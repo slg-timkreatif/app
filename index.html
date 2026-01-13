@@ -28,10 +28,9 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Loader */
         .loader {
             border: 3px solid #f3f4f6;
-            border-top: 3px solid #0f766e; /* Teal */
+            border-top: 3px solid #10b981; /* Emerald Green */
             border-radius: 50%;
             width: 32px; height: 32px;
             animation: spin 1s linear infinite;
@@ -57,7 +56,7 @@
                 <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-10 h-10 rounded-full border border-slate-100 shadow-sm">
                 <div>
                     <h1 class="font-bold text-slate-800 text-base leading-tight">Selogiri Creative</h1>
-                    <span class="text-[10px] text-slate-400 font-medium tracking-wider">OFFICIAL PORTAL</span>
+                    <span class="text-[10px] text-slate-400 font-medium tracking-wider">DIGITAL PORTAL</span>
                 </div>
             </div>
             
@@ -100,21 +99,16 @@
                         <div class="absolute top-0 right-0 -mr-8 -mt-8 w-40 h-40 rounded-full bg-white opacity-10 blur-2xl"></div>
                         <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-white opacity-10 blur-3xl"></div>
                         
-                        <div class="relative z-10">
+                        <div class="relative z-10 text-center md:text-left">
                             <h3 class="text-xl font-bold mb-2 tracking-tight">Selamat Datang,</h3>
-                            <p class="text-blue-50 text-sm leading-relaxed max-w-md font-light">
+                            <p class="text-blue-50 text-sm leading-relaxed max-w-lg mx-auto md:mx-0 font-light mb-6">
                                 Akses seluruh layanan digital pendidikan dalam satu genggaman. Inovatif, Efisien, dan Terintegrasi.
                             </p>
                             
-                            <div id="install-container" class="hidden mt-5 bg-white/20 backdrop-blur-md rounded-xl p-2 pr-3 border border-white/20 inline-flex items-center gap-3 transition-all hover:bg-white/30 cursor-pointer">
-                                <div class="bg-white text-indigo-600 p-1.5 rounded-lg">
-                                    <i data-lucide="download" class="w-4 h-4"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-xs font-semibold text-white">Download Aplikasi</p>
-                                </div>
-                                <button id="install-btn" class="text-[10px] bg-white text-indigo-700 font-bold px-3 py-1.5 rounded-lg shadow-sm">
-                                    Install
+                            <div id="install-container" class="hidden justify-center md:justify-start">
+                                <button id="install-btn" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-emerald-500/30 transition-all active:scale-95 hover:-translate-y-0.5 ring-2 ring-emerald-300/50">
+                                    <i data-lucide="download" class="w-5 h-5"></i>
+                                    <span>Download Aplikasi</span>
                                 </button>
                             </div>
                         </div>
@@ -202,7 +196,7 @@
                 <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-100">
                     <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-12 h-12 rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Pasang Aplikasi Resmi</h3>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Pasang Aplikasi</h3>
                 <p class="text-sm text-slate-500 leading-relaxed px-4">
                     Untuk akses lebih cepat, stabil, dan tampilan layar penuh, disarankan menggunakan versi Aplikasi.
                 </p>
@@ -221,76 +215,58 @@
             <div class="mt-6 flex items-center justify-center gap-4 text-[10px] text-slate-400 font-medium">
                 <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3 h-3"></i> Aman</span>
                 <span class="flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3"></i> Ringan</span>
-                <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Resmi</span>
+                <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Praktis</span>
             </div>
         </div>
     </div>
 
-        <script>
+    <script>
         lucide.createIcons();
 
-        // --- 1. LOADING SCREEN ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('initial-loader');
             const main = document.getElementById('main-layout');
             
-            // Register Service Worker
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('SW Registered!', reg))
-                .catch(err => console.error('SW Error:', err));
+                navigator.serviceWorker.register('./sw.js').catch(console.error);
             }
 
-            // Hilangkan Loading setelah 0.8 detik
             setTimeout(() => {
                 loader.classList.add('opacity-0', 'pointer-events-none');
                 main.classList.remove('hidden');
                 main.classList.add('slide-up');
                 
-                // --- JURUS PAMUNGKAS: FORCE TIMER ---
-                // Tunggu 3 detik setelah loading, lalu cek:
-                // Apakah user membuka di browser biasa? (Bukan di Aplikasi yang sudah terinstall)
-                // Jika YA, paksa munculkan Popup Sheet.
+                // Force Show Popup logic (3 detik)
                 setTimeout(() => {
                     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
                     if (!isStandalone) {
-                        showInstallSheet(); // PAKSA TAMPIL
+                        showInstallSheet();
                     }
-                }, 3000); // 3000ms = 3 detik
+                }, 3000);
 
             }, 800);
         });
 
-        // --- 2. VARIABEL UI ---
-        let deferredPrompt; // Wadah untuk menyimpan izin Chrome
+        let deferredPrompt;
         const installOverlay = document.getElementById('install-overlay');
         const installBackdrop = document.getElementById('install-backdrop');
         const installSheet = document.getElementById('install-sheet');
         const btnInstall = document.getElementById('btn-install-now');
         const btnLater = document.getElementById('btn-later');
         
-        // Tombol Cadangan (Kecil)
         const installContainer = document.getElementById('install-container');
         const installBtnSmall = document.getElementById('install-btn');
 
-        // Pastikan tombol kecil selalu ada sebagai cadangan
+        // Tombol kecil selalu aktif
         installContainer.classList.remove('hidden');
-        installContainer.classList.add('inline-flex');
+        installContainer.classList.add('flex'); // Pakai flex untuk centering
 
-        // --- 3. FUNGSI TAMPIL/SEMBUNYI SHEET ---
         function showInstallSheet() {
-            // Cek session storage agar tidak muncul berulang kali di satu sesi (Opsional)
-            // if (sessionStorage.getItem('install_sheet_shown')) return;
-
             installOverlay.classList.remove('hidden');
-            // Animasi masuk
             setTimeout(() => {
                 installBackdrop.classList.remove('opacity-0');
                 installSheet.classList.remove('translate-y-full');
             }, 50);
-            
-            // Tandai sudah muncul
-            sessionStorage.setItem('install_sheet_shown', 'true');
         }
 
         function hideInstallSheet() {
@@ -301,58 +277,36 @@
             }, 300);
         }
 
-        // --- 4. EVENT LISTENER BROWSER ---
-        // Ini event resmi Chrome. Kalau Chrome siap, dia akan panggil event ini.
-        // Kita simpan event-nya di variabel 'deferredPrompt' untuk dipakai nanti.
         window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('Browser siap menginstall!');
             e.preventDefault();
             deferredPrompt = e;
-            // Kita tidak panggil showInstallSheet() di sini lagi, 
-            // karena sudah dipanggil oleh Force Timer di atas.
         });
 
-        // --- 5. LOGIKA KLIK TOMBOL INSTALL ---
         const handleInstallClick = () => {
             hideInstallSheet();
-            
             if (deferredPrompt) {
-                // KONDISI 1: Chrome Mengizinkan Install Otomatis
-                console.log('Menginstall via Native Prompt...');
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User menerima install');
-                    } else {
-                        console.log('User menolak install');
-                    }
                     deferredPrompt = null;
                 });
             } else {
-                // KONDISI 2: Chrome Tidak Siap / iOS / Desktop / Sudah Terinstall
-                console.log('Native Prompt tidak tersedia, tampilkan instruksi manual.');
-                
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 if (isIOS) {
-                    alert("Petunjuk Install di iPhone:\n\n1. Tekan tombol Share (ikon panah atas atau kotak panah)\n2. Cari dan pilih 'Add to Home Screen' (Tambah ke Layar Utama)");
+                    alert("Petunjuk Install di iPhone:\n\n1. Tekan tombol Share (ikon panah atas)\n2. Pilih 'Add to Home Screen' (Tambah ke Layar Utama)");
                 } else {
-                    alert("Tidak dapat menginstall otomatis.\n\nKemungkinan aplikasi sudah terinstall atau browser memblokir.\n\nSilakan install manual melalui menu browser (Titik Tiga) > 'Install App' atau 'Tambahkan ke Layar Utama'.");
+                    alert("Aplikasi mungkin sudah terinstall.\n\nSilakan cek menu browser (Titik Tiga) > 'Install App' atau 'Tambahkan ke Layar Utama'.");
                 }
             }
         };
 
-        // Pasang fungsi ke tombol
         btnInstall.addEventListener('click', handleInstallClick);
         installBtnSmall.addEventListener('click', handleInstallClick);
 
-        // Tombol Nanti Saja
         btnLater.addEventListener('click', () => {
             hideInstallSheet();
         });
 
-        // Jika berhasil diinstall
         window.addEventListener('appinstalled', () => {
-            console.log('Aplikasi berhasil diinstall!');
             hideInstallSheet();
             installContainer.classList.add('hidden');
         });
