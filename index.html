@@ -30,7 +30,7 @@
 
         .loader {
             border: 3px solid #f3f4f6;
-            border-top: 3px solid #10b981; /* Emerald Green */
+            border-top: 3px solid #10b981;
             border-radius: 50%;
             width: 32px; height: 32px;
             animation: spin 1s linear infinite;
@@ -41,10 +41,10 @@
         .sidebar-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-        /* --- JURUS ANTI-BOBOL (CSS STANDALONE CHECK) --- */
-        /* Jika browser mendeteksi mode aplikasi (standalone), elemen ini WAJIB HILANG */
+        /* --- JURUS ANTI-BOBOL (CSS FORCE HIDE) --- */
+        /* Memaksa elemen dengan ID ini hilang total jika dibuka sebagai App */
         @media all and (display-mode: standalone) {
-            .pwa-only-browser {
+            #install-container-wrapper, #install-overlay {
                 display: none !important;
                 visibility: hidden !important;
             }
@@ -114,11 +114,17 @@
                                 Akses seluruh layanan digital pendidikan dalam satu genggaman. Inovatif, Efisien, dan Terintegrasi.
                             </p>
                             
-                            <div id="install-container" class="pwa-only-browser hidden justify-center md:justify-start">
-                                <button id="install-btn" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-emerald-500/30 transition-all active:scale-95 hover:-translate-y-0.5 ring-2 ring-emerald-300/50">
-                                    <i data-lucide="download" class="w-5 h-5"></i>
-                                    <span>Download Aplikasi</span>
-                                </button>
+                            <div id="install-container-wrapper" class="hidden justify-center md:justify-start relative">
+                                <div class="relative inline-block">
+                                    <button id="install-btn" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-emerald-500/30 transition-all active:scale-95 hover:-translate-y-0.5 ring-2 ring-emerald-300/50">
+                                        <i data-lucide="download" class="w-5 h-5"></i>
+                                        <span>Download Aplikasi</span>
+                                    </button>
+                                    
+                                    <button id="close-install-btn" class="absolute -top-2 -right-2 bg-slate-900 text-white p-1 rounded-full shadow-md hover:bg-red-500 transition" title="Tutup / Sudah Install">
+                                        <i data-lucide="x" class="w-3 h-3"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -195,7 +201,7 @@
         </main>
     </div>
 
-    <div id="install-overlay" class="pwa-only-browser fixed inset-0 z-50 flex items-end justify-center hidden">
+    <div id="install-overlay" class="fixed inset-0 z-50 flex items-end justify-center hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0" id="install-backdrop"></div>
         
         <div class="bg-white w-full max-w-md mx-auto rounded-t-3xl p-6 shadow-2xl relative z-10 transform translate-y-full transition-transform duration-300" id="install-sheet">
@@ -232,32 +238,43 @@
     <script>
         lucide.createIcons();
 
-        // --- 1. DETEKSI MODE & UI INIT ---
-        const installContainer = document.getElementById('install-container');
+        // 1. INIT UI DENGAN PENGECEKAN KETAT
+        const installWrapper = document.getElementById('install-container-wrapper');
         const installOverlay = document.getElementById('install-overlay');
 
-        // Fungsi inisialisasi UI
         function initUI() {
-            // CSS Media Query di atas (@media display-mode: standalone) sudah otomatis menghandle
-            // penyembunyian. Namun kita tambahkan JS class removal untuk memastikan tombol muncul di browser.
-            
+            // Cek Mode Standalone (App)
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             
-            if (!isStandalone) {
-                // HANYA JIKA BROWSER: Munculkan tombol & jalankan timer
-                installContainer.classList.remove('hidden');
-                installContainer.classList.add('flex'); // Centering
+            // Cek apakah user pernah menutup tombol secara permanen
+            const isDismissed = localStorage.getItem('install_dismissed') === 'true';
 
-                setTimeout(() => {
-                    showInstallSheet();
-                }, 3000); 
-            } else {
-                // JIKA APP: Pastikan JS tidak pernah memicu popup
-                console.log("App Mode Detected: Install UI suppressed.");
+            if (isStandalone) {
+                // JIKA MODE APP: Hapus elemen dari DOM agar tidak mungkin muncul
+                if(installWrapper) installWrapper.remove();
+                if(installOverlay) installOverlay.remove();
+                console.log("App Mode: Install UI Removed.");
+                return;
             }
+
+            if (isDismissed) {
+                // JIKA PERNAH DISMISS: Sembunyikan tapi jangan hapus (siapa tahu mau reset)
+                installWrapper.classList.add('hidden');
+                console.log("User dismissed install button previously.");
+                return;
+            }
+
+            // JIKA BROWSER & BELUM DISMISS: Tampilkan
+            installWrapper.classList.remove('hidden');
+            installWrapper.classList.add('flex'); // Centering
+
+            // Timer Popup Sheet (3 detik)
+            setTimeout(() => {
+                showInstallSheet();
+            }, 3000); 
         }
 
-        // --- 2. LOADING ---
+        // 2. LOADING
         window.addEventListener('load', () => {
             const loader = document.getElementById('initial-loader');
             const main = document.getElementById('main-layout');
@@ -271,25 +288,30 @@
                 main.classList.remove('hidden');
                 main.classList.add('slide-up');
                 
-                initUI(); // Jalankan logic UI
+                initUI(); 
 
             }, 800);
         });
 
-        // --- 3. SHEET LOGIC ---
+        // 3. SHEET LOGIC
         let deferredPrompt;
         const installBackdrop = document.getElementById('install-backdrop');
         const installSheet = document.getElementById('install-sheet');
         const btnInstall = document.getElementById('btn-install-now');
         const btnLater = document.getElementById('btn-later');
         const installBtnSmall = document.getElementById('install-btn');
+        const btnCloseSmall = document.getElementById('close-install-btn');
 
         function showInstallSheet() {
+            // Cek session agar tidak spam per sesi
+            if (sessionStorage.getItem('sheet_shown')) return;
+            
             installOverlay.classList.remove('hidden');
             setTimeout(() => {
                 installBackdrop.classList.remove('opacity-0');
                 installSheet.classList.remove('translate-y-full');
             }, 50);
+            sessionStorage.setItem('sheet_shown', 'true');
         }
 
         function hideInstallSheet() {
@@ -300,7 +322,7 @@
             }, 300);
         }
 
-        // --- 4. INSTALL HANDLER ---
+        // 4. EVENT INSTALL
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -323,16 +345,28 @@
             }
         };
 
+        // 5. EVENT LISTENERS
         btnInstall.addEventListener('click', handleInstallClick);
         installBtnSmall.addEventListener('click', handleInstallClick);
 
         btnLater.addEventListener('click', () => {
             hideInstallSheet();
         });
+        
+        // Listener Tombol Close (X) Kecil
+        btnCloseSmall.addEventListener('click', (e) => {
+            e.stopPropagation(); // Agar tidak memicu klik tombol install
+            if(confirm("Sembunyikan tombol download ini selamanya?")) {
+                installWrapper.classList.add('hidden');
+                localStorage.setItem('install_dismissed', 'true');
+            }
+        });
 
+        // Saat sukses install
         window.addEventListener('appinstalled', () => {
             hideInstallSheet();
-            installContainer.classList.add('hidden');
+            if(installWrapper) installWrapper.classList.add('hidden');
+            localStorage.setItem('install_dismissed', 'true'); // Anggap dismissed agar tidak muncul lagi
         });
     </script>
 </body>
