@@ -226,27 +226,43 @@
         </div>
     </div>
 
-    <script>
+        <script>
         lucide.createIcons();
 
-        // 1. Loading Logic
+        // --- 1. LOADING SCREEN ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('initial-loader');
             const main = document.getElementById('main-layout');
             
+            // Register Service Worker
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js').catch(console.error);
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('SW Registered!', reg))
+                .catch(err => console.error('SW Error:', err));
             }
 
+            // Hilangkan Loading setelah 0.8 detik
             setTimeout(() => {
                 loader.classList.add('opacity-0', 'pointer-events-none');
                 main.classList.remove('hidden');
                 main.classList.add('slide-up');
+                
+                // --- JURUS PAMUNGKAS: FORCE TIMER ---
+                // Tunggu 3 detik setelah loading, lalu cek:
+                // Apakah user membuka di browser biasa? (Bukan di Aplikasi yang sudah terinstall)
+                // Jika YA, paksa munculkan Popup Sheet.
+                setTimeout(() => {
+                    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+                    if (!isStandalone) {
+                        showInstallSheet(); // PAKSA TAMPIL
+                    }
+                }, 3000); // 3000ms = 3 detik
+
             }, 800);
         });
 
-        // 2. Install Logic Variables
-        let deferredPrompt;
+        // --- 2. VARIABEL UI ---
+        let deferredPrompt; // Wadah untuk menyimpan izin Chrome
         const installOverlay = document.getElementById('install-overlay');
         const installBackdrop = document.getElementById('install-backdrop');
         const installSheet = document.getElementById('install-sheet');
@@ -257,16 +273,24 @@
         const installContainer = document.getElementById('install-container');
         const installBtnSmall = document.getElementById('install-btn');
 
-        // Tampilkan tombol kecil default
+        // Pastikan tombol kecil selalu ada sebagai cadangan
         installContainer.classList.remove('hidden');
         installContainer.classList.add('inline-flex');
 
+        // --- 3. FUNGSI TAMPIL/SEMBUNYI SHEET ---
         function showInstallSheet() {
+            // Cek session storage agar tidak muncul berulang kali di satu sesi (Opsional)
+            // if (sessionStorage.getItem('install_sheet_shown')) return;
+
             installOverlay.classList.remove('hidden');
+            // Animasi masuk
             setTimeout(() => {
                 installBackdrop.classList.remove('opacity-0');
                 installSheet.classList.remove('translate-y-full');
             }, 50);
+            
+            // Tandai sudah muncul
+            sessionStorage.setItem('install_sheet_shown', 'true');
         }
 
         function hideInstallSheet() {
@@ -277,42 +301,58 @@
             }, 300);
         }
 
-        // EVENT: Android Ready to Install
+        // --- 4. EVENT LISTENER BROWSER ---
+        // Ini event resmi Chrome. Kalau Chrome siap, dia akan panggil event ini.
+        // Kita simpan event-nya di variabel 'deferredPrompt' untuk dipakai nanti.
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('Browser siap menginstall!');
             e.preventDefault();
             deferredPrompt = e;
-            // Munculkan popup besar otomatis
-            showInstallSheet();
+            // Kita tidak panggil showInstallSheet() di sini lagi, 
+            // karena sudah dipanggil oleh Force Timer di atas.
         });
 
-        // Handler untuk kedua tombol (Besar & Kecil)
+        // --- 5. LOGIKA KLIK TOMBOL INSTALL ---
         const handleInstallClick = () => {
             hideInstallSheet();
+            
             if (deferredPrompt) {
-                // Skenario Android Lancar
+                // KONDISI 1: Chrome Mengizinkan Install Otomatis
+                console.log('Menginstall via Native Prompt...');
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User menerima install');
+                    } else {
+                        console.log('User menolak install');
+                    }
                     deferredPrompt = null;
                 });
             } else {
-                // Skenario iPhone / Desktop / Sudah Terinstall
+                // KONDISI 2: Chrome Tidak Siap / iOS / Desktop / Sudah Terinstall
+                console.log('Native Prompt tidak tersedia, tampilkan instruksi manual.');
+                
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                 if (isIOS) {
-                    alert("Untuk menginstall di iPhone:\n1. Tekan tombol Share (ikon panah atas)\n2. Pilih 'Add to Home Screen' (Tambah ke Layar Utama)");
+                    alert("Petunjuk Install di iPhone:\n\n1. Tekan tombol Share (ikon panah atas atau kotak panah)\n2. Cari dan pilih 'Add to Home Screen' (Tambah ke Layar Utama)");
                 } else {
-                    alert("Aplikasi mungkin sudah terinstall.\nSilakan cek layar utama HP Anda.");
+                    alert("Tidak dapat menginstall otomatis.\n\nKemungkinan aplikasi sudah terinstall atau browser memblokir.\n\nSilakan install manual melalui menu browser (Titik Tiga) > 'Install App' atau 'Tambahkan ke Layar Utama'.");
                 }
             }
         };
 
+        // Pasang fungsi ke tombol
         btnInstall.addEventListener('click', handleInstallClick);
         installBtnSmall.addEventListener('click', handleInstallClick);
 
+        // Tombol Nanti Saja
         btnLater.addEventListener('click', () => {
             hideInstallSheet();
         });
 
+        // Jika berhasil diinstall
         window.addEventListener('appinstalled', () => {
+            console.log('Aplikasi berhasil diinstall!');
             hideInstallSheet();
             installContainer.classList.add('hidden');
         });
