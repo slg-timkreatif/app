@@ -1,4 +1,4 @@
-const CACHE_NAME = 'selogiri-app-v1';
+const CACHE_NAME = 'selogiri-app-v2';
 const urlsToCache = [
   './',
   './index.html',
