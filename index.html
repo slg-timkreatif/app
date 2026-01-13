@@ -223,6 +223,38 @@
     <script>
         lucide.createIcons();
 
+        // --- 1. DETEKSI MODE APLIKASI ---
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+        // --- 2. LOGIKA UI ---
+        let deferredPrompt;
+        const installOverlay = document.getElementById('install-overlay');
+        const installBackdrop = document.getElementById('install-backdrop');
+        const installSheet = document.getElementById('install-sheet');
+        const btnInstall = document.getElementById('btn-install-now');
+        const btnLater = document.getElementById('btn-later');
+        
+        const installContainer = document.getElementById('install-container');
+        const installBtnSmall = document.getElementById('install-btn');
+
+        // Fungsi inisialisasi berdasarkan mode
+        function initInstallUI() {
+            if (isStandalone) {
+                console.log('App Mode: Tombol install disembunyikan.');
+                installContainer.classList.add('hidden');
+                return; // Stop, jangan jalankan timer popup
+            }
+
+            // Browser Mode: Munculkan tombol & timer
+            installContainer.classList.remove('hidden');
+            installContainer.classList.add('flex'); // Gunakan flex agar centering jalan
+
+            setTimeout(() => {
+                showInstallSheet();
+            }, 3000); 
+        }
+
+        // --- 3. LOADING ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('initial-loader');
             const main = document.getElementById('main-layout');
@@ -236,37 +268,20 @@
                 main.classList.remove('hidden');
                 main.classList.add('slide-up');
                 
-                // Force Show Popup logic (3 detik)
-                setTimeout(() => {
-                    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-                    if (!isStandalone) {
-                        showInstallSheet();
-                    }
-                }, 3000);
+                initInstallUI(); // Jalankan logika UI
 
             }, 800);
         });
 
-        let deferredPrompt;
-        const installOverlay = document.getElementById('install-overlay');
-        const installBackdrop = document.getElementById('install-backdrop');
-        const installSheet = document.getElementById('install-sheet');
-        const btnInstall = document.getElementById('btn-install-now');
-        const btnLater = document.getElementById('btn-later');
-        
-        const installContainer = document.getElementById('install-container');
-        const installBtnSmall = document.getElementById('install-btn');
-
-        // Tombol kecil selalu aktif
-        installContainer.classList.remove('hidden');
-        installContainer.classList.add('flex'); // Pakai flex untuk centering
-
+        // --- 4. SHEET FUNCTIONS ---
         function showInstallSheet() {
+            // if (sessionStorage.getItem('install_sheet_shown')) return; // Opsional: Uncomment jika ingin muncul sekali per sesi
             installOverlay.classList.remove('hidden');
             setTimeout(() => {
                 installBackdrop.classList.remove('opacity-0');
                 installSheet.classList.remove('translate-y-full');
             }, 50);
+            sessionStorage.setItem('install_sheet_shown', 'true');
         }
 
         function hideInstallSheet() {
@@ -277,6 +292,7 @@
             }, 300);
         }
 
+        // --- 5. EVENT LISTENERS ---
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -294,7 +310,7 @@
                 if (isIOS) {
                     alert("Petunjuk Install di iPhone:\n\n1. Tekan tombol Share (ikon panah atas)\n2. Pilih 'Add to Home Screen' (Tambah ke Layar Utama)");
                 } else {
-                    alert("Aplikasi mungkin sudah terinstall.\n\nSilakan cek menu browser (Titik Tiga) > 'Install App' atau 'Tambahkan ke Layar Utama'.");
+                    alert("Aplikasi mungkin sudah terinstall.\n\nCek menu browser (Titik Tiga) > 'Install App' atau cek layar utama HP Anda.");
                 }
             }
         };
