@@ -1,0 +1,21 @@
+{
+  "name": "Selogiri Creative App",
+  "short_name": "Selogiri App",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme_color": "#0056b3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

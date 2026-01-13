@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Portal Layanan Pendidikan Selogiri">
+    
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+
+    <link rel="manifest" href="manifest.json">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <title>Selogiri Creative App</title>
+
+    <style>
+        :root {
+            --primary: #2563eb; /* Royal Blue Modern */
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            
+            /* Gradient Cantik */
+            --gradient-header: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER AREA --- */
+        .header-decoration {
+            background: var(--gradient-header);
+            padding: 30px 24px 80px 24px; /* Bottom padding besar untuk efek overlap */
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            color: white;
+            box-shadow: 0 10px 25px -10px rgba(37, 99, 235, 0.4);
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.8);
+            background: white;
+            padding: 1px;
+        }
+
+        .brand-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        
+        .brand-text span {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .greeting h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .greeting p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 90%;
+        }
+
+        /* --- MAIN CONTENT (OVERLAPPING) --- */
+        main {
+            padding: 0 24px;
+            margin-top: -50px; /* Efek Overlap ke atas */
+            flex: 1;
+            z-index: 10;
+        }
+
+        /* Install Banner */
+        #install-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+        
+        .install-alert {
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.5s ease;
+        }
+
+        .install-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        .btn-install-mini {
+            background: var(--bg-body);
+            color: var(--primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        /* MENU GRID/LIST */
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); /* Soft Shadow */
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+        }
+
+        .app-card:active {
+            transform: scale(0.98);
+        }
+
+        .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Warna Spesifik Icon */
+        .icon-guru {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+        
+        .icon-jurnal {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .card-content p {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        .card-arrow {
+            color: #cbd5e1;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-decoration">
+        <div class="top-bar">
+            <div class="brand">
+                <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" alt="Logo">
+                <div class="brand-text">
+                    <h1>Selogiri Creative</h1>
+                    <span>Official App Portal</span>
+                </div>
+            </div>
+            </div>
+
+        <div class="greeting">
+            <h2>Portal Layanan</h2>
+            <p>Akses cepat ke aplikasi pendidikan dalam satu genggaman.</p>
+        </div>
+    </div>
+
+    <main>
+        <div id="install-container">
+            <div class="install-alert">
+                <div class="install-info">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Pasang Aplikasi</span>
+                </div>
+                <button id="install-btn" class="btn-install-mini">
+                    Install
+                </button>
+            </div>
+        </div>
+
+        <div class="menu-container">
+            
+            <a href="https://slg-timkreatif.github.io/guruberbagi/phone.html" class="app-card" target="_blank">
+                <div class="icon-wrapper icon-guru">
+                    <i class="fas fa-chalkboard-user"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Guru Berbagi</h3>
+                    <p>Wadah kolaborasi dan berbagi karya inovatif.</p>
+                </div>
+                <div class="card-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+            <a href="https://slg-timkreatif.github.io/jurnalgtk" class="app-card" target="_blank">
+                <div class="icon-wrapper icon-jurnal">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Jurnal Harian GTK</h3>
+                    <p>Administrasi harian digital, cepat dan terstruktur.</p>
+                </div>
+                <div class="card-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Tim Kreatif Selogiri</p>
+        <p style="margin-top:5px; font-weight:500;">Membangun Pendidikan Digital</p>
+    </footer>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+
+        let deferredPrompt;
+        const installContainer = document.getElementById('install-container');
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installContainer.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', (e) => {
+            installContainer.style.display = 'none';
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                deferredPrompt = null;
+            });
+        });
+
+        window.addEventListener('appinstalled', (evt) => {
+            installContainer.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
