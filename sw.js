@@ -1,4 +1,4 @@
-const CACHE_NAME = 'slg-creative-app-v6';
+const CACHE_NAME = 'slg-creative-app-v7';
 const urlsToCache = [
   './',
   './index.html',
