@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f8fafc">
+    <meta name="description" content="Portal Layanan Pendidikan Selogiri">
+    <title>Selogiri Creative App</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        .slide-up { animation: slideUp 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .loader {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #2563eb;
+            border-radius: 50%;
+            width: 32px; height: 32px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .nav-item.active { color: #2563eb; }
+        .sidebar-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen overflow-hidden flex flex-col">
+
+    <div id="initial-loader" class="fixed inset-0 z-[100] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="loader mb-4"></div>
+        <p class="text-slate-500 text-xs font-semibold tracking-widest uppercase">Memuat Aplikasi...</p>
+    </div>
+
+    <div id="main-layout" class="flex h-full w-full hidden">
+        
+        <aside class="hidden md:flex w-72 bg-white border-r border-slate-200 flex-col z-20 shadow-sm">
+            <div class="p-8 flex items-center gap-4 border-b border-slate-100">
+                <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-10 h-10 rounded-full border border-slate-100 shadow-sm">
+                <div>
+                    <h1 class="font-bold text-slate-800 text-base leading-tight">Selogiri Creative</h1>
+                    <span class="text-[10px] text-slate-400 font-medium tracking-wider">OFFICIAL PORTAL</span>
+                </div>
+            </div>
+            
+            <div class="p-4 space-y-2 flex-1 overflow-y-auto">
+                <button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard
+                </button>
+                <button onclick="window.open('https://slg-timkreatif.github.io/guruberbagi/phone.html', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
+                    <i data-lucide="presentation" class="w-5 h-5"></i> Guru Berbagi
+                </button>
+                <button onclick="window.open('https://slg-timkreatif.github.io/jurnalgtk', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
+                    <i data-lucide="book-open" class="w-5 h-5"></i> Jurnal GTK
+                </button>
+            </div>
+
+            <div class="p-6 border-t border-slate-100 bg-slate-50/50">
+                <p class="text-xs text-slate-500 mb-2">Belum punya akun?</p>
+                <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="flex items-center gap-2 text-sm font-bold text-teal-700 hover:underline">
+                    Daftar Guru Berbagi <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col relative overflow-hidden bg-slate-50">
+            
+            <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 z-10 px-6 py-4 sticky top-0 flex items-center gap-4">
+                <div class="md:hidden w-9 h-9 rounded-full border border-slate-200 overflow-hidden shadow-sm shrink-0">
+                    <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h2 class="font-bold text-slate-800 text-lg leading-tight tracking-tight">Selogiri Creative App</h2>
+                    <p class="text-xs text-slate-500 font-medium pt-0.5">Portal Layanan Pendidikan Selogiri</p>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-5 md:p-10 scroll-smooth pb-32 md:pb-10">
+                <div class="max-w-3xl mx-auto w-full fade-in space-y-8">
+                    
+                    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 -mr-8 -mt-8 w-40 h-40 rounded-full bg-white opacity-10 blur-2xl"></div>
+                        <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-white opacity-10 blur-3xl"></div>
+
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-bold mb-2 tracking-tight">Selamat Datang,</h3>
+                            <p class="text-blue-50 text-sm leading-relaxed max-w-md font-light">
+                                Akses seluruh layanan digital pendidikan dalam satu genggaman. Inovatif, Efisien, dan Terintegrasi.
+                            </p>
+                            
+                            <div id="install-container" class="hidden mt-5 bg-white/20 backdrop-blur-md rounded-xl p-2 pr-3 border border-white/20 inline-flex items-center gap-3 transition-all hover:bg-white/30 cursor-pointer">
+                                <div class="bg-white text-indigo-600 p-1.5 rounded-lg">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs font-semibold text-white">Download Aplikasi</p>
+                                </div>
+                                <button id="install-btn" class="text-[10px] bg-white text-indigo-700 font-bold px-3 py-1.5 rounded-lg shadow-sm">
+                                    Install
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Daftar Aplikasi</p>
+
+                        <a href="https://slg-timkreatif.github.io/guruberbagi/phone.html" target="_blank" class="block group">
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg hover:border-teal-200 transition-all duration-300 flex items-center gap-5 relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-teal-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                <div class="shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl bg-teal-50 text-teal-600 border border-teal-100 group-hover:bg-teal-600 group-hover:text-white transition-colors duration-300">
+                                    <i data-lucide="presentation" class="w-7 h-7"></i>
+                                </div>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-bold text-base text-slate-800 group-hover:text-teal-700 transition-colors">Guru Berbagi</h3>
+                                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-teal-500 transition-transform group-hover:translate-x-1"></i>
+                                    </div>
+                                    <p class="text-sm text-slate-500 mt-1 line-clamp-1">Portal berbagi karya guru & inovasi.</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="https://slg-timkreatif.github.io/jurnalgtk" target="_blank" class="block group">
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 flex items-center gap-5 relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                <div class="shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                    <i data-lucide="book-open" class="w-7 h-7"></i>
+                                </div>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-bold text-base text-slate-800 group-hover:text-blue-700 transition-colors">Jurnal Harian GTK</h3>
+                                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-transform group-hover:translate-x-1"></i>
+                                    </div>
+                                    <p class="text-sm text-slate-500 mt-1 line-clamp-1">Input & cetak jurnal harian otomatis.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-slate-200 border-dashed text-center">
+                        <div class="bg-slate-50 rounded-xl p-4 inline-block w-full border border-slate-100">
+                            <p class="text-xs text-slate-500 mb-2 font-medium">Belum memiliki akun Guru Berbagi?</p>
+                            <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="inline-flex items-center gap-2 text-sm font-bold text-teal-700 hover:text-teal-800 transition">
+                                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                Daftar Akun Baru Disini
+                            </a>
+                        </div>
+                        
+                        <div class="mt-8 mb-4">
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Powered By</p>
+                            <p class="text-xs text-slate-500 font-medium">Tim Kreatif Selogiri &copy; 2026</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <nav class="bg-white/95 backdrop-blur-md border-t border-slate-200 pb-safe pt-1 px-6 flex justify-around items-center z-30 md:hidden fixed bottom-0 left-0 right-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)] h-[65px]">
+                <button class="nav-item active flex flex-col items-center justify-center gap-1 w-16 h-full">
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                    <span class="text-[10px] font-medium">Home</span>
+                </button>
+                <button onclick="window.open('https://slg-timkreatif.github.io/guruberbagi/phone.html', '_blank')" class="text-slate-400 flex flex-col items-center justify-center gap-1 w-16 h-full hover:text-teal-600 transition-colors">
+                    <i data-lucide="presentation" class="w-6 h-6"></i>
+                    <span class="text-[10px] font-medium">Berbagi</span>
+                </button>
+                <button onclick="window.open('https://slg-timkreatif.github.io/jurnalgtk', '_blank')" class="text-slate-400 flex flex-col items-center justify-center gap-1 w-16 h-full hover:text-blue-600 transition-colors">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
+                    <span class="text-[10px] font-medium">Jurnal</span>
+                </button>
+            </nav>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('initial-loader');
+            const main = document.getElementById('main-layout');
+            
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js').catch(console.error);
+            }
+
+            setTimeout(() => {
+                loader.classList.add('opacity-0', 'pointer-events-none');
+                main.classList.remove('hidden');
+                main.classList.add('slide-up');
+            }, 800);
+        });
+
+        let deferredPrompt;
+        const installContainer = document.getElementById('install-container');
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installContainer.classList.remove('hidden');
+            installContainer.classList.add('inline-flex');
+        });
+
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        installContainer.classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+        
+        window.addEventListener('appinstalled', () => {
+            installContainer.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
