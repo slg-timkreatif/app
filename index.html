@@ -41,8 +41,7 @@
         .sidebar-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
-        /* --- JURUS ANTI-BOBOL (CSS FORCE HIDE) --- */
-        /* Memaksa elemen dengan ID ini hilang total jika dibuka sebagai App */
+        /* JURUS ANTI-BOBOL: Force Hide di Mode App */
         @media all and (display-mode: standalone) {
             #install-container-wrapper, #install-overlay {
                 display: none !important;
@@ -55,7 +54,7 @@
 
     <div id="initial-loader" class="fixed inset-0 z-[100] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="loader mb-4"></div>
-        <p class="text-slate-500 text-xs font-semibold tracking-widest uppercase">Memuat Aplikasi...</p>
+        <p class="text-slate-500 text-xs font-semibold tracking-widest uppercase">Memuat Portal...</p>
     </div>
 
     <div id="main-layout" class="flex h-full w-full hidden">
@@ -69,16 +68,11 @@
                 </div>
             </div>
             
-            <div class="p-4 space-y-2 flex-1 overflow-y-auto">
-                <button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
-                    <i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard
-                </button>
-                <button onclick="window.open('https://slg-timkreatif.github.io/guruberbagi/phone.html', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
-                    <i data-lucide="presentation" class="w-5 h-5"></i> Guru Berbagi
-                </button>
-                <button onclick="window.open('https://slg-timkreatif.github.io/jurnalgtk', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
-                    <i data-lucide="book-open" class="w-5 h-5"></i> Jurnal GTK
-                </button>
+            <div id="sidebar-menu-list" class="p-4 space-y-2 flex-1 overflow-y-auto">
+                <div class="animate-pulse space-y-2">
+                    <div class="h-10 bg-slate-100 rounded-xl"></div>
+                    <div class="h-10 bg-slate-100 rounded-xl"></div>
+                </div>
             </div>
 
             <div class="p-6 border-t border-slate-100 bg-slate-50/50">
@@ -102,7 +96,10 @@
             </header>
 
             <div class="flex-1 overflow-y-auto p-5 md:p-10 scroll-smooth pb-32 md:pb-10">
-                <div class="max-w-3xl mx-auto w-full fade-in space-y-8">
+                <div class="max-w-3xl mx-auto w-full fade-in space-y-6">
+                    
+                    <div id="announcement-area" class="hidden">
+                        </div>
                     
                     <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 -mr-8 -mt-8 w-40 h-40 rounded-full bg-white opacity-10 blur-2xl"></div>
@@ -120,10 +117,7 @@
                                         <i data-lucide="download" class="w-5 h-5"></i>
                                         <span>Download Aplikasi</span>
                                     </button>
-                                    
-                                    <button id="close-install-btn" class="absolute -top-2 -right-2 bg-slate-900 text-white p-1 rounded-full shadow-md hover:bg-red-500 transition" title="Tutup / Sudah Install">
-                                        <i data-lucide="x" class="w-3 h-3"></i>
-                                    </button>
+                                    <button id="close-install-btn" class="absolute -top-2 -right-2 bg-slate-900 text-white p-1 rounded-full shadow-md hover:bg-red-500 transition"><i data-lucide="x" class="w-3 h-3"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -131,38 +125,16 @@
 
                     <div class="space-y-4">
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest px-1">Daftar Aplikasi</p>
-
-                        <a href="https://slg-timkreatif.github.io/guruberbagi/phone.html" target="_blank" class="block group">
-                            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg hover:border-teal-200 transition-all duration-300 flex items-center gap-5 relative overflow-hidden">
-                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-teal-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div class="shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl bg-teal-50 text-teal-600 border border-teal-100 group-hover:bg-teal-600 group-hover:text-white transition-colors duration-300">
-                                    <i data-lucide="presentation" class="w-7 h-7"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center justify-between">
-                                        <h3 class="font-bold text-base text-slate-800 group-hover:text-teal-700 transition-colors">Guru Berbagi</h3>
-                                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-teal-500 transition-transform group-hover:translate-x-1"></i>
-                                    </div>
-                                    <p class="text-sm text-slate-500 mt-1 line-clamp-1">Portal berbagi karya guru & inovasi.</p>
+                        
+                        <div id="dynamic-menu-container" class="space-y-4">
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-5 animate-pulse">
+                                <div class="w-14 h-14 bg-slate-100 rounded-2xl"></div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="h-4 bg-slate-100 rounded w-1/3"></div>
+                                    <div class="h-3 bg-slate-100 rounded w-2/3"></div>
                                 </div>
                             </div>
-                        </a>
-
-                        <a href="https://slg-timkreatif.github.io/jurnalgtk" target="_blank" class="block group">
-                            <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 flex items-center gap-5 relative overflow-hidden">
-                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div class="shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                                    <i data-lucide="book-open" class="w-7 h-7"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center justify-between">
-                                        <h3 class="font-bold text-base text-slate-800 group-hover:text-blue-700 transition-colors">Jurnal Harian GTK</h3>
-                                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-blue-500 transition-transform group-hover:translate-x-1"></i>
-                                    </div>
-                                    <p class="text-sm text-slate-500 mt-1 line-clamp-1">Input & cetak jurnal harian otomatis.</p>
-                                </div>
-                            </div>
-                        </a>
+                        </div>
                     </div>
 
                     <div class="mt-8 pt-8 border-t border-slate-200 border-dashed text-center">
@@ -173,7 +145,6 @@
                                 Daftar Akun Baru Disini
                             </a>
                         </div>
-                        
                         <div class="mt-8 mb-4">
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Powered By</p>
                             <p class="text-xs text-slate-500 font-medium">Tim Kreatif Selogiri &copy; 2026</p>
@@ -183,54 +154,32 @@
                 </div>
             </div>
 
-            <nav class="bg-white/95 backdrop-blur-md border-t border-slate-200 pb-safe pt-1 px-6 flex justify-around items-center z-30 md:hidden fixed bottom-0 left-0 right-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)] h-[65px]">
+            <nav id="bottom-nav-container" class="bg-white/95 backdrop-blur-md border-t border-slate-200 pb-safe pt-1 px-6 flex justify-around items-center z-30 md:hidden fixed bottom-0 left-0 right-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)] h-[65px]">
                 <button class="nav-item active flex flex-col items-center justify-center gap-1 w-16 h-full">
                     <i data-lucide="layout-grid" class="w-6 h-6"></i>
                     <span class="text-[10px] font-medium">Home</span>
-                </button>
-                <button onclick="window.open('https://slg-timkreatif.github.io/guruberbagi/phone.html', '_blank')" class="text-slate-400 flex flex-col items-center justify-center gap-1 w-16 h-full hover:text-teal-600 transition-colors">
-                    <i data-lucide="presentation" class="w-6 h-6"></i>
-                    <span class="text-[10px] font-medium">Berbagi</span>
-                </button>
-                <button onclick="window.open('https://slg-timkreatif.github.io/jurnalgtk', '_blank')" class="text-slate-400 flex flex-col items-center justify-center gap-1 w-16 h-full hover:text-blue-600 transition-colors">
-                    <i data-lucide="book-open" class="w-6 h-6"></i>
-                    <span class="text-[10px] font-medium">Jurnal</span>
                 </button>
             </nav>
 
         </main>
     </div>
 
-    <div id="install-overlay" class="fixed inset-0 z-50 flex items-end justify-center hidden">
+    <div id="install-overlay" class="pwa-only-browser fixed inset-0 z-50 flex items-end justify-center hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0" id="install-backdrop"></div>
-        
         <div class="bg-white w-full max-w-md mx-auto rounded-t-3xl p-6 shadow-2xl relative z-10 transform translate-y-full transition-transform duration-300" id="install-sheet">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
-            
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-blue-100">
                     <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-12 h-12 rounded-full">
                 </div>
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Pasang Aplikasi</h3>
-                <p class="text-sm text-slate-500 leading-relaxed px-4">
-                    Untuk akses lebih cepat, stabil, dan tampilan layar penuh, disarankan menggunakan versi Aplikasi.
-                </p>
+                <p class="text-sm text-slate-500 leading-relaxed px-4">Untuk akses lebih cepat, stabil, dan tampilan layar penuh, disarankan menggunakan versi Aplikasi.</p>
             </div>
-
             <div class="space-y-3">
                 <button id="btn-install-now" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 active:scale-95 transition flex justify-center items-center gap-2 hover:bg-blue-700">
-                    <i data-lucide="download" class="w-5 h-5"></i>
-                    <span>Pasang Aplikasi Sekarang</span>
+                    <i data-lucide="download" class="w-5 h-5"></i><span>Pasang Aplikasi Sekarang</span>
                 </button>
-                <button id="btn-later" class="w-full bg-slate-50 text-slate-500 font-semibold py-3.5 rounded-xl hover:bg-slate-100 transition">
-                    Nanti Saja
-                </button>
-            </div>
-            
-            <div class="mt-6 flex items-center justify-center gap-4 text-[10px] text-slate-400 font-medium">
-                <span class="flex items-center gap-1"><i data-lucide="shield-check" class="w-3 h-3"></i> Aman</span>
-                <span class="flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3"></i> Ringan</span>
-                <span class="flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Praktis</span>
+                <button id="btn-later" class="w-full bg-slate-50 text-slate-500 font-semibold py-3.5 rounded-xl hover:bg-slate-100 transition">Nanti Saja</button>
             </div>
         </div>
     </div>
@@ -238,63 +187,121 @@
     <script>
         lucide.createIcons();
 
-        // 1. INIT UI DENGAN PENGECEKAN KETAT
-        const installWrapper = document.getElementById('install-container-wrapper');
-        const installOverlay = document.getElementById('install-overlay');
-
-        function initUI() {
-            // Cek Mode Standalone (App)
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            
-            // Cek apakah user pernah menutup tombol secara permanen
-            const isDismissed = localStorage.getItem('install_dismissed') === 'true';
-
-            if (isStandalone) {
-                // JIKA MODE APP: Hapus elemen dari DOM agar tidak mungkin muncul
-                if(installWrapper) installWrapper.remove();
-                if(installOverlay) installOverlay.remove();
-                console.log("App Mode: Install UI Removed.");
-                return;
-            }
-
-            if (isDismissed) {
-                // JIKA PERNAH DISMISS: Sembunyikan tapi jangan hapus (siapa tahu mau reset)
-                installWrapper.classList.add('hidden');
-                console.log("User dismissed install button previously.");
-                return;
-            }
-
-            // JIKA BROWSER & BELUM DISMISS: Tampilkan
-            installWrapper.classList.remove('hidden');
-            installWrapper.classList.add('flex'); // Centering
-
-            // Timer Popup Sheet (3 detik)
-            setTimeout(() => {
-                showInstallSheet();
-            }, 3000); 
+        // --- 1. AMBIL DATA (MENU & PENGUMUMAN) ---
+        function fetchAppData() {
+            // Memanggil fungsi baru getPortalData()
+            google.script.run.withSuccessHandler(renderApp).getPortalData();
         }
 
-        // 2. LOADING
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('initial-loader');
-            const main = document.getElementById('main-layout');
-            
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('./sw.js').catch(console.error);
+        function renderApp(data) {
+            const menuList = data.menu || [];
+            const info = data.info;
+
+            // --- A. Render Menu ---
+            const container = document.getElementById('dynamic-menu-container');
+            const bottomNav = document.getElementById('bottom-nav-container');
+            const sidebarNav = document.getElementById('sidebar-menu-list');
+
+            container.innerHTML = '';
+            sidebarNav.innerHTML = `
+                <button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard
+                </button>`;
+
+            menuList.forEach(item => {
+                const color = item.warna || 'blue';
+                
+                // Card
+                const cardHtml = `
+                <a href="${item.url}" target="_blank" class="block group">
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg hover:border-${color}-200 transition-all duration-300 flex items-center gap-5 relative overflow-hidden">
+                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-${color}-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl bg-${color}-50 text-${color}-600 border border-${color}-100 group-hover:bg-${color}-600 group-hover:text-white transition-colors duration-300">
+                            <i data-lucide="${item.icon}" class="w-7 h-7"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-base text-slate-800 group-hover:text-${color}-700 transition-colors">${item.judul}</h3>
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-1 line-clamp-1">${item.deskripsi}</p>
+                        </div>
+                    </div>
+                </a>`;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+
+                // Bottom Nav (Max 3 items recommended)
+                const navHtml = `
+                <button onclick="window.open('${item.url}', '_blank')" class="text-slate-400 flex flex-col items-center justify-center gap-1 w-16 h-full hover:text-${color}-600 transition-colors">
+                    <i data-lucide="${item.icon}" class="w-6 h-6"></i>
+                    <span class="text-[10px] font-medium truncate w-full text-center">${item.judul.split(' ')[0]}</span>
+                </button>`;
+                bottomNav.insertAdjacentHTML('beforeend', navHtml);
+
+                // Sidebar
+                const sideHtml = `
+                <button onclick="window.open('${item.url}', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
+                    <i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}
+                </button>`;
+                sidebarNav.insertAdjacentHTML('beforeend', sideHtml);
+            });
+
+            // --- B. Render Pengumuman ---
+            const annArea = document.getElementById('announcement-area');
+            if (info && info.status === 'ON') {
+                const colors = {
+                    red: 'bg-red-50 text-red-700 border-red-100',
+                    blue: 'bg-blue-50 text-blue-700 border-blue-100',
+                    yellow: 'bg-yellow-50 text-yellow-700 border-yellow-100',
+                    green: 'bg-green-50 text-green-700 border-green-100'
+                };
+                const theme = colors[info.warna] || colors.blue;
+                const iconMap = { red: 'alert-circle', blue: 'info', yellow: 'alert-triangle', green: 'check-circle' };
+                const iconName = iconMap[info.warna] || 'info';
+
+                annArea.innerHTML = `
+                <div class="${theme} border rounded-xl p-4 flex items-start gap-3 shadow-sm animate-pulse">
+                    <i data-lucide="${iconName}" class="w-5 h-5 shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="text-sm font-semibold leading-relaxed">${info.pesan}</p>
+                    </div>
+                </div>`;
+                annArea.classList.remove('hidden');
+            } else {
+                annArea.classList.add('hidden');
             }
 
-            setTimeout(() => {
-                loader.classList.add('opacity-0', 'pointer-events-none');
-                main.classList.remove('hidden');
-                main.classList.add('slide-up');
-                
-                initUI(); 
+            // --- C. Finishing ---
+            lucide.createIcons();
+            hideLoader();
+        }
 
-            }, 800);
+        function hideLoader() {
+            document.getElementById('initial-loader').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('main-layout').classList.remove('hidden');
+            document.getElementById('main-layout').classList.add('slide-up');
+        }
+
+        // --- 2. STARTUP ---
+        window.addEventListener('load', () => {
+            fetchAppData(); // Panggil Data dari GAS
+
+            const installWrapper = document.getElementById('install-container-wrapper');
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            const isDismissed = localStorage.getItem('install_dismissed') === 'true';
+
+            if (!isStandalone && !isDismissed) {
+                if(installWrapper) {
+                    installWrapper.classList.remove('hidden');
+                    installWrapper.classList.add('flex');
+                }
+                setTimeout(() => showInstallSheet(), 3000);
+            }
         });
 
-        // 3. SHEET LOGIC
+        // --- 3. INSTALL LOGIC ---
         let deferredPrompt;
+        const installOverlay = document.getElementById('install-overlay');
         const installBackdrop = document.getElementById('install-backdrop');
         const installSheet = document.getElementById('install-sheet');
         const btnInstall = document.getElementById('btn-install-now');
@@ -303,9 +310,7 @@
         const btnCloseSmall = document.getElementById('close-install-btn');
 
         function showInstallSheet() {
-            // Cek session agar tidak spam per sesi
             if (sessionStorage.getItem('sheet_shown')) return;
-            
             installOverlay.classList.remove('hidden');
             setTimeout(() => {
                 installBackdrop.classList.remove('opacity-0');
@@ -317,56 +322,38 @@
         function hideInstallSheet() {
             installBackdrop.classList.add('opacity-0');
             installSheet.classList.add('translate-y-full');
-            setTimeout(() => {
-                installOverlay.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { installOverlay.classList.add('hidden'); }, 300);
         }
 
-        // 4. EVENT INSTALL
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 
         const handleInstallClick = () => {
             hideInstallSheet();
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    deferredPrompt = null;
-                });
+                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
             } else {
                 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                if (isIOS) {
-                    alert("Petunjuk Install di iPhone:\n\n1. Tekan tombol Share (ikon panah atas)\n2. Pilih 'Add to Home Screen' (Tambah ke Layar Utama)");
-                } else {
-                    alert("Aplikasi mungkin sudah terinstall.\n\nCek menu browser (Titik Tiga) > 'Install App' atau cek layar utama HP Anda.");
-                }
+                if (isIOS) { alert("Petunjuk Install di iPhone:\n\n1. Tekan tombol Share (ikon panah atas)\n2. Pilih 'Add to Home Screen'"); } 
+                else { alert("Cek menu browser (Titik Tiga) > 'Install App' atau cek layar utama."); }
             }
         };
 
-        // 5. EVENT LISTENERS
-        btnInstall.addEventListener('click', handleInstallClick);
-        installBtnSmall.addEventListener('click', handleInstallClick);
-
-        btnLater.addEventListener('click', () => {
-            hideInstallSheet();
-        });
-        
-        // Listener Tombol Close (X) Kecil
-        btnCloseSmall.addEventListener('click', (e) => {
-            e.stopPropagation(); // Agar tidak memicu klik tombol install
+        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick);
+        if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick);
+        if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet());
+        if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => {
+            e.stopPropagation();
             if(confirm("Sembunyikan tombol download ini selamanya?")) {
-                installWrapper.classList.add('hidden');
+                document.getElementById('install-container-wrapper').classList.add('hidden');
                 localStorage.setItem('install_dismissed', 'true');
             }
         });
 
-        // Saat sukses install
         window.addEventListener('appinstalled', () => {
             hideInstallSheet();
-            if(installWrapper) installWrapper.classList.add('hidden');
-            localStorage.setItem('install_dismissed', 'true'); // Anggap dismissed agar tidak muncul lagi
+            if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden');
+            localStorage.setItem('install_dismissed', 'true');
         });
     </script>
 </body>
