@@ -37,9 +37,7 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .nav-item.active { color: #2563eb; }
         .sidebar-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
 
         /* JURUS ANTI-BOBOL: Force Hide di Mode App */
         @media all and (display-mode: standalone) {
@@ -71,7 +69,6 @@
             <div id="sidebar-menu-list" class="p-4 space-y-2 flex-1 overflow-y-auto">
                 <div class="animate-pulse space-y-2">
                     <div class="h-10 bg-slate-100 rounded-xl"></div>
-                    <div class="h-10 bg-slate-100 rounded-xl"></div>
                 </div>
             </div>
 
@@ -95,11 +92,10 @@
                 </div>
             </header>
 
-            <div class="flex-1 overflow-y-auto p-5 md:p-10 scroll-smooth pb-32 md:pb-10">
+            <div class="flex-1 overflow-y-auto p-5 md:p-10 scroll-smooth pb-10">
                 <div class="max-w-3xl mx-auto w-full fade-in space-y-6">
                     
-                    <div id="announcement-area" class="hidden">
-                        </div>
+                    <div id="announcement-area" class="hidden"></div>
                     
                     <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 -mr-8 -mt-8 w-40 h-40 rounded-full bg-white opacity-10 blur-2xl"></div>
@@ -108,7 +104,7 @@
                         <div class="relative z-10 text-center md:text-left">
                             <h3 class="text-xl font-bold mb-2 tracking-tight">Selamat Datang,</h3>
                             <p class="text-blue-50 text-sm leading-relaxed max-w-lg mx-auto md:mx-0 font-light mb-6">
-                                Akses seluruh layanan digital pendidikan dalam satu genggaman. Inovatif, Efisien, dan Terintegrasi.
+                                Akses seluruh layanan digital pendidikan dalam satu genggaman.
                             </p>
                             
                             <div id="install-container-wrapper" class="hidden justify-center md:justify-start relative">
@@ -153,15 +149,8 @@
 
                 </div>
             </div>
-
-            <nav id="bottom-nav-container" class="bg-white/95 backdrop-blur-md border-t border-slate-200 pb-safe pt-1 px-6 flex justify-around items-center z-30 md:hidden fixed bottom-0 left-0 right-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)] h-[65px]">
-                <button class="nav-item active flex flex-col items-center justify-center gap-1 w-16 h-full">
-                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
-                    <span class="text-[10px] font-medium">Home</span>
-                </button>
-            </nav>
-
-        </main>
+            
+            </main>
     </div>
 
     <div id="install-overlay" class="pwa-only-browser fixed inset-0 z-50 flex items-end justify-center hidden">
@@ -186,22 +175,30 @@
 
     <script>
         lucide.createIcons();
+        
+        // URL GAS ANDA (Pastikan sudah Deploy New Version)
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
 
-        // --- 1. AMBIL DATA (MENU & PENGUMUMAN) ---
+        // --- 1. FETCH DATA ---
         function fetchAppData() {
-            // Memanggil fungsi baru getPortalData()
-            google.script.run.withSuccessHandler(renderApp).getPortalData();
+            fetch(GAS_API_URL)
+                .then(response => response.json())
+                .then(data => renderApp(data))
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Gagal memuat data menu. Cek koneksi internet.");
+                    hideLoader();
+                });
         }
 
         function renderApp(data) {
             const menuList = data.menu || [];
             const info = data.info;
 
-            // --- A. Render Menu ---
             const container = document.getElementById('dynamic-menu-container');
-            const bottomNav = document.getElementById('bottom-nav-container');
             const sidebarNav = document.getElementById('sidebar-menu-list');
 
+            // Reset Container
             container.innerHTML = '';
             sidebarNav.innerHTML = `
                 <button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
@@ -210,10 +207,25 @@
 
             menuList.forEach(item => {
                 const color = item.warna || 'blue';
+                const target = (item.target || 'all').toLowerCase(); // mobile, desktop, atau all
                 
-                // Card
+                // --- LOGIKA FILTER TAMPILAN (Tailwind Classes) ---
+                let visibilityClass = '';
+                
+                if (target === 'mobile') {
+                    // Muncul di HP (block), Hilang di Desktop (md:hidden)
+                    visibilityClass = 'block md:hidden';
+                } else if (target === 'desktop') {
+                    // Hilang di HP (hidden), Muncul di Desktop (md:block)
+                    visibilityClass = 'hidden md:block';
+                } else {
+                    // Muncul di semua
+                    visibilityClass = 'block';
+                }
+
+                // --- 1. RENDER KARTU MENU (Pakai visibilityClass) ---
                 const cardHtml = `
-                <a href="${item.url}" target="_blank" class="block group">
+                <a href="${item.url}" target="_blank" class="${visibilityClass} group">
                     <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg hover:border-${color}-200 transition-all duration-300 flex items-center gap-5 relative overflow-hidden">
                         <div class="absolute left-0 top-0 bottom-0 w-1 bg-${color}-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl bg-${color}-50 text-${color}-600 border border-${color}-100 group-hover:bg-${color}-600 group-hover:text-white transition-colors duration-300">
@@ -230,23 +242,17 @@
                 </a>`;
                 container.insertAdjacentHTML('beforeend', cardHtml);
 
-                // Bottom Nav (Max 3 items recommended)
-                const navHtml = `
-                <button onclick="window.open('${item.url}', '_blank')" class="text-slate-400 flex flex-col items-center justify-center gap-1 w-16 h-full hover:text-${color}-600 transition-colors">
-                    <i data-lucide="${item.icon}" class="w-6 h-6"></i>
-                    <span class="text-[10px] font-medium truncate w-full text-center">${item.judul.split(' ')[0]}</span>
-                </button>`;
-                bottomNav.insertAdjacentHTML('beforeend', navHtml);
-
-                // Sidebar
-                const sideHtml = `
-                <button onclick="window.open('${item.url}', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
-                    <i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}
-                </button>`;
-                sidebarNav.insertAdjacentHTML('beforeend', sideHtml);
+                // --- 2. RENDER SIDEBAR (Hanya render jika target != mobile) ---
+                if (target !== 'mobile') {
+                    const sideHtml = `
+                    <button onclick="window.open('${item.url}', '_blank')" class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium">
+                        <i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}
+                    </button>`;
+                    sidebarNav.insertAdjacentHTML('beforeend', sideHtml);
+                }
             });
 
-            // --- B. Render Pengumuman ---
+            // --- RENDER PENGUMUMAN ---
             const annArea = document.getElementById('announcement-area');
             if (info && info.status === 'ON') {
                 const colors = {
@@ -271,7 +277,6 @@
                 annArea.classList.add('hidden');
             }
 
-            // --- C. Finishing ---
             lucide.createIcons();
             hideLoader();
         }
@@ -282,9 +287,9 @@
             document.getElementById('main-layout').classList.add('slide-up');
         }
 
-        // --- 2. STARTUP ---
+        // --- STARTUP & INSTALL LOGIC ---
         window.addEventListener('load', () => {
-            fetchAppData(); // Panggil Data dari GAS
+            fetchAppData(); 
 
             const installWrapper = document.getElementById('install-container-wrapper');
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -299,7 +304,7 @@
             }
         });
 
-        // --- 3. INSTALL LOGIC ---
+        // INSTALL SHEET LOGIC (Tetap Sama)
         let deferredPrompt;
         const installOverlay = document.getElementById('install-overlay');
         const installBackdrop = document.getElementById('install-backdrop');
