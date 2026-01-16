@@ -54,10 +54,7 @@
             transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
             opacity: 0;
         }
-        .submenu-container.open {
-            opacity: 1;
-        }
-        /* Rotasi Panah */
+        .submenu-container.open { opacity: 1; }
         .chevron-icon { transition: transform 0.3s; }
         .group.active .chevron-icon { transform: rotate(180deg); }
     </style>
@@ -211,25 +208,22 @@
             // Animasi Putar
             icon.classList.add('animate-spin');
             status.classList.remove('hidden');
-            
-            // Panggil data dengan parameter waktu (CACHE BUSTING)
             fetchAppData(true);
         }
 
         function fetchAppData(isRefresh = false) {
-            // Cache Busting: Tambahkan ?t=... agar browser tidak mengambil data cache lama
+            // Cache Busting
             const url = isRefresh ? `${GAS_API_URL}?t=${new Date().getTime()}` : GAS_API_URL;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     renderApp(data);
-                    
+                    // Stop animasi
                     if(isRefresh) {
                         const btn = document.getElementById('refresh-btn');
                         const status = document.getElementById('update-status');
                         const icon = btn.querySelector('svg');
-                        
                         setTimeout(() => {
                             icon.classList.remove('animate-spin');
                             status.classList.add('hidden');
@@ -262,7 +256,7 @@
             const parents = [];
             const childrenMap = {};
 
-            // Grouping Menu
+            // Grouping
             menuList.forEach(item => {
                 const p = item.parent ? String(item.parent).trim() : "";
                 if(p !== "") {
@@ -273,7 +267,7 @@
                 }
             });
 
-            // Render Menu Items
+            // Render
             parents.forEach(item => {
                 const color = item.warna || 'blue';
                 const target = (item.target || 'all').toLowerCase();
@@ -286,10 +280,9 @@
                 const gridSpan = hasChildren ? 'col-span-2 md:col-span-4' : 'col-span-1';
 
                 if (hasChildren) {
-                    // --- RENDER FOLDER (FULL WIDTH) ---
+                    // --- FOLDER (Full Width) ---
                     const children = childrenMap[item.judul];
                     let subItemsHtml = '';
-                    
                     children.forEach(sub => {
                         const subTarget = (sub.target || 'all').toLowerCase();
                         let subVis = 'block';
@@ -332,7 +325,7 @@
                     container.insertAdjacentHTML('beforeend', folderHtml);
 
                 } else {
-                    // --- RENDER MENU BIASA (GRID) ---
+                    // --- MENU BIASA (GRID) ---
                     const cardHtml = `
                     <a href="${item.url}" target="_blank" class="${visibilityClass} ${gridSpan} group block h-full">
                         <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-lg hover:border-${color}-200 transition-all duration-300 flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden h-full">
@@ -349,7 +342,6 @@
                     container.insertAdjacentHTML('beforeend', cardHtml);
                 }
 
-                // Render Sidebar (Desktop)
                 if (target !== 'mobile') {
                     const clickAction = hasChildren 
                         ? `document.getElementById('toggle-${item.judul.replace(/[^a-zA-Z0-9]/g, '-')}-group').scrollIntoView({behavior: 'smooth'})` 
@@ -362,13 +354,8 @@
                 }
             });
 
-            // --- RENDER PENGUMUMAN (CLEAN VERSION) ---
+            // --- RENDER PENGUMUMAN ---
             const annArea = document.getElementById('announcement-area');
-            
-            // RESET TOTAL: Kosongkan dan sembunyikan dulu
-            annArea.innerHTML = '';
-            annArea.className = 'hidden'; 
-
             if (info && info.status === 'ON') {
                 const colors = { red: 'bg-red-50 text-red-700 border-red-100', blue: 'bg-blue-50 text-blue-700 border-blue-100', yellow: 'bg-yellow-50 text-yellow-700 border-yellow-100', green: 'bg-green-50 text-green-700 border-green-100' };
                 const theme = colors[info.warna] || colors.blue;
@@ -379,8 +366,8 @@
                     <i data-lucide="${iconName}" class="w-5 h-5 shrink-0"></i>
                     <p class="text-xs font-semibold leading-relaxed">${info.pesan}</p>
                 </div>`;
-                annArea.classList.remove('hidden'); // Baru munculkan jika ada isi
-            }
+                annArea.classList.remove('hidden');
+            } else { annArea.classList.add('hidden'); }
 
             lucide.createIcons();
             hideLoader();
