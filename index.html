@@ -20,30 +20,20 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        
         .fade-in { animation: fadeIn 0.6s ease-out; }
         .slide-up { animation: slideUp 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
         .sidebar-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
-        
-        /* Modal Animation */
         .modal-enter { opacity: 0; transform: scale(0.95); }
         .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.2s ease-out; }
-        .modal-exit { opacity: 1; transform: scale(1); }
-        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: all 0.2s ease-in; }
-
-        @media all and (display-mode: standalone) {
-            #install-container-wrapper, #install-overlay { display: none !important; visibility: hidden !important; }
-        }
-        
-        /* Bounce Animation for Checkmark */
-        @keyframes check-bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
+        @media all and (display-mode: standalone) { #install-container-wrapper, #install-overlay { display: none !important; visibility: hidden !important; } }
+        @keyframes check-bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         .animate-check { animation: check-bounce 0.5s ease-in-out; }
+        .submenu-container { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, opacity 0.3s ease-out; opacity: 0; }
+        .submenu-container.open { opacity: 1; }
+        .chevron-icon { transition: transform 0.3s; }
+        .group.active .chevron-icon { transform: rotate(180deg); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 h-screen overflow-hidden flex flex-col">
@@ -63,11 +53,8 @@
                 </div>
             </div>
             <div id="sidebar-menu-list" class="p-4 space-y-2 flex-1 overflow-y-auto"></div>
-            <div class="p-6 border-t border-slate-100 bg-slate-50/50">
-                <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="flex items-center gap-2 text-sm font-bold text-teal-700 hover:underline">
-                    Daftar Guru Berbagi <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </a>
-            </div>
+            <div class="p-6 border-t border-slate-100 bg-slate-50/50" id="sidebar-footer-area">
+                </div>
         </aside>
 
         <main class="flex-1 flex flex-col relative overflow-hidden bg-slate-50">
@@ -129,8 +116,13 @@
                     </div>
 
                     <div class="mt-8 pt-8 border-t border-slate-200 border-dashed text-center">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Powered By</p>
-                        <p class="text-xs text-slate-500 font-medium">Tim Kreatif Selogiri &copy; 2026</p>
+                        <div id="footer-links-container" class="flex flex-wrap justify-center gap-4 mb-6">
+                            </div>
+                        
+                        <div class="mb-4">
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Powered By</p>
+                            <p class="text-xs text-slate-500 font-medium">Tim Kreatif Selogiri &copy; 2026</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,11 +168,9 @@
 
     <div id="success-modal" class="fixed inset-0 z-[60] flex items-center justify-center hidden">
         <div class="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-xs w-full mx-4 transform transition-all scale-95 opacity-0" id="success-content">
-            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-check">
-                <i data-lucide="check" class="w-10 h-10 stroke-[3]"></i>
-            </div>
+            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-check"><i data-lucide="check" class="w-10 h-10 stroke-[3]"></i></div>
             <h3 class="text-xl font-bold text-slate-800 mb-2">Terkirim!</h3>
-            <p class="text-sm text-slate-500 mb-6 leading-relaxed">Terima kasih atas masukan Anda. Sangat berarti bagi kami.</p>
+            <p class="text-sm text-slate-500 mb-6 leading-relaxed">Terima kasih atas masukan Anda.</p>
             <button onclick="closeSuccessModal()" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl hover:bg-slate-200 transition">Tutup</button>
         </div>
         <div class="absolute inset-0 bg-black/20 backdrop-blur-sm -z-10" onclick="closeSuccessModal()"></div>
@@ -204,197 +194,93 @@
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Pasang Aplikasi</h3>
                 <p class="text-sm text-slate-500 leading-relaxed px-4">Akses lebih cepat & stabil.</p>
             </div>
-            <div class="space-y-3">
-                <button id="btn-install-now" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-blue-700 transition active:scale-95"><i data-lucide="download" class="w-5 h-5 inline mr-2"></i>Pasang Sekarang</button>
-                <button id="btn-later" class="w-full bg-slate-50 text-slate-500 font-semibold py-3.5 rounded-xl hover:bg-slate-100 transition">Nanti Saja</button>
-            </div>
+            <div class="space-y-3"><button id="btn-install-now" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-blue-700 transition active:scale-95"><i data-lucide="download" class="w-5 h-5 inline mr-2"></i>Pasang Sekarang</button><button id="btn-later" class="w-full bg-slate-50 text-slate-500 font-semibold py-3.5 rounded-xl hover:bg-slate-100 transition">Nanti Saja</button></div>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
-        
         let globalChildrenMap = {}; 
 
-        // --- SUBMENU LOGIC ---
+        // --- SUBMENU ---
         function openSubmenu(parentTitle, iconName, color) {
             const children = globalChildrenMap[parentTitle] || [];
-            const sheet = document.getElementById('submenu-sheet');
-            const backdrop = document.getElementById('submenu-backdrop');
-            const overlay = document.getElementById('submenu-overlay');
-            const listContainer = document.getElementById('submenu-list');
-            const titleEl = document.getElementById('submenu-title');
-
-            titleEl.textContent = parentTitle;
-            listContainer.innerHTML = '';
-            children.forEach(sub => {
-                listContainer.insertAdjacentHTML('beforeend', `
-                    <a href="${sub.url}" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-${color}-50 hover:border-${color}-200 transition group">
-                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-${color}-600 border border-slate-200 shadow-sm group-hover:scale-110 transition-transform">
-                            <i data-lucide="${sub.icon || 'circle'}" class="w-5 h-5"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-slate-700 text-sm group-hover:text-${color}-700">${sub.judul}</h4>
-                            <p class="text-xs text-slate-400 line-clamp-1">${sub.deskripsi}</p>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-${color}-500"></i>
-                    </a>
-                `);
-            });
-            lucide.createIcons();
-            overlay.classList.remove('hidden');
-            setTimeout(() => { backdrop.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
+            const sheet = document.getElementById('submenu-sheet'); const backdrop = document.getElementById('submenu-backdrop'); const overlay = document.getElementById('submenu-overlay'); const listContainer = document.getElementById('submenu-list'); const titleEl = document.getElementById('submenu-title');
+            titleEl.textContent = parentTitle; listContainer.innerHTML = '';
+            children.forEach(sub => { listContainer.insertAdjacentHTML('beforeend', `<a href="${sub.url}" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-${color}-50 hover:border-${color}-200 transition group"><div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-${color}-600 border border-slate-200 shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="${sub.icon || 'circle'}" class="w-5 h-5"></i></div><div class="flex-1"><h4 class="font-bold text-slate-700 text-sm group-hover:text-${color}-700">${sub.judul}</h4><p class="text-xs text-slate-400 line-clamp-1">${sub.deskripsi}</p></div><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-${color}-500"></i></a>`); });
+            lucide.createIcons(); overlay.classList.remove('hidden'); setTimeout(() => { backdrop.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
         }
-
-        function closeSubmenu() {
-            const sheet = document.getElementById('submenu-sheet');
-            const backdrop = document.getElementById('submenu-backdrop');
-            const overlay = document.getElementById('submenu-overlay');
-            backdrop.classList.add('opacity-0');
-            sheet.classList.add('translate-y-full');
-            setTimeout(() => { overlay.classList.add('hidden'); }, 300);
-        }
+        function closeSubmenu() { const sheet = document.getElementById('submenu-sheet'); const backdrop = document.getElementById('submenu-backdrop'); const overlay = document.getElementById('submenu-overlay'); backdrop.classList.add('opacity-0'); sheet.classList.add('translate-y-full'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
 
         // --- RENDER APP ---
         function renderApp(data) {
             const menuList = data.menu || [];
+            const footerList = data.footer || []; // AMBIL DATA FOOTER
             const info = data.info;
             const container = document.getElementById('dynamic-menu-container');
             const sidebarNav = document.getElementById('sidebar-menu-list');
+            const sidebarFooter = document.getElementById('sidebar-footer-area');
+            const footerContainer = document.getElementById('footer-links-container');
 
-            container.className = 'grid grid-cols-2 md:grid-cols-4 gap-3';
-            container.innerHTML = '';
+            // 1. Render Menu Utama
+            container.className = 'grid grid-cols-2 md:grid-cols-4 gap-3'; container.innerHTML = '';
             sidebarNav.innerHTML = `<button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard</button>`;
-
-            const parents = [];
-            globalChildrenMap = {};
-
-            menuList.forEach(item => {
-                const p = item.parent ? String(item.parent).trim() : "";
-                if(p !== "") { if(!globalChildrenMap[p]) globalChildrenMap[p] = []; globalChildrenMap[p].push(item); } else { parents.push(item); }
-            });
+            
+            const parents = []; globalChildrenMap = {};
+            menuList.forEach(item => { const p = item.parent ? String(item.parent).trim() : ""; if(p !== "") { if(!globalChildrenMap[p]) globalChildrenMap[p] = []; globalChildrenMap[p].push(item); } else { parents.push(item); } });
 
             parents.forEach(item => {
-                const color = item.warna || 'blue';
-                const target = (item.target || 'all').toLowerCase();
-                const hasChildren = globalChildrenMap[item.judul] && globalChildrenMap[item.judul].length > 0;
-                let visibilityClass = 'block';
-                if (target === 'mobile') visibilityClass = 'block md:hidden'; else if (target === 'desktop') visibilityClass = 'hidden md:block';
-
+                const color = item.warna || 'blue'; const target = (item.target || 'all').toLowerCase(); const hasChildren = globalChildrenMap[item.judul] && globalChildrenMap[item.judul].length > 0;
+                let visibilityClass = 'block'; if (target === 'mobile') visibilityClass = 'block md:hidden'; else if (target === 'desktop') visibilityClass = 'hidden md:block';
                 let clickAction = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
                 let badgeHtml = hasChildren ? `<span class="absolute top-3 right-3 bg-${color}-100 text-${color}-600 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-${color}-200 shadow-sm">${globalChildrenMap[item.judul].length}</span>` : '';
-
-                const cardHtml = `
-                <div ${clickAction} class="${visibilityClass} group cursor-pointer h-full">
-                    <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-lg hover:border-${color}-200 transition-all duration-300 flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden h-full">
-                        <div class="absolute top-0 left-0 right-0 h-1 bg-${color}-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        ${badgeHtml}
-                        <div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-${color}-50 text-${color}-600 border border-${color}-100 group-hover:scale-110 transition-transform duration-300">
-                            <i data-lucide="${item.icon}" class="w-7 h-7"></i>
-                        </div>
-                        <div class="w-full">
-                            <h3 class="font-bold text-sm text-slate-800 group-hover:text-${color}-700 transition-colors leading-tight">${item.judul}</h3>
-                            <p class="text-[10px] text-slate-400 mt-1 line-clamp-1 hidden md:block">${item.deskripsi}</p>
-                        </div>
-                    </div>
-                </div>`;
-                
-                container.insertAdjacentHTML('beforeend', cardHtml);
-
-                if (target !== 'mobile') {
-                    const sideClick = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
-                    sidebarNav.insertAdjacentHTML('beforeend', `<button ${sideClick} class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}</button>`);
-                }
+                container.insertAdjacentHTML('beforeend', `<div ${clickAction} class="${visibilityClass} group cursor-pointer h-full"><div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-lg hover:border-${color}-200 transition-all duration-300 flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden h-full"><div class="absolute top-0 left-0 right-0 h-1 bg-${color}-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>${badgeHtml}<div class="w-14 h-14 flex items-center justify-center rounded-2xl bg-${color}-50 text-${color}-600 border border-${color}-100 group-hover:scale-110 transition-transform duration-300"><i data-lucide="${item.icon}" class="w-7 h-7"></i></div><div class="w-full"><h3 class="font-bold text-sm text-slate-800 group-hover:text-${color}-700 transition-colors leading-tight">${item.judul}</h3><p class="text-[10px] text-slate-400 mt-1 line-clamp-1 hidden md:block">${item.deskripsi}</p></div></div></div>`);
+                if (target !== 'mobile') { const sideClick = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`; sidebarNav.insertAdjacentHTML('beforeend', `<button ${sideClick} class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}</button>`); }
             });
 
-            const annArea = document.getElementById('announcement-area');
-            annArea.innerHTML = ''; annArea.className = 'hidden';
-            if (info && info.status === 'ON') {
-                const colors = { red: 'bg-red-50 text-red-700 border-red-100', blue: 'bg-blue-50 text-blue-700 border-blue-100', yellow: 'bg-yellow-50 text-yellow-700 border-yellow-100', green: 'bg-green-50 text-green-700 border-green-100' };
-                const theme = colors[info.warna] || colors.blue;
-                const iconName = info.warna === 'red' ? 'alert-circle' : 'info';
-                annArea.innerHTML = `<div class="${theme} border rounded-xl p-3 flex items-center gap-3 shadow-sm mb-4"><i data-lucide="${iconName}" class="w-5 h-5 shrink-0"></i><p class="text-xs font-semibold leading-relaxed">${info.pesan}</p></div>`;
-                annArea.classList.remove('hidden');
-            }
+            // 2. Render Pengumuman
+            const annArea = document.getElementById('announcement-area'); annArea.innerHTML = ''; annArea.className = 'hidden';
+            if (info && info.status === 'ON') { const colors = { red: 'bg-red-50 text-red-700 border-red-100', blue: 'bg-blue-50 text-blue-700 border-blue-100', yellow: 'bg-yellow-50 text-yellow-700 border-yellow-100', green: 'bg-green-50 text-green-700 border-green-100' }; const theme = colors[info.warna] || colors.blue; const iconName = info.warna === 'red' ? 'alert-circle' : 'info'; annArea.innerHTML = `<div class="${theme} border rounded-xl p-3 flex items-center gap-3 shadow-sm mb-4"><i data-lucide="${iconName}" class="w-5 h-5 shrink-0"></i><p class="text-xs font-semibold leading-relaxed">${info.pesan}</p></div>`; annArea.classList.remove('hidden'); }
+
+            // 3. Render Footer Links (DINAMIS)
+            footerContainer.innerHTML = '';
+            sidebarFooter.innerHTML = '';
+            footerList.forEach(link => {
+                const icon = link.icon || 'link';
+                // Footer Utama
+                footerContainer.insertAdjacentHTML('beforeend', 
+                    `<a href="${link.url}" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 text-xs font-semibold text-slate-600 hover:bg-teal-50 hover:text-teal-700 transition"><i data-lucide="${icon}" class="w-3.5 h-3.5"></i> ${link.judul}</a>`
+                );
+                // Sidebar Footer (Mirror)
+                sidebarFooter.insertAdjacentHTML('beforeend', 
+                    `<a href="${link.url}" target="_blank" class="flex items-center gap-2 text-sm font-bold text-teal-700 hover:underline mb-2"><i data-lucide="${icon}" class="w-4 h-4"></i> ${link.judul}</a>`
+                );
+            });
+
             lucide.createIcons();
             hideLoader();
         }
 
-        // --- FETCH & REFRESH ---
-        function forceRefresh() {
-            const btn = document.getElementById('refresh-btn');
-            const status = document.getElementById('update-status');
-            const icon = btn.querySelector('svg');
-            icon.classList.add('animate-spin');
-            status.classList.remove('hidden');
-            fetchAppData(true);
-        }
-        function fetchAppData(isRefresh = false) {
-            const url = isRefresh ? `${GAS_API_URL}?t=${new Date().getTime()}` : GAS_API_URL;
-            fetch(url).then(res => res.json()).then(data => {
-                renderApp(data);
-                if(isRefresh) {
-                    setTimeout(() => {
-                        document.getElementById('refresh-btn').querySelector('svg').classList.remove('animate-spin');
-                        document.getElementById('update-status').classList.add('hidden');
-                    }, 500);
-                }
-            }).catch(err => { console.error(err); hideLoader(); });
-        }
+        // --- UTILS (REFRESH, INSTALL, ETC) ---
+        function forceRefresh() { const btn = document.getElementById('refresh-btn'); const status = document.getElementById('update-status'); const icon = btn.querySelector('svg'); icon.classList.add('animate-spin'); status.classList.remove('hidden'); fetchAppData(true); }
+        function fetchAppData(isRefresh = false) { const url = isRefresh ? `${GAS_API_URL}?t=${new Date().getTime()}` : GAS_API_URL; fetch(url).then(res => res.json()).then(data => { renderApp(data); if(isRefresh) { setTimeout(() => { document.getElementById('refresh-btn').querySelector('svg').classList.remove('animate-spin'); document.getElementById('update-status').classList.add('hidden'); }, 500); } }).catch(err => { console.error(err); hideLoader(); }); }
         function hideLoader() { document.getElementById('initial-loader').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('main-layout').classList.remove('hidden'); document.getElementById('main-layout').classList.add('slide-up'); }
         window.onload = () => { fetchAppData(); const iw = document.getElementById('install-container-wrapper'); const isApp = window.matchMedia('(display-mode: standalone)').matches; if(!isApp && !localStorage.getItem('install_dismissed') && iw) { iw.classList.remove('hidden'); iw.classList.add('flex'); setTimeout(() => showInstallSheet(), 3000); } };
 
-        // --- FEEDBACK & SUCCESS MODAL LOGIC ---
+        // FEEDBACK, RATING, INSTALL LOGIC
         function toggleFeedbackModal() { const m = document.getElementById('feedback-modal'); const c = document.getElementById('feedback-content'); if(m.classList.contains('hidden')){m.classList.remove('hidden');setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10);}else{c.classList.remove('scale-100','opacity-100');c.classList.add('scale-95','opacity-0');setTimeout(()=>{m.classList.add('hidden');},300);} }
-        function showSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); m.classList.remove('hidden'); setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); 
-            // Auto close after 3s
-            setTimeout(() => closeSuccessModal(), 3000); 
-        }
+        function showSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); m.classList.remove('hidden'); setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); setTimeout(() => closeSuccessModal(), 3000); }
         function closeSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); c.classList.remove('scale-100','opacity-100'); c.classList.add('scale-95','opacity-0'); setTimeout(()=>{m.classList.add('hidden');},300); }
         function toggleAnonim() { const c = document.getElementById('anonim-check').checked; const g = document.getElementById('identity-group'); c ? g.classList.add('opacity-50','pointer-events-none') : g.classList.remove('opacity-50','pointer-events-none'); }
         function setRating(v) { document.getElementById('rating-input').value = v; document.getElementById('star-container').querySelectorAll('button').forEach((b,i)=>{ i<v ? (b.classList.remove('text-slate-300'),b.classList.add('text-yellow-400')) : (b.classList.add('text-slate-300'),b.classList.remove('text-yellow-400')) }); }
-        
-        function submitFeedback(e) { 
-            e.preventDefault(); 
-            const btn = document.getElementById('btn-submit-fb'); 
-            const txt = btn.innerHTML; 
-            btn.innerHTML = 'Mengirim...'; 
-            btn.disabled = true; 
-            const fd = new FormData(e.target); 
-            const d = Object.fromEntries(fd.entries()); 
-            d.isAnonim = document.getElementById('anonim-check').checked; 
-            
-            fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)})
-            .then(()=>{
-                toggleFeedbackModal(); // Tutup form
-                showSuccessModal();    // Munculkan centang hijau
-                e.target.reset(); 
-                setRating(5);
-            })
-            .catch(()=>{alert("Gagal kirim. Cek koneksi.");})
-            .finally(()=>{btn.innerHTML = txt; btn.disabled = false; lucide.createIcons();}); 
-        }
-        
-        // --- INSTALL LOGIC ---
-        let deferredPrompt;
-        const installOverlay = document.getElementById('install-overlay');
-        const installBackdrop = document.getElementById('install-backdrop');
-        const installSheet = document.getElementById('install-sheet');
-        const btnInstall = document.getElementById('btn-install-now');
-        const btnLater = document.getElementById('btn-later');
-        const installBtnSmall = document.getElementById('install-btn');
-        const btnCloseSmall = document.getElementById('close-install-btn');
-
+        function submitFeedback(e) { e.preventDefault(); const btn = document.getElementById('btn-submit-fb'); const txt = btn.innerHTML; btn.innerHTML = 'Mengirim...'; btn.disabled = true; const fd = new FormData(e.target); const d = Object.fromEntries(fd.entries()); d.isAnonim = document.getElementById('anonim-check').checked; fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)}).then(()=>{toggleFeedbackModal(); showSuccessModal(); e.target.reset(); setRating(5);}).catch(()=>{alert("Gagal kirim.");}).finally(()=>{btn.innerHTML = txt; btn.disabled = false; lucide.createIcons();}); }
+        let deferredPrompt; const installOverlay = document.getElementById('install-overlay'); const installBackdrop = document.getElementById('install-backdrop'); const installSheet = document.getElementById('install-sheet'); const btnInstall = document.getElementById('btn-install-now'); const btnLater = document.getElementById('btn-later'); const installBtnSmall = document.getElementById('install-btn'); const btnCloseSmall = document.getElementById('close-install-btn');
         function showInstallSheet() { if (sessionStorage.getItem('sheet_shown')) return; installOverlay.classList.remove('hidden'); setTimeout(() => { installBackdrop.classList.remove('opacity-0'); installSheet.classList.remove('translate-y-full'); }, 50); sessionStorage.setItem('sheet_shown', 'true'); }
         function hideInstallSheet() { installBackdrop.classList.add('opacity-0'); installSheet.classList.add('translate-y-full'); setTimeout(() => { installOverlay.classList.add('hidden'); }, 300); }
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
         const handleInstallClick = () => { hideInstallSheet(); if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); } else { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if(isIOS) alert("iPhone: Tekan tombol Share > Add to Home Screen"); else alert("Cek menu browser > Install App"); } };
-        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick);
-        if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick);
-        if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet());
-        if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Sembunyikan tombol download ini selamanya?")) { document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); } });
-        window.addEventListener('appinstalled', () => { hideInstallSheet(); if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); });
+        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick); if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick); if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet()); if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Sembunyikan tombol download ini selamanya?")) { document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); } }); window.addEventListener('appinstalled', () => { hideInstallSheet(); if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); });
     </script>
 </body>
 </html>
