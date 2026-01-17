@@ -12,9 +12,7 @@
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -28,31 +26,34 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .loader {
-            border: 3px solid #f3f4f6;
-            border-top: 3px solid #10b981;
-            border-radius: 50%;
-            width: 32px; height: 32px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         .sidebar-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
+        
+        /* Modal Animation */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: all 0.2s ease-out; }
+        .modal-exit { opacity: 1; transform: scale(1); }
+        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: all 0.2s ease-in; }
 
         @media all and (display-mode: standalone) {
             #install-container-wrapper, #install-overlay { display: none !important; visibility: hidden !important; }
         }
+        
+        /* Bounce Animation for Checkmark */
+        @keyframes check-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .animate-check { animation: check-bounce 0.5s ease-in-out; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 h-screen overflow-hidden flex flex-col">
 
     <div id="initial-loader" class="fixed inset-0 z-[100] bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="loader mb-4"></div>
+        <div class="loader w-8 h-8 rounded-full border-4 border-slate-200 border-t-emerald-500 animate-spin mb-4"></div>
         <p class="text-slate-500 text-xs font-semibold tracking-widest uppercase">Memuat Portal...</p>
     </div>
 
     <div id="main-layout" class="flex h-full w-full hidden">
-        
         <aside class="hidden md:flex w-72 bg-white border-r border-slate-200 flex-col z-20 shadow-sm">
             <div class="p-8 flex items-center gap-4 border-b border-slate-100">
                 <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-10 h-10 rounded-full border border-slate-100 shadow-sm">
@@ -116,11 +117,13 @@
                                 <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span> Memperbarui...
                             </span>
                         </div>
-                        
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <div class="col-span-2 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-5 animate-pulse">
                                 <div class="w-14 h-14 bg-slate-100 rounded-2xl"></div>
-                                <div class="flex-1 space-y-2"><div class="h-4 bg-slate-100 rounded w-1/3"></div><div class="h-3 bg-slate-100 rounded w-2/3"></div></div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="h-4 bg-slate-100 rounded w-1/3"></div>
+                                    <div class="h-3 bg-slate-100 rounded w-2/3"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -171,24 +174,24 @@
         </div>
     </div>
 
+    <div id="success-modal" class="fixed inset-0 z-[60] flex items-center justify-center hidden">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-xs w-full mx-4 transform transition-all scale-95 opacity-0" id="success-content">
+            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-check">
+                <i data-lucide="check" class="w-10 h-10 stroke-[3]"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Terkirim!</h3>
+            <p class="text-sm text-slate-500 mb-6 leading-relaxed">Terima kasih atas masukan Anda. Sangat berarti bagi kami.</p>
+            <button onclick="closeSuccessModal()" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl hover:bg-slate-200 transition">Tutup</button>
+        </div>
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm -z-10" onclick="closeSuccessModal()"></div>
+    </div>
+
     <div id="submenu-overlay" class="fixed inset-0 z-50 flex items-end justify-center hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0" id="submenu-backdrop" onclick="closeSubmenu()"></div>
         <div class="bg-white w-full max-w-md mx-auto rounded-t-3xl shadow-2xl relative z-10 transform translate-y-full transition-transform duration-300 flex flex-col max-h-[80vh]" id="submenu-sheet">
-            
-            <div class="w-full flex justify-center pt-3 pb-1" onclick="closeSubmenu()">
-                <div class="w-12 h-1.5 bg-slate-200 rounded-full"></div>
-            </div>
-
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <div>
-                    <h3 id="submenu-title" class="text-lg font-bold text-slate-800">Folder Name</h3>
-                    <p class="text-xs text-slate-400">Pilih menu di bawah ini</p>
-                </div>
-                <button onclick="closeSubmenu()" class="bg-slate-100 p-2 rounded-full text-slate-500 hover:bg-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-
-            <div id="submenu-list" class="p-6 overflow-y-auto space-y-3">
-                </div>
+            <div class="w-full flex justify-center pt-3 pb-1" onclick="closeSubmenu()"><div class="w-12 h-1.5 bg-slate-200 rounded-full"></div></div>
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between"><div><h3 id="submenu-title" class="text-lg font-bold text-slate-800">Menu</h3><p class="text-xs text-slate-400">Pilih menu di bawah ini</p></div><button onclick="closeSubmenu()" class="bg-slate-100 p-2 rounded-full text-slate-500 hover:bg-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <div id="submenu-list" class="p-6 overflow-y-auto space-y-3"></div>
         </div>
     </div>
 
@@ -212,9 +215,9 @@
         lucide.createIcons();
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
         
-        let globalChildrenMap = {}; // Simpan data submenu di memori
+        let globalChildrenMap = {}; 
 
-        // --- SUBMENU SHEET LOGIC ---
+        // --- SUBMENU LOGIC ---
         function openSubmenu(parentTitle, iconName, color) {
             const children = globalChildrenMap[parentTitle] || [];
             const sheet = document.getElementById('submenu-sheet');
@@ -223,13 +226,9 @@
             const listContainer = document.getElementById('submenu-list');
             const titleEl = document.getElementById('submenu-title');
 
-            // Set Title
             titleEl.textContent = parentTitle;
-            
-            // Render List Items inside Sheet
             listContainer.innerHTML = '';
             children.forEach(sub => {
-                // Ignore target filter inside submenu for simplicity (or apply if needed)
                 listContainer.insertAdjacentHTML('beforeend', `
                     <a href="${sub.url}" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-${color}-50 hover:border-${color}-200 transition group">
                         <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-${color}-600 border border-slate-200 shadow-sm group-hover:scale-110 transition-transform">
@@ -244,78 +243,48 @@
                 `);
             });
             lucide.createIcons();
-
-            // Show Sheet
             overlay.classList.remove('hidden');
-            setTimeout(() => {
-                backdrop.classList.remove('opacity-0');
-                sheet.classList.remove('translate-y-full');
-            }, 10);
+            setTimeout(() => { backdrop.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
         }
 
         function closeSubmenu() {
             const sheet = document.getElementById('submenu-sheet');
             const backdrop = document.getElementById('submenu-backdrop');
             const overlay = document.getElementById('submenu-overlay');
-            
             backdrop.classList.add('opacity-0');
             sheet.classList.add('translate-y-full');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { overlay.classList.add('hidden'); }, 300);
         }
 
-        // --- RENDER APP (GRID UNIFORM) ---
+        // --- RENDER APP ---
         function renderApp(data) {
             const menuList = data.menu || [];
             const info = data.info;
             const container = document.getElementById('dynamic-menu-container');
             const sidebarNav = document.getElementById('sidebar-menu-list');
 
-            // Reset
             container.className = 'grid grid-cols-2 md:grid-cols-4 gap-3';
             container.innerHTML = '';
             sidebarNav.innerHTML = `<button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard</button>`;
 
             const parents = [];
-            globalChildrenMap = {}; // Reset global map
+            globalChildrenMap = {};
 
             menuList.forEach(item => {
                 const p = item.parent ? String(item.parent).trim() : "";
-                if(p !== "") {
-                    if(!globalChildrenMap[p]) globalChildrenMap[p] = [];
-                    globalChildrenMap[p].push(item);
-                } else {
-                    parents.push(item);
-                }
+                if(p !== "") { if(!globalChildrenMap[p]) globalChildrenMap[p] = []; globalChildrenMap[p].push(item); } else { parents.push(item); }
             });
 
-            // RENDER LOOP
             parents.forEach(item => {
                 const color = item.warna || 'blue';
                 const target = (item.target || 'all').toLowerCase();
                 const hasChildren = globalChildrenMap[item.judul] && globalChildrenMap[item.judul].length > 0;
-                
                 let visibilityClass = 'block';
-                if (target === 'mobile') visibilityClass = 'block md:hidden';
-                else if (target === 'desktop') visibilityClass = 'hidden md:block';
+                if (target === 'mobile') visibilityClass = 'block md:hidden'; else if (target === 'desktop') visibilityClass = 'hidden md:block';
 
-                // SEMUA MENU JADI KOTAK (GRID) - KONSISTENSI VISUAL
-                // Jika hasChildren: onclick buka Sheet
-                // Jika tidak: onclick buka Link
-                
-                let clickAction = '';
-                let badgeHtml = '';
+                let clickAction = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
+                let badgeHtml = hasChildren ? `<span class="absolute top-3 right-3 bg-${color}-100 text-${color}-600 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-${color}-200 shadow-sm">${globalChildrenMap[item.judul].length}</span>` : '';
 
-                if (hasChildren) {
-                    clickAction = `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"`;
-                    // Badge jumlah item
-                    badgeHtml = `<span class="absolute top-3 right-3 bg-${color}-100 text-${color}-600 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-${color}-200 shadow-sm">${globalChildrenMap[item.judul].length}</span>`;
-                } else {
-                    clickAction = `onclick="window.open('${item.url}', '_blank')"`;
-                }
-
-                // HTML KARTU (SERAGAM UNTUK FOLDER & LINK)
                 const cardHtml = `
                 <div ${clickAction} class="${visibilityClass} group cursor-pointer h-full">
                     <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-lg hover:border-${color}-200 transition-all duration-300 flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden h-full">
@@ -333,14 +302,12 @@
                 
                 container.insertAdjacentHTML('beforeend', cardHtml);
 
-                // Sidebar Logic (Desktop)
                 if (target !== 'mobile') {
                     const sideClick = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
                     sidebarNav.insertAdjacentHTML('beforeend', `<button ${sideClick} class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}</button>`);
                 }
             });
 
-            // Pengumuman
             const annArea = document.getElementById('announcement-area');
             annArea.innerHTML = ''; annArea.className = 'hidden';
             if (info && info.status === 'ON') {
@@ -354,7 +321,7 @@
             hideLoader();
         }
 
-        // --- FETCH & UTILS ---
+        // --- FETCH & REFRESH ---
         function forceRefresh() {
             const btn = document.getElementById('refresh-btn');
             const status = document.getElementById('update-status');
@@ -378,12 +345,38 @@
         function hideLoader() { document.getElementById('initial-loader').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('main-layout').classList.remove('hidden'); document.getElementById('main-layout').classList.add('slide-up'); }
         window.onload = () => { fetchAppData(); const iw = document.getElementById('install-container-wrapper'); const isApp = window.matchMedia('(display-mode: standalone)').matches; if(!isApp && !localStorage.getItem('install_dismissed') && iw) { iw.classList.remove('hidden'); iw.classList.add('flex'); setTimeout(() => showInstallSheet(), 3000); } };
 
-        // FEEDBACK & INSTALL LOGIC (SAMA SEPERTI SEBELUMNYA)
+        // --- FEEDBACK & SUCCESS MODAL LOGIC ---
         function toggleFeedbackModal() { const m = document.getElementById('feedback-modal'); const c = document.getElementById('feedback-content'); if(m.classList.contains('hidden')){m.classList.remove('hidden');setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10);}else{c.classList.remove('scale-100','opacity-100');c.classList.add('scale-95','opacity-0');setTimeout(()=>{m.classList.add('hidden');},300);} }
+        function showSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); m.classList.remove('hidden'); setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); 
+            // Auto close after 3s
+            setTimeout(() => closeSuccessModal(), 3000); 
+        }
+        function closeSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); c.classList.remove('scale-100','opacity-100'); c.classList.add('scale-95','opacity-0'); setTimeout(()=>{m.classList.add('hidden');},300); }
         function toggleAnonim() { const c = document.getElementById('anonim-check').checked; const g = document.getElementById('identity-group'); c ? g.classList.add('opacity-50','pointer-events-none') : g.classList.remove('opacity-50','pointer-events-none'); }
         function setRating(v) { document.getElementById('rating-input').value = v; document.getElementById('star-container').querySelectorAll('button').forEach((b,i)=>{ i<v ? (b.classList.remove('text-slate-300'),b.classList.add('text-yellow-400')) : (b.classList.add('text-slate-300'),b.classList.remove('text-yellow-400')) }); }
-        function submitFeedback(e) { e.preventDefault(); const btn = document.getElementById('btn-submit-fb'); const txt = btn.innerHTML; btn.innerHTML = 'Mengirim...'; btn.disabled = true; const fd = new FormData(e.target); const d = Object.fromEntries(fd.entries()); d.isAnonim = document.getElementById('anonim-check').checked; fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)}).then(()=>{alert("Terima kasih!"); toggleFeedbackModal(); e.target.reset(); setRating(5);}).catch(()=>{alert("Gagal kirim.");}).finally(()=>{btn.innerHTML = txt; btn.disabled = false; lucide.createIcons();}); }
         
+        function submitFeedback(e) { 
+            e.preventDefault(); 
+            const btn = document.getElementById('btn-submit-fb'); 
+            const txt = btn.innerHTML; 
+            btn.innerHTML = 'Mengirim...'; 
+            btn.disabled = true; 
+            const fd = new FormData(e.target); 
+            const d = Object.fromEntries(fd.entries()); 
+            d.isAnonim = document.getElementById('anonim-check').checked; 
+            
+            fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)})
+            .then(()=>{
+                toggleFeedbackModal(); // Tutup form
+                showSuccessModal();    // Munculkan centang hijau
+                e.target.reset(); 
+                setRating(5);
+            })
+            .catch(()=>{alert("Gagal kirim. Cek koneksi.");})
+            .finally(()=>{btn.innerHTML = txt; btn.disabled = false; lucide.createIcons();}); 
+        }
+        
+        // --- INSTALL LOGIC ---
         let deferredPrompt;
         const installOverlay = document.getElementById('install-overlay');
         const installBackdrop = document.getElementById('install-backdrop');
