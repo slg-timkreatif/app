@@ -117,12 +117,30 @@
     <div id="update-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden p-4">
         <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-3xl shadow-2xl relative z-10 p-6 text-center transform scale-100 transition-all">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-bounce">
-                <i data-lucide="download-cloud" class="w-8 h-8"></i>
-            </div>
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-bounce"><i data-lucide="download-cloud" class="w-8 h-8"></i></div>
             <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Update Tersedia!</h3>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">Versi terbaru aplikasi sudah siap. Silakan update untuk fitur terbaru.</p>
-            <button onclick="applyUpdate()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-blue-700 transition active:scale-95">Update Sekarang</button>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">Versi terbaru aplikasi sudah siap.</p>
+            <div class="space-y-3">
+                <button onclick="applyUpdate()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-blue-700 transition active:scale-95">Update Sekarang</button>
+                <button onclick="closeUpdateModal()" class="w-full bg-transparent text-slate-400 font-semibold py-2 text-sm hover:text-slate-600 dark:hover:text-slate-200 transition">Nanti Saja</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="fixed inset-0 z-[90] flex items-center justify-center hidden p-4">
+        <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeInfoModal()"></div>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-3xl shadow-2xl relative z-10 overflow-hidden transform scale-100 transition-all">
+            <div id="info-image-container" class="w-full h-48 bg-slate-100 dark:bg-slate-700 hidden">
+                <img id="info-image" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6 text-center">
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mx-auto mb-4" id="info-icon-wrapper">
+                    <i data-lucide="bell-ring" class="w-6 h-6"></i>
+                </div>
+                <h3 id="info-title" class="text-lg font-bold text-slate-800 dark:text-white mb-2">Informasi Penting</h3>
+                <p id="info-desc" class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">...</p>
+                <button onclick="closeInfoModal()" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-3 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-600 transition">Tutup / Mengerti</button>
+            </div>
         </div>
     </div>
 
@@ -196,12 +214,11 @@
     <script>
         lucide.createIcons();
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
-        let globalChildrenMap = {}; 
+        const CURRENT_APP_VERSION = "1.0"; // UPDATE DISINI SAAT DEPLOY
         
-        // --- 0. VERSION CONTROL (SET VERSI DISINI SETIAP DEPLOY) ---
-        const CURRENT_APP_VERSION = "1.0"; // GANTI ANGKA INI DI KODE SETIAP KALI DEPLOY VERSI BARU (Misal jadi 1.1)
+        let globalChildrenMap = {}; 
 
-        // 1. Dark Mode
+        // 1. Theme Logic
         function toggleDarkMode() {
             const html = document.documentElement;
             const metaTheme = document.querySelector("meta[name=theme-color]");
@@ -238,17 +255,34 @@
         }
         function closeSubmenu() { const sheet = document.getElementById('submenu-sheet'); const backdrop = document.getElementById('submenu-backdrop'); const overlay = document.getElementById('submenu-overlay'); backdrop.classList.add('opacity-0'); sheet.classList.add('translate-y-full'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
 
-        // 3. Render App
+        // 3. Render
         function renderApp(data) {
             const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info;
             const container = document.getElementById('dynamic-menu-container'); const sidebarNav = document.getElementById('sidebar-menu-list'); const sidebarFooter = document.getElementById('sidebar-footer-area'); const footerContainer = document.getElementById('footer-links-container');
 
-            // CEK VERSI (LOGIC BARU)
+            // OTA Check
             if (info && info.versi) {
-                const serverVersion = String(info.versi).trim();
-                if (serverVersion !== CURRENT_APP_VERSION) {
-                    document.getElementById('update-modal').classList.remove('hidden');
+                if (String(info.versi).trim() !== CURRENT_APP_VERSION) document.getElementById('update-modal').classList.remove('hidden');
+            }
+
+            // POPUP Check
+            if (info && info.pop_status === 'ON') {
+                const imgContainer = document.getElementById('info-image-container');
+                const imgEl = document.getElementById('info-image');
+                const iconWrap = document.getElementById('info-icon-wrapper');
+                
+                document.getElementById('info-title').textContent = info.pop_judul || "Informasi";
+                document.getElementById('info-desc').textContent = info.pop_pesan || "";
+                
+                if(info.pop_gambar) {
+                    imgEl.src = info.pop_gambar;
+                    imgContainer.classList.remove('hidden');
+                    iconWrap.classList.add('hidden');
+                } else {
+                    imgContainer.classList.add('hidden');
+                    iconWrap.classList.remove('hidden');
                 }
+                document.getElementById('info-modal').classList.remove('hidden');
             }
 
             container.className = 'grid grid-cols-2 md:grid-cols-4 gap-4'; container.innerHTML = '';
@@ -262,7 +296,6 @@
                 const color = item.warna || 'blue'; const target = (item.target || 'all').toLowerCase(); const hasChildren = globalChildrenMap[item.judul] && globalChildrenMap[item.judul].length > 0;
                 let visibilityClass = 'block'; if (target === 'mobile') visibilityClass = 'block md:hidden'; else if (target === 'desktop') visibilityClass = 'hidden md:block';
                 let clickAction = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
-                
                 let badgeHtml = '';
                 if(item.label) {
                     const labelColor = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : 'bg-blue-500';
@@ -270,19 +303,15 @@
                 } else if(hasChildren) {
                     badgeHtml = `<div class="absolute top-3 right-3 text-${color}-400 dark:text-${color}-300 bg-${color}-50 dark:bg-${color}-900/40 p-1.5 rounded-lg border border-${color}-100 dark:border-${color}-800 shadow-sm z-10"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></div>`;
                 }
-
                 const isWide = item.ukuran && item.ukuran.toLowerCase() === 'wide';
                 const gridClass = isWide ? 'col-span-2' : 'col-span-1';
-                
                 let cardContentHtml = '';
                 if(isWide) {
                     cardContentHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none hover:border-${color}-200 dark:hover:border-${color}-800 transition-all duration-300 flex items-center text-left gap-5 relative overflow-visible h-full">${badgeHtml}<div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 dark:border-${color}-800 group-hover:scale-110 group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900/50 transition-all duration-300 shadow-inner"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0"><h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 group-hover:text-${color}-700 dark:group-hover:text-${color}-400 transition-colors leading-tight mb-1">${item.judul}</h3><p class="text-xs text-slate-400 dark:text-slate-500 font-medium line-clamp-2">${item.deskripsi}</p></div></div>`;
                 } else {
                     cardContentHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none hover:border-${color}-200 dark:hover:border-${color}-800 transition-all duration-300 flex flex-col items-center justify-center text-center gap-4 relative overflow-visible h-full">${badgeHtml}<div class="w-16 h-16 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 dark:border-${color}-800 group-hover:scale-110 group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900/50 transition-all duration-300 shadow-inner"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="w-full"><h3 class="font-bold text-sm text-slate-700 dark:text-slate-200 group-hover:text-${color}-700 dark:group-hover:text-${color}-400 transition-colors leading-tight mb-1">${item.judul}</h3><p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium line-clamp-1 hidden md:block">${item.deskripsi}</p></div></div>`;
                 }
-
                 container.insertAdjacentHTML('beforeend', `<div ${clickAction} class="${visibilityClass} ${gridClass} group cursor-pointer h-full active:scale-95 transition-transform duration-200">${cardContentHtml}</div>`);
-
                 if (target !== 'mobile') {
                     const sideClick = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
                     sidebarNav.insertAdjacentHTML('beforeend', `<button ${sideClick} class="sidebar-item w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.judul}</button>`);
@@ -307,17 +336,14 @@
             lucide.createIcons(); hideLoader();
         }
 
-        // 4. Utils
         function forceRefresh() { const btn = document.getElementById('refresh-btn'); const status = document.getElementById('update-status'); const icon = btn.querySelector('svg'); icon.classList.add('animate-spin'); status.classList.remove('hidden'); status.classList.add('flex'); fetchAppData(true); }
         function fetchAppData(isRefresh = false) { const url = isRefresh ? `${GAS_API_URL}?t=${new Date().getTime()}` : GAS_API_URL; fetch(url).then(res => res.json()).then(data => { renderApp(data); if(isRefresh) { setTimeout(() => { document.getElementById('refresh-btn').querySelector('svg').classList.remove('animate-spin'); document.getElementById('update-status').classList.add('hidden'); document.getElementById('update-status').classList.remove('flex'); }, 500); } }).catch(err => { console.error(err); hideLoader(); }); }
         function hideLoader() { document.getElementById('initial-loader').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('main-layout').classList.remove('hidden'); }
-        function applyUpdate() {
-            // Force Reload dengan Cache Buster agar browser mengambil ulang HTML baru dari GAS
-            window.location.href = window.location.pathname + '?v=' + new Date().getTime();
-        }
+        function applyUpdate() { window.location.href = window.location.pathname + '?v=' + new Date().getTime(); }
+        function closeUpdateModal() { document.getElementById('update-modal').classList.add('hidden'); }
+        function closeInfoModal() { document.getElementById('info-modal').classList.add('hidden'); }
         window.onload = () => { fetchAppData(); const iw = document.getElementById('install-container-wrapper'); const isApp = window.matchMedia('(display-mode: standalone)').matches; if(!isApp && !localStorage.getItem('install_dismissed') && iw) { iw.classList.remove('hidden'); iw.classList.add('flex'); setTimeout(() => showInstallSheet(), 3000); } };
 
-        // 5. Modals & Feedback
         function toggleFeedbackModal() { const m = document.getElementById('feedback-modal'); const c = document.getElementById('feedback-content'); if(m.classList.contains('hidden')){m.classList.remove('hidden');setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10);}else{c.classList.remove('scale-100','opacity-100');c.classList.add('scale-95','opacity-0');setTimeout(()=>{m.classList.add('hidden');},300);} }
         function showSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); m.classList.remove('hidden'); setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); setTimeout(() => closeSuccessModal(), 3000); }
         function closeSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); c.classList.remove('scale-100','opacity-100'); c.classList.add('scale-95','opacity-0'); setTimeout(()=>{m.classList.add('hidden');},300); }
