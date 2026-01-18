@@ -299,9 +299,14 @@
 
             refreshData: function() {
                 const btn = document.getElementById('refresh-btn');
+                // SAFE CHECK FOR BTN ICON
+                if(btn) {
+                    const icon = btn.querySelector('svg') || btn.querySelector('i');
+                    if(icon) icon.classList.add('animate-spin');
+                }
                 const status = document.getElementById('sync-status');
-                if(btn) btn.querySelector('svg').classList.add('animate-spin');
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); }
+                
                 fetch(this.apiURL + "?t=" + new Date().getTime())
                     .then(res => res.json())
                     .then(data => {
@@ -311,7 +316,10 @@
                     .catch(e => console.log("Offline"))
                     .finally(() => {
                         setTimeout(() => { 
-                            if(btn) btn.querySelector('svg').classList.remove('animate-spin');
+                            if(btn) {
+                                const icon = btn.querySelector('svg') || btn.querySelector('i');
+                                if(icon) icon.classList.remove('animate-spin');
+                            }
                             if(status) { status.classList.add('hidden'); status.classList.remove('flex'); }
                         }, 500);
                     });
@@ -508,23 +516,22 @@
                 setTimeout(() => this.showAlert('success', 'Tersimpan', 'Profil diperbarui.'), 350);
             },
 
-            // --- STRICT STAR LOGIC (PERBAIKAN FINAL) ---
+            // --- STRICT STAR LOGIC (UPDATED) ---
             setRating: function(v) {
                 document.getElementById('rating-input').value = v;
                 const buttons = document.getElementById('star-rating-group').querySelectorAll('button');
                 
                 buttons.forEach((btn, index) => {
-                    // Cari SVG atau I (karena Lucide replace i dengan svg)
                     const icon = btn.querySelector('svg') || btn.querySelector('i');
                     if (icon) {
                         if (index < v) {
-                            // Active State
+                            // Active
                             icon.classList.add('text-yellow-400', 'fill-yellow-400');
                             icon.classList.remove('text-slate-300');
                         } else {
-                            // Inactive State
+                            // Inactive
                             icon.classList.remove('text-yellow-400', 'fill-yellow-400');
-                            icon.classList.add('text-slate-300');
+                            // Lucide default uses stroke currentColor, so we just reset color
                         }
                     }
                 });
@@ -550,8 +557,10 @@
                 const obj = Object.fromEntries(fd.entries());
                 obj.isAnonim = document.getElementById('anonim-check').checked;
                 
-                // Gunakan Promise Race: Jika server lambat (>1.5 detik), tetap anggap sukses
+                // Fire and Forget (mostly)
                 const sendRequest = fetch(this.apiURL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(obj) });
+                
+                // UX Trick: Tunggu 1.5 detik lalu anggap sukses
                 const fakeDelay = new Promise(r => setTimeout(r, 1500));
 
                 Promise.race([sendRequest, fakeDelay])
@@ -573,6 +582,7 @@
 
             loadProfile: function() {
                 const s = localStorage.getItem('guru_profile');
+                // Helper Safe DOM
                 const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
                 const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
                 const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
