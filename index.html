@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0f172a">
+    
+    <meta name="theme-color" content="#f8fafc">
     
     <meta name="description" content="Portal Pendidikan Selogiri">
-    
     <title>Selogiri Creative App</title>
     
     <link rel="manifest" href="manifest.json">
@@ -32,7 +32,6 @@
     </script>
     
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -77,7 +76,6 @@
                     <span class="text-[10px] text-slate-400 font-medium tracking-wider">PORTAL PENDIDIKAN</span>
                 </div>
             </div>
-            
             <div id="sidebar-menu-list" class="p-4 space-y-2 flex-1 overflow-y-auto"></div>
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30" id="sidebar-footer-area"></div>
         </aside>
@@ -255,24 +253,41 @@
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
         let globalChildrenMap = {}; 
 
-        // Dark Mode
+        // 1. Dark Mode Logic with Status Bar Fix
         function toggleDarkMode() {
             const html = document.documentElement;
+            const metaTheme = document.querySelector("meta[name=theme-color]");
+            
             if (html.classList.contains('dark')) {
+                // Switch to Light
                 html.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
+                if(metaTheme) metaTheme.setAttribute("content", "#f8fafc"); // Light Status Bar
             } else {
+                // Switch to Dark
                 html.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
+                if(metaTheme) metaTheme.setAttribute("content", "#0f172a"); // Dark Status Bar
             }
         }
-        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
+        
+        // Init Theme on Load
+        function initTheme() {
+            const metaTheme = document.querySelector("meta[name=theme-color]");
+            const savedTheme = localStorage.getItem('theme');
+            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+                document.documentElement.classList.add('dark');
+                if(metaTheme) metaTheme.setAttribute("content", "#0f172a");
+            } else {
+                document.documentElement.classList.remove('dark');
+                if(metaTheme) metaTheme.setAttribute("content", "#f8fafc");
+            }
         }
+        initTheme(); // Run immediately
 
-        // Submenu
+        // 2. Submenu
         function openSubmenu(parentTitle, iconName, color) {
             const children = globalChildrenMap[parentTitle] || [];
             const sheet = document.getElementById('submenu-sheet'); 
@@ -314,7 +329,7 @@
             setTimeout(() => { overlay.classList.add('hidden'); }, 300); 
         }
 
-        // Render
+        // 3. Render
         function renderApp(data) {
             const menuList = data.menu || []; 
             const footerList = data.footer || []; 
@@ -392,11 +407,12 @@
                 footerContainer.insertAdjacentHTML('beforeend', `<a href="${link.url}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-800 hover:text-white dark:hover:bg-slate-700 hover:border-slate-800 transition shadow-sm"><i data-lucide="${icon}" class="w-3.5 h-3.5"></i> ${link.judul}</a>`);
                 sidebarFooter.insertAdjacentHTML('beforeend', `<a href="${link.url}" target="_blank" class="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 mb-2"><i data-lucide="${icon}" class="w-4 h-4"></i> ${link.judul}</a>`);
             });
+            
             lucide.createIcons(); 
             hideLoader();
         }
 
-        // Utils
+        // 4. Utils
         function forceRefresh() { 
             const btn = document.getElementById('refresh-btn'); 
             const status = document.getElementById('update-status'); 
@@ -440,7 +456,7 @@
             } 
         };
 
-        // Feedback Logic
+        // 5. Modals & Feedback
         function toggleFeedbackModal() { 
             const m = document.getElementById('feedback-modal'); 
             const c = document.getElementById('feedback-content'); 
@@ -453,6 +469,7 @@
                 setTimeout(()=>{m.classList.add('hidden');},300);
             } 
         }
+        
         function showSuccessModal() { 
             const m = document.getElementById('success-modal'); 
             const c = document.getElementById('success-content'); 
@@ -460,6 +477,7 @@
             setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); 
             setTimeout(() => closeSuccessModal(), 3000); 
         }
+        
         function closeSuccessModal() { 
             const m = document.getElementById('success-modal'); 
             const c = document.getElementById('success-content'); 
@@ -467,17 +485,20 @@
             c.classList.add('scale-95','opacity-0'); 
             setTimeout(()=>{m.classList.add('hidden');},300); 
         }
+        
         function toggleAnonim() { 
             const c = document.getElementById('anonim-check').checked; 
             const g = document.getElementById('identity-group'); 
             c ? g.classList.add('opacity-50','pointer-events-none') : g.classList.remove('opacity-50','pointer-events-none'); 
         }
+        
         function setRating(v) { 
             document.getElementById('rating-input').value = v; 
             document.getElementById('star-container').querySelectorAll('button').forEach((b,i)=>{ 
                 i<v ? (b.classList.remove('text-yellow-400'),b.classList.add('text-yellow-400','fill-current')) : (b.classList.add('text-yellow-400'),b.classList.remove('fill-current')) 
             }); 
         }
+        
         function submitFeedback(e) { 
             e.preventDefault(); 
             const btn = document.getElementById('btn-submit-fb'); 
@@ -487,12 +508,23 @@
             const fd = new FormData(e.target); 
             const d = Object.fromEntries(fd.entries()); 
             d.isAnonim = document.getElementById('anonim-check').checked; 
+            
             fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)})
-            .then(()=>{ toggleFeedbackModal(); showSuccessModal(); e.target.reset(); setRating(5); })
+            .then(()=>{
+                toggleFeedbackModal(); 
+                showSuccessModal(); 
+                e.target.reset(); 
+                setRating(5);
+            })
             .catch(()=>{alert("Gagal kirim.");})
-            .finally(()=>{ btn.innerHTML = txt; btn.disabled = false; lucide.createIcons(); }); 
+            .finally(()=>{
+                btn.innerHTML = txt; 
+                btn.disabled = false; 
+                lucide.createIcons();
+            }); 
         }
         
+        // 6. Install
         let deferredPrompt; 
         const installOverlay = document.getElementById('install-overlay'); 
         const installBackdrop = document.getElementById('install-backdrop'); 
@@ -501,11 +533,53 @@
         const btnLater = document.getElementById('btn-later'); 
         const installBtnSmall = document.getElementById('install-btn'); 
         const btnCloseSmall = document.getElementById('close-install-btn');
-        function showInstallSheet() { if (sessionStorage.getItem('sheet_shown')) return; installOverlay.classList.remove('hidden'); setTimeout(() => { installBackdrop.classList.remove('opacity-0'); installSheet.classList.remove('translate-y-full'); }, 50); sessionStorage.setItem('sheet_shown', 'true'); }
-        function hideInstallSheet() { installBackdrop.classList.add('opacity-0'); installSheet.classList.add('translate-y-full'); setTimeout(() => { installOverlay.classList.add('hidden'); }, 300); }
+        
+        function showInstallSheet() { 
+            if (sessionStorage.getItem('sheet_shown')) return; 
+            installOverlay.classList.remove('hidden'); 
+            setTimeout(() => { 
+                installBackdrop.classList.remove('opacity-0'); 
+                installSheet.classList.remove('translate-y-full'); 
+            }, 50); 
+            sessionStorage.setItem('sheet_shown', 'true'); 
+        }
+        
+        function hideInstallSheet() { 
+            installBackdrop.classList.add('opacity-0'); 
+            installSheet.classList.add('translate-y-full'); 
+            setTimeout(() => { installOverlay.classList.add('hidden'); }, 300); 
+        }
+        
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
-        const handleInstallClick = () => { hideInstallSheet(); if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); } else { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if(isIOS) alert("iPhone: Tekan tombol Share > Add to Home Screen"); else alert("Cek menu browser > Install App"); } };
-        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick); if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick); if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet()); if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Sembunyikan tombol download ini selamanya?")) { document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); } }); window.addEventListener('appinstalled', () => { hideInstallSheet(); if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); });
+        
+        const handleInstallClick = () => { 
+            hideInstallSheet(); 
+            if (deferredPrompt) { 
+                deferredPrompt.prompt(); 
+                deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); 
+            } else { 
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; 
+                if(isIOS) alert("iPhone: Tekan tombol Share > Add to Home Screen"); 
+                else alert("Cek menu browser > Install App"); 
+            } 
+        };
+        
+        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick); 
+        if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick); 
+        if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet()); 
+        if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            if(confirm("Sembunyikan tombol download ini selamanya?")) { 
+                document.getElementById('install-container-wrapper').classList.add('hidden'); 
+                localStorage.setItem('install_dismissed', 'true'); 
+            } 
+        }); 
+        
+        window.addEventListener('appinstalled', () => { 
+            hideInstallSheet(); 
+            if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); 
+            localStorage.setItem('install_dismissed', 'true'); 
+        });
     </script>
 </body>
 </html>
