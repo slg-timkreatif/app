@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="theme-color" content="#f8fafc">
-    
     <meta name="description" content="Portal Pendidikan Selogiri">
     <title>Selogiri Creative App</title>
     
@@ -17,20 +15,9 @@
     <script>
         tailwind.config = {
             darkMode: 'class', 
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#0f172a',   // Slate 900
-                        darkcard: '#1e293b', // Slate 800
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    }
-                }
-            }
+            theme: { extend: { colors: { darkbg: '#0f172a', darkcard: '#1e293b' }, fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } }
         }
     </script>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -67,64 +54,41 @@
     </div>
 
     <div id="main-layout" class="flex h-full w-full hidden fade-in">
-        
         <aside class="hidden md:flex w-72 bg-white/80 dark:bg-darkcard/80 backdrop-blur-xl border-r border-slate-200/60 dark:border-slate-700/50 flex-col z-20 shadow-sm transition-colors duration-300">
             <div class="p-8 flex items-center gap-4 border-b border-slate-100 dark:border-slate-700">
                 <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-10 h-10 rounded-full border border-slate-100 dark:border-slate-600 shadow-sm">
-                <div>
-                    <h1 class="font-bold text-slate-800 dark:text-white text-base leading-tight">Selogiri Creative App</h1>
-                    <span class="text-[10px] text-slate-400 font-medium tracking-wider">PORTAL PENDIDIKAN</span>
-                </div>
+                <div><h1 class="font-bold text-slate-800 dark:text-white text-base leading-tight">Selogiri Creative App</h1><span class="text-[10px] text-slate-400 font-medium tracking-wider">PORTAL PENDIDIKAN</span></div>
             </div>
             <div id="sidebar-menu-list" class="p-4 space-y-2 flex-1 overflow-y-auto"></div>
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30" id="sidebar-footer-area"></div>
         </aside>
 
         <main class="flex-1 flex flex-col relative overflow-hidden">
-            
             <header class="bg-white/70 dark:bg-darkbg/70 backdrop-blur-md border-b border-white/20 dark:border-slate-700/30 z-10 px-6 py-4 sticky top-0 flex items-center justify-between gap-4 shadow-sm transition-colors duration-300">
                 <div class="flex items-center gap-4">
-                    <div class="md:hidden w-10 h-10 rounded-full border-2 border-white dark:border-slate-700 shadow-md overflow-hidden shrink-0">
-                        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover">
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">Selogiri Creative App</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Portal Pendidikan Selogiri</p>
-                    </div>
+                    <div class="md:hidden w-10 h-10 rounded-full border-2 border-white dark:border-slate-700 shadow-md overflow-hidden shrink-0"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover"></div>
+                    <div><h2 class="font-bold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">Selogiri Creative App</h2><p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Portal Pendidikan Selogiri</p></div>
                 </div>
-
                 <div class="flex gap-2">
-                    <button onclick="toggleDarkMode()" id="theme-btn" class="p-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-yellow-400 border border-white/50 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-md">
-                        <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
-                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-                    </button>
-                    <button onclick="forceRefresh()" id="refresh-btn" class="p-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-blue-400 border border-white/50 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-md">
-                        <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-                    </button>
+                    <button onclick="toggleDarkMode()" id="theme-btn" class="p-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-yellow-400 border border-white/50 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-md"><i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i><i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i></button>
+                    <button onclick="forceRefresh()" id="refresh-btn" class="p-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-blue-400 border border-white/50 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all active:scale-95 shadow-md"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
                 </div>
             </header>
 
             <div class="flex-1 overflow-y-auto p-5 md:p-10 scroll-smooth pb-24 md:pb-10">
                 <div class="max-w-4xl mx-auto w-full space-y-8">
-                    
                     <div id="announcement-area" class="hidden fade-in"></div>
                     
                     <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 dark:from-blue-900 dark:via-slate-900 dark:to-slate-950 rounded-3xl p-8 text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20 -mr-16 -mt-16"></div>
                         <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20 -ml-16 -mb-16"></div>
-                        
                         <div class="relative z-10">
                             <span class="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/10 text-[10px] font-bold tracking-wider uppercase mb-3 text-blue-200">Selamat Datang</span>
                             <h3 class="text-2xl md:text-3xl font-extrabold mb-3 tracking-tight leading-tight">Halo, Bapak/Ibu Guru!</h3>
-                            <p class="text-blue-100 text-sm leading-relaxed max-w-lg font-medium opacity-90 mb-6">
-                                Administrasi dan layanan digital dalam satu genggaman.
-                            </p>
-                            
+                            <p class="text-blue-100 text-sm leading-relaxed max-w-lg font-medium opacity-90 mb-6">Administrasi dan layanan digital dalam satu genggaman.</p>
                             <div id="install-container-wrapper" class="hidden relative">
                                 <div class="inline-flex bg-white/10 backdrop-blur-md rounded-2xl p-1.5 border border-white/10">
-                                    <button id="install-btn" class="flex items-center gap-2 bg-white text-slate-900 font-bold py-2.5 px-5 rounded-xl shadow-lg hover:bg-blue-50 transition active:scale-95 text-sm">
-                                        <i data-lucide="download" class="w-4 h-4"></i><span>Pasang Aplikasi</span>
-                                    </button>
+                                    <button id="install-btn" class="flex items-center gap-2 bg-white text-slate-900 font-bold py-2.5 px-5 rounded-xl shadow-lg hover:bg-blue-50 transition active:scale-95 text-sm"><i data-lucide="download" class="w-4 h-4"></i><span>Pasang Aplikasi</span></button>
                                     <button id="close-install-btn" class="px-3 text-white/70 hover:text-white transition"><i data-lucide="x" class="w-4 h-4"></i></button>
                                 </div>
                             </div>
@@ -133,58 +97,49 @@
 
                     <div class="space-y-5">
                         <div class="flex items-center justify-between px-1">
-                            <div class="flex items-center gap-2">
-                                <div class="w-1 h-5 bg-blue-600 dark:bg-blue-400 rounded-full"></div>
-                                <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Daftar Aplikasi</p>
-                            </div>
-                            <span id="update-status" class="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-2 py-1 rounded-full border border-blue-100 dark:border-blue-800 hidden items-center gap-1">
-                                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span> Syncing...
-                            </span>
+                            <div class="flex items-center gap-2"><div class="w-1 h-5 bg-blue-600 dark:bg-blue-400 rounded-full"></div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Daftar Aplikasi</p></div>
+                            <span id="update-status" class="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-2 py-1 rounded-full border border-blue-100 dark:border-blue-800 hidden items-center gap-1"><span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span> Syncing...</span>
                         </div>
-                        
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="col-span-2 bg-white/60 dark:bg-slate-800/60 rounded-3xl p-6 border border-white/50 dark:border-slate-700 shadow-sm h-32 flex items-center justify-center animate-pulse">
-                                <div class="text-slate-300 dark:text-slate-600 text-sm font-medium">Memuat data...</div>
-                            </div>
+                            <div class="col-span-2 bg-white/60 dark:bg-slate-800/60 rounded-3xl p-6 border border-white/50 dark:border-slate-700 shadow-sm h-32 flex items-center justify-center animate-pulse"><div class="text-slate-300 dark:text-slate-600 text-sm font-medium">Memuat data...</div></div>
                         </div>
                     </div>
 
                     <div class="pt-8 border-t border-slate-200/60 dark:border-slate-700/50 text-center">
                         <div id="footer-links-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
-                        <div class="mb-4 opacity-60">
-                            <p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">Tim Kreatif Selogiri &copy; 2026</p>
-                        </div>
+                        <div class="mb-4 opacity-60"><p class="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">Tim Kreatif Selogiri &copy; 2026</p></div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <button onclick="toggleFeedbackModal()" class="fixed bottom-6 right-6 z-40 bg-slate-900 dark:bg-blue-600 text-white p-4 rounded-2xl shadow-2xl shadow-slate-900/30 dark:shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all duration-300 group flex items-center justify-center border border-slate-700 dark:border-blue-500">
-        <i data-lucide="message-square-plus" class="w-6 h-6"></i>
-    </button>
+    <div id="update-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-3xl shadow-2xl relative z-10 p-6 text-center transform scale-100 transition-all">
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i data-lucide="download-cloud" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Update Tersedia!</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">Versi terbaru aplikasi sudah siap. Silakan update untuk fitur terbaru.</p>
+            <button onclick="applyUpdate()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:bg-blue-700 transition active:scale-95">Update Sekarang</button>
+        </div>
+    </div>
+
+    <button onclick="toggleFeedbackModal()" class="fixed bottom-6 right-6 z-40 bg-slate-900 dark:bg-blue-600 text-white p-4 rounded-2xl shadow-2xl shadow-slate-900/30 dark:shadow-blue-600/30 hover:scale-105 active:scale-95 transition-all duration-300 group flex items-center justify-center border border-slate-700 dark:border-blue-500"><i data-lucide="message-square-plus" class="w-6 h-6"></i></button>
 
     <div id="feedback-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="toggleFeedbackModal()"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-3xl shadow-2xl relative z-10 overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="feedback-content">
             <div class="bg-slate-50 dark:bg-slate-900/50 p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg font-bold text-slate-800 dark:text-white">Pusat Bantuan</h3>
-                    <p class="text-slate-400 text-xs">Kami siap mendengar masukan Anda.</p>
-                </div>
+                <div><h3 class="text-lg font-bold text-slate-800 dark:text-white">Pusat Bantuan</h3><p class="text-slate-400 text-xs">Kami siap mendengar masukan Anda.</p></div>
                 <button onclick="toggleFeedbackModal()" class="bg-white dark:bg-slate-700 p-2 rounded-full border border-slate-200 dark:border-slate-600 text-slate-400 hover:text-slate-800 dark:hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <form id="feedback-form" onsubmit="submitFeedback(event)">
                     <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="tipe" value="Saran" class="peer sr-only" checked>
-                            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="tipe" value="Bug" class="peer sr-only">
-                            <div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div>
-                        </label>
+                        <label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label>
+                        <label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label>
                     </div>
                     <textarea name="pesan" required rows="3" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none dark:text-white" placeholder="Tulis pesan Anda..."></textarea>
                     <div id="identity-group" class="grid grid-cols-2 gap-3">
@@ -192,18 +147,8 @@
                         <input type="tel" name="kontak" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" placeholder="No. WA">
                     </div>
                     <div class="flex items-center justify-between pt-2">
-                        <label class="flex items-center gap-2 cursor-pointer select-none">
-                            <input type="checkbox" id="anonim-check" onchange="toggleAnonim()" class="w-4 h-4 rounded text-slate-600 dark:bg-slate-700 border-slate-300 dark:border-slate-600">
-                            <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">Anonim</span>
-                        </label>
-                        <div class="flex gap-1" id="star-container">
-                            <input type="hidden" name="rating" id="rating-input" value="5">
-                            <button type="button" onclick="setRating(1)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button>
-                            <button type="button" onclick="setRating(2)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button>
-                            <button type="button" onclick="setRating(3)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button>
-                            <button type="button" onclick="setRating(4)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button>
-                            <button type="button" onclick="setRating(5)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button>
-                        </div>
+                        <label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" onchange="toggleAnonim()" class="w-4 h-4 rounded text-slate-600 dark:bg-slate-700 border-slate-300 dark:border-slate-600"><span class="text-sm text-slate-600 dark:text-slate-400 font-medium">Anonim</span></label>
+                        <div class="flex gap-1" id="star-container"><input type="hidden" name="rating" id="rating-input" value="5"><button type="button" onclick="setRating(1)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button><button type="button" onclick="setRating(2)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button><button type="button" onclick="setRating(3)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button><button type="button" onclick="setRating(4)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button><button type="button" onclick="setRating(5)" class="text-yellow-400"><i data-lucide="star" class="w-6 h-6 fill-current"></i></button></div>
                     </div>
                     <button type="submit" id="btn-submit-fb" class="w-full mt-4 bg-slate-900 dark:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg hover:scale-[1.02] transition active:scale-95 flex justify-center items-center gap-2"><span>Kirim Masukan</span><i data-lucide="send" class="w-4 h-4"></i></button>
                 </form>
@@ -252,138 +197,91 @@
         lucide.createIcons();
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
         let globalChildrenMap = {}; 
+        
+        // --- 0. VERSION CONTROL (SET VERSI DISINI SETIAP DEPLOY) ---
+        const CURRENT_APP_VERSION = "1.0"; // GANTI ANGKA INI DI KODE SETIAP KALI DEPLOY VERSI BARU (Misal jadi 1.1)
 
-        // 1. Dark Mode Logic with Status Bar Fix
+        // 1. Dark Mode
         function toggleDarkMode() {
             const html = document.documentElement;
             const metaTheme = document.querySelector("meta[name=theme-color]");
-            
             if (html.classList.contains('dark')) {
-                // Switch to Light
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-                if(metaTheme) metaTheme.setAttribute("content", "#f8fafc"); // Light Status Bar
+                html.classList.remove('dark'); localStorage.setItem('theme', 'light'); if(metaTheme) metaTheme.setAttribute("content", "#f8fafc");
             } else {
-                // Switch to Dark
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-                if(metaTheme) metaTheme.setAttribute("content", "#0f172a"); // Dark Status Bar
+                html.classList.add('dark'); localStorage.setItem('theme', 'dark'); if(metaTheme) metaTheme.setAttribute("content", "#0f172a");
             }
         }
-        
-        // Init Theme on Load
         function initTheme() {
             const metaTheme = document.querySelector("meta[name=theme-color]");
             const savedTheme = localStorage.getItem('theme');
             const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-                document.documentElement.classList.add('dark');
-                if(metaTheme) metaTheme.setAttribute("content", "#0f172a");
-            } else {
-                document.documentElement.classList.remove('dark');
-                if(metaTheme) metaTheme.setAttribute("content", "#f8fafc");
-            }
+            if (savedTheme === 'dark' || (!savedTheme && systemDark)) { document.documentElement.classList.add('dark'); if(metaTheme) metaTheme.setAttribute("content", "#0f172a"); } 
+            else { document.documentElement.classList.remove('dark'); if(metaTheme) metaTheme.setAttribute("content", "#f8fafc"); }
         }
-        initTheme(); // Run immediately
+        initTheme();
 
         // 2. Submenu
         function openSubmenu(parentTitle, iconName, color) {
             const children = globalChildrenMap[parentTitle] || [];
-            const sheet = document.getElementById('submenu-sheet'); 
-            const backdrop = document.getElementById('submenu-backdrop'); 
-            const overlay = document.getElementById('submenu-overlay'); 
-            const listContainer = document.getElementById('submenu-list'); 
-            const titleEl = document.getElementById('submenu-title');
-            
-            titleEl.textContent = parentTitle; 
-            listContainer.innerHTML = '';
-            
+            const sheet = document.getElementById('submenu-sheet'); const backdrop = document.getElementById('submenu-backdrop'); const overlay = document.getElementById('submenu-overlay'); const listContainer = document.getElementById('submenu-list'); const titleEl = document.getElementById('submenu-title');
+            titleEl.textContent = parentTitle; listContainer.innerHTML = '';
             children.forEach(sub => {
                 listContainer.insertAdjacentHTML('beforeend', `
                     <a href="${sub.url}" target="_blank" class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 shadow-sm hover:shadow-md hover:border-${color}-200 dark:hover:border-${color}-500 transition-all group active:scale-95">
-                        <div class="w-12 h-12 rounded-xl bg-${color}-50 dark:bg-${color}-900/30 flex items-center justify-center text-${color}-600 dark:text-${color}-400 border border-${color}-100 dark:border-${color}-800 group-hover:scale-110 transition-transform">
-                            <i data-lucide="${sub.icon || 'circle'}" class="w-6 h-6"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-100 text-base group-hover:text-${color}-700 dark:group-hover:text-${color}-400">${sub.judul}</h4>
-                            <p class="text-xs text-slate-400 dark:text-slate-400 line-clamp-1 mt-0.5">${sub.deskripsi}</p>
-                        </div>
-                        <div class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-600 flex items-center justify-center group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900 group-hover:text-${color}-600 text-slate-300 transition-colors">
-                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-${color}-50 dark:bg-${color}-900/30 flex items-center justify-center text-${color}-600 dark:text-${color}-400 border border-${color}-100 dark:border-${color}-800 group-hover:scale-110 transition-transform"><i data-lucide="${sub.icon || 'circle'}" class="w-6 h-6"></i></div>
+                        <div class="flex-1"><h4 class="font-bold text-slate-800 dark:text-slate-100 text-base group-hover:text-${color}-700 dark:group-hover:text-${color}-400">${sub.judul}</h4><p class="text-xs text-slate-400 dark:text-slate-400 line-clamp-1 mt-0.5">${sub.deskripsi}</p></div>
+                        <div class="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-600 flex items-center justify-center group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900 group-hover:text-${color}-600 text-slate-300 transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></div>
                     </a>
                 `);
             });
-            lucide.createIcons(); 
-            overlay.classList.remove('hidden'); 
-            setTimeout(() => { backdrop.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
+            lucide.createIcons(); overlay.classList.remove('hidden'); setTimeout(() => { backdrop.classList.remove('opacity-0'); sheet.classList.remove('translate-y-full'); }, 10);
         }
+        function closeSubmenu() { const sheet = document.getElementById('submenu-sheet'); const backdrop = document.getElementById('submenu-backdrop'); const overlay = document.getElementById('submenu-overlay'); backdrop.classList.add('opacity-0'); sheet.classList.add('translate-y-full'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
 
-        function closeSubmenu() { 
-            const sheet = document.getElementById('submenu-sheet'); 
-            const backdrop = document.getElementById('submenu-backdrop'); 
-            const overlay = document.getElementById('submenu-overlay'); 
-            backdrop.classList.add('opacity-0'); 
-            sheet.classList.add('translate-y-full'); 
-            setTimeout(() => { overlay.classList.add('hidden'); }, 300); 
-        }
-
-        // 3. Render
+        // 3. Render App
         function renderApp(data) {
-            const menuList = data.menu || []; 
-            const footerList = data.footer || []; 
-            const info = data.info;
-            const container = document.getElementById('dynamic-menu-container'); 
-            const sidebarNav = document.getElementById('sidebar-menu-list'); 
-            const sidebarFooter = document.getElementById('sidebar-footer-area'); 
-            const footerContainer = document.getElementById('footer-links-container');
+            const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info;
+            const container = document.getElementById('dynamic-menu-container'); const sidebarNav = document.getElementById('sidebar-menu-list'); const sidebarFooter = document.getElementById('sidebar-footer-area'); const footerContainer = document.getElementById('footer-links-container');
 
-            container.className = 'grid grid-cols-2 md:grid-cols-4 gap-4'; 
-            container.innerHTML = '';
+            // CEK VERSI (LOGIC BARU)
+            if (info && info.versi) {
+                const serverVersion = String(info.versi).trim();
+                if (serverVersion !== CURRENT_APP_VERSION) {
+                    document.getElementById('update-modal').classList.remove('hidden');
+                }
+            }
+
+            container.className = 'grid grid-cols-2 md:grid-cols-4 gap-4'; container.innerHTML = '';
             sidebarNav.innerHTML = `<button class="sidebar-item active w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-slate-500 hover:bg-slate-50 transition text-sm font-medium"><i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard</button>`;
-            sidebarFooter.innerHTML = ''; 
-            footerContainer.innerHTML = '';
+            sidebarFooter.innerHTML = ''; footerContainer.innerHTML = '';
 
-            const parents = []; 
-            globalChildrenMap = {};
-            
-            menuList.forEach(item => { 
-                const p = item.parent ? String(item.parent).trim() : ""; 
-                if(p !== "") { 
-                    if(!globalChildrenMap[p]) globalChildrenMap[p] = []; 
-                    globalChildrenMap[p].push(item); 
-                } else { 
-                    parents.push(item); 
-                } 
-            });
+            const parents = []; globalChildrenMap = {};
+            menuList.forEach(item => { const p = item.parent ? String(item.parent).trim() : ""; if(p !== "") { if(!globalChildrenMap[p]) globalChildrenMap[p] = []; globalChildrenMap[p].push(item); } else { parents.push(item); } });
 
             parents.forEach(item => {
-                const color = item.warna || 'blue'; 
-                const target = (item.target || 'all').toLowerCase(); 
-                const hasChildren = globalChildrenMap[item.judul] && globalChildrenMap[item.judul].length > 0;
-                
-                let visibilityClass = 'block'; 
-                if (target === 'mobile') visibilityClass = 'block md:hidden'; 
-                else if (target === 'desktop') visibilityClass = 'hidden md:block';
-                
+                const color = item.warna || 'blue'; const target = (item.target || 'all').toLowerCase(); const hasChildren = globalChildrenMap[item.judul] && globalChildrenMap[item.judul].length > 0;
+                let visibilityClass = 'block'; if (target === 'mobile') visibilityClass = 'block md:hidden'; else if (target === 'desktop') visibilityClass = 'hidden md:block';
                 let clickAction = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
-                let badgeHtml = hasChildren ? `<span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border-2 border-white dark:border-darkcard shadow-sm z-10">${globalChildrenMap[item.judul].length}</span>` : '';
+                
+                let badgeHtml = '';
+                if(item.label) {
+                    const labelColor = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : 'bg-blue-500';
+                    badgeHtml = `<span class="absolute top-3 left-3 ${labelColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm z-10 tracking-wide">${item.label}</span>`;
+                } else if(hasChildren) {
+                    badgeHtml = `<div class="absolute top-3 right-3 text-${color}-400 dark:text-${color}-300 bg-${color}-50 dark:bg-${color}-900/40 p-1.5 rounded-lg border border-${color}-100 dark:border-${color}-800 shadow-sm z-10"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></div>`;
+                }
 
-                const cardHtml = `
-                <div ${clickAction} class="${visibilityClass} group cursor-pointer h-full active:scale-95 transition-transform duration-200">
-                    <div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none hover:border-${color}-200 dark:hover:border-${color}-800 transition-all duration-300 flex flex-col items-center justify-center text-center gap-4 relative overflow-visible h-full">
-                        ${badgeHtml}
-                        <div class="w-16 h-16 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 dark:border-${color}-800 group-hover:scale-110 group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900/50 transition-all duration-300 shadow-inner">
-                            <i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i>
-                        </div>
-                        <div class="w-full">
-                            <h3 class="font-bold text-sm text-slate-700 dark:text-slate-200 group-hover:text-${color}-700 dark:group-hover:text-${color}-400 transition-colors leading-tight mb-1">${item.judul}</h3>
-                            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium line-clamp-1 hidden md:block">${item.deskripsi}</p>
-                        </div>
-                    </div>
-                </div>`;
-                container.insertAdjacentHTML('beforeend', cardHtml);
+                const isWide = item.ukuran && item.ukuran.toLowerCase() === 'wide';
+                const gridClass = isWide ? 'col-span-2' : 'col-span-1';
+                
+                let cardContentHtml = '';
+                if(isWide) {
+                    cardContentHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none hover:border-${color}-200 dark:hover:border-${color}-800 transition-all duration-300 flex items-center text-left gap-5 relative overflow-visible h-full">${badgeHtml}<div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 dark:border-${color}-800 group-hover:scale-110 group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900/50 transition-all duration-300 shadow-inner"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0"><h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 group-hover:text-${color}-700 dark:group-hover:text-${color}-400 transition-colors leading-tight mb-1">${item.judul}</h3><p class="text-xs text-slate-400 dark:text-slate-500 font-medium line-clamp-2">${item.deskripsi}</p></div></div>`;
+                } else {
+                    cardContentHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none hover:border-${color}-200 dark:hover:border-${color}-800 transition-all duration-300 flex flex-col items-center justify-center text-center gap-4 relative overflow-visible h-full">${badgeHtml}<div class="w-16 h-16 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 dark:border-${color}-800 group-hover:scale-110 group-hover:bg-${color}-100 dark:group-hover:bg-${color}-900/50 transition-all duration-300 shadow-inner"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="w-full"><h3 class="font-bold text-sm text-slate-700 dark:text-slate-200 group-hover:text-${color}-700 dark:group-hover:text-${color}-400 transition-colors leading-tight mb-1">${item.judul}</h3><p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium line-clamp-1 hidden md:block">${item.deskripsi}</p></div></div>`;
+                }
+
+                container.insertAdjacentHTML('beforeend', `<div ${clickAction} class="${visibilityClass} ${gridClass} group cursor-pointer h-full active:scale-95 transition-transform duration-200">${cardContentHtml}</div>`);
 
                 if (target !== 'mobile') {
                     const sideClick = hasChildren ? `onclick="openSubmenu('${item.judul}', '${item.icon}', '${color}')"` : `onclick="window.open('${item.url}', '_blank')"`;
@@ -391,13 +289,12 @@
                 }
             });
 
-            const annArea = document.getElementById('announcement-area'); 
-            annArea.innerHTML = ''; 
-            annArea.className = 'hidden fade-in';
+            const annArea = document.getElementById('announcement-area'); annArea.innerHTML = ''; annArea.className = 'hidden fade-in';
             if (info && info.status === 'ON') {
-                const colors = { red: 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800' };
-                const theme = colors[info.warna] || colors.blue; 
-                const iconName = info.warna === 'red' ? 'alert-circle' : 'info';
+                const colors = { red: 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800', green: 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800', yellow: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800', purple: 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800' };
+                const colorKey = (info.warna || 'blue').toLowerCase();
+                const theme = colors[colorKey] || colors.blue;
+                const iconName = colorKey === 'red' ? 'alert-circle' : (colorKey === 'green' ? 'check-circle' : 'info');
                 annArea.innerHTML = `<div class="${theme} border rounded-2xl p-4 flex items-start gap-4 shadow-sm"><div class="p-2 bg-white/50 dark:bg-black/20 rounded-full shrink-0"><i data-lucide="${iconName}" class="w-5 h-5"></i></div><div class="mt-1"><p class="text-xs font-bold uppercase opacity-70 mb-0.5">Pengumuman</p><p class="text-sm font-semibold leading-relaxed">${info.pesan}</p></div></div>`;
                 annArea.classList.remove('hidden');
             }
@@ -407,179 +304,33 @@
                 footerContainer.insertAdjacentHTML('beforeend', `<a href="${link.url}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-800 hover:text-white dark:hover:bg-slate-700 hover:border-slate-800 transition shadow-sm"><i data-lucide="${icon}" class="w-3.5 h-3.5"></i> ${link.judul}</a>`);
                 sidebarFooter.insertAdjacentHTML('beforeend', `<a href="${link.url}" target="_blank" class="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-slate-900 mb-2"><i data-lucide="${icon}" class="w-4 h-4"></i> ${link.judul}</a>`);
             });
-            
-            lucide.createIcons(); 
-            hideLoader();
+            lucide.createIcons(); hideLoader();
         }
 
         // 4. Utils
-        function forceRefresh() { 
-            const btn = document.getElementById('refresh-btn'); 
-            const status = document.getElementById('update-status'); 
-            const icon = btn.querySelector('svg'); 
-            icon.classList.add('animate-spin'); 
-            status.classList.remove('hidden'); 
-            status.classList.add('flex'); 
-            fetchAppData(true); 
+        function forceRefresh() { const btn = document.getElementById('refresh-btn'); const status = document.getElementById('update-status'); const icon = btn.querySelector('svg'); icon.classList.add('animate-spin'); status.classList.remove('hidden'); status.classList.add('flex'); fetchAppData(true); }
+        function fetchAppData(isRefresh = false) { const url = isRefresh ? `${GAS_API_URL}?t=${new Date().getTime()}` : GAS_API_URL; fetch(url).then(res => res.json()).then(data => { renderApp(data); if(isRefresh) { setTimeout(() => { document.getElementById('refresh-btn').querySelector('svg').classList.remove('animate-spin'); document.getElementById('update-status').classList.add('hidden'); document.getElementById('update-status').classList.remove('flex'); }, 500); } }).catch(err => { console.error(err); hideLoader(); }); }
+        function hideLoader() { document.getElementById('initial-loader').classList.add('opacity-0', 'pointer-events-none'); document.getElementById('main-layout').classList.remove('hidden'); }
+        function applyUpdate() {
+            // Force Reload dengan Cache Buster agar browser mengambil ulang HTML baru dari GAS
+            window.location.href = window.location.pathname + '?v=' + new Date().getTime();
         }
-        
-        function fetchAppData(isRefresh = false) { 
-            const url = isRefresh ? `${GAS_API_URL}?t=${new Date().getTime()}` : GAS_API_URL; 
-            fetch(url)
-                .then(res => res.json())
-                .then(data => { 
-                    renderApp(data); 
-                    if(isRefresh) { 
-                        setTimeout(() => { 
-                            document.getElementById('refresh-btn').querySelector('svg').classList.remove('animate-spin'); 
-                            document.getElementById('update-status').classList.add('hidden'); 
-                            document.getElementById('update-status').classList.remove('flex'); 
-                        }, 500); 
-                    } 
-                })
-                .catch(err => { console.error(err); hideLoader(); }); 
-        }
-        
-        function hideLoader() { 
-            document.getElementById('initial-loader').classList.add('opacity-0', 'pointer-events-none'); 
-            document.getElementById('main-layout').classList.remove('hidden'); 
-        }
-
-        window.onload = () => { 
-            fetchAppData(); 
-            const iw = document.getElementById('install-container-wrapper'); 
-            const isApp = window.matchMedia('(display-mode: standalone)').matches; 
-            if(!isApp && !localStorage.getItem('install_dismissed') && iw) { 
-                iw.classList.remove('hidden'); 
-                iw.classList.add('flex'); 
-                setTimeout(() => showInstallSheet(), 3000); 
-            } 
-        };
+        window.onload = () => { fetchAppData(); const iw = document.getElementById('install-container-wrapper'); const isApp = window.matchMedia('(display-mode: standalone)').matches; if(!isApp && !localStorage.getItem('install_dismissed') && iw) { iw.classList.remove('hidden'); iw.classList.add('flex'); setTimeout(() => showInstallSheet(), 3000); } };
 
         // 5. Modals & Feedback
-        function toggleFeedbackModal() { 
-            const m = document.getElementById('feedback-modal'); 
-            const c = document.getElementById('feedback-content'); 
-            if(m.classList.contains('hidden')){
-                m.classList.remove('hidden');
-                setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10);
-            } else {
-                c.classList.remove('scale-100','opacity-100');
-                c.classList.add('scale-95','opacity-0');
-                setTimeout(()=>{m.classList.add('hidden');},300);
-            } 
-        }
+        function toggleFeedbackModal() { const m = document.getElementById('feedback-modal'); const c = document.getElementById('feedback-content'); if(m.classList.contains('hidden')){m.classList.remove('hidden');setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10);}else{c.classList.remove('scale-100','opacity-100');c.classList.add('scale-95','opacity-0');setTimeout(()=>{m.classList.add('hidden');},300);} }
+        function showSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); m.classList.remove('hidden'); setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); setTimeout(() => closeSuccessModal(), 3000); }
+        function closeSuccessModal() { const m = document.getElementById('success-modal'); const c = document.getElementById('success-content'); c.classList.remove('scale-100','opacity-100'); c.classList.add('scale-95','opacity-0'); setTimeout(()=>{m.classList.add('hidden');},300); }
+        function toggleAnonim() { const c = document.getElementById('anonim-check').checked; const g = document.getElementById('identity-group'); c ? g.classList.add('opacity-50','pointer-events-none') : g.classList.remove('opacity-50','pointer-events-none'); }
+        function setRating(v) { document.getElementById('rating-input').value = v; document.getElementById('star-container').querySelectorAll('button').forEach((b,i)=>{ i<v ? (b.classList.remove('text-yellow-400'),b.classList.add('text-yellow-400','fill-current')) : (b.classList.add('text-yellow-400'),b.classList.remove('fill-current')) }); }
+        function submitFeedback(e) { e.preventDefault(); const btn = document.getElementById('btn-submit-fb'); const txt = btn.innerHTML; btn.innerHTML = 'Mengirim...'; btn.disabled = true; const fd = new FormData(e.target); const d = Object.fromEntries(fd.entries()); d.isAnonim = document.getElementById('anonim-check').checked; fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)}).then(()=>{toggleFeedbackModal(); showSuccessModal(); e.target.reset(); setRating(5);}).catch(()=>{alert("Gagal kirim.");}).finally(()=>{btn.innerHTML = txt; btn.disabled = false; lucide.createIcons();}); }
         
-        function showSuccessModal() { 
-            const m = document.getElementById('success-modal'); 
-            const c = document.getElementById('success-content'); 
-            m.classList.remove('hidden'); 
-            setTimeout(()=>{c.classList.remove('scale-95','opacity-0');c.classList.add('scale-100','opacity-100');},10); 
-            setTimeout(() => closeSuccessModal(), 3000); 
-        }
-        
-        function closeSuccessModal() { 
-            const m = document.getElementById('success-modal'); 
-            const c = document.getElementById('success-content'); 
-            c.classList.remove('scale-100','opacity-100'); 
-            c.classList.add('scale-95','opacity-0'); 
-            setTimeout(()=>{m.classList.add('hidden');},300); 
-        }
-        
-        function toggleAnonim() { 
-            const c = document.getElementById('anonim-check').checked; 
-            const g = document.getElementById('identity-group'); 
-            c ? g.classList.add('opacity-50','pointer-events-none') : g.classList.remove('opacity-50','pointer-events-none'); 
-        }
-        
-        function setRating(v) { 
-            document.getElementById('rating-input').value = v; 
-            document.getElementById('star-container').querySelectorAll('button').forEach((b,i)=>{ 
-                i<v ? (b.classList.remove('text-yellow-400'),b.classList.add('text-yellow-400','fill-current')) : (b.classList.add('text-yellow-400'),b.classList.remove('fill-current')) 
-            }); 
-        }
-        
-        function submitFeedback(e) { 
-            e.preventDefault(); 
-            const btn = document.getElementById('btn-submit-fb'); 
-            const txt = btn.innerHTML; 
-            btn.innerHTML = 'Mengirim...'; 
-            btn.disabled = true; 
-            const fd = new FormData(e.target); 
-            const d = Object.fromEntries(fd.entries()); 
-            d.isAnonim = document.getElementById('anonim-check').checked; 
-            
-            fetch(GAS_API_URL, {method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)})
-            .then(()=>{
-                toggleFeedbackModal(); 
-                showSuccessModal(); 
-                e.target.reset(); 
-                setRating(5);
-            })
-            .catch(()=>{alert("Gagal kirim.");})
-            .finally(()=>{
-                btn.innerHTML = txt; 
-                btn.disabled = false; 
-                lucide.createIcons();
-            }); 
-        }
-        
-        // 6. Install
-        let deferredPrompt; 
-        const installOverlay = document.getElementById('install-overlay'); 
-        const installBackdrop = document.getElementById('install-backdrop'); 
-        const installSheet = document.getElementById('install-sheet'); 
-        const btnInstall = document.getElementById('btn-install-now'); 
-        const btnLater = document.getElementById('btn-later'); 
-        const installBtnSmall = document.getElementById('install-btn'); 
-        const btnCloseSmall = document.getElementById('close-install-btn');
-        
-        function showInstallSheet() { 
-            if (sessionStorage.getItem('sheet_shown')) return; 
-            installOverlay.classList.remove('hidden'); 
-            setTimeout(() => { 
-                installBackdrop.classList.remove('opacity-0'); 
-                installSheet.classList.remove('translate-y-full'); 
-            }, 50); 
-            sessionStorage.setItem('sheet_shown', 'true'); 
-        }
-        
-        function hideInstallSheet() { 
-            installBackdrop.classList.add('opacity-0'); 
-            installSheet.classList.add('translate-y-full'); 
-            setTimeout(() => { installOverlay.classList.add('hidden'); }, 300); 
-        }
-        
+        let deferredPrompt; const installOverlay = document.getElementById('install-overlay'); const installBackdrop = document.getElementById('install-backdrop'); const installSheet = document.getElementById('install-sheet'); const btnInstall = document.getElementById('btn-install-now'); const btnLater = document.getElementById('btn-later'); const installBtnSmall = document.getElementById('install-btn'); const btnCloseSmall = document.getElementById('close-install-btn');
+        function showInstallSheet() { if (sessionStorage.getItem('sheet_shown')) return; installOverlay.classList.remove('hidden'); setTimeout(() => { installBackdrop.classList.remove('opacity-0'); installSheet.classList.remove('translate-y-full'); }, 50); sessionStorage.setItem('sheet_shown', 'true'); }
+        function hideInstallSheet() { installBackdrop.classList.add('opacity-0'); installSheet.classList.add('translate-y-full'); setTimeout(() => { installOverlay.classList.add('hidden'); }, 300); }
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
-        
-        const handleInstallClick = () => { 
-            hideInstallSheet(); 
-            if (deferredPrompt) { 
-                deferredPrompt.prompt(); 
-                deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); 
-            } else { 
-                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; 
-                if(isIOS) alert("iPhone: Tekan tombol Share > Add to Home Screen"); 
-                else alert("Cek menu browser > Install App"); 
-            } 
-        };
-        
-        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick); 
-        if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick); 
-        if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet()); 
-        if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { 
-            e.stopPropagation(); 
-            if(confirm("Sembunyikan tombol download ini selamanya?")) { 
-                document.getElementById('install-container-wrapper').classList.add('hidden'); 
-                localStorage.setItem('install_dismissed', 'true'); 
-            } 
-        }); 
-        
-        window.addEventListener('appinstalled', () => { 
-            hideInstallSheet(); 
-            if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); 
-            localStorage.setItem('install_dismissed', 'true'); 
-        });
+        const handleInstallClick = () => { hideInstallSheet(); if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); } else { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if(isIOS) alert("iPhone: Tekan tombol Share > Add to Home Screen"); else alert("Cek menu browser > Install App"); } };
+        if(btnInstall) btnInstall.addEventListener('click', handleInstallClick); if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick); if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet()); if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Sembunyikan tombol download ini selamanya?")) { document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); } }); window.addEventListener('appinstalled', () => { hideInstallSheet(); if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); });
     </script>
 </body>
 </html>
