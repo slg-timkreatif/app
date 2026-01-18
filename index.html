@@ -208,7 +208,7 @@
         // ==========================================
         // 1. CONFIG & GLOBAL VARS
         // ==========================================
-        // PASTIKAN LINK INI ADALAH YANG PERMISSIONS NYA 'ANYONE'
+        // PASTIKAN LINK INI VALID DAN 'ANYONE'
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
         
         const CURRENT_APP_VERSION = "1.0"; 
@@ -217,7 +217,7 @@
         let globalChildrenMap = {}; 
 
         // ==========================================
-        // 2. UI FUNCTIONS (DEFINED FIRST TO AVOID ERRORS)
+        // 2. UI FUNCTIONS
         // ==========================================
         
         function openModalSafe(modalId) {
@@ -226,11 +226,19 @@
                 if(modalId === 'submenu-sheet' || modalId === 'install-overlay') {
                     const backdrop = document.getElementById(modalId === 'submenu-sheet' ? 'submenu-backdrop' : 'install-backdrop');
                     el.classList.remove('hidden'); 
-                    setTimeout(() => { backdrop.classList.remove('opacity-0'); el.classList.remove('translate-y-full'); }, 10);
+                    
+                    // PERBAIKAN: Pastikan pointer-events aktif saat dibuka
+                    el.style.pointerEvents = 'auto';
+
+                    setTimeout(() => { 
+                        backdrop.classList.remove('opacity-0'); 
+                        el.classList.remove('translate-y-full'); 
+                        if(modalId === 'submenu-sheet') document.getElementById('submenu-sheet').classList.remove('translate-y-full'); 
+                        if(modalId === 'install-overlay') document.getElementById('install-sheet').classList.remove('translate-y-full'); 
+                    }, 10);
                 } else {
                     el.classList.remove('hidden');
                 }
-                // Tambahkan ke history agar bisa di-back
                 history.pushState({modalOpen: modalId}, null, "");
             }
         }
@@ -253,7 +261,7 @@
             loadProfile(); closeProfileModal(); showModernDialog('success', 'Tersimpan', 'Profil Anda berhasil diperbarui.');
         }
 
-        // --- SUBMENU ---
+        // --- SUBMENU (DIPERBAIKI) ---
         function openSubmenu(parentTitle, parentIcon, parentColor) {
             const children = globalChildrenMap[parentTitle] || [];
             if (children.length === 0) { showModernDialog('error', 'Kosong', 'Menu ini belum memiliki isi.'); return; }
@@ -265,12 +273,13 @@
             children.forEach(child => {
                 const icon = child.icon || 'link';
                 const subColor = parentColor || 'blue';
+                // Gunakan <a> agar link mobile lebih responsif
                 list.insertAdjacentHTML('beforeend', `
-                    <div onclick="window.open('${child.url}', '_blank')" class="group flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700 cursor-pointer active:scale-95 transition-transform">
+                    <a href="${child.url}" target="_blank" class="group flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700 cursor-pointer active:scale-95 transition-transform no-underline">
                         <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-white dark:bg-slate-800 text-${subColor}-500 shadow-sm group-hover:bg-${subColor}-500 group-hover:text-white transition-colors"><i data-lucide="${icon}" class="w-6 h-6"></i></div>
                         <div class="flex-1"><h4 class="font-bold text-slate-700 dark:text-white text-sm group-hover:text-${subColor}-600 transition-colors">${child.judul}</h4><p class="text-xs text-slate-400 font-medium line-clamp-1">${child.deskripsi || 'Klik untuk membuka'}</p></div>
                         <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300"></i>
-                    </div>
+                    </a>
                 `);
             });
             lucide.createIcons();
@@ -278,15 +287,27 @@
         }
 
         function closeSubmenu(fromBackBtn) { 
-            const sheet = document.getElementById('submenu-sheet'); const backdrop = document.getElementById('submenu-backdrop'); const overlay = document.getElementById('submenu-overlay'); 
-            backdrop.classList.add('opacity-0'); sheet.classList.add('translate-y-full'); 
-            setTimeout(() => { overlay.classList.add('hidden'); }, 300);
+            const sheet = document.getElementById('submenu-sheet'); 
+            const backdrop = document.getElementById('submenu-backdrop'); 
+            const overlay = document.getElementById('submenu-overlay'); 
+            
+            backdrop.classList.add('opacity-0'); 
+            sheet.classList.add('translate-y-full'); 
+            
+            // PERBAIKAN: Matikan pointer-events SEGERA agar klik tembus ke bawah
+            overlay.style.pointerEvents = 'none';
+
+            setTimeout(() => { 
+                overlay.classList.add('hidden'); 
+                overlay.style.pointerEvents = ''; // Reset
+            }, 300);
+            
             if(!fromBackBtn) goBackHistory(); 
         }
 
         // --- DIALOGS ---
         function showModernDialog(t, tit, msg, cb) { 
-            const modal = document.getElementById('custom-dialog'); const content = document.getElementById('dialog-content'); const backdrop = document.getElementById('dialog-backdrop');
+            const modal = document.getElementById('custom-dialog'); const content = document.getElementById('dialog-content'); 
             const iconEl = document.getElementById('dialog-icon'); const iconBg = document.getElementById('dialog-icon-bg');
             const groupConfirm = document.getElementById('dialog-btn-confirm-group'); const btnOk = document.getElementById('btn-dialog-ok'); const btnYes = document.getElementById('btn-dialog-yes');
             
@@ -333,17 +354,14 @@
             initTheme();
             loadProfile();
             
-            // 1. Cek Cache dulu
             const cachedData = localStorage.getItem('app_cache');
             if (cachedData) {
                 try { renderApp(JSON.parse(cachedData), true); console.log("Cache loaded"); } catch(e) { console.error(e); }
             } else {
-                // Skeleton loading
                 document.getElementById('dynamic-menu-container').innerHTML = 
                 `<div class="col-span-2 bg-white/60 dark:bg-slate-800/60 rounded-3xl p-6 border border-white/50 dark:border-slate-700 shadow-sm h-32 flex items-center justify-center animate-pulse gap-3"><div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div><div class="text-slate-400 text-sm font-medium">Memuat Menu...</div></div>`;
             }
 
-            // 2. Fetch Data (Delay 0.5s agar smooth)
             setTimeout(fetchAppData, 500); 
         }
 
@@ -369,6 +387,7 @@
             }); 
         }
 
+        // --- FUNGSI RENDER (DIPERBAIKI UNTUK MENGHINDARI TOMBOL MACET) ---
         function renderApp(data, fromCache) {
             const menuList = data.menu || []; 
             const footerList = data.footer || []; 
@@ -378,7 +397,7 @@
             globalChildrenMap = {};
             menuList.forEach(item => { const p = item.parent ? String(item.parent).trim() : ""; if(p !== "") { if(!globalChildrenMap[p]) globalChildrenMap[p] = []; globalChildrenMap[p].push(item); } });
 
-            // Render Info & Footer (Sama seperti sebelumnya)
+            // Info & Footer
             const annArea = document.getElementById('announcement-area'); annArea.innerHTML = ''; 
             if (info && info.status === 'ON') {
                 const colors = { red: 'bg-red-50 dark:bg-red-900/20 text-red-700', blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700', green: 'bg-green-50 dark:bg-green-900/20 text-green-700', yellow: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700' };
@@ -389,9 +408,8 @@
             const footerContainer = document.getElementById('footer-links-container'); footerContainer.innerHTML = '';
             footerList.forEach(link => { footerContainer.insertAdjacentHTML('beforeend', `<a href="${link.url}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-800 hover:text-white transition shadow-sm"><i data-lucide="${link.icon || 'link'}" class="w-3.5 h-3.5"></i> ${link.judul}</a>`); });
 
-            // RENDER GRID MENU UTAMA
+            // GRID MENU UTAMA
             const container = document.getElementById('dynamic-menu-container'); container.innerHTML = '';
-            // Filter Parent
             const parents = menuList.filter(item => !item.parent || item.parent.trim() === "");
 
             parents.forEach(item => {
@@ -403,11 +421,14 @@
                 let visibilityClass = 'block';
                 if (target === 'mobile') visibilityClass = 'block md:hidden'; else if (target === 'desktop') visibilityClass = 'hidden md:block';
 
-                // OnClick
-                const safeTitle = item.judul.replace(/'/g, "\\'");
-                const clickAction = hasChildren 
-                    ? `onclick="openSubmenu('${safeTitle}', '${item.icon}', '${color}')"` 
-                    : `onclick="window.open('${item.url}', '_blank')"`;
+                // Sanitasi Judul (Mengatasi error kutip ganda)
+                const safeTitle = item.judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                
+                // PERBAIKAN: Gunakan <a> untuk link langsung, <button> untuk submenu
+                let wrapperTag = hasChildren ? 'button' : 'a';
+                let wrapperAttrs = hasChildren 
+                    ? `type="button" onclick="openSubmenu('${safeTitle}', '${item.icon}', '${color}')"` 
+                    : `href="${item.url}" target="_blank"`;
 
                 // Badge
                 let badgeHtml = '';
@@ -418,12 +439,14 @@
                 const isWide = item.ukuran && item.ukuran.toLowerCase() === 'wide';
                 const gridClass = isWide ? 'col-span-2' : 'col-span-1';
                 let cardHtml = '';
+                
                 if(isWide) {
-                     cardHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none transition-all duration-300 flex items-center gap-5 relative h-full group">${badgeHtml}<div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 group-hover:scale-110 transition-transform"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0"><h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 mb-1">${item.judul}</h3><p class="text-xs text-slate-400 dark:text-slate-500 font-medium line-clamp-2">${item.deskripsi}</p></div></div>`;
+                     cardHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none transition-all duration-300 flex items-center gap-5 relative h-full group w-full text-left">${badgeHtml}<div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 group-hover:scale-110 transition-transform"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0"><h3 class="font-bold text-lg text-slate-700 dark:text-slate-200 mb-1">${item.judul}</h3><p class="text-xs text-slate-400 dark:text-slate-500 font-medium line-clamp-2">${item.deskripsi}</p></div></div>`;
                 } else {
-                     cardHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none transition-all duration-300 flex flex-col items-center justify-center text-center gap-4 relative h-full group">${badgeHtml}<div class="w-16 h-16 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 group-hover:scale-110 transition-transform"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="w-full"><h3 class="font-bold text-sm text-slate-700 dark:text-slate-200 mb-1">${item.judul}</h3><p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium line-clamp-1 hidden md:block">${item.deskripsi}</p></div></div>`;
+                     cardHtml = `<div class="bg-white/80 dark:bg-darkcard/60 backdrop-blur-sm rounded-3xl p-5 border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-${color}-100 dark:hover:shadow-none transition-all duration-300 flex flex-col items-center justify-center text-center gap-4 relative h-full group w-full">${badgeHtml}<div class="w-16 h-16 flex items-center justify-center rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 border border-${color}-100/50 group-hover:scale-110 transition-transform"><i data-lucide="${item.icon}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="w-full"><h3 class="font-bold text-sm text-slate-700 dark:text-slate-200 mb-1">${item.judul}</h3><p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium line-clamp-1 hidden md:block">${item.deskripsi}</p></div></div>`;
                 }
-                container.insertAdjacentHTML('beforeend', `<div ${clickAction} class="${visibilityClass} ${gridClass} cursor-pointer h-full active:scale-95 transition-transform duration-200 select-none">${cardHtml}</div>`);
+                
+                container.insertAdjacentHTML('beforeend', `<${wrapperTag} ${wrapperAttrs} class="${visibilityClass} ${gridClass} block cursor-pointer h-full active:scale-95 transition-transform duration-200 select-none no-underline">${cardHtml}</${wrapperTag}>`);
             });
             lucide.createIcons();
         }
@@ -501,8 +524,8 @@
         const iw = document.getElementById('install-container-wrapper'); const isApp = window.matchMedia('(display-mode: standalone)').matches; 
         setTimeout(() => { if(!isApp && !localStorage.getItem('install_dismissed') && iw) { iw.classList.remove('hidden'); iw.classList.add('flex'); setTimeout(() => showInstallSheet(), 2000); } }, 3000);
         let deferredPrompt; const installOverlay = document.getElementById('install-overlay'); const installBackdrop = document.getElementById('install-backdrop'); const installSheet = document.getElementById('install-sheet'); const btnInstall = document.getElementById('btn-install-now'); const btnLater = document.getElementById('btn-later'); const installBtnSmall = document.getElementById('install-btn'); const btnCloseSmall = document.getElementById('close-install-btn');
-        function showInstallSheet() { if (sessionStorage.getItem('sheet_shown')) return; installOverlay.classList.remove('hidden'); setTimeout(() => { installBackdrop.classList.remove('opacity-0'); installSheet.classList.remove('translate-y-full'); }, 50); sessionStorage.setItem('sheet_shown', 'true'); }
-        function hideInstallSheet() { installBackdrop.classList.add('opacity-0'); installSheet.classList.add('translate-y-full'); setTimeout(() => { installOverlay.classList.add('hidden'); }, 300); }
+        function showInstallSheet() { if (sessionStorage.getItem('sheet_shown')) return; installOverlay.classList.remove('hidden'); installOverlay.style.pointerEvents = 'auto'; setTimeout(() => { installBackdrop.classList.remove('opacity-0'); installSheet.classList.remove('translate-y-full'); }, 50); sessionStorage.setItem('sheet_shown', 'true'); }
+        function hideInstallSheet() { installBackdrop.classList.add('opacity-0'); installSheet.classList.add('translate-y-full'); installOverlay.style.pointerEvents = 'none'; setTimeout(() => { installOverlay.classList.add('hidden'); installOverlay.style.pointerEvents = ''; }, 300); }
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
         const handleInstallClick = () => { hideInstallSheet(); if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); } else { const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream; if(isIOS) alert("iPhone: Tekan tombol Share > Add to Home Screen"); else alert("Cek menu browser > Install App"); } };
         if(btnInstall) btnInstall.addEventListener('click', handleInstallClick); if(installBtnSmall) installBtnSmall.addEventListener('click', handleInstallClick); if(btnLater) btnLater.addEventListener('click', () => hideInstallSheet()); if(btnCloseSmall) btnCloseSmall.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Sembunyikan tombol download ini selamanya?")) { document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); } }); window.addEventListener('appinstalled', () => { hideInstallSheet(); if(document.getElementById('install-container-wrapper')) document.getElementById('install-container-wrapper').classList.add('hidden'); localStorage.setItem('install_dismissed', 'true'); });
