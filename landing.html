@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selogiri Creative App - Landing Page</title>
+    <meta name="description" content="Portal Pendidikan Digital Terintegrasi Kecamatan Selogiri">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    colors: { darkbg: '#0f172a', darkcard: '#1e293b' }, 
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } 
+                } 
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .blob { position: absolute; filter: blur(90px); z-index: -1; opacity: 0.5; animation: float 10s infinite ease-in-out alternate; }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #bfdbfe; } 
+        .blob-2 { bottom: 10%; right: -10%; width: 400px; height: 400px; background: #ddd6fe; } 
+        .dark .blob-1 { background: #1e3a8a; opacity: 0.3; } 
+        .dark .blob-2 { background: #581c87; opacity: 0.3; } 
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(20px, 40px); } }
+        
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .dark .glass { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        .mockup-shadow { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .dark .mockup-shadow { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 transition-colors duration-500 overflow-x-hidden">
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <nav class="fixed w-full z-50 glass transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 rounded-full shadow-sm">
+                <span class="font-bold text-lg tracking-tight">Selogiri Creative</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#fitur" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Fitur Utama</a>
+                <a href="#changelog" class="hover:text-blue-600 dark:hover:text-blue-400 transition">Changelog</a>
+                <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="pt-32 pb-20 px-6 relative">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 animate-fade-in-up">
+                <span class="inline-block py-1 px-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold tracking-wider uppercase border border-blue-200 dark:border-blue-800">
+                    Portal Pendidikan v1.0
+                </span>
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-slate-900 dark:text-white">
+                    Layanan Digital <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Dalam Genggaman</span>
+                </h1>
+                <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-lg">
+                    Akses administrasi guru, materi siswa, dan informasi Korwil Selogiri dalam satu aplikasi yang ringan, cepat, dan modern.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="https://slg-timkreatif.github.io/app" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-lg shadow-blue-500/30 transition transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
+                        <i data-lucide="rocket" class="w-5 h-5"></i> Buka Aplikasi
+                    </a>
+                    <a href="#fitur" class="px-8 py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-700 rounded-2xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center gap-2">
+                        <i data-lucide="info" class="w-5 h-5"></i> Pelajari Dulu
+                    </a>
+                </div>
+            </div>
+            
+            <div class="relative flex justify-center perspective-1000">
+                <div class="relative w-[280px] h-[580px] bg-slate-900 rounded-[3rem] border-8 border-slate-900 shadow-2xl mockup-shadow overflow-hidden transform rotate-y-12 rotate-z-2 hover:rotate-0 transition-all duration-700 ease-out">
+                    <div class="w-full h-full bg-slate-50 dark:bg-darkbg flex flex-col">
+                        <div class="h-6 w-full bg-slate-900/5 absolute top-0 z-20 flex justify-center"><div class="w-32 h-4 bg-slate-900 rounded-b-xl"></div></div>
+                        <div class="p-6 pt-10 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md border-b border-slate-200/50">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-500"></div>
+                                <div class="space-y-1">
+                                    <div class="w-24 h-2 bg-slate-200 rounded-full"></div>
+                                    <div class="w-16 h-2 bg-slate-100 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <div class="w-full h-32 rounded-2xl bg-gradient-to-br from-blue-900 to-slate-800 p-4">
+                                <div class="w-1/2 h-4 bg-white/20 rounded-full mb-2"></div>
+                                <div class="w-3/4 h-6 bg-white/30 rounded-full"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="h-24 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700"></div>
+                                <div class="h-24 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[320px] h-[600px] bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="fitur" class="py-20 px-6 bg-white/40 dark:bg-black/20 backdrop-blur-sm border-y border-white/50 dark:border-white/5">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Fitur Unggulan</h2>
+                <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">Dirancang khusus untuk memudahkan ekosistem pendidikan di Selogiri dengan teknologi terkini.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                    <div class="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="smartphone" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">PWA Support</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                        Dapat diinstal langsung ke perangkat Android & iOS tanpa melalui App Store. Ringan dan hemat memori.
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                    <div class="w-14 h-14 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="database" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">Dynamic Sync</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                        Menu dan konten dikelola secara real-time melalui Google Sheets (GAS API), memungkinkan update instan.
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                    <div class="w-14 h-14 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="moon" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">Dark Mode</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                        Tampilan yang nyaman di mata dengan mode gelap otomatis mengikuti preferensi sistem pengguna.
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                    <div class="w-14 h-14 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="message-square-plus" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">Feedback System</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                        Pengguna dapat melaporkan bug atau memberikan saran langsung kepada Tim Kreatif melalui formulir terintegrasi.
+                    </p>
+                </div>
+                 <div class="glass p-8 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                    <div class="w-14 h-14 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="bell-ring" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">Smart Announcement</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                        Fitur pengumuman popup dan banner yang dinamis untuk informasi penting kedinasan.
+                    </p>
+                </div>
+                 <div class="glass p-8 rounded-3xl hover:shadow-xl hover:-translate-y-1 transition duration-300">
+                    <div class="w-14 h-14 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="shield-check" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-3">Secure & Fast</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                        Dibangun tanpa backend yang berat, memanfaatkan hosting statis GitHub Pages dan Google Script.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="changelog" class="py-20 px-6">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-10 text-center">Riwayat Pembaruan</h2>
+            
+            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-blue-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                    </div>
+                    
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass p-6 rounded-2xl shadow-sm border-l-4 border-blue-500">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-slate-900 dark:text-white">Versi 1.0 (Rilis Publik)</h3>
+                            <span class="text-xs font-mono text-slate-400">Januari 2026</span>
+                        </div>
+                        <ul class="text-sm text-slate-600 dark:text-slate-400 space-y-1 list-disc list-inside">
+                            <li>Peluncuran perdana Portal Selogiri Creative.</li>
+                            <li>Integrasi Database Menu via Google Spreadsheet.</li>
+                            <li>Fitur Dark Mode otomatis & manual.</li>
+                            <li>Sistem Feedback & Laporan Bug.</li>
+                            <li>Popup Informasi & Banner Pengumuman.</li>
+                            <li>PWA Manifest untuk instalasi Android/iOS.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 dark:bg-slate-700 text-slate-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <span class="text-xs font-bold">0.9</span>
+                    </div>
+                    
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass p-6 rounded-2xl shadow-sm opacity-70">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-slate-900 dark:text-white">Versi 0.9 (Beta)</h3>
+                            <span class="text-xs font-mono text-slate-400">Desember 2025</span>
+                        </div>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">
+                            Pengujian internal tim kreatif dan penyusunan struktur database API.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Siap Menggunakan Aplikasi?</h2>
+            <p class="text-slate-500 mb-8">Tidak perlu download besar. Cukup buka di browser dan tambahkan ke layar utama.</p>
+            
+            <a href="https://slg-timkreatif.github.io/app" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 dark:bg-blue-600 text-white rounded-xl font-bold hover:scale-105 transition duration-300 shadow-xl">
+                <span>Buka Aplikasi Sekarang</span>
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </a>
+
+            <div class="mt-12 text-xs text-slate-400 uppercase tracking-widest font-bold">
+                Tim Kreatif Selogiri &copy; 2026
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</body>
+</html>
