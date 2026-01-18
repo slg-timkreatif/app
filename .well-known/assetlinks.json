@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.timkreatif.guruberbagi",
+    "sha256_cert_fingerprints":
+    ["D9:B6:BB:FF:4E:99:79:D8:1E:B2:90:E6:E6:86:70:B4:33:13:23:CF:34:CB:67:46:FB:6C:32:B0:D8:7B:8E:70"]
+  }
+}]
