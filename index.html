@@ -79,6 +79,10 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase px-2 mb-2">Pintasan</p>
                     <button onclick="app.openModal('profile-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="user-cog" class="w-4 h-4"></i> Edit Profil</button>
                     <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="help-circle" class="w-4 h-4"></i> Bantuan & Laporan</button>
+                    
+                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800">
+                        <i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Pembaruan Sistem
+                    </button>
                 </div>
             </div>
 
@@ -184,6 +188,10 @@
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Unit Kerja</label><input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Jabatan</label><input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
                 <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl hover:scale-[1.02] active:scale-95 transition mt-2">Simpan Profil</button>
+                
+                <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="w-full flex items-center justify-center gap-2 py-3 mt-4 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition">
+                    <i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Pembaruan Sistem
+                </button>
             </form>
         </div>
     </div>
@@ -323,6 +331,37 @@
                     });
             },
 
+            // --- FUNGSI UPDATE PWA MANUAL ---
+            resetApp: async function() {
+                const btnSidebar = document.getElementById('btn-reset-sidebar');
+                const btnProfile = document.getElementById('btn-reset-profile');
+                const loadingHtml = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...';
+
+                if(btnSidebar) btnSidebar.innerHTML = loadingHtml;
+                if(btnProfile) btnProfile.innerHTML = loadingHtml;
+                lucide.createIcons();
+
+                try {
+                    // 1. Unregister SW
+                    if ('serviceWorker' in navigator) {
+                        const registrations = await navigator.serviceWorker.getRegistrations();
+                        for (let registration of registrations) {
+                            await registration.unregister();
+                        }
+                    }
+                    // 2. Clear Caches
+                    if ('caches' in window) {
+                        const keys = await caches.keys();
+                        await Promise.all(keys.map(key => caches.delete(key)));
+                    }
+                    // 3. Reload
+                    setTimeout(() => window.location.reload(true), 1000);
+                } catch (e) {
+                    alert("Gagal reset otomatis. Silakan clear cache browser manual.");
+                    window.location.reload();
+                }
+            },
+
             render: function(data) {
                 const menuList = data.menu || [];
                 const footerList = data.footer || [];
@@ -374,7 +413,8 @@
                         attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`;
                     }
 
-                    // --- LOGIKA CARD KOTAK STANDAR (Kecuali diset wide di DB) ---
+                    // --- LOGIKA CARD KEMBALI STANDAR (KOTAK) ---
+                    // Hanya Wide jika Kolom H = "wide"
                     const isWide = (item.ukuran || '').toLowerCase() === 'wide';
                     const colSpan = isWide ? 'col-span-2' : 'col-span-1';
 
@@ -389,7 +429,7 @@
                     let html = '';
                     
                     if (isWide) {
-                        // TAMPILAN WIDE (Khusus Kolom H="wide") -> Ikon Kiri
+                        // TAMPILAN WIDE (Khusus jika diset wide di DB)
                         html = `
                         <${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">
                             ${badge}
@@ -402,7 +442,7 @@
                             </div>
                         </${tag}>`;
                     } else {
-                        // TAMPILAN BOX (Standar Default) -> Ikon Atas
+                        // TAMPILAN BOX (Standar untuk semua)
                         html = `
                         <${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">
                             ${badge}
