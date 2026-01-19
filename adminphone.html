@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Admin Guru Berbagi</title>
+    <title>Admin Mobile</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -11,41 +11,25 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
-        
-        /* Animasi Transisi */
         .fade-in { animation: fadeIn 0.3s cubic-bezier(0.2, 0, 0.2, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Hilangkan Scrollbar tapi tetap bisa scroll */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* Safe Area untuk HP Poni/Notch */
         .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-        .pt-safe { padding-top: env(safe-area-inset-top); }
     </style>
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-    <div id="login-screen" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6 fade-in">
+    <div id="login-screen" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6">
         <div class="w-full max-w-sm text-center">
-            <div class="w-24 h-24 bg-blue-600 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-xl shadow-blue-200">
-                <i data-lucide="command" class="w-12 h-12 text-white"></i>
-            </div>
-            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Admin Portal</h1>
-            <p class="text-slate-500 mb-10">Kelola aplikasi dari genggaman Anda.</p>
-            
+            <div class="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-200"><i data-lucide="smartphone" class="w-10 h-10 text-white"></i></div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2">Admin Portal</h1>
+            <p class="text-slate-500 mb-8 text-sm">Versi Mobile v2.3 (Fix UI)</p>
             <form onsubmit="admin.login(event)" class="space-y-6">
-                <div class="relative">
-                    <input type="password" id="admin-pin" class="w-full text-center text-4xl font-bold border-b-2 border-slate-200 py-4 outline-none focus:border-blue-600 transition text-slate-800 placeholder-slate-200 tracking-[0.5em]" placeholder="••••••" maxlength="6" inputmode="numeric" required>
-                    <p class="text-xs text-slate-400 mt-2">Masukkan 6 digit PIN Keamanan</p>
-                </div>
-                <button type="submit" id="btn-login" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg shadow-slate-200 active:scale-95 transition flex justify-center items-center gap-2 text-lg">
-                    Masuk <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                </button>
+                <input type="password" id="admin-pin" class="w-full text-center text-3xl font-bold border-b-2 border-slate-200 py-3 outline-none focus:border-blue-600 transition text-slate-800 tracking-[0.5em]" placeholder="••••••" maxlength="6" inputmode="numeric" required>
+                <button type="submit" id="btn-login" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition">Masuk</button>
             </form>
         </div>
-        <div class="absolute bottom-8 text-xs text-slate-300 font-bold tracking-widest">VERSI MOBILE 2.0</div>
     </div>
 
     <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 px-5 py-4 flex justify-between items-center sticky top-0 z-30 pt-safe">
@@ -53,42 +37,37 @@
             <h2 class="text-lg font-extrabold text-slate-800" id="header-title">Dashboard</h2>
             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider" id="header-subtitle">Overview</p>
         </div>
-        <div class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center active:scale-90 transition" onclick="location.reload()">
-            <i data-lucide="refresh-cw" class="w-4 h-4 text-slate-600"></i>
-        </div>
+        <button class="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center active:scale-90 transition" onclick="location.reload()"><i data-lucide="refresh-cw" class="w-4 h-4 text-slate-600"></i></button>
     </header>
 
     <main id="main-content" class="flex-1 overflow-y-auto p-5 pb-32 no-scrollbar">
         
         <div id="tab-home" class="tab-content fade-in space-y-6">
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-blue-600 text-white p-5 rounded-3xl shadow-lg shadow-blue-600/20 relative overflow-hidden">
-                    <i data-lucide="users" class="absolute -right-2 -bottom-2 w-20 h-20 text-white/10"></i>
-                    <div class="opacity-80 text-xs font-bold mb-1 uppercase">Total Guru</div>
-                    <div class="text-4xl font-extrabold tracking-tight" id="stat-guru">0</div>
+                <div class="bg-blue-600 text-white p-5 rounded-3xl shadow-lg relative overflow-hidden">
+                    <i data-lucide="users" class="absolute -right-2 -bottom-2 w-16 h-16 text-white/10"></i>
+                    <div class="opacity-80 text-xs font-bold mb-1 uppercase">Guru</div>
+                    <div class="text-3xl font-extrabold" id="stat-guru">0</div>
                 </div>
-                <div class="bg-slate-800 text-white p-5 rounded-3xl shadow-lg shadow-slate-800/20 relative overflow-hidden">
-                    <i data-lucide="grid" class="absolute -right-2 -bottom-2 w-20 h-20 text-white/10"></i>
-                    <div class="opacity-80 text-xs font-bold mb-1 uppercase">Menu Aktif</div>
-                    <div class="text-4xl font-extrabold tracking-tight" id="stat-menu">0</div>
+                <div class="bg-slate-800 text-white p-5 rounded-3xl shadow-lg relative overflow-hidden">
+                    <i data-lucide="grid" class="absolute -right-2 -bottom-2 w-16 h-16 text-white/10"></i>
+                    <div class="opacity-80 text-xs font-bold mb-1 uppercase">Menu</div>
+                    <div class="text-3xl font-extrabold" id="stat-menu">0</div>
                 </div>
             </div>
 
             <div>
-                <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider ml-1">Aksi Cepat</h3>
+                <h3 class="text-xs font-bold text-slate-400 uppercase mb-3 tracking-wider ml-1">Menu Cepat</h3>
                 <div class="grid grid-cols-4 gap-4">
-                    <button onclick="admin.openUserModal()" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm group-active:scale-95 transition"><i data-lucide="user-plus" class="w-7 h-7"></i></div><span class="text-[10px] font-bold text-slate-600">Add Guru</span></button>
-                    <button onclick="admin.openMenuModal()" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-purple-600 shadow-sm group-active:scale-95 transition"><i data-lucide="plus-circle" class="w-7 h-7"></i></div><span class="text-[10px] font-bold text-slate-600">Add Menu</span></button>
-                    <button onclick="admin.nav('tab-info')" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-green-600 shadow-sm group-active:scale-95 transition"><i data-lucide="bell" class="w-7 h-7"></i></div><span class="text-[10px] font-bold text-slate-600">Info OTA</span></button>
-                    <button onclick="admin.nav('tab-settings')" class="flex flex-col items-center gap-2 group"><div class="w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-600 shadow-sm group-active:scale-95 transition"><i data-lucide="settings" class="w-7 h-7"></i></div><span class="text-[10px] font-bold text-slate-600">Setelan</span></button>
+                    <button onclick="admin.openUserModal()" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm group-active:scale-95 transition"><i data-lucide="user-plus" class="w-6 h-6"></i></div><span class="text-[10px] font-bold text-slate-600">Guru</span></button>
+                    <button onclick="admin.openMenuModal()" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-purple-600 shadow-sm group-active:scale-95 transition"><i data-lucide="plus-circle" class="w-6 h-6"></i></div><span class="text-[10px] font-bold text-slate-600">Menu</span></button>
+                    <button onclick="admin.nav('tab-info')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-green-600 shadow-sm group-active:scale-95 transition"><i data-lucide="bell" class="w-6 h-6"></i></div><span class="text-[10px] font-bold text-slate-600">Info</span></button>
+                    <button onclick="admin.nav('tab-settings')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-600 shadow-sm group-active:scale-95 transition"><i data-lucide="settings" class="w-6 h-6"></i></div><span class="text-[10px] font-bold text-slate-600">Setelan</span></button>
                 </div>
             </div>
 
             <div>
-                <div class="flex justify-between items-center mb-3 ml-1">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pesan Terbaru</h3>
-                    <button onclick="admin.nav('tab-feedback')" class="text-blue-600 text-xs font-bold">Lihat Semua</button>
-                </div>
+                <div class="flex justify-between items-center mb-3 ml-1"><h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pesan Terbaru</h3><button onclick="admin.nav('tab-feedback')" class="text-blue-600 text-xs font-bold">Semua</button></div>
                 <div id="home-feedback-list" class="space-y-3"></div>
             </div>
         </div>
@@ -98,17 +77,12 @@
                 <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-slate-400"></i>
                 <input type="text" placeholder="Cari nama atau NIP..." class="w-full pl-11 pr-4 py-3 bg-white border-none shadow-sm rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none" onkeyup="admin.searchUser(this.value)">
             </div>
-            
-            <div id="user-list-container" class="space-y-3 pb-20">
-                </div>
-            
-            <button onclick="admin.openUserModal()" class="fixed bottom-24 right-5 w-14 h-14 bg-blue-600 text-white rounded-full shadow-xl shadow-blue-600/40 flex items-center justify-center active:scale-90 transition z-20">
-                <i data-lucide="plus" class="w-7 h-7"></i>
-            </button>
+            <div id="user-list-container" class="space-y-3 pb-20"></div>
+            <button onclick="admin.openUserModal()" class="fixed bottom-24 right-5 w-14 h-14 bg-blue-600 text-white rounded-full shadow-xl shadow-blue-600/40 flex items-center justify-center active:scale-90 transition z-20"><i data-lucide="plus" class="w-7 h-7"></i></button>
         </div>
 
         <div id="tab-menu" class="tab-content hidden space-y-4 fade-in">
-            <div class="flex justify-between items-center px-1">
+            <div class="flex justify-between items-center px-1 mb-2">
                 <span class="text-xs font-bold text-slate-400 uppercase">Daftar Menu</span>
                 <button onclick="admin.openMenuModal()" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-lg flex items-center gap-2 active:scale-95 transition"><i data-lucide="plus" class="w-3 h-3"></i> Tambah</button>
             </div>
@@ -124,128 +98,63 @@
                 <h3 class="font-bold text-lg mb-4 flex items-center gap-2 text-slate-800"><i data-lucide="bell" class="w-5 h-5 text-blue-600"></i> Info & OTA</h3>
                 <form onsubmit="admin.saveInfo(event)" class="space-y-4">
                     <div class="grid grid-cols-2 gap-3">
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase">Versi App</label><input type="text" id="info-versi" class="w-full border rounded-xl p-3 bg-slate-50 font-bold text-blue-600 text-center"></div>
+                        <div><label class="text-[10px] font-bold text-slate-400 uppercase">Versi</label><input type="text" id="info-versi" class="w-full border rounded-xl p-3 bg-slate-50 font-bold text-blue-600 text-center"></div>
                         <div><label class="text-[10px] font-bold text-slate-400 uppercase">Status</label><select id="info-status" class="w-full border rounded-xl p-3 bg-slate-50"><option value="ON">ON</option><option value="OFF">OFF</option></select></div>
                     </div>
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase">Running Text</label><textarea id="info-pesan" rows="2" class="w-full border rounded-xl p-3 bg-slate-50 text-sm"></textarea></div>
-                    
+                    <div><label class="text-[10px] font-bold text-slate-400 uppercase">Warna Tema</label><select id="info-warna" class="w-full border rounded-xl p-3 bg-slate-50"><option value="blue">Biru</option><option value="red">Merah</option><option value="green">Hijau</option></select></div>
                     <hr class="border-dashed">
                     <h3 class="font-bold text-sm text-slate-600">Popup Flyer</h3>
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase">Status Popup</label><select id="pop-status" class="w-full border rounded-xl p-3 bg-slate-50"><option value="ON">ON</option><option value="OFF">OFF</option></select></div>
                     <input type="text" id="pop-judul" class="w-full border rounded-xl p-3 bg-slate-50 text-sm" placeholder="Judul Popup">
                     <textarea id="pop-pesan" rows="2" class="w-full border rounded-xl p-3 bg-slate-50 text-sm" placeholder="Pesan Popup"></textarea>
                     <input type="text" id="pop-gambar" class="w-full border rounded-xl p-3 bg-slate-50 text-sm" placeholder="URL Gambar">
-                    
                     <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition">Simpan Info</button>
                 </form>
             </div>
 
             <div class="bg-white p-5 rounded-3xl shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg flex items-center gap-2 text-slate-800"><i data-lucide="link" class="w-5 h-5 text-slate-600"></i> Footer Link</h3>
-                    <button onclick="admin.openFooterModal()" class="bg-slate-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold">+ Tambah</button>
-                </div>
+                <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-5 h-5 text-slate-600"></i> Footer Link</h3><button onclick="admin.openFooterModal()" class="bg-slate-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold">+ Tambah</button></div>
                 <div id="footer-list-container" class="space-y-2"></div>
             </div>
 
             <button onclick="admin.logout()" class="w-full bg-red-50 text-red-600 font-bold py-4 rounded-2xl border border-red-100 flex justify-center items-center gap-2 active:scale-95 transition mb-10"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
-
     </main>
 
     <nav class="bg-white border-t border-slate-200 fixed bottom-0 w-full z-40 pb-safe shadow-[0_-8px_30px_rgba(0,0,0,0.04)] rounded-t-[1.5rem]">
         <div class="flex justify-around items-center h-20 px-2">
-            <button onclick="admin.nav('tab-home')" class="nav-btn active flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1">
-                <div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white group-[.active]:shadow-lg group-[.active]:shadow-blue-600/30 transition-all duration-300"><i data-lucide="layout-grid" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold group-[.active]:text-blue-600 transition-colors">Home</span>
-            </button>
-            <button onclick="admin.nav('tab-user')" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1">
-                <div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white group-[.active]:shadow-lg group-[.active]:shadow-blue-600/30 transition-all duration-300"><i data-lucide="users" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold group-[.active]:text-blue-600 transition-colors">Guru</span>
-            </button>
-            <button onclick="admin.nav('tab-menu')" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1">
-                <div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white group-[.active]:shadow-lg group-[.active]:shadow-blue-600/30 transition-all duration-300"><i data-lucide="grid" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold group-[.active]:text-blue-600 transition-colors">Menu</span>
-            </button>
-            <button onclick="admin.nav('tab-settings')" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1">
-                <div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white group-[.active]:shadow-lg group-[.active]:shadow-blue-600/30 transition-all duration-300"><i data-lucide="settings" class="w-5 h-5"></i></div>
-                <span class="text-[10px] font-bold group-[.active]:text-blue-600 transition-colors">Setelan</span>
-            </button>
+            <button onclick="admin.nav('tab-home')" class="nav-btn active flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1"><div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white transition-all"><i data-lucide="layout-grid" class="w-5 h-5"></i></div><span class="text-[10px] font-bold group-[.active]:text-blue-600">Home</span></button>
+            <button onclick="admin.nav('tab-user')" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1"><div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white transition-all"><i data-lucide="users" class="w-5 h-5"></i></div><span class="text-[10px] font-bold group-[.active]:text-blue-600">Guru</span></button>
+            <button onclick="admin.nav('tab-menu')" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1"><div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white transition-all"><i data-lucide="grid" class="w-5 h-5"></i></div><span class="text-[10px] font-bold group-[.active]:text-blue-600">Menu</span></button>
+            <button onclick="admin.nav('tab-settings')" class="nav-btn flex-1 flex flex-col items-center justify-center text-slate-300 transition group gap-1"><div class="w-10 h-10 rounded-2xl flex items-center justify-center group-[.active]:bg-blue-600 group-[.active]:text-white transition-all"><i data-lucide="settings" class="w-5 h-5"></i></div><span class="text-[10px] font-bold group-[.active]:text-blue-600">Setelan</span></button>
         </div>
     </nav>
 
-    <div id="menu-modal" class="fixed inset-0 z-[80] hidden flex items-end justify-center bg-slate-900/60 backdrop-blur-sm">
+    <div id="menu-modal" class="fixed inset-0 z-[80] hidden flex items-end justify-center bg-slate-900/60 backdrop-blur-sm" onclick="if(event.target===this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-t-[2rem] shadow-2xl p-6 max-h-[90vh] overflow-y-auto fade-in pb-safe">
-            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
-            <h3 class="text-xl font-bold mb-4 text-slate-800">Editor Menu</h3>
-            <form onsubmit="admin.submitMenu(event)" class="space-y-4">
-                <input type="hidden" id="inp-id">
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-[10px] font-bold text-slate-400 uppercase">Judul</label><input type="text" id="inp-judul" required class="w-full border rounded-xl p-3 bg-slate-50"></div>
-                    <div><label class="text-[10px] font-bold text-slate-400 uppercase">Icon</label><input type="text" id="inp-icon" required class="w-full border rounded-xl p-3 bg-slate-50" placeholder="nama icon"></div>
-                </div>
-                <input type="text" id="inp-deskripsi" placeholder="Deskripsi Singkat" class="w-full border rounded-xl p-3 bg-slate-50 text-sm">
-                <input type="text" id="inp-url" required placeholder="URL Tujuan" class="w-full border rounded-xl p-3 bg-slate-50 text-sm">
-                <div class="grid grid-cols-3 gap-2">
-                    <select id="inp-warna" class="border rounded-xl p-3 bg-slate-50 text-xs"><option value="blue">Blue</option><option value="red">Red</option><option value="green">Green</option><option value="orange">Orange</option><option value="purple">Purple</option></select>
-                    <select id="inp-target" class="border rounded-xl p-3 bg-slate-50 text-xs"><option value="all">All</option><option value="desktop">Desktop</option><option value="mobile">HP</option></select>
-                    <select id="inp-ukuran" class="border rounded-xl p-3 bg-slate-50 text-xs"><option value="">Kotak</option><option value="wide">Wide</option></select>
-                </div>
-                <input type="text" id="inp-role" placeholder="Role (Contoh: PJOK, KS)" class="w-full border border-blue-200 rounded-xl p-3 bg-blue-50 text-sm">
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="text" id="inp-label" placeholder="Label (Baru)" class="border rounded-xl p-3 bg-slate-50 text-sm">
-                    <input type="text" id="inp-parent" placeholder="Parent Menu" class="border rounded-xl p-3 bg-slate-50 text-sm">
-                </div>
-                <div class="pt-2 flex gap-3">
-                    <button type="button" onclick="document.getElementById('menu-modal').classList.add('hidden')" class="flex-1 py-3.5 bg-slate-100 rounded-xl font-bold text-sm text-slate-600">Batal</button>
-                    <button type="submit" class="flex-1 py-3.5 bg-slate-900 text-white rounded-xl font-bold text-sm">Simpan</button>
-                </div>
-            </form>
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div><h3 class="text-xl font-bold mb-4">Editor Menu</h3>
+            <form onsubmit="admin.submitMenu(event)" class="space-y-4"><input type="hidden" id="inp-id"><div class="grid grid-cols-2 gap-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase">Judul</label><input type="text" id="inp-judul" required class="w-full border rounded-xl p-3 bg-slate-50"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase">Icon</label><input type="text" id="inp-icon" required class="w-full border rounded-xl p-3 bg-slate-50" placeholder="nama icon"></div></div><input type="text" id="inp-deskripsi" placeholder="Deskripsi" class="w-full border rounded-xl p-3 bg-slate-50 text-sm"><input type="text" id="inp-url" required placeholder="URL" class="w-full border rounded-xl p-3 bg-slate-50 text-sm"><div class="grid grid-cols-3 gap-2"><select id="inp-warna" class="border rounded-xl p-3 bg-slate-50 text-xs"><option value="blue">Blue</option><option value="red">Red</option><option value="green">Green</option><option value="orange">Orange</option><option value="purple">Purple</option></select><select id="inp-target" class="border rounded-xl p-3 bg-slate-50 text-xs"><option value="all">All</option><option value="desktop">Desktop</option><option value="mobile">HP</option></select><select id="inp-ukuran" class="border rounded-xl p-3 bg-slate-50 text-xs"><option value="">Kotak</option><option value="wide">Wide</option></select></div><input type="text" id="inp-role" placeholder="Role (Contoh: PJOK)" class="w-full border border-blue-200 rounded-xl p-3 bg-blue-50 text-sm"><div class="grid grid-cols-2 gap-3"><input type="text" id="inp-label" placeholder="Label" class="border rounded-xl p-3 bg-slate-50 text-sm"><input type="text" id="inp-parent" placeholder="Parent" class="border rounded-xl p-3 bg-slate-50 text-sm"></div><div class="pt-2 flex gap-3"><button type="button" onclick="document.getElementById('menu-modal').classList.add('hidden')" class="flex-1 py-3.5 bg-slate-100 rounded-xl font-bold text-sm text-slate-600">Batal</button><button type="submit" class="flex-1 py-3.5 bg-slate-900 text-white rounded-xl font-bold text-sm">Simpan</button></div></form>
         </div>
     </div>
 
-    <div id="user-modal" class="fixed inset-0 z-[80] hidden flex items-end justify-center bg-slate-900/60 backdrop-blur-sm">
+    <div id="user-modal" class="fixed inset-0 z-[80] hidden flex items-end justify-center bg-slate-900/60 backdrop-blur-sm" onclick="if(event.target===this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-t-[2rem] shadow-2xl p-6 max-h-[90vh] overflow-y-auto fade-in pb-safe">
-            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
-            <h3 class="text-xl font-bold mb-4 text-slate-800">Editor Guru</h3>
-            <form onsubmit="admin.submitUser(event)" class="space-y-4">
-                <input type="hidden" id="user-id">
-                <input type="email" id="user-email" required placeholder="Email Login" class="w-full border rounded-xl p-3 bg-slate-50 font-bold">
-                <input type="text" id="user-nama" required placeholder="Nama Lengkap" class="w-full border rounded-xl p-3 bg-slate-50">
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="text" id="user-nip" placeholder="NIP" class="border rounded-xl p-3 bg-slate-50 text-sm">
-                    <input type="text" id="user-pin" required placeholder="PIN (6 Digit)" class="border rounded-xl p-3 bg-slate-50 text-sm font-mono tracking-widest text-center">
-                </div>
-                <input type="text" id="user-jabatan" placeholder="Jabatan" class="w-full border rounded-xl p-3 bg-slate-50 text-sm">
-                <input type="text" id="user-instansi" placeholder="Unit Kerja" class="w-full border rounded-xl p-3 bg-slate-50 text-sm">
-                <div class="pt-2 flex gap-3">
-                    <button type="button" onclick="document.getElementById('user-modal').classList.add('hidden')" class="flex-1 py-3.5 bg-slate-100 rounded-xl font-bold text-sm text-slate-600">Batal</button>
-                    <button type="submit" class="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Simpan</button>
-                </div>
-            </form>
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div><h3 class="text-xl font-bold mb-4">Editor Guru</h3>
+            <form onsubmit="admin.submitUser(event)" class="space-y-4"><input type="hidden" id="user-id"><input type="email" id="user-email" required placeholder="Email Login" class="w-full border rounded-xl p-3 bg-slate-50 font-bold"><input type="text" id="user-nama" required placeholder="Nama Lengkap" class="w-full border rounded-xl p-3 bg-slate-50"><div class="grid grid-cols-2 gap-3"><input type="text" id="user-nip" placeholder="NIP" class="border rounded-xl p-3 bg-slate-50 text-sm"><input type="text" id="user-pin" required placeholder="PIN" class="border rounded-xl p-3 bg-slate-50 text-sm font-mono tracking-widest text-center"></div><input type="text" id="user-jabatan" placeholder="Jabatan" class="w-full border rounded-xl p-3 bg-slate-50 text-sm"><input type="text" id="user-instansi" placeholder="Unit Kerja" class="w-full border rounded-xl p-3 bg-slate-50 text-sm"><div class="pt-2 flex gap-3"><button type="button" onclick="document.getElementById('user-modal').classList.add('hidden')" class="flex-1 py-3.5 bg-slate-100 rounded-xl font-bold text-sm text-slate-600">Batal</button><button type="submit" class="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-bold text-sm">Simpan</button></div></form>
         </div>
     </div>
 
-    <div id="footer-modal" class="fixed inset-0 z-[80] hidden flex items-end justify-center bg-slate-900/60 backdrop-blur-sm">
+    <div id="footer-modal" class="fixed inset-0 z-[80] hidden flex items-end justify-center bg-slate-900/60 backdrop-blur-sm" onclick="if(event.target===this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-t-[2rem] shadow-2xl p-6 fade-in pb-safe">
-            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div>
-            <h3 class="font-bold text-lg mb-4">Link Footer</h3>
-            <form onsubmit="admin.submitFooter(event)" class="space-y-4">
-                <input type="hidden" id="foot-id">
-                <input type="text" id="foot-judul" required placeholder="Judul Link" class="w-full border rounded-xl p-3 bg-slate-50">
-                <input type="text" id="foot-url" required placeholder="URL Tujuan" class="w-full border rounded-xl p-3 bg-slate-50">
-                <input type="text" id="foot-icon" required placeholder="Nama Icon (Lucide)" class="w-full border rounded-xl p-3 bg-slate-50">
-                <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="document.getElementById('footer-modal').classList.add('hidden')" class="flex-1 py-3 bg-slate-100 rounded-xl font-bold text-slate-600">Batal</button>
-                    <button type="submit" class="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold">Simpan</button>
-                </div>
-            </form>
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-6"></div><h3 class="font-bold text-lg mb-4">Link Footer</h3>
+            <form onsubmit="admin.submitFooter(event)" class="space-y-4"><input type="hidden" id="foot-id"><input type="text" id="foot-judul" required placeholder="Judul" class="w-full border rounded-xl p-3 bg-slate-50"><input type="text" id="foot-url" required placeholder="URL" class="w-full border rounded-xl p-3 bg-slate-50"><input type="text" id="foot-icon" required placeholder="Icon" class="w-full border rounded-xl p-3 bg-slate-50"><div class="flex gap-2 pt-2"><button type="button" onclick="document.getElementById('footer-modal').classList.add('hidden')" class="flex-1 py-3 bg-slate-100 rounded-xl font-bold">Batal</button><button type="submit" class="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold">Simpan</button></div></form>
         </div>
     </div>
 
     <script>
         const admin = {
-            // !!! GANTI URL DI BAWAH INI DENGAN URL DEPLOYMENT KODE.GS ANDA !!!
+            // !!! GANTI URL DI BAWAH INI DENGAN URL DEPLOYMENT KODE.GS TERBARU ANDA !!!
             url: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec", 
             
             pin: "", data: null,
@@ -256,176 +165,115 @@
                 this.setupBackHandling();
             },
 
-            // --- NAVIGATION ---
             nav: function(id) {
-                // Update Nav Buttons
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); b.querySelector('div').classList.remove('bg-blue-600', 'text-white'); b.querySelector('span').classList.remove('text-blue-600'); });
                 const btn = document.querySelector(`button[onclick="admin.nav('${id}')"]`);
-                if(btn) btn.classList.add('active');
-
-                // Show Content
+                if(btn) { btn.classList.add('active'); btn.querySelector('div').classList.add('bg-blue-600', 'text-white'); btn.querySelector('span').classList.add('text-blue-600'); }
+                
                 document.querySelectorAll('.tab-content').forEach(e => e.classList.add('hidden'));
                 document.getElementById(id).classList.remove('hidden');
-
-                // Update Header
+                
                 const titles = {'tab-home':'Dashboard','tab-user':'Data Guru','tab-menu':'Menu App','tab-feedback':'Kotak Masuk','tab-settings':'Pengaturan'};
                 const subs = {'tab-home':'Overview','tab-user':'Kelola Akun','tab-menu':'Navigasi','tab-feedback':'Laporan','tab-settings':'System'};
                 document.getElementById('header-title').innerText = titles[id];
                 document.getElementById('header-subtitle').innerText = subs[id];
-                
-                // History Push
                 window.history.pushState({page: id}, '', '');
             },
 
-            // --- LOGIC BACK BUTTON ---
             setupBackHandling: function() {
                 window.history.pushState({page: 'root'}, '', '');
                 window.addEventListener('popstate', () => {
                     const modals = ['menu-modal', 'user-modal', 'footer-modal'];
                     let openModal = modals.find(id => !document.getElementById(id).classList.contains('hidden'));
-                    if (openModal) {
-                        document.getElementById(openModal).classList.add('hidden');
-                        window.history.pushState({page: 'modal_closed'}, '', '');
-                        return;
-                    }
+                    if (openModal) { document.getElementById(openModal).classList.add('hidden'); window.history.pushState({page: 'modal_closed'}, '', ''); return; }
                     const home = document.getElementById('tab-home');
-                    if (home && home.classList.contains('hidden')) {
-                        this.nav('tab-home');
-                        return;
-                    }
+                    if (home && home.classList.contains('hidden')) { this.nav('tab-home'); return; }
                 });
             },
 
-            // --- AUTH ---
             login: function(e) { e.preventDefault(); this.doLogin(document.getElementById('admin-pin').value); },
             doLogin: function(p) {
                 const btn = document.getElementById('btn-login'), old = btn.innerHTML;
                 btn.innerHTML = "<i data-lucide='loader-2' class='animate-spin'></i>"; btn.disabled = true; lucide.createIcons();
                 fetch(`${this.url}?action=admin_load&pin=${p}`).then(r=>r.json()).then(d=>{
-                    if(d.status==='success'){
-                        this.pin = p; this.data = d; sessionStorage.setItem('admin_pin',p);
-                        document.getElementById('login-screen').classList.add('hidden');
-                        this.renderAll(); this.nav('tab-home');
-                    } else { alert("PIN Salah!"); sessionStorage.removeItem('admin_pin'); btn.innerHTML = old; btn.disabled = false; }
-                }).catch(()=>{ alert("Koneksi Gagal"); btn.innerHTML = old; btn.disabled = false; });
+                    if(d.status==='success'){ 
+                        this.pin = p; this.data = d; sessionStorage.setItem('admin_pin',p); 
+                        document.getElementById('login-screen').classList.add('hidden'); 
+                        this.renderAll(); 
+                        this.nav('tab-home'); 
+                    } else { 
+                        alert("PIN Salah atau Akses Ditolak! " + (d.message || "")); sessionStorage.removeItem('admin_pin'); btn.innerHTML = old; btn.disabled = false; 
+                    }
+                }).catch(e => { alert("Error Script: " + e.message); btn.innerHTML = old; btn.disabled = false; });
             },
             logout: function() { sessionStorage.removeItem('admin_pin'); location.reload(); },
 
             // --- RENDERERS ---
-            renderAll: function() {
-                this.renderStats(); this.renderUsers(); this.renderMenu(); this.renderFeedback(); this.renderFooter(); this.renderInfo(); lucide.createIcons();
+            renderAll: function() { 
+                try {
+                    this.renderStats(); this.renderUsers(); this.renderMenu(); this.renderFeedback(); this.renderFooter(); this.renderInfo(); 
+                    setTimeout(() => lucide.createIcons(), 100); 
+                } catch(e) { console.error(e); alert("Render Error: " + e.message); }
             },
-            renderStats: function() {
-                document.getElementById('stat-guru').innerText = Math.max(0, this.data.users.length - 1);
-                document.getElementById('stat-menu').innerText = Math.max(0, this.data.raw_menu.length - 1);
-            },
+            
+            renderStats: function() { document.getElementById('stat-guru').innerText = Math.max(0, this.data.users.length - 1); document.getElementById('stat-menu').innerText = Math.max(0, this.data.raw_menu.length - 1); },
+            
             renderUsers: function() {
                 const c = document.getElementById('user-list-container'); c.innerHTML = '';
                 this.data.users.forEach((r, i) => {
                     if(i===0) return;
-                    c.insertAdjacentHTML('beforeend', `
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="font-bold text-slate-800 truncate">${r[1]}</div>
-                                <div class="text-xs text-slate-400 truncate">${r[3]}</div>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="text-[10px] bg-slate-100 px-1.5 rounded text-slate-500 font-mono">PIN: ${r[5]}</span>
-                                    <span class="text-[10px] ${r[6]?'text-green-600':'text-red-400'} font-bold">${r[6]?'Active':'Inactive'}</span>
-                                </div>
-                            </div>
-                            <button onclick="admin.editUser(${i})" class="w-10 h-10 bg-slate-50 rounded-xl text-blue-600 flex items-center justify-center ml-2"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                        </div>
-                    `);
+                    c.insertAdjacentHTML('beforeend', `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between"><div class="flex-1 min-w-0"><div class="font-bold text-slate-800 truncate">${r[1]}</div><div class="text-xs text-slate-400 truncate">${r[3]}</div><div class="flex items-center gap-2 mt-1"><span class="text-[10px] bg-slate-100 px-1.5 rounded text-slate-500 font-mono">PIN: ${r[5]}</span><span class="text-[10px] ${r[6]?'text-green-600':'text-red-400'} font-bold">${r[6]?'Active':'Inactive'}</span></div></div><div class="flex gap-2"><button onclick="admin.editUser(${i})" class="w-10 h-10 bg-slate-50 rounded-xl text-blue-600 flex items-center justify-center"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="admin.deleteUser(${i})" class="w-10 h-10 bg-red-50 rounded-xl text-red-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`);
                 });
             },
             renderMenu: function() {
                 const c = document.getElementById('menu-list-container'); c.innerHTML = '';
                 this.data.raw_menu.forEach((r, i) => {
                     if(i===0||r[0]==="") return;
-                    c.insertAdjacentHTML('beforeend', `
-                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-${r[4]||'blue'}-100 text-${r[4]||'blue'}-600 flex items-center justify-center shrink-0"><i data-lucide="${r[3]||'circle'}" class="w-6 h-6"></i></div>
-                            <div class="flex-1 min-w-0">
-                                <div class="font-bold text-slate-800">${r[0]}</div>
-                                <div class="text-[10px] text-slate-400 line-clamp-1">${r[1]}</div>
-                                <div class="flex gap-1 mt-1"><span class="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded font-bold text-slate-500">${r[9]?'🔒 '+r[9]:'🌍 PUBLIC'}</span></div>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <button onclick="admin.editMenu(${i})" class="text-blue-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                                <button onclick="admin.deleteMenu(${i})" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                            </div>
-                        </div>
-                    `);
+                    c.insertAdjacentHTML('beforeend', `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-${r[4]||'blue'}-100 text-${r[4]||'blue'}-600 flex items-center justify-center shrink-0"><i data-lucide="${r[3]||'circle'}" class="w-6 h-6"></i></div><div class="flex-1 min-w-0"><div class="font-bold text-slate-800">${r[0]}</div><div class="text-[10px] text-slate-400 line-clamp-1">${r[1]}</div><div class="flex gap-1 mt-1"><span class="text-[9px] bg-slate-100 px-1.5 py-0.5 rounded font-bold text-slate-500">${r[9]?'🔒 '+r[9]:'🌍 PUBLIC'}</span></div></div><div class="flex flex-col gap-2"><button onclick="admin.editMenu(${i})" class="text-blue-600 p-1"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="admin.deleteMenu(${i})" class="text-red-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`);
                 });
             },
             renderFeedback: function() {
-                const c = document.getElementById('feedback-list-container'); c.innerHTML = '';
-                const h = document.getElementById('home-feedback-list'); h.innerHTML = '';
+                const c = document.getElementById('feedback-list-container'), h = document.getElementById('home-feedback-list'); c.innerHTML = ''; h.innerHTML = '';
                 this.data.feedback.forEach((r, idx) => {
-                    const item = `
-                        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-                            <div class="flex justify-between mb-2">
-                                <span class="text-[10px] font-bold ${r[1]=='Bug'?'text-red-500 bg-red-50':'text-blue-500 bg-blue-50'} px-2 py-0.5 rounded-full uppercase">${r[1]}</span>
-                                <span class="text-[10px] text-slate-300 font-mono">${this.fmtDate(r[0])}</span>
-                            </div>
-                            <p class="text-sm text-slate-600 italic mb-2">"${r[2]}"</p>
-                            <div class="flex justify-between items-center pt-2 border-t border-slate-50">
-                                <span class="text-xs font-bold text-slate-800">${r[4]}</span>
-                                <div class="flex text-yellow-400"><i data-lucide="star" class="w-3 h-3 fill-current"></i><span class="text-xs font-bold ml-1 text-slate-400">${r[3]}</span></div>
-                            </div>
-                        </div>`;
-                    c.insertAdjacentHTML('beforeend', item);
-                    if(idx < 2) h.insertAdjacentHTML('beforeend', item);
+                    const item = `<div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm"><div class="flex justify-between mb-2"><span class="text-[10px] font-bold ${r[1]=='Bug'?'text-red-500 bg-red-50':'text-blue-500 bg-blue-50'} px-2 py-0.5 rounded-full uppercase">${r[1]}</span><span class="text-[10px] text-slate-300 font-mono">${this.fmtDate(r[0])}</span></div><p class="text-sm text-slate-600 italic mb-2">"${r[2]}"</p><div class="flex justify-between items-center pt-2 border-t border-slate-50"><span class="text-xs font-bold text-slate-800">${r[4]}</span><div class="flex text-yellow-400"><i data-lucide="star" class="w-3 h-3 fill-current"></i><span class="text-xs font-bold ml-1 text-slate-400">${r[3]}</span></div></div></div>`;
+                    c.insertAdjacentHTML('beforeend', item); if(idx < 2) h.insertAdjacentHTML('beforeend', item);
                 });
             },
             renderFooter: function() {
-                const c = document.getElementById('footer-list-container'); c.innerHTML = '';
-                if(this.data.raw_footer) {
-                    this.data.raw_footer.forEach((r, i) => {
-                        if(i===0||r[0]==="") return;
-                        c.insertAdjacentHTML('beforeend', `<div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100"><div class="flex items-center gap-3"><i data-lucide="${r[2]||'link'}" class="w-4 h-4 text-slate-400"></i><span class="text-sm font-bold text-slate-700">${r[0]}</span></div><button onclick="admin.deleteFooter(${i})" class="text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button></div>`);
-                    });
+                const c = document.getElementById('footer-list-container'); c.innerHTML = ''; 
+                if(this.data.raw_footer) { 
+                    this.data.raw_footer.forEach((r, i) => { 
+                        if(i===0||r[0]==="") return; 
+                        c.insertAdjacentHTML('beforeend', `<div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100"><div class="flex items-center gap-3"><i data-lucide="${r[2]||'link'}" class="w-4 h-4 text-slate-400"></i><span class="text-sm font-bold text-slate-700">${r[0]}</span></div><div class="flex gap-2"><button onclick="admin.editFooter(${i})" class="text-blue-600"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="admin.deleteFooter(${i})" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`); 
+                    }); 
                 }
             },
-            renderInfo: function() {
-                const i = this.data.info;
-                document.getElementById('info-status').value = i.status;
-                document.getElementById('info-pesan').value = i.pesan;
-                document.getElementById('info-warna').value = i.warna;
-                document.getElementById('info-versi').value = i.versi;
-                document.getElementById('pop-status').value = i.pop_status;
-                document.getElementById('pop-judul').value = i.pop_judul;
-                document.getElementById('pop-pesan').value = i.pop_pesan;
-                document.getElementById('pop-gambar').value = i.pop_gambar;
-            },
+            renderInfo: function() { const i=this.data.info; document.getElementById('info-status').value=i.status; document.getElementById('info-pesan').value=i.pesan; document.getElementById('info-warna').value=i.warna; document.getElementById('info-versi').value=i.versi; document.getElementById('pop-status').value=i.pop_status; document.getElementById('pop-judul').value=i.pop_judul; document.getElementById('pop-pesan').value=i.pop_pesan; document.getElementById('pop-gambar').value=i.pop_gambar; },
 
             // --- CRUD ---
             openMenuModal: function() { this.reset('menu'); document.getElementById('menu-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
             editMenu: function(i) { this.fill('menu', this.data.raw_menu[i], i); document.getElementById('menu-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
-            submitMenu: function(e) { e.preventDefault(); if(!confirm("Simpan?"))return; this.sendData({action:"save_menu",admin_pin:this.pin,id:document.getElementById('inp-id').value,judul:document.getElementById('inp-judul').value,deskripsi:document.getElementById('inp-deskripsi').value,url:document.getElementById('inp-url').value,icon:document.getElementById('inp-icon').value,warna:document.getElementById('inp-warna').value,target:document.getElementById('inp-target').value,parent:document.getElementById('inp-parent').value,ukuran:document.getElementById('inp-ukuran').value,label:document.getElementById('inp-label').value,role:document.getElementById('inp-role').value}); },
-            deleteMenu: function(i) { if(confirm("Hapus?")) this.sendData({action:"delete_menu",admin_pin:this.pin,id:i}); },
+            submitMenu: function(e) { e.preventDefault(); if(!confirm("Simpan?"))return; this.sendData({action:"save_menu", admin_pin:this.pin, id:document.getElementById('inp-id').value, judul:document.getElementById('inp-judul').value, deskripsi:document.getElementById('inp-deskripsi').value, url:document.getElementById('inp-url').value, icon:document.getElementById('inp-icon').value, warna:document.getElementById('inp-warna').value, target:document.getElementById('inp-target').value, parent:document.getElementById('inp-parent').value, ukuran:document.getElementById('inp-ukuran').value, label:document.getElementById('inp-label').value, role:document.getElementById('inp-role').value}); },
+            deleteMenu: function(i) { if(confirm("Hapus?")) this.sendData({action:"delete_menu", admin_pin:this.pin, id:i}); },
 
             openUserModal: function() { this.reset('user'); document.getElementById('user-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
             editUser: function(i) { this.fill('user', this.data.users[i], i); document.getElementById('user-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
-            submitUser: function(e) { e.preventDefault(); this.sendData({action:"save_user",admin_pin:this.pin,id:document.getElementById('user-id').value,email:document.getElementById('user-email').value,nama:document.getElementById('user-nama').value,nip:document.getElementById('user-nip').value,jabatan:document.getElementById('user-jabatan').value,instansi:document.getElementById('user-instansi').value,pin:document.getElementById('user-pin').value}); },
+            submitUser: function(e) { e.preventDefault(); this.sendData({action:"save_user", admin_pin:this.pin, id:document.getElementById('user-id').value, email:document.getElementById('user-email').value, nama:document.getElementById('user-nama').value, nip:document.getElementById('user-nip').value, jabatan:document.getElementById('user-jabatan').value, instansi:document.getElementById('user-instansi').value, pin:document.getElementById('user-pin').value}); },
+            deleteUser: function(i) { if(confirm("Hapus?")) this.sendData({action:"delete_user", admin_pin:this.pin, id:i}); },
             
-            openFooterModal: function() { document.getElementById('foot-id').value=-1; document.getElementById('foot-judul').value=''; document.getElementById('footer-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
-            submitFooter: function(e) { e.preventDefault(); this.sendData({action:"save_footer",admin_pin:this.pin,id:document.getElementById('foot-id').value,judul:document.getElementById('foot-judul').value,url:document.getElementById('foot-url').value,icon:document.getElementById('foot-icon').value}); },
-            deleteFooter: function(i) { if(confirm("Hapus?")) this.sendData({action:"delete_footer",admin_pin:this.pin,id:i}); },
+            openFooterModal: function() { document.getElementById('foot-id').value=-1; document.getElementById('foot-judul').value=''; document.getElementById('foot-url').value=''; document.getElementById('foot-icon').value=''; document.getElementById('footer-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
+            editFooter: function(i) { const r=this.data.raw_footer[i]; document.getElementById('foot-id').value=i; document.getElementById('foot-judul').value=r[0]; document.getElementById('foot-url').value=r[1]; document.getElementById('foot-icon').value=r[2]; document.getElementById('footer-modal').classList.remove('hidden'); window.history.pushState({page: 'modal'}, '', ''); },
+            submitFooter: function(e) { e.preventDefault(); this.sendData({action:"save_footer", admin_pin:this.pin, id:document.getElementById('foot-id').value, judul:document.getElementById('foot-judul').value, url:document.getElementById('foot-url').value, icon:document.getElementById('foot-icon').value}); },
+            deleteFooter: function(i) { if(confirm("Hapus?")) this.sendData({action:"delete_footer", admin_pin:this.pin, id:i}); },
 
-            saveInfo: function(e) { e.preventDefault(); this.sendData({action:"save_info",admin_pin:this.pin,status:document.getElementById('info-status').value,pesan:document.getElementById('info-pesan').value,warna:document.getElementById('info-warna').value,versi:document.getElementById('info-versi').value,pop_status:document.getElementById('pop-status').value,pop_judul:document.getElementById('pop-judul').value,pop_pesan:document.getElementById('pop-pesan').value,pop_gambar:document.getElementById('pop-gambar').value}); },
+            saveInfo: function(e) { e.preventDefault(); this.sendData({action:"save_info", admin_pin:this.pin, status:document.getElementById('info-status').value, pesan:document.getElementById('info-pesan').value, warna:document.getElementById('info-warna').value, versi:document.getElementById('info-versi').value, pop_status:document.getElementById('pop-status').value, pop_judul:document.getElementById('pop-judul').value, pop_pesan:document.getElementById('pop-pesan').value, pop_gambar:document.getElementById('pop-gambar').value}); },
 
-            // Helpers
             searchUser: function(q) { const t=q.toLowerCase(); Array.from(document.getElementById('user-list-container').children).forEach(r=>{r.style.display=r.innerText.toLowerCase().includes(t)?'flex':'none'})},
             reset: function(t) { if(t=='menu'){document.getElementById('inp-id').value=-1;['inp-judul','inp-deskripsi','inp-url','inp-icon','inp-label','inp-parent','inp-role'].forEach(i=>document.getElementById(i).value='')} if(t=='user'){document.getElementById('user-id').value=-1;['user-email','user-nama','user-nip','user-jabatan','user-instansi','user-pin'].forEach(i=>document.getElementById(i).value='')} },
             fill: function(t,r,i) { if(t=='menu'){document.getElementById('inp-id').value=i;document.getElementById('inp-judul').value=r[0];document.getElementById('inp-deskripsi').value=r[1];document.getElementById('inp-url').value=r[2];document.getElementById('inp-icon').value=r[3];document.getElementById('inp-warna').value=r[4];document.getElementById('inp-target').value=r[5];document.getElementById('inp-parent').value=r[6];document.getElementById('inp-ukuran').value=r[7];document.getElementById('inp-label').value=r[8];document.getElementById('inp-role').value=r[9]} if(t=='user'){document.getElementById('user-id').value=i;document.getElementById('user-email').value=r[0];document.getElementById('user-nama').value=r[1];document.getElementById('user-nip').value=r[2];document.getElementById('user-jabatan').value=r[3];document.getElementById('user-instansi').value=r[4];document.getElementById('user-pin').value=r[5]} },
             fmtDate: function(s) { if(!s||s.length<5)return'Belum'; try{return new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(s))}catch{return s} },
-            sendData: function(p) {
-                const l=document.createElement('div');l.className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center text-white backdrop-blur-sm";l.innerHTML="<div class='bg-slate-900 p-6 rounded-2xl flex gap-3'><i data-lucide='loader-2' class='animate-spin'></i> Menyimpan...</div>";document.body.appendChild(l);
-                fetch(this.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(()=>{setTimeout(()=>{alert("Berhasil!");location.reload()},1000)}).catch(e=>{document.body.removeChild(l);alert("Error:"+e)});
-            }
-        };
-        document.addEventListener('DOMContentLoaded',()=>admin.init());
+            sendData: function(p) { const l=document.createElement('div');l.className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center text-white backdrop-blur-sm";l.innerHTML="<div class='bg-slate-900 p-6 rounded-2xl flex gap-3'><i data-lucide='loader-2' class='animate-spin'></i> Menyimpan...</div>";document.body.appendChild(l); fetch(this.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(()=>{setTimeout(()=>{alert("Berhasil!");location.reload()},1000)}).catch(e=>{document.body.removeChild(l);alert("Error:"+e)}); }
+        }; document.addEventListener('DOMContentLoaded',()=>admin.init());
     </script>
 </body>
 </html>
