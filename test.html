@@ -79,9 +79,9 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase px-2 mb-2">Pintasan</p>
                     <button onclick="app.openModal('profile-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="user-cog" class="w-4 h-4"></i> Edit Profil</button>
                     <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="help-circle" class="w-4 h-4"></i> Bantuan & Laporan</button>
+                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Pembaruan Sistem</button>
                 </div>
             </div>
-
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-white/30 dark:bg-slate-800/30">
                  <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-900/40 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
             </div>
@@ -108,6 +108,7 @@
 
             <div class="flex-1 overflow-y-auto p-5 md:p-10 scroll-smooth pb-28 md:pb-10">
                 <div class="max-w-5xl mx-auto w-full space-y-8">
+                    
                     <div id="announcement-area" class="hidden fade-in"></div>
                     
                     <div class="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 dark:from-blue-950 dark:via-slate-900 dark:to-black rounded-[2rem] p-8 text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden group transition-all hover:shadow-blue-900/30">
@@ -139,7 +140,7 @@
 
                     <div class="pt-10 border-t border-slate-200/60 dark:border-slate-800/60 text-center pb-8">
                         <div id="footer-links-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
-                        <p class="text-[10px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-[0.2em]">Tim Kreatif Selogiri &copy; 2026</p>
+                        <p class="text-[10px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-[0.2em]">Tim Kreatif Selogiri <span id="app-version-footer"></span> &copy; 2026</p>
                     </div>
                 </div>
             </div>
@@ -184,6 +185,7 @@
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Unit Kerja</label><input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Jabatan</label><input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
                 <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl hover:scale-[1.02] active:scale-95 transition mt-2">Simpan Profil</button>
+                <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="w-full flex items-center justify-center gap-2 py-3 mt-4 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Pembaruan Sistem</button>
             </form>
         </div>
     </div>
@@ -217,24 +219,17 @@
                         <button type="button" onclick="app.setRating(4)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
                         <button type="button" onclick="app.setRating(5)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
                     </div>
-
                     <div class="grid grid-cols-2 gap-3">
                         <label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label>
                         <label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label>
                     </div>
-
                     <div id="feedback-identity" class="grid grid-cols-2 gap-3 transition-opacity duration-300">
                         <input type="text" name="pengirim" id="fb-nama" placeholder="Nama Anda" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
                         <input type="text" name="kontak" id="fb-kontak" placeholder="No WA / Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
                     </div>
-
                     <textarea name="pesan" required rows="3" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none dark:text-white" placeholder="Tulis pesan Anda..."></textarea>
-                    
                     <div class="flex items-center justify-between pt-2">
-                         <label class="flex items-center gap-2 cursor-pointer select-none">
-                             <input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()">
-                             <span class="text-sm text-slate-500 font-medium">Kirim Anonim</span>
-                         </label>
+                         <label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500 font-medium">Kirim Anonim</span></label>
                          <button type="submit" id="btn-feedback-submit" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2 text-sm"><span>Kirim</span><i data-lucide="send" class="w-4 h-4"></i></button>
                     </div>
                 </form>
@@ -269,8 +264,9 @@
 
     <script>
         const app = {
-            // PASTIKAN LINK API ANDA DISINI
+            // !!! GANTI DENGAN URL DEPLOYMENT KODE.GS ANDA !!!
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
+            
             deferredPrompt: null,
             menuMap: {},
 
@@ -280,6 +276,7 @@
                 const cached = localStorage.getItem('app_cache');
                 if (cached) { try { this.render(JSON.parse(cached)); } catch(e) {} }
                 this.refreshData();
+                this.trackUser(); 
                 lucide.createIcons();
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
@@ -298,16 +295,21 @@
                 });
             },
 
+            // --- TRACKING FOR ADMIN ---
+            trackUser: function() {
+                const s = localStorage.getItem('guru_profile');
+                if (s) {
+                    const p = JSON.parse(s);
+                    // Kirim sinyal tracking ke backend
+                    fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email || '')}`).catch(()=>{});
+                }
+            },
+
             refreshData: function() {
                 const btn = document.getElementById('refresh-btn');
-                // SAFE CHECK FOR BTN ICON
-                if(btn) {
-                    const icon = btn.querySelector('svg') || btn.querySelector('i');
-                    if(icon) icon.classList.add('animate-spin');
-                }
                 const status = document.getElementById('sync-status');
+                if(btn) btn.querySelector('svg').classList.add('animate-spin');
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); }
-                
                 fetch(this.apiURL + "?t=" + new Date().getTime())
                     .then(res => res.json())
                     .then(data => {
@@ -317,21 +319,34 @@
                     .catch(e => console.log("Offline"))
                     .finally(() => {
                         setTimeout(() => { 
-                            if(btn) {
-                                const icon = btn.querySelector('svg') || btn.querySelector('i');
-                                if(icon) icon.classList.remove('animate-spin');
-                            }
+                            if(btn) btn.querySelector('svg').classList.remove('animate-spin');
                             if(status) { status.classList.add('hidden'); status.classList.remove('flex'); }
                         }, 500);
                     });
             },
 
+            resetApp: async function() {
+                const btnSidebar = document.getElementById('btn-reset-sidebar');
+                const btnProfile = document.getElementById('btn-reset-profile');
+                const loadingHtml = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...';
+                if(btnSidebar) btnSidebar.innerHTML = loadingHtml;
+                if(btnProfile) btnProfile.innerHTML = loadingHtml;
+                lucide.createIcons();
+                try {
+                    if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); }
+                    if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
+                    setTimeout(() => window.location.reload(true), 1000);
+                } catch (e) { alert("Reset manual diperlukan."); window.location.reload(); }
+            },
+
             render: function(data) {
                 const menuList = data.menu || [];
                 const footerList = data.footer || [];
-                const info = data.info;
+                const info = data.info || {};
 
-                // --- ROLE FILTERING ---
+                // Render Versi
+                document.getElementById('app-version-footer').innerText = info.versi || '';
+
                 const savedProfile = localStorage.getItem('guru_profile');
                 let userJabatan = "";
                 if (savedProfile) {
@@ -350,11 +365,13 @@
                 const parents = menuList.filter(item => (item.parent || "").trim() === "");
 
                 parents.forEach(item => {
-                    // ROLE CHECK
+                    // Logic Role Filter
                     const requiredRole = (item.role || "").toLowerCase().trim();
                     if (requiredRole !== "") {
-                        if (userJabatan === "") return; // Not logged in
-                        if (!userJabatan.includes(requiredRole)) return; // Role mismatch
+                        if (userJabatan === "") return; 
+                        
+                        // NEW LOGIC: "GURU" = Any logged in user
+                        if (requiredRole !== "guru" && !userJabatan.includes(requiredRole)) return; 
                     }
 
                     const parentKey = item.judul.toLowerCase().trim();
@@ -372,17 +389,13 @@
                     const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
                     
                     if (hasChildren) {
-                        tag = 'button';
-                        attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`;
+                        tag = 'button'; attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`;
                     } else if (!item.url || item.url.trim().length < 1) {
-                        tag = 'button';
-                        attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`;
+                        tag = 'button'; attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`;
                     }
 
                     const isWide = (item.ukuran || '').toLowerCase() === 'wide';
                     const colSpan = isWide ? 'col-span-2' : 'col-span-1';
-                    const layoutClasses = isWide ? 'flex-row items-center justify-start text-left gap-5 px-6 py-6' : 'flex-col items-center justify-center text-center gap-4 p-5';
-                    const iconSize = isWide ? 'w-16 h-16' : 'w-14 h-14';
 
                     let badge = '';
                     if (item.label) {
@@ -392,7 +405,12 @@
                         badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`;
                     }
 
-                    const html = `<${tag} ${attrs} class="${visibility} ${colSpan} ${layoutClasses} h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95 flex">${badge}<div class="${iconSize} shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-1/2 h-1/2 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
+                    let html = '';
+                    if (isWide) {
+                        html = `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">${badge}<div class="w-16 h-16 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 flex flex-col justify-center"><h4 class="font-bold text-base md:text-lg text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[11px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
+                    } else {
+                        html = `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">${badge}<div class="w-14 h-14 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
+                    }
                     container.insertAdjacentHTML('beforeend', html);
                 });
 
@@ -447,7 +465,6 @@
                 const el = document.getElementById(id);
                 if (!el) return;
                 
-                // AUTO FILL FEEDBACK
                 if (id === 'feedback-modal') {
                     const s = localStorage.getItem('guru_profile');
                     if(s) {
@@ -504,6 +521,7 @@
                 const btn = document.getElementById('btn-sync');
                 if(!email || !pin) { this.showAlert('error', 'Gagal', 'Lengkapi Email & PIN'); return; }
                 const oldTxt = btn.innerHTML; btn.innerHTML = '...'; btn.disabled = true;
+                
                 fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`)
                     .then(r => r.json())
                     .then(d => {
@@ -511,6 +529,17 @@
                             document.getElementById('input-nama').value = d.nama;
                             document.getElementById('input-jabatan').value = d.jabatan;
                             document.getElementById('input-instansi').value = d.instansi;
+                            
+                            // SIMPAN JUGA EMAIL AGAR BISA DITRACKING
+                            const p = {
+                                nama: d.nama,
+                                jabatan: d.jabatan,
+                                instansi: d.instansi,
+                                email: email, // <-- TAMBAHAN
+                                foto: document.getElementById('preview-photo').src
+                            };
+                            localStorage.setItem('guru_profile', JSON.stringify(p));
+                            
                             this.showAlert('success', 'Berhasil', `Halo ${d.nama}, data ditemukan.`);
                         } else { this.showAlert('error', 'Gagal', d.message); }
                     })
@@ -520,10 +549,14 @@
 
             saveProfile: function(e) {
                 e.preventDefault();
+                // AMBIL EMAIL LAMA AGAR TIDAK HILANG SAAT UPDATE PROFIL MANUAL
+                const oldP = JSON.parse(localStorage.getItem('guru_profile') || "{}");
+                
                 const p = {
                     nama: document.getElementById('input-nama').value,
                     jabatan: document.getElementById('input-jabatan').value,
                     instansi: document.getElementById('input-instansi').value,
+                    email: oldP.email || document.getElementById('sync-email').value || "", // Pertahankan email
                     foto: document.getElementById('preview-photo').src
                 };
                 localStorage.setItem('guru_profile', JSON.stringify(p));
@@ -532,22 +565,18 @@
                 setTimeout(() => this.showAlert('success', 'Tersimpan', 'Profil diperbarui.'), 350);
             },
 
-            // --- STRICT STAR LOGIC (UPDATED) ---
             setRating: function(v) {
                 document.getElementById('rating-input').value = v;
                 const buttons = document.getElementById('star-rating-group').querySelectorAll('button');
-                
                 buttons.forEach((btn, index) => {
                     const icon = btn.querySelector('svg') || btn.querySelector('i');
                     if (icon) {
                         if (index < v) {
-                            // Active
                             icon.classList.add('text-yellow-400', 'fill-yellow-400');
                             icon.classList.remove('text-slate-300');
                         } else {
-                            // Inactive
                             icon.classList.remove('text-yellow-400', 'fill-yellow-400');
-                            // Lucide default uses stroke currentColor, so we just reset color
+                            icon.classList.add('text-slate-300');
                         }
                     }
                 });
@@ -560,7 +589,6 @@
                 else { identity.classList.remove('opacity-50', 'pointer-events-none'); }
             },
 
-            // --- FAST FEEDBACK (Optimistic UI) ---
             submitFeedback: function(e) {
                 e.preventDefault();
                 const btn = document.getElementById('btn-feedback-submit');
@@ -573,10 +601,7 @@
                 const obj = Object.fromEntries(fd.entries());
                 obj.isAnonim = document.getElementById('anonim-check').checked;
                 
-                // Fire and Forget (mostly)
                 const sendRequest = fetch(this.apiURL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(obj) });
-                
-                // UX Trick: Tunggu 1.5 detik lalu anggap sukses
                 const fakeDelay = new Promise(r => setTimeout(r, 1500));
 
                 Promise.race([sendRequest, fakeDelay])
@@ -598,7 +623,6 @@
 
             loadProfile: function() {
                 const s = localStorage.getItem('guru_profile');
-                // Helper Safe DOM
                 const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
                 const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
                 const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
@@ -616,6 +640,8 @@
                     setVal('input-nama', p.nama);
                     setVal('input-jabatan', p.jabatan);
                     setVal('input-instansi', p.instansi);
+                    // Isi juga email jika ada
+                    if(p.email) setVal('sync-email', p.email);
                     
                     show('btn-logout-sidebar');
                     setTxt('sidebar-status-text', "Online");
