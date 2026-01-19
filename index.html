@@ -299,14 +299,12 @@
 
             refreshData: function() {
                 const btn = document.getElementById('refresh-btn');
-                // SAFE CHECK FOR BTN ICON
+                const status = document.getElementById('sync-status');
                 if(btn) {
                     const icon = btn.querySelector('svg') || btn.querySelector('i');
                     if(icon) icon.classList.add('animate-spin');
                 }
-                const status = document.getElementById('sync-status');
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); }
-                
                 fetch(this.apiURL + "?t=" + new Date().getTime())
                     .then(res => res.json())
                     .then(data => {
@@ -330,6 +328,13 @@
                 const footerList = data.footer || [];
                 const info = data.info;
 
+                const savedProfile = localStorage.getItem('guru_profile');
+                let userJabatan = "";
+                if (savedProfile) {
+                    const p = JSON.parse(savedProfile);
+                    userJabatan = (p.jabatan || "").toLowerCase().trim();
+                }
+
                 this.menuMap = {};
                 menuList.forEach(item => {
                     const p = (item.parent || "").toLowerCase().trim();
@@ -341,6 +346,12 @@
                 const parents = menuList.filter(item => (item.parent || "").trim() === "");
 
                 parents.forEach(item => {
+                    const requiredRole = (item.role || "").toLowerCase().trim();
+                    if (requiredRole !== "") {
+                        if (userJabatan === "") return; 
+                        if (!userJabatan.includes(requiredRole)) return; 
+                    }
+
                     const parentKey = item.judul.toLowerCase().trim();
                     const hasChildren = this.menuMap[parentKey] && this.menuMap[parentKey].length > 0;
                     const color = item.warna || 'blue';
@@ -363,10 +374,9 @@
                         attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`;
                     }
 
+                    // --- LOGIKA CARD KOTAK STANDAR (Kecuali diset wide di DB) ---
                     const isWide = (item.ukuran || '').toLowerCase() === 'wide';
                     const colSpan = isWide ? 'col-span-2' : 'col-span-1';
-                    const layoutClasses = isWide ? 'flex-row items-center justify-start text-left gap-5 px-6 py-6' : 'flex-col items-center justify-center text-center gap-4 p-5';
-                    const iconSize = isWide ? 'w-16 h-16' : 'w-14 h-14';
 
                     let badge = '';
                     if (item.label) {
@@ -376,7 +386,36 @@
                         badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`;
                     }
 
-                    const html = `<${tag} ${attrs} class="${visibility} ${colSpan} ${layoutClasses} h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95 flex">${badge}<div class="${iconSize} shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-1/2 h-1/2 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
+                    let html = '';
+                    
+                    if (isWide) {
+                        // TAMPILAN WIDE (Khusus Kolom H="wide") -> Ikon Kiri
+                        html = `
+                        <${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">
+                            ${badge}
+                            <div class="w-16 h-16 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                                <i data-lucide="${item.icon || 'circle'}" class="w-8 h-8 stroke-[1.5]"></i>
+                            </div>
+                            <div class="flex-1 min-w-0 flex flex-col justify-center">
+                                <h4 class="font-bold text-base md:text-lg text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4>
+                                <p class="text-[11px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p>
+                            </div>
+                        </${tag}>`;
+                    } else {
+                        // TAMPILAN BOX (Standar Default) -> Ikon Atas
+                        html = `
+                        <${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">
+                            ${badge}
+                            <div class="w-14 h-14 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                                <i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i>
+                            </div>
+                            <div class="flex-1 min-w-0 w-full flex flex-col justify-center">
+                                <h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4>
+                                <p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p>
+                            </div>
+                        </${tag}>`;
+                    }
+
                     container.insertAdjacentHTML('beforeend', html);
                 });
 
@@ -431,7 +470,6 @@
                 const el = document.getElementById(id);
                 if (!el) return;
                 
-                // AUTO FILL FEEDBACK
                 if (id === 'feedback-modal') {
                     const s = localStorage.getItem('guru_profile');
                     if(s) {
@@ -516,22 +554,18 @@
                 setTimeout(() => this.showAlert('success', 'Tersimpan', 'Profil diperbarui.'), 350);
             },
 
-            // --- STRICT STAR LOGIC (UPDATED) ---
             setRating: function(v) {
                 document.getElementById('rating-input').value = v;
                 const buttons = document.getElementById('star-rating-group').querySelectorAll('button');
-                
                 buttons.forEach((btn, index) => {
                     const icon = btn.querySelector('svg') || btn.querySelector('i');
                     if (icon) {
                         if (index < v) {
-                            // Active
                             icon.classList.add('text-yellow-400', 'fill-yellow-400');
                             icon.classList.remove('text-slate-300');
                         } else {
-                            // Inactive
                             icon.classList.remove('text-yellow-400', 'fill-yellow-400');
-                            // Lucide default uses stroke currentColor, so we just reset color
+                            icon.classList.add('text-slate-300');
                         }
                     }
                 });
@@ -544,7 +578,6 @@
                 else { identity.classList.remove('opacity-50', 'pointer-events-none'); }
             },
 
-            // --- FAST FEEDBACK (Optimistic UI) ---
             submitFeedback: function(e) {
                 e.preventDefault();
                 const btn = document.getElementById('btn-feedback-submit');
@@ -557,10 +590,7 @@
                 const obj = Object.fromEntries(fd.entries());
                 obj.isAnonim = document.getElementById('anonim-check').checked;
                 
-                // Fire and Forget (mostly)
                 const sendRequest = fetch(this.apiURL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(obj) });
-                
-                // UX Trick: Tunggu 1.5 detik lalu anggap sukses
                 const fakeDelay = new Promise(r => setTimeout(r, 1500));
 
                 Promise.race([sendRequest, fakeDelay])
@@ -582,7 +612,6 @@
 
             loadProfile: function() {
                 const s = localStorage.getItem('guru_profile');
-                // Helper Safe DOM
                 const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
                 const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
                 const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
