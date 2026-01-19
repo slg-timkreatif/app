@@ -11,7 +11,7 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -46,6 +46,7 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
+        
         <div id="sidebar-overlay" onclick="admin.toggleSidebar()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
         
         <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 w-72 bg-slate-900 text-slate-300 flex flex-col transform -translate-x-full md:translate-x-0 z-50 shadow-2xl md:shadow-none border-r border-slate-800">
@@ -54,8 +55,12 @@
             </div>
             
             <nav class="flex-1 px-4 space-y-1 mt-4 md:mt-0 overflow-y-auto">
-                <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-2">Master Data</p>
-                <button onclick="admin.showTab('tab-user')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-slate-800 transition text-left focus:bg-blue-600 focus:text-white tab-btn active group">
+                <button onclick="admin.showTab('tab-home')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-slate-800 transition text-left focus:bg-blue-600 focus:text-white tab-btn active group mb-4 border border-slate-800 bg-slate-800/50">
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-blue-400 group-hover:text-white"></i> Dashboard Utama
+                </button>
+
+                <p class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Master Data</p>
+                <button onclick="admin.showTab('tab-user')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-slate-800 transition text-left focus:bg-blue-600 focus:text-white tab-btn group">
                     <i data-lucide="users" class="w-5 h-5 group-hover:scale-110 transition"></i> Manajemen Guru
                 </button>
                 <button onclick="admin.showTab('tab-menu')" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-slate-800 transition text-left focus:bg-blue-600 focus:text-white tab-btn group">
@@ -80,15 +85,76 @@
 
         <main class="flex-1 p-4 md:p-10 overflow-y-auto bg-slate-50/50 w-full relative">
             
-            <div id="tab-user" class="space-y-6 tab-content fade-in">
-                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
-                    <div>
-                        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Data Guru</h2>
-                        <p class="text-sm text-slate-500 font-medium mt-1">Kelola akun login dan pantau aktivitas.</p>
-                    </div>
-                    <button onclick="admin.openUserModal()" class="bg-blue-600 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition active:scale-95">
-                        <i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Guru
+            <div id="tab-home" class="space-y-6 tab-content fade-in">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-extrabold text-slate-800">Selamat Datang!</h2>
+                    <p class="text-slate-500">Pilih menu untuk mulai mengelola aplikasi.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <button onclick="admin.showTab('tab-user')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition group text-left relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition"><i data-lucide="users" class="w-16 h-16 text-blue-600"></i></div>
+                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-3"><i data-lucide="users" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-slate-700">Data Guru</h3>
+                        <p class="text-xs text-slate-400 mt-1">Kelola akun & login</p>
+                        <div class="mt-3 text-2xl font-extrabold text-slate-800" id="count-guru">-</div>
                     </button>
+
+                    <button onclick="admin.showTab('tab-menu')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-slate-400 transition group text-left relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition"><i data-lucide="grid" class="w-16 h-16 text-slate-600"></i></div>
+                        <div class="w-10 h-10 bg-slate-100 text-slate-600 rounded-xl flex items-center justify-center mb-3"><i data-lucide="grid" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-slate-700">Menu App</h3>
+                        <p class="text-xs text-slate-400 mt-1">Tambah/Hapus Menu</p>
+                        <div class="mt-3 text-2xl font-extrabold text-slate-800" id="count-menu">-</div>
+                    </button>
+
+                    <button onclick="admin.showTab('tab-info')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-purple-300 transition group text-left relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition"><i data-lucide="bell" class="w-16 h-16 text-purple-600"></i></div>
+                        <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-3"><i data-lucide="bell" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-slate-700">Info & Flyer</h3>
+                        <p class="text-xs text-slate-400 mt-1">Update pengumuman</p>
+                        <div class="mt-3 text-xs font-bold px-2 py-1 bg-green-100 text-green-600 rounded w-fit uppercase" id="status-info">-</div>
+                    </button>
+
+                    <button onclick="admin.showTab('tab-feedback')" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-orange-300 transition group text-left relative overflow-hidden">
+                        <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition"><i data-lucide="message-square" class="w-16 h-16 text-orange-600"></i></div>
+                        <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mb-3"><i data-lucide="message-square" class="w-5 h-5"></i></div>
+                        <h3 class="font-bold text-slate-700">Feedback</h3>
+                        <p class="text-xs text-slate-400 mt-1">Saran & Laporan</p>
+                        <div class="mt-3 text-2xl font-extrabold text-slate-800" id="count-feedback">-</div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="tab-user" class="hidden space-y-6 tab-content fade-in">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Data Guru & Tendik</h2>
+                        <p class="text-sm text-slate-500 font-medium mt-1">Rekapitulasi dan monitoring aktivitas login.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="admin.renderUsers()" class="p-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 transition shadow-sm" title="Refresh Data"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+                        <button onclick="admin.openUserModal()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition active:scale-95"><i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Baru</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total GTK</p><h3 class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-total-gtk">0</h3></div><div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="users" class="w-4 h-4"></i></div></div>
+                        <div class="mt-2 text-[10px] text-slate-500 font-medium">Tersebar di <span class="font-bold text-slate-700" id="stat-total-sekolah">0</span> Sekolah</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Jabatan</p><div class="flex items-baseline gap-1 mt-1"><h3 class="text-xl font-extrabold text-indigo-600" id="stat-total-ks">0</h3><span class="text-xs font-bold text-slate-400">KS</span><span class="text-slate-300 mx-1">|</span><h3 class="text-xl font-extrabold text-slate-700" id="stat-total-guru">0</h3><span class="text-xs font-bold text-slate-400">Guru</span></div></div><div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="briefcase" class="w-4 h-4"></i></div></div>
+                        <div class="mt-2 text-[10px] text-slate-500 font-medium">Termasuk Penjaga & Tendik</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aktivitas</p><h3 class="text-2xl font-extrabold text-green-600 mt-1" id="stat-sudah-login">0</h3></div><div class="p-2 bg-green-50 text-green-600 rounded-lg"><i data-lucide="user-check" class="w-4 h-4"></i></div></div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden"><div id="bar-login" class="bg-green-500 h-1.5 rounded-full" style="width: 0%"></div></div><div class="mt-1 text-[10px] text-slate-400 text-right"><span id="persen-login">0%</span> Sudah Login</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start"><div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Belum Aktif</p><h3 class="text-2xl font-extrabold text-red-500 mt-1" id="stat-belum-login">0</h3></div><div class="p-2 bg-red-50 text-red-500 rounded-lg"><i data-lucide="user-x" class="w-4 h-4"></i></div></div>
+                        <div class="mt-2 text-[10px] text-red-400 font-medium bg-red-50 px-2 py-1 rounded w-fit">Perlu ditindaklanjuti</div>
+                    </div>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
@@ -111,89 +177,37 @@
 
             <div id="tab-menu" class="hidden space-y-6 tab-content fade-in">
                 <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
-                    <div>
-                        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Menu Aplikasi</h2>
-                        <p class="text-sm text-slate-500 font-medium mt-1">Atur navigasi dan akses pengguna.</p>
-                    </div>
-                    <button onclick="admin.openMenuModal()" class="bg-slate-800 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-slate-900 shadow-lg flex items-center justify-center gap-2 transition active:scale-95">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Menu Baru
-                    </button>
+                    <div><h2 class="text-2xl font-bold text-slate-800">Menu Aplikasi</h2><p class="text-sm text-slate-500">Atur navigasi.</p></div>
+                    <button onclick="admin.openMenuModal()" class="bg-slate-800 text-white px-5 py-3 rounded-xl text-sm font-bold hover:bg-slate-900 shadow-lg flex items-center justify-center gap-2 transition active:scale-95"><i data-lucide="plus" class="w-4 h-4"></i> Menu Baru</button>
                 </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-400 uppercase bg-slate-50/50 border-b border-slate-100">
-                                <tr>
-                                    <th class="px-6 py-4 font-bold">Icon</th>
-                                    <th class="px-6 py-4 font-bold">Detail Menu</th>
-                                    <th class="px-6 py-4 font-bold">Target</th>
-                                    <th class="px-6 py-4 font-bold">Akses Role</th>
-                                    <th class="px-6 py-4 text-right font-bold">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-menu-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-slate-400 uppercase bg-slate-50 border-b border-slate-100"><tr><th class="px-6 py-4">Icon</th><th class="px-6 py-4">Detail</th><th class="px-6 py-4">Target</th><th class="px-6 py-4">Akses</th><th class="px-6 py-4 text-right">Aksi</th></tr></thead><tbody id="table-menu-body" class="divide-y divide-slate-100"></tbody></table></div></div>
             </div>
 
             <div id="tab-info" class="hidden space-y-6 tab-content fade-in">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Informasi & Pengumuman</h2>
-                    <p class="text-sm text-slate-500 font-medium mt-1">Update running text dan banner popup.</p>
-                </div>
-                
-                <div class="grid lg:grid-cols-2 gap-8">
-                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
-                        <form onsubmit="admin.saveInfo(event)" class="space-y-6">
-                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                <h3 class="font-bold text-sm mb-4 flex items-center gap-2 text-blue-600 uppercase tracking-wide"><i data-lucide="scroll" class="w-4 h-4"></i> Running Text</h3>
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Status</label><select id="info-status" class="w-full border rounded-xl p-2.5 bg-white"><option value="ON">🟢 ON</option><option value="OFF">🔴 OFF</option></select></div>
-                                    <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Warna</label><select id="info-warna" class="w-full border rounded-xl p-2.5 bg-white"><option value="blue">🔵 Biru</option><option value="red">🔴 Merah</option><option value="green">🟢 Hijau</option></select></div>
-                                </div>
-                                <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Isi Pesan</label><textarea id="info-pesan" rows="2" class="w-full border rounded-xl p-3 bg-white focus:ring-2 focus:ring-blue-500 outline-none"></textarea></div>
+                <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Informasi & Pengumuman</h2><p class="text-sm text-slate-500 font-medium mt-1">Update running text dan banner popup.</p></div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                    <form onsubmit="admin.saveInfo(event)" class="space-y-6">
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <h3 class="font-bold text-sm mb-4 flex items-center gap-2 text-blue-600 uppercase tracking-wide"><i data-lucide="scroll" class="w-4 h-4"></i> Running Text</h3>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Status</label><select id="info-status" class="w-full border rounded-xl p-2.5 bg-white"><option value="ON">🟢 ON (Tampil)</option><option value="OFF">🔴 OFF (Sembunyi)</option></select></div>
+                                <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Warna</label><select id="info-warna" class="w-full border rounded-xl p-2.5 bg-white"><option value="blue">🔵 Biru</option><option value="red">🔴 Merah</option><option value="green">🟢 Hijau</option></select></div>
                             </div>
-
-                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                <h3 class="font-bold text-sm mb-4 flex items-center gap-2 text-purple-600 uppercase tracking-wide"><i data-lucide="image" class="w-4 h-4"></i> Popup Flyer</h3>
-                                <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Status Popup</label><select id="pop-status" class="w-full border rounded-xl p-2.5 bg-white mb-3"><option value="ON">🟢 ON</option><option value="OFF">🔴 OFF</option></select></div>
-                                <div class="grid grid-cols-1 gap-3">
-                                    <input type="text" id="pop-judul" class="w-full border rounded-xl p-2.5 bg-white" placeholder="Judul Popup">
-                                    <textarea id="pop-pesan" rows="2" class="w-full border rounded-xl p-2.5 bg-white" placeholder="Pesan Popup"></textarea>
-                                    <input type="text" id="pop-gambar" class="w-full border rounded-xl p-2.5 bg-white" placeholder="Link Gambar (https://...)">
-                                </div>
-                            </div>
-                            
-                            <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-xl hover:scale-[1.01] active:scale-95 transition flex items-center justify-center gap-2">
-                                <i data-lucide="save" class="w-4 h-4"></i> Simpan Semua Perubahan
-                            </button>
-                        </form>
-                    </div>
+                            <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Isi Pesan</label><textarea id="info-pesan" rows="2" class="w-full border rounded-xl p-3 bg-white focus:ring-2 focus:ring-blue-500 outline-none"></textarea></div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <h3 class="font-bold text-sm mb-4 flex items-center gap-2 text-purple-600 uppercase tracking-wide"><i data-lucide="image" class="w-4 h-4"></i> Popup Flyer</h3>
+                            <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Status Popup</label><select id="pop-status" class="w-full border rounded-xl p-2.5 bg-white mb-3"><option value="ON">🟢 ON</option><option value="OFF">🔴 OFF</option></select></div>
+                            <div class="grid grid-cols-1 gap-3"><input type="text" id="pop-judul" class="w-full border rounded-xl p-2.5 bg-white" placeholder="Judul Popup"><textarea id="pop-pesan" rows="2" class="w-full border rounded-xl p-2.5 bg-white" placeholder="Pesan Popup"></textarea><input type="text" id="pop-gambar" class="w-full border rounded-xl p-2.5 bg-white" placeholder="URL Gambar"></div>
+                        </div>
+                        <button type="submit" class="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-xl hover:scale-[1.01] active:scale-95 transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Semua Perubahan</button>
+                    </form>
                 </div>
             </div>
 
             <div id="tab-feedback" class="hidden space-y-6 tab-content fade-in">
-                <div class="mb-8">
-                    <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kotak Masuk</h2>
-                    <p class="text-sm text-slate-500 font-medium mt-1">Laporan dan saran dari pengguna.</p>
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-400 uppercase bg-slate-50 border-b">
-                                <tr>
-                                    <th class="px-6 py-4">Waktu</th>
-                                    <th class="px-6 py-4">Pengirim</th>
-                                    <th class="px-6 py-4">Pesan</th>
-                                    <th class="px-6 py-4">Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-fb-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
-                </div>
+                <div class="mb-8"><h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kotak Masuk</h2><p class="text-sm text-slate-500 font-medium mt-1">Laporan dan saran dari pengguna.</p></div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-slate-400 uppercase bg-slate-50 border-b border-slate-100"><tr><th class="px-6 py-4">Waktu</th><th class="px-6 py-4">Pengirim</th><th class="px-6 py-4">Pesan</th><th class="px-6 py-4">Rating</th></tr></thead><tbody id="table-fb-body" class="divide-y divide-slate-100"></tbody></table></div></div>
             </div>
         </main>
     </div>
@@ -209,28 +223,21 @@
                 </div>
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Deskripsi Singkat</label><input type="text" id="inp-deskripsi" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">URL Link</label><input type="text" id="inp-url" required class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="https://..."></div>
-                
                 <div class="grid grid-cols-3 gap-3">
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Warna</label><select id="inp-warna" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50"><option value="blue">Blue</option><option value="red">Red</option><option value="green">Green</option><option value="orange">Orange</option><option value="purple">Purple</option><option value="teal">Teal</option></select></div>
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Target</label><select id="inp-target" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50"><option value="all">All</option><option value="desktop">Desktop</option><option value="mobile">Mobile</option></select></div>
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Ukuran</label><select id="inp-ukuran" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50"><option value="">Kotak</option><option value="wide">Wide</option></select></div>
                 </div>
-
                 <div class="p-3 bg-blue-50 rounded-xl border border-blue-100">
                     <label class="text-[10px] font-bold text-blue-500 uppercase block mb-1">Role Akses (Kata Kunci)</label>
                     <input type="text" id="inp-role" class="w-full border border-blue-200 rounded-lg p-2.5 bg-white text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: PJOK, PAI (Kosongkan untuk Umum)">
                     <p class="text-[10px] text-blue-400 mt-1 italic">*Menu muncul jika jabatan guru mengandung kata ini.</p>
                 </div>
-                
                 <div class="grid grid-cols-2 gap-4">
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Label (Badge)</label><input type="text" id="inp-label" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50" placeholder="Baru / Populer"></div>
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Parent (Submenu)</label><input type="text" id="inp-parent" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50" placeholder="Kosong = Utama"></div>
                 </div>
-
-                <div class="flex gap-3 mt-8 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="document.getElementById('menu-modal').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-3.5 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button>
-                    <button type="submit" class="flex-1 bg-blue-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Simpan Data</button>
-                </div>
+                <div class="flex gap-3 mt-8 pt-4 border-t border-slate-100"><button type="button" onclick="document.getElementById('menu-modal').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-3.5 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button><button type="submit" class="flex-1 bg-blue-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Simpan Data</button></div>
             </form>
         </div>
     </div>
@@ -250,317 +257,164 @@
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Jabatan</label><input type="text" id="user-jabatan" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50"></div>
                 </div>
                 <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Unit Kerja</label><input type="text" id="user-instansi" class="w-full border border-slate-200 rounded-xl p-3 bg-slate-50"></div>
-
-                <div class="flex gap-3 mt-8 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="document.getElementById('user-modal').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-3.5 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button>
-                    <button type="submit" class="flex-1 bg-blue-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Simpan Guru</button>
-                </div>
+                <div class="flex gap-3 mt-8 pt-4 border-t border-slate-100"><button type="button" onclick="document.getElementById('user-modal').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-3.5 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button><button type="submit" class="flex-1 bg-blue-600 text-white py-3.5 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Simpan Guru</button></div>
             </form>
         </div>
     </div>
 
     <script>
         const admin = {
+            // !!! GANTI DENGAN URL DEPLOYMENT SCRIPT ANDA !!!
             url: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec", 
             pin: "",
             data: null,
 
             init: function() {
                 const savedPin = sessionStorage.getItem('admin_pin');
-                if (savedPin) {
-                    document.getElementById('admin-pin').value = savedPin;
-                    this.doLogin(savedPin);
-                }
+                if (savedPin) { document.getElementById('admin-pin').value = savedPin; this.doLogin(savedPin); }
             },
 
-            login: function(e) {
-                e.preventDefault();
-                const p = document.getElementById('admin-pin').value;
-                this.doLogin(p);
-            },
+            login: function(e) { e.preventDefault(); this.doLogin(document.getElementById('admin-pin').value); },
 
             doLogin: function(p) {
-                const btn = document.getElementById('btn-login');
-                const oldHtml = btn.innerHTML;
-                btn.innerHTML = "<span class='animate-pulse'>Menghubungkan...</span>";
-                btn.disabled = true;
+                const btn = document.getElementById('btn-login'); const oldHtml = btn.innerHTML;
+                btn.innerHTML = "<span class='animate-pulse'>Menghubungkan...</span>"; btn.disabled = true;
                 
-                fetch(`${this.url}?action=admin_load&pin=${p}`)
-                .then(r => r.json())
-                .then(d => {
+                fetch(`${this.url}?action=admin_load&pin=${p}`).then(r=>r.json()).then(d=>{
                     if(d.status === 'success') {
-                        this.pin = p;
-                        this.data = d;
-                        sessionStorage.setItem('admin_pin', p); 
+                        this.pin = p; this.data = d; sessionStorage.setItem('admin_pin', p); 
                         document.getElementById('login-screen').classList.add('hidden');
-                        this.renderMenu();
-                        this.renderInfo();
-                        this.renderFeedback();
-                        this.renderUsers();
+                        this.renderHome(); this.renderMenu(); this.renderInfo(); this.renderFeedback(); this.renderUsers();
+                        this.showTab('tab-home'); 
                     } else {
-                        alert("Akses Ditolak: PIN Salah!");
-                        sessionStorage.removeItem('admin_pin');
-                        btn.innerHTML = oldHtml;
-                        btn.disabled = false;
+                        alert("Akses Ditolak: PIN Salah!"); sessionStorage.removeItem('admin_pin'); btn.innerHTML = oldHtml; btn.disabled = false;
                     }
-                })
-                .catch(e => {
-                    console.error(e);
-                    alert("Gagal terhubung ke server.");
-                    btn.innerHTML = oldHtml;
-                    btn.disabled = false;
-                });
+                }).catch(()=>{ alert("Koneksi Gagal"); btn.innerHTML = oldHtml; btn.disabled = false; });
             },
 
-            logout: function() {
-                sessionStorage.removeItem('admin_pin');
-                location.reload();
-            },
-
-            // 2. HELPER FORMAT TANGGAL
-            formatDate: function(isoString) {
-                if (!isoString || isoString.length < 5) return 'Belum Login';
-                try {
-                    const date = new Date(isoString);
-                    if (isNaN(date)) return isoString; 
-                    return new Intl.DateTimeFormat('id-ID', {
-                        day: 'numeric', month: 'short', year: 'numeric',
-                        hour: '2-digit', minute: '2-digit'
-                    }).format(date);
-                } catch(e) { return isoString; }
-            },
-
-            toggleSidebar: function() {
-                const sb = document.getElementById('sidebar');
-                const ov = document.getElementById('sidebar-overlay');
-                if (sb.classList.contains('-translate-x-full')) {
-                    sb.classList.remove('-translate-x-full');
-                    ov.classList.remove('hidden');
-                } else {
-                    sb.classList.add('-translate-x-full');
-                    ov.classList.add('hidden');
-                }
-            },
+            logout: function() { sessionStorage.removeItem('admin_pin'); location.reload(); },
+            formatDate: function(s) { if(!s||s.length<5)return'Belum Login'; try{return new Intl.DateTimeFormat('id-ID',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(s))}catch{return s} },
+            toggleSidebar: function() { const sb=document.getElementById('sidebar'), ov=document.getElementById('sidebar-overlay'); sb.classList.toggle('-translate-x-full'); ov.classList.toggle('hidden'); },
 
             showTab: function(id) {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
                 document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('bg-blue-600', 'text-white'));
                 document.getElementById(id).classList.remove('hidden');
-                
                 const activeBtn = document.querySelector(`button[onclick="admin.showTab('${id}')"]`);
                 if(activeBtn) activeBtn.classList.add('bg-blue-600', 'text-white');
-
-                if(window.innerWidth < 768) {
-                    document.getElementById('sidebar').classList.add('-translate-x-full');
-                    document.getElementById('sidebar-overlay').classList.add('hidden');
-                }
+                if(window.innerWidth < 768) { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden'); }
             },
 
+            // --- RENDER DASHBOARD HOME ---
+            renderHome: function() {
+                const guruCount = Math.max(0, this.data.users.length - 1);
+                const menuCount = Math.max(0, this.data.raw_menu.length - 1);
+                const fbCount = this.data.feedback.length;
+                const infoStatus = this.data.info.status === 'ON' ? 'AKTIF' : 'NONAKTIF';
+
+                document.getElementById('count-guru').innerText = guruCount + " Guru";
+                document.getElementById('count-menu').innerText = menuCount + " Item";
+                document.getElementById('count-feedback').innerText = fbCount + " Pesan";
+                const st = document.getElementById('status-info');
+                st.innerText = infoStatus;
+                st.className = infoStatus==='AKTIF' ? "mt-3 text-xs font-bold px-2 py-1 bg-green-100 text-green-600 rounded w-fit uppercase" : "mt-3 text-xs font-bold px-2 py-1 bg-red-100 text-red-600 rounded w-fit uppercase";
+            },
+
+            // --- RENDER MENU (RESPONSIVE) ---
             renderMenu: function() {
-                const tbody = document.getElementById('table-menu-body');
-                tbody.innerHTML = '';
+                const tbody = document.getElementById('table-menu-body'); tbody.innerHTML = '';
+                document.querySelector('#table-menu-body').parentElement.querySelector('thead').className = "hidden md:table-header-group text-xs text-slate-400 uppercase bg-slate-50 border-b border-slate-100";
+                
                 this.data.raw_menu.forEach((row, index) => {
                     if(index === 0 || row[0] === "") return;
-                    const html = `
-                        <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
-                            <td class="px-6 py-4"><div class="w-10 h-10 rounded-xl bg-${row[4] || 'blue'}-100 text-${row[4] || 'blue'}-600 flex items-center justify-center shadow-sm"><i data-lucide="${row[3] || 'circle'}" class="w-5 h-5"></i></div></td>
-                            <td class="px-6 py-4"><div class="font-bold text-slate-800 text-sm">${row[0]}</div><div class="text-[11px] text-slate-400 truncate w-48">${row[1]}</div></td>
-                            <td class="px-6 py-4"><span class="px-2 py-1 rounded bg-slate-100 text-[10px] font-bold text-slate-500 uppercase tracking-wide border border-slate-200">${row[5] || 'All'}</span></td>
-                            <td class="px-6 py-4"><span class="text-[10px] font-bold px-2 py-1 rounded border ${row[9] ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-green-50 text-green-600 border-green-100'}">${row[9] ? '🔒 '+row[9] : '🌍 PUBLIC'}</span></td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex justify-end gap-1">
-                                    <button onclick="admin.editMenu(${index})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                                    <button onclick="admin.deleteMenu(${index})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.insertAdjacentHTML('beforeend', html);
-                });
-                lucide.createIcons();
-            },
-
-            renderUsers: function() {
-                const tbody = document.getElementById('table-user-body');
-                tbody.innerHTML = '';
-                this.data.users.forEach((row, index) => {
-                    if(index === 0) return; 
-                    const html = `
-                        <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
-                            <td class="px-6 py-4">
-                                <div class="font-bold text-slate-800 text-sm">${row[1]}</div>
-                                <div class="text-[11px] text-slate-400">${row[2] || '-'} | ${row[0]}</div>
-                            </td>
-                            <td class="px-6 py-4"><div class="inline-flex flex-col"><span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded w-fit mb-1">${row[3]}</span><span class="text-[10px] text-slate-400">${row[4]}</span></div></td>
-                            <td class="px-6 py-4"><span class="font-mono text-xs tracking-wider bg-slate-100 px-2 py-1 rounded border border-slate-200 text-slate-600">${row[5]}</span></td>
-                            <td class="px-6 py-4 text-[11px] ${row[6] ? 'text-green-600 font-bold' : 'text-slate-300 italic'}">
-                                ${this.formatDate(row[6])}
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex justify-end gap-1">
-                                    <button onclick="admin.editUser(${index})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                                    <button onclick="admin.deleteUser(${index})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.insertAdjacentHTML('beforeend', html);
-                });
-                lucide.createIcons();
-            },
-
-            renderInfo: function() {
-                const i = this.data.info;
-                document.getElementById('info-status').value = i.status;
-                document.getElementById('info-pesan').value = i.pesan;
-                document.getElementById('info-warna').value = i.warna;
-                document.getElementById('pop-status').value = i.pop_status;
-                document.getElementById('pop-judul').value = i.pop_judul;
-                document.getElementById('pop-pesan').value = i.pop_pesan;
-                document.getElementById('pop-gambar').value = i.pop_gambar;
-            },
-
-            renderFeedback: function() {
-                const tbody = document.getElementById('table-fb-body');
-                tbody.innerHTML = '';
-                this.data.feedback.forEach(row => {
                     tbody.insertAdjacentHTML('beforeend', `
-                        <tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0">
-                            <td class="px-6 py-4 text-[10px] text-slate-400 font-mono">${this.formatDate(row[0])}</td>
-                            <td class="px-6 py-4"><div class="font-bold text-sm text-slate-800">${row[4]}</div><div class="text-[10px] text-slate-400">${row[5]}</div></td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase mb-1 inline-block ${row[1]=='Bug'?'bg-red-100 text-red-600':'bg-blue-100 text-blue-600'}">${row[1]}</span>
-                                <div class="text-sm text-slate-600 leading-snug">"${row[2]}"</div>
-                            </td>
-                            <td class="px-6 py-4 text-yellow-500 font-bold text-xs flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-current"></i> ${row[3]}</td>
+                        <tr class="block md:table-row bg-white md:hover:bg-slate-50 border-b border-slate-100 mb-4 md:mb-0 rounded-xl md:rounded-none shadow-sm md:shadow-none border md:border-b p-4 md:p-0">
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-${row[4]||'blue'}-100 text-${row[4]||'blue'}-600 flex items-center justify-center"><i data-lucide="${row[3]||'circle'}" class="w-5 h-5"></i></div><div class="md:hidden font-bold">${row[0]}</div></div></td>
+                            <td class="hidden md:table-cell px-6 py-4"><div class="font-bold text-sm">${row[0]}</div><div class="text-[11px] text-slate-400">${row[1]}</div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Target</span><span class="px-2 py-1 rounded bg-slate-100 text-[10px] font-bold text-slate-500 uppercase">${row[5]||'All'} ${row[7]=='wide'?'(WIDE)':''}</span></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Akses</span><span class="text-[10px] font-bold px-2 py-1 rounded border ${row[9]?'bg-orange-50 text-orange-600 border-orange-100':'bg-green-50 text-green-600 border-green-100'}">${row[9]?'🔒 '+row[9]:'🌍 PUBLIC'}</span></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4 text-right"><div class="flex justify-end gap-1 mt-2 md:mt-0"><button onclick="admin.editMenu(${index})" class="text-blue-600 bg-blue-50 p-2 rounded-lg"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="admin.deleteMenu(${index})" class="text-red-600 bg-red-50 p-2 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td>
                         </tr>
                     `);
                 });
                 lucide.createIcons();
             },
 
-            // --- ACTIONS ---
-            openMenuModal: function() {
-                document.getElementById('inp-id').value = -1; 
-                ['inp-judul','inp-deskripsi','inp-url','inp-icon','inp-label','inp-parent','inp-role'].forEach(i=>document.getElementById(i).value='');
-                document.getElementById('menu-modal').classList.remove('hidden');
-            },
-            editMenu: function(index) {
-                const row = this.data.raw_menu[index];
-                document.getElementById('inp-id').value = index;
-                document.getElementById('inp-judul').value = row[0];
-                document.getElementById('inp-deskripsi').value = row[1];
-                document.getElementById('inp-url').value = row[2];
-                document.getElementById('inp-icon').value = row[3];
-                document.getElementById('inp-warna').value = row[4];
-                document.getElementById('inp-target').value = row[5];
-                document.getElementById('inp-parent').value = row[6];
-                document.getElementById('inp-ukuran').value = row[7];
-                document.getElementById('inp-label').value = row[8];
-                document.getElementById('inp-role').value = row[9];
-                document.getElementById('menu-modal').classList.remove('hidden');
-            },
-            submitMenu: function(e) {
-                e.preventDefault();
-                if(!confirm("Simpan perubahan menu?")) return;
-                const payload = {
-                    action: "save_menu", admin_pin: this.pin,
-                    id: document.getElementById('inp-id').value,
-                    judul: document.getElementById('inp-judul').value,
-                    deskripsi: document.getElementById('inp-deskripsi').value,
-                    url: document.getElementById('inp-url').value,
-                    icon: document.getElementById('inp-icon').value,
-                    warna: document.getElementById('inp-warna').value,
-                    target: document.getElementById('inp-target').value,
-                    parent: document.getElementById('inp-parent').value,
-                    ukuran: document.getElementById('inp-ukuran').value,
-                    label: document.getElementById('inp-label').value,
-                    role: document.getElementById('inp-role').value
-                };
-                this.sendData(payload);
-            },
-            deleteMenu: function(index) {
-                if(!confirm("Yakin hapus menu ini?")) return;
-                this.sendData({ action: "delete_menu", admin_pin: this.pin, id: index });
-            },
+            // --- RENDER USERS & STATS ---
+            renderUsers: function() {
+                const tbody = document.getElementById('table-user-body'); tbody.innerHTML = '';
+                document.querySelector('#table-user-body').parentElement.querySelector('thead').className = "hidden md:table-header-group text-xs text-slate-400 uppercase bg-slate-50 border-b border-slate-100";
 
-            openUserModal: function() {
-                document.getElementById('user-id').value = -1;
-                document.getElementById('user-modal-title').innerText = "Tambah Guru Baru";
-                ['user-email','user-pin','user-nama','user-nip','user-jabatan','user-instansi'].forEach(id => document.getElementById(id).value = '');
-                document.getElementById('user-modal').classList.remove('hidden');
-            },
-            editUser: function(index) {
-                const row = this.data.users[index];
-                document.getElementById('user-id').value = index;
-                document.getElementById('user-email').value = row[0];
-                document.getElementById('user-nama').value = row[1];
-                document.getElementById('user-nip').value = row[2];
-                document.getElementById('user-jabatan').value = row[3];
-                document.getElementById('user-instansi').value = row[4];
-                document.getElementById('user-pin').value = row[5];
-                document.getElementById('user-modal-title').innerText = "Edit Data Guru";
-                document.getElementById('user-modal').classList.remove('hidden');
-            },
-            submitUser: function(e) {
-                e.preventDefault();
-                const payload = {
-                    action: "save_user", admin_pin: this.pin,
-                    id: document.getElementById('user-id').value,
-                    email: document.getElementById('user-email').value,
-                    nama: document.getElementById('user-nama').value,
-                    nip: document.getElementById('user-nip').value,
-                    jabatan: document.getElementById('user-jabatan').value,
-                    instansi: document.getElementById('user-instansi').value,
-                    pin: document.getElementById('user-pin').value
-                };
-                this.sendData(payload);
-            },
-            deleteUser: function(index) {
-                if(!confirm("Yakin hapus data guru ini?")) return;
-                this.sendData({ action: "delete_user", admin_pin: this.pin, id: index });
-            },
+                let totalGTK = 0, totalKS = 0, sudahLogin = 0;
+                let unitKerjaSet = new Set(); 
 
-            saveInfo: function(e) {
-                e.preventDefault();
-                const payload = {
-                    action: "save_info", admin_pin: this.pin,
-                    status: document.getElementById('info-status').value,
-                    pesan: document.getElementById('info-pesan').value,
-                    warna: document.getElementById('info-warna').value,
-                    versi: "v2.0",
-                    pop_status: document.getElementById('pop-status').value,
-                    pop_judul: document.getElementById('pop-judul').value,
-                    pop_pesan: document.getElementById('pop-pesan').value,
-                    pop_gambar: document.getElementById('pop-gambar').value
-                };
-                this.sendData(payload);
-            },
+                this.data.users.forEach((row, index) => {
+                    if(index === 0) return; 
+                    totalGTK++;
+                    if((row[3]||"").toLowerCase().includes("kepala sekolah")) totalKS++;
+                    if(row[4] && row[4].length > 2) unitKerjaSet.add(row[4].trim());
+                    if(row[6] && row[6].length > 5) sudahLogin++;
 
-            sendData: function(payload) {
-                const loading = document.createElement('div');
-                loading.className = "fixed inset-0 z-[200] bg-black/50 flex items-center justify-center text-white font-bold backdrop-blur-sm";
-                loading.innerHTML = "<div class='bg-slate-900 p-6 rounded-2xl shadow-xl flex items-center gap-3'><i data-lucide='loader-2' class='animate-spin'></i> Menyimpan...</div>";
-                document.body.appendChild(loading);
-                lucide.createIcons();
-
-                fetch(this.url, {
-                    method: 'POST', mode: 'no-cors',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
-                }).then(() => {
-                    setTimeout(() => {
-                        alert("Berhasil disimpan! Halaman akan dimuat ulang.");
-                        location.reload();
-                    }, 1500);
-                }).catch(e => {
-                    document.body.removeChild(loading);
-                    alert("Error: " + e);
+                    tbody.insertAdjacentHTML('beforeend', `
+                        <tr class="block md:table-row bg-white md:hover:bg-slate-50 border-b border-slate-100 mb-4 md:mb-0 rounded-xl md:rounded-none shadow-sm md:shadow-none border md:border-b p-4 md:p-0">
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Nama</span><div><div class="font-bold text-sm">${row[1]}</div><div class="text-[11px] text-slate-400">${row[2]||'-'}</div></div></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Jabatan</span><div><span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded">${row[3]}</span><div class="text-[10px] text-slate-400 mt-1">${row[4]}</div></div></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">PIN</span><span class="font-mono text-xs bg-slate-50 px-2 py-1 border rounded">${row[5]}</span></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Login</span><span class="text-[11px] ${row[6]?'text-green-600 font-bold':'text-slate-300 italic'}">${this.formatDate(row[6])}</span></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4 text-right"><div class="flex justify-end gap-1 mt-2 md:mt-0"><button onclick="admin.editUser(${index})" class="text-blue-600 bg-blue-50 p-2 rounded-lg"><i data-lucide="pencil" class="w-4 h-4"></i></button><button onclick="admin.deleteUser(${index})" class="text-red-600 bg-red-50 p-2 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td>
+                        </tr>
+                    `);
                 });
+
+                document.getElementById('stat-total-gtk').innerText = totalGTK;
+                document.getElementById('stat-total-sekolah').innerText = unitKerjaSet.size;
+                document.getElementById('stat-total-ks').innerText = totalKS;
+                document.getElementById('stat-total-guru').innerText = totalGTK - totalKS;
+                document.getElementById('stat-sudah-login').innerText = sudahLogin;
+                document.getElementById('stat-belum-login').innerText = totalGTK - sudahLogin;
+                const persen = totalGTK > 0 ? Math.round((sudahLogin/totalGTK)*100) : 0;
+                document.getElementById('bar-login').style.width = persen + "%";
+                document.getElementById('persen-login').innerText = persen + "%";
+                lucide.createIcons();
+            },
+
+            renderFeedback: function() {
+                const tbody = document.getElementById('table-fb-body'); tbody.innerHTML = '';
+                document.querySelector('#table-fb-body').parentElement.querySelector('thead').className = "hidden md:table-header-group text-xs text-slate-400 uppercase bg-slate-50 border-b border-slate-100";
+                this.data.feedback.forEach(row => {
+                    tbody.insertAdjacentHTML('beforeend', `
+                        <tr class="block md:table-row bg-white md:hover:bg-slate-50 border-b border-slate-100 mb-4 md:mb-0 rounded-xl md:rounded-none shadow-sm md:shadow-none border md:border-b p-4 md:p-0">
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Waktu</span><span class="text-[10px] text-slate-400 font-mono">${this.formatDate(row[0])}</span></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Dari</span><div><div class="font-bold text-sm">${row[4]}</div><div class="text-[10px] text-slate-400">${row[5]}</div></div></div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase mb-1 inline-block ${row[1]=='Bug'?'bg-red-100 text-red-600':'bg-blue-100 text-blue-600'}">${row[1]}</span><div class="text-sm text-slate-600 leading-snug">"${row[2]}"</div></td>
+                            <td class="block md:table-cell px-2 py-1 md:px-6 md:py-4"><div class="flex justify-between md:block"><span class="md:hidden text-xs text-slate-400 font-bold uppercase">Rating</span><div class="text-yellow-500 font-bold text-xs">⭐ ${row[3]}</div></div></td>
+                        </tr>
+                    `);
+                });
+                lucide.createIcons();
+            },
+
+            renderInfo: function() { const i=this.data.info; document.getElementById('info-status').value=i.status; document.getElementById('info-pesan').value=i.pesan; document.getElementById('info-warna').value=i.warna; document.getElementById('pop-status').value=i.pop_status; document.getElementById('pop-judul').value=i.pop_judul; document.getElementById('pop-pesan').value=i.pop_pesan; document.getElementById('pop-gambar').value=i.pop_gambar; },
+            
+            // CRUD & HELPERS
+            openMenuModal: function() { document.getElementById('inp-id').value=-1; ['inp-judul','inp-deskripsi','inp-url','inp-icon','inp-label','inp-parent','inp-role'].forEach(i=>document.getElementById(i).value=''); document.getElementById('menu-modal').classList.remove('hidden'); },
+            editMenu: function(i) { const r=this.data.raw_menu[i]; document.getElementById('inp-id').value=i; document.getElementById('inp-judul').value=r[0]; document.getElementById('inp-deskripsi').value=r[1]; document.getElementById('inp-url').value=r[2]; document.getElementById('inp-icon').value=r[3]; document.getElementById('inp-warna').value=r[4]; document.getElementById('inp-target').value=r[5]; document.getElementById('inp-parent').value=r[6]; document.getElementById('inp-ukuran').value=r[7]; document.getElementById('inp-label').value=r[8]; document.getElementById('inp-role').value=r[9]; document.getElementById('menu-modal').classList.remove('hidden'); },
+            submitMenu: function(e) { e.preventDefault(); if(!confirm("Simpan?"))return; this.sendData({action:"save_menu",admin_pin:this.pin,id:document.getElementById('inp-id').value,judul:document.getElementById('inp-judul').value,deskripsi:document.getElementById('inp-deskripsi').value,url:document.getElementById('inp-url').value,icon:document.getElementById('inp-icon').value,warna:document.getElementById('inp-warna').value,target:document.getElementById('inp-target').value,parent:document.getElementById('inp-parent').value,ukuran:document.getElementById('inp-ukuran').value,label:document.getElementById('inp-label').value,role:document.getElementById('inp-role').value}); },
+            deleteMenu: function(i) { if(confirm("Hapus menu?")) this.sendData({action:"delete_menu",admin_pin:this.pin,id:i}); },
+
+            openUserModal: function() { document.getElementById('user-id').value=-1; document.getElementById('user-modal-title').innerText="Tambah Guru"; ['user-email','user-pin','user-nama','user-nip','user-jabatan','user-instansi'].forEach(i=>document.getElementById(i).value=''); document.getElementById('user-modal').classList.remove('hidden'); },
+            editUser: function(i) { const r=this.data.users[i]; document.getElementById('user-id').value=i; document.getElementById('user-email').value=r[0]; document.getElementById('user-nama').value=r[1]; document.getElementById('user-nip').value=r[2]; document.getElementById('user-jabatan').value=r[3]; document.getElementById('user-instansi').value=r[4]; document.getElementById('user-pin').value=r[5]; document.getElementById('user-modal-title').innerText="Edit Guru"; document.getElementById('user-modal').classList.remove('hidden'); },
+            submitUser: function(e) { e.preventDefault(); this.sendData({action:"save_user",admin_pin:this.pin,id:document.getElementById('user-id').value,email:document.getElementById('user-email').value,nama:document.getElementById('user-nama').value,nip:document.getElementById('user-nip').value,jabatan:document.getElementById('user-jabatan').value,instansi:document.getElementById('user-instansi').value,pin:document.getElementById('user-pin').value}); },
+            deleteUser: function(i) { if(confirm("Hapus user?")) this.sendData({action:"delete_user",admin_pin:this.pin,id:i}); },
+
+            saveInfo: function(e) { e.preventDefault(); this.sendData({action:"save_info",admin_pin:this.pin,status:document.getElementById('info-status').value,pesan:document.getElementById('info-pesan').value,warna:document.getElementById('info-warna').value,versi:"v2.0",pop_status:document.getElementById('pop-status').value,pop_judul:document.getElementById('pop-judul').value,pop_pesan:document.getElementById('pop-pesan').value,pop_gambar:document.getElementById('pop-gambar').value}); },
+
+            sendData: function(p) {
+                const l=document.createElement('div'); l.className="fixed inset-0 z-[200] bg-black/50 flex items-center justify-center text-white backdrop-blur-sm"; l.innerHTML="<div class='bg-slate-900 p-6 rounded-xl flex gap-3'><i data-lucide='loader-2' class='animate-spin'></i> Menyimpan...</div>"; document.body.appendChild(l); lucide.createIcons();
+                fetch(this.url,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(()=>{setTimeout(()=>{alert("Tersimpan!");location.reload()},1500)}).catch(e=>{document.body.removeChild(l);alert("Error:"+e)});
             }
         };
-
-        document.addEventListener('DOMContentLoaded', () => admin.init());
+        document.addEventListener('DOMContentLoaded',()=>admin.init());
     </script>
 </body>
 </html>
