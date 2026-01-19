@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Portal - Guru Berbagi</title>
+    <title>Admin Guru Berbagi</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,9 +13,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* Transisi Sidebar Mobile */
         #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        /* Scrollbar Halus */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     </style>
@@ -28,7 +26,7 @@
             <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
                 <i data-lucide="shield-check" class="w-10 h-10"></i>
             </div>
-            <h2 class="text-2xl font-extrabold mb-2 text-slate-800">Admin Portal</h2>
+            <h2 class="text-2xl font-extrabold mb-2 text-slate-800">Admin Guru Berbagi</h2>
             <p class="text-slate-400 text-sm mb-8 font-medium">Verifikasi identitas administrator.</p>
             <form onsubmit="admin.login(event)" class="space-y-4">
                 <input type="password" id="admin-pin" class="w-full text-center text-3xl tracking-[0.5em] font-bold border-2 border-slate-200 rounded-xl py-4 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition text-slate-700 placeholder-slate-200" placeholder="••••••" maxlength="6" required>
@@ -48,7 +46,6 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden relative">
-        
         <div id="sidebar-overlay" onclick="admin.toggleSidebar()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity"></div>
         
         <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 w-72 bg-slate-900 text-slate-300 flex flex-col transform -translate-x-full md:translate-x-0 z-50 shadow-2xl md:shadow-none border-r border-slate-800">
@@ -106,8 +103,7 @@
                                     <th class="px-6 py-4 text-right font-bold tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-user-body" class="divide-y divide-slate-100">
-                                </tbody>
+                            <tbody id="table-user-body" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
@@ -151,11 +147,10 @@
                 <div class="grid lg:grid-cols-2 gap-8">
                     <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
                         <form onsubmit="admin.saveInfo(event)" class="space-y-6">
-                            
                             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
                                 <h3 class="font-bold text-sm mb-4 flex items-center gap-2 text-blue-600 uppercase tracking-wide"><i data-lucide="scroll" class="w-4 h-4"></i> Running Text</h3>
                                 <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Status</label><select id="info-status" class="w-full border rounded-xl p-2.5 bg-white"><option value="ON">🟢 ON (Tampil)</option><option value="OFF">🔴 OFF (Sembunyi)</option></select></div>
+                                    <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Status</label><select id="info-status" class="w-full border rounded-xl p-2.5 bg-white"><option value="ON">🟢 ON</option><option value="OFF">🔴 OFF</option></select></div>
                                     <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Warna</label><select id="info-warna" class="w-full border rounded-xl p-2.5 bg-white"><option value="blue">🔵 Biru</option><option value="red">🔴 Merah</option><option value="green">🟢 Hijau</option></select></div>
                                 </div>
                                 <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Isi Pesan</label><textarea id="info-pesan" rows="2" class="w-full border rounded-xl p-3 bg-white focus:ring-2 focus:ring-blue-500 outline-none"></textarea></div>
@@ -266,13 +261,11 @@
 
     <script>
         const admin = {
-            // GANTI URL INI DENGAN URL DEPLOYMENT KODE.GS TERBARU ANDA
             url: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec", 
             pin: "",
             data: null,
 
             init: function() {
-                // Auto-Login if session exists
                 const savedPin = sessionStorage.getItem('admin_pin');
                 if (savedPin) {
                     document.getElementById('admin-pin').value = savedPin;
@@ -313,7 +306,7 @@
                 })
                 .catch(e => {
                     console.error(e);
-                    alert("Gagal terhubung ke server. Periksa koneksi internet.");
+                    alert("Gagal terhubung ke server.");
                     btn.innerHTML = oldHtml;
                     btn.disabled = false;
                 });
@@ -322,6 +315,19 @@
             logout: function() {
                 sessionStorage.removeItem('admin_pin');
                 location.reload();
+            },
+
+            // 2. HELPER FORMAT TANGGAL
+            formatDate: function(isoString) {
+                if (!isoString || isoString.length < 5) return 'Belum Login';
+                try {
+                    const date = new Date(isoString);
+                    if (isNaN(date)) return isoString; 
+                    return new Intl.DateTimeFormat('id-ID', {
+                        day: 'numeric', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                    }).format(date);
+                } catch(e) { return isoString; }
             },
 
             toggleSidebar: function() {
@@ -341,18 +347,15 @@
                 document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('bg-blue-600', 'text-white'));
                 document.getElementById(id).classList.remove('hidden');
                 
-                // Highlight button
                 const activeBtn = document.querySelector(`button[onclick="admin.showTab('${id}')"]`);
                 if(activeBtn) activeBtn.classList.add('bg-blue-600', 'text-white');
 
-                // Auto close sidebar on mobile
                 if(window.innerWidth < 768) {
                     document.getElementById('sidebar').classList.add('-translate-x-full');
                     document.getElementById('sidebar-overlay').classList.add('hidden');
                 }
             },
 
-            // --- RENDER MENU ---
             renderMenu: function() {
                 const tbody = document.getElementById('table-menu-body');
                 tbody.innerHTML = '';
@@ -377,7 +380,6 @@
                 lucide.createIcons();
             },
 
-            // --- RENDER USERS ---
             renderUsers: function() {
                 const tbody = document.getElementById('table-user-body');
                 tbody.innerHTML = '';
@@ -387,12 +389,13 @@
                         <tr class="hover:bg-slate-50 transition border-b border-slate-100 last:border-0">
                             <td class="px-6 py-4">
                                 <div class="font-bold text-slate-800 text-sm">${row[1]}</div>
-                                <div class="text-[11px] text-slate-400">${row[2] || '-'}</div>
-                                <div class="text-[10px] text-blue-500 mt-0.5">${row[0]}</div>
+                                <div class="text-[11px] text-slate-400">${row[2] || '-'} | ${row[0]}</div>
                             </td>
                             <td class="px-6 py-4"><div class="inline-flex flex-col"><span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-2 py-0.5 rounded w-fit mb-1">${row[3]}</span><span class="text-[10px] text-slate-400">${row[4]}</span></div></td>
                             <td class="px-6 py-4"><span class="font-mono text-xs tracking-wider bg-slate-100 px-2 py-1 rounded border border-slate-200 text-slate-600">${row[5]}</span></td>
-                            <td class="px-6 py-4 text-[11px] ${row[6] ? 'text-green-600 font-bold' : 'text-slate-300 italic'}">${row[6] || 'Belum Login'}</td>
+                            <td class="px-6 py-4 text-[11px] ${row[6] ? 'text-green-600 font-bold' : 'text-slate-300 italic'}">
+                                ${this.formatDate(row[6])}
+                            </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex justify-end gap-1">
                                     <button onclick="admin.editUser(${index})" class="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition"><i data-lucide="pencil" class="w-4 h-4"></i></button>
@@ -423,7 +426,7 @@
                 this.data.feedback.forEach(row => {
                     tbody.insertAdjacentHTML('beforeend', `
                         <tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0">
-                            <td class="px-6 py-4 text-[10px] text-slate-400 font-mono">${row[0]}</td>
+                            <td class="px-6 py-4 text-[10px] text-slate-400 font-mono">${this.formatDate(row[0])}</td>
                             <td class="px-6 py-4"><div class="font-bold text-sm text-slate-800">${row[4]}</div><div class="text-[10px] text-slate-400">${row[5]}</div></td>
                             <td class="px-6 py-4">
                                 <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase mb-1 inline-block ${row[1]=='Bug'?'bg-red-100 text-red-600':'bg-blue-100 text-blue-600'}">${row[1]}</span>
@@ -436,7 +439,7 @@
                 lucide.createIcons();
             },
 
-            // --- MENU ACTIONS ---
+            // --- ACTIONS ---
             openMenuModal: function() {
                 document.getElementById('inp-id').value = -1; 
                 ['inp-judul','inp-deskripsi','inp-url','inp-icon','inp-label','inp-parent','inp-role'].forEach(i=>document.getElementById(i).value='');
@@ -455,7 +458,6 @@
                 document.getElementById('inp-ukuran').value = row[7];
                 document.getElementById('inp-label').value = row[8];
                 document.getElementById('inp-role').value = row[9];
-                document.getElementById('modal-title').innerText = "Edit Menu";
                 document.getElementById('menu-modal').classList.remove('hidden');
             },
             submitMenu: function(e) {
@@ -482,7 +484,6 @@
                 this.sendData({ action: "delete_menu", admin_pin: this.pin, id: index });
             },
 
-            // --- USER ACTIONS ---
             openUserModal: function() {
                 document.getElementById('user-id').value = -1;
                 document.getElementById('user-modal-title').innerText = "Tambah Guru Baru";
@@ -537,10 +538,9 @@
             },
 
             sendData: function(payload) {
-                // Loading Overlay UI (Simple)
                 const loading = document.createElement('div');
                 loading.className = "fixed inset-0 z-[200] bg-black/50 flex items-center justify-center text-white font-bold backdrop-blur-sm";
-                loading.innerHTML = "<div class='bg-slate-900 p-6 rounded-2xl shadow-xl flex items-center gap-3'><i data-lucide='loader-2' class='animate-spin'></i> Menyimpan Data...</div>";
+                loading.innerHTML = "<div class='bg-slate-900 p-6 rounded-2xl shadow-xl flex items-center gap-3'><i data-lucide='loader-2' class='animate-spin'></i> Menyimpan...</div>";
                 document.body.appendChild(loading);
                 lucide.createIcons();
 
@@ -552,7 +552,7 @@
                     setTimeout(() => {
                         alert("Berhasil disimpan! Halaman akan dimuat ulang.");
                         location.reload();
-                    }, 1500); // Delay dikit biar kerasa prosesnya
+                    }, 1500);
                 }).catch(e => {
                     document.body.removeChild(loading);
                     alert("Error: " + e);
