@@ -79,7 +79,7 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase px-2 mb-2">Pintasan</p>
                     <button onclick="app.openModal('profile-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="user-cog" class="w-4 h-4"></i> Edit Profil</button>
                     <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="help-circle" class="w-4 h-4"></i> Bantuan & Laporan</button>
-                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Pembaruan Sistem</button>
+                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Update App</button>
                 </div>
             </div>
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-white/30 dark:bg-slate-800/30">
@@ -167,25 +167,32 @@
                 <h3 class="text-xl font-bold text-slate-800 dark:text-white">Profil Pengguna</h3>
                 <button onclick="app.closeModal('profile-modal')" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div class="bg-blue-50/80 dark:bg-blue-900/20 p-5 rounded-2xl mb-6 border border-blue-100 dark:border-blue-800">
-                <div class="flex items-center gap-2 mb-3 text-blue-700 dark:text-blue-300"><i data-lucide="cloud-cog" class="w-4 h-4"></i><span class="text-xs font-bold uppercase tracking-wider">Tarik Data Database</span></div>
-                <div class="space-y-3">
-                    <input type="email" id="sync-email" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email Terdaftar">
+            <div class="bg-blue-50/80 dark:bg-blue-900/20 p-4 rounded-2xl mb-5 border border-blue-100 dark:border-blue-800">
+                <div class="flex items-center gap-2 mb-3 text-blue-700 dark:text-blue-300"><i data-lucide="cloud-cog" class="w-4 h-4"></i><span class="text-[10px] font-bold uppercase tracking-wider">Tarik Data Database</span></div>
+                <div class="space-y-2">
+                    <input type="email" id="sync-email" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email Terdaftar">
                     <div class="flex gap-2">
-                        <input type="text" id="sync-pin" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="PIN">
-                        <button onclick="app.syncData()" id="btn-sync" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-blue-700 active:scale-95 transition whitespace-nowrap">Cek Data</button>
+                        <input type="text" id="sync-pin" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="PIN">
+                        <button onclick="app.syncData()" id="btn-sync" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 active:scale-95 transition whitespace-nowrap">Cek Data</button>
                     </div>
                 </div>
             </div>
             <form onsubmit="app.saveProfile(event)" class="space-y-4">
-                <div class="flex justify-center mb-6 relative group">
-                    <div class="relative"><img id="preview-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-24 h-24 rounded-full border-4 border-slate-100 dark:border-slate-700 object-cover shadow-lg"><label class="absolute bottom-0 right-0 bg-slate-900 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 transition shadow-md active:scale-95"><i data-lucide="camera" class="w-4 h-4"></i><input type="file" hidden onchange="app.previewImage(this)"></label></div>
+                <div class="flex justify-center mb-2 relative group">
+                    <div class="relative"><img id="preview-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-20 h-20 rounded-full border-4 border-slate-100 dark:border-slate-700 object-cover shadow-lg"><label class="absolute bottom-0 right-0 bg-slate-900 text-white p-1.5 rounded-full cursor-pointer hover:bg-blue-600 transition shadow-md active:scale-95"><i data-lucide="camera" class="w-3.5 h-3.5"></i><input type="file" hidden onchange="app.previewImage(this)"></label></div>
                 </div>
-                <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Nama Lengkap</label><input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
-                <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Unit Kerja</label><input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
-                <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Jabatan</label><input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
-                <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-xl hover:scale-[1.02] active:scale-95 transition mt-2">Simpan Profil</button>
-                <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="w-full flex items-center justify-center gap-2 py-3 mt-4 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Pembaruan Sistem</button>
+                <div class="space-y-3">
+                    <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Nama Lengkap</label><input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
+                    <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Unit Kerja</label><input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
+                    <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Jabatan</label><input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
+                    <div class="grid grid-cols-2 gap-3 mt-3">
+                        <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="cloud-lightning" class="w-4 h-4"></i><span>Cek Update App</span></button>
+                        <button type="button" onclick="app.confirmLogout()" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar Akun</span></button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -264,7 +271,7 @@
 
     <script>
         const app = {
-            // !!! GANTI DENGAN URL DEPLOYMENT KODE.GS ANDA !!!
+            // URL DARI ADMIN HP YANG SUDAH VALID
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
             deferredPrompt: null,
@@ -295,12 +302,10 @@
                 });
             },
 
-            // --- TRACKING FOR ADMIN ---
             trackUser: function() {
                 const s = localStorage.getItem('guru_profile');
                 if (s) {
                     const p = JSON.parse(s);
-                    // Kirim sinyal tracking ke backend
                     fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email || '')}`).catch(()=>{});
                 }
             },
@@ -330,7 +335,10 @@
                 const btnProfile = document.getElementById('btn-reset-profile');
                 const loadingHtml = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...';
                 if(btnSidebar) btnSidebar.innerHTML = loadingHtml;
-                if(btnProfile) btnProfile.innerHTML = loadingHtml;
+                if(btnProfile) {
+                    // Update text inside button for grid layout
+                    btnProfile.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>';
+                }
                 lucide.createIcons();
                 try {
                     if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); }
@@ -344,7 +352,6 @@
                 const footerList = data.footer || [];
                 const info = data.info || {};
 
-                // Render Versi
                 document.getElementById('app-version-footer').innerText = info.versi || '';
 
                 const savedProfile = localStorage.getItem('guru_profile');
@@ -365,12 +372,9 @@
                 const parents = menuList.filter(item => (item.parent || "").trim() === "");
 
                 parents.forEach(item => {
-                    // Logic Role Filter
                     const requiredRole = (item.role || "").toLowerCase().trim();
                     if (requiredRole !== "") {
                         if (userJabatan === "") return; 
-                        
-                        // NEW LOGIC: "GURU" = Any logged in user
                         if (requiredRole !== "guru" && !userJabatan.includes(requiredRole)) return; 
                     }
 
@@ -464,24 +468,16 @@
             openModal: function(id) {
                 const el = document.getElementById(id);
                 if (!el) return;
-                
                 if (id === 'feedback-modal') {
                     const s = localStorage.getItem('guru_profile');
-                    if(s) {
-                        const p = JSON.parse(s);
-                        document.getElementById('fb-nama').value = p.nama || '';
-                    }
+                    if(s) { const p = JSON.parse(s); document.getElementById('fb-nama').value = p.nama || ''; }
                 }
-
                 el.classList.remove('hidden'); 
                 void el.offsetWidth; 
                 const overlay = el.querySelector('.modal-overlay');
                 const content = el.querySelector('.modal-content');
                 if (overlay) overlay.classList.remove('opacity-0');
-                if (content) {
-                    content.classList.remove('opacity-0', 'scale-95', 'translate-y-full');
-                    content.classList.add('scale-100', 'translate-y-0');
-                }
+                if (content) { content.classList.remove('opacity-0', 'scale-95', 'translate-y-full'); content.classList.add('scale-100', 'translate-y-0'); }
             },
 
             closeModal: function(id) {
@@ -490,10 +486,7 @@
                 const overlay = el.querySelector('.modal-overlay');
                 const content = el.querySelector('.modal-content');
                 if (overlay) overlay.classList.add('opacity-0');
-                if (content) {
-                    content.classList.add('opacity-0', 'scale-95');
-                    if(id.includes('submenu') || id.includes('install')) content.classList.add('translate-y-full');
-                }
+                if (content) { content.classList.add('opacity-0', 'scale-95'); if(id.includes('submenu') || id.includes('install')) content.classList.add('translate-y-full'); }
                 setTimeout(() => { el.classList.add('hidden'); }, 300);
             },
 
@@ -530,12 +523,11 @@
                             document.getElementById('input-jabatan').value = d.jabatan;
                             document.getElementById('input-instansi').value = d.instansi;
                             
-                            // SIMPAN JUGA EMAIL AGAR BISA DITRACKING
                             const p = {
                                 nama: d.nama,
                                 jabatan: d.jabatan,
                                 instansi: d.instansi,
-                                email: email, // <-- TAMBAHAN
+                                email: email,
                                 foto: document.getElementById('preview-photo').src
                             };
                             localStorage.setItem('guru_profile', JSON.stringify(p));
@@ -549,14 +541,12 @@
 
             saveProfile: function(e) {
                 e.preventDefault();
-                // AMBIL EMAIL LAMA AGAR TIDAK HILANG SAAT UPDATE PROFIL MANUAL
                 const oldP = JSON.parse(localStorage.getItem('guru_profile') || "{}");
-                
                 const p = {
                     nama: document.getElementById('input-nama').value,
                     jabatan: document.getElementById('input-jabatan').value,
                     instansi: document.getElementById('input-instansi').value,
-                    email: oldP.email || document.getElementById('sync-email').value || "", // Pertahankan email
+                    email: oldP.email || document.getElementById('sync-email').value || "", 
                     foto: document.getElementById('preview-photo').src
                 };
                 localStorage.setItem('guru_profile', JSON.stringify(p));
@@ -571,13 +561,8 @@
                 buttons.forEach((btn, index) => {
                     const icon = btn.querySelector('svg') || btn.querySelector('i');
                     if (icon) {
-                        if (index < v) {
-                            icon.classList.add('text-yellow-400', 'fill-yellow-400');
-                            icon.classList.remove('text-slate-300');
-                        } else {
-                            icon.classList.remove('text-yellow-400', 'fill-yellow-400');
-                            icon.classList.add('text-slate-300');
-                        }
+                        if (index < v) { icon.classList.add('text-yellow-400', 'fill-yellow-400'); icon.classList.remove('text-slate-300'); } 
+                        else { icon.classList.remove('text-yellow-400', 'fill-yellow-400'); icon.classList.add('text-slate-300'); }
                     }
                 });
             },
@@ -611,14 +596,8 @@
                         e.target.reset();
                         this.setRating(5);
                     })
-                    .catch(err => {
-                        console.error(err);
-                        this.showAlert('error', 'Gagal', 'Terjadi kesalahan jaringan');
-                    })
-                    .finally(() => { 
-                        btn.innerHTML = oldTxt; 
-                        btn.disabled = false; 
-                    });
+                    .catch(err => { console.error(err); this.showAlert('error', 'Gagal', 'Terjadi kesalahan jaringan'); })
+                    .finally(() => { btn.innerHTML = oldTxt; btn.disabled = false; });
             },
 
             loadProfile: function() {
@@ -640,7 +619,6 @@
                     setVal('input-nama', p.nama);
                     setVal('input-jabatan', p.jabatan);
                     setVal('input-instansi', p.instansi);
-                    // Isi juga email jika ada
                     if(p.email) setVal('sync-email', p.email);
                     
                     show('btn-logout-sidebar');
