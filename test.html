@@ -134,7 +134,9 @@
                             <span id="sync-status" class="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-800 hidden items-center gap-1.5"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Sinkronisasi...</span>
                         </div>
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                            <div class="col-span-2 h-40 bg-white/50 dark:bg-slate-800/50 border border-white/60 dark:border-slate-700 rounded-3xl animate-pulse flex items-center justify-center gap-3"><div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div><span class="text-sm font-medium text-slate-400">Memuat Data...</span></div>
+                            <div class="col-span-2 h-40 bg-white/50 dark:bg-slate-800/50 border border-white/60 dark:border-slate-700 rounded-3xl animate-pulse flex items-center justify-center gap-3">
+                                <div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div><span class="text-sm font-medium text-slate-400">Memuat Data...</span>
+                            </div>
                         </div>
                     </div>
 
@@ -163,36 +165,12 @@
     <div id="profile-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-2xl relative z-10 p-6 transform scale-95 opacity-0 modal-content transition-all duration-300">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-slate-800 dark:text-white">Profil Pengguna</h3>
-                <button onclick="app.closeModal('profile-modal')" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div class="bg-blue-50/80 dark:bg-blue-900/20 p-4 rounded-2xl mb-5 border border-blue-100 dark:border-blue-800">
-                <div class="flex items-center gap-2 mb-3 text-blue-700 dark:text-blue-300"><i data-lucide="cloud-cog" class="w-4 h-4"></i><span class="text-[10px] font-bold uppercase tracking-wider">Tarik Data Database</span></div>
-                <div class="space-y-2">
-                    <input type="email" id="sync-email" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email Terdaftar">
-                    <div class="flex gap-2">
-                        <input type="text" id="sync-pin" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="PIN">
-                        <button onclick="app.syncData()" id="btn-sync" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 active:scale-95 transition whitespace-nowrap">Cek Data</button>
-                    </div>
-                </div>
-            </div>
+            <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-slate-800 dark:text-white">Profil Pengguna</h3><button onclick="app.closeModal('profile-modal')" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <div class="bg-blue-50/80 dark:bg-blue-900/20 p-4 rounded-2xl mb-5 border border-blue-100 dark:border-blue-800"><div class="flex items-center gap-2 mb-3 text-blue-700 dark:text-blue-300"><i data-lucide="cloud-cog" class="w-4 h-4"></i><span class="text-[10px] font-bold uppercase tracking-wider">Tarik Data Database</span></div><div class="space-y-2"><input type="email" id="sync-email" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Email Terdaftar"><div class="flex gap-2"><input type="text" id="sync-pin" class="w-full bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none" placeholder="PIN"><button onclick="app.syncData()" id="btn-sync" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 active:scale-95 transition whitespace-nowrap">Cek Data</button></div></div></div>
             <form onsubmit="app.saveProfile(event)" class="space-y-4">
-                <div class="flex justify-center mb-2 relative group">
-                    <div class="relative"><img id="preview-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-20 h-20 rounded-full border-4 border-slate-100 dark:border-slate-700 object-cover shadow-lg"><label class="absolute bottom-0 right-0 bg-slate-900 text-white p-1.5 rounded-full cursor-pointer hover:bg-blue-600 transition shadow-md active:scale-95"><i data-lucide="camera" class="w-3.5 h-3.5"></i><input type="file" hidden onchange="app.previewImage(this)"></label></div>
-                </div>
-                <div class="space-y-3">
-                    <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Nama Lengkap</label><input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
-                    <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Unit Kerja</label><input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
-                    <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Jabatan</label><input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
-                </div>
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
-                    <div class="grid grid-cols-2 gap-3 mt-3">
-                        <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="cloud-lightning" class="w-4 h-4"></i><span>Cek Update App</span></button>
-                        <button type="button" onclick="app.confirmLogout()" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar Akun</span></button>
-                    </div>
-                </div>
+                <div class="flex justify-center mb-2 relative group"><div class="relative"><img id="preview-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-20 h-20 rounded-full border-4 border-slate-100 dark:border-slate-700 object-cover shadow-lg"><label class="absolute bottom-0 right-0 bg-slate-900 text-white p-1.5 rounded-full cursor-pointer hover:bg-blue-600 transition shadow-md active:scale-95"><i data-lucide="camera" class="w-3.5 h-3.5"></i><input type="file" hidden onchange="app.previewImage(this)"></label></div></div>
+                <div class="space-y-3"><div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Nama Lengkap</label><input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Unit Kerja</label><input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div><div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Jabatan</label><input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div></div>
+                <div class="pt-2"><button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button><div class="grid grid-cols-2 gap-3 mt-3"><button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="cloud-lightning" class="w-4 h-4"></i><span>Cek Update App</span></button><button type="button" onclick="app.confirmLogout()" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar Akun</span></button></div></div>
             </form>
         </div>
     </div>
@@ -218,27 +196,11 @@
             </div>
             <div class="p-6">
                 <form onsubmit="app.submitFeedback(event)" class="space-y-4">
-                    <div class="flex justify-center gap-2 mb-2" id="star-rating-group">
-                        <input type="hidden" name="rating" id="rating-input" value="5">
-                        <button type="button" onclick="app.setRating(1)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(2)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(3)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(4)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(5)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label>
-                        <label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label>
-                    </div>
-                    <div id="feedback-identity" class="grid grid-cols-2 gap-3 transition-opacity duration-300">
-                        <input type="text" name="pengirim" id="fb-nama" placeholder="Nama Anda" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-                        <input type="text" name="kontak" id="fb-kontak" placeholder="No WA / Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-                    </div>
+                    <div class="flex justify-center gap-2 mb-2" id="star-rating-group"><input type="hidden" name="rating" id="rating-input" value="5"><button type="button" onclick="app.setRating(1)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(2)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(3)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(4)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(5)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button></div>
+                    <div class="grid grid-cols-2 gap-3"><label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label><label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label></div>
+                    <div id="feedback-identity" class="grid grid-cols-2 gap-3 transition-opacity duration-300"><input type="text" name="pengirim" id="fb-nama" placeholder="Nama Anda" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"><input type="text" name="kontak" id="fb-kontak" placeholder="No WA / Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"></div>
                     <textarea name="pesan" required rows="3" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none dark:text-white" placeholder="Tulis pesan Anda..."></textarea>
-                    <div class="flex items-center justify-between pt-2">
-                         <label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500 font-medium">Kirim Anonim</span></label>
-                         <button type="submit" id="btn-feedback-submit" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2 text-sm"><span>Kirim</span><i data-lucide="send" class="w-4 h-4"></i></button>
-                    </div>
+                    <div class="flex items-center justify-between pt-2"><label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500 font-medium">Kirim Anonim</span></label><button type="submit" id="btn-feedback-submit" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2 text-sm"><span>Kirim</span><i data-lucide="send" class="w-4 h-4"></i></button></div>
                 </form>
             </div>
         </div>
@@ -271,7 +233,7 @@
 
     <script>
         const app = {
-            // URL DARI ADMIN HP YANG SUDAH VALID
+            // !!! PASTE URL DARI ADMIN HP DI SINI !!!
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
             deferredPrompt: null,
@@ -280,11 +242,16 @@
             init: function() {
                 this.initTheme();
                 this.loadProfile();
+                
+                // Load Cache dulu biar cepat
                 const cached = localStorage.getItem('app_cache');
                 if (cached) { try { this.render(JSON.parse(cached)); } catch(e) {} }
+                
+                // Ambil Data Baru
                 this.refreshData();
                 this.trackUser(); 
                 lucide.createIcons();
+                
                 window.addEventListener('beforeinstallprompt', (e) => {
                     e.preventDefault();
                     this.deferredPrompt = e;
@@ -306,6 +273,7 @@
                 const s = localStorage.getItem('guru_profile');
                 if (s) {
                     const p = JSON.parse(s);
+                    // Fire & Forget
                     fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email || '')}`).catch(()=>{});
                 }
             },
@@ -313,15 +281,25 @@
             refreshData: function() {
                 const btn = document.getElementById('refresh-btn');
                 const status = document.getElementById('sync-status');
+                
                 if(btn) btn.querySelector('svg').classList.add('animate-spin');
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); }
+                
                 fetch(this.apiURL + "?t=" + new Date().getTime())
                     .then(res => res.json())
                     .then(data => {
                         localStorage.setItem('app_cache', JSON.stringify(data));
                         this.render(data);
                     })
-                    .catch(e => console.log("Offline"))
+                    .catch(e => {
+                        console.log("Offline/Error:", e);
+                        // JIKA CACHE KOSONG & FETCH GAGAL
+                        if(!localStorage.getItem('app_cache')) {
+                            document.getElementById('dynamic-menu-container').innerHTML = 
+                                '<div class="col-span-2 md:col-span-4 text-center p-8 bg-red-50 dark:bg-red-900/30 rounded-3xl border border-red-100 dark:border-red-800"><i data-lucide="wifi-off" class="w-8 h-8 text-red-400 mx-auto mb-3"></i><p class="text-red-600 dark:text-red-300 font-bold mb-1">Gagal Memuat Data</p><p class="text-xs text-red-400 dark:text-red-400">Periksa koneksi internet Anda.</p><button onclick="location.reload()" class="mt-4 px-5 py-2.5 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition">Coba Lagi</button></div>';
+                            lucide.createIcons();
+                        }
+                    })
                     .finally(() => {
                         setTimeout(() => { 
                             if(btn) btn.querySelector('svg').classList.remove('animate-spin');
@@ -331,15 +309,9 @@
             },
 
             resetApp: async function() {
-                const btnSidebar = document.getElementById('btn-reset-sidebar');
-                const btnProfile = document.getElementById('btn-reset-profile');
-                const loadingHtml = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...';
-                if(btnSidebar) btnSidebar.innerHTML = loadingHtml;
-                if(btnProfile) {
-                    // Update text inside button for grid layout
-                    btnProfile.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>';
-                }
-                lucide.createIcons();
+                const btn = document.getElementById('btn-reset-profile');
+                if(btn) btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>';
+                
                 try {
                     if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); }
                     if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
@@ -352,7 +324,8 @@
                 const footerList = data.footer || [];
                 const info = data.info || {};
 
-                document.getElementById('app-version-footer').innerText = info.versi || '';
+                const verEl = document.getElementById('app-version-footer');
+                if(verEl) verEl.innerText = info.versi || '';
 
                 const savedProfile = localStorage.getItem('guru_profile');
                 let userJabatan = "";
@@ -369,7 +342,13 @@
 
                 const container = document.getElementById('dynamic-menu-container');
                 container.innerHTML = '';
+                
                 const parents = menuList.filter(item => (item.parent || "").trim() === "");
+
+                if(parents.length === 0) {
+                    container.innerHTML = '<div class="col-span-2 text-center text-slate-400 text-sm py-10">Belum ada menu yang diaktifkan.</div>';
+                    return;
+                }
 
                 parents.forEach(item => {
                     const requiredRole = (item.role || "").toLowerCase().trim();
@@ -468,16 +447,24 @@
             openModal: function(id) {
                 const el = document.getElementById(id);
                 if (!el) return;
+                
                 if (id === 'feedback-modal') {
                     const s = localStorage.getItem('guru_profile');
-                    if(s) { const p = JSON.parse(s); document.getElementById('fb-nama').value = p.nama || ''; }
+                    if(s) {
+                        const p = JSON.parse(s);
+                        document.getElementById('fb-nama').value = p.nama || '';
+                    }
                 }
+
                 el.classList.remove('hidden'); 
                 void el.offsetWidth; 
                 const overlay = el.querySelector('.modal-overlay');
                 const content = el.querySelector('.modal-content');
                 if (overlay) overlay.classList.remove('opacity-0');
-                if (content) { content.classList.remove('opacity-0', 'scale-95', 'translate-y-full'); content.classList.add('scale-100', 'translate-y-0'); }
+                if (content) {
+                    content.classList.remove('opacity-0', 'scale-95', 'translate-y-full');
+                    content.classList.add('scale-100', 'translate-y-0');
+                }
             },
 
             closeModal: function(id) {
@@ -486,7 +473,10 @@
                 const overlay = el.querySelector('.modal-overlay');
                 const content = el.querySelector('.modal-content');
                 if (overlay) overlay.classList.add('opacity-0');
-                if (content) { content.classList.add('opacity-0', 'scale-95'); if(id.includes('submenu') || id.includes('install')) content.classList.add('translate-y-full'); }
+                if (content) {
+                    content.classList.add('opacity-0', 'scale-95');
+                    if(id.includes('submenu') || id.includes('install')) content.classList.add('translate-y-full');
+                }
                 setTimeout(() => { el.classList.add('hidden'); }, 300);
             },
 
@@ -596,8 +586,14 @@
                         e.target.reset();
                         this.setRating(5);
                     })
-                    .catch(err => { console.error(err); this.showAlert('error', 'Gagal', 'Terjadi kesalahan jaringan'); })
-                    .finally(() => { btn.innerHTML = oldTxt; btn.disabled = false; });
+                    .catch(err => {
+                        console.error(err);
+                        this.showAlert('error', 'Gagal', 'Terjadi kesalahan jaringan');
+                    })
+                    .finally(() => { 
+                        btn.innerHTML = oldTxt; 
+                        btn.disabled = false; 
+                    });
             },
 
             loadProfile: function() {
