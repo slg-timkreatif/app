@@ -151,19 +151,6 @@
         </main>
     </div>
 
-    <div id="flyer-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content">
-            <div id="flyer-image-container" class="hidden h-48 w-full bg-slate-100 dark:bg-slate-700 relative"><img id="flyer-img" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div></div>
-            <div class="p-8 text-center">
-                <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><i data-lucide="megaphone" class="w-8 h-8"></i></div>
-                <h3 id="flyer-title" class="text-xl font-bold text-slate-800 dark:text-white mb-2">Info Penting</h3>
-                <p id="flyer-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed whitespace-pre-wrap">...</p>
-                <button onclick="app.closeModal('flyer-modal')" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:scale-[1.02] transition">Tutup Info</button>
-            </div>
-        </div>
-    </div>
-
     <div id="profile-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-2xl relative z-10 p-6 transform scale-95 opacity-0 modal-content transition-all duration-300">
@@ -198,6 +185,18 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="flyer-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content">
+            <div id="flyer-image-container" class="hidden h-48 w-full bg-slate-100 dark:bg-slate-700 relative"><img id="flyer-img" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div></div>
+            <div class="p-8 text-center">
+                <h3 id="flyer-title" class="text-xl font-bold text-slate-800 dark:text-white mb-2">Info</h3>
+                <p id="flyer-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed whitespace-pre-wrap">...</p>
+                <button onclick="app.closeModal('flyer-modal')" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:scale-[1.02] transition">Tutup Info</button>
+            </div>
         </div>
     </div>
 
@@ -259,7 +258,7 @@
 
     <script>
         const app = {
-            // !!! PASTIKAN URL INI SAMA DENGAN ADMIN DAN SUDAH DEPLOY NEW VERSION !!!
+            // !!! GANTI URL DI BAWAH INI DENGAN URL DEPLOYMENT KODE.GS YANG SAMA DENGAN ADMIN !!!
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
             deferredPrompt: null,
@@ -267,26 +266,26 @@
 
             init: function() {
                 this.initTheme();
+                // FIX: Panggil createIcons lebih awal untuk mencegah error di refreshData
+                lucide.createIcons();
                 this.loadProfile();
                 
-                // STRATEGI BARU: Render Cache Dulu (Supaya tidak loading terus)
+                // STRATEGI 1: LOAD CACHE
                 const cached = localStorage.getItem('app_cache');
                 if (cached) { 
-                    console.log("Memuat dari Cache HP...");
                     try { 
                         this.render(JSON.parse(cached)); 
-                        // Hapus skeleton loading karena data cache sudah tampil
+                        // Hapus skeleton loading jika cache sudah tampil
                         const container = document.getElementById('dynamic-menu-container');
                         if(container && container.innerHTML.includes('animate-pulse')) {
                             container.innerHTML = ''; 
                         }
-                    } catch(e) { console.error("Cache rusak", e); } 
+                    } catch(e) {} 
                 }
                 
-                // Lalu ambil data baru di background
+                // STRATEGI 2: AMBIL DATA BARU
                 this.refreshData();
                 this.trackUser(); 
-                lucide.createIcons();
                 this.setupInstallPrompt();
             },
 
@@ -296,11 +295,12 @@
                 const menuContainer = document.getElementById('dynamic-menu-container');
                 const loadingText = document.getElementById('loading-text');
                 
-                // Tampilkan indikator loading kecil (spinner di header)
-                if(btn) btn.querySelector('svg').classList.add('animate-spin');
+                // Safety check: Pastikan icon ada sebelum classList
+                const btnIcon = btn ? btn.querySelector('svg') : null;
+                if(btnIcon) btnIcon.classList.add('animate-spin');
+                
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); status.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Menghubungkan...'; lucide.createIcons(); }
 
-                // Timer untuk deteksi koneksi lambat (3 detik) -> Ubah text loading
                 const slowTimer = setTimeout(() => {
                     if(loadingText) {
                         loadingText.innerText = "Menyiapkan Database... (Mohon Tunggu)";
@@ -315,28 +315,27 @@
                 fetch(this.apiURL + "?t=" + new Date().getTime())
                     .then(res => res.json())
                     .then(data => {
-                        clearTimeout(slowTimer); // Batalkan timer lambat
+                        clearTimeout(slowTimer);
                         localStorage.setItem('app_cache', JSON.stringify(data));
-                        this.render(data); // Render ulang dengan data baru
+                        this.render(data);
                         if(status) { status.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Terhubung'; lucide.createIcons(); }
                     })
                     .catch(e => {
                         clearTimeout(slowTimer);
-                        console.log("Mode Offline:", e);
-                        if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); }
+                        console.log("Offline/Error:", e);
                         
-                        // JIKA CACHE KOSONG & FETCH GAGAL -> BARU TAMPILKAN ERROR BESAR
+                        if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); }
+
                         if(!localStorage.getItem('app_cache')) {
                             menuContainer.innerHTML = 
-                                '<div class="col-span-2 md:col-span-4 text-center p-8 bg-red-50 dark:bg-red-900/30 rounded-3xl border border-red-100 dark:border-red-800"><i data-lucide="wifi-off" class="w-8 h-8 text-red-400 mx-auto mb-3"></i><p class="text-red-600 dark:text-red-300 font-bold mb-1">Gagal Memuat Data</p><p class="text-xs text-red-400 dark:text-red-400">Server sedang sibuk atau koneksi terputus.</p><button onclick="location.reload()" class="mt-4 px-5 py-2.5 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition">Muat Ulang</button></div>';
+                                '<div class="col-span-2 md:col-span-4 text-center p-8 bg-red-50 dark:bg-red-900/30 rounded-3xl border border-red-100 dark:border-red-800"><i data-lucide="wifi-off" class="w-8 h-8 text-red-400 mx-auto mb-3"></i><p class="text-red-600 dark:text-red-300 font-bold mb-1">Gagal Memuat Data</p><p class="text-xs text-red-400 dark:text-red-400 mb-4">Pastikan URL Script benar & Internet lancar.</p><button onclick="location.reload()" class="px-5 py-2.5 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition">Coba Lagi</button></div>';
                             lucide.createIcons();
                         }
                     })
                     .finally(() => {
                         setTimeout(() => { 
-                            if(btn) btn.querySelector('svg').classList.remove('animate-spin');
+                            if(btnIcon) btnIcon.classList.remove('animate-spin');
                             if(status) { 
-                                // Hilangkan status setelah 2 detik jika sukses
                                 setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000);
                             }
                         }, 500);
@@ -350,11 +349,9 @@
                 const footerList = data.footer || [];
                 const info = data.info || {};
 
-                // 1. Tampilkan Versi App
                 const verEl = document.getElementById('app-version-footer');
                 if(verEl) verEl.innerText = info.versi || '';
 
-                // 2. Cek Jabatan User
                 const savedProfile = localStorage.getItem('guru_profile');
                 let userJabatan = "";
                 if (savedProfile) {
@@ -362,14 +359,12 @@
                     userJabatan = (p.jabatan || "").toLowerCase().trim();
                 }
 
-                // 3. Mapping Menu
                 this.menuMap = {};
                 menuList.forEach(item => {
                     const p = (item.parent || "").toLowerCase().trim();
                     if(p) { if(!this.menuMap[p]) this.menuMap[p] = []; this.menuMap[p].push(item); }
                 });
 
-                // 4. Render ke Layar
                 const container = document.getElementById('dynamic-menu-container');
                 let tempHTML = '';
                 
@@ -456,6 +451,7 @@
             loadProfile: function() { const s=localStorage.getItem('guru_profile'); const setTxt=(id,txt)=>{ const el=document.getElementById(id); if(el)el.innerText=txt; }; const setSrc=(id,src)=>{ const el=document.getElementById(id); if(el)el.src=src; }; const setVal=(id,val)=>{ const el=document.getElementById(id); if(el)el.value=val; }; const show=(id)=>{ const el=document.getElementById(id); if(el)el.classList.remove('hidden'); }; const hide=(id)=>{ const el=document.getElementById(id); if(el)el.classList.add('hidden'); }; if(s){ const p=JSON.parse(s); setTxt('sidebar-user-name',p.nama); setTxt('sidebar-user-instansi',p.instansi); setTxt('welcome-message',"Halo, "+p.nama.split(' ')[0]+"!"); setSrc('sidebar-user-photo',p.foto); setSrc('header-user-photo',p.foto); setSrc('preview-photo',p.foto); setVal('input-nama',p.nama); setVal('input-jabatan',p.jabatan); setVal('input-instansi',p.instansi); if(p.email)setVal('sync-email',p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text',"Online"); const st=document.getElementById('sidebar-status-text'); if(st)st.className="text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan',p.jabatan); setTxt('sidebar-instansi',p.instansi); const badge=document.getElementById('user-status-badge'); if(badge){ badge.innerHTML='<span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> Online'; badge.classList.replace('text-slate-300','text-green-200'); } }else{ const badge=document.getElementById('user-status-badge'); if(badge){ badge.innerHTML='<span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span> Tamu'; badge.classList.replace('text-green-200','text-slate-300'); } setTxt('sidebar-status-text',"Belum Login"); const st=document.getElementById('sidebar-status-text'); if(st)st.className="text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); } },
             previewImage: function(i) { if(i.files&&i.files[0]){ const r=new FileReader(); r.onload=(e)=>document.getElementById('preview-photo').src=e.target.result; r.readAsDataURL(i.files[0]); } },
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
+            resetApp: async function() { if(!confirm("Aplikasi akan dimuat ulang untuk mengambil pembaruan sistem. Lanjutkan?"))return; const btn=document.getElementById('btn-reset-profile'); if(btn)btn.innerHTML='<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>'; try{ if('serviceWorker'in navigator){ const regs=await navigator.serviceWorker.getRegistrations(); for(let r of regs)await r.unregister(); } if('caches'in window){ const keys=await caches.keys(); await Promise.all(keys.map(k=>caches.delete(k))); } setTimeout(()=>window.location.reload(true),1000); }catch(e){ alert("Gagal reset otomatis. Silakan refresh browser manual."); window.location.reload(); } },
             toggleTheme: function() { const isDark=document.documentElement.classList.toggle('dark'); localStorage.setItem('theme',isDark?'dark':'light'); this.updateStatusBar(isDark); },
             initTheme: function() { const saved=localStorage.getItem('theme'); const isDark=saved==='dark'||(!saved&&window.matchMedia('(prefers-color-scheme: dark)').matches); if(isDark)document.documentElement.classList.add('dark'); this.updateStatusBar(isDark); },
             updateStatusBar: function(isDark) { document.getElementById('theme-color-meta').setAttribute('content',isDark?'#0f172a':'#f8fafc'); },
