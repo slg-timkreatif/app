@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#f8fafc" id="theme-color-meta">
-    <meta name="description" content="Portal Pendidikan Selogiri">
     <title>Guru Berbagi</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -28,21 +24,16 @@
 
     <style>
         body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-thumb { background: #475569; }
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
         .blob-2 { bottom: -10%; right: -10%; width: 350px; height: 350px; background: #e0e7ff; animation: float 12s infinite alternate-reverse; } 
-        .dark .blob-1 { background: #172554; opacity: 0.3; } 
-        .dark .blob-2 { background: #312e81; opacity: 0.3; }
+        .dark .blob-1 { background: #172554; opacity: 0.3; } .dark .blob-2 { background: #312e81; opacity: 0.3; }
+        /* Modal Transitions */
         .modal-overlay { transition: opacity 0.3s ease; }
         .modal-content { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; }
-        @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen overflow-hidden flex flex-col relative transition-colors duration-500">
@@ -52,10 +43,10 @@
     
     <div id="main-layout" class="flex h-full w-full fade-in relative z-0">
         
-        <aside class="hidden md:flex w-72 bg-white/70 dark:bg-darkcard/70 backdrop-blur-xl border-r border-white/50 dark:border-slate-700/50 flex-col z-20 shadow-sm transition-colors duration-300">
+        <aside class="hidden md:flex w-72 bg-white/70 dark:bg-darkcard/70 backdrop-blur-xl border-r border-white/50 dark:border-slate-700/50 flex-col z-20 shadow-sm">
             <div class="p-8 flex flex-col items-center border-b border-slate-100/50 dark:border-slate-700/50 text-center relative">
                 <div class="relative w-24 h-24 mb-4 group cursor-pointer transition-transform hover:scale-105" onclick="app.openModal('profile-modal')">
-                    <img id="sidebar-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full rounded-full border-[3px] border-white dark:border-slate-600 shadow-xl object-cover">
+                    <img id="sidebar-user-photo" src="https://ui-avatars.com/api/?name=Tamu&background=random" class="w-full h-full rounded-full border-[3px] border-white dark:border-slate-600 shadow-xl object-cover">
                     <div class="absolute bottom-1 right-1 w-7 h-7 bg-blue-600 rounded-full border-2 border-white dark:border-slate-700 flex items-center justify-center text-white shadow-md"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></div>
                 </div>
                 <div>
@@ -65,33 +56,29 @@
             </div>
             
             <div class="flex-1 overflow-y-auto p-5 space-y-4">
-                <div id="sidebar-bio-card" class="bg-white/50 dark:bg-slate-800/50 p-4 rounded-2xl border border-white/60 dark:border-slate-700/60 shadow-sm hidden">
+                <div id="sidebar-bio-card" class="hidden bg-white/50 dark:bg-slate-800/50 p-4 rounded-2xl border border-white/60 dark:border-slate-700/60 shadow-sm">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600"><i data-lucide="id-card" class="w-4 h-4"></i></div>
                         <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Data Pegawai</span>
                     </div>
                     <div class="space-y-3">
-                        <div><p class="text-[10px] text-slate-400 uppercase">Jabatan</p><p class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-1" id="sidebar-jabatan">-</p></div>
-                        <div><p class="text-[10px] text-slate-400 uppercase">Unit Kerja</p><p class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-1" id="sidebar-instansi">-</p></div>
+                        <div><p class="text-[10px] text-slate-400 uppercase">Jabatan</p><p class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-2" id="sidebar-jabatan">-</p></div>
+                        <div><p class="text-[10px] text-slate-400 uppercase">Unit Kerja</p><p class="text-xs font-bold text-slate-700 dark:text-slate-200 line-clamp-2" id="sidebar-instansi">-</p></div>
                     </div>
                 </div>
                 <div class="space-y-1">
                     <p class="text-[10px] font-bold text-slate-400 uppercase px-2 mb-2">Pintasan</p>
                     <button onclick="app.openModal('profile-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="user-cog" class="w-4 h-4"></i> Edit Profil</button>
-                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="help-circle" class="w-4 h-4"></i> Bantuan & Laporan</button>
-                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Update App</button>
+                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="help-circle" class="w-4 h-4"></i> Bantuan</button>
                 </div>
-            </div>
-            <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-white/30 dark:bg-slate-800/30">
-                 <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-900/40 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
             </div>
         </aside>
 
         <main class="flex-1 flex flex-col relative overflow-hidden">
-            <header class="bg-white/60 dark:bg-darkbg/60 backdrop-blur-md border-b border-white/40 dark:border-slate-700/40 z-10 px-6 py-4 sticky top-0 flex items-center justify-between gap-4 shadow-sm transition-all duration-300">
+            <header class="bg-white/60 dark:bg-darkbg/60 backdrop-blur-md border-b border-white/40 dark:border-slate-700/40 z-10 px-6 py-4 sticky top-0 flex items-center justify-between gap-4 shadow-sm">
                 <div class="flex items-center gap-4">
                     <div class="md:hidden w-10 h-10 rounded-full border-2 border-white dark:border-slate-700 shadow-md overflow-hidden shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="app.openModal('profile-modal')">
-                        <img id="header-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover">
+                        <img id="header-user-photo" src="https://ui-avatars.com/api/?name=Tamu&background=random" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h2 class="font-extrabold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">Guru Berbagi</h2>
@@ -120,11 +107,6 @@
                             </span>
                             <h3 class="text-3xl md:text-4xl font-extrabold mb-3 tracking-tight leading-tight" id="welcome-message">Halo, Guru Hebat!</h3>
                             <p class="text-blue-100/90 text-sm md:text-base leading-relaxed max-w-lg font-medium mb-8">Administrasi dan layanan digital dalam satu genggaman.</p>
-                            <div id="install-inline-container" class="pwa-install-area hidden">
-                                <div class="inline-flex p-1.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10">
-                                    <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white text-slate-900 font-bold py-2.5 px-6 rounded-xl shadow-lg hover:bg-blue-50 active:scale-95 transition text-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -133,31 +115,24 @@
                             <div class="flex items-center gap-2.5"><div class="w-1.5 h-6 bg-blue-600 dark:bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"></div><h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Aplikasi & Layanan</h3></div>
                             <span id="sync-status" class="text-[10px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-800 hidden items-center gap-1.5"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Sinkronisasi...</span>
                         </div>
+                        
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                            <div class="col-span-2 h-40 bg-white/50 dark:bg-slate-800/50 border border-white/60 dark:border-slate-700 rounded-3xl animate-pulse flex items-center justify-center gap-3"><div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div><span class="text-sm font-medium text-slate-400">Memuat Data...</span></div>
+                            <div class="col-span-2 h-40 bg-white/50 dark:bg-slate-800/50 border border-white/60 dark:border-slate-700 rounded-3xl animate-pulse flex items-center justify-center gap-3">
+                                <div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                <span class="text-sm font-medium text-slate-400">Memuat Data...</span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="pt-10 border-t border-slate-200/60 dark:border-slate-800/60 text-center pb-8">
                         <div id="footer-links-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
-                        <p class="text-[10px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-[0.2em]">Tim Kreatif Selogiri <span id="app-version-footer"></span> &copy; 2026</p>
+                        <p class="text-[10px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-[0.2em]">
+                            Tim Kreatif Selogiri <span id="app-version-footer"></span> &copy; 2026
+                        </p>
                     </div>
                 </div>
             </div>
         </main>
-    </div>
-
-    <div id="flyer-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content">
-            <div id="flyer-image-container" class="hidden h-48 w-full bg-slate-100 dark:bg-slate-700 relative"><img id="flyer-img" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div></div>
-            <div class="p-8 text-center">
-                <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4"><i data-lucide="megaphone" class="w-8 h-8"></i></div>
-                <h3 id="flyer-title" class="text-xl font-bold text-slate-800 dark:text-white mb-2">Info Penting</h3>
-                <p id="flyer-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed whitespace-pre-wrap">...</p>
-                <button onclick="app.closeModal('flyer-modal')" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl hover:scale-[1.02] transition">Tutup Info</button>
-            </div>
-        </div>
     </div>
 
     <div id="profile-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
@@ -179,7 +154,7 @@
             </div>
             <form onsubmit="app.saveProfile(event)" class="space-y-4">
                 <div class="flex justify-center mb-2 relative group">
-                    <div class="relative"><img id="preview-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-20 h-20 rounded-full border-4 border-slate-100 dark:border-slate-700 object-cover shadow-lg"><label class="absolute bottom-0 right-0 bg-slate-900 text-white p-1.5 rounded-full cursor-pointer hover:bg-blue-600 transition shadow-md active:scale-95"><i data-lucide="camera" class="w-3.5 h-3.5"></i><input type="file" hidden onchange="app.previewImage(this)"></label></div>
+                    <div class="relative"><img id="preview-photo" src="https://ui-avatars.com/api/?name=Tamu&background=random" class="w-20 h-20 rounded-full border-4 border-slate-100 dark:border-slate-700 object-cover shadow-lg"><label class="absolute bottom-0 right-0 bg-slate-900 text-white p-1.5 rounded-full cursor-pointer hover:bg-blue-600 transition shadow-md active:scale-95"><i data-lucide="camera" class="w-3.5 h-3.5"></i><input type="file" hidden onchange="app.previewImage(this)"></label></div>
                 </div>
                 <div class="space-y-3">
                     <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 ml-1 block">Nama Lengkap</label><input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition"></div>
@@ -197,13 +172,25 @@
         </div>
     </div>
 
+    <div id="flyer-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content">
+            <div id="flyer-image-container" class="hidden h-48 w-full bg-slate-100 dark:bg-slate-700 relative"><img id="flyer-img" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div></div>
+            <div class="p-8 text-center">
+                <h3 id="flyer-title" class="text-xl font-bold text-slate-800 dark:text-white mb-2">Info</h3>
+                <p id="flyer-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed whitespace-pre-wrap">...</p>
+                <button onclick="app.closeModal('flyer-modal')" class="w-full bg-slate-900 text-white font-bold py-3.5 rounded-xl">Tutup Info</button>
+            </div>
+        </div>
+    </div>
+
     <div id="submenu-modal" class="fixed inset-0 z-50 hidden flex items-end justify-center">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('submenu-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-xl mx-auto rounded-t-[2.5rem] shadow-2xl relative z-10 transform translate-y-full modal-content transition-all duration-300 max-h-[85vh] flex flex-col">
-            <div class="w-full flex justify-center pt-4 pb-2" onclick="app.closeModal('submenu-modal')"><div class="w-16 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full cursor-pointer hover:bg-slate-300 transition"></div></div>
-            <div class="px-8 py-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <div><h3 id="submenu-title" class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Menu</h3><p class="text-sm text-slate-400 font-medium">Pilih layanan</p></div>
-                <button onclick="app.closeModal('submenu-modal')" class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="w-full flex justify-center pt-4 pb-2" onclick="app.closeModal('submenu-modal')"><div class="w-16 h-1.5 bg-slate-200 rounded-full"></div></div>
+            <div class="px-8 py-5 border-b border-slate-100 flex justify-between items-center">
+                <h3 id="submenu-title" class="text-2xl font-bold text-slate-800 dark:text-white">Menu</h3>
+                <button onclick="app.closeModal('submenu-modal')" class="p-2 bg-slate-100 rounded-full"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div id="submenu-list" class="p-6 overflow-y-auto space-y-4 pb-12"></div>
         </div>
@@ -211,101 +198,61 @@
 
     <div id="feedback-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('feedback-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content">
-            <div class="bg-slate-50 dark:bg-slate-900/50 p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <div><h3 class="text-lg font-bold text-slate-800 dark:text-white">Pusat Bantuan</h3><p class="text-slate-400 text-xs">Kirim saran atau laporan bug.</p></div>
-                <button onclick="app.closeModal('feedback-modal')" class="p-2 bg-white dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div class="p-6">
-                <form onsubmit="app.submitFeedback(event)" class="space-y-4">
-                    <div class="flex justify-center gap-2 mb-2" id="star-rating-group">
-                        <input type="hidden" name="rating" id="rating-input" value="5">
-                        <button type="button" onclick="app.setRating(1)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(2)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(3)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(4)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                        <button type="button" onclick="app.setRating(5)" class="transition hover:scale-110"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label>
-                        <label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label>
-                    </div>
-                    <div id="feedback-identity" class="grid grid-cols-2 gap-3 transition-opacity duration-300">
-                        <input type="text" name="pengirim" id="fb-nama" placeholder="Nama Anda" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-                        <input type="text" name="kontak" id="fb-kontak" placeholder="No WA / Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-                    </div>
-                    <textarea name="pesan" required rows="3" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none dark:text-white" placeholder="Tulis pesan Anda..."></textarea>
-                    <div class="flex items-center justify-between pt-2">
-                         <label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500 font-medium">Kirim Anonim</span></label>
-                         <button type="submit" id="btn-feedback-submit" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2 text-sm"><span>Kirim</span><i data-lucide="send" class="w-4 h-4"></i></button>
-                    </div>
-                </form>
-            </div>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content p-6">
+            <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold">Pusat Bantuan</h3><button onclick="app.closeModal('feedback-modal')" class="p-2 bg-slate-100 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <form onsubmit="app.submitFeedback(event)" class="space-y-4">
+                <div class="flex justify-center gap-2 mb-2" id="star-rating-group"><input type="hidden" name="rating" id="rating-input" value="5"><button type="button" onclick="app.setRating(1)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(2)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(3)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(4)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(5)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button></div>
+                <div class="grid grid-cols-2 gap-3"><label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border bg-white text-center text-xs font-bold text-slate-500 peer-checked:bg-blue-50 peer-checked:text-blue-600 transition">💡 Saran</div></label><label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border bg-white text-center text-xs font-bold text-slate-500 peer-checked:bg-red-50 peer-checked:text-red-600 transition">🐞 Error</div></label></div>
+                <div id="feedback-identity" class="grid grid-cols-2 gap-3"><input type="text" name="pengirim" id="fb-nama" placeholder="Nama" class="border rounded-xl px-3 py-2 text-xs w-full"><input type="text" name="kontak" id="fb-kontak" placeholder="Kontak" class="border rounded-xl px-3 py-2 text-xs w-full"></div>
+                <textarea name="pesan" required rows="3" class="w-full border rounded-xl px-4 py-3 text-sm resize-none" placeholder="Tulis pesan..."></textarea>
+                <div class="flex items-center justify-between"><label class="flex items-center gap-2"><input type="checkbox" id="anonim-check" name="isAnonim" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500">Anonim</span></label><button type="submit" id="btn-feedback-submit" class="bg-slate-900 text-white font-bold py-3 px-6 rounded-xl text-sm">Kirim</button></div>
+            </form>
         </div>
     </div>
 
     <div id="dialog-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-2xl relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content">
-            <div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-blue-100 text-blue-600 shadow-inner"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div>
-            <h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3>
-            <p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p>
+            <div id="dialog-icon-bg" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-blue-100 text-blue-600"><i id="dialog-icon" data-lucide="info" class="w-8 h-8"></i></div>
+            <h3 id="dialog-title" class="text-lg font-bold mb-2">Info</h3>
+            <p id="dialog-msg" class="text-sm text-slate-500 mb-6">...</p>
             <div id="dialog-actions" class="w-full"></div>
         </div>
     </div>
-    
-    <div id="install-modal" class="pwa-install-area fixed inset-0 z-50 hidden flex items-end justify-center">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('install-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md mx-auto rounded-t-[2.5rem] p-8 relative z-10 transform translate-y-full modal-content text-center">
-            <div class="w-20 h-20 bg-white dark:bg-slate-700 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl border border-slate-100 dark:border-slate-600"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-16 h-16 rounded-2xl"></div>
-            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">Pasang Aplikasi</h3>
-            <p class="text-slate-500 dark:text-slate-400 font-medium mb-8 px-4">Dapatkan akses lebih cepat tanpa membuka browser.</p>
-            <button id="btn-install-trigger" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/40 hover:bg-blue-700 hover:scale-[1.02] active:scale-95 transition mb-3 flex justify-center items-center gap-2"><i data-lucide="download" class="w-5 h-5"></i> Pasang Sekarang</button>
-            <button onclick="app.closeModal('install-modal')" class="w-full py-4 text-slate-400 font-bold hover:text-slate-600 dark:hover:text-slate-300 transition">Nanti Saja</button>
-        </div>
-    </div>
 
-    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-40 bg-slate-900 dark:bg-blue-600 text-white p-4 rounded-2xl shadow-2xl shadow-slate-900/40 dark:shadow-blue-600/40 hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-90 group border border-slate-700 dark:border-blue-500">
-        <i data-lucide="message-square-plus" class="w-6 h-6 group-hover:animate-bounce"></i>
-    </button>
+    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-40 bg-slate-900 text-white p-4 rounded-2xl shadow-2xl hover:scale-110 transition active:scale-90"><i data-lucide="message-square-plus" class="w-6 h-6"></i></button>
 
     <script>
         const app = {
-            // URL DARI ADMIN HP YANG SUDAH VALID
+            // !!! PASTE URL DARI ADMIN HP DI SINI !!!
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
-            deferredPrompt: null,
             menuMap: {},
 
             init: function() {
                 this.initTheme();
                 this.loadProfile();
+                
+                // Load Cache dulu biar cepat
                 const cached = localStorage.getItem('app_cache');
-                if (cached) { try { this.render(JSON.parse(cached)); } catch(e) {} }
+                if (cached) { 
+                    try { this.render(JSON.parse(cached)); } catch(e) {} 
+                }
+                
+                // Ambil Data Baru
                 this.refreshData();
+                
+                // Tracking User
                 this.trackUser(); 
+                
                 lucide.createIcons();
-                window.addEventListener('beforeinstallprompt', (e) => {
-                    e.preventDefault();
-                    this.deferredPrompt = e;
-                    if(!localStorage.getItem('install_dismissed')) {
-                        document.getElementById('install-inline-container').classList.remove('hidden');
-                        setTimeout(() => this.openModal('install-modal'), 4000);
-                    }
-                });
-                document.getElementById('btn-install-trigger').addEventListener('click', async () => {
-                    this.closeModal('install-modal');
-                    if (this.deferredPrompt) {
-                        this.deferredPrompt.prompt();
-                        this.deferredPrompt = null;
-                    }
-                });
             },
 
             trackUser: function() {
                 const s = localStorage.getItem('guru_profile');
                 if (s) {
                     const p = JSON.parse(s);
+                    // Fire & Forget (gak perlu nunggu respon)
                     fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email || '')}`).catch(()=>{});
                 }
             },
@@ -313,16 +260,28 @@
             refreshData: function() {
                 const btn = document.getElementById('refresh-btn');
                 const status = document.getElementById('sync-status');
+                
+                // Animasi Loading
                 if(btn) btn.querySelector('svg').classList.add('animate-spin');
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); }
+                
                 fetch(this.apiURL + "?t=" + new Date().getTime())
                     .then(res => res.json())
                     .then(data => {
+                        // Jika sukses, simpan cache & render
                         localStorage.setItem('app_cache', JSON.stringify(data));
                         this.render(data);
                     })
-                    .catch(e => console.log("Offline"))
+                    .catch(e => {
+                        console.log("Gagal ambil data (Offline/Error):", e);
+                        // JIKA CACHE KOSONG & FETCH GAGAL -> TAMPILKAN ERROR DI LAYAR
+                        if(!localStorage.getItem('app_cache')) {
+                            document.getElementById('dynamic-menu-container').innerHTML = 
+                                '<div class="col-span-2 md:col-span-4 text-center p-8 bg-red-50 rounded-3xl border border-red-100"><p class="text-red-600 font-bold mb-2">Gagal Memuat Data</p><p class="text-xs text-red-400">Periksa koneksi internet Anda atau coba muat ulang.</p><button onclick="location.reload()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold">Muat Ulang</button></div>';
+                        }
+                    })
                     .finally(() => {
+                        // Matikan animasi loading
                         setTimeout(() => { 
                             if(btn) btn.querySelector('svg').classList.remove('animate-spin');
                             if(status) { status.classList.add('hidden'); status.classList.remove('flex'); }
@@ -331,20 +290,25 @@
             },
 
             resetApp: async function() {
-                const btnSidebar = document.getElementById('btn-reset-sidebar');
-                const btnProfile = document.getElementById('btn-reset-profile');
-                const loadingHtml = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...';
-                if(btnSidebar) btnSidebar.innerHTML = loadingHtml;
-                if(btnProfile) {
-                    // Update text inside button for grid layout
-                    btnProfile.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>';
-                }
+                if(!confirm("Aplikasi akan dimuat ulang untuk mengambil pembaruan sistem. Lanjutkan?")) return;
+                
+                const btn = document.getElementById('btn-reset-profile');
+                if(btn) btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>';
                 lucide.createIcons();
+                
                 try {
+                    // Hapus Service Worker & Cache Browser
                     if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); }
                     if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
+                    
+                    // Hapus Data Lokal App (Opsional, kalau mau bersih total)
+                    // localStorage.removeItem('app_cache'); 
+                    
                     setTimeout(() => window.location.reload(true), 1000);
-                } catch (e) { alert("Reset manual diperlukan."); window.location.reload(); }
+                } catch (e) { 
+                    alert("Gagal reset otomatis. Silakan refresh browser manual."); 
+                    window.location.reload(); 
+                }
             },
 
             render: function(data) {
@@ -352,8 +316,11 @@
                 const footerList = data.footer || [];
                 const info = data.info || {};
 
-                document.getElementById('app-version-footer').innerText = info.versi || '';
+                // 1. Tampilkan Versi App
+                const verEl = document.getElementById('app-version-footer');
+                if(verEl) verEl.innerText = info.versi || '';
 
+                // 2. Cek Jabatan User
                 const savedProfile = localStorage.getItem('guru_profile');
                 let userJabatan = "";
                 if (savedProfile) {
@@ -361,23 +328,41 @@
                     userJabatan = (p.jabatan || "").toLowerCase().trim();
                 }
 
+                // 3. Kelompokkan Menu (Parent-Child)
                 this.menuMap = {};
                 menuList.forEach(item => {
                     const p = (item.parent || "").toLowerCase().trim();
                     if(p) { if(!this.menuMap[p]) this.menuMap[p] = []; this.menuMap[p].push(item); }
                 });
 
+                // 4. Render Menu Utama
                 const container = document.getElementById('dynamic-menu-container');
-                container.innerHTML = '';
+                container.innerHTML = ''; // Hapus Skeleton Loading
+                
                 const parents = menuList.filter(item => (item.parent || "").trim() === "");
 
+                if(parents.length === 0) {
+                    container.innerHTML = '<div class="col-span-2 text-center text-slate-400 text-sm py-10">Belum ada menu yang diaktifkan.</div>';
+                    return;
+                }
+
                 parents.forEach(item => {
+                    // -- LOGIKA FILTER ROLE --
                     const requiredRole = (item.role || "").toLowerCase().trim();
+                    
                     if (requiredRole !== "") {
-                        if (userJabatan === "") return; 
-                        if (requiredRole !== "guru" && !userJabatan.includes(requiredRole)) return; 
+                        // Jika role = "guru", tampilkan untuk SEMUA user yang sudah login (punya jabatan)
+                        if (requiredRole === "guru") {
+                            if (userJabatan === "") return; // Belum login -> Hide
+                        } 
+                        // Jika role spesifik (misal "kepala"), cek jabatannya
+                        else {
+                            if (userJabatan === "") return; // Belum login -> Hide
+                            if (!userJabatan.includes(requiredRole)) return; // Jabatan beda -> Hide
+                        }
                     }
 
+                    // -- RENDER KARTU --
                     const parentKey = item.judul.toLowerCase().trim();
                     const hasChildren = this.menuMap[parentKey] && this.menuMap[parentKey].length > 0;
                     const color = item.warna || 'blue';
@@ -389,13 +374,16 @@
 
                     let tag = 'a';
                     let attrs = `href="${item.url}" target="_blank"`;
-                    const safeTitle = item.judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                    const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
                     
                     if (hasChildren) {
-                        tag = 'button'; attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`;
+                        tag = 'button'; 
+                        // Escape quotes for onclick
+                        const safeTitle = item.judul.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
+                        attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`;
                     } else if (!item.url || item.url.trim().length < 1) {
-                        tag = 'button'; attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`;
+                        tag = 'button'; 
+                        attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`;
                     }
 
                     const isWide = (item.ukuran || '').toLowerCase() === 'wide';
@@ -418,6 +406,7 @@
                     container.insertAdjacentHTML('beforeend', html);
                 });
 
+                // 5. Render Info Running Text
                 const annArea = document.getElementById('announcement-area');
                 if (info) {
                     if (info.status === 'ON') {
@@ -429,6 +418,7 @@
                     this.checkFlyer(info);
                 }
 
+                // 6. Render Footer
                 const footContainer = document.getElementById('footer-links-container');
                 footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
                 lucide.createIcons();
@@ -468,16 +458,24 @@
             openModal: function(id) {
                 const el = document.getElementById(id);
                 if (!el) return;
+                
                 if (id === 'feedback-modal') {
                     const s = localStorage.getItem('guru_profile');
-                    if(s) { const p = JSON.parse(s); document.getElementById('fb-nama').value = p.nama || ''; }
+                    if(s) {
+                        const p = JSON.parse(s);
+                        document.getElementById('fb-nama').value = p.nama || '';
+                    }
                 }
+
                 el.classList.remove('hidden'); 
                 void el.offsetWidth; 
                 const overlay = el.querySelector('.modal-overlay');
                 const content = el.querySelector('.modal-content');
                 if (overlay) overlay.classList.remove('opacity-0');
-                if (content) { content.classList.remove('opacity-0', 'scale-95', 'translate-y-full'); content.classList.add('scale-100', 'translate-y-0'); }
+                if (content) {
+                    content.classList.remove('opacity-0', 'scale-95', 'translate-y-full');
+                    content.classList.add('scale-100', 'translate-y-0');
+                }
             },
 
             closeModal: function(id) {
@@ -486,7 +484,10 @@
                 const overlay = el.querySelector('.modal-overlay');
                 const content = el.querySelector('.modal-content');
                 if (overlay) overlay.classList.add('opacity-0');
-                if (content) { content.classList.add('opacity-0', 'scale-95'); if(id.includes('submenu') || id.includes('install')) content.classList.add('translate-y-full'); }
+                if (content) {
+                    content.classList.add('opacity-0', 'scale-95');
+                    if(id.includes('submenu') || id.includes('install')) content.classList.add('translate-y-full');
+                }
                 setTimeout(() => { el.classList.add('hidden'); }, 300);
             },
 
