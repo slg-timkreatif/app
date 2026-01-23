@@ -34,17 +34,23 @@
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Animasi Background Blob */
         @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
         .blob-2 { bottom: -10%; right: -10%; width: 350px; height: 350px; background: #e0e7ff; animation: float 12s infinite alternate-reverse; } 
         .dark .blob-1 { background: #172554; opacity: 0.3; } 
         .dark .blob-2 { background: #312e81; opacity: 0.3; }
+
+        /* Transisi Modal yang Halus */
         .modal-overlay { transition: opacity 0.3s ease; }
-        .modal-content { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease; }
+        /* Hybrid Transition: Slide Up on Mobile, Scale on Desktop handled via Tailwind classes */
+        .modal-content { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
 
-        /* --- [BARU] Style untuk Pesan Toast Back Button --- */
+        /* Toast Back Button */
         #exit-toast {
             visibility: hidden;
             min-width: 250px;
@@ -64,13 +70,9 @@
             transition: all 0.3s ease-in-out;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255,255,255,0.1);
-            pointer-events: none; /* Agar klik tembus */
+            pointer-events: none;
         }
-        #exit-toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 50px;
-        }
+        #exit-toast.show { visibility: visible; opacity: 1; bottom: 50px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen overflow-hidden flex flex-col relative transition-colors duration-500">
@@ -107,7 +109,7 @@
                     <p class="text-[10px] font-bold text-slate-400 uppercase px-2 mb-2">Pintasan</p>
                     <button onclick="app.openModal('profile-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="user-cog" class="w-4 h-4"></i> Edit Profil</button>
                     <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="help-circle" class="w-4 h-4"></i> Bantuan & Laporan</button>
-                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="cloud-lightning" class="w-4 h-4"></i> Cek Update App</button>
+                    <button onclick="app.resetApp()" id="btn-reset-sidebar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="rocket" class="w-4 h-4"></i> Optimasi Sistem</button>
                 </div>
             </div>
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-white/30 dark:bg-slate-800/30">
@@ -180,9 +182,10 @@
         </main>
     </div>
 
-    <div id="profile-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div id="profile-modal" class="fixed inset-0 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-2xl relative z-10 p-6 transform scale-95 opacity-0 modal-content transition-all duration-300">
+        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-sm rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 p-6 md:p-8 transform translate-y-full md:translate-y-0 md:scale-95 md:opacity-0 modal-content transition-all duration-300">
+            <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6 md:hidden"></div>
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold text-slate-800 dark:text-white">Profil Pengguna</h3>
                 <button onclick="app.closeModal('profile-modal')" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -209,11 +212,31 @@
                 <div class="pt-2">
                     <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
                     <div class="grid grid-cols-2 gap-3 mt-3">
-                        <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="cloud-lightning" class="w-4 h-4"></i><span>Cek Update App</span></button>
-                        <button type="button" onclick="app.confirmLogout()" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar Akun</span></button>
+                        <button type="button" onclick="app.resetApp()" id="btn-reset-profile" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="rocket" class="w-4 h-4"></i><span>Optimasi</span></button>
+                        <button type="button" onclick="app.confirmLogout()" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar</span></button>
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="feedback-modal" class="fixed inset-0 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('feedback-modal')"></div>
+        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform translate-y-full md:translate-y-0 md:scale-95 md:opacity-0 modal-content transition-all duration-300">
+            <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mt-4 mb-2 md:hidden"></div>
+            <div class="bg-slate-50 dark:bg-slate-900/50 p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                <div><h3 class="text-lg font-bold text-slate-800 dark:text-white">Pusat Bantuan</h3><p class="text-slate-400 text-xs">Kirim saran atau laporan bug.</p></div>
+                <button onclick="app.closeModal('feedback-modal')" class="p-2 bg-white dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-6">
+                <form onsubmit="app.submitFeedback(event)" class="space-y-4">
+                    <div class="flex justify-center gap-2 mb-2" id="star-rating-group"><input type="hidden" name="rating" id="rating-input" value="5"><button type="button" onclick="app.setRating(1)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(2)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(3)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(4)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(5)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button></div>
+                    <div class="grid grid-cols-2 gap-3"><label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label><label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label></div>
+                    <div id="feedback-identity" class="grid grid-cols-2 gap-3 transition-opacity duration-300"><input type="text" name="pengirim" id="fb-nama" placeholder="Nama Anda" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"><input type="text" name="kontak" id="fb-kontak" placeholder="No WA / Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"></div>
+                    <textarea name="pesan" required rows="3" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none dark:text-white" placeholder="Tulis pesan Anda..."></textarea>
+                    <div class="flex items-center justify-between pt-2"><label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500 font-medium">Kirim Anonim</span></label><button type="submit" id="btn-feedback-submit" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2 text-sm"><span>Kirim</span><i data-lucide="send" class="w-4 h-4"></i></button></div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -239,25 +262,6 @@
                 <button onclick="app.closeModal('submenu-modal')" class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div id="submenu-list" class="p-6 overflow-y-auto space-y-4 pb-12"></div>
-        </div>
-    </div>
-
-    <div id="feedback-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('feedback-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform scale-95 opacity-0 modal-content">
-            <div class="bg-slate-50 dark:bg-slate-900/50 p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
-                <div><h3 class="text-lg font-bold text-slate-800 dark:text-white">Pusat Bantuan</h3><p class="text-slate-400 text-xs">Kirim saran atau laporan bug.</p></div>
-                <button onclick="app.closeModal('feedback-modal')" class="p-2 bg-white dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div class="p-6">
-                <form onsubmit="app.submitFeedback(event)" class="space-y-4">
-                    <div class="flex justify-center gap-2 mb-2" id="star-rating-group"><input type="hidden" name="rating" id="rating-input" value="5"><button type="button" onclick="app.setRating(1)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(2)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(3)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(4)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button><button type="button" onclick="app.setRating(5)"><i data-lucide="star" class="w-8 h-8 text-yellow-400 fill-yellow-400"></i></button></div>
-                    <div class="grid grid-cols-2 gap-3"><label class="cursor-pointer"><input type="radio" name="tipe" value="Saran" class="peer sr-only" checked><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition">💡 Saran</div></label><label class="cursor-pointer"><input type="radio" name="tipe" value="Bug" class="peer sr-only"><div class="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-center text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-red-500 peer-checked:bg-red-50 dark:peer-checked:bg-red-900/30 peer-checked:text-red-600 dark:peer-checked:text-red-400 transition">🐞 Error</div></label></div>
-                    <div id="feedback-identity" class="grid grid-cols-2 gap-3 transition-opacity duration-300"><input type="text" name="pengirim" id="fb-nama" placeholder="Nama Anda" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"><input type="text" name="kontak" id="fb-kontak" placeholder="No WA / Email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"></div>
-                    <textarea name="pesan" required rows="3" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none dark:text-white" placeholder="Tulis pesan Anda..."></textarea>
-                    <div class="flex items-center justify-between pt-2"><label class="flex items-center gap-2 cursor-pointer select-none"><input type="checkbox" id="anonim-check" name="isAnonim" class="w-4 h-4 rounded border-slate-300" onchange="app.toggleAnonim()"><span class="text-sm text-slate-500 font-medium">Kirim Anonim</span></label><button type="submit" id="btn-feedback-submit" class="bg-slate-900 dark:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2 text-sm"><span>Kirim</span><i data-lucide="send" class="w-4 h-4"></i></button></div>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -288,113 +292,144 @@
     
     <div id="exit-toast">Tekan sekali lagi untuk keluar</div>
 
+    <div id="update-overlay" class="fixed inset-0 z-[100] bg-slate-900 text-white flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-500">
+        <div class="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
+            <div class="absolute top-10 left-10 w-32 h-32 bg-blue-500 rounded-full blur-[80px] animate-pulse"></div>
+            <div class="absolute bottom-10 right-10 w-40 h-40 bg-purple-500 rounded-full blur-[80px] animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+        <div class="relative z-10 text-center px-8 w-full max-w-sm">
+            <div class="w-24 h-24 mx-auto mb-8 relative">
+                <div class="absolute inset-0 bg-blue-500 blur-2xl opacity-20 animate-pulse"></div>
+                <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full rounded-2xl relative z-10 shadow-2xl animate-bounce" style="animation-duration: 3s;">
+                <div class="absolute -bottom-2 -right-2 bg-green-500 text-slate-900 p-1.5 rounded-full border-4 border-slate-900 shadow-lg"><i data-lucide="zap" class="w-5 h-5 fill-current"></i></div>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 tracking-tight">Optimasi Sistem</h2>
+            <p id="update-status-text" class="text-slate-400 text-sm font-mono mb-8 h-5">Menginisialisasi...</p>
+            <div class="w-full bg-slate-800 rounded-full h-1.5 mb-2 overflow-hidden border border-slate-700">
+                <div id="update-progress-bar" class="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-full transition-all duration-300 ease-out w-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                <span>Proses</span>
+                <span id="update-percent">0%</span>
+            </div>
+        </div>
+    </div>
+
     <script>
         const app = {
-            // !!! GANTI DENGAN URL DEPLOYMENT KODE.GS YANG BARU !!!
+            // !!! GANTI DENGAN URL DEPLOYMENT KODE.GS ANDA !!!
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
             deferredPrompt: null,
             menuMap: {},
-            
-            // [BARU] Variable logic back button
             backPressedTime: 0, 
             modalList: ['profile-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal'],
 
             init: function() {
                 this.initTheme();
-                // FIX: Icon dibuat di awal agar tidak error saat dipanggil refreshData
                 lucide.createIcons();
                 this.loadProfile();
                 
-                // STRATEGI 1: Tampilkan Cache
                 const cached = localStorage.getItem('app_cache');
                 if (cached) { 
                     try { 
                         this.render(JSON.parse(cached)); 
                         const container = document.getElementById('dynamic-menu-container');
-                        if(container && container.innerHTML.includes('animate-pulse')) {
-                            container.innerHTML = ''; 
-                        }
+                        if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; 
                     } catch(e) {} 
                 }
                 
-                // STRATEGI 2: Update Data Baru
                 this.refreshData();
                 this.trackUser(); 
                 this.setupInstallPrompt();
-                
-                // [BARU] Aktifkan logic Back Button
                 this.setupBackButton();
             },
 
-            // --- [BARU] FUNGSI LOGIKA TOMBOL BACK ---
-            setupBackButton: function() {
-                // 1. Trap history agar back tidak langsung close
-                window.history.pushState(null, null, window.location.href);
-
-                // 2. Listener saat tombol back ditekan
-                window.addEventListener('popstate', (event) => {
-                    // Cek Modal
-                    let modalOpen = false;
-                    for (let id of this.modalList) {
-                        const el = document.getElementById(id);
-                        if (el && !el.classList.contains('hidden')) {
-                            this.closeModal(id);
-                            modalOpen = true;
-                            break; 
-                        }
-                    }
-
-                    if (modalOpen) {
-                        // Jika tutup modal, pasang trap lagi
-                        window.history.pushState(null, null, window.location.href);
-                    } else {
-                        // Jika di halaman utama
-                        const now = new Date().getTime();
-                        if (now - this.backPressedTime < 2000) {
-                            // Back 2x cepat -> Keluar (jangan pushState)
-                            return; 
-                        } else {
-                            // Back 1x -> Toast & Trap lagi
-                            this.backPressedTime = now;
-                            this.showToast();
-                            window.history.pushState(null, null, window.location.href);
-                        }
-                    }
+            // --- FUNGSI UPDATE V2.0 (Optimasi Sistem) ---
+            confirmUpdate: function() {
+                const title = "Penyegaran Sistem";
+                const msg = "Aplikasi akan memuat ulang sistem untuk membersihkan cache dan menyinkronkan data terbaru. Lanjutkan?";
+                document.getElementById('dialog-icon-bg').className = "w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-indigo-100 text-indigo-600 shadow-inner animate-pulse";
+                document.getElementById('dialog-icon').setAttribute('data-lucide', 'rocket');
+                lucide.createIcons();
+                this.showAlert('info', title, msg, () => {
+                    this.processUpdateAnimation();
                 });
             },
 
-            showToast: function() {
-                const x = document.getElementById("exit-toast");
-                if(x) {
-                    x.classList.add("show");
-                    setTimeout(function(){ x.classList.remove("show"); }, 2000);
-                }
+            processUpdateAnimation: async function() {
+                const overlay = document.getElementById('update-overlay');
+                const bar = document.getElementById('update-progress-bar');
+                const txt = document.getElementById('update-status-text');
+                const pct = document.getElementById('update-percent');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 50);
+
+                const updateStep = (text, percent, delay) => {
+                    return new Promise(resolve => {
+                        txt.innerText = text;
+                        bar.style.width = percent + '%';
+                        pct.innerText = percent + '%';
+                        setTimeout(resolve, delay);
+                    });
+                };
+
+                await updateStep("Memeriksa Koneksi...", 15, 800);
+                
+                try {
+                    txt.innerText = "Membersihkan Cache Lama...";
+                    if ('caches' in window) {
+                        const keys = await caches.keys();
+                        await Promise.all(keys.map(k => caches.delete(k)));
+                    }
+                    if ('serviceWorker' in navigator) {
+                        const regs = await navigator.serviceWorker.getRegistrations();
+                        for (let r of regs) await r.unregister();
+                    }
+                } catch (e) { console.log("Cache error", e); }
+                
+                await updateStep("Sinkronisasi Database...", 45, 1000); 
+                await updateStep("Menyusun Ulang Tampilan...", 75, 800);
+                await updateStep("Finalisasi Optimasi...", 100, 600);
+
+                txt.innerText = "Selesai! Memuat Ulang...";
+                txt.classList.add("text-green-400");
+                setTimeout(() => { window.location.reload(true); }, 500);
             },
+
+            resetApp: function() { this.confirmUpdate(); },
             // ----------------------------------------
 
+            // --- REFRESH DATA DENGAN SKELETON PULSE ---
             refreshData: function() {
                 const btn = document.getElementById('refresh-btn');
                 const status = document.getElementById('sync-status');
                 const menuContainer = document.getElementById('dynamic-menu-container');
                 const loadingText = document.getElementById('loading-text');
                 
-                // Safety check untuk icon
                 let icon = null;
                 if(btn) {
-                    icon = btn.querySelector('svg');
-                    // Jika svg belum ada (karena lucide belum render), cari tag i
-                    if(!icon) icon = btn.querySelector('i');
+                    icon = btn.querySelector('svg') || btn.querySelector('i');
+                }
+                if(icon) icon.classList.add('animate-spin');
+
+                if(status) { 
+                    status.classList.remove('hidden'); status.classList.add('flex'); 
+                    status.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Menghubungkan...'; 
+                    lucide.createIcons(); 
                 }
 
-                if(icon) icon.classList.add('animate-spin');
-                if(status) { status.classList.remove('hidden'); status.classList.add('flex'); status.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Menghubungkan...'; lucide.createIcons(); }
+                // SKELETON LOADING (Responsive Grid)
+                const skeletonHTML = `
+                    <div class="col-span-2 h-40 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div>
+                    <div class="col-span-1 h-32 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div>
+                    <div class="col-span-1 h-32 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div>
+                    <div class="col-span-1 h-32 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div>
+                    <div class="col-span-1 h-32 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div>
+                `;
+                if(menuContainer) menuContainer.innerHTML = skeletonHTML;
 
                 const slowTimer = setTimeout(() => {
-                    if(loadingText) {
-                        loadingText.innerText = "Menyiapkan Database... (Mohon Tunggu)";
-                        loadingText.classList.add("text-blue-500");
-                    }
                     if(status) {
                         status.innerHTML = '<i data-lucide="wifi" class="w-3 h-3 animate-pulse"></i> Sinyal Lemah...';
                         lucide.createIcons();
@@ -412,29 +447,115 @@
                     .catch(e => {
                         clearTimeout(slowTimer);
                         console.log("Offline/Error:", e);
-                        
                         if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); }
-
                         if(!localStorage.getItem('app_cache')) {
-                            menuContainer.innerHTML = 
-                                '<div class="col-span-2 md:col-span-4 text-center p-8 bg-red-50 dark:bg-red-900/30 rounded-3xl border border-red-100 dark:border-red-800"><i data-lucide="wifi-off" class="w-8 h-8 text-red-400 mx-auto mb-3"></i><p class="text-red-600 dark:text-red-300 font-bold mb-1">Gagal Memuat Data</p><p class="text-xs text-red-400 dark:text-red-400 mb-4">Pastikan URL Script benar & Internet lancar.</p><button onclick="location.reload()" class="px-5 py-2.5 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition">Coba Lagi</button></div>';
+                            menuContainer.innerHTML = '<div class="col-span-2 md:col-span-4 text-center p-8 bg-red-50 dark:bg-red-900/30 rounded-3xl border border-red-100 dark:border-red-800"><i data-lucide="wifi-off" class="w-8 h-8 text-red-400 mx-auto mb-3"></i><p class="text-red-600 dark:text-red-300 font-bold mb-1">Gagal Memuat Data</p><button onclick="app.refreshData()" class="mt-3 px-5 py-2 bg-red-600 text-white rounded-xl text-xs font-bold">Coba Lagi</button></div>';
                             lucide.createIcons();
+                        } else {
+                            this.render(JSON.parse(localStorage.getItem('app_cache')));
                         }
                     })
                     .finally(() => {
                         setTimeout(() => { 
-                            // Re-query icon karena Lucide mungkin sudah me-render ulang
                             const currentIcon = document.getElementById('refresh-btn')?.querySelector('svg');
                             if(currentIcon) currentIcon.classList.remove('animate-spin');
-                            
-                            if(status) { 
-                                setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000);
-                            }
+                            if(status) { setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000); }
                         }, 500);
                     });
             },
+            
+            // --- LOGIKA MODAL OPEN (HYBRID) ---
+            openModal: function(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                
+                // Set isi form feedback jika ada profil
+                if (id === 'feedback-modal') {
+                    const s = localStorage.getItem('guru_profile');
+                    if (s) {
+                        const p = JSON.parse(s);
+                        document.getElementById('fb-nama').value = p.nama || '';
+                    }
+                }
+                
+                el.classList.remove('hidden');
+                void el.offsetWidth; // Trigger reflow
+                
+                const overlay = el.querySelector('.modal-overlay');
+                const content = el.querySelector('.modal-content');
+                
+                if (overlay) overlay.classList.remove('opacity-0');
+                
+                if (content) {
+                    // Reset semua class transisi
+                    content.classList.remove('opacity-0', 'scale-95', 'translate-y-full');
+                    // Tambahkan class aktif (Responsive via CSS sudah handle sisanya)
+                    content.classList.add('translate-y-0', 'scale-100', 'opacity-100');
+                }
+                
+                // History Push (Agar bisa di-Back)
+                window.history.pushState(null, null, window.location.href);
+            },
+            
+            // --- LOGIKA MODAL CLOSE (HYBRID) ---
+            closeModal: function(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                
+                const overlay = el.querySelector('.modal-overlay');
+                const content = el.querySelector('.modal-content');
+                
+                if (overlay) overlay.classList.add('opacity-0');
+                
+                if (content) {
+                    // Kembalikan ke state awal (Hidden)
+                    content.classList.remove('translate-y-0', 'scale-100', 'opacity-100');
+                    content.classList.add('opacity-0'); // Desktop fade out
+                    
+                    // Untuk Bottom Sheet Mobile (Slide Down)
+                    if (id.includes('submenu') || id.includes('install') || id === 'profile-modal' || id === 'feedback-modal') {
+                        content.classList.add('translate-y-full');
+                        content.classList.add('scale-95'); // Desktop scale out
+                    } else {
+                        content.classList.add('scale-95');
+                    }
+                }
+                setTimeout(() => { el.classList.add('hidden'); }, 300);
+            },
 
-            // --- FUNGSI LAINNYA ---
+            // --- LOGIKA BACK BUTTON ---
+            setupBackButton: function() {
+                window.history.pushState(null, null, window.location.href);
+                window.addEventListener('popstate', (event) => {
+                    let modalOpen = false;
+                    for (let id of this.modalList) {
+                        const el = document.getElementById(id);
+                        if (el && !el.classList.contains('hidden')) {
+                            this.closeModal(id);
+                            modalOpen = true;
+                            break; 
+                        }
+                    }
+                    if (modalOpen) {
+                        window.history.pushState(null, null, window.location.href);
+                    } else {
+                        const now = new Date().getTime();
+                        if (now - this.backPressedTime < 2000) {
+                            return; 
+                        } else {
+                            this.backPressedTime = now;
+                            this.showToast();
+                            window.history.pushState(null, null, window.location.href);
+                        }
+                    }
+                });
+            },
+            showToast: function() {
+                const x = document.getElementById("exit-toast");
+                if(x) { x.classList.add("show"); setTimeout(function(){ x.classList.remove("show"); }, 2000); }
+            },
+
+            // --- STANDARD FUNCTIONS (UNCHANGED) ---
             trackUser: function() { const s=localStorage.getItem('guru_profile'); if(s){ const p=JSON.parse(s); fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email||'')}`).catch(()=>{}); } },
             render: function(data) {
                 const menuList = data.menu || [];
@@ -505,10 +626,13 @@
                         badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`;
                     }
 
+                    // Native Touch Effect: active:scale-95
+                    const touchEffect = "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95";
+
                     if (isWide) {
-                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">${badge}<div class="w-16 h-16 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 flex flex-col justify-center"><h4 class="font-bold text-base md:text-lg text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[11px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
+                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] hover:shadow-${color}-500/10 ${touchEffect}">${badge}<div class="w-16 h-16 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 flex flex-col justify-center"><h4 class="font-bold text-base md:text-lg text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[11px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
                     } else {
-                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] transition-all duration-300 hover:shadow-xl hover:shadow-${color}-500/10 hover:-translate-y-1 active:scale-95">${badge}<div class="w-14 h-14 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
+                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative group overflow-hidden bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] hover:shadow-${color}-500/10 ${touchEffect}">${badge}<div class="w-14 h-14 shrink-0 rounded-2xl bg-${color}-50 dark:bg-${color}-900/30 text-${color}-600 dark:text-${color}-400 flex items-center justify-center shadow-sm border border-${color}-100 dark:border-${color}-800/50 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300"><i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight mb-1">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`;
                     }
                 });
                 
@@ -525,15 +649,13 @@
                 this.checkFlyer(info);
 
                 const footContainer = document.getElementById('footer-links-container');
-                footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
+                footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2 active:scale-95"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
                 
                 lucide.createIcons();
             },
 
             checkFlyer: function(info) { const status=info.Pop_Status||info.pop_status; if(status==='ON'){ if(sessionStorage.getItem('flyer_shown_v1'))return; document.getElementById('flyer-title').textContent=info.Pop_Judul||info.pop_judul||'Informasi'; document.getElementById('flyer-msg').textContent=info.Pop_Pesan||info.pop_pesan||''; const gambar=info.Pop_Gambar||info.pop_gambar||''; const imgContainer=document.getElementById('flyer-image-container'); if(gambar&&gambar.length>5){ document.getElementById('flyer-img').src=gambar; imgContainer.classList.remove('hidden'); }else{ imgContainer.classList.add('hidden'); } setTimeout(()=>{ this.openModal('flyer-modal'); sessionStorage.setItem('flyer_shown_v1','true'); },1500); } },
             openSubmenu: function(title,icon,color) { const key=title.toLowerCase().trim(); const children=this.menuMap[key]||[]; if(children.length===0){ this.showAlert('error','Kosong','Menu ini belum diisi.'); return; } document.getElementById('submenu-title').textContent=title; const list=document.getElementById('submenu-list'); list.innerHTML=children.map(child=>`<a href="${child.url}" target="_blank" class="flex items-center gap-5 p-5 rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition active:scale-95 group shadow-sm hover:shadow-md"><div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-${color}-500 group-hover:scale-110 transition-transform"><i data-lucide="${child.icon||'link'}" class="w-6 h-6"></i></div><div class="flex-1"><h5 class="font-bold text-sm text-slate-700 dark:text-white mb-0.5">${child.judul}</h5><p class="text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div><i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-colors"></i></a>`).join(''); lucide.createIcons(); this.openModal('submenu-modal'); },
-            openModal: function(id) { const el=document.getElementById(id); if(!el)return; if(id==='feedback-modal'){ const s=localStorage.getItem('guru_profile'); if(s){ const p=JSON.parse(s); document.getElementById('fb-nama').value=p.nama||''; } } el.classList.remove('hidden'); void el.offsetWidth; const overlay=el.querySelector('.modal-overlay'); const content=el.querySelector('.modal-content'); if(overlay)overlay.classList.remove('opacity-0'); if(content){ content.classList.remove('opacity-0','scale-95','translate-y-full'); content.classList.add('scale-100','translate-y-0'); } },
-            closeModal: function(id) { const el=document.getElementById(id); if(!el)return; const overlay=el.querySelector('.modal-overlay'); const content=el.querySelector('.modal-content'); if(overlay)overlay.classList.add('opacity-0'); if(content){ content.classList.add('opacity-0','scale-95'); if(id.includes('submenu')||id.includes('install'))content.classList.add('translate-y-full'); } setTimeout(()=>{ el.classList.add('hidden'); },300); },
             showAlert: function(type,title,msg,onYes) { const bgColors={error:'bg-red-100 text-red-600',success:'bg-green-100 text-green-600',info:'bg-blue-100 text-blue-600'}; const icons={error:'alert-triangle',success:'check-circle',info:'info'}; document.getElementById('dialog-icon-bg').className=`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 ${bgColors[type]||bgColors.info} shadow-inner`; document.getElementById('dialog-icon').setAttribute('data-lucide',icons[type]||'info'); document.getElementById('dialog-title').textContent=title; document.getElementById('dialog-msg').textContent=msg; const actions=document.getElementById('dialog-actions'); if(onYes){ actions.innerHTML=`<div class="grid grid-cols-2 gap-3"><button onclick="app.closeModal('dialog-modal')" class="py-3 rounded-xl bg-slate-100 font-bold text-slate-500 text-sm">Batal</button><button id="dialog-confirm" class="py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg">Ya</button></div>`; document.getElementById('dialog-confirm').onclick=()=>{ onYes(); app.closeModal('dialog-modal'); }; }else{ actions.innerHTML=`<button onclick="app.closeModal('dialog-modal')" class="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-blue-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition">Mengerti</button>`; } lucide.createIcons(); this.openModal('dialog-modal'); },
             syncData: function() { const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='...'; btn.disabled=true; fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`).then(r=>r.json()).then(d=>{ if(d.status==='success'){ document.getElementById('input-nama').value=d.nama; document.getElementById('input-jabatan').value=d.jabatan; document.getElementById('input-instansi').value=d.instansi; const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); },
             saveProfile: function(e) { e.preventDefault(); const oldP=JSON.parse(localStorage.getItem('guru_profile')||"{}"); const p={ nama:document.getElementById('input-nama').value, jabatan:document.getElementById('input-jabatan').value, instansi:document.getElementById('input-instansi').value, email:oldP.email||document.getElementById('sync-email').value||"", foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.loadProfile(); this.closeModal('profile-modal'); setTimeout(()=>this.showAlert('success','Tersimpan','Profil diperbarui.'),350); },
@@ -543,7 +665,6 @@
             loadProfile: function() { const s=localStorage.getItem('guru_profile'); const setTxt=(id,txt)=>{ const el=document.getElementById(id); if(el)el.innerText=txt; }; const setSrc=(id,src)=>{ const el=document.getElementById(id); if(el)el.src=src; }; const setVal=(id,val)=>{ const el=document.getElementById(id); if(el)el.value=val; }; const show=(id)=>{ const el=document.getElementById(id); if(el)el.classList.remove('hidden'); }; const hide=(id)=>{ const el=document.getElementById(id); if(el)el.classList.add('hidden'); }; if(s){ const p=JSON.parse(s); setTxt('sidebar-user-name',p.nama); setTxt('sidebar-user-instansi',p.instansi); setTxt('welcome-message',"Halo, "+p.nama.split(' ')[0]+"!"); setSrc('sidebar-user-photo',p.foto); setSrc('header-user-photo',p.foto); setSrc('preview-photo',p.foto); setVal('input-nama',p.nama); setVal('input-jabatan',p.jabatan); setVal('input-instansi',p.instansi); if(p.email)setVal('sync-email',p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text',"Online"); const st=document.getElementById('sidebar-status-text'); if(st)st.className="text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan',p.jabatan); setTxt('sidebar-instansi',p.instansi); const badge=document.getElementById('user-status-badge'); if(badge){ badge.innerHTML='<span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> Online'; badge.classList.replace('text-slate-300','text-green-200'); } }else{ const badge=document.getElementById('user-status-badge'); if(badge){ badge.innerHTML='<span class="w-1.5 h-1.5 bg-slate-400 rounded-full"></span> Tamu'; badge.classList.replace('text-green-200','text-slate-300'); } setTxt('sidebar-status-text',"Belum Login"); const st=document.getElementById('sidebar-status-text'); if(st)st.className="text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); } },
             previewImage: function(i) { if(i.files&&i.files[0]){ const r=new FileReader(); r.onload=(e)=>document.getElementById('preview-photo').src=e.target.result; r.readAsDataURL(i.files[0]); } },
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
-            resetApp: async function() { if(!confirm("Aplikasi akan dimuat ulang untuk mengambil pembaruan sistem. Lanjutkan?"))return; const btn=document.getElementById('btn-reset-profile'); if(btn)btn.innerHTML='<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memproses...</span>'; try{ if('serviceWorker'in navigator){ const regs=await navigator.serviceWorker.getRegistrations(); for(let r of regs)await r.unregister(); } if('caches'in window){ const keys=await caches.keys(); await Promise.all(keys.map(k=>caches.delete(k))); } setTimeout(()=>window.location.reload(true),1000); }catch(e){ alert("Gagal reset otomatis. Silakan refresh browser manual."); window.location.reload(); } },
             toggleTheme: function() { const isDark=document.documentElement.classList.toggle('dark'); localStorage.setItem('theme',isDark?'dark':'light'); this.updateStatusBar(isDark); },
             initTheme: function() { const saved=localStorage.getItem('theme'); const isDark=saved==='dark'||(!saved&&window.matchMedia('(prefers-color-scheme: dark)').matches); if(isDark)document.documentElement.classList.add('dark'); this.updateStatusBar(isDark); },
             updateStatusBar: function(isDark) { document.getElementById('theme-color-meta').setAttribute('content',isDark?'#0f172a':'#f8fafc'); },
