@@ -133,7 +133,7 @@
                     
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-6 text-white shadow-xl shadow-blue-900/10 relative overflow-hidden group transition-all">
                         
-                        <i id="greeting-bg-icon" data-lucide="sun" class="absolute -bottom-6 -right-6 w-36 h-36 text-white opacity-15 rotate-12 pointer-events-none z-0 stroke-[1.5px]"></i>
+                        <i id="greeting-bg-icon" data-lucide="sun" class="absolute -bottom-4 -right-4 w-24 h-24 md:w-32 md:h-32 text-white opacity-10 rotate-12 pointer-events-none z-0 stroke-[1.5px]"></i>
 
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
                         
@@ -284,6 +284,7 @@
 
                 text.innerText = greet;
                 if(iconBg) iconBg.setAttribute('data-lucide', iconName);
+                // Ikon diperkecil (w-24/h-24), opacity turun 10%
                 card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-6 text-white shadow-xl shadow-blue-900/10 relative overflow-hidden group transition-all`;
                 lucide.createIcons();
             },
@@ -442,7 +443,7 @@
 
                 if (saved === 'dark') { isDark = true; }
                 else if (saved === 'light') { isDark = false; }
-                else if (isNight) { isDark = true; } // Auto dark mode jika belum ada setting manual
+                else if (isNight) { isDark = true; } 
                 else { isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; }
 
                 if (isDark) document.documentElement.classList.add('dark');
