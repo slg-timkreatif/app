@@ -13,16 +13,10 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
         .bg-grid { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; opacity: 0.5; }
         .hide-scroll::-webkit-scrollbar { display: none; }
-        /* Animasi Modal */
         .modal-content { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); transform: scale(0.95); opacity: 0; }
         .modal-open .modal-content { transform: scale(1); opacity: 1; }
         
-        /* Floating Save Button Area */
-        .floating-action-area {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            padding: 1rem; background: linear-gradient(to top, #ffffff 90%, transparent);
-            z-index: 40; pointer-events: none;
-        }
+        .floating-action-area { position: fixed; bottom: 0; left: 0; right: 0; padding: 1rem; background: linear-gradient(to top, #ffffff 90%, transparent); z-index: 40; pointer-events: none; }
         .floating-action-area button { pointer-events: auto; }
     </style>
 </head>
@@ -63,15 +57,15 @@
 
         <div id="view-menu" class="space-y-4 pb-20">
             <div class="flex justify-between items-center mb-2 px-1">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Daftar Menu Aktif</span>
-                <button onclick="app.editMenu(-1)" class="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md active:scale-95 transition"><i data-lucide="plus" class="w-4 h-4"></i> Menu Baru</button>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Manajemen Aplikasi</span>
+                <button onclick="app.editMenu(-1)" class="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md hover:bg-slate-800 active:scale-95 transition"><i data-lucide="plus" class="w-4 h-4"></i> Tambah Menu</button>
             </div>
             <div id="list-menu" class="space-y-3"></div>
         </div>
 
         <div id="view-info" class="hidden space-y-6 pb-24">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="font-bold text-sm mb-4 border-b border-slate-100 pb-3 flex items-center gap-2 text-slate-700"><i data-lucide="megaphone" class="w-4 h-4 text-blue-500"></i> Banner Informasi (Atas)</h3>
+                <h3 class="font-bold text-sm mb-4 border-b border-slate-100 pb-3 flex items-center gap-2 text-slate-700"><i data-lucide="megaphone" class="w-4 h-4 text-blue-500"></i> Banner Informasi</h3>
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Status</label><select id="inf-status" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-500"><option value="ON">ON (Tampil)</option><option value="OFF">OFF (Sembunyi)</option></select></div>
@@ -108,13 +102,11 @@
         </div>
 
         <div id="view-user" class="hidden h-full flex flex-col">
-            
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 mb-4 sticky top-0 z-20 flex flex-col gap-3">
                 <div class="relative w-full">
                     <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
                     <input type="text" id="search-user" onkeyup="app.renderUser()" placeholder="Cari Nama, NIP, atau Email..." class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 transition">
                 </div>
-                
                 <div class="grid grid-cols-2 gap-2">
                     <div class="relative w-full">
                         <select id="filter-unit" onchange="app.renderUser()" class="w-full pl-3 pr-6 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold text-slate-600 outline-none appearance-none truncate">
@@ -129,7 +121,6 @@
                         <i data-lucide="briefcase" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none"></i>
                     </div>
                 </div>
-                
                 <div class="flex justify-between items-center pt-1 border-t border-slate-50 mt-1">
                     <div class="flex items-center gap-2 overflow-x-auto hide-scroll">
                         <button onclick="app.setFilterStatus('all')" id="btn-status-all" class="px-3 py-1.5 rounded-full text-[10px] font-bold bg-slate-800 text-white whitespace-nowrap transition">Semua</button>
@@ -139,7 +130,6 @@
                     <span id="user-count" class="text-[10px] font-bold text-slate-400 shrink-0">Memuat...</span>
                 </div>
             </div>
-            
             <div id="list-user" class="space-y-3 pb-24"></div>
         </div>
 
@@ -196,7 +186,7 @@
             url: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
             data: {}, adminPin: "",
-            currentStatusFilter: 'all', // all, active, inactive
+            currentStatusFilter: 'all',
             
             init: function() {
                 if(localStorage.getItem('admin_pin')) {
@@ -229,7 +219,7 @@
                     this.data = d;
                     this.renderMenu();
                     this.renderInfo();
-                    this.initUserFilters(); // Siapkan dropdown
+                    this.initUserFilters();
                     this.renderUser();
                     this.renderFeedback();
                 })
@@ -248,34 +238,46 @@
                     btn.classList.add('text-slate-500');
                 });
                 document.getElementById(`view-${tab}`).classList.remove('hidden');
-                
                 const fab = document.getElementById('save-info-btn-container');
                 if(tab === 'info') fab.classList.remove('hidden'); else fab.classList.add('hidden');
-                
                 const active = document.getElementById(`tab-${tab}`);
                 active.classList.add('bg-white', 'shadow-sm', 'text-slate-800');
                 active.classList.remove('text-slate-500');
             },
             
-            // --- MENU FUNCTIONS ---
+            // --- MENU FUNCTIONS (PROFESSIONAL DESIGN) ---
             renderMenu: function() {
                 const c = document.getElementById('list-menu'); c.innerHTML = '';
                 (this.data.raw_menu || []).slice(1).forEach((r, i) => {
                     if(!r[0]) return;
-                    const isApp = r[10] === 'app';
-                    const badgeApp = isApp ? '<span class="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider">APP VIEW</span>' : '';
                     
+                    // Badges Logic
+                    const isApp = r[10] === 'app';
+                    const isMobile = (r[5] || '').toLowerCase() === 'mobile';
+                    const isGuru = (r[9] || '').toLowerCase() === 'guru';
+                    
+                    let badges = '';
+                    if(isApp) badges += '<span class="flex items-center gap-1 bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded text-[9px] font-bold"><i data-lucide="smartphone" class="w-2.5 h-2.5"></i> In-App</span>';
+                    if(isMobile) badges += '<span class="flex items-center gap-1 bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded text-[9px] font-bold"><i data-lucide="tablet-smartphone" class="w-2.5 h-2.5"></i> HP Only</span>';
+                    if(isGuru) badges += '<span class="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-[9px] font-bold"><i data-lucide="lock" class="w-2.5 h-2.5"></i> Guru</span>';
+
                     const div = document.createElement('div');
-                    div.className = "bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:border-blue-200 transition";
+                    div.className = "bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group hover:border-blue-200 hover:shadow-md transition cursor-default";
                     div.innerHTML = `
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-${r[4]}-50 text-${r[4]}-600 flex items-center justify-center border border-${r[4]}-100"><i data-lucide="${r[3]}" class="w-6 h-6"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2">${r[0]} ${badgeApp}</h4>
-                                <p class="text-xs text-slate-400 truncate max-w-[180px] mt-0.5">${r[1]}</p>
+                        <div class="flex items-start gap-4 overflow-hidden">
+                            <div class="w-12 h-12 shrink-0 rounded-xl bg-${r[4]}-50 text-${r[4]}-600 flex items-center justify-center border border-${r[4]}-100 shadow-sm">
+                                <i data-lucide="${r[3]}" class="w-6 h-6 stroke-[1.5]"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h4 class="font-bold text-sm text-slate-800 truncate">${r[0]}</h4>
+                                    ${r[8] ? `<span class="bg-red-500 text-white text-[9px] px-1.5 rounded font-bold">${r[8]}</span>` : ''}
+                                </div>
+                                <p class="text-[11px] text-slate-400 truncate max-w-[200px] mb-1.5">${r[1]}</p>
+                                <div class="flex gap-1.5 flex-wrap">${badges}</div>
                             </div>
                         </div>
-                        <button onclick="app.editMenu(${i + 1})" class="p-2.5 bg-slate-50 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button onclick="app.editMenu(${i + 1})" class="p-2.5 bg-slate-50 rounded-xl text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition border border-transparent hover:border-blue-100"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
                     `;
                     c.appendChild(div);
                 });
@@ -374,17 +376,15 @@
                 this.sendData(p);
             },
 
-            // --- USER FUNCTIONS (FILTER & STATUS) ---
+            // --- USER FUNCTIONS ---
             initUserFilters: function() {
                 const users = (this.data.users || []).slice(1);
                 
-                // Populate Unit
                 const unitSelect = document.getElementById('filter-unit');
                 unitSelect.innerHTML = '<option value="">Semua Sekolah</option>';
                 const units = [...new Set(users.map(u => u[4]).filter(Boolean))].sort();
                 units.forEach(u => unitSelect.add(new Option(u, u)));
 
-                // Populate Jabatan (Dinamis sesuai data)
                 const jabSelect = document.getElementById('filter-jabatan');
                 jabSelect.innerHTML = '<option value="">Semua Jabatan</option>';
                 const jobs = [...new Set(users.map(u => u[3]).filter(Boolean))].sort();
@@ -393,15 +393,10 @@
 
             setFilterStatus: function(status) {
                 this.currentStatusFilter = status;
-                
-                // Update Button Visuals
                 ['all', 'active', 'inactive'].forEach(k => {
                     const btn = document.getElementById(`btn-status-${k}`);
-                    if (k === status) {
-                        btn.className = "px-3 py-1.5 rounded-full text-[10px] font-bold bg-slate-800 text-white whitespace-nowrap transition shadow-md";
-                    } else {
-                        btn.className = "px-3 py-1.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 hover:bg-slate-200 whitespace-nowrap transition";
-                    }
+                    if (k === status) btn.className = "px-3 py-1.5 rounded-full text-[10px] font-bold bg-slate-800 text-white whitespace-nowrap transition shadow-md";
+                    else btn.className = "px-3 py-1.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-500 hover:bg-slate-200 whitespace-nowrap transition";
                 });
                 this.renderUser();
             },
@@ -411,16 +406,14 @@
                 const searchTerm = document.getElementById('search-user').value.toLowerCase();
                 const unitFilter = document.getElementById('filter-unit').value;
                 const jabFilter = document.getElementById('filter-jabatan').value;
-                
                 const users = (this.data.users || []).slice(1);
                 
                 const filtered = users.filter(u => {
                     const name = String(u[1]).toLowerCase();
                     const unit = String(u[4]); 
                     const jab = String(u[3]);
-                    const lastLogin = u[6] && u[6].length > 5; // True if active
+                    const lastLogin = u[6] && u[6].length > 5;
                     
-                    // Logic Filters
                     const matchSearch = name.includes(searchTerm) || unit.toLowerCase().includes(searchTerm) || String(u[0]).toLowerCase().includes(searchTerm);
                     const matchUnit = unitFilter === "" || unit === unitFilter;
                     const matchJab = jabFilter === "" || jab === jabFilter;
@@ -432,7 +425,6 @@
                     return matchSearch && matchUnit && matchJab && matchStatus;
                 });
 
-                // UPDATE COUNT DISPLAY
                 const countEl = document.getElementById('user-count');
                 if(countEl) countEl.innerText = `Menampilkan ${filtered.length} dari ${users.length} Data`;
 
