@@ -32,20 +32,19 @@
     <style>
         body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
-        /* --- CSS FIX: LAYOUT DESKTOP & ANTI MACET --- */
-        
-        /* 1. Paksa elemen hidden untuk hilang (Fix modal macet) */
+        /* 1. Aturan Global: Sembunyikan elemen hidden */
         .hidden { display: none !important; }
 
-        /* 2. BERI KARTU VIP UNTUK DESKTOP (Fix Sidebar & Menu Desktop Hilang) */
+        /* 2. Pengecualian Desktop: Paksa Elemen Desktop Muncul */
         @media (min-width: 768px) {
-            .md\:flex { display: flex !important; }     /* Sidebar & Menu pakai ini */
-            .md\:block { display: block !important; }   /* Jaga-jaga jika ada elemen block */
+            .md\:flex { display: flex !important; }
             #desktop-sidebar { display: flex !important; }
         }
-        /* ------------------------------------------- */
 
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 0px; }
+        
+        /* Animasi */
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -63,7 +62,7 @@
         
         #exit-toast {
             visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 50px;
-            padding: 12px 20px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%);
+            padding: 12px 20px; position: fixed; z-index: 100; left: 50%; bottom: 30px; transform: translateX(-50%);
             font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.3s ease-in-out;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.1); pointer-events: none;
         }
@@ -89,7 +88,7 @@
     
     <div id="main-layout" class="flex h-full w-full fade-in relative z-0">
         
-        <aside id="desktop-sidebar" class="hidden md:flex w-72 shrink-0 bg-white/70 dark:bg-darkcard/70 backdrop-blur-xl border-r border-white/50 dark:border-slate-700/50 flex-col z-20 shadow-sm transition-colors duration-300">
+        <aside id="desktop-sidebar" class="hidden md:flex w-72 shrink-0 bg-white/70 dark:bg-darkcard/70 backdrop-blur-xl border-r border-white/50 dark:border-slate-700/50 flex-col z-30 shadow-sm transition-colors duration-300">
             <div class="p-8 flex flex-col items-center border-b border-slate-100/50 dark:border-slate-700/50 text-center relative">
                 <div class="relative w-24 h-24 mb-4 group cursor-pointer transition-transform hover:scale-105" onclick="app.openModal('profile-modal')">
                     <img id="sidebar-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full rounded-full border-[3px] border-white dark:border-slate-600 shadow-xl object-cover">
@@ -284,7 +283,7 @@
     <div id="dialog-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4"><div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('dialog-modal')"></div><div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-2xl relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content transition-all duration-300"><div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-blue-100 text-blue-600 shadow-inner"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div><h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3><p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p><div id="dialog-actions" class="w-full"></div></div></div>
     <div id="browser-modal" class="fixed inset-0 z-[80] hidden flex flex-col bg-white dark:bg-slate-900 transition-colors duration-300"><div class="flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm shrink-0 z-10"><div class="flex items-center gap-3 overflow-hidden"><button onclick="app.closeModal('browser-modal')" class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300"><i data-lucide="arrow-left" class="w-6 h-6"></i></button><div class="flex flex-col"><h4 id="browser-title" class="font-bold text-sm text-slate-800 dark:text-slate-100 line-clamp-1">Memuat...</h4><span class="text-[10px] text-slate-400 flex items-center gap-1"><i data-lucide="shield-check" class="w-2.5 h-2.5"></i> Aman • Tampilan Aplikasi</span></div></div><div class="flex gap-2"><button onclick="document.getElementById('web-frame').contentWindow.location.reload()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button><a id="browser-external-link" href="#" target="_blank" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400"><i data-lucide="external-link" class="w-5 h-5"></i></a></div></div><div class="flex-1 relative w-full h-full bg-slate-50 dark:bg-slate-900"><div id="browser-loader" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-2 z-0"><i data-lucide="loader-2" class="w-8 h-8 animate-spin text-blue-500"></i><span class="text-xs font-medium">Memuat Halaman...</span></div><iframe id="web-frame" class="w-full h-full relative z-10 opacity-0 transition-opacity duration-500" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals" onload="this.classList.remove('opacity-0')"></iframe></div></div>
     
-    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
+    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
         <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         <i data-lucide="life-buoy" class="w-6 h-6 group-hover:animate-spin-slow relative z-10"></i>
     </button>
@@ -409,7 +408,7 @@
             checkFlyer: function(info) { const status = info.Pop_Status || info.pop_status; if (status === 'ON') { const today = new Date().toDateString(); const lastShown = localStorage.getItem('flyer_shown_date'); if (lastShown === today) return; document.getElementById('flyer-title').textContent = info.Pop_Judul || info.pop_judul || 'Informasi'; document.getElementById('flyer-msg').textContent = info.Pop_Pesan || info.pop_pesan || ''; const gambar = info.Pop_Gambar || info.pop_gambar || ''; const imgContainer = document.getElementById('flyer-image-container'); if (gambar && gambar.length > 5) { document.getElementById('flyer-img').src = gambar; imgContainer.classList.remove('hidden'); } else { imgContainer.classList.add('hidden'); } setTimeout(() => { app.openModal('flyer-modal'); localStorage.setItem('flyer_shown_date', today); }, 1500); } },
             openSubmenu: function(title,icon,color) { const key=title.toLowerCase().trim(); const children=this.menuMap[key]||[]; if(children.length===0){ this.showAlert('error','Kosong','Menu ini belum diisi.'); return; } document.getElementById('submenu-title').textContent=title; const list=document.getElementById('submenu-list'); list.innerHTML=children.map(child=>`<a href="${child.url}" target="_blank" class="flex items-center gap-5 p-5 rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition active:scale-95 group shadow-sm hover:shadow-md"><div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-${color}-500 group-hover:scale-110 transition-transform"><i data-lucide="${child.icon||'link'}" class="w-6 h-6"></i></div><div class="flex-1"><h5 class="font-bold text-sm text-slate-700 dark:text-white mb-0.5">${child.judul}</h5><p class="text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div><i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-colors"></i></a>`).join(''); lucide.createIcons(); this.openModal('submenu-modal'); },
             showAlert: function(type,title,msg,onYes) { const bgColors={error:'bg-red-100 text-red-600',success:'bg-green-100 text-green-600',info:'bg-blue-100 text-blue-600'}; const icons={error:'alert-triangle',success:'check-circle',info:'info'}; document.getElementById('dialog-icon-bg').className=`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 ${bgColors[type]||bgColors.info} shadow-inner`; document.getElementById('dialog-icon').setAttribute('data-lucide',icons[type]||'info'); document.getElementById('dialog-title').textContent=title; document.getElementById('dialog-msg').textContent=msg; const actions=document.getElementById('dialog-actions'); if(onYes){ actions.innerHTML=`<div class="grid grid-cols-2 gap-3"><button onclick="app.closeModal('dialog-modal')" class="py-3 rounded-xl bg-slate-100 font-bold text-slate-500 text-sm">Batal</button><button id="dialog-confirm" class="py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg">Ya</button></div>`; document.getElementById('dialog-confirm').onclick=()=>{ onYes(); app.closeModal('dialog-modal'); }; }else{ actions.innerHTML=`<button onclick="app.closeModal('dialog-modal')" class="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-blue-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition">Mengerti</button>`; } lucide.createIcons(); this.openModal('dialog-modal'); },
-            syncData: function() { const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='...'; btn.disabled=true; fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`).then(r=>r.json()).then(d=>{ if(d.status==='success'){ document.getElementById('input-nama').value=d.nama; document.getElementById('input-jabatan').value=d.jabatan; document.getElementById('input-instansi').value=d.instansi; const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); this.loadProfile(); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); },
+            syncData: function() { const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='...'; btn.disabled=true; fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' }).then(r=>r.json()).then(d=>{ if(d.status==='success'){ document.getElementById('input-nama').value=d.nama; document.getElementById('input-jabatan').value=d.jabatan; document.getElementById('input-instansi').value=d.instansi; const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); this.loadProfile(); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); },
             saveProfile: function(e) { e.preventDefault(); const oldP=JSON.parse(localStorage.getItem('guru_profile')||"{}"); const p={ nama:document.getElementById('input-nama').value, jabatan:document.getElementById('input-jabatan').value, instansi:document.getElementById('input-instansi').value, email:oldP.email||document.getElementById('sync-email').value||"", foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.loadProfile(); this.closeModal('profile-modal'); setTimeout(()=>this.showAlert('success','Tersimpan','Profil diperbarui.'),350); },
             setRating: function(v) { document.getElementById('rating-input').value=v; const buttons=document.getElementById('star-rating-group').querySelectorAll('button'); buttons.forEach((btn,index)=>{ const icon=btn.querySelector('svg')||btn.querySelector('i'); if(icon){ if(index<v){ icon.classList.add('text-yellow-400','fill-yellow-400'); icon.classList.remove('text-slate-300'); }else{ icon.classList.remove('text-yellow-400','fill-yellow-400'); icon.classList.add('text-slate-300'); } } }); },
             
@@ -428,7 +427,6 @@
                 } 
             },
             
-            // --- FIRE AND FORGET LOGIC (100% SUKSES) ---
             submitFeedback: function(e) { 
                 e.preventDefault(); 
                 const btn = document.getElementById('btn-feedback-submit'); 
