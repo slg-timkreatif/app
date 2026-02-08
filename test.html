@@ -253,7 +253,7 @@
                 <button onclick="app.closeModal('feedback-modal')" class="p-2 bg-white dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="p-6 space-y-6">
-                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Guru%20Berbagi,%20saya%20butuh%20bantuan." target="_blank" class="flex items-center gap-4 p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 hover:bg-green-100 dark:hover:bg-green-900/40 transition group">
+                <a href="https://wa.me/6285647059039?text=Halo%20Admin%20Guru%20Berbagi,%20saya%20butuh%20bantuan." target="_blank" class="flex items-center gap-4 p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 hover:bg-green-100 dark:hover:bg-green-900/40 transition group">
                     <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-green-500/30 group-hover:scale-110 transition-transform"><i data-lucide="message-circle" class="w-6 h-6 fill-current"></i></div>
                     <div><h4 class="font-bold text-slate-800 dark:text-white">Chat Admin via WA</h4><p class="text-xs text-slate-500 dark:text-green-300/70">Respon cepat via WhatsApp.</p></div>
                     <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 ml-auto"></i>
@@ -307,9 +307,9 @@
             modalList: ['profile-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
 
             init: function() {
-                this.initTheme(); // DIPULIHKAN
+                this.initTheme(); 
                 lucide.createIcons(); 
-                this.loadProfile(); // DIPULIHKAN
+                this.loadProfile();
                 const scrollArea = document.getElementById('main-scroll-area');
                 scrollArea.addEventListener('scroll', () => {
                     const banner = document.getElementById('announcement-area');
@@ -326,7 +326,7 @@
                 this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); this.updateGreeting(); setInterval(() => this.updateGreeting(), 60000); 
             },
 
-            // --- FUNCTION UTAMA: RENDER (FIXED: SQUIRCLE COLORFUL) ---
+            // --- FUNCTION RENDER (V12: SQUIRCLE ICON + GLASS CARD) ---
             render: function(data) {
                 const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info || {}; const quotes = data.quotes || [];
                 if (quotes.length > 0) { const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]; const qText = document.getElementById('quote-text'); const qAuth = document.getElementById('quote-author'); if(qText) qText.innerText = `"${randomQuote.text}"`; if(qAuth) qAuth.innerText = `- ${randomQuote.author}`; }
@@ -352,7 +352,7 @@
                     const glassEffect = "bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60"; 
                     const hoverEffect = `hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300 group`;
                     
-                    // ICON STYLE: V8 - SQUIRCLE GRADIENT (KOTAK TUMPUL WARNA-WARNI)
+                    // ICON STYLE: SQUIRCLE GRADIENT
                     const iconClass = `w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-${color}-500 to-${color}-600 text-white flex items-center justify-center shadow-lg shadow-${color}-500/30 border border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`;
                     
                     if (isWide) { 
@@ -375,13 +375,13 @@
                     annArea.innerHTML = `<div class="${theme} backdrop-blur-lg bg-opacity-90 dark:bg-slate-800 dark:text-slate-200 border-l-4 py-3 px-4 rounded-xl shadow-lg flex justify-between items-center gap-3 text-sm"><div class="flex items-center gap-3 w-full overflow-hidden"><i data-lucide="info" class="w-5 h-5 shrink-0"></i>${contentHTML}</div><button onclick="app.closeBanner()" class="p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition shrink-0"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
                     annArea.classList.remove('hidden');
                 } else { annArea.classList.add('hidden'); }
-                this.checkFlyer(info); // DIPULIHKAN
+                this.checkFlyer(info);
                 const footContainer = document.getElementById('footer-links-container');
                 footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2 active:scale-95"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
                 lucide.createIcons();
             },
 
-            // --- FUNGSI TEMA (DIPULIHKAN) ---
+            // --- FUNGSI TEMA ---
             initTheme: function() {
                 const saved = localStorage.getItem('theme');
                 const hour = new Date().getHours();
@@ -407,15 +407,57 @@
                 const meta = document.getElementById('theme-color-meta');
                 if (meta) meta.setAttribute('content', isDark ? '#0f172a' : '#f8fafc');
             },
+
+            // --- FUNGSI PROFIL & LOGIN (DIPULIHKAN & DIJAMIN ADA) ---
+            loadProfile: function() {
+                const s = localStorage.getItem('guru_profile');
+                const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
+                const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
+                const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
+                const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); };
+                const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); };
+                const statusDot = document.getElementById('status-indicator');
+                const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; if(isLocked) el.classList.add('bg-slate-100', 'text-slate-500'); else el.classList.remove('bg-slate-100', 'text-slate-500'); } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); };
+                if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setTxt('sidebar-user-instansi', p.instansi); setSrc('sidebar-user-photo', p.foto); setSrc('header-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(statusDot) { statusDot.classList.remove('bg-red-400'); statusDot.classList.add('bg-green-400'); statusDot.title = "Online"; } if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } 
+                else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); if(statusDot) { statusDot.classList.remove('bg-green-400'); statusDot.classList.add('bg-red-400'); statusDot.title = "Tamu"; } lockFields(false); }
+            },
+
+            syncData: function() { 
+                const email=document.getElementById('sync-email').value; 
+                const pin=document.getElementById('sync-pin').value; 
+                const btn=document.getElementById('btn-sync'); 
+                
+                if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } 
+                
+                const oldTxt=btn.innerHTML; 
+                btn.innerHTML='...'; 
+                btn.disabled=true; 
+                
+                fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' })
+                .then(r=>r.json())
+                .then(d=>{ 
+                    if(d.status==='success'){ 
+                        document.getElementById('input-nama').value=d.nama; 
+                        document.getElementById('input-jabatan').value=d.jabatan; 
+                        document.getElementById('input-instansi').value=d.instansi; 
+                        const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; 
+                        localStorage.setItem('guru_profile',JSON.stringify(p)); 
+                        this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); 
+                        this.loadProfile(); 
+                    } else { 
+                        this.showAlert('error','Gagal',d.message); 
+                    } 
+                })
+                .catch(()=>this.showAlert('error','Error','Koneksi gagal'))
+                .finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); 
+            },
             
-            // --- FUNGSI CHECK FLYER (DIPULIHKAN) ---
             checkFlyer: function(info) { 
                 const status = info.Pop_Status || info.pop_status; 
                 if (status === 'ON') { 
                     const today = new Date().toDateString(); 
                     const lastShown = localStorage.getItem('flyer_shown_date'); 
                     if (lastShown === today) return; 
-                    // ... Logic flyer ...
                     setTimeout(() => { 
                         // app.openModal('flyer-modal'); 
                         localStorage.setItem('flyer_shown_date', today); 
@@ -435,6 +477,7 @@
                 this.openModal('submenu-modal'); 
             },
 
+            // --- FUNCTION LAINNYA ---
             updateGreeting: function() {
                 const hour = new Date().getHours(); const card = document.getElementById('greeting-card'); const text = document.getElementById('greeting-text'); const iconContainer = document.getElementById('greeting-bg-icon');
                 let name = "Guru Hebat"; const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
@@ -486,59 +529,19 @@
             closeBanner: function() { const banner = document.getElementById('announcement-area'); if(banner) banner.classList.add('hidden'); },
 
             saveProfile: function(e) { e.preventDefault(); const oldP=JSON.parse(localStorage.getItem('guru_profile')||"{}"); const p={ nama:document.getElementById('input-nama').value, jabatan:document.getElementById('input-jabatan').value, instansi:document.getElementById('input-instansi').value, email:oldP.email||document.getElementById('sync-email').value||"", foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.loadProfile(); this.closeModal('profile-modal'); setTimeout(()=>this.showAlert('success','Tersimpan','Profil diperbarui.'),350); },
+            
             setRating: function(v) { document.getElementById('rating-input').value=v; const buttons=document.getElementById('star-rating-group').querySelectorAll('button'); buttons.forEach((btn,index)=>{ const icon=btn.querySelector('svg')||btn.querySelector('i'); if(icon){ if(index<v){ icon.classList.add('text-yellow-400','fill-yellow-400'); icon.classList.remove('text-slate-300'); }else{ icon.classList.remove('text-yellow-400','fill-yellow-400'); icon.classList.add('text-slate-300'); } } }); },
             
             toggleAnonim: function() { 
                 const isAnon = document.getElementById('anonim-check').checked; 
                 const identity = document.getElementById('feedback-identity'); 
                 const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
-                
-                if (isAnon) { 
-                    identity.classList.add('opacity-50','pointer-events-none');
-                    document.getElementById('fb-nama').value = "Anonim";
-                    document.getElementById('fb-kontak').value = "-";
-                } else { 
-                    identity.classList.remove('opacity-50','pointer-events-none');
-                    document.getElementById('fb-nama').value = p.nama || "";
-                } 
+                if (isAnon) { identity.classList.add('opacity-50','pointer-events-none'); document.getElementById('fb-nama').value = "Anonim"; document.getElementById('fb-kontak').value = "-"; } 
+                else { identity.classList.remove('opacity-50','pointer-events-none'); document.getElementById('fb-nama').value = p.nama || ""; } 
             },
             
             submitFeedback: function(e) { 
-                e.preventDefault(); 
-                const btn = document.getElementById('btn-feedback-submit'); 
-                const oldTxt = btn.innerHTML; 
-                btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Mengirim...'; 
-                btn.disabled = true; 
-                lucide.createIcons(); 
-                
-                this.toggleAnonim();
-
-                const fd = new FormData(e.target); 
-                const obj = Object.fromEntries(fd.entries()); 
-                obj.isAnonim = document.getElementById('anonim-check').checked;
-                
-                if(obj.isAnonim) {
-                    obj.pengirim = "Anonim";
-                    obj.kontak = "-";
-                } else {
-                    obj.pengirim = document.getElementById('fb-nama').value;
-                    obj.kontak = document.getElementById('fb-kontak').value;
-                }
-
-                fetch(this.apiURL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    body: JSON.stringify(obj)
-                }); 
-                
-                setTimeout(() => { 
-                    this.closeModal('feedback-modal'); 
-                    this.showAlert('success', 'Terkirim', 'Terima kasih atas masukan Anda!'); 
-                    e.target.reset(); 
-                    this.setRating(5); 
-                    btn.innerHTML = oldTxt; 
-                    btn.disabled = false; 
-                }, 1000); 
+                e.preventDefault(); const btn = document.getElementById('btn-feedback-submit'); const oldTxt = btn.innerHTML; btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Mengirim...'; btn.disabled = true; lucide.createIcons(); this.toggleAnonim(); const fd = new FormData(e.target); const obj = Object.fromEntries(fd.entries()); obj.isAnonim = document.getElementById('anonim-check').checked; if(obj.isAnonim) { obj.pengirim = "Anonim"; obj.kontak = "-"; } else { obj.pengirim = document.getElementById('fb-nama').value; obj.kontak = document.getElementById('fb-kontak').value; } fetch(this.apiURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(obj) }); setTimeout(() => { this.closeModal('feedback-modal'); this.showAlert('success', 'Terkirim', 'Terima kasih atas masukan Anda!'); e.target.reset(); this.setRating(5); btn.innerHTML = oldTxt; btn.disabled = false; }, 1000); 
             },
             
             previewImage: function(i) { if(i.files&&i.files[0]){ const r=new FileReader(); r.onload=(e)=>document.getElementById('preview-photo').src=e.target.result; r.readAsDataURL(i.files[0]); } },
@@ -551,7 +554,8 @@
             setupBackButton: function() { window.history.pushState(null, null, window.location.href); window.addEventListener('popstate', (event) => { let modalOpen = false; for (let id of this.modalList) { const el = document.getElementById(id); if (el && !el.classList.contains('hidden')) { app.closeModal(id); modalOpen = true; break; } } if (modalOpen) window.history.pushState(null, null, window.location.href); else { const now = new Date().getTime(); if (now - this.backPressedTime < 2000) {} else { this.backPressedTime = now; this.showToast(); window.history.pushState(null, null, window.location.href); } } }); },
             showToast: function() { const x = document.getElementById("exit-toast"); if(x) { x.classList.add("show"); setTimeout(function(){ x.classList.remove("show"); }, 2000); } },
             trackUser: function() { const s=localStorage.getItem('guru_profile'); if(s){ const p=JSON.parse(s); fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email||'')}`).catch(()=>{}); } },
-            setupInstallPrompt: function() { window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); this.deferredPrompt=e; if(!localStorage.getItem('install_dismissed')){ document.getElementById('install-inline-container').classList.remove('hidden'); setTimeout(()=>this.openModal('install-modal'),4000); } }); document.getElementById('btn-install-trigger').addEventListener('click',async()=>{ this.closeModal('install-modal'); if(this.deferredPrompt){ this.deferredPrompt.prompt(); this.deferredPrompt=null; } }); }
+            setupInstallPrompt: function() { window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); this.deferredPrompt=e; if(!localStorage.getItem('install_dismissed')){ document.getElementById('install-inline-container').classList.remove('hidden'); setTimeout(()=>this.openModal('install-modal'),4000); } }); document.getElementById('btn-install-trigger').addEventListener('click',async()=>{ this.closeModal('install-modal'); if(this.deferredPrompt){ this.deferredPrompt.prompt(); this.deferredPrompt=null; } }); },
+            showAlert: function(type,title,msg,onYes) { const bgColors={error:'bg-red-100 text-red-600',success:'bg-green-100 text-green-600',info:'bg-blue-100 text-blue-600'}; const icons={error:'alert-triangle',success:'check-circle',info:'info'}; document.getElementById('dialog-icon-bg').className=`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 ${bgColors[type]||bgColors.info} shadow-inner`; document.getElementById('dialog-icon').setAttribute('data-lucide',icons[type]||'info'); document.getElementById('dialog-title').textContent=title; document.getElementById('dialog-msg').textContent=msg; const actions=document.getElementById('dialog-actions'); if(onYes){ actions.innerHTML=`<div class="grid grid-cols-2 gap-3"><button onclick="app.closeModal('dialog-modal')" class="py-3 rounded-xl bg-slate-100 font-bold text-slate-500 text-sm">Batal</button><button id="dialog-confirm" class="py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg">Ya</button></div>`; document.getElementById('dialog-confirm').onclick=()=>{ onYes(); app.closeModal('dialog-modal'); }; }else{ actions.innerHTML=`<button onclick="app.closeModal('dialog-modal')" class="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-blue-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition">Mengerti</button>`; } lucide.createIcons(); this.openModal('dialog-modal'); }
         };
         document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
