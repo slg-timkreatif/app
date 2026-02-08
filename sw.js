@@ -1,4 +1,4 @@
-const CACHE_NAME = 'guru-berbagi-v1.3-Gradient Squircle';
+const CACHE_NAME = 'guru-berbagi-v1.3-Squircle';
 const urlsToCache = [
   './',
   './index.html',
