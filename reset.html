@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maintenance System | Guru Berbagi</title>
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        /* Gaya Tampilan Gelap & Modern */
+        body {
+            background-color: #0f172a; /* Dark Blue Slate */
+            color: #e2e8f0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Animasi Loading Lingkaran */
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #1e293b;
+            border-top: 6px solid #3b82f6; /* Biru terang */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 25px;
+        }
+
+        h2 { margin: 0 0 10px 0; font-weight: 700; letter-spacing: -0.5px; }
+        p { margin: 0; opacity: 0.6; font-size: 14px; line-height: 1.5; }
+        
+        .card {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid #334155;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 320px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    
+    <script>
+        // --- SETTING URL ---
+        // URL Mesin Google Apps Script Bapak (Dari index.html sebelumnya)
+        const appURL = "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec";
+        
+        // --- LOGIKA PENGALIHAN ---
+        window.onload = function() {
+            // Beri jeda 2 detik agar user tahu sedang ada proses perbaikan
+            setTimeout(function() {
+                // Alihkan ke App Utama dengan membawa 'kunci rahasia' ?buka=reset
+                window.location.replace(appURL + "?buka=reset");
+            }, 2000);
+        };
+    </script>
+</head>
+<body>
+    <div class="card">
+        <div class="loader"></div>
+        <h2>Optimasi Sistem</h2>
+        <p>Sedang menghubungkan ke server untuk perbaikan data...</p>
+        <p style="margin-top: 15px; font-size: 11px; color: #64748b;">Jangan tutup halaman ini.</p>
+    </div>
+</body>
+</html>
