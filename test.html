@@ -20,7 +20,7 @@
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     animation: { 
                         'float': 'float 10s infinite ease-in-out alternate', 
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite' 
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite', /* Sangat lambat (8s) */
                     } 
                 } 
             }
@@ -32,19 +32,17 @@
     <style>
         body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
-        /* 1. Aturan Global: Sembunyikan elemen hidden */
+        /* 1. Global: Sembunyikan elemen hidden */
         .hidden { display: none !important; }
 
-        /* 2. Pengecualian Desktop: Paksa Elemen Desktop Muncul */
+        /* 2. Pengecualian Desktop: Paksa Sidebar & Flex Desktop Muncul */
         @media (min-width: 768px) {
             .md\:flex { display: flex !important; }
             #desktop-sidebar { display: flex !important; }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 0px; }
         
-        /* Animasi */
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -62,7 +60,7 @@
         
         #exit-toast {
             visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 50px;
-            padding: 12px 20px; position: fixed; z-index: 100; left: 50%; bottom: 30px; transform: translateX(-50%);
+            padding: 12px 20px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%);
             font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.3s ease-in-out;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.1); pointer-events: none;
         }
@@ -71,14 +69,12 @@
         .sticky-banner { position: sticky; top: -20px; z-index: 30; transition: all 0.3s ease; margin-bottom: 10px; }
         .input-group:focus-within .lock-icon { color: #3b82f6; }
 
-        /* Marquee */
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
-        /* Rocket Animation */
         @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
-        .rocket-anim { animation: rocket-float 3s ease-in-out infinite; }
+        .rocket-anim { animation: rocket-float 8s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen overflow-hidden flex flex-col relative transition-colors duration-500">
@@ -148,8 +144,11 @@
             <div class="flex-1 overflow-y-auto p-5 md:p-8 scroll-smooth pb-28 md:pb-10" id="main-scroll-area">
                 <div class="max-w-5xl mx-auto w-full space-y-6">
                     <div id="announcement-area" class="hidden fade-in sticky-banner"></div>
-                    <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden group transition-all">
-                        <i id="greeting-bg-icon" data-lucide="sun" class="absolute -bottom-4 -right-4 w-24 h-24 md:w-32 md:h-32 text-white opacity-10 rotate-12 pointer-events-none z-0 stroke-[1.5px]"></i>
+                    
+                    <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden group transition-all duration-1000">
+                        
+                        <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-24 md:h-24 transition-all duration-1000 opacity-40 pointer-events-none z-0"></div>
+                        
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
                         <div id="status-indicator" class="absolute top-5 right-5 w-3 h-3 rounded-full bg-red-400 border-2 border-white/30 shadow-lg z-20 animate-pulse" title="Status"></div>
                         <div class="relative z-10 mt-1">
@@ -161,6 +160,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="space-y-4">
                         <div class="flex items-center justify-between px-2">
                             <div class="flex items-center gap-2.5"><div class="w-1 h-5 bg-blue-600 dark:bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"></div><h3 class="text-base font-bold text-slate-800 dark:text-slate-200">Aplikasi & Layanan</h3></div>
@@ -246,7 +246,7 @@
                 <button onclick="app.closeModal('feedback-modal')" class="p-2 bg-white dark:bg-slate-700 rounded-full border border-slate-200 dark:border-slate-600 hover:bg-slate-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="p-6 space-y-6">
-                <a href="https://wa.me/6285647059039?text=Halo%20Admin%20Guru%20Berbagi,%20saya%20butuh%20bantuan." target="_blank" class="flex items-center gap-4 p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 hover:bg-green-100 dark:hover:bg-green-900/40 transition group">
+                <a href="https://wa.me/6281234567890?text=Halo%20Admin%20Guru%20Berbagi,%20saya%20butuh%20bantuan." target="_blank" class="flex items-center gap-4 p-4 rounded-2xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 hover:bg-green-100 dark:hover:bg-green-900/40 transition group">
                     <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-green-500/30 group-hover:scale-110 transition-transform"><i data-lucide="message-circle" class="w-6 h-6 fill-current"></i></div>
                     <div><h4 class="font-bold text-slate-800 dark:text-white">Chat Admin via WA</h4><p class="text-xs text-slate-500 dark:text-green-300/70">Respon cepat via WhatsApp.</p></div>
                     <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 ml-auto"></i>
@@ -283,7 +283,7 @@
     <div id="dialog-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4"><div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('dialog-modal')"></div><div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-2xl relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content transition-all duration-300"><div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-blue-100 text-blue-600 shadow-inner"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div><h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3><p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p><div id="dialog-actions" class="w-full"></div></div></div>
     <div id="browser-modal" class="fixed inset-0 z-[80] hidden flex flex-col bg-white dark:bg-slate-900 transition-colors duration-300"><div class="flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm shrink-0 z-10"><div class="flex items-center gap-3 overflow-hidden"><button onclick="app.closeModal('browser-modal')" class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300"><i data-lucide="arrow-left" class="w-6 h-6"></i></button><div class="flex flex-col"><h4 id="browser-title" class="font-bold text-sm text-slate-800 dark:text-slate-100 line-clamp-1">Memuat...</h4><span class="text-[10px] text-slate-400 flex items-center gap-1"><i data-lucide="shield-check" class="w-2.5 h-2.5"></i> Aman • Tampilan Aplikasi</span></div></div><div class="flex gap-2"><button onclick="document.getElementById('web-frame').contentWindow.location.reload()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button><a id="browser-external-link" href="#" target="_blank" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400"><i data-lucide="external-link" class="w-5 h-5"></i></a></div></div><div class="flex-1 relative w-full h-full bg-slate-50 dark:bg-slate-900"><div id="browser-loader" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-2 z-0"><i data-lucide="loader-2" class="w-8 h-8 animate-spin text-blue-500"></i><span class="text-xs font-medium">Memuat Halaman...</span></div><iframe id="web-frame" class="w-full h-full relative z-10 opacity-0 transition-opacity duration-500" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals" onload="this.classList.remove('opacity-0')"></iframe></div></div>
     
-    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
+    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
         <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         <i data-lucide="life-buoy" class="w-6 h-6 group-hover:animate-spin-slow relative z-10"></i>
     </button>
@@ -318,12 +318,54 @@
             },
 
             updateGreeting: function() {
-                const hour = new Date().getHours(); const card = document.getElementById('greeting-card'); const text = document.getElementById('greeting-text'); const iconBg = document.getElementById('greeting-bg-icon');
+                const hour = new Date().getHours(); const card = document.getElementById('greeting-card'); const text = document.getElementById('greeting-text'); const iconContainer = document.getElementById('greeting-bg-icon');
                 let name = "Guru Hebat"; const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
                 if (p.nama) { let cleanName = p.nama.replace(/^(Bpk\.|Ibu|Sdr\.|Sdri\.|Drs\.|Dra\.|H\.|Hj\.|Dr\.)\s+/i, ''); name = cleanName.trim().split(' ')[0]; name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(); } 
-                let greet = "", theme = "", iconName = "";
-                if (hour >= 4 && hour < 10) { greet = `Semangat Pagi, ${name}!`; theme = "from-orange-400 to-yellow-500"; iconName = "sunrise"; } else if (hour >= 10 && hour < 15) { greet = `Selamat Siang, ${name}`; theme = "from-blue-500 to-cyan-400"; iconName = "sun"; } else if (hour >= 15 && hour < 18) { greet = `Selamat Sore, ${name}`; theme = "from-indigo-500 to-purple-500"; iconName = "sunset"; } else { greet = `Selamat Malam, ${name}`; theme = "from-slate-800 to-slate-900"; iconName = "moon"; }
-                text.innerText = greet; if(iconBg) iconBg.setAttribute('data-lucide', iconName); card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-6 text-white shadow-xl shadow-blue-900/10 relative overflow-hidden group transition-all`; lucide.createIcons();
+                let greet = "", theme = "", svgContent = "";
+
+                if (hour >= 4 && hour < 10) { 
+                    // PAGI: Gradient Yellow -> Orange
+                    greet = `Semangat Pagi, ${name}!`; 
+                    theme = "from-orange-400 to-yellow-500"; 
+                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
+                        <defs><linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fef08a;stop-opacity:1" /><stop offset="100%" style="stop-color:#facc15;stop-opacity:1" /></linearGradient></defs>
+                        <path d="M12 4V2M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M4 20H20" stroke="url(#sunGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 20C16 17.7909 14.2091 16 12 16C9.79086 16 8 17.7909 8 20" stroke="url(#sunGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="url(#sunGrad)" fill-opacity="0.3"/>
+                    </svg>`; 
+                } 
+                else if (hour >= 10 && hour < 15) { 
+                    // SIANG: Gradient White -> Cyan (SPIN SLOW 60s)
+                    greet = `Selamat Siang, ${name}`; 
+                    theme = "from-blue-500 to-cyan-400"; 
+                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full animate-[spin_60s_linear_infinite] drop-shadow-[0_0_20px_rgba(255,255,255,0.6)]">
+                         <defs><linearGradient id="noonGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#cffafe;stop-opacity:1" /></linearGradient></defs>
+                        <circle cx="12" cy="12" r="5" fill="url(#noonGrad)" fill-opacity="0.3" stroke="url(#noonGrad)" stroke-width="2"/>
+                        <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#noonGrad)" stroke-width="2" stroke-linecap="round"/>
+                    </svg>`; 
+                } 
+                else if (hour >= 15 && hour < 18) { 
+                    // SORE: Gradient Orange -> Purple
+                    greet = `Selamat Sore, ${name}`; 
+                    theme = "from-indigo-500 to-purple-500"; 
+                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full drop-shadow-[0_0_15px_rgba(255,200,200,0.4)]">
+                        <defs><linearGradient id="sunsetGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" /><stop offset="100%" style="stop-color:#e879f9;stop-opacity:1" /></linearGradient></defs>
+                        <path d="M12 4V2M4.92993 4.92993L6.34414 6.34414M19.0701 4.92993L17.6559 6.34414M2 12H4M22 12H20" stroke="url(#sunsetGrad)" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M16.2426 16.2426C15.1174 15.1174 13.5913 14.4853 12 14.4853C10.4087 14.4853 8.88258 15.1174 7.75736 16.2426" stroke="url(#sunsetGrad)" stroke-width="2" stroke-linecap="round" fill="url(#sunsetGrad)" fill-opacity="0.2"/>
+                    </svg>`; 
+                } 
+                else { 
+                    // MALAM: Gradient Silver -> Blue
+                    greet = `Selamat Malam, ${name}`; 
+                    theme = "from-slate-800 to-slate-900"; 
+                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full drop-shadow-[0_0_15px_rgba(103,232,249,0.5)] transform -rotate-12">
+                        <defs><linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e2e8f0;stop-opacity:1" /><stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" /></linearGradient></defs>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25195C12.285 2.25195 12.5539 2.37562 12.7237 2.58514C12.8935 2.79466 12.9366 3.06526 12.8398 3.31306C11.9686 5.54019 11.9686 8.04018 12.8398 10.2673C13.7111 12.4944 15.3477 14.1793 17.5147 14.9458C17.747 15.0279 17.9304 15.228 17.9948 15.4697C18.0592 15.7113 17.9946 15.9691 17.8207 16.1444C16.3263 17.6534 14.2882 18.5 12.1667 18.5C7.94056 18.5 4.5 15.0743 4.5 10.8693C4.5 6.94052 7.42398 3.7088 11.2333 3.35515C11.4881 3.33152 11.7335 3.44778 11.8797 3.65586C12.0259 3.86394 12.0494 4.13065 11.9416 4.35824C11.3653 5.57861 11.3653 6.96931 11.9416 8.18968C12.518 9.41005 13.5937 10.3066 14.9084 10.6384C15.1557 10.7008 15.3619 10.8934 15.4526 11.1352C15.5434 11.377 15.5042 11.6468 15.352 11.8491C14.269 13.2871 12.569 14.125 10.75 14.125C7.98858 14.125 5.75 11.8864 5.75 9.125C5.75 7.02672 7.05409 5.21528 8.97726 4.46011C9.20816 4.36949 9.3516 4.13788 9.32431 3.89063C9.29702 3.64339 9.10626 3.44299 8.86877 3.3683C6.42594 2.40866 3.65653 3.01314 1.95462 4.96025C0.252703 6.90736 -0.15875 9.77196 0.893073 12.2477C1.9449 14.7235 4.29807 16.375 7 16.375C11.0041 16.375 14.25 13.1291 14.25 9.125C14.25 6.91428 13.2678 4.93556 11.7226 3.59472C11.5178 3.41724 11.2384 3.37688 11.0122 3.49132C10.7861 3.60576 10.6667 3.84752 10.6667 4.10156V4.10156C10.6667 6.17263 12.3454 7.85156 14.4167 7.85156C16.4879 7.85156 18.1667 6.17263 18.1667 4.10156C18.1667 3.84752 18.0472 3.60576 17.8211 3.49132C17.595 3.37688 17.3156 3.41724 17.1107 3.59472C15.5656 4.93556 14.5833 6.91428 14.5833 9.125C14.5833 13.1291 17.8292 16.375 21.8333 16.375C24.5353 16.375 26.8884 14.7235 27.9403 12.2477C28.9921 9.77196 28.5806 6.90736 26.8787 4.96025C25.1768 3.01314 22.4074 2.40866 19.9646 3.3683C19.7271 3.44299 19.5363 3.64339 19.509 3.89063C19.4817 4.13788 19.6252 4.36949 19.8561 4.46011C21.7792 5.21528 23.0833 7.02672 23.0833 9.125C23.0833 11.8864 20.8448 14.125 18.0833 14.125C16.2643 14.125 14.5643 13.2871 13.4813 11.8491C13.3292 11.6468 13.29 11.377 13.3807 11.1352C13.4714 10.8934 13.6776 10.7008 13.9249 10.6384C15.2396 10.3066 16.3154 9.41005 16.8917 8.18968C17.468 6.96931 17.468 5.57861 16.8917 4.35824C16.784 4.13065 16.8074 3.86394 16.9536 3.65586C17.0998 3.44778 17.3452 3.33152 17.6 3.35515C21.4093 3.7088 24.3333 6.94052 24.3333 10.8693C24.3333 15.0743 20.8928 18.5 16.6667 18.5C14.5452 18.5 12.507 17.6534 11.0126 16.1444C10.8388 15.9691 10.7741 15.7113 10.8386 15.4697C10.903 15.228 11.0863 15.0279 11.3187 14.9458C13.4856 14.1793 15.1222 12.4944 15.9935 10.2673C16.8648 8.04018 16.8648 5.54019 15.9935 3.31306C15.8967 3.06526 15.9398 2.79466 16.1097 2.58514C16.2794 2.37562 16.5484 2.25195 16.8333 2.25195H12Z" fill="url(#moonGrad)"/></svg>`; 
+                }
+                
+                text.innerText = greet; 
+                if(iconContainer) iconContainer.innerHTML = svgContent;
+                card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-6 text-white shadow-xl shadow-blue-900/10 relative overflow-hidden group transition-all duration-1000`; 
+                lucide.createIcons();
             },
 
             refreshData: function(isManual = false) {
@@ -427,6 +469,7 @@
                 } 
             },
             
+            // --- FIRE AND FORGET LOGIC (100% SUKSES) ---
             submitFeedback: function(e) { 
                 e.preventDefault(); 
                 const btn = document.getElementById('btn-feedback-submit'); 
