@@ -20,8 +20,15 @@
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     animation: { 
                         'float': 'float 10s infinite ease-in-out alternate', 
-                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite', /* Sangat lambat (8s) */
-                    } 
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite', 
+                        'breathe': 'breathe 10s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.8' },
+                            '50%': { transform: 'scale(1.05)', opacity: '1' },
+                        }
+                    }
                 } 
             }
         }
@@ -73,7 +80,7 @@
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
-        @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+        @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
         .rocket-anim { animation: rocket-float 8s ease-in-out infinite; }
     </style>
 </head>
@@ -126,7 +133,10 @@
                         <img id="header-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h2 class="font-extrabold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">Guru Berbagi</h2>
+                        <div class="flex items-center gap-2">
+                            <h2 class="font-extrabold text-slate-800 dark:text-white text-lg leading-tight tracking-tight">Guru Berbagi</h2>
+                            <div id="status-indicator" class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm animate-pulse" title="Status Koneksi"></div>
+                        </div>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Portal Pendidikan Selogiri</p>
                     </div>
                 </div>
@@ -146,11 +156,8 @@
                     <div id="announcement-area" class="hidden fade-in sticky-banner"></div>
                     
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden group transition-all duration-1000">
-                        
-                        <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-24 md:h-24 transition-all duration-1000 opacity-40 pointer-events-none z-0"></div>
-                        
+                        <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-24 md:h-24 rounded-full transition-all duration-1000 pointer-events-none z-0 animate-breathe opacity-40"></div>
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
-                        <div id="status-indicator" class="absolute top-5 right-5 w-3 h-3 rounded-full bg-red-400 border-2 border-white/30 shadow-lg z-20 animate-pulse" title="Status"></div>
                         <div class="relative z-10 mt-1">
                             <h3 class="text-2xl md:text-3xl font-extrabold mb-1 tracking-tight leading-tight flex items-center gap-3"><span id="greeting-text">Halo, Guru!</span></h3>
                             <p id="quote-text" class="text-blue-100/90 text-xs md:text-sm leading-relaxed max-w-lg font-medium italic pr-8">"Memuat kata mutiara..."</p>
@@ -283,7 +290,7 @@
     <div id="dialog-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4"><div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('dialog-modal')"></div><div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-2xl relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content transition-all duration-300"><div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-blue-100 text-blue-600 shadow-inner"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div><h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3><p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p><div id="dialog-actions" class="w-full"></div></div></div>
     <div id="browser-modal" class="fixed inset-0 z-[80] hidden flex flex-col bg-white dark:bg-slate-900 transition-colors duration-300"><div class="flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm shrink-0 z-10"><div class="flex items-center gap-3 overflow-hidden"><button onclick="app.closeModal('browser-modal')" class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300"><i data-lucide="arrow-left" class="w-6 h-6"></i></button><div class="flex flex-col"><h4 id="browser-title" class="font-bold text-sm text-slate-800 dark:text-slate-100 line-clamp-1">Memuat...</h4><span class="text-[10px] text-slate-400 flex items-center gap-1"><i data-lucide="shield-check" class="w-2.5 h-2.5"></i> Aman • Tampilan Aplikasi</span></div></div><div class="flex gap-2"><button onclick="document.getElementById('web-frame').contentWindow.location.reload()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button><a id="browser-external-link" href="#" target="_blank" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400"><i data-lucide="external-link" class="w-5 h-5"></i></a></div></div><div class="flex-1 relative w-full h-full bg-slate-50 dark:bg-slate-900"><div id="browser-loader" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-2 z-0"><i data-lucide="loader-2" class="w-8 h-8 animate-spin text-blue-500"></i><span class="text-xs font-medium">Memuat Halaman...</span></div><iframe id="web-frame" class="w-full h-full relative z-10 opacity-0 transition-opacity duration-500" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals" onload="this.classList.remove('opacity-0')"></iframe></div></div>
     
-    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
+    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
         <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         <i data-lucide="life-buoy" class="w-6 h-6 group-hover:animate-spin-slow relative z-10"></i>
     </button>
@@ -300,7 +307,9 @@
             modalList: ['profile-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
 
             init: function() {
-                this.initTheme(); lucide.createIcons(); this.loadProfile();
+                this.initTheme(); // DIPULIHKAN
+                lucide.createIcons(); 
+                this.loadProfile(); // DIPULIHKAN
                 const scrollArea = document.getElementById('main-scroll-area');
                 scrollArea.addEventListener('scroll', () => {
                     const banner = document.getElementById('announcement-area');
@@ -317,53 +326,140 @@
                 this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); this.updateGreeting(); setInterval(() => this.updateGreeting(), 60000); 
             },
 
+            // --- FUNCTION UTAMA: RENDER (FIXED: SQUIRCLE COLORFUL) ---
+            render: function(data) {
+                const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info || {}; const quotes = data.quotes || [];
+                if (quotes.length > 0) { const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]; const qText = document.getElementById('quote-text'); const qAuth = document.getElementById('quote-author'); if(qText) qText.innerText = `"${randomQuote.text}"`; if(qAuth) qAuth.innerText = `- ${randomQuote.author}`; }
+                const verEl = document.getElementById('app-version-footer'); if(verEl) verEl.innerText = info.versi || '';
+                const savedProfile = localStorage.getItem('guru_profile'); let userJabatan = ""; if (savedProfile) { const p = JSON.parse(savedProfile); userJabatan = (p.jabatan || "").toLowerCase().trim(); }
+                this.menuMap = {}; menuList.forEach(item => { const p = (item.parent || "").toLowerCase().trim(); if(p) { if(!this.menuMap[p]) this.menuMap[p] = []; this.menuMap[p].push(item); } });
+                const container = document.getElementById('dynamic-menu-container'); let tempHTML = ''; const parents = menuList.filter(item => (item.parent || "").trim() === "");
+                if(parents.length === 0) { container.innerHTML = '<div class="col-span-2 text-center text-slate-400 text-sm py-10">Belum ada menu.</div>'; return; }
+                
+                parents.forEach(item => {
+                    const requiredRole = (item.role || "").toLowerCase().trim(); if (requiredRole !== "") { if (requiredRole === "guru") { if (userJabatan === "") return; } else { if (userJabatan === "" || !userJabatan.includes(requiredRole)) return; } }
+                    const hasChildren = this.menuMap[item.judul.toLowerCase().trim()] && this.menuMap[item.judul.toLowerCase().trim()].length > 0;
+                    const color = item.warna || 'blue'; const targetVisibility = (item.target || 'all').toLowerCase(); let visibility = 'block';
+                    if (targetVisibility === 'mobile') visibility = 'flex md:hidden'; 
+                    else if (targetVisibility === 'desktop') visibility = 'hidden md:flex';
+                    const safeTitle = item.judul.replace(/'/g, "\\'").replace(/"/g, '&quot;'); const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
+                    const openMode = (item.openMode || '').toLowerCase().trim(); const isAppView = openMode === 'app';
+                    let tag = 'a'; let attrs = '';
+                    if (hasChildren) { tag = 'button'; attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`; } else if (!item.url || item.url.trim().length < 1) { tag = 'button'; attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`; } else if (isAppView) { tag = 'button'; attrs = `type="button" onclick="app.openWeb('${item.url}', '${safeTitle}')"`; } else { tag = 'a'; attrs = `href="${item.url}" target="_blank"`; }
+                    const isWide = (item.ukuran || '').toLowerCase() === 'wide'; const colSpan = isWide ? 'col-span-2' : 'col-span-1';
+                    let badge = ''; if (item.label) { const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : 'bg-blue-500'; badge = `<span class="absolute top-3 left-3 ${bgLabel} text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10">${item.label}</span>`; } else if (hasChildren) { badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`; }
+                    
+                    const glassEffect = "bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60"; 
+                    const hoverEffect = `hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300 group`;
+                    
+                    // ICON STYLE: V8 - SQUIRCLE GRADIENT (KOTAK TUMPUL WARNA-WARNI)
+                    const iconClass = `w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-${color}-500 to-${color}-600 text-white flex items-center justify-center shadow-lg shadow-${color}-500/30 border border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`;
+                    
+                    if (isWide) { 
+                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative overflow-hidden rounded-[1.5rem] ${glassEffect} ${hoverEffect}">${badge}
+                        <div class="${iconClass}"><i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i></div>
+                        <div class="flex-1 min-w-0 flex flex-col justify-center"><h4 class="font-bold text-base md:text-lg text-slate-700 dark:text-slate-100 leading-tight mb-1 group-hover:text-${color}-600 dark:group-hover:text-${color}-400 transition-colors">${item.judul}</h4><p class="text-[11px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`; 
+                    } else { 
+                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative overflow-hidden rounded-[1.5rem] ${glassEffect} ${hoverEffect}">${badge}
+                        <div class="${iconClass}"><i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i></div>
+                        <div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-100 leading-tight mb-1 group-hover:text-${color}-600 dark:group-hover:text-${color}-400 transition-colors">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`; 
+                    }
+                });
+                container.innerHTML = tempHTML;
+                const annArea = document.getElementById('announcement-area');
+                if (info && info.status === 'ON') {
+                    const colorMap = {red:'bg-red-50 text-red-800 border-red-500', green:'bg-green-50 text-green-800 border-green-500', blue:'bg-blue-50 text-blue-800 border-blue-500'};
+                    const theme = colorMap[info.warna] || colorMap.blue;
+                    const pesan = info.pesan || ''; let contentHTML = '';
+                    if (pesan.length > 50) { contentHTML = `<div class="marquee-container w-full overflow-hidden"><div class="marquee-text font-medium text-xs md:text-sm leading-tight whitespace-nowrap">${pesan}</div></div>`; } else { contentHTML = `<div class="font-medium text-xs md:text-sm leading-tight">${pesan}</div>`; }
+                    annArea.innerHTML = `<div class="${theme} backdrop-blur-lg bg-opacity-90 dark:bg-slate-800 dark:text-slate-200 border-l-4 py-3 px-4 rounded-xl shadow-lg flex justify-between items-center gap-3 text-sm"><div class="flex items-center gap-3 w-full overflow-hidden"><i data-lucide="info" class="w-5 h-5 shrink-0"></i>${contentHTML}</div><button onclick="app.closeBanner()" class="p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition shrink-0"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
+                    annArea.classList.remove('hidden');
+                } else { annArea.classList.add('hidden'); }
+                this.checkFlyer(info); // DIPULIHKAN
+                const footContainer = document.getElementById('footer-links-container');
+                footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2 active:scale-95"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
+                lucide.createIcons();
+            },
+
+            // --- FUNGSI TEMA (DIPULIHKAN) ---
+            initTheme: function() {
+                const saved = localStorage.getItem('theme');
+                const hour = new Date().getHours();
+                const isNight = hour >= 18 || hour < 6;
+                let isDark = false;
+                if (saved === 'dark') { isDark = true; }
+                else if (saved === 'light') { isDark = false; }
+                else if (isNight) { isDark = true; }
+                else { isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; }
+                
+                if (isDark) document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+                this.updateStatusBar(isDark);
+            },
+
+            toggleTheme: function() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                this.updateStatusBar(isDark);
+            },
+
+            updateStatusBar: function(isDark) {
+                const meta = document.getElementById('theme-color-meta');
+                if (meta) meta.setAttribute('content', isDark ? '#0f172a' : '#f8fafc');
+            },
+            
+            // --- FUNGSI CHECK FLYER (DIPULIHKAN) ---
+            checkFlyer: function(info) { 
+                const status = info.Pop_Status || info.pop_status; 
+                if (status === 'ON') { 
+                    const today = new Date().toDateString(); 
+                    const lastShown = localStorage.getItem('flyer_shown_date'); 
+                    if (lastShown === today) return; 
+                    // ... Logic flyer ...
+                    setTimeout(() => { 
+                        // app.openModal('flyer-modal'); 
+                        localStorage.setItem('flyer_shown_date', today); 
+                    }, 1500); 
+                } 
+            },
+
+            openSubmenu: function(title,icon,color) { 
+                const key=title.toLowerCase().trim(); 
+                const children=this.menuMap[key]||[]; 
+                if(children.length===0){ this.showAlert('error','Kosong','Menu ini belum diisi.'); return; } 
+                document.getElementById('submenu-title').textContent=title; 
+                const list=document.getElementById('submenu-list'); 
+                
+                list.innerHTML=children.map(child=>`<a href="${child.url}" target="_blank" class="flex items-center gap-5 p-5 rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition active:scale-95 group shadow-sm hover:shadow-md"><div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-${color}-500 group-hover:scale-110 transition-transform"><i data-lucide="${child.icon||'link'}" class="w-6 h-6"></i></div><div class="flex-1"><h5 class="font-bold text-sm text-slate-700 dark:text-white mb-0.5">${child.judul}</h5><p class="text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div><i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-colors"></i></a>`).join(''); 
+                lucide.createIcons(); 
+                this.openModal('submenu-modal'); 
+            },
+
             updateGreeting: function() {
                 const hour = new Date().getHours(); const card = document.getElementById('greeting-card'); const text = document.getElementById('greeting-text'); const iconContainer = document.getElementById('greeting-bg-icon');
                 let name = "Guru Hebat"; const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
                 if (p.nama) { let cleanName = p.nama.replace(/^(Bpk\.|Ibu|Sdr\.|Sdri\.|Drs\.|Dra\.|H\.|Hj\.|Dr\.)\s+/i, ''); name = cleanName.trim().split(' ')[0]; name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(); } 
-                let greet = "", theme = "", svgContent = "";
+                let greet = "", theme = "", planetStyle = "";
 
                 if (hour >= 4 && hour < 10) { 
-                    // PAGI: Gradient Yellow -> Orange
-                    greet = `Semangat Pagi, ${name}!`; 
-                    theme = "from-orange-400 to-yellow-500"; 
-                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
-                        <defs><linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fef08a;stop-opacity:1" /><stop offset="100%" style="stop-color:#facc15;stop-opacity:1" /></linearGradient></defs>
-                        <path d="M12 4V2M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M4 20H20" stroke="url(#sunGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 20C16 17.7909 14.2091 16 12 16C9.79086 16 8 17.7909 8 20" stroke="url(#sunGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="url(#sunGrad)" fill-opacity="0.3"/>
-                    </svg>`; 
+                    greet = `Semangat Pagi, ${name}!`; theme = "from-orange-400 to-yellow-500"; 
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #fef08a, #facc15, #f97316); box-shadow: 0 0 60px #fbbf24;";
                 } 
                 else if (hour >= 10 && hour < 15) { 
-                    // SIANG: Gradient White -> Cyan (SPIN SLOW 60s)
-                    greet = `Selamat Siang, ${name}`; 
-                    theme = "from-blue-500 to-cyan-400"; 
-                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full animate-[spin_60s_linear_infinite] drop-shadow-[0_0_20px_rgba(255,255,255,0.6)]">
-                         <defs><linearGradient id="noonGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" /><stop offset="100%" style="stop-color:#cffafe;stop-opacity:1" /></linearGradient></defs>
-                        <circle cx="12" cy="12" r="5" fill="url(#noonGrad)" fill-opacity="0.3" stroke="url(#noonGrad)" stroke-width="2"/>
-                        <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="url(#noonGrad)" stroke-width="2" stroke-linecap="round"/>
-                    </svg>`; 
+                    greet = `Selamat Siang, ${name}`; theme = "from-blue-500 to-cyan-400"; 
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #ffffff, #cffafe, #22d3ee); box-shadow: 0 0 80px rgba(255,255,255,0.8);";
                 } 
                 else if (hour >= 15 && hour < 18) { 
-                    // SORE: Gradient Orange -> Purple
-                    greet = `Selamat Sore, ${name}`; 
-                    theme = "from-indigo-500 to-purple-500"; 
-                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full drop-shadow-[0_0_15px_rgba(255,200,200,0.4)]">
-                        <defs><linearGradient id="sunsetGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" /><stop offset="100%" style="stop-color:#e879f9;stop-opacity:1" /></linearGradient></defs>
-                        <path d="M12 4V2M4.92993 4.92993L6.34414 6.34414M19.0701 4.92993L17.6559 6.34414M2 12H4M22 12H20" stroke="url(#sunsetGrad)" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M16.2426 16.2426C15.1174 15.1174 13.5913 14.4853 12 14.4853C10.4087 14.4853 8.88258 15.1174 7.75736 16.2426" stroke="url(#sunsetGrad)" stroke-width="2" stroke-linecap="round" fill="url(#sunsetGrad)" fill-opacity="0.2"/>
-                    </svg>`; 
+                    greet = `Selamat Sore, ${name}`; theme = "from-indigo-500 to-purple-500"; 
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #fbcfe8, #f472b6, #db2777); box-shadow: 0 0 60px #f472b6;";
                 } 
                 else { 
-                    // MALAM: Gradient Silver -> Blue
-                    greet = `Selamat Malam, ${name}`; 
-                    theme = "from-slate-800 to-slate-900"; 
-                    svgContent = `<svg viewBox="0 0 24 24" fill="none" class="w-full h-full drop-shadow-[0_0_15px_rgba(103,232,249,0.5)] transform -rotate-12">
-                        <defs><linearGradient id="moonGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#e2e8f0;stop-opacity:1" /><stop offset="100%" style="stop-color:#22d3ee;stop-opacity:1" /></linearGradient></defs>
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25195C12.285 2.25195 12.5539 2.37562 12.7237 2.58514C12.8935 2.79466 12.9366 3.06526 12.8398 3.31306C11.9686 5.54019 11.9686 8.04018 12.8398 10.2673C13.7111 12.4944 15.3477 14.1793 17.5147 14.9458C17.747 15.0279 17.9304 15.228 17.9948 15.4697C18.0592 15.7113 17.9946 15.9691 17.8207 16.1444C16.3263 17.6534 14.2882 18.5 12.1667 18.5C7.94056 18.5 4.5 15.0743 4.5 10.8693C4.5 6.94052 7.42398 3.7088 11.2333 3.35515C11.4881 3.33152 11.7335 3.44778 11.8797 3.65586C12.0259 3.86394 12.0494 4.13065 11.9416 4.35824C11.3653 5.57861 11.3653 6.96931 11.9416 8.18968C12.518 9.41005 13.5937 10.3066 14.9084 10.6384C15.1557 10.7008 15.3619 10.8934 15.4526 11.1352C15.5434 11.377 15.5042 11.6468 15.352 11.8491C14.269 13.2871 12.569 14.125 10.75 14.125C7.98858 14.125 5.75 11.8864 5.75 9.125C5.75 7.02672 7.05409 5.21528 8.97726 4.46011C9.20816 4.36949 9.3516 4.13788 9.32431 3.89063C9.29702 3.64339 9.10626 3.44299 8.86877 3.3683C6.42594 2.40866 3.65653 3.01314 1.95462 4.96025C0.252703 6.90736 -0.15875 9.77196 0.893073 12.2477C1.9449 14.7235 4.29807 16.375 7 16.375C11.0041 16.375 14.25 13.1291 14.25 9.125C14.25 6.91428 13.2678 4.93556 11.7226 3.59472C11.5178 3.41724 11.2384 3.37688 11.0122 3.49132C10.7861 3.60576 10.6667 3.84752 10.6667 4.10156V4.10156C10.6667 6.17263 12.3454 7.85156 14.4167 7.85156C16.4879 7.85156 18.1667 6.17263 18.1667 4.10156C18.1667 3.84752 18.0472 3.60576 17.8211 3.49132C17.595 3.37688 17.3156 3.41724 17.1107 3.59472C15.5656 4.93556 14.5833 6.91428 14.5833 9.125C14.5833 13.1291 17.8292 16.375 21.8333 16.375C24.5353 16.375 26.8884 14.7235 27.9403 12.2477C28.9921 9.77196 28.5806 6.90736 26.8787 4.96025C25.1768 3.01314 22.4074 2.40866 19.9646 3.3683C19.7271 3.44299 19.5363 3.64339 19.509 3.89063C19.4817 4.13788 19.6252 4.36949 19.8561 4.46011C21.7792 5.21528 23.0833 7.02672 23.0833 9.125C23.0833 11.8864 20.8448 14.125 18.0833 14.125C16.2643 14.125 14.5643 13.2871 13.4813 11.8491C13.3292 11.6468 13.29 11.377 13.3807 11.1352C13.4714 10.8934 13.6776 10.7008 13.9249 10.6384C15.2396 10.3066 16.3154 9.41005 16.8917 8.18968C17.468 6.96931 17.468 5.57861 16.8917 4.35824C16.784 4.13065 16.8074 3.86394 16.9536 3.65586C17.0998 3.44778 17.3452 3.33152 17.6 3.35515C21.4093 3.7088 24.3333 6.94052 24.3333 10.8693C24.3333 15.0743 20.8928 18.5 16.6667 18.5C14.5452 18.5 12.507 17.6534 11.0126 16.1444C10.8388 15.9691 10.7741 15.7113 10.8386 15.4697C10.903 15.228 11.0863 15.0279 11.3187 14.9458C13.4856 14.1793 15.1222 12.4944 15.9935 10.2673C16.8648 8.04018 16.8648 5.54019 15.9935 3.31306C15.8967 3.06526 15.9398 2.79466 16.1097 2.58514C16.2794 2.37562 16.5484 2.25195 16.8333 2.25195H12Z" fill="url(#moonGrad)"/></svg>`; 
+                    greet = `Selamat Malam, ${name}`; theme = "from-slate-800 to-slate-900"; 
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #f1f5f9, #94a3b8, #475569); box-shadow: 0 0 50px rgba(148, 163, 184, 0.5);";
                 }
                 
                 text.innerText = greet; 
-                if(iconContainer) iconContainer.innerHTML = svgContent;
+                if(iconContainer) iconContainer.style = planetStyle;
                 card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-6 text-white shadow-xl shadow-blue-900/10 relative overflow-hidden group transition-all duration-1000`; 
                 lucide.createIcons();
             },
@@ -389,68 +485,6 @@
 
             closeBanner: function() { const banner = document.getElementById('announcement-area'); if(banner) banner.classList.add('hidden'); },
 
-            render: function(data) {
-                const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info || {}; const quotes = data.quotes || [];
-                if (quotes.length > 0) { const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]; const qText = document.getElementById('quote-text'); const qAuth = document.getElementById('quote-author'); if(qText) qText.innerText = `"${randomQuote.text}"`; if(qAuth) qAuth.innerText = `- ${randomQuote.author}`; }
-                const verEl = document.getElementById('app-version-footer'); if(verEl) verEl.innerText = info.versi || '';
-                const savedProfile = localStorage.getItem('guru_profile'); let userJabatan = ""; if (savedProfile) { const p = JSON.parse(savedProfile); userJabatan = (p.jabatan || "").toLowerCase().trim(); }
-                this.menuMap = {}; menuList.forEach(item => { const p = (item.parent || "").toLowerCase().trim(); if(p) { if(!this.menuMap[p]) this.menuMap[p] = []; this.menuMap[p].push(item); } });
-                const container = document.getElementById('dynamic-menu-container'); let tempHTML = ''; const parents = menuList.filter(item => (item.parent || "").trim() === "");
-                if(parents.length === 0) { container.innerHTML = '<div class="col-span-2 text-center text-slate-400 text-sm py-10">Belum ada menu.</div>'; return; }
-                parents.forEach(item => {
-                    const requiredRole = (item.role || "").toLowerCase().trim(); if (requiredRole !== "") { if (requiredRole === "guru") { if (userJabatan === "") return; } else { if (userJabatan === "" || !userJabatan.includes(requiredRole)) return; } }
-                    const hasChildren = this.menuMap[item.judul.toLowerCase().trim()] && this.menuMap[item.judul.toLowerCase().trim()].length > 0;
-                    const color = item.warna || 'blue'; const targetVisibility = (item.target || 'all').toLowerCase(); let visibility = 'block';
-                    if (targetVisibility === 'mobile') visibility = 'flex md:hidden'; 
-                    else if (targetVisibility === 'desktop') visibility = 'hidden md:flex'; // --- FIX MENU DESKTOP ---
-                    const safeTitle = item.judul.replace(/'/g, "\\'").replace(/"/g, '&quot;'); const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
-                    const openMode = (item.openMode || '').toLowerCase().trim(); const isAppView = openMode === 'app';
-                    let tag = 'a'; let attrs = '';
-                    if (hasChildren) { tag = 'button'; attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`; } else if (!item.url || item.url.trim().length < 1) { tag = 'button'; attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`; } else if (isAppView) { tag = 'button'; attrs = `type="button" onclick="app.openWeb('${item.url}', '${safeTitle}')"`; } else { tag = 'a'; attrs = `href="${item.url}" target="_blank"`; }
-                    const isWide = (item.ukuran || '').toLowerCase() === 'wide'; const colSpan = isWide ? 'col-span-2' : 'col-span-1';
-                    let badge = ''; if (item.label) { const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : 'bg-blue-500'; badge = `<span class="absolute top-3 left-3 ${bgLabel} text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10">${item.label}</span>`; } else if (hasChildren) { badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`; }
-                    const glassEffect = "bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60"; const hoverEffect = `hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300 group`;
-                    const iconClass = `w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-${color}-500 to-${color}-600 text-white flex items-center justify-center shadow-lg shadow-${color}-500/30 border border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`;
-                    const iconClassSmall = `w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-${color}-500 to-${color}-600 text-white flex items-center justify-center shadow-lg shadow-${color}-500/30 border border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`;
-                    if (isWide) { tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-6 px-6 py-5 h-full relative overflow-hidden rounded-[1.5rem] ${glassEffect} ${hoverEffect}">${badge}<div class="${iconClass}"><i data-lucide="${item.icon || 'circle'}" class="w-8 h-8 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 flex flex-col justify-center"><h4 class="font-bold text-base md:text-lg text-slate-700 dark:text-slate-100 leading-tight mb-1 group-hover:text-${color}-600 dark:group-hover:text-${color}-400 transition-colors">${item.judul}</h4><p class="text-[11px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`; } 
-                    else { tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-4 p-5 h-full relative overflow-hidden rounded-[1.5rem] ${glassEffect} ${hoverEffect}">${badge}<div class="${iconClassSmall}"><i data-lucide="${item.icon || 'circle'}" class="w-7 h-7 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-sm md:text-base text-slate-700 dark:text-slate-100 leading-tight mb-1 group-hover:text-${color}-600 dark:group-hover:text-${color}-400 transition-colors">${item.judul}</h4><p class="text-[10px] md:text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`; }
-                });
-                container.innerHTML = tempHTML;
-                const annArea = document.getElementById('announcement-area');
-                if (info && info.status === 'ON') {
-                    const colorMap = {red:'bg-red-50 text-red-800 border-red-500', green:'bg-green-50 text-green-800 border-green-500', blue:'bg-blue-50 text-blue-800 border-blue-500'};
-                    const theme = colorMap[info.warna] || colorMap.blue;
-                    const pesan = info.pesan || ''; let contentHTML = '';
-                    if (pesan.length > 50) { contentHTML = `<div class="marquee-container w-full overflow-hidden"><div class="marquee-text font-medium text-xs md:text-sm leading-tight whitespace-nowrap">${pesan}</div></div>`; } else { contentHTML = `<div class="font-medium text-xs md:text-sm leading-tight">${pesan}</div>`; }
-                    annArea.innerHTML = `<div class="${theme} backdrop-blur-lg bg-opacity-90 dark:bg-slate-800 dark:text-slate-200 border-l-4 py-3 px-4 rounded-xl shadow-lg flex justify-between items-center gap-3 text-sm"><div class="flex items-center gap-3 w-full overflow-hidden"><i data-lucide="info" class="w-5 h-5 shrink-0"></i>${contentHTML}</div><button onclick="app.closeBanner()" class="p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition shrink-0"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
-                    annArea.classList.remove('hidden');
-                } else { annArea.classList.add('hidden'); }
-                this.checkFlyer(info);
-                const footContainer = document.getElementById('footer-links-container');
-                footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2 active:scale-95"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
-                lucide.createIcons();
-            },
-
-            loadProfile: function() {
-                const s = localStorage.getItem('guru_profile');
-                const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; };
-                const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; };
-                const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
-                const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); };
-                const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); };
-                const statusDot = document.getElementById('status-indicator');
-                const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; if(isLocked) el.classList.add('bg-slate-100', 'text-slate-500'); else el.classList.remove('bg-slate-100', 'text-slate-500'); } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); };
-                if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setTxt('sidebar-user-instansi', p.instansi); setSrc('sidebar-user-photo', p.foto); setSrc('header-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(statusDot) { statusDot.classList.remove('bg-red-400'); statusDot.classList.add('bg-green-400'); statusDot.title = "Online"; } if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } 
-                else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); if(statusDot) { statusDot.classList.remove('bg-green-400'); statusDot.classList.add('bg-red-400'); statusDot.title = "Tamu"; } lockFields(false); }
-            },
-            
-            initTheme: function() { const saved = localStorage.getItem('theme'); const hour = new Date().getHours(); const isNight = hour >= 18 || hour < 6; let isDark = false; if (saved === 'dark') { isDark = true; } else if (saved === 'light') { isDark = false; } else if (isNight) { isDark = true; } else { isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; } if (isDark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); this.updateStatusBar(isDark); },
-            toggleTheme: function() { const isDark=document.documentElement.classList.toggle('dark'); localStorage.setItem('theme',isDark?'dark':'light'); this.updateStatusBar(isDark); },
-            updateStatusBar: function(isDark) { document.getElementById('theme-color-meta').setAttribute('content',isDark?'#0f172a':'#f8fafc'); },
-            checkFlyer: function(info) { const status = info.Pop_Status || info.pop_status; if (status === 'ON') { const today = new Date().toDateString(); const lastShown = localStorage.getItem('flyer_shown_date'); if (lastShown === today) return; document.getElementById('flyer-title').textContent = info.Pop_Judul || info.pop_judul || 'Informasi'; document.getElementById('flyer-msg').textContent = info.Pop_Pesan || info.pop_pesan || ''; const gambar = info.Pop_Gambar || info.pop_gambar || ''; const imgContainer = document.getElementById('flyer-image-container'); if (gambar && gambar.length > 5) { document.getElementById('flyer-img').src = gambar; imgContainer.classList.remove('hidden'); } else { imgContainer.classList.add('hidden'); } setTimeout(() => { app.openModal('flyer-modal'); localStorage.setItem('flyer_shown_date', today); }, 1500); } },
-            openSubmenu: function(title,icon,color) { const key=title.toLowerCase().trim(); const children=this.menuMap[key]||[]; if(children.length===0){ this.showAlert('error','Kosong','Menu ini belum diisi.'); return; } document.getElementById('submenu-title').textContent=title; const list=document.getElementById('submenu-list'); list.innerHTML=children.map(child=>`<a href="${child.url}" target="_blank" class="flex items-center gap-5 p-5 rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition active:scale-95 group shadow-sm hover:shadow-md"><div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-${color}-500 group-hover:scale-110 transition-transform"><i data-lucide="${child.icon||'link'}" class="w-6 h-6"></i></div><div class="flex-1"><h5 class="font-bold text-sm text-slate-700 dark:text-white mb-0.5">${child.judul}</h5><p class="text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div><i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-colors"></i></a>`).join(''); lucide.createIcons(); this.openModal('submenu-modal'); },
-            showAlert: function(type,title,msg,onYes) { const bgColors={error:'bg-red-100 text-red-600',success:'bg-green-100 text-green-600',info:'bg-blue-100 text-blue-600'}; const icons={error:'alert-triangle',success:'check-circle',info:'info'}; document.getElementById('dialog-icon-bg').className=`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 ${bgColors[type]||bgColors.info} shadow-inner`; document.getElementById('dialog-icon').setAttribute('data-lucide',icons[type]||'info'); document.getElementById('dialog-title').textContent=title; document.getElementById('dialog-msg').textContent=msg; const actions=document.getElementById('dialog-actions'); if(onYes){ actions.innerHTML=`<div class="grid grid-cols-2 gap-3"><button onclick="app.closeModal('dialog-modal')" class="py-3 rounded-xl bg-slate-100 font-bold text-slate-500 text-sm">Batal</button><button id="dialog-confirm" class="py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg">Ya</button></div>`; document.getElementById('dialog-confirm').onclick=()=>{ onYes(); app.closeModal('dialog-modal'); }; }else{ actions.innerHTML=`<button onclick="app.closeModal('dialog-modal')" class="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-blue-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition">Mengerti</button>`; } lucide.createIcons(); this.openModal('dialog-modal'); },
-            syncData: function() { const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='...'; btn.disabled=true; fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' }).then(r=>r.json()).then(d=>{ if(d.status==='success'){ document.getElementById('input-nama').value=d.nama; document.getElementById('input-jabatan').value=d.jabatan; document.getElementById('input-instansi').value=d.instansi; const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); this.loadProfile(); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); },
             saveProfile: function(e) { e.preventDefault(); const oldP=JSON.parse(localStorage.getItem('guru_profile')||"{}"); const p={ nama:document.getElementById('input-nama').value, jabatan:document.getElementById('input-jabatan').value, instansi:document.getElementById('input-instansi').value, email:oldP.email||document.getElementById('sync-email').value||"", foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.loadProfile(); this.closeModal('profile-modal'); setTimeout(()=>this.showAlert('success','Tersimpan','Profil diperbarui.'),350); },
             setRating: function(v) { document.getElementById('rating-input').value=v; const buttons=document.getElementById('star-rating-group').querySelectorAll('button'); buttons.forEach((btn,index)=>{ const icon=btn.querySelector('svg')||btn.querySelector('i'); if(icon){ if(index<v){ icon.classList.add('text-yellow-400','fill-yellow-400'); icon.classList.remove('text-slate-300'); }else{ icon.classList.remove('text-yellow-400','fill-yellow-400'); icon.classList.add('text-slate-300'); } } }); },
             
@@ -469,7 +503,6 @@
                 } 
             },
             
-            // --- FIRE AND FORGET LOGIC (100% SUKSES) ---
             submitFeedback: function(e) { 
                 e.preventDefault(); 
                 const btn = document.getElementById('btn-feedback-submit'); 
@@ -492,14 +525,12 @@
                     obj.kontak = document.getElementById('fb-kontak').value;
                 }
 
-                // Kirim data ke Google Apps Script (Tanpa menunggu balasan)
                 fetch(this.apiURL, {
                     method: 'POST',
-                    mode: 'no-cors', // Penting agar tidak diblokir browser
+                    mode: 'no-cors', 
                     body: JSON.stringify(obj)
                 }); 
                 
-                // LANGSUNG SUKSES DI UI (Optimistic)
                 setTimeout(() => { 
                     this.closeModal('feedback-modal'); 
                     this.showAlert('success', 'Terkirim', 'Terima kasih atas masukan Anda!'); 
