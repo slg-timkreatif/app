@@ -48,6 +48,7 @@
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* BACKGROUND BLOBS */
         @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
@@ -60,6 +61,7 @@
         
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         
+        /* TOAST & BANNER */
         #exit-toast {
             visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 50px;
             padding: 12px 20px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%);
@@ -67,15 +69,16 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.1); pointer-events: none;
         }
         #exit-toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-
         .sticky-banner { position: sticky; top: -20px; z-index: 30; transition: all 0.3s ease; margin-bottom: 10px; }
         .input-group:focus-within .lock-icon { color: #3b82f6; }
 
+        /* MARQUEE (RUNNING TEXT) - UPDATED: PAUSE ON HOVER */
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
-        .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } 
+        .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } /* Fitur Baru */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
+        /* ROCKET ANIMATION */
         @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
         .rocket-anim { animation: rocket-float 8s ease-in-out infinite; }
     </style>
@@ -149,6 +152,7 @@
 
             <div class="flex-1 overflow-y-auto p-5 md:p-8 scroll-smooth pb-28 md:pb-10" id="main-scroll-area">
                 <div class="max-w-5xl mx-auto w-full space-y-6">
+                    
                     <div id="announcement-area" class="hidden fade-in sticky-banner"></div>
                     
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-6 text-white shadow-xl shadow-indigo-900/20 relative overflow-hidden group transition-all duration-1000">
@@ -334,7 +338,7 @@
                 } catch (e) {}
             },
 
-            // --- FUNGSI RENDER (UPDATED V2.0 FINAL) ---
+            // --- FUNGSI RENDER (UPDATED V2.1: Role Tamu & Banner V2) ---
             render: function(data) {
                 const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info || {}; const quotes = data.quotes || [];
                 if (quotes.length > 0) { const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]; const qText = document.getElementById('quote-text'); const qAuth = document.getElementById('quote-author'); if(qText) qText.innerText = `"${randomQuote.text}"`; if(qAuth) qAuth.innerText = `- ${randomQuote.author}`; }
@@ -345,7 +349,19 @@
                 if(parents.length === 0) { container.innerHTML = '<div class="col-span-2 text-center text-slate-400 text-sm py-10">Belum ada menu.</div>'; return; }
                 
                 parents.forEach(item => {
-                    const requiredRole = (item.role || "").toLowerCase().trim(); if (requiredRole !== "") { if (requiredRole === "guru") { if (userJabatan === "") return; } else { if (userJabatan === "" || !userJabatan.includes(requiredRole)) return; } }
+                    const requiredRole = (item.role || "").toLowerCase().trim(); 
+                    
+                    // --- LOGIKA FILTER ROLE (UPDATED V2.1) ---
+                    if (requiredRole !== "") {
+                        if (requiredRole === "tamu") {
+                            if (userJabatan !== "") return; // Jika user login, HIDE menu ini
+                        } else if (requiredRole === "guru") {
+                            if (userJabatan === "") return; // Jika user tamu, HIDE menu ini
+                        } else {
+                            if (userJabatan === "" || !userJabatan.includes(requiredRole)) return;
+                        }
+                    }
+
                     const hasChildren = this.menuMap[item.judul.toLowerCase().trim()] && this.menuMap[item.judul.toLowerCase().trim()].length > 0;
                     const color = item.warna || 'blue'; const targetVisibility = (item.target || 'all').toLowerCase(); let visibility = 'block';
                     if (targetVisibility === 'mobile') visibility = 'flex md:hidden'; 
@@ -381,8 +397,6 @@
                     const isActionCard = (linkTarget !== '' && linkTarget.length > 1);
 
                     // LOGIKA VISUAL DINAMIS
-                    // Jika Action Card: Alignment Start (Atas), Padding Besar
-                    // Jika Running Text: Alignment Center (Tengah), Padding Kecil
                     const containerClass = isActionCard 
                         ? "py-4 px-5 items-start gap-4" 
                         : "py-2.5 px-4 items-center gap-3"; 
@@ -449,7 +463,6 @@
                 if (navigator.vibrate) navigator.vibrate(50);
 
                 // Cek apakah User minta External Link?
-                // Contoh di DB: "ext:https://google.com"
                 if (target.startsWith('ext:')) {
                     const cleanUrl = target.substring(4); // Hapus "ext:"
                     window.open(cleanUrl, '_blank'); // Buka tab baru (Browser HP)
