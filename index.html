@@ -38,8 +38,6 @@
 
     <style>
         body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        
-        /* CSS WAJIB */
         .hidden { display: none !important; }
         @media (min-width: 768px) {
             .md\:flex { display: flex !important; }
@@ -50,6 +48,7 @@
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* BACKGROUND BLOBS */
         @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
@@ -62,6 +61,7 @@
         
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         
+        /* TOAST & BANNER */
         #exit-toast {
             visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 50px;
             padding: 12px 20px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%);
@@ -69,14 +69,16 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.1); pointer-events: none;
         }
         #exit-toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-
         .sticky-banner { position: sticky; top: -20px; z-index: 30; transition: all 0.3s ease; margin-bottom: 10px; }
         .input-group:focus-within .lock-icon { color: #3b82f6; }
 
+        /* MARQUEE (RUNNING TEXT) */
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
+        .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } /* Pause on Hover */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
+        /* ROCKET ANIMATION */
         @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
         .rocket-anim { animation: rocket-float 8s ease-in-out infinite; }
     </style>
@@ -174,6 +176,7 @@
                             <div class="col-span-2 md:col-span-4 text-center py-10 text-slate-400 hidden" id="empty-state-msg"><span class="text-xs">Menunggu data...</span></div>
                         </div>
                     </div>
+
                     <div class="pt-8 border-t border-slate-200/60 dark:border-slate-800/60 text-center pb-8">
                         <div id="footer-links-container" class="flex flex-wrap justify-center gap-3 mb-6"></div>
                         <p class="text-[10px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-[0.2em]">Tim Kreatif Selogiri <span id="app-version-footer"></span> &copy; 2026</p>
@@ -291,7 +294,6 @@
         <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         <i data-lucide="life-buoy" class="w-6 h-6 group-hover:animate-spin-slow relative z-10"></i>
     </button>
-
     <div id="exit-toast">Tekan sekali lagi untuk keluar</div>
     
     <div id="update-overlay" class="fixed inset-0 z-[100] bg-slate-900 text-white flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-500"><div class="absolute inset-0 overflow-hidden opacity-20 pointer-events-none"><div class="absolute top-10 left-10 w-32 h-32 bg-blue-500 rounded-full blur-[80px] animate-pulse"></div><div class="absolute bottom-10 right-10 w-40 h-40 bg-purple-500 rounded-full blur-[80px] animate-pulse" style="animation-delay: 1s;"></div></div><div class="relative z-10 text-center px-8 w-full max-w-sm"><div class="w-24 h-24 mx-auto mb-8 relative"><div class="absolute inset-0 bg-blue-500 blur-2xl opacity-20 animate-pulse"></div><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full rounded-2xl relative z-10 shadow-2xl animate-bounce" style="animation-duration: 3s;"><div class="absolute -bottom-2 -right-2 bg-green-500 text-slate-900 p-1.5 rounded-full border-4 border-slate-900 shadow-lg"><i data-lucide="zap" class="w-5 h-5 fill-current"></i></div></div><h2 class="text-2xl font-bold mb-2 tracking-tight">Optimasi Sistem</h2><p id="update-status-text" class="text-slate-400 text-sm font-mono mb-8 h-5">Menginisialisasi...</p><div class="w-full bg-slate-800 rounded-full h-1.5 mb-2 overflow-hidden border border-slate-700"><div id="update-progress-bar" class="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-full transition-all duration-300 ease-out w-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div></div><div class="flex justify-between text-[10px] text-slate-500 font-bold uppercase tracking-widest"><span>Proses</span><span id="update-percent">0%</span></div></div></div>
@@ -320,22 +322,19 @@
                 if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
                 this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); this.updateGreeting(); setInterval(() => this.updateGreeting(), 60000); 
                 
-                // DEEP LINK LOGIC (V14)
+                // DEEP LINK LOGIC (V14 - EXPANDED)
                 try {
                     setTimeout(() => {
                         const hash = window.location.hash; 
-                        if (hash === '#reset') {
+                        if (hash && hash.length > 1) {
+                            app.handleLink(hash);
                             history.replaceState(null, null, ' '); 
-                            app.processUpdateAnimation(true); 
-                        } else if (hash === '#profil') {
-                            history.replaceState(null, null, ' ');
-                            app.openModal('profile-modal');
                         }
                     }, 1500); 
                 } catch (e) {}
             },
 
-            // --- FUNGSI RENDER (V12: SQUIRCLE + GLASS CARD) ---
+            // --- FUNGSI RENDER (UPDATED V2.0 FINAL) ---
             render: function(data) {
                 const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info || {}; const quotes = data.quotes || [];
                 if (quotes.length > 0) { const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]; const qText = document.getElementById('quote-text'); const qAuth = document.getElementById('quote-author'); if(qText) qText.innerText = `"${randomQuote.text}"`; if(qAuth) qAuth.innerText = `- ${randomQuote.author}`; }
@@ -360,8 +359,6 @@
                     
                     const glassEffect = "bg-white/70 dark:bg-darkcard/60 backdrop-blur-md border border-white/60 dark:border-slate-700/60"; 
                     const hoverEffect = `hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300 group`;
-                    
-                    // ICON STYLE: SQUIRCLE GRADIENT (V12)
                     const iconClass = `w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-${color}-500 to-${color}-600 text-white flex items-center justify-center shadow-lg shadow-${color}-500/30 border border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`;
                     
                     if (isWide) { 
@@ -371,19 +368,87 @@
                     }
                 });
                 container.innerHTML = tempHTML;
+                
+                // === CONTEXTUAL BANNER LOGIC V2 (VISUAL REFINED) ===
                 const annArea = document.getElementById('announcement-area');
-                if (info && info.status === 'ON') {
-                    const colorMap = {red:'bg-red-50 text-red-800 border-red-500', green:'bg-green-50 text-green-800 border-green-500', blue:'bg-blue-50 text-blue-800 border-blue-500'};
+                if (info && (info.status === 'ON' || info.Status === 'ON')) {
+                    const displayText = info.pesan || info.Pesan || '';
+                    const linkTarget = info.link || info.Link || ''; 
+                    const btnLabel = info.btn_label || 'Buka';
+
+                    const isActionCard = (linkTarget !== '' && linkTarget.length > 1);
+                    const containerClass = isActionCard ? "py-4 px-5 items-start gap-4" : "py-2.5 px-4 items-center gap-3"; 
+                    const iconWrapperClass = isActionCard ? "p-2 bg-white/20 rounded-lg mt-0.5" : "p-1 bg-white/20 rounded-md shrink-0"; 
+                    const iconSize = isActionCard ? "w-5 h-5" : "w-3.5 h-3.5"; 
+
+                    const colorMap = {
+                        red: 'bg-red-500 text-white border-red-600', 
+                        green: 'bg-green-500 text-white border-green-600', 
+                        blue: 'bg-blue-600 text-white border-blue-700',
+                        yellow: 'bg-yellow-400 text-slate-900 border-yellow-500',
+                        dark: 'bg-slate-800 text-white border-slate-900'
+                    };
                     const theme = colorMap[info.warna] || colorMap.blue;
-                    const pesan = info.pesan || ''; let contentHTML = '';
-                    if (pesan.length > 50) { contentHTML = `<div class="marquee-container w-full overflow-hidden"><div class="marquee-text font-medium text-xs md:text-sm leading-tight whitespace-nowrap">${pesan}</div></div>`; } else { contentHTML = `<div class="font-medium text-xs md:text-sm leading-tight">${pesan}</div>`; }
-                    annArea.innerHTML = `<div class="${theme} backdrop-blur-lg bg-opacity-90 dark:bg-slate-800 dark:text-slate-200 border-l-4 py-3 px-4 rounded-xl shadow-lg flex justify-between items-center gap-3 text-sm"><div class="flex items-center gap-3 w-full overflow-hidden"><i data-lucide="info" class="w-5 h-5 shrink-0"></i>${contentHTML}</div><button onclick="app.closeBanner()" class="p-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition shrink-0"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
+                    let contentHTML = '';
+
+                    if (isActionCard) {
+                        const iconBtn = linkTarget.startsWith('#') ? 'chevron-right' : 'download';
+                        contentHTML = `
+                            <div class="flex flex-col md:flex-row items-start md:items-center gap-3 w-full">
+                                <div class="flex-1"><p class="font-bold text-sm md:text-base leading-snug">${displayText}</p></div>
+                                <button onclick="app.handleLink('${linkTarget}')" class="shrink-0 mt-2 md:mt-0 px-4 py-2 bg-white text-slate-900 text-xs font-bold rounded-lg shadow-sm hover:bg-slate-100 active:scale-95 transition-all flex items-center gap-2">
+                                    <span>${btnLabel}</span><i data-lucide="${iconBtn}" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>`;
+                    } else {
+                        if (displayText.length > 50) {
+                            contentHTML = `<div class="marquee-container w-full overflow-hidden"><div class="marquee-text font-bold text-xs md:text-sm leading-tight whitespace-nowrap flex items-center gap-2">${displayText}</div></div>`;
+                        } else {
+                            contentHTML = `<div class="font-bold text-xs md:text-sm leading-tight">${displayText}</div>`;
+                        }
+                    }
+
+                    annArea.innerHTML = `
+                        <div class="${theme} backdrop-blur-md border-l-4 ${containerClass} rounded-xl shadow-lg flex mb-4 relative overflow-hidden transition-all duration-500">
+                            <div class="${iconWrapperClass} animate-pulse"><i data-lucide="${isActionCard ? 'newspaper' : 'bell-ring'}" class="${iconSize} text-current"></i></div>
+                            <div class="flex-1 min-w-0">${contentHTML}</div>
+                            <button onclick="app.closeBanner()" class="absolute top-1 right-1 p-1 rounded-full bg-black/10 hover:bg-black/20 text-white/70 hover:text-white transition"><i data-lucide="x" class="w-3 h-3"></i></button>
+                        </div>`;
                     annArea.classList.remove('hidden');
                 } else { annArea.classList.add('hidden'); }
+                // === END BANNER LOGIC ===
+
                 this.checkFlyer(info);
                 const footContainer = document.getElementById('footer-links-container');
                 footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2 active:scale-95"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
                 lucide.createIcons();
+            },
+
+            // --- HANDLE LINK V3 (EXT SUPPORT) ---
+            handleLink: function(target) {
+                if (!target) return;
+                if (navigator.vibrate) navigator.vibrate(50);
+
+                if (target.startsWith('ext:')) {
+                    const cleanUrl = target.substring(4); 
+                    window.open(cleanUrl, '_blank'); 
+                    return;
+                }
+
+                if (target.startsWith('#')) {
+                    const command = target.substring(1).toLowerCase(); 
+                    if (command === 'profil') this.openModal('profile-modal');
+                    else if (command === 'bantuan') this.openModal('feedback-modal');
+                    else if (command === 'install') this.openModal('install-modal');
+                    else if (command === 'reset') this.processUpdateAnimation(true);
+                    else this.showAlert('info', 'Info', 'Fitur belum tersedia.');
+                } 
+                else if (target.startsWith('http')) {
+                    this.openWeb(target, 'Info Tautan');
+                } 
+                else {
+                    this.showAlert('info', 'Info', target);
+                }
             },
 
             // --- FUNCTION UTAMA LAINNYA ---
