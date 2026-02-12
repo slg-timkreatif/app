@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panduan Login - Guru Berbagi</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    colors: { darkbg: '#0f172a', darkcard: '#1e293b' }, 
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                } 
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; }
+        .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #3b82f6; animation: float 10s infinite alternate; } 
+        .blob-2 { bottom: -10%; right: -10%; width: 350px; height: 350px; background: #8b5cf6; animation: float 12s infinite alternate-reverse; } 
+        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(20px, 20px); } }
+        .step-line { position: absolute; left: 24px; top: 40px; bottom: -20px; width: 2px; background: #e2e8f0; z-index: 0; }
+        .dark .step-line { background: #334155; }
+        .last-item .step-line { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 min-h-screen relative font-sans transition-colors duration-500">
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="max-w-2xl mx-auto p-6 md:p-10">
+        
+        <div class="text-center mb-10 fade-in">
+            <div class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl mx-auto mb-6 shadow-xl border border-slate-100 dark:border-slate-700 flex items-center justify-center">
+                <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-16 h-16 rounded-2xl">
+            </div>
+            <h1 class="text-3xl font-extrabold mb-2 text-slate-900 dark:text-white">Aplikasi Pindah Rumah?</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-md mx-auto">
+                Jangan khawatir. Semua aplikasi lama Anda (Raport, Absensi, dll) kini terintegrasi di sini demi keamanan data.
+            </p>
+        </div>
+
+        <div class="bg-white/60 dark:bg-darkcard/60 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-[2.5rem] p-8 shadow-2xl mb-8 relative overflow-hidden">
+            
+            <h3 class="text-center font-bold text-lg mb-8 flex items-center justify-center gap-2">
+                <i data-lucide="map" class="w-5 h-5 text-blue-500"></i> Cara Masuk Aplikasi
+            </h3>
+
+            <div class="space-y-0 relative">
+                
+                <div class="relative flex gap-6 pb-10">
+                    <div class="step-line"></div>
+                    <div class="w-12 h-12 shrink-0 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center shadow-sm relative z-10 font-bold text-lg">1</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Buka Profil</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Di halaman utama, klik foto profil (sudut kiri atas di HP) atau tombol <b>"Edit Profil"</b>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative flex gap-6 pb-10">
+                    <div class="step-line"></div>
+                    <div class="w-12 h-12 shrink-0 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-2xl flex items-center justify-center shadow-sm relative z-10 font-bold text-lg">2</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Masukkan Email & PIN</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Isi Email dan PIN yang sudah terdaftar. Lalu klik tombol <span class="px-2 py-0.5 bg-blue-600 text-white text-[10px] rounded font-bold">Cek Data</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative flex gap-6 pb-10">
+                    <div class="step-line"></div>
+                    <div class="w-12 h-12 shrink-0 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-2xl flex items-center justify-center shadow-sm relative z-10 font-bold text-lg">3</div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Simpan Profil</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Jika data benar (Nama & Unit Kerja muncul), klik <b>Simpan Profil</b>. Sistem akan mencatat kehadiran Anda.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative flex gap-6 last-item">
+                    <div class="step-line"></div>
+                    <div class="w-12 h-12 shrink-0 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-2xl flex items-center justify-center shadow-sm relative z-10 font-bold text-lg"><i data-lucide="check" class="w-6 h-6"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white text-lg mb-1">Menu Terbuka!</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Menu aplikasi (Raport, Jurnal, dll) akan otomatis muncul sesuai jabatan Anda.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <a href="index.html#profil" class="block w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition text-center flex items-center justify-center gap-3">
+            <span>Login Sekarang</span>
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </a>
+        
+        <p class="text-center text-[10px] text-slate-400 mt-6 uppercase tracking-widest font-bold">Tim Kreatif Selogiri &copy; 2026</p>
+
+    </div>
+
+    <script>
+        // Init Dark Mode Check
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        lucide.createIcons();
+    </script>
+</body>
+</html>
