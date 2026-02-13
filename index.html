@@ -2,14 +2,8 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#f8fafc" id="theme-color-meta">
     <meta name="description" content="Portal Pendidikan Selogiri">
     <title>Guru Berbagi</title>
     
@@ -43,13 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        body { 
-            -webkit-tap-highlight-color: transparent; 
-            touch-action: manipulation; 
-            /* PADDING TOP KHUSUS AGAR KONTEN TIDAK KETUTUPAN PONI HP */
-            padding-top: env(safe-area-inset-top);
-        }
-        
+        body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         .hidden { display: none !important; }
         @media (min-width: 768px) {
             .md\:flex { display: flex !important; }
@@ -60,7 +48,7 @@
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* BLOB ANIMATION */
+        /* BACKGROUND BLOBS */
         @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
@@ -73,7 +61,7 @@
         
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         
-        /* TOAST */
+        /* TOAST & BANNER */
         #exit-toast {
             visibility: hidden; min-width: 250px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 50px;
             padding: 12px 20px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%);
@@ -81,30 +69,16 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.1); pointer-events: none;
         }
         #exit-toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-
-        /* GLASS HEADER CSS */
-        .navbar-glass {
-            background: rgba(255, 255, 255, 0.7); /* Transparan */
-            backdrop-filter: blur(16px) saturate(180%); /* Efek Kaca Kuat */
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-        }
-        .dark .navbar-glass {
-            background: rgba(15, 23, 42, 0.7);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
         .sticky-banner { position: sticky; top: -20px; z-index: 30; transition: all 0.3s ease; margin-bottom: 10px; }
         .input-group:focus-within .lock-icon { color: #3b82f6; }
 
-        /* MARQUEE */
+        /* MARQUEE (RUNNING TEXT) - UPDATED: PAUSE ON HOVER */
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
-        .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } 
+        .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } /* Fitur Baru */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
-        /* ROCKET */
+        /* ROCKET ANIMATION */
         @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
         .rocket-anim { animation: rocket-float 8s ease-in-out infinite; }
     </style>
@@ -152,7 +126,7 @@
         </aside>
 
         <main class="flex-1 flex flex-col relative overflow-hidden min-w-0">
-            <header class="navbar-glass z-50 px-6 py-4 sticky top-0 flex items-center justify-between gap-4 transition-all duration-300">
+            <header class="bg-white/60 dark:bg-darkbg/60 backdrop-blur-md border-b border-white/40 dark:border-slate-700/40 z-20 px-6 py-4 sticky top-0 flex items-center justify-between gap-4 shadow-sm transition-all duration-300">
                 <div class="flex items-center gap-4">
                     <div class="md:hidden w-10 h-10 rounded-full border-2 border-white dark:border-slate-700 shadow-md overflow-hidden shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="app.openModal('profile-modal')">
                         <img id="header-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover">
@@ -349,19 +323,22 @@
                 if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
                 this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); this.updateGreeting(); setInterval(() => this.updateGreeting(), 60000); 
                 
-                // DEEP LINK LOGIC (V14 - EXPANDED)
+                // DEEP LINK LOGIC (V14 - EXPANDED FOR V2)
                 try {
                     setTimeout(() => {
                         const hash = window.location.hash; 
+                        // Cek apakah ada hash?
                         if (hash && hash.length > 1) {
+                            // Kirim ke handleLink
                             app.handleLink(hash);
+                            // Bersihkan URL
                             history.replaceState(null, null, ' '); 
                         }
                     }, 1500); 
                 } catch (e) {}
             },
 
-            // --- FUNGSI RENDER (UPDATED V2.2: Ultimate Glass UI) ---
+            // --- FUNGSI RENDER (UPDATED V2.1: Role Tamu & Banner V2) ---
             render: function(data) {
                 const menuList = data.menu || []; const footerList = data.footer || []; const info = data.info || {}; const quotes = data.quotes || [];
                 if (quotes.length > 0) { const randomQuote = quotes[Math.floor(Math.random() * quotes.length)]; const qText = document.getElementById('quote-text'); const qAuth = document.getElementById('quote-author'); if(qText) qText.innerText = `"${randomQuote.text}"`; if(qAuth) qAuth.innerText = `- ${randomQuote.author}`; }
@@ -374,12 +351,12 @@
                 parents.forEach(item => {
                     const requiredRole = (item.role || "").toLowerCase().trim(); 
                     
-                    // --- LOGIKA FILTER ROLE ---
+                    // --- LOGIKA FILTER ROLE (UPDATED V2.1) ---
                     if (requiredRole !== "") {
                         if (requiredRole === "tamu") {
-                            if (userJabatan !== "") return; 
+                            if (userJabatan !== "") return; // Jika user login, HIDE menu ini
                         } else if (requiredRole === "guru") {
-                            if (userJabatan === "") return; 
+                            if (userJabatan === "") return; // Jika user tamu, HIDE menu ini
                         } else {
                             if (userJabatan === "" || !userJabatan.includes(requiredRole)) return;
                         }
@@ -409,30 +386,41 @@
                 });
                 container.innerHTML = tempHTML;
                 
-                // === BANNER LOGIC V2 (FROSTED EDITION) ===
+                // === START CONTEXTUAL BANNER LOGIC V2 (REFINED) ===
                 const annArea = document.getElementById('announcement-area');
                 if (info && (info.status === 'ON' || info.Status === 'ON')) {
                     const displayText = info.pesan || info.Pesan || '';
                     const linkTarget = info.link || info.Link || ''; 
                     const btnLabel = info.btn_label || 'Buka';
 
+                    // Cek apakah ini Banner Besar (Ada Link) atau Running Text (Tanpa Link)
                     const isActionCard = (linkTarget !== '' && linkTarget.length > 1);
-                    const containerClass = isActionCard ? "py-4 px-5 items-start gap-4" : "py-2.5 px-4 items-center gap-3"; 
-                    const iconWrapperClass = isActionCard ? "p-2 bg-white/20 rounded-lg mt-0.5" : "p-1 bg-white/20 rounded-md shrink-0"; 
-                    const iconSize = isActionCard ? "w-5 h-5" : "w-3.5 h-3.5"; 
 
-                    // FROSTED COLOR MAP (Semi-Transparent)
+                    // LOGIKA VISUAL DINAMIS
+                    const containerClass = isActionCard 
+                        ? "py-4 px-5 items-start gap-4" 
+                        : "py-2.5 px-4 items-center gap-3"; 
+
+                    // Ukuran & Style Ikon
+                    const iconWrapperClass = isActionCard
+                        ? "p-2 bg-white/20 rounded-lg mt-0.5" // Ikon Besar
+                        : "p-1 bg-white/20 rounded-md shrink-0"; // Ikon Kecil
+                        
+                    const iconSize = isActionCard ? "w-5 h-5" : "w-3.5 h-3.5"; // Ukuran Ikon
+
+                    // Tema Warna
                     const colorMap = {
-                        red: 'bg-red-50/90 text-red-700 border-red-500 dark:bg-red-900/40 dark:text-red-200 dark:border-red-500', 
-                        green: 'bg-green-50/90 text-green-700 border-green-500 dark:bg-green-900/40 dark:text-green-200 dark:border-green-500', 
-                        blue: 'bg-blue-50/90 text-blue-700 border-blue-500 dark:bg-blue-900/40 dark:text-blue-200 dark:border-blue-500',
-                        yellow: 'bg-yellow-50/90 text-yellow-700 border-yellow-500 dark:bg-yellow-900/40 dark:text-yellow-200 dark:border-yellow-500',
-                        dark: 'bg-slate-800/90 text-white border-slate-600 dark:bg-slate-700/60 dark:text-white dark:border-slate-500'
+                        red: 'bg-red-500 text-white border-red-600', 
+                        green: 'bg-green-500 text-white border-green-600', 
+                        blue: 'bg-blue-600 text-white border-blue-700',
+                        yellow: 'bg-yellow-400 text-slate-900 border-yellow-500',
+                        dark: 'bg-slate-800 text-white border-slate-900'
                     };
                     const theme = colorMap[info.warna] || colorMap.blue;
                     let contentHTML = '';
 
                     if (isActionCard) {
+                        // === MODE 1: Static Banner (Besar) ===
                         const iconBtn = linkTarget.startsWith('#') ? 'chevron-right' : 'download';
                         contentHTML = `
                             <div class="flex flex-col md:flex-row items-start md:items-center gap-3 w-full">
@@ -442,6 +430,7 @@
                                 </button>
                             </div>`;
                     } else {
+                        // === MODE 2: Running Text (Kecil & Rapi) ===
                         if (displayText.length > 50) {
                             contentHTML = `<div class="marquee-container w-full overflow-hidden"><div class="marquee-text font-bold text-xs md:text-sm leading-tight whitespace-nowrap flex items-center gap-2">${displayText}</div></div>`;
                         } else {
@@ -449,14 +438,18 @@
                         }
                     }
 
+                    // RENDER FINAL
                     annArea.innerHTML = `
                         <div class="${theme} backdrop-blur-md border-l-4 ${containerClass} rounded-xl shadow-lg flex mb-4 relative overflow-hidden transition-all duration-500">
-                            <div class="${iconWrapperClass} animate-pulse"><i data-lucide="${isActionCard ? 'newspaper' : 'bell-ring'}" class="${iconSize} text-current"></i></div>
+                            <div class="${iconWrapperClass} animate-pulse">
+                                <i data-lucide="${isActionCard ? 'newspaper' : 'bell-ring'}" class="${iconSize} text-current"></i>
+                            </div>
                             <div class="flex-1 min-w-0">${contentHTML}</div>
                             <button onclick="app.closeBanner()" class="absolute top-1 right-1 p-1 rounded-full bg-black/10 hover:bg-black/20 text-white/70 hover:text-white transition"><i data-lucide="x" class="w-3 h-3"></i></button>
                         </div>`;
                     annArea.classList.remove('hidden');
                 } else { annArea.classList.add('hidden'); }
+                // === END CONTEXTUAL BANNER LOGIC ===
 
                 this.checkFlyer(info);
                 const footContainer = document.getElementById('footer-links-container');
@@ -464,17 +457,19 @@
                 lucide.createIcons();
             },
 
-            // --- HANDLE LINK ---
+            // --- FUNCTION HANDLE LINK (V3: Support Prefix 'ext:') ---
             handleLink: function(target) {
                 if (!target) return;
                 if (navigator.vibrate) navigator.vibrate(50);
 
+                // Cek apakah User minta External Link?
                 if (target.startsWith('ext:')) {
-                    const cleanUrl = target.substring(4); 
-                    window.open(cleanUrl, '_blank'); 
+                    const cleanUrl = target.substring(4); // Hapus "ext:"
+                    window.open(cleanUrl, '_blank'); // Buka tab baru (Browser HP)
                     return;
                 }
 
+                // Cek Internal Deep Link (#)
                 if (target.startsWith('#')) {
                     const command = target.substring(1).toLowerCase(); 
                     if (command === 'profil') this.openModal('profile-modal');
@@ -483,6 +478,7 @@
                     else if (command === 'reset') this.processUpdateAnimation(true);
                     else this.showAlert('info', 'Info', 'Fitur belum tersedia.');
                 } 
+                // Default HTTP (Tanpa ext:) -> Buka di Frame Aplikasi
                 else if (target.startsWith('http')) {
                     this.openWeb(target, 'Info Tautan');
                 } 
