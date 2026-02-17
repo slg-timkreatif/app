@@ -66,9 +66,8 @@
         }
         .dark .navbar-floating { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
 
-        /* BANNER STYLE (Z-Index 30) */
+        /* BANNER STYLE */
         .banner-sticky {
-            position: sticky; top: 87px; margin-bottom: 24px; z-index: 30; 
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             animation: slideDown 0.5s ease-out;
         }
@@ -111,7 +110,7 @@
         <main class="flex-1 flex flex-col relative overflow-hidden min-w-0">
             <div id="main-scroll-area" class="flex-1 overflow-y-auto h-full scroll-smooth">
                 
-                <div class="sticky top-0 z-30 flex flex-col items-center w-full pointer-events-none pb-2">
+                <div class="sticky top-0 z-30 flex flex-col items-center w-full pointer-events-none pb-2 transition-all duration-300">
                     
                     <div class="max-w-5xl mx-auto w-full px-5 md:px-8 mt-3 pointer-events-auto">
                         <header class="navbar-floating px-6 py-4 flex items-center justify-between gap-4">
@@ -122,7 +121,7 @@
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <h2 class="font-extrabold text-slate-800 dark:text-white text-lg leading-tight">Guru Berbagi</h2>
-                                        <div id="status-indicator" class="w-2 h-2 rounded-full bg-red-500 shadow-sm animate-pulse" title="Status Koneksi"></div>
+                                        <div id="status-indicator" class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm animate-pulse" title="Status Koneksi"></div>
                                     </div>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Portal Pendidikan Selogiri</p>
                                 </div>
@@ -139,7 +138,7 @@
                         </header>
                     </div>
 
-                    <div id="announcement-area" class="hidden pointer-events-auto banner-enter max-w-5xl mx-auto w-full px-5 md:px-8 mt-3"></div>
+                    <div id="announcement-area" class="hidden pointer-events-auto banner-enter max-w-5xl mx-auto w-full px-5 md:px-8 mt-3 relative"></div>
                 </div>
 
                 <div class="max-w-5xl mx-auto w-full space-y-6 px-5 md:px-8 mt-2 pb-32 md:pb-10">
@@ -293,11 +292,28 @@
     <script>
         const app = {
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
-            
             deferredPrompt: null, menuMap: {}, backPressedTime: 0, 
             modalList: ['profile-modal', 'control-center', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
 
-            // --- RESTORED FUNCTIONS (DIJAMIN AMAN) ---
+            // --- FUNGSI INTI (WAJIB ADA) ---
+            init: function() {
+                this.initTheme(); 
+                lucide.createIcons(); 
+                this.loadProfile();
+                window.addEventListener('popstate', (event) => {
+                    let modalOpen = false;
+                    for (let id of this.modalList) { const el = document.getElementById(id); if (el && !el.classList.contains('hidden')) { app.closeModal(id); modalOpen = true; break; } }
+                    if (modalOpen) window.history.pushState(null, null, window.location.href); else { const now = new Date().getTime(); if (now - this.backPressedTime < 2000) {} else { this.backPressedTime = now; this.showToast(); window.history.pushState(null, null, window.location.href); } }
+                });
+                window.history.pushState(null, null, window.location.href);
+                const cached = localStorage.getItem('app_cache');
+                if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
+                this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); 
+                app.updateGreeting(); // FIX: Explicit Call
+                setInterval(() => app.updateGreeting(), 60000); 
+                try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { app.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
+            },
+
             initTheme: function() { const saved = localStorage.getItem('theme'); const hour = new Date().getHours(); const isNight = hour >= 18 || hour < 6; let isDark = false; if (saved === 'dark') { isDark = true; } else if (saved === 'light') { isDark = false; } else if (isNight) { isDark = true; } else { isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; } if (isDark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); this.updateStatusBar(isDark); },
             toggleTheme: function() { const isDark=document.documentElement.classList.toggle('dark'); localStorage.setItem('theme',isDark?'dark':'light'); this.updateStatusBar(isDark); },
             updateStatusBar: function(isDark) { 
@@ -305,28 +321,55 @@
                 const metaTags = document.querySelectorAll('meta[name="theme-color"]');
                 metaTags.forEach(tag => tag.setAttribute('content', color));
             },
-            
-            checkFlyer: function(info) { const status = info.Pop_Status || info.pop_status; if (status === 'ON') { const today = new Date().toDateString(); const lastShown = localStorage.getItem('flyer_shown_date'); if (lastShown === today) return; document.getElementById('flyer-title').textContent = info.Pop_Judul || info.pop_judul || 'Informasi'; document.getElementById('flyer-msg').innerHTML = info.Pop_Pesan || info.pop_pesan || ''; const gambar = info.Pop_Gambar || info.pop_gambar || ''; const imgContainer = document.getElementById('flyer-image-container'); if (gambar && gambar.length > 5) { document.getElementById('flyer-img').src = gambar; imgContainer.classList.remove('hidden'); } else { imgContainer.classList.add('hidden'); } setTimeout(() => { app.openModal('flyer-modal'); localStorage.setItem('flyer_shown_date', today); }, 1500); } },
-            
+
+            // --- FUNCTION UTAMA UNTUK CEK ANTRIAN MODAL (PRIORITY LOGIC) ---
+            checkPriorityQueue: function(info) {
+                const today = new Date().toDateString();
+                
+                // 1. Cek Optimasi (Prioritas Tertinggi)
+                if (info && (info.optimasi === 'ON' || info.optimasi === 'YA')) {
+                    const lastShown = localStorage.getItem('rocket_shown_date');
+                    if (lastShown !== today) { 
+                        setTimeout(() => { app.openModal('optimization-modal'); }, 2000); 
+                        localStorage.setItem('rocket_shown_date', today);
+                        return; // Stop di sini, jangan lanjut ke flyer
+                    }
+                }
+
+                // 2. Cek Flyer (Prioritas Kedua)
+                const status = info.Pop_Status || info.pop_status;
+                if (status === 'ON') { 
+                    const lastShown = localStorage.getItem('flyer_shown_date'); 
+                    if (lastShown !== today) {
+                        document.getElementById('flyer-title').textContent = info.Pop_Judul || info.pop_judul || 'Informasi'; 
+                        document.getElementById('flyer-msg').innerHTML = info.Pop_Pesan || info.pop_pesan || ''; 
+                        const gambar = info.Pop_Gambar || info.pop_gambar || ''; 
+                        const imgContainer = document.getElementById('flyer-image-container'); 
+                        if (gambar && gambar.length > 5) { 
+                            document.getElementById('flyer-img').src = gambar; 
+                            imgContainer.classList.remove('hidden'); 
+                        } else { 
+                            imgContainer.classList.add('hidden'); 
+                        } 
+                        setTimeout(() => { 
+                            app.openModal('flyer-modal'); 
+                            localStorage.setItem('flyer_shown_date', today); 
+                        }, 2500); 
+                    }
+                }
+            },
+
             openSubmenu: function(title, icon, color) { 
                 const key = title.toLowerCase().trim(); 
                 const children = this.menuMap[key] || []; 
-                if (children.length === 0) { 
-                    this.showAlert('info', 'Kosong', 'Menu ini belum diisi.'); 
-                    return; 
-                } 
+                if (children.length === 0) { this.showAlert('info', 'Kosong', 'Menu ini belum diisi.'); return; } 
                 document.getElementById('submenu-title').textContent = title; 
                 const list = document.getElementById('submenu-list'); 
                 list.innerHTML = children.map(child => {
                     const safeIcon = child.icon || 'link';
-                    // Escape quote agar tidak error
                     const url = (child.url || '#').replace(/'/g, "\\'");
                     const judul = (child.judul || '').replace(/'/g, "\\'");
-                    return `<a href="${url}" target="_blank" class="flex items-center gap-5 p-5 rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition active:scale-95 group shadow-sm hover:shadow-md">
-                        <div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-${color}-500 group-hover:scale-110 transition-transform"><i data-lucide="${safeIcon}" class="w-6 h-6"></i></div>
-                        <div class="flex-1"><h5 class="font-bold text-sm text-slate-700 dark:text-white mb-0.5">${judul}</h5><p class="text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div>
-                        <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-colors"></i>
-                    </a>`;
+                    return `<a href="${url}" target="_blank" class="flex items-center gap-5 p-5 rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition active:scale-95 group shadow-sm hover:shadow-md"><div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center text-${color}-500 group-hover:scale-110 transition-transform"><i data-lucide="${safeIcon}" class="w-6 h-6"></i></div><div class="flex-1"><h5 class="font-bold text-sm text-slate-700 dark:text-white mb-0.5">${judul}</h5><p class="text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div><i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-${color}-500 transition-colors"></i></a>`;
                 }).join(''); 
                 lucide.createIcons(); 
                 this.openModal('submenu-modal'); 
@@ -337,40 +380,13 @@
                 const titleEl = document.getElementById('browser-title'); 
                 const extBtn = document.getElementById('browser-external-link'); 
                 const loader = document.getElementById('browser-loader');
-                
                 frame.classList.add('opacity-0'); 
                 loader.classList.remove('hidden');
                 frame.src = 'about:blank'; 
-                
                 titleEl.textContent = title || "Menjelajah"; 
                 extBtn.href = url; 
-                
                 this.openModal('browser-modal'); 
                 setTimeout(() => { frame.src = url; }, 300); 
-            },
-
-            init: function() {
-                this.initTheme(); lucide.createIcons(); this.loadProfile();
-                
-                window.addEventListener('popstate', (event) => {
-                    let modalOpen = false;
-                    for (let id of this.modalList) { const el = document.getElementById(id); if (el && !el.classList.contains('hidden')) { app.closeModal(id); modalOpen = true; break; } }
-                    if (modalOpen) window.history.pushState(null, null, window.location.href); else { const now = new Date().getTime(); if (now - this.backPressedTime < 2000) {} else { this.backPressedTime = now; this.showToast(); window.history.pushState(null, null, window.location.href); } }
-                });
-                window.history.pushState(null, null, window.location.href);
-                const cached = localStorage.getItem('app_cache');
-                if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
-                this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); this.updateGreeting(); setInterval(() => this.updateGreeting(), 60000); 
-                
-                try {
-                    setTimeout(() => {
-                        const hash = window.location.hash; 
-                        if (hash && hash.length > 1) {
-                            app.handleLink(hash);
-                            history.replaceState(null, null, ' '); 
-                        }
-                    }, 1500); 
-                } catch (e) {}
             },
 
             render: function(data) {
@@ -394,27 +410,16 @@
                     const color = item.warna || 'blue'; const targetVisibility = (item.target || 'all').toLowerCase(); let visibility = 'block';
                     if (targetVisibility === 'mobile') visibility = 'flex md:hidden'; else if (targetVisibility === 'desktop') visibility = 'hidden md:flex';
                     
-                    // SAFE STRING ESCAPING FOR ONCLICK
                     const safeTitle = item.judul.replace(/'/g, "\\'").replace(/"/g, '&quot;'); 
                     const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
                     const safeUrl = (item.url || '').replace(/'/g, "\\'");
-
                     const openMode = (item.openMode || '').toLowerCase().trim(); const isAppView = openMode === 'app';
                     let tag = 'a'; let attrs = '';
                     
-                    if (hasChildren) { 
-                        tag = 'button'; 
-                        attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`; 
-                    } else if (!item.url || item.url.trim().length < 1) { 
-                        tag = 'button'; 
-                        attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`; 
-                    } else if (isAppView) { 
-                        tag = 'button'; 
-                        attrs = `type="button" onclick="app.openWeb('${safeUrl}', '${safeTitle}')"`; 
-                    } else { 
-                        tag = 'a'; 
-                        attrs = `href="${item.url}" target="_blank"`; 
-                    }
+                    if (hasChildren) { tag = 'button'; attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${color}')"`; } 
+                    else if (!item.url || item.url.trim().length < 1) { tag = 'button'; attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`; } 
+                    else if (isAppView) { tag = 'button'; attrs = `type="button" onclick="app.openWeb('${safeUrl}', '${safeTitle}')"`; } 
+                    else { tag = 'a'; attrs = `href="${item.url}" target="_blank"`; }
 
                     const isWide = (item.ukuran || '').toLowerCase() === 'wide'; const colSpan = isWide ? 'col-span-2' : 'col-span-1';
                     let badge = ''; if (item.label) { const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : 'bg-blue-500'; badge = `<span class="absolute top-3 left-3 ${bgLabel} text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10">${item.label}</span>`; } else if (hasChildren) { badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`; }
@@ -457,16 +462,13 @@
                         else contentHTML = `<div class="font-bold text-xs md:text-sm leading-tight">${displayText}</div>`;
                     }
                     
-                    annArea.innerHTML = `
-                        <div class="banner-sticky ${theme} backdrop-blur-md ${containerClass} rounded-[1.2rem] shadow-sm flex relative overflow-hidden transition-all duration-500">
-                            <div class="${iconWrapperClass} animate-pulse"><i data-lucide="${isActionCard ? 'newspaper' : 'bell-ring'}" class="${iconSize} text-current"></i></div>
-                            <div class="flex-1 min-w-0">${contentHTML}</div>
-                            <button onclick="app.closeBanner()" class="absolute top-2 right-2 p-1 rounded-full hover:bg-black/10 text-current transition opacity-50 hover:opacity-100"><i data-lucide="x" class="w-4 h-4"></i></button>
-                        </div>`;
+                    annArea.innerHTML = `<div class="banner-sticky ${theme} backdrop-blur-md ${containerClass} rounded-[1.2rem] shadow-sm flex relative overflow-hidden transition-all duration-500"><div class="${iconWrapperClass} animate-pulse"><i data-lucide="${isActionCard ? 'newspaper' : 'bell-ring'}" class="${iconSize} text-current"></i></div><div class="flex-1 min-w-0">${contentHTML}</div><button onclick="app.closeBanner()" class="absolute top-2 right-2 p-1 rounded-full hover:bg-black/10 text-current transition opacity-50 hover:opacity-100"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
                     annArea.classList.remove('hidden');
                 } else { annArea.classList.add('hidden'); }
 
-                this.checkFlyer(info);
+                // PANGGIL SISTEM ANTRIAN (PRIORITY QUEUE)
+                this.checkPriorityQueue(info);
+                
                 const footContainer = document.getElementById('footer-links-container');
                 footContainer.innerHTML = footerList.map(l => `<a href="${l.url}" target="_blank" class="px-4 py-2 bg-white dark:bg-darkcard rounded-full border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-500 hover:text-white hover:bg-slate-900 dark:hover:bg-blue-600 transition shadow-sm flex items-center gap-2 active:scale-95"><i data-lucide="${l.icon||'link'}" class="w-3 h-3"></i>${l.judul}</a>`).join('');
                 lucide.createIcons();
@@ -510,12 +512,8 @@
                 if (isManual || !hasContent) { const skeletonHTML = `<div class="col-span-2 h-40 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div><div class="col-span-1 h-32 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div><div class="col-span-1 h-32 bg-white/50 dark:bg-slate-700/50 border border-white/60 dark:border-slate-700/60 rounded-[1.5rem] animate-pulse"></div>`; if(menuContainer) menuContainer.innerHTML = skeletonHTML; }
                 fetch(this.apiURL + "?t=" + new Date().getTime()).then(res => res.json()).then(data => {
                     localStorage.setItem('app_cache', JSON.stringify(data)); this.render(data);
-                    if (data.info && (data.info.optimasi === 'ON' || data.info.optimasi === 'YA')) {
-                        const today = new Date().toDateString(); const lastShown = localStorage.getItem('rocket_shown_date');
-                        if (lastShown !== today) { setTimeout(() => { app.openModal('optimization-modal'); }, 2000); localStorage.setItem('rocket_shown_date', today); }
-                    }
                     if(status) { status.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Terhubung'; lucide.createIcons(); }
-                    this.updateGreeting();
+                    app.updateGreeting();
                 }).catch(e => {
                     if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); } if (localStorage.getItem('app_cache')) { this.render(JSON.parse(localStorage.getItem('app_cache'))); }
                 }).finally(() => { setTimeout(() => { const currentIcon = document.getElementById('refresh-btn')?.querySelector('svg'); if(currentIcon) currentIcon.classList.remove('animate-spin'); if(status) { setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000); } }, 500); });
@@ -530,96 +528,31 @@
                 const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }; 
                 const statusDot = document.getElementById('status-indicator'); 
                 const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; if(isLocked) el.classList.add('bg-slate-100', 'text-slate-500'); else el.classList.remove('bg-slate-100', 'text-slate-500'); } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); }; 
-                
-                if(s){ 
-                    const p = JSON.parse(s); 
-                    setTxt('sidebar-user-name', p.nama); 
-                    setTxt('sidebar-user-instansi', p.instansi); 
-                    setSrc('sidebar-user-photo', p.foto); 
-                    setSrc('header-user-photo', p.foto); 
-                    setSrc('preview-photo', p.foto); 
-                    setVal('input-nama', p.nama); 
-                    setVal('input-jabatan', p.jabatan); 
-                    setVal('input-instansi', p.instansi); 
-                    if(p.email) setVal('sync-email', p.email); 
-                    show('btn-logout-sidebar'); 
-                    setTxt('sidebar-status-text', "Online"); 
-                    const st = document.getElementById('sidebar-status-text'); 
-                    if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; 
-                    show('sidebar-bio-card'); 
-                    setTxt('sidebar-jabatan', p.jabatan); 
-                    setTxt('sidebar-instansi', p.instansi); 
-                    if(statusDot) { statusDot.classList.remove('bg-red-400'); statusDot.classList.add('bg-green-400'); statusDot.title = "Online"; } 
-                    if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); 
-                } else { 
-                    setTxt('sidebar-status-text', "Belum Login"); 
-                    const st = document.getElementById('sidebar-status-text'); 
-                    if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; 
-                    hide('sidebar-bio-card'); 
-                    hide('btn-logout-sidebar'); 
-                    if(statusDot) { statusDot.classList.remove('bg-green-400'); statusDot.classList.add('bg-red-400'); statusDot.title = "Tamu"; } 
-                    lockFields(false); 
-                } 
+                if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setTxt('sidebar-user-instansi', p.instansi); setSrc('sidebar-user-photo', p.foto); setSrc('header-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(statusDot) { statusDot.classList.remove('bg-red-400'); statusDot.classList.add('bg-green-400'); statusDot.title = "Online"; } if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); if(statusDot) { statusDot.classList.remove('bg-green-400'); statusDot.classList.add('bg-red-400'); statusDot.title = "Tamu"; } lockFields(false); } 
             },
 
             syncData: function() { 
-                const email=document.getElementById('sync-email').value; 
-                const pin=document.getElementById('sync-pin').value; 
-                const btn=document.getElementById('btn-sync'); 
-                if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } 
-                const oldTxt=btn.innerHTML; 
-                btn.innerHTML='...'; 
-                btn.disabled=true; 
-                fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' })
-                .then(r=>r.json())
-                .then(d=>{ 
-                    if(d.status==='success'){ 
-                        const safeSet = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
-                        safeSet('input-nama', d.nama); 
-                        safeSet('input-jabatan', d.jabatan); 
-                        safeSet('input-instansi', d.instansi); 
-                        const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; 
-                        localStorage.setItem('guru_profile',JSON.stringify(p)); 
-                        this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); 
-                        this.loadProfile(); 
-                    } else { 
-                        this.showAlert('error','Gagal',d.message); 
-                    } 
-                })
-                .catch(()=>this.showAlert('error','Error','Koneksi gagal'))
-                .finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); 
+                const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='...'; btn.disabled=true; fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' }).then(r=>r.json()).then(d=>{ if(d.status==='success'){ const safeSet = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; safeSet('input-nama', d.nama); safeSet('input-jabatan', d.jabatan); safeSet('input-instansi', d.instansi); const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); this.loadProfile(); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); 
             },
 
             showAlert: function(type,title,msg,onYes) { 
-                const bgColors={error:'bg-red-100 text-red-600',success:'bg-green-100 text-green-600',info:'bg-blue-100 text-blue-600'}; 
-                const icons={error:'alert-triangle',success:'check-circle',info:'info'}; 
-                const elIconBg = document.getElementById('dialog-icon-bg');
-                const elIcon = document.getElementById('dialog-icon');
-                
+                const bgColors={error:'bg-red-100 text-red-600',success:'bg-green-100 text-green-600',info:'bg-blue-100 text-blue-600'}; const icons={error:'alert-triangle',success:'check-circle',info:'info'}; 
+                const elIconBg = document.getElementById('dialog-icon-bg'); const elIcon = document.getElementById('dialog-icon');
                 if(elIconBg) elIconBg.className=`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 ${bgColors[type]||bgColors.info} shadow-inner`; 
                 if(elIcon) elIcon.setAttribute('data-lucide',icons[type]||'info'); 
-                
-                document.getElementById('dialog-title').textContent=title; 
-                document.getElementById('dialog-msg').textContent=msg; 
-                
+                document.getElementById('dialog-title').textContent=title; document.getElementById('dialog-msg').textContent=msg; 
                 const actions=document.getElementById('dialog-actions'); 
-                if(onYes){ 
-                    actions.innerHTML=`<div class="grid grid-cols-2 gap-3"><button onclick="app.closeModal('dialog-modal')" class="py-3 rounded-xl bg-slate-100 font-bold text-slate-500 text-sm">Batal</button><button id="dialog-confirm" class="py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg">Ya</button></div>`; 
-                    document.getElementById('dialog-confirm').onclick=()=>{ onYes(); app.closeModal('dialog-modal'); }; 
-                }else{ 
-                    actions.innerHTML=`<button onclick="app.closeModal('dialog-modal')" class="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-blue-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition">Mengerti</button>`; 
-                } 
-                lucide.createIcons(); 
-                this.openModal('dialog-modal'); 
+                if(onYes){ actions.innerHTML=`<div class="grid grid-cols-2 gap-3"><button onclick="app.closeModal('dialog-modal')" class="py-3 rounded-xl bg-slate-100 font-bold text-slate-500 text-sm">Batal</button><button id="dialog-confirm" class="py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-lg">Ya</button></div>`; document.getElementById('dialog-confirm').onclick=()=>{ onYes(); app.closeModal('dialog-modal'); }; }else{ actions.innerHTML=`<button onclick="app.closeModal('dialog-modal')" class="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-blue-600 text-white font-bold text-sm shadow-lg hover:scale-105 transition">Mengerti</button>`; } 
+                lucide.createIcons(); this.openModal('dialog-modal'); 
             },
             
+            closeBanner: function() { const banner = document.getElementById('announcement-area'); if(banner) banner.classList.add('hidden'); },
             saveProfile: function(e) { e.preventDefault(); const oldP=JSON.parse(localStorage.getItem('guru_profile')||"{}"); const p={ nama:document.getElementById('input-nama').value, jabatan:document.getElementById('input-jabatan').value, instansi:document.getElementById('input-instansi').value, email:oldP.email||document.getElementById('sync-email').value||"", foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.loadProfile(); this.closeModal('profile-modal'); setTimeout(()=>this.showAlert('success','Tersimpan','Profil diperbarui.'),350); },
             toggleAnonim: function() { const isAnon=document.getElementById('anonim-check').checked; const identity=document.getElementById('feedback-identity'); if(isAnon){ identity.classList.add('opacity-50','pointer-events-none'); }else{ identity.classList.remove('opacity-50','pointer-events-none'); } },
             submitFeedback: function(e) { e.preventDefault(); const btn=document.getElementById('btn-feedback-submit'); const oldTxt=btn.innerHTML; btn.innerHTML='<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Mengirim...'; btn.disabled=true; lucide.createIcons(); this.toggleAnonim(); const fd=new FormData(e.target); const obj=Object.fromEntries(fd.entries()); obj.isAnonim=document.getElementById('anonim-check').checked; if(obj.isAnonim){ obj.pengirim="Anonim"; obj.kontak="-"; } else { obj.pengirim=document.getElementById('fb-nama').value; obj.kontak=document.getElementById('fb-kontak').value; } fetch(this.apiURL,{method:'POST',mode:'no-cors',body:JSON.stringify(obj)}); setTimeout(()=>{ this.closeModal('feedback-modal'); this.showAlert('success','Terkirim','Terima kasih atas masukan Anda!'); e.target.reset(); btn.innerHTML=oldTxt; btn.disabled=false; },1000); },
             previewImage: function(i) { if(i.files&&i.files[0]){ const r=new FileReader(); r.onload=(e)=>document.getElementById('preview-photo').src=e.target.result; r.readAsDataURL(i.files[0]); } },
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
             
-            // --- UPDATED: SAFE OPTIMIZATION ---
             processUpdateAnimation: async function(isRocket = false) { 
                 if(isRocket) app.closeModal('optimization-modal'); 
                 app.closeModal('profile-modal'); 
@@ -627,57 +560,26 @@
                 const bar = document.getElementById('update-progress-bar'); 
                 const txt = document.getElementById('update-status-text'); 
                 const pct = document.getElementById('update-percent'); 
-                
                 overlay.classList.remove('hidden'); 
                 setTimeout(() => overlay.classList.remove('opacity-0'), 50); 
-                
-                const updateStep = (text, percent, delay) => { 
-                    return new Promise(resolve => { 
-                        txt.innerText = text; 
-                        bar.style.width = percent + '%'; 
-                        pct.innerText = percent + '%'; 
-                        setTimeout(resolve, delay); 
-                    }); 
-                }; 
-                
+                const updateStep = (text, percent, delay) => { return new Promise(resolve => { txt.innerText = text; bar.style.width = percent + '%'; pct.innerText = percent + '%'; setTimeout(resolve, delay); }); }; 
                 await updateStep("Memeriksa Koneksi...", 15, 800); 
-                
-                try { 
-                    txt.innerText = "Membersihkan Cache Lama..."; 
-                    if ('caches' in window) { 
-                        const keys = await caches.keys(); 
-                        await Promise.all(keys.map(k => caches.delete(k))); 
-                    } 
-                    if ('serviceWorker' in navigator) { 
-                        const regs = await navigator.serviceWorker.getRegistrations(); 
-                        for (let r of regs) await r.unregister(); 
-                    } 
-                } catch (e) { 
-                    console.log("Cache clean error (Safe to ignore)", e); 
-                } 
-                
+                try { txt.innerText = "Membersihkan Cache Lama..."; if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); } } catch (e) { console.log("Cache error", e); } 
                 await updateStep("Sinkronisasi Database...", 45, 1000); 
                 await updateStep("Menyusun Ulang Tampilan...", 75, 800); 
                 await updateStep("Finalisasi Optimasi...", 100, 600); 
-                
-                txt.innerText = "Selesai! Memuat Ulang..."; 
-                txt.classList.add("text-green-400"); 
-                
+                txt.innerText = "Selesai! Memuat Ulang..."; txt.classList.add("text-green-400"); 
                 setTimeout(() => { window.location.reload(true); }, 500); 
             },
             resetApp: function() { if(confirm("Jalankan optimasi sekarang?")) { this.processUpdateAnimation(); } },
             
-            // --- MODAL SYSTEM ---
             openModal: function(id) { 
-                const el = document.getElementById(id); 
-                if (!el) return; 
-
-                // FIX: SEMBUNYIKAN TOMBOL CONTROL AGAR TIDAK MENGHALANGI
+                const el = document.getElementById(id); if (!el) return; 
+                // Fix Z-Index Button
                 const fab = document.getElementById('fab-button');
                 if(fab) fab.classList.add('hidden');
 
-                document.body.classList.add('modal-open');
-
+                document.body.classList.add('modal-open'); 
                 if (id === 'control-center') {
                     el.classList.remove('hidden');
                     setTimeout(() => {
@@ -687,61 +589,28 @@
                     window.history.pushState(null, null, window.location.href);
                     return;
                 }
-
-                if (id === 'feedback-modal') { 
-                    const s = localStorage.getItem('guru_profile'); 
-                    if (s) { 
-                        const p = JSON.parse(s); 
-                        const elNama = document.getElementById('fb-nama'); 
-                        if(elNama) elNama.value = p.nama || ''; 
-                    } 
-                } 
-                
-                el.classList.remove('hidden'); 
-                void el.offsetWidth; 
-                const overlay = el.querySelector('.modal-overlay'); 
-                const content = el.querySelector('.modal-content'); 
-                
+                if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } 
+                el.classList.remove('hidden'); void el.offsetWidth; 
+                const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); 
                 if (overlay) overlay.classList.remove('opacity-0'); 
-                if (content) { 
-                    content.classList.remove('opacity-0', 'scale-95'); 
-                    content.classList.add('opacity-100', 'scale-100'); 
-                    
-                    const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'control-center', 'flyer-modal'].some(k => id.includes(k)); 
-                    if (isHybrid) { 
-                        content.classList.remove('translate-y-full'); 
-                        content.classList.add('translate-y-0'); 
-                    } else { 
-                        content.classList.remove('translate-y-full', 'translate-y-0'); 
-                    } 
-                } 
+                if (content) { content.classList.remove('opacity-0', 'scale-95'); content.classList.add('opacity-100', 'scale-100'); 
+                const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'control-center', 'flyer-modal'].some(k => id.includes(k)); 
+                if (isHybrid) { content.classList.remove('translate-y-full'); content.classList.add('translate-y-0'); } else { content.classList.remove('translate-y-full', 'translate-y-0'); } } 
                 window.history.pushState(null, null, window.location.href); 
             },
 
             closeModal: function(id) { 
-                const el = document.getElementById(id); 
-                if (!el) return; 
-                
-                // FIX: TAMPILKAN LAGI TOMBOL CONTROL
+                const el = document.getElementById(id); if (!el) return; 
+                // Fix Z-Index Button
                 const fab = document.getElementById('fab-button');
                 if(fab) fab.classList.remove('hidden');
-
-                document.body.classList.remove('modal-open');
-
-                const overlay = el.querySelector('.modal-overlay'); 
-                const content = el.querySelector('.modal-content'); 
+                
+                document.body.classList.remove('modal-open'); 
+                const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); 
                 if (overlay) overlay.classList.add('opacity-0'); 
-                if (content) { 
-                    content.classList.remove('opacity-100', 'scale-100', 'translate-y-0'); 
-                    content.classList.add('opacity-0'); 
-                    const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'control-center', 'flyer-modal'].some(k => id.includes(k)); 
-                    if (isHybrid) { 
-                        content.classList.add('translate-y-full'); 
-                        content.classList.add('scale-95'); 
-                    } else { 
-                        content.classList.add('scale-95'); 
-                    } 
-                } 
+                if (content) { content.classList.remove('opacity-100', 'scale-100', 'translate-y-0'); content.classList.add('opacity-0'); 
+                const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'control-center', 'flyer-modal'].some(k => id.includes(k)); 
+                if (isHybrid) { content.classList.add('translate-y-full'); content.classList.add('scale-95'); } else { content.classList.add('scale-95'); } } 
                 setTimeout(() => { el.classList.add('hidden'); }, 300); 
             },
 
@@ -756,14 +625,23 @@
                     e.preventDefault(); 
                     this.deferredPrompt=e; 
                     if(!localStorage.getItem('install_dismissed')){ 
-                        const inline = document.getElementById('install-inline-container');
-                        if(inline) inline.classList.remove('hidden'); 
-                        setTimeout(()=>this.openModal('install-modal'),4000); 
+                        // Cek Prioritas Antrian, kalau tidak ada Rocket & Flyer, baru show Install
+                        const today = new Date().toDateString();
+                        const rocket = localStorage.getItem('rocket_shown_date');
+                        const flyer = localStorage.getItem('flyer_shown_date');
+                        
+                        if (rocket !== today && flyer !== today) {
+                            const inline = document.getElementById('install-inline-container');
+                            if(inline) inline.classList.remove('hidden'); 
+                            setTimeout(()=>this.openModal('install-modal'),4000); 
+                        }
                     } 
                 }); 
+                
+                // SAFETY CHECK: Pastikan elemen ada sebelum addEventListener
                 const btnInstall = document.getElementById('btn-install-trigger');
-                if(btnInstall) {
-                    btnInstall.addEventListener('click',async()=>{ 
+                if (btnInstall) {
+                    btnInstall.addEventListener('click', async()=>{ 
                         this.closeModal('install-modal'); 
                         if(this.deferredPrompt){ 
                             this.deferredPrompt.prompt(); 
