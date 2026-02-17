@@ -76,14 +76,12 @@
         }
         #exit-toast.show { visibility: visible; opacity: 1; bottom: 50px; }
 
-        /* --- STYLES KOMPONEN --- */
-        
-        /* 1. Header Kapsul (Glass) */
+        /* --- 1. HEADER KAPSUL --- */
         .navbar-floating {
             background: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-radius: 9999px; /* Full Rounded */
+            border-radius: 9999px; 
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.6);
             transition: all 0.3s ease;
@@ -94,22 +92,28 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        /* 2. Banner Widget (Animasi) */
-        .banner-enter { animation: slideDown 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        @keyframes slideDown { 
-            from { opacity: 0; transform: translateY(-20px) scale(0.95); } 
-            to { opacity: 1; transform: translateY(0) scale(1); } 
+        /* --- 2. BANNER STICKY --- */
+        .banner-sticky {
+            position: sticky; 
+            top: 87px; 
+            margin-bottom: 24px; 
+            z-index: 40; 
+            backdrop-filter: blur(15px) saturate(150%);
+            -webkit-backdrop-filter: blur(15px) saturate(150%);
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .input-group:focus-within .lock-icon { color: #3b82f6; }
 
-        /* Marquee */
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } 
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         
-        /* Rocket */
         @keyframes rocket-float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
         .rocket-anim { animation: rocket-float 8s ease-in-out infinite; }
     </style>
@@ -145,10 +149,7 @@
                     </div>
                 </div>
                 <div class="space-y-1">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase px-2 mb-2">Pintasan</p>
-                    <button onclick="app.openModal('profile-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="user-cog" class="w-4 h-4"></i> Edit Profil</button>
-                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/60 dark:hover:bg-slate-700/50 transition text-slate-600 dark:text-slate-300 text-xs font-medium"><i data-lucide="life-buoy" class="w-4 h-4"></i> Pusat Bantuan</button>
-                    <button onclick="app.openModal('optimization-modal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="rocket" class="w-4 h-4"></i> Optimasi Sistem</button>
+                    <button onclick="app.openModal('control-center')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition text-xs font-bold mt-2 border border-blue-100 dark:border-blue-800"><i data-lucide="layout-grid" class="w-4 h-4"></i> Pusat Kontrol</button>
                 </div>
             </div>
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-white/30 dark:bg-slate-800/30">
@@ -160,38 +161,29 @@
             
             <div id="main-scroll-area" class="flex-1 overflow-y-auto h-full scroll-smooth">
                 
-                <div class="sticky top-0 z-50 flex flex-col items-center w-full pointer-events-none pb-2">
+                <div class="sticky top-0 z-50 flex flex-col gap-3 px-5 pt-3 pb-2 pointer-events-none">
                     
                     <div class="w-full px-5 mt-3 pointer-events-auto">
-                        <header class="navbar-floating px-5 py-3.5 flex items-center justify-between gap-4">
+                        <header class="navbar-floating px-6 py-4 flex items-center justify-between gap-4">
                             <div class="flex items-center gap-3.5">
-                                <div class="md:hidden w-9 h-9 rounded-full border border-slate-200 dark:border-slate-600 shadow-sm overflow-hidden shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="app.openModal('profile-modal')">
+                                <div class="md:hidden w-10 h-10 rounded-full border border-slate-200 dark:border-slate-600 shadow-sm overflow-hidden shrink-0 cursor-pointer active:scale-95 transition-transform" onclick="app.openModal('profile-modal')">
                                     <img id="header-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover">
                                 </div>
                                 <div>
                                     <div class="flex items-center gap-2">
-                                        <h2 class="font-extrabold text-slate-800 dark:text-white text-base leading-tight">Guru Berbagi</h2>
+                                        <h2 class="font-extrabold text-slate-800 dark:text-white text-lg leading-tight">Guru Berbagi</h2>
                                         <div id="status-indicator" class="w-2 h-2 rounded-full bg-red-500 shadow-sm animate-pulse" title="Status Koneksi"></div>
                                     </div>
-                                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Selogiri</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Portal Pendidikan Selogiri</p>
                                 </div>
                             </div>
-                            <div class="flex gap-2">
-                                <button onclick="app.toggleTheme()" class="w-9 h-9 rounded-full bg-slate-100/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-700 text-slate-600 dark:text-yellow-400 border border-transparent dark:border-slate-700 active:scale-90 transition-all flex items-center justify-center relative overflow-hidden">
-                                    <i data-lucide="moon" class="w-4 h-4 absolute transition-all duration-300 rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
-                                    <i data-lucide="sun" class="w-4 h-4 absolute transition-all duration-300 rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
-                                </button>
-                                <button onclick="app.refreshData(true)" id="refresh-btn" class="w-9 h-9 rounded-full bg-slate-100/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-700 text-blue-600 dark:text-blue-400 border border-transparent dark:border-slate-700 active:scale-90 transition-all flex items-center justify-center">
-                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </header>
+                            </header>
                     </div>
 
                     <div id="announcement-area" class="hidden pointer-events-auto banner-enter w-full px-5 mt-3"></div>
                 
                 </div>
-                <div class="max-w-5xl mx-auto w-full space-y-6 px-5 md:px-8 mt-2 pb-28 md:pb-10">
+                <div class="max-w-5xl mx-auto w-full space-y-6 px-5 md:px-8 mt-2 pb-32 md:pb-10">
                     
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-6 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000">
                         <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-24 md:h-24 rounded-full transition-all duration-1000 pointer-events-none z-0 animate-breathe opacity-40"></div>
@@ -224,7 +216,58 @@
         </main>
     </div>
 
-    <div id="profile-modal" class="fixed inset-0 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4">
+    <div id="control-center" class="fixed inset-0 z-[60] hidden flex items-end md:items-center justify-center p-0 md:p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('control-center')"></div>
+        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 p-6 md:p-8 transform translate-y-full md:translate-y-0 scale-95 opacity-0 modal-content transition-all duration-300">
+            <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto -mt-2 mb-6 md:hidden"></div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-slate-800 dark:text-white">Pusat Kontrol</h3>
+                <button onclick="app.closeModal('control-center')" class="p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <button onclick="app.toggleTheme()" class="col-span-1 p-4 rounded-2xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 flex flex-col items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-700 transition active:scale-95 group">
+                    <div class="w-10 h-10 rounded-full bg-white dark:bg-slate-600 shadow-sm flex items-center justify-center text-slate-700 dark:text-yellow-400">
+                        <i data-lucide="moon" class="w-5 h-5 absolute transition-all duration-300 rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
+                        <i data-lucide="sun" class="w-5 h-5 absolute transition-all duration-300 rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-600 dark:text-slate-300">Mode Layar</span>
+                </button>
+
+                <button onclick="app.refreshData(true); app.closeModal('control-center')" class="col-span-1 p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 flex flex-col items-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition active:scale-95 group">
+                    <div class="w-10 h-10 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-500/30 flex items-center justify-center group-hover:rotate-180 transition-transform duration-500">
+                        <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xs font-bold text-blue-700 dark:text-blue-300">Refresh Data</span>
+                </button>
+            </div>
+
+            <div class="space-y-2 mb-6">
+                <button onclick="app.openModal('profile-modal'); app.closeModal('control-center')" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition">
+                    <div class="p-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 rounded-lg"><i data-lucide="user-cog" class="w-5 h-5"></i></div>
+                    <div class="flex-1 text-left"><h4 class="font-bold text-sm text-slate-700 dark:text-white">Profil Saya</h4><p class="text-[10px] text-slate-400">Edit data & sinkronisasi</p></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </button>
+
+                <button onclick="app.openModal('feedback-modal'); app.closeModal('control-center')" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition">
+                    <div class="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-lg"><i data-lucide="life-buoy" class="w-5 h-5"></i></div>
+                    <div class="flex-1 text-left"><h4 class="font-bold text-sm text-slate-700 dark:text-white">Pusat Bantuan</h4><p class="text-[10px] text-slate-400">Lapor bug & saran</p></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </button>
+
+                <button onclick="app.openModal('optimization-modal'); app.closeModal('control-center')" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition">
+                    <div class="p-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 rounded-lg"><i data-lucide="rocket" class="w-5 h-5"></i></div>
+                    <div class="flex-1 text-left"><h4 class="font-bold text-sm text-slate-700 dark:text-white">Optimasi Sistem</h4><p class="text-[10px] text-slate-400">Reset & perbaiki aplikasi</p></div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                </button>
+            </div>
+            
+            <p class="text-center text-[10px] text-slate-400 uppercase tracking-widest font-bold">Tim Kreatif Selogiri &copy; 2026</p>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="fixed inset-0 z-[70] hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-sm rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 p-6 md:p-8 transform translate-y-full md:translate-y-0 scale-95 opacity-0 modal-content transition-all duration-300">
             <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6 md:hidden"></div>
@@ -254,8 +297,7 @@
                 <div class="pt-2">
                     <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
                     <div class="grid grid-cols-2 gap-3 mt-3">
-                        <button type="button" onclick="app.openModal('optimization-modal')" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition"><i data-lucide="rocket" class="w-4 h-4"></i><span>Optimasi Sistem</span></button>
-                        <button type="button" onclick="app.confirmLogout()" class="flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar Akun</span></button>
+                        <button type="button" onclick="app.confirmLogout()" class="col-span-2 flex flex-col items-center justify-center gap-1 py-3 text-[10px] font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 transition"><i data-lucide="log-out" class="w-4 h-4"></i><span>Keluar Akun</span></button>
                     </div>
                 </div>
             </form>
@@ -282,7 +324,7 @@
         </div>
     </div>
 
-    <div id="feedback-modal" class="fixed inset-0 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4">
+    <div id="feedback-modal" class="fixed inset-0 z-[70] hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('feedback-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 overflow-hidden transform translate-y-full md:translate-y-0 scale-95 opacity-0 modal-content transition-all duration-300">
             <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mt-4 mb-2 md:hidden"></div>
@@ -323,14 +365,14 @@
         </div>
     </div>
 
-    <div id="submenu-modal" class="fixed inset-0 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4"><div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('submenu-modal')"></div><div class="bg-white dark:bg-slate-800 w-full md:w-full md:max-w-xl mx-auto rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 transform translate-y-full md:translate-y-0 scale-95 opacity-0 modal-content transition-all duration-300 max-h-[85vh] flex flex-col"><div class="w-full flex justify-center pt-4 pb-2 md:hidden" onclick="app.closeModal('submenu-modal')"><div class="w-16 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full cursor-pointer hover:bg-slate-300 transition"></div></div><div class="px-8 py-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center"><div><h3 id="submenu-title" class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Menu</h3><p class="text-sm text-slate-400 font-medium">Pilih layanan</p></div><button onclick="app.closeModal('submenu-modal')" class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-6 h-6"></i></button></div><div id="submenu-list" class="p-6 overflow-y-auto space-y-4 pb-12"></div></div></div>
+    <div id="submenu-modal" class="fixed inset-0 z-[60] hidden flex items-end md:items-center justify-center p-0 md:p-4"><div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('submenu-modal')"></div><div class="bg-white dark:bg-slate-800 w-full md:w-full md:max-w-xl mx-auto rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] shadow-2xl relative z-10 transform translate-y-full md:translate-y-0 scale-95 opacity-0 modal-content transition-all duration-300 max-h-[85vh] flex flex-col"><div class="w-full flex justify-center pt-4 pb-2 md:hidden" onclick="app.closeModal('submenu-modal')"><div class="w-16 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full cursor-pointer hover:bg-slate-300 transition"></div></div><div class="px-8 py-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center"><div><h3 id="submenu-title" class="text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Menu</h3><p class="text-sm text-slate-400 font-medium">Pilih layanan</p></div><button onclick="app.closeModal('submenu-modal')" class="p-2.5 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i data-lucide="x" class="w-6 h-6"></i></button></div><div id="submenu-list" class="p-6 overflow-y-auto space-y-4 pb-12"></div></div></div>
     <div id="install-modal" class="pwa-install-area fixed inset-0 z-50 hidden flex items-end md:items-center justify-center p-0 md:p-4"><div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('install-modal')"></div><div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md mx-auto rounded-t-[2.5rem] rounded-b-none md:rounded-[2rem] p-8 relative z-10 transform translate-y-full md:translate-y-0 scale-95 opacity-0 modal-content text-center"><div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto -mt-4 mb-6 md:hidden"></div><div class="w-20 h-20 bg-white dark:bg-slate-700 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl border border-slate-100 dark:border-slate-600"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-16 h-16 rounded-2xl"></div><h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">Pasang Aplikasi</h3><p class="text-slate-500 dark:text-slate-400 font-medium mb-8 px-4">Dapatkan akses lebih cepat tanpa membuka browser.</p><button id="btn-install-trigger" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/40 hover:bg-blue-700 hover:scale-[1.02] active:scale-95 transition mb-3 flex justify-center items-center gap-2"><i data-lucide="download" class="w-5 h-5"></i> Pasang Sekarang</button><button onclick="app.closeModal('install-modal')" class="w-full py-4 text-slate-400 font-bold hover:text-slate-600 dark:hover:text-slate-300 transition">Nanti Saja</button></div></div>
-    <div id="dialog-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4"><div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('dialog-modal')"></div><div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-2xl relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content transition-all duration-300"><div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-blue-100 text-blue-600 shadow-inner"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div><h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3><p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p><div id="dialog-actions" class="w-full"></div></div></div>
+    <div id="dialog-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4"><div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay opacity-0" onclick="app.closeModal('dialog-modal')"></div><div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-2xl relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content transition-all duration-300"><div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 bg-blue-100 text-blue-600 shadow-inner"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div><h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3><p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p><div id="dialog-actions" class="w-full"></div></div></div>
     <div id="browser-modal" class="fixed inset-0 z-[80] hidden flex flex-col bg-white dark:bg-slate-900 transition-colors duration-300"><div class="flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm shrink-0 z-10"><div class="flex items-center gap-3 overflow-hidden"><button onclick="app.closeModal('browser-modal')" class="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300"><i data-lucide="arrow-left" class="w-6 h-6"></i></button><div class="flex flex-col"><h4 id="browser-title" class="font-bold text-sm text-slate-800 dark:text-slate-100 line-clamp-1">Memuat...</h4><span class="text-[10px] text-slate-400 flex items-center gap-1"><i data-lucide="shield-check" class="w-2.5 h-2.5"></i> Aman • Tampilan Aplikasi</span></div></div><div class="flex gap-2"><button onclick="document.getElementById('web-frame').contentWindow.location.reload()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button><a id="browser-external-link" href="#" target="_blank" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400"><i data-lucide="external-link" class="w-5 h-5"></i></a></div></div><div class="flex-1 relative w-full h-full bg-slate-50 dark:bg-slate-900"><div id="browser-loader" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-2 z-0"><i data-lucide="loader-2" class="w-8 h-8 animate-spin text-blue-500"></i><span class="text-xs font-medium">Memuat Halaman...</span></div><iframe id="web-frame" class="w-full h-full relative z-10 opacity-0 transition-opacity duration-500" sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-modals" onload="this.classList.remove('opacity-0')"></iframe></div></div>
     
-    <button onclick="app.openModal('feedback-modal')" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-6 transition-all duration-300 active:scale-95 group">
+    <button onclick="app.openModal('control-center')" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-slate-900/80 backdrop-blur-md text-white border border-slate-700 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] flex items-center justify-center hover:scale-110 hover:-rotate-3 transition-all duration-300 active:scale-95 group">
         <div class="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <i data-lucide="life-buoy" class="w-6 h-6 group-hover:animate-spin-slow relative z-10"></i>
+        <i data-lucide="layout-grid" class="w-6 h-6 relative z-10"></i>
     </button>
 
     <div id="exit-toast">Tekan sekali lagi untuk keluar</div>
@@ -342,12 +384,10 @@
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             
             deferredPrompt: null, menuMap: {}, backPressedTime: 0, 
-            modalList: ['profile-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
+            modalList: ['profile-modal', 'control-center', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
 
             init: function() {
                 this.initTheme(); lucide.createIcons(); this.loadProfile();
-                const scrollArea = document.getElementById('main-scroll-area');
-                // Removed manual scroll listener
                 
                 window.addEventListener('popstate', (event) => {
                     let modalOpen = false;
@@ -359,7 +399,6 @@
                 if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
                 this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); this.updateGreeting(); setInterval(() => this.updateGreeting(), 60000); 
                 
-                // DEEP LINK LOGIC
                 try {
                     setTimeout(() => {
                         const hash = window.location.hash; 
@@ -419,7 +458,6 @@
                     const iconWrapperClass = isActionCard ? "p-2.5 bg-white/20 rounded-xl mt-0.5" : "p-1.5 bg-white/20 rounded-lg shrink-0"; 
                     const iconSize = isActionCard ? "w-5 h-5" : "w-4 h-4"; 
 
-                    // --- BANNER COLORS V3.5 ---
                     const colorMap = {
                         red: 'bg-red-100/95 text-red-800 border-red-200/50 dark:bg-red-900/90 dark:text-red-100 dark:border-red-500/50',
                         green: 'bg-emerald-100/95 text-emerald-800 border-emerald-200/50 dark:bg-emerald-900/90 dark:text-emerald-100 dark:border-emerald-500/50',
@@ -463,6 +501,7 @@
                     else if (command === 'bantuan') this.openModal('feedback-modal');
                     else if (command === 'install') this.openModal('install-modal');
                     else if (command === 'reset') this.processUpdateAnimation(true);
+                    else if (command === 'control') this.openModal('control-center');
                     else this.showAlert('info', 'Info', 'Fitur belum tersedia.');
                 } else if (target.startsWith('http')) { this.openWeb(target, 'Info Tautan'); } 
                 else { this.showAlert('info', 'Info', target); }
@@ -523,8 +562,59 @@
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
             processUpdateAnimation: async function(isRocket = false) { if(isRocket) app.closeModal('optimization-modal'); app.closeModal('profile-modal'); const overlay = document.getElementById('update-overlay'); const bar = document.getElementById('update-progress-bar'); const txt = document.getElementById('update-status-text'); const pct = document.getElementById('update-percent'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 50); const updateStep = (text, percent, delay) => { return new Promise(resolve => { txt.innerText = text; bar.style.width = percent + '%'; pct.innerText = percent + '%'; setTimeout(resolve, delay); }); }; await updateStep("Memeriksa Koneksi...", 15, 800); try { txt.innerText = "Membersihkan Cache Lama..."; if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); } } catch (e) { console.log("Cache error", e); } await updateStep("Sinkronisasi Database...", 45, 1000); await updateStep("Menyusun Ulang Tampilan...", 75, 800); await updateStep("Finalisasi Optimasi...", 100, 600); txt.innerText = "Selesai! Memuat Ulang..."; txt.classList.add("text-green-400"); setTimeout(() => { window.location.reload(true); }, 500); },
             resetApp: function() { if(confirm("Jalankan optimasi sekarang?")) { this.processUpdateAnimation(); } },
-            openModal: function(id) { const el = document.getElementById(id); if (!el) return; if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } el.classList.remove('hidden'); void el.offsetWidth; const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); if (overlay) overlay.classList.remove('opacity-0'); if (content) { content.classList.remove('opacity-0', 'scale-95'); content.classList.add('opacity-100', 'scale-100'); const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal'].some(k => id.includes(k)); if (isHybrid) { content.classList.remove('translate-y-full'); content.classList.add('translate-y-0'); } else { content.classList.remove('translate-y-full', 'translate-y-0'); } } window.history.pushState(null, null, window.location.href); },
-            closeModal: function(id) { const el = document.getElementById(id); if (!el) return; const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); if (overlay) overlay.classList.add('opacity-0'); if (content) { content.classList.remove('opacity-100', 'scale-100', 'translate-y-0'); content.classList.add('opacity-0'); const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal'].some(k => id.includes(k)); if (isHybrid) { content.classList.add('translate-y-full'); content.classList.add('scale-95'); } else { content.classList.add('scale-95'); } } setTimeout(() => { el.classList.add('hidden'); }, 300); },
+            
+            // --- FIX ERROR: Single declaration of 'el' ---
+            openModal: function(id) { 
+                const el = document.getElementById(id); // Only one declaration here
+                if (!el) return; 
+                
+                // Handle Control Center Specific
+                if (id === 'control-center') {
+                    el.classList.remove('hidden');
+                    setTimeout(() => {
+                        const overlay = el.querySelector('.modal-overlay');
+                        const content = el.querySelector('.modal-content');
+                        if(overlay) overlay.classList.remove('opacity-0');
+                        if(content) content.classList.remove('opacity-0', 'translate-y-full', 'scale-95');
+                    }, 10);
+                    window.history.pushState(null, null, window.location.href);
+                    return;
+                }
+
+                // Handle Feedback Pre-fill
+                if (id === 'feedback-modal') { 
+                    const s = localStorage.getItem('guru_profile'); 
+                    if (s) { 
+                        const p = JSON.parse(s); 
+                        const elNama = document.getElementById('fb-nama'); 
+                        if(elNama) elNama.value = p.nama || ''; 
+                    } 
+                } 
+                
+                // General Modal Show Logic
+                el.classList.remove('hidden'); 
+                void el.offsetWidth; // Force Reflow
+                
+                const overlay = el.querySelector('.modal-overlay'); 
+                const content = el.querySelector('.modal-content'); 
+                
+                if (overlay) overlay.classList.remove('opacity-0'); 
+                if (content) { 
+                    content.classList.remove('opacity-0', 'scale-95'); 
+                    content.classList.add('opacity-100', 'scale-100'); 
+                    
+                    const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal'].some(k => id.includes(k)); 
+                    if (isHybrid) { 
+                        content.classList.remove('translate-y-full'); 
+                        content.classList.add('translate-y-0'); 
+                    } else { 
+                        content.classList.remove('translate-y-full', 'translate-y-0'); 
+                    } 
+                } 
+                window.history.pushState(null, null, window.location.href); 
+            },
+
+            closeModal: function(id) { const el = document.getElementById(id); if (!el) return; const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); if (overlay) overlay.classList.add('opacity-0'); if (content) { content.classList.remove('opacity-100', 'scale-100', 'translate-y-0'); content.classList.add('opacity-0'); const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'control-center'].some(k => id.includes(k)); if (isHybrid) { content.classList.add('translate-y-full'); content.classList.add('scale-95'); } else { content.classList.add('scale-95'); } } setTimeout(() => { el.classList.add('hidden'); }, 300); },
             openWeb: function(url, title) { const frame = document.getElementById('web-frame'); const titleEl = document.getElementById('browser-title'); const extBtn = document.getElementById('browser-external-link'); frame.classList.add('opacity-0'); frame.src = 'about:blank'; titleEl.textContent = title || "Menjelajah"; extBtn.href = url; this.openModal('browser-modal'); setTimeout(() => { frame.src = url; }, 300); },
             setupBackButton: function() { window.history.pushState(null, null, window.location.href); window.addEventListener('popstate', (event) => { let modalOpen = false; for (let id of this.modalList) { const el = document.getElementById(id); if (el && !el.classList.contains('hidden')) { app.closeModal(id); modalOpen = true; break; } } if (modalOpen) window.history.pushState(null, null, window.location.href); else { const now = new Date().getTime(); if (now - this.backPressedTime < 2000) {} else { this.backPressedTime = now; this.showToast(); window.history.pushState(null, null, window.location.href); } } }); },
             showToast: function() { const x = document.getElementById("exit-toast"); if(x) { x.classList.add("show"); setTimeout(function(){ x.classList.remove("show"); }, 2000); } },
