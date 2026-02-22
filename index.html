@@ -220,11 +220,12 @@
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
                         
                         <div class="relative z-10 mt-1">
-                            <h3 class="text-2xl md:text-4xl font-extrabold mb-2 tracking-tight leading-tight flex items-center gap-3"><span id="greeting-text">Halo, Guru!</span></h3>
-                            <p id="quote-text" class="text-blue-100/90 text-xs md:text-base leading-relaxed max-w-2xl font-medium italic pr-8">"Memuat kata mutiara..."</p>
-                            <p id="quote-author" class="text-blue-200/60 text-[10px] md:text-xs mt-1 font-bold tracking-wide uppercase">-</p>
+                            <h3 class="text-2xl md:text-4xl font-extrabold mb-2 tracking-tight leading-tight flex items-center gap-3 [text-shadow:0_8px_16px_rgba(0,0,0,0.4)]"><span id="greeting-text">Halo, Guru!</span></h3>
+                            <p id="quote-text" class="text-white text-xs md:text-base leading-relaxed max-w-2xl font-medium italic pr-8 [text-shadow:0_4px_10px_rgba(0,0,0,0.4)]">"Memuat kata mutiara..."</p>
+                            <p id="quote-author" class="text-slate-100 text-[10px] md:text-xs mt-1 font-bold tracking-wide uppercase [text-shadow:0_4px_10px_rgba(0,0,0,0.4)]">-</p>
+                            
                             <div id="install-inline-container" class="pwa-install-area hidden mt-6">
-                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-white/30 active:scale-95 transition text-xs md:text-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
+                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-white/30 active:scale-95 transition text-xs md:text-sm shadow-md"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
                             </div>
                         </div>
                     </div>
@@ -335,7 +336,7 @@
                 window.history.pushState(null, null, window.location.href);
                 const cached = localStorage.getItem('app_cache');
                 if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
-                this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); 
+                this.refreshData(false); this.trackUser(); this.setupInstallPrompt();
                 
                 this.updateGreeting(); 
                 setInterval(() => app.updateGreeting(), 60000); 
@@ -351,7 +352,7 @@
                 metaTags.forEach(tag => tag.setAttribute('content', color));
             },
             
-            // LOGIKA GREETING CARD (Animasi Sun/Moon Blob + Override DB)
+            // LOGIKA GREETING CARD (Gambar Original dari DB & Efek Text Shadow Melayang)
             updateGreeting: function() {
                 const hour = new Date().getHours(); 
                 const card = document.getElementById('greeting-card'); 
@@ -368,7 +369,6 @@
                 
                 let greet = "", theme = "", planetStyle = "", timeKey = "";
                 
-                // Tema dan warna dasar untuk animasi 'breathe' blob
                 if (hour >= 4 && hour < 10) { 
                     greet = `Semangat Pagi, ${name}!`; theme = "from-orange-400 to-yellow-500"; timeKey = "pagi";
                     planetStyle = "background: radial-gradient(circle at 30% 30%, #fef08a, #facc15, #f97316); box-shadow: 0 0 60px #fbbf24;"; 
@@ -401,22 +401,15 @@
 
                 if(card) {
                     if (dbImg && dbImg.length > 5 && dbImg.startsWith('http')) {
-                        // JIKA ADA GAMBAR DARI DATABASE
-                        let overlay = "rgba(15, 23, 42, 0.6), rgba(30, 58, 138, 0.7)"; 
-                        if (timeKey === 'pagi') overlay = "rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.7)"; 
-                        if (timeKey === 'siang') overlay = "rgba(14, 165, 233, 0.4), rgba(2, 132, 199, 0.7)"; 
-                        if (timeKey === 'sore') overlay = "rgba(139, 92, 246, 0.4), rgba(76, 29, 149, 0.7)"; 
-                        if (timeKey === 'malam') overlay = "rgba(15, 23, 42, 0.6), rgba(0, 0, 0, 0.8)"; 
-
-                        card.style.backgroundImage = `linear-gradient(to bottom right, ${overlay}), url('${dbImg}')`;
+                        // JIKA ADA GAMBAR DARI DATABASE: Render foto murni tanpa overlay gradient gelap
+                        card.style.backgroundImage = `url('${dbImg}')`;
                         card.style.backgroundSize = 'cover';
                         card.style.backgroundPosition = 'center';
                         card.className = `bg-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`;
                         
-                        // Sembunyikan Blob
                         if(iconContainer) iconContainer.style.display = 'none'; 
                     } else {
-                        // JIKA DATABASE KOSONG: KEMBALI KE EFEK BLOB DEFAULT
+                        // JIKA KOSONG: Tampilkan efek warna dengan animasi blob Matahari/Bulan
                         card.style.backgroundImage = '';
                         if(iconContainer) {
                             iconContainer.style.display = 'block';
@@ -728,7 +721,7 @@
                             setTimeout(()=>this.openModal('install-modal'),4000); 
                         }
                     } 
-                }); 
+                });
                 
                 const btnInstall = document.getElementById('btn-install-trigger');
                 if (btnInstall) {
