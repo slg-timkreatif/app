@@ -53,24 +53,6 @@
             opacity: 0;
         }
 
-        /* TWEAK CUACA DINAMIS MURNI CSS */
-        @keyframes driftAnim { 0% { left: -30%; } 100% { left: 120%; } }
-        @keyframes flyAnim { 
-            0% { left: -20%; top: 60%; transform: scale(0.4) rotate(-15deg); opacity: 0; } 
-            20% { opacity: 0.6; } 
-            80% { opacity: 0.6; } 
-            100% { left: 120%; top: 10%; transform: scale(0.8) rotate(15deg); opacity: 0; } 
-        }
-        @keyframes twinkleAnim { 0%, 100% { opacity: 0.2; transform: scale(0.7); } 50% { opacity: 1; transform: scale(1.3); } }
-
-        .anim-cloud { animation: driftAnim 25s linear infinite; }
-        .anim-cloud-slow { animation: driftAnim 40s linear infinite; }
-        .anim-bird { animation: flyAnim 18s linear infinite; }
-        .anim-bird-slow { animation: flyAnim 25s linear infinite 5s; }
-        .anim-star { animation: twinkleAnim 3s ease-in-out infinite; }
-        .anim-star-2 { animation: twinkleAnim 4.5s ease-in-out infinite 1s; }
-        .anim-star-3 { animation: twinkleAnim 2.5s ease-in-out infinite 2s; }
-
         /* BACKGROUND BLOB */
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
@@ -234,14 +216,16 @@
                     
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000">
                         
-                        <div id="weather-anim-container" class="absolute inset-0 z-0 pointer-events-none overflow-hidden"></div>
+                        <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-32 md:h-32 rounded-full pointer-events-none z-0 animate-breathe opacity-40"></div>
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
                         
                         <div class="relative z-10 mt-1">
-                            <h3 class="text-2xl md:text-4xl font-extrabold mb-2 tracking-tight leading-tight flex items-center gap-3"><span id="greeting-text">Halo, Guru!</span></h3>
-                            <p id="quote-text" class="text-blue-100/90 text-xs md:text-base leading-relaxed max-w-2xl font-medium italic pr-8">"Memuat kata mutiara..."</p>
-                            <p id="quote-author" class="text-blue-200/60 text-[10px] md:text-xs mt-1 font-bold tracking-wide uppercase">-</p>
+                            <h3 class="text-2xl md:text-4xl font-extrabold mb-2 tracking-tight leading-tight flex items-center gap-3 [text-shadow:0_8px_16px_rgba(0,0,0,0.4)]"><span id="greeting-text">Halo, Guru!</span></h3>
+                            <p id="quote-text" class="text-white text-xs md:text-base leading-relaxed max-w-2xl font-medium italic pr-8 [text-shadow:0_4px_10px_rgba(0,0,0,0.4)]">"Memuat kata mutiara..."</p>
+                            <p id="quote-author" class="text-slate-100 text-[10px] md:text-xs mt-1 font-bold tracking-wide uppercase [text-shadow:0_4px_10px_rgba(0,0,0,0.4)]">-</p>
+                            
                             <div id="install-inline-container" class="pwa-install-area hidden mt-6">
-                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-white/30 active:scale-95 transition text-xs md:text-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
+                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-white/30 active:scale-95 transition text-xs md:text-sm shadow-md"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
                             </div>
                         </div>
                     </div>
@@ -352,7 +336,7 @@
                 window.history.pushState(null, null, window.location.href);
                 const cached = localStorage.getItem('app_cache');
                 if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('animate-pulse')) container.innerHTML = ''; } catch(e) {} }
-                this.refreshData(false); this.trackUser(); this.setupInstallPrompt(); 
+                this.refreshData(false); this.trackUser(); this.setupInstallPrompt();
                 
                 this.updateGreeting(); 
                 setInterval(() => app.updateGreeting(), 60000); 
@@ -368,12 +352,12 @@
                 metaTags.forEach(tag => tag.setAttribute('content', color));
             },
             
-            // LOGIKA GREETING CARD & ANIMASI CUACA
+            // LOGIKA GREETING CARD (Gambar Original dari DB & Efek Text Shadow Melayang)
             updateGreeting: function() {
                 const hour = new Date().getHours(); 
                 const card = document.getElementById('greeting-card'); 
                 const text = document.getElementById('greeting-text'); 
-                const weatherContainer = document.getElementById('weather-anim-container');
+                const iconContainer = document.getElementById('greeting-bg-icon');
                 
                 let name = "Guru Hebat"; 
                 const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
@@ -417,53 +401,21 @@
 
                 if(card) {
                     if (dbImg && dbImg.length > 5 && dbImg.startsWith('http')) {
-                        // JIKA ADA GAMBAR DARI DATABASE
-                        let overlay = "rgba(15, 23, 42, 0.6), rgba(30, 58, 138, 0.7)"; 
-                        if (timeKey === 'pagi') overlay = "rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.7)"; 
-                        if (timeKey === 'siang') overlay = "rgba(14, 165, 233, 0.4), rgba(2, 132, 199, 0.7)"; 
-                        if (timeKey === 'sore') overlay = "rgba(139, 92, 246, 0.4), rgba(76, 29, 149, 0.7)"; 
-                        if (timeKey === 'malam') overlay = "rgba(15, 23, 42, 0.6), rgba(0, 0, 0, 0.8)"; 
-
-                        card.style.backgroundImage = `linear-gradient(to bottom right, ${overlay}), url('${dbImg}')`;
+                        // JIKA ADA GAMBAR DARI DATABASE: Render foto murni tanpa overlay gradient gelap
+                        card.style.backgroundImage = `url('${dbImg}')`;
                         card.style.backgroundSize = 'cover';
                         card.style.backgroundPosition = 'center';
                         card.className = `bg-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`;
                         
-                        // Bersihkan animasi cuaca CSS
-                        if(weatherContainer) weatherContainer.innerHTML = ''; 
+                        if(iconContainer) iconContainer.style.display = 'none'; 
                     } else {
-                        // JIKA TIDAK ADA GAMBAR: GUNAKAN ANIMASI CUACA CSS
+                        // JIKA KOSONG: Tampilkan efek warna dengan animasi blob Matahari/Bulan
                         card.style.backgroundImage = '';
-                        card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`; 
-                        
-                        if (weatherContainer) {
-                            let weatherHTML = '';
-                            if (timeKey === 'pagi' || timeKey === 'siang') {
-                                weatherHTML = `
-                                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full mix-blend-overlay filter blur-3xl -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
-                                    <div class="absolute -bottom-4 -right-4 w-32 h-32 rounded-full opacity-40 animate-breathe pointer-events-none" style="${planetStyle}"></div>
-                                    <div class="absolute top-4 w-32 h-10 bg-white/30 rounded-full blur-[2px] anim-cloud pointer-events-none"></div>
-                                    <div class="absolute top-14 w-48 h-12 bg-white/20 rounded-full blur-[4px] anim-cloud-slow pointer-events-none"></div>
-                                `;
-                            } else if (timeKey === 'sore') {
-                                weatherHTML = `
-                                    <div class="absolute bottom-[-20%] left-[-10%] w-[120%] h-[60%] bg-gradient-to-t from-orange-500/40 to-transparent blur-xl pointer-events-none"></div>
-                                    <div class="absolute -bottom-4 -right-4 w-32 h-32 rounded-full opacity-40 animate-breathe pointer-events-none" style="${planetStyle}"></div>
-                                    <svg class="absolute w-8 h-8 text-white/50 anim-bird fill-current pointer-events-none" viewBox="0 0 24 24"><path d="M2.2 15.5c2.3-1.4 4.8-1.4 7.1 0 1.2.7 2.5 1.4 3.9 1.4s2.7-.7 3.9-1.4c2.3-1.4 4.8-1.4 7.1 0l-.8 1.5c-1.8-1-3.6-1-5.4 0-1.5.8-3.1 1.6-4.8 1.6s-3.3-.8-4.8-1.6c-1.8-1-3.6-1-5.4 0l-.8-1.5z"/></svg>
-                                    <svg class="absolute w-6 h-6 text-white/40 anim-bird-slow fill-current pointer-events-none" viewBox="0 0 24 24"><path d="M2.2 15.5c2.3-1.4 4.8-1.4 7.1 0 1.2.7 2.5 1.4 3.9 1.4s2.7-.7 3.9-1.4c2.3-1.4 4.8-1.4 7.1 0l-.8 1.5c-1.8-1-3.6-1-5.4 0-1.5.8-3.1 1.6-4.8 1.6s-3.3-.8-4.8-1.6c-1.8-1-3.6-1-5.4 0l-.8-1.5z"/></svg>
-                                `;
-                            } else if (timeKey === 'malam') {
-                                weatherHTML = `
-                                    <div class="absolute top-6 right-8 w-16 h-16 md:w-24 md:h-24 rounded-full shadow-[inset_-8px_-4px_0_0_rgba(255,255,255,0.6)] md:shadow-[inset_-12px_-6px_0_0_rgba(255,255,255,0.5)] opacity-80 animate-pulse pointer-events-none"></div>
-                                    <div class="absolute top-6 left-10 w-1.5 h-1.5 bg-white rounded-full anim-star pointer-events-none"></div>
-                                    <div class="absolute top-16 left-1/4 w-2 h-2 bg-white/80 blur-[1px] rounded-full anim-star-2 pointer-events-none"></div>
-                                    <div class="absolute top-10 left-1/2 w-1.5 h-1.5 bg-white rounded-full anim-star-3 pointer-events-none"></div>
-                                    <div class="absolute top-24 right-1/3 w-1.5 h-1.5 bg-white/70 rounded-full anim-star pointer-events-none"></div>
-                                    <div class="absolute bottom-10 left-1/3 w-2 h-2 bg-white/50 blur-[1px] rounded-full anim-star-2 pointer-events-none"></div>
-                                `;
-                            }
-                            weatherContainer.innerHTML = weatherHTML;
+                        if(iconContainer) {
+                            iconContainer.style.display = 'block';
+                            iconContainer.style = planetStyle;
                         }
+                        card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`; 
                     }
                 }
                 lucide.createIcons();
@@ -769,7 +721,7 @@
                             setTimeout(()=>this.openModal('install-modal'),4000); 
                         }
                     } 
-                }); 
+                });
                 
                 const btnInstall = document.getElementById('btn-install-trigger');
                 if (btnInstall) {
