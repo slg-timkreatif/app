@@ -53,7 +53,7 @@
             opacity: 0;
         }
 
-        /* BACKGROUND */
+        /* BACKGROUND BLOB */
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
         .blob-2 { bottom: -10%; right: -10%; width: 350px; height: 350px; background: #e0e7ff; animation: float 12s infinite alternate-reverse; } 
@@ -62,11 +62,7 @@
         @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
 
         .modal-overlay { transition: opacity 0.3s ease; }
-        /* TWEAK SMOOTH: Hardware Acceleration pada Modal */
-        .modal-content { 
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            will-change: transform, opacity; 
-        }
+        .modal-content { transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform, opacity; }
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         
         /* HEADER STYLE */
@@ -103,18 +99,10 @@
 
         @media (min-width: 768px) {
             #main-layout { flex-direction: row !important; }
-            #desktop-sidebar { 
-                display: flex !important; 
-                width: 300px !important; 
-                flex-shrink: 0 !important;
-                height: 100vh !important;
-                position: sticky !important;
-                top: 0 !important;
-            }
+            #desktop-sidebar { display: flex !important; width: 300px !important; flex-shrink: 0 !important; height: 100vh !important; position: sticky !important; top: 0 !important; }
             #fab-button { display: none !important; }
             .mobile-header-area { display: none !important; }
             .desktop-header-area { display: flex !important; }
-            
             aside ::-webkit-scrollbar { width: 4px; }
             aside ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
             .dark aside ::-webkit-scrollbar-thumb { background: #334155; }
@@ -227,8 +215,10 @@
                 <div class="max-w-6xl mx-auto w-full space-y-6 px-5 md:px-8 mt-2 pb-32 md:pb-10">
                     
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 via-indigo-700 to-violet-800 dark:from-slate-900 dark:to-black rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000">
+                        
                         <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-32 md:h-32 rounded-full pointer-events-none z-0 animate-breathe opacity-40"></div>
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-10 -mr-10 -mt-10 animate-pulse pointer-events-none"></div>
+                        
                         <div class="relative z-10 mt-1">
                             <h3 class="text-2xl md:text-4xl font-extrabold mb-2 tracking-tight leading-tight flex items-center gap-3"><span id="greeting-text">Halo, Guru!</span></h3>
                             <p id="quote-text" class="text-blue-100/90 text-xs md:text-base leading-relaxed max-w-2xl font-medium italic pr-8">"Memuat kata mutiara..."</p>
@@ -361,17 +351,80 @@
                 metaTags.forEach(tag => tag.setAttribute('content', color));
             },
             
+            // LOGIKA GREETING CARD (Animasi Sun/Moon Blob + Override DB)
             updateGreeting: function() {
-                const hour = new Date().getHours(); const card = document.getElementById('greeting-card'); const text = document.getElementById('greeting-text'); const iconContainer = document.getElementById('greeting-bg-icon');
-                let name = "Guru Hebat"; const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
-                if (p.nama) { let cleanName = p.nama.replace(/^(Bpk\.|Ibu|Sdr\.|Sdri\.|Drs\.|Dra\.|H\.|Hj\.|Dr\.)\s+/i, ''); name = cleanName.trim().split(' ')[0]; name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(); } 
-                let greet = "", theme = "", planetStyle = "";
-                if (hour >= 4 && hour < 10) { greet = `Semangat Pagi, ${name}!`; theme = "from-orange-400 to-yellow-500"; planetStyle = "background: radial-gradient(circle at 30% 30%, #fef08a, #facc15, #f97316); box-shadow: 0 0 60px #fbbf24;"; } 
-                else if (hour >= 10 && hour < 15) { greet = `Selamat Siang, ${name}`; theme = "from-blue-500 to-cyan-400"; planetStyle = "background: radial-gradient(circle at 30% 30%, #ffffff, #cffafe, #22d3ee); box-shadow: 0 0 80px rgba(255,255,255,0.8);"; } 
-                else if (hour >= 15 && hour < 18) { greet = `Selamat Sore, ${name}`; theme = "from-indigo-500 to-purple-500"; planetStyle = "background: radial-gradient(circle at 30% 30%, #fbcfe8, #f472b6, #db2777); box-shadow: 0 0 60px #f472b6;"; } 
-                else { greet = `Selamat Malam, ${name}`; theme = "from-slate-800 to-slate-900"; planetStyle = "background: radial-gradient(circle at 30% 30%, #f1f5f9, #94a3b8, #475569); box-shadow: 0 0 50px rgba(148, 163, 184, 0.5);"; }
-                if(text) text.innerText = greet; if(iconContainer) iconContainer.style = planetStyle;
-                if(card) card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`; 
+                const hour = new Date().getHours(); 
+                const card = document.getElementById('greeting-card'); 
+                const text = document.getElementById('greeting-text'); 
+                const iconContainer = document.getElementById('greeting-bg-icon');
+                
+                let name = "Guru Hebat"; 
+                const p = JSON.parse(localStorage.getItem('guru_profile') || "{}");
+                if (p.nama) { 
+                    let cleanName = p.nama.replace(/^(Bpk\.|Ibu|Sdr\.|Sdri\.|Drs\.|Dra\.|H\.|Hj\.|Dr\.)\s+/i, ''); 
+                    name = cleanName.trim().split(' ')[0]; 
+                    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase(); 
+                } 
+                
+                let greet = "", theme = "", planetStyle = "", timeKey = "";
+                
+                // Tema dan warna dasar untuk animasi 'breathe' blob
+                if (hour >= 4 && hour < 10) { 
+                    greet = `Semangat Pagi, ${name}!`; theme = "from-orange-400 to-yellow-500"; timeKey = "pagi";
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #fef08a, #facc15, #f97316); box-shadow: 0 0 60px #fbbf24;"; 
+                } else if (hour >= 10 && hour < 15) { 
+                    greet = `Selamat Siang, ${name}`; theme = "from-blue-500 to-cyan-400"; timeKey = "siang";
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #ffffff, #cffafe, #22d3ee); box-shadow: 0 0 80px rgba(255,255,255,0.8);"; 
+                } else if (hour >= 15 && hour < 18) { 
+                    greet = `Selamat Sore, ${name}`; theme = "from-indigo-500 to-purple-500"; timeKey = "sore";
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #fbcfe8, #f472b6, #db2777); box-shadow: 0 0 60px #f472b6;"; 
+                } else { 
+                    greet = `Selamat Malam, ${name}`; theme = "from-slate-800 to-slate-900"; timeKey = "malam";
+                    planetStyle = "background: radial-gradient(circle at 30% 30%, #f1f5f9, #94a3b8, #475569); box-shadow: 0 0 50px rgba(148, 163, 184, 0.5);"; 
+                }
+                
+                if(text) text.innerText = greet; 
+
+                // Cek Override Gambar dari Database Google Sheets
+                let dbImg = "";
+                const cacheStr = localStorage.getItem('app_cache');
+                if (cacheStr) {
+                    try {
+                        const cacheData = JSON.parse(cacheStr);
+                        const info = cacheData.info || {};
+                        if (timeKey === 'pagi') dbImg = info.Bg_Pagi || info.bg_pagi;
+                        else if (timeKey === 'siang') dbImg = info.Bg_Siang || info.bg_siang;
+                        else if (timeKey === 'sore') dbImg = info.Bg_Sore || info.bg_sore;
+                        else if (timeKey === 'malam') dbImg = info.Bg_Malam || info.bg_malam;
+                    } catch(e) {}
+                }
+
+                if(card) {
+                    if (dbImg && dbImg.length > 5 && dbImg.startsWith('http')) {
+                        // JIKA ADA GAMBAR DARI DATABASE
+                        let overlay = "rgba(15, 23, 42, 0.6), rgba(30, 58, 138, 0.7)"; 
+                        if (timeKey === 'pagi') overlay = "rgba(251, 146, 60, 0.4), rgba(234, 88, 12, 0.7)"; 
+                        if (timeKey === 'siang') overlay = "rgba(14, 165, 233, 0.4), rgba(2, 132, 199, 0.7)"; 
+                        if (timeKey === 'sore') overlay = "rgba(139, 92, 246, 0.4), rgba(76, 29, 149, 0.7)"; 
+                        if (timeKey === 'malam') overlay = "rgba(15, 23, 42, 0.6), rgba(0, 0, 0, 0.8)"; 
+
+                        card.style.backgroundImage = `linear-gradient(to bottom right, ${overlay}), url('${dbImg}')`;
+                        card.style.backgroundSize = 'cover';
+                        card.style.backgroundPosition = 'center';
+                        card.className = `bg-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`;
+                        
+                        // Sembunyikan Blob
+                        if(iconContainer) iconContainer.style.display = 'none'; 
+                    } else {
+                        // JIKA DATABASE KOSONG: KEMBALI KE EFEK BLOB DEFAULT
+                        card.style.backgroundImage = '';
+                        if(iconContainer) {
+                            iconContainer.style.display = 'block';
+                            iconContainer.style = planetStyle;
+                        }
+                        card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-2xl shadow-blue-600/30 relative overflow-hidden group transition-all duration-1000`; 
+                    }
+                }
                 lucide.createIcons();
             },
 
@@ -418,7 +471,6 @@
                 document.getElementById('submenu-title').textContent = title; 
                 const list = document.getElementById('submenu-list'); 
                 
-                // TWEAK SMOOTH: Loop untuk animasi Air Terjun (Staggered Animation)
                 list.innerHTML = children.map((child, index) => {
                     const safeIcon = child.icon || 'link';
                     const url = (child.url || '#').replace(/'/g, "\\'");
@@ -480,8 +532,6 @@
                     let badge = ''; if (item.label) { const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : 'bg-blue-500'; badge = `<span class="absolute top-3 left-3 ${bgLabel} text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10">${item.label}</span>`; } else if (hasChildren) { badge = `<span class="absolute top-3 right-3 text-${color}-400 bg-${color}-50 dark:bg-${color}-900/40 p-1 rounded-lg border border-${color}-100 dark:border-${color}-800/50"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`; }
                     
                     const glassEffect = "bg-white/70 dark:bg-darkcard/60 backdrop-blur-xl border border-white/60 dark:border-slate-700/60"; 
-                    
-                    // TWEAK SMOOTH: Perhalus efek hover active dan duration
                     const hoverEffect = `hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-200 ease-out group`;
                     
                     const iconClass = `w-11 h-11 md:w-14 md:h-14 shrink-0 rounded-xl md:rounded-2xl bg-gradient-to-br from-${color}-500 to-${color}-600 text-white flex items-center justify-center shadow-lg shadow-${color}-500/30 border border-white/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`;
@@ -495,9 +545,8 @@
                 
                 container.innerHTML = tempHTML;
                 
-                // TWEAK SMOOTH: Efek Crossfade saat data masuk
                 container.classList.remove('fade-in');
-                void container.offsetWidth; // Trigger reflow
+                void container.offsetWidth; 
                 container.classList.add('fade-in');
                 
                 const annArea = document.getElementById('announcement-area');
@@ -623,7 +672,6 @@
             
             openModal: function(id) { 
                 const el = document.getElementById(id); if (!el) return; 
-                // Fix Z-Index Button
                 const fab = document.getElementById('fab-button');
                 if(fab) fab.classList.add('hidden');
 
@@ -649,7 +697,6 @@
 
             closeModal: function(id) { 
                 const el = document.getElementById(id); if (!el) return; 
-                // Fix Z-Index Button
                 const fab = document.getElementById('fab-button');
                 if(fab) fab.classList.remove('hidden');
                 
