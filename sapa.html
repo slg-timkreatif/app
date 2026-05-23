@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <title>SAPA - Sistem Absensi Pemantauan Anak</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { darkbg: '#0f172a', darkcard: '#1e293b' },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        ::-webkit-scrollbar { width: 0px; }
+        
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .dark .glass-panel { 
+            background: rgba(30, 41, 59, 0.7); 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        #reader { width: 100%; border-radius: 1.5rem; overflow: hidden; border: none !important; }
+        #reader video { border-radius: 1.5rem; object-fit: cover; }
+
+        /* Laser Scan Animation */
+        .scanner-laser {
+            height: 3px;
+            background: linear-gradient(to right, transparent, #3b82f6, transparent);
+            position: absolute;
+            width: 85%;
+            left: 7.5%;
+            animation: scanning 2.5s ease-in-out infinite;
+        }
+        @keyframes scanning {
+            0%, 100% { top: 15%; opacity: 0.3; }
+            50% { top: 85%; opacity: 1; }
+        }
+
+        .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.5; pointer-events: none; }
+        .blob-1 { top: -10%; left: -10%; width: 300px; height: 300px; background: #dbeafe; }
+        .blob-2 { bottom: -10%; right: -10%; width: 250px; height: 250px; background: #e0e7ff; }
+        .dark .blob-1 { background: #172554; opacity: 0.3; }
+        .dark .blob-2 { background: #312e81; opacity: 0.3; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen flex flex-col overflow-hidden relative transition-colors duration-500">
+
+    <div class="blob blob-1 animate-pulse"></div>
+    <div class="blob blob-2 animate-pulse" style="animation-delay: 2s;"></div>
+
+    <header class="px-6 py-4 flex items-center justify-between z-10 shrink-0 border-b border-slate-200/30 dark:border-slate-800/30">
+        <div>
+            <div class="flex items-center gap-2">
+                <h1 class="text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">SAPA</h1>
+                <span class="text-[9px] font-extrabold bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-md uppercase tracking-wider">PWA</span>
+            </div>
+            <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Kecamatan Selogiri</p>
+        </div>
+        
+        <div class="flex items-center gap-3 glass-panel px-3.5 py-1.5 rounded-full shadow-sm">
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-700 border border-white dark:border-slate-600 shadow-sm shrink-0">
+                <img id="guru-photo" src="" alt="Guru" class="w-full h-full object-cover hidden">
+                <i data-lucide="user" class="w-4 h-4 m-2 text-slate-400" id="guru-icon-fallback"></i>
+            </div>
+            <div class="flex flex-col min-w-0 max-w-[100px]">
+                <span id="guru-nama" class="text-xs font-bold leading-tight truncate">Tamu</span>
+                <span class="text-[8px] font-bold text-slate-400 uppercase tracking-wider truncate" id="guru-instansi">Petugas</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-5 pb-24">
+        
+        <div class="glass-panel p-2 rounded-[2rem] shadow-xl shadow-slate-900/5 relative shrink-0 overflow-hidden">
+            <div class="scanner-laser z-20"></div>
+            <div class="absolute top-6 left-6 w-8 h-8 border-t-4 border-l-4 border-blue-500 dark:border-blue-400 rounded-tl-xl z-20"></div>
+            <div class="absolute top-6 right-6 w-8 h-8 border-t-4 border-r-4 border-blue-500 dark:border-blue-400 rounded-tr-xl z-20"></div>
+            <div class="absolute bottom-6 left-6 w-8 h-8 border-b-4 border-l-4 border-blue-500 dark:border-blue-400 rounded-bl-xl z-20"></div>
+            <div class="absolute bottom-6 right-6 w-8 h-8 border-b-4 border-r-4 border-blue-500 dark:border-blue-400 rounded-br-xl z-20"></div>
+            
+            <div id="reader" class="bg-slate-900/5 dark:bg-black/20 w-full aspect-[4/4] flex items-center justify-center relative">
+                </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 shrink-0">
+            <i data-lucide="scan-face" class="w-4 h-4 animate-pulse"></i>
+            <span>Pindai Kartu QR atau Layar HP Siswa</span>
+        </div>
+
+        <div class="flex-1 flex flex-col min-h-[200px]">
+            <div class="flex items-center justify-between px-1 mb-3 shrink-0">
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-4 bg-blue-600 dark:bg-blue-500 rounded-full"></div>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aktivitas Hari Ini</h3>
+                </div>
+                <span id="log-count" class="text-[10px] font-bold bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2.5 py-0.5 rounded-full">0 Siswa</span>
+            </div>
+            
+            <div id="log-container" class="flex-1 overflow-y-auto space-y-2.5 max-h-[250px] pr-1">
+                <div id="log-empty" class="text-center py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-slate-400 gap-1">
+                    <i data-lucide="history" class="w-5 h-5 opacity-60"></i>
+                    <span class="text-xs">Belum ada data presensi masuk</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="confirm-modal" class="fixed inset-0 z-50 flex items-end justify-center hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 modal-overlay" onclick="closeModal()"></div>
+        <div id="modal-content" class="bg-white dark:bg-slate-800 w-full rounded-t-[2.5rem] p-6 pb-8 relative z-10 shadow-2xl transform translate-y-full transition-transform duration-300">
+            <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto -mt-2 mb-6"></div>
+            
+            <div class="flex items-center gap-4 p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100/50 dark:border-blue-900/30 mb-6">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0">
+                    <i data-lucide="user-check" class="w-6 h-6"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-0.5">Konfirmasi Sesi Presensi</p>
+                    <h3 id="siswa-nisn" class="text-lg font-black text-slate-800 dark:text-white truncate">Membaca QR...</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3.5">
+                <button onclick="closeModal()" class="py-4 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold text-sm active:scale-95 transition">Batal</button>
+                <button onclick="submitPresensi()" id="btn-submit" class="py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/20 flex justify-center items-center gap-2 active:scale-95 transition">
+                    <span>Konfirmasi</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // CONFIGURASI UTAMA Backend Aplikasi SAPA
+        // =========================================================================
+        const CONFIG = {
+            // Gantilah URL ini dengan URL Web App hasil deploy Spreadsheet Sekolah Anda
+            scriptURL: "https://script.google.com/macros/s/AKfycby1OjnfEnQNu2nSgIfSZRHGNgAJpb_qmL9ChwSzjlW3Bf8dS2jhPDpo-0R6AcuqXv7uWA/exec"
+        };
+
+        let html5QrcodeScanner;
+        let scannedQRString = ""; 
+        let localHistoryLogs = [];
+
+        // 1. Inisialisasi Otomatis Tema & Data Petugas dari Guru Berbagi Portal
+        function initApp() {
+            lucide.createIcons();
+            initTheme();
+            
+            // Integrasi Sesi Login dengan Local Storage Guru Berbagi
+            const savedProfile = localStorage.getItem('guru_profile');
+            if (savedProfile) {
+                try {
+                    const profile = JSON.parse(savedProfile);
+                    document.getElementById('guru-nama').innerText = profile.nama.split(' ')[0] || "Guru";
+                    if (profile.instansi) document.getElementById('guru-instansi').innerText = profile.instansi;
+                    if (profile.foto) {
+                        const img = document.getElementById('guru-photo');
+                        img.src = profile.foto;
+                        img.classList.remove('hidden');
+                        document.getElementById('guru-icon-fallback').classList.add('hidden');
+                    }
+                } catch(e) { console.error("Gagal memproses cache profil lokal.", e); }
+            } else {
+                alert("Peringatan: Sesi login Guru Berbagi tidak ditemukan. Berjalan dalam mode Tamu.");
+            }
+            
+            initScanner();
+        }
+
+        // 2. Sinkronisasi Deteksi Tema Jam Kerja
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const hour = new Date().getHours();
+            const isNight = hour >= 18 || hour < 6;
+            let isDark = savedTheme === 'dark' || (!savedTheme && isNight);
+            
+            if (isDark) document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        }
+
+        // 3. Konfigurasi Modul Kamera Scanner Browser Native
+        function initScanner() {
+            html5QrcodeScanner = new Html5Qrcode("reader");
+            const config = { 
+                fps: 15, 
+                qrbox: (width, height) => {
+                    const minDim = Math.min(width, height);
+                    return { width: Math.floor(minDim * 0.65), height: Math.floor(minDim * 0.65) };
+                },
+                aspectRatio: 1.0
+            };
+            
+            html5QrcodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
+            .catch(err => {
+                console.error("Akses hardware kamera diblokir atau tidak tersedia.", err);
+                document.getElementById('reader').innerHTML = `<div class="text-center p-6 text-red-500 text-xs font-bold"><i data-lucide="camera-off" class="w-8 h-8 mx-auto mb-2"></i>Izin Kamera Ditolak / Tidak Tersedia</div>`;
+                lucide.createIcons();
+            });
+        }
+
+        // 4. Trigger Interseptor Ketika QR Berhasil Terbaca Kamera
+        function onScanSuccess(decodedText, decodedResult) {
+            // Amankan dari double trigger, langsung kunci viewport kamera
+            html5QrcodeScanner.pause();
+            
+            scannedQRString = decodedText; 
+            
+            // Bersihkan format string visual (Misal: SD03-012345 diambil NISN-nya saja untuk modal display)
+            const structuralParts = decodedText.split('-');
+            const displayNISN = structuralParts.length > 1 ? structuralParts[1] : decodedText;
+            
+            document.getElementById('siswa-nisn').innerText = "NISN: " + displayNISN;
+            
+            // Putar audio konfirmasi lokal
+            triggerAudioFeedback('success');
+            if(navigator.vibrate) navigator.vibrate(80);
+            
+            openModal();
+        }
+
+        // 5. Sintesis Nada Beep Menggunakan Web Audio API (Zero Dependencies)
+        function triggerAudioFeedback(statusType) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                if (statusType === 'success') {
+                    oscillator.frequency.setValueAtTime(950, audioContext.currentTime); // High pitch crisp beep
+                    gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.12);
+                    oscillator.stop(audioContext.currentTime + 0.12);
+                } else {
+                    oscillator.frequency.setValueAtTime(280, audioContext.currentTime); // Low bass buzz error
+                    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.35);
+                    oscillator.stop(audioContext.currentTime + 0.35);
+                }
+            } catch (err) { console.log("Sinyal browser memblokir audio autoplay.", err); }
+        }
+
+        // 6. Animasi Tampilan Modal Sheets (Material Style)
+        function openModal() {
+            const modal = document.getElementById('confirm-modal');
+            const overlay = modal.querySelector('.modal-overlay');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                content.classList.remove('translate-y-full');
+            }, 20);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confirm-modal');
+            const overlay = modal.querySelector('.modal-overlay');
+            const content = document.getElementById('modal-content');
+            
+            overlay.classList.add('opacity-0');
+            content.classList.add('translate-y-full');
+            
+            setTimeout(() => { 
+                modal.classList.add('hidden'); 
+                if (html5QrcodeScanner) html5QrcodeScanner.resume();
+            }, 300);
+        }
+
+        // 7. Pengiriman Amunisi Payload Data Presensi ke Core Script Google Sheets via Fetch API
+        function submitPresensi() {
+            const btn = document.getElementById('btn-submit');
+            const initialBtnHTML = btn.innerHTML;
+            
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Memproses...';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            // Dekonstruksi String QR Aman
+            const structuralParts = scannedQRString.split('-');
+            const kodeSekolah = structuralParts.length > 1 ? structuralParts[0] : "-";
+            const nisnSiswa = structuralParts.length > 1 ? structuralParts[1] : scannedQRString;
+            const namaPetugas = document.getElementById('guru-nama').innerText;
+
+            const payload = {
+                nisn: nisnSiswa,
+                nama: "Siswa (" + nisnSiswa + ")", // Otomatis diselesaikan di sisi Backend Sheet
+                kelas: "-",
+                petugas: namaPetugas
+            };
+
+            fetch(CONFIG.scriptURL, {
+                method: 'POST',
+                mode: 'no-cors', // Menembus CORS Policy Apps Script Google
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                // Skenario Sukses Terkirim
+                btn.classList.replace('bg-blue-600', 'bg-green-500');
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Sukses';
+                lucide.createIcons();
+                
+                // Tambahkan transaksi ke Log Histori Lokal di HP
+                pushToLocalLog(nisnSiswa);
+
+                setTimeout(() => {
+                    closeModal();
+                    btn.classList.replace('bg-green-500', 'bg-blue-600');
+                    btn.innerHTML = initialBtnHTML;
+                    btn.disabled = false;
+                }, 1200);
+            })
+            .catch(error => {
+                console.error("Koneksi internet bermasalah.", error);
+                triggerAudioFeedback('error');
+                alert("Gagal mengirim! Periksa sinyal internet di gerbang sekolah.");
+                btn.innerHTML = initialBtnHTML;
+                btn.disabled = false;
+            });
+        }
+
+        // 8. Manajemen Log Render Histori Harian di Sisi Client HP Guru
+        function pushToLocalLog(nisn) {
+            const now = new Date();
+            const timeString = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            
+            // Simpan ke array
+            localHistoryLogs.unshift({ nisn: nisn, jam: timeString });
+            
+            const container = document.getElementById('log-container');
+            const emptyState = document.getElementById('log-empty');
+            if (emptyState) emptyState.remove();
+            
+            // Render elemen histori baru dengan style glassmorphic
+            const logItem = document.createElement('div');
+            logItem.className = "flex items-center justify-between p-3.5 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 shadow-sm animate-fade-in";
+            logItem.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-xl">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-200">Siswa ID: ${nisn}</p>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide">Pemantauan Real-time Aktif</p>
+                    </div>
+                </div>
+                <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-lg">${timeString} WIB</span>
+            `;
+            
+            container.insertBefore(logItem, container.firstChild);
+            document.getElementById('log-count').innerText = localHistoryLogs.length + " Siswa";
+            lucide.createIcons();
+        }
+
+        // Jalankan ekosistem aplikasi saat DOM siap
+        document.addEventListener("DOMContentLoaded", initApp);
+    </script>
+</body>
+</html>
