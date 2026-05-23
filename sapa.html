@@ -74,7 +74,7 @@
             <div class="flex items-center justify-between px-1 mb-3 shrink-0">
                 <div class="flex items-center gap-2">
                     <div class="w-1 h-4 bg-blue-600 dark:bg-blue-500 rounded-full"></div>
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Log Pemantauan</h3>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Daftar Kehadiran</h3>
                 </div>
                 <span id="log-count" class="text-[10px] font-bold bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2.5 py-0.5 rounded-full">0 Siswa</span>
             </div>
@@ -118,6 +118,7 @@
         // CONFIGURASI UTAMA Backend Aplikasi SAPA
         // =========================================================================
         const CONFIG = {
+            // URL Router Master Kecamatan
             scriptURL: "https://script.google.com/macros/s/AKfycby1OjnfEnQNu2nSgIfSZRHGNgAJpb_qmL9ChwSzjlW3Bf8dS2jhPDpo-0R6AcuqXv7uWA/exec"
         };
 
@@ -151,7 +152,11 @@
             
             initScanner();
             updateSyncBadge();
+            
+            // Proses data offline yang tertunda
             if (scanQueue.length > 0) processQueue();
+            
+            // Tarik data histori awal (merging Masuk & Pulang)
             if(instansiGuru) fetchSharedHistory(instansiGuru);
         }
 
@@ -177,7 +182,7 @@
         }
 
         // =========================================================================
-        // ALUR: SCAN -> LOOKUP -> MODAL KONFIRMASI
+        // ALUR SCAN & LOOKUP (Menampilkan Modal Konfirmasi)
         // =========================================================================
         function onScanSuccess(decodedText) {
             html5QrcodeScanner.pause();
@@ -207,7 +212,6 @@
                     document.getElementById('siswa-nama').innerText = data.nama;
                     document.getElementById('siswa-kelas-id').innerText = "Kelas: " + data.kelas + " | NISN: " + scannedQRString.split('-')[1];
                     
-                    // Simpan sementara untuk dimasukkan ke antrean
                     tempSiswaData = { nama: data.nama, kelas: data.kelas, qr: scannedQRString, petugas: namaPetugas };
                     
                     btnSubmit.disabled = false;
@@ -260,7 +264,7 @@
         }
 
         // =========================================================================
-        // ALUR: KLIK KONFIRMASI -> BACKGROUND QUEUE (SAT-SET)
+        // ANTRIAN PENGIRIMAN LATAR BELAKANG (Bikin Sistem Terasa "Sat-Set")
         // =========================================================================
         function queuePresensi() {
             const now = new Date();
@@ -278,14 +282,14 @@
                 displayNisn: rawNISN
             };
 
+            // Simpan ke memori antrean HP
             scanQueue.push(queueItem);
             localStorage.setItem('sapa_queue', JSON.stringify(scanQueue));
             
-            // Render antrean di UI
             renderPendingLog(queueItem);
             updateSyncBadge();
 
-            // Modal Instan Tertutup & Kamera Siap Scan Siswa Lain!
+            // Modal Instan Tertutup & Kamera Siap Scan Lagi!
             closeModal();
             processQueue();
         }
@@ -305,10 +309,12 @@
                 const data = await response.json();
 
                 if (data.status === "success") {
-                    updateLogToSuccess(currentItem.id, data.nama, data.kelas, data.action, currentItem.displayNisn);
+                    updateLogToSuccess(currentItem.id, data.nama, data.kelas, data.action, currentItem.displayNisn, currentItem.jam);
                 } else {
                     updateLogToFailed(currentItem.id, data.message);
                 }
+                
+                // Buang dari antrean memori setelah selesai diproses server
                 scanQueue.shift();
                 localStorage.setItem('sapa_queue', JSON.stringify(scanQueue));
 
@@ -334,7 +340,7 @@
         }
 
         // =========================================================================
-        // UI RENDERING & FITUR HAPUS DATA
+        // KARTU TERPADU (MERGING MASUK & PULANG DI UI)
         // =========================================================================
         function renderPendingLog(item) {
             const container = document.getElementById('log-container');
@@ -349,38 +355,20 @@
                     <div class="p-2 bg-slate-200 dark:bg-slate-700 text-slate-500 rounded-xl"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i></div>
                     <div>
                         <p class="text-xs font-bold text-slate-700 dark:text-slate-200">${item.nama}</p>
-                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Mengirim ke server...</p>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Menyimpan ke server...</p>
                     </div>
                 </div>
             `;
             container.insertBefore(logDiv, container.firstChild);
-            updateLogCount();
-            lucide.createIcons();
         }
 
-        function updateLogToSuccess(id, nama, kelas, statusAbsen, rawNISN) {
+        function updateLogToSuccess(id, nama, kelas, statusAbsen, rawNISN, jam) {
+            // Hapus kartu indikator antrean (loading)
             const el = document.getElementById(id);
-            if (!el) return;
-
-            const colorClass = statusAbsen === "Masuk" ? "text-emerald-600 bg-emerald-100" : "text-blue-600 bg-blue-100";
-            const iconType = statusAbsen === "Masuk" ? "log-in" : "log-out";
-
-            el.className = "flex items-center justify-between p-3 mb-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800/50 shadow-md group relative overflow-hidden transition-all duration-300";
-            el.innerHTML = `
-                <div class="flex items-center gap-3 z-10">
-                    <div class="p-2 rounded-xl ${colorClass}"><i data-lucide="${iconType}" class="w-5 h-5"></i></div>
-                    <div>
-                        <p class="text-sm font-bold text-slate-800 dark:text-slate-100">${nama}</p>
-                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wide">Kelas ${kelas} • Status ${statusAbsen}</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2 z-10">
-                    <button onclick="deleteLog('${rawNISN}', '${id}')" class="p-1.5 text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Batalkan Presensi">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            `;
-            lucide.createIcons();
+            if (el) el.remove();
+            
+            // Eksekusi pembuatan/pembaruan Kartu Terpadu
+            upsertCard(rawNISN, nama, kelas, statusAbsen, jam);
         }
 
         function updateLogToFailed(id, pesanError) {
@@ -400,13 +388,87 @@
             triggerAudioFeedback('error');
         }
 
-        // FITUR BARU: FUNGSI HAPUS DATA
-        function deleteLog(rawNISN, elementId) {
-            const instansiGuru = document.getElementById('guru-instansi').innerText;
-            if(!confirm("Yakin ingin membatalkan/menghapus presensi terakhir anak ini?")) return;
+        // FUNGSI INTI KARTU TERPADU
+        function upsertCard(nisn, nama, kelas, statusAbsen, jam) {
+            const container = document.getElementById('log-container');
+            const emptyState = document.getElementById('log-empty');
+            if (emptyState) emptyState.remove();
+
+            let card = document.getElementById('card_' + nisn);
+            let colorClass = statusAbsen === "Masuk" ? "text-emerald-600 bg-emerald-100 dark:bg-emerald-900/40" : "text-amber-600 bg-amber-100 dark:bg-amber-900/40";
+            let iconType = statusAbsen === "Masuk" ? "log-in" : "log-out";
             
-            const el = document.getElementById(elementId);
-            el.style.opacity = '0.5';
+            if (!card) {
+                // Skenario A: KARTU BARU (Anak belum pernah scan sama sekali hari ini)
+                card = document.createElement('div');
+                card.id = 'card_' + nisn;
+                card.className = "flex flex-col p-3.5 mb-2.5 rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200/50 dark:border-slate-700/50 shadow-sm transition-all duration-500";
+                
+                let jamMasuk = statusAbsen === "Masuk" ? jam : "--:--";
+                let jamPulang = statusAbsen === "Pulang" ? jam : "--:--";
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3 z-10">
+                            <div class="p-2 rounded-xl ${colorClass}" id="iconbox_${nisn}"><i data-lucide="${iconType}" class="w-5 h-5"></i></div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 dark:text-slate-100">${nama}</p>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide" id="status_${nisn}">Kelas ${kelas} • Status ${statusAbsen}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 z-10">
+                            <button onclick="deleteLog('${nisn}')" class="p-1.5 text-red-400 hover:text-red-600 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 rounded-lg transition-colors" title="Batalkan Presensi Terakhir">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 border-t border-slate-100 dark:border-slate-700 pt-2.5">
+                        <div class="flex flex-col">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Jam Masuk</span>
+                            <span class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400" id="masuk_${nisn}">${jamMasuk}</span>
+                        </div>
+                        <div class="flex flex-col border-l border-slate-100 dark:border-slate-700 pl-3">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">Jam Pulang</span>
+                            <span class="text-xs font-mono font-bold text-amber-600 dark:text-amber-400" id="pulang_${nisn}">${jamPulang}</span>
+                        </div>
+                    </div>
+                `;
+                container.insertBefore(card, container.firstChild);
+            } else {
+                // Skenario B: UPDATE KARTU LAMA (Jika data anak sudah ada, lengkapi jam-nya)
+                if (statusAbsen === "Masuk") {
+                    document.getElementById('masuk_' + nisn).innerText = jam;
+                } else if (statusAbsen === "Pulang") {
+                    document.getElementById('pulang_' + nisn).innerText = jam;
+                }
+                
+                // Perbarui status dan warna ikon sesuai status terkini (Masuk / Pulang)
+                document.getElementById('status_' + nisn).innerText = `Kelas ${kelas} • Status ${statusAbsen}`;
+                const iconBox = document.getElementById('iconbox_' + nisn);
+                iconBox.className = `p-2 rounded-xl ${colorClass} z-10`;
+                iconBox.innerHTML = `<i data-lucide="${iconType}" class="w-5 h-5"></i>`;
+                
+                // Efek visual kedip menandakan data diperbarui
+                card.classList.add('ring-2', 'ring-blue-400', 'scale-[1.02]');
+                setTimeout(() => card.classList.remove('ring-2', 'ring-blue-400', 'scale-[1.02]'), 800);
+                
+                // Pindahkan kartu ini ke paling atas agar guru tahu anak ini baru saja lewat gerbang!
+                container.insertBefore(card, container.firstChild);
+            }
+            
+            updateLogCount();
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // FITUR HAPUS (VOID) & REFRESH DARI CLOUD DATABASE
+        // =========================================================================
+        function deleteLog(rawNISN) {
+            const instansiGuru = document.getElementById('guru-instansi').innerText;
+            if(!confirm("Yakin ingin membatalkan/menghapus riwayat presensi terakhir anak ini?")) return;
+            
+            const card = document.getElementById('card_' + rawNISN);
+            if(card) card.style.opacity = '0.5';
             
             fetch(CONFIG.scriptURL, {
                 method: 'POST',
@@ -415,16 +477,15 @@
             .then(res => res.json())
             .then(data => {
                 if(data.status === "success") {
-                    el.remove();
-                    updateLogCount();
-                    alert("Presensi berhasil dihapus dari sistem.");
+                    // Setelah dihapus di database, sinkronisasi ulang layar UI agar akurat
+                    fetchSharedHistory(instansiGuru); 
                 } else {
                     alert("Gagal menghapus: " + data.message);
-                    el.style.opacity = '1';
+                    if(card) card.style.opacity = '1';
                 }
             }).catch(e => {
                 alert("Gangguan internet, gagal menghapus.");
-                el.style.opacity = '1';
+                if(card) card.style.opacity = '1';
             });
         }
 
@@ -435,26 +496,26 @@
             })
             .then(res => res.json())
             .then(data => {
+                const container = document.getElementById('log-container');
+                container.innerHTML = ''; // Kosongkan layar dulu
+                
                 if(data.status === "success" && data.data.length > 0) {
-                    const container = document.getElementById('log-container');
-                    const emptyState = document.getElementById('log-empty');
-                    if (emptyState) emptyState.remove();
-
-                    data.data.forEach(item => {
-                        const internalId = 'hist_' + Math.random().toString(36).substr(2, 9);
-                        const logDiv = document.createElement('div');
-                        logDiv.id = internalId;
-                        container.appendChild(logDiv);
-                        updateLogToSuccess(internalId, item.nama, item.kelas, item.status, item.nisn);
+                    // Urutan dibalik (reverse) agar 'Masuk' dieksekusi lebih dulu oleh upsertCard, lalu 'Pulang' akan menimpanya secara presisi
+                    data.data.reverse().forEach(item => {
+                        upsertCard(item.nisn, item.nama, item.kelas, item.status, item.jam);
                     });
-                    updateLogCount();
+                } else {
+                    container.innerHTML = `<div id="log-empty" class="text-center py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-slate-400 gap-1"><i data-lucide="history" class="w-5 h-5 opacity-60"></i><span class="text-xs">Belum ada data presensi hari ini</span></div>`;
                 }
-            }).catch(e => console.log("Gagal memuat log"));
+                updateLogCount();
+            }).catch(e => console.log("Gagal memuat histori jaringan"));
         }
 
         function updateLogCount() {
+            // Berkat sistem "Kartu Terpadu", jumlah children (kartu UI) yang terhitung = jumlah fisik siswa nyata (Murni)
             const count = document.getElementById('log-container').children.length;
-            document.getElementById('log-count').innerText = count + " Siswa";
+            const emptyEl = document.getElementById('log-empty');
+            document.getElementById('log-count').innerText = (emptyEl ? 0 : count) + " Siswa";
         }
 
         document.addEventListener("DOMContentLoaded", initApp);
