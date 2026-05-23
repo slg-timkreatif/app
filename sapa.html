@@ -11,12 +11,7 @@
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { darkbg: '#0f172a', darkcard: '#1e293b' },
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
-                }
-            }
+            theme: { extend: { colors: { darkbg: '#0f172a', darkcard: '#1e293b' }, fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } }
         }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -26,34 +21,12 @@
     <style>
         body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         ::-webkit-scrollbar { width: 0px; }
-        
-        .glass-panel { 
-            background: rgba(255, 255, 255, 0.75); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-        .dark .glass-panel { 
-            background: rgba(30, 41, 59, 0.7); 
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
+        .glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.4); }
+        .dark .glass-panel { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); }
         #reader { width: 100%; border-radius: 1.5rem; overflow: hidden; border: none !important; }
         #reader video { border-radius: 1.5rem; object-fit: cover; }
-
-        /* Laser Scan Animation */
-        .scanner-laser {
-            height: 3px;
-            background: linear-gradient(to right, transparent, #3b82f6, transparent);
-            position: absolute;
-            width: 85%;
-            left: 7.5%;
-            animation: scanning 2.5s ease-in-out infinite;
-        }
-        @keyframes scanning {
-            0%, 100% { top: 15%; opacity: 0.3; }
-            50% { top: 85%; opacity: 1; }
-        }
-
+        .scanner-laser { height: 3px; background: linear-gradient(to right, transparent, #3b82f6, transparent); position: absolute; width: 85%; left: 7.5%; animation: scanning 2.5s ease-in-out infinite; }
+        @keyframes scanning { 0%, 100% { top: 15%; opacity: 0.3; } 50% { top: 85%; opacity: 1; } }
         .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.5; pointer-events: none; }
         .blob-1 { top: -10%; left: -10%; width: 300px; height: 300px; background: #dbeafe; }
         .blob-2 { bottom: -10%; right: -10%; width: 250px; height: 250px; background: #e0e7ff; }
@@ -70,7 +43,7 @@
         <div>
             <div class="flex items-center gap-2">
                 <h1 class="text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">SAPA</h1>
-                <span class="text-[9px] font-extrabold bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-md uppercase tracking-wider">PWA</span>
+                <span id="sync-badge" class="text-[9px] font-extrabold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-md uppercase tracking-wider transition-colors">Sinkronisasi</span>
             </div>
             <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Kecamatan Selogiri</p>
         </div>
@@ -88,36 +61,28 @@
     </header>
 
     <main class="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-5 pb-24">
-        
         <div class="glass-panel p-2 rounded-[2rem] shadow-xl shadow-slate-900/5 relative shrink-0 overflow-hidden">
             <div class="scanner-laser z-20"></div>
             <div class="absolute top-6 left-6 w-8 h-8 border-t-4 border-l-4 border-blue-500 dark:border-blue-400 rounded-tl-xl z-20"></div>
             <div class="absolute top-6 right-6 w-8 h-8 border-t-4 border-r-4 border-blue-500 dark:border-blue-400 rounded-tr-xl z-20"></div>
             <div class="absolute bottom-6 left-6 w-8 h-8 border-b-4 border-l-4 border-blue-500 dark:border-blue-400 rounded-bl-xl z-20"></div>
             <div class="absolute bottom-6 right-6 w-8 h-8 border-b-4 border-r-4 border-blue-500 dark:border-blue-400 rounded-br-xl z-20"></div>
-            
-            <div id="reader" class="bg-slate-900/5 dark:bg-black/20 w-full aspect-[4/4] flex items-center justify-center relative">
-                </div>
-        </div>
-
-        <div class="flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 dark:text-slate-500 shrink-0">
-            <i data-lucide="scan-face" class="w-4 h-4 animate-pulse"></i>
-            <span>Pindai Kartu QR atau Layar HP Siswa</span>
+            <div id="reader" class="bg-slate-900/5 dark:bg-black/20 w-full aspect-[4/4] flex items-center justify-center relative"></div>
         </div>
 
         <div class="flex-1 flex flex-col min-h-[200px]">
             <div class="flex items-center justify-between px-1 mb-3 shrink-0">
                 <div class="flex items-center gap-2">
                     <div class="w-1 h-4 bg-blue-600 dark:bg-blue-500 rounded-full"></div>
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Aktivitas Hari Ini</h3>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Log Pemantauan</h3>
                 </div>
                 <span id="log-count" class="text-[10px] font-bold bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2.5 py-0.5 rounded-full">0 Siswa</span>
             </div>
             
-            <div id="log-container" class="flex-1 overflow-y-auto space-y-2.5 max-h-[250px] pr-1">
+            <div id="log-container" class="flex-1 overflow-y-auto space-y-2.5 max-h-[300px] pr-1 pb-10">
                 <div id="log-empty" class="text-center py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-slate-400 gap-1">
                     <i data-lucide="history" class="w-5 h-5 opacity-60"></i>
-                    <span class="text-xs">Belum ada data presensi masuk</span>
+                    <span class="text-xs">Belum ada data presensi hari ini</span>
                 </div>
             </div>
         </div>
@@ -133,15 +98,15 @@
                     <i data-lucide="user-check" class="w-6 h-6"></i>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <p id="siswa-sekolah" class="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-0.5">Menghubungkan...</p>
-                    <h3 id="siswa-nama" class="text-lg font-black text-slate-800 dark:text-white truncate">Memuat Data...</h3>
-                    <p id="siswa-kelas-id" class="text-xs text-slate-400 font-medium">Mencari di database master...</p>
+                    <p id="siswa-sekolah" class="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-0.5">MENCARI DATA...</p>
+                    <h3 id="siswa-nama" class="text-lg font-black text-slate-800 dark:text-white truncate">Tunggu sebentar...</h3>
+                    <p id="siswa-kelas-id" class="text-xs text-slate-400 font-medium">Validasi internal server</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3.5">
                 <button onclick="closeModal()" class="py-4 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold text-sm active:scale-95 transition">Batal</button>
-                <button onclick="submitPresensi()" id="btn-submit" class="py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/20 flex justify-center items-center gap-2 active:scale-95 transition">
+                <button onclick="queuePresensi()" id="btn-submit" class="py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/20 flex justify-center items-center gap-2 active:scale-95 transition">
                     <span>Konfirmasi</span>
                 </button>
             </div>
@@ -153,83 +118,74 @@
         // CONFIGURASI UTAMA Backend Aplikasi SAPA
         // =========================================================================
         const CONFIG = {
-            // PENTING: Paste URL Web App ROUTER KECAMATAN Anda di dalam tanda kutip ini
             scriptURL: "https://script.google.com/macros/s/AKfycby1OjnfEnQNu2nSgIfSZRHGNgAJpb_qmL9ChwSzjlW3Bf8dS2jhPDpo-0R6AcuqXv7uWA/exec"
         };
 
         let html5QrcodeScanner;
         let scannedQRString = ""; 
-        let localHistoryLogs = [];
-
-        // 1. Inisialisasi Otomatis Tema & Data Petugas dari Guru Berbagi Portal
+        let tempSiswaData = {};
+        
+        let scanQueue = JSON.parse(localStorage.getItem('sapa_queue')) || [];
+        let isProcessingQueue = false;
+        
         function initApp() {
             lucide.createIcons();
             initTheme();
             
-            // Integrasi Sesi Login dengan Local Storage Guru Berbagi
             const savedProfile = localStorage.getItem('guru_profile');
+            let instansiGuru = "";
             if (savedProfile) {
                 try {
                     const profile = JSON.parse(savedProfile);
                     document.getElementById('guru-nama').innerText = profile.nama.split(' ')[0] || "Guru";
-                    if (profile.instansi) document.getElementById('guru-instansi').innerText = profile.instansi;
+                    instansiGuru = profile.instansi;
+                    if (instansiGuru) document.getElementById('guru-instansi').innerText = instansiGuru;
                     if (profile.foto) {
                         const img = document.getElementById('guru-photo');
                         img.src = profile.foto;
                         img.classList.remove('hidden');
                         document.getElementById('guru-icon-fallback').classList.add('hidden');
                     }
-                } catch(e) { console.error("Cache profil corrupt.", e); }
-            } else {
-                alert("Peringatan: Sesi login tidak ditemukan. Berjalan dalam mode Tamu.");
+                } catch(e) {}
             }
             
             initScanner();
+            updateSyncBadge();
+            if (scanQueue.length > 0) processQueue();
+            if(instansiGuru) fetchSharedHistory(instansiGuru);
         }
 
-        // 2. Sinkronisasi Deteksi Tema Jam Kerja
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
             const hour = new Date().getHours();
-            const isNight = hour >= 18 || hour < 6;
-            if (savedTheme === 'dark' || (!savedTheme && isNight)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            if (savedTheme === 'dark' || (!savedTheme && (hour >= 18 || hour < 6))) document.documentElement.classList.add('dark');
         }
 
-        // 3. Konfigurasi Modul Kamera Scanner Browser Native
         function initScanner() {
             html5QrcodeScanner = new Html5Qrcode("reader");
-            const config = { 
-                fps: 15, 
-                qrbox: (w, h) => { const min = Math.min(w, h); return { width: Math.floor(min * 0.65), height: Math.floor(min * 0.65) }; }, 
-                aspectRatio: 1.0 
-            };
+            const config = { fps: 15, qrbox: (w, h) => { const min = Math.min(w, h); return { width: Math.floor(min * 0.65), height: Math.floor(min * 0.65) }; }, aspectRatio: 1.0 };
             
             html5QrcodeScanner.start({ facingMode: "environment" }, config, onScanSuccess)
             .catch(err => {
                 Html5Qrcode.getCameras().then(devices => {
-                    if (devices && devices.length) {
-                        html5QrcodeScanner.start(devices[devices.length - 1].id, config, onScanSuccess);
-                    }
+                    if (devices && devices.length) html5QrcodeScanner.start(devices[devices.length - 1].id, config, onScanSuccess);
                 }).catch(e => {
-                    document.getElementById('reader').innerHTML = `<div class="text-center p-6 text-red-500 text-xs font-bold flex flex-col items-center justify-center h-full"><i data-lucide="camera-off" class="w-10 h-10 mb-3 opacity-80"></i>Gunakan Google Chrome Browser.</div>`;
+                    document.getElementById('reader').innerHTML = `<div class="text-center p-6 text-red-500 text-xs font-bold"><i data-lucide="camera-off" class="w-10 h-10 mx-auto mb-3 opacity-80"></i>Gunakan Google Chrome Browser.</div>`;
                     lucide.createIcons();
                 });
             });
         }
 
-        // 4. Trigger Interseptor Ketika Kamera Berhasil Membaca QR
-        function onScanSuccess(decodedText, decodedResult) {
+        // =========================================================================
+        // ALUR: SCAN -> LOOKUP -> MODAL KONFIRMASI
+        // =========================================================================
+        function onScanSuccess(decodedText) {
             html5QrcodeScanner.pause();
             scannedQRString = decodedText; 
             
-            // Atur Kondisi Awal Tampilan Alert Menjadi Loading State
             document.getElementById('siswa-sekolah').innerText = "MENGHUBUNGKAN SERVER...";
             document.getElementById('siswa-nama').innerText = "Memuat Nama Siswa...";
-            document.getElementById('siswa-kelas-id').innerText = "Mencari data validasi internal...";
+            document.getElementById('siswa-kelas-id').innerText = "Mencari data...";
             
             const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
@@ -239,7 +195,6 @@
             if(navigator.vibrate) navigator.vibrate(80);
             openModal();
             
-            // JALANKAN PROSES LOOKUP DATA RIIL KE SERVER KECAMATAN
             var namaPetugas = document.getElementById('guru-nama').innerText;
             fetch(CONFIG.scriptURL, {
                 method: 'POST',
@@ -248,12 +203,13 @@
             .then(res => res.json())
             .then(data => {
                 if (data.status === "success") {
-                    // Berhasil Menemukan Identitas, Tampilkan Pada Komponen Alert
                     document.getElementById('siswa-sekolah').innerText = data.sekolah.toUpperCase();
                     document.getElementById('siswa-nama').innerText = data.nama;
                     document.getElementById('siswa-kelas-id').innerText = "Kelas: " + data.kelas + " | NISN: " + scannedQRString.split('-')[1];
                     
-                    // Aktifkan Kembali Akses Tombol Konfirmasi Presensi
+                    // Simpan sementara untuk dimasukkan ke antrean
+                    tempSiswaData = { nama: data.nama, kelas: data.kelas, qr: scannedQRString, petugas: namaPetugas };
+                    
                     btnSubmit.disabled = false;
                     btnSubmit.classList.remove('opacity-40', 'cursor-not-allowed');
                 } else {
@@ -261,14 +217,13 @@
                 }
             })
             .catch(err => {
-                document.getElementById('siswa-sekolah').innerText = "PERINGATAN GAGAL SISTEM";
+                document.getElementById('siswa-sekolah').innerText = "PERINGATAN GAGAL";
                 document.getElementById('siswa-nama').innerText = "Data Tidak Ditemukan";
                 document.getElementById('siswa-kelas-id').innerText = err.message || "Masalah jaringan internet.";
                 triggerAudioFeedback('error');
             });
         }
 
-        // 5. Sintesis Nada Beep Menggunakan Web Audio API
         function triggerAudioFeedback(type) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -285,7 +240,6 @@
             } catch (e) {}
         }
 
-        // 6. Animasi Tampilan Modal Sheets (Material Style)
         function openModal() {
             const modal = document.getElementById('confirm-modal');
             modal.classList.remove('hidden');
@@ -305,81 +259,204 @@
             }, 300);
         }
 
-        // 7. Pengiriman Amunisi Perintah Eksekusi Simpan Data Presensi (Action: Save)
-        function submitPresensi() {
-            const btn = document.getElementById('btn-submit');
-            const initialHTML = btn.innerHTML;
+        // =========================================================================
+        // ALUR: KLIK KONFIRMASI -> BACKGROUND QUEUE (SAT-SET)
+        // =========================================================================
+        function queuePresensi() {
+            const now = new Date();
+            const jam = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            const internalId = 'scan_' + Date.now();
+            const rawNISN = tempSiswaData.qr.split('-').length > 1 ? tempSiswaData.qr.split('-')[1] : tempSiswaData.qr;
+
+            const queueItem = {
+                id: internalId,
+                qr: tempSiswaData.qr,
+                nama: tempSiswaData.nama,
+                kelas: tempSiswaData.kelas,
+                petugas: tempSiswaData.petugas,
+                jam: jam,
+                displayNisn: rawNISN
+            };
+
+            scanQueue.push(queueItem);
+            localStorage.setItem('sapa_queue', JSON.stringify(scanQueue));
             
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Menyimpan...';
-            btn.disabled = true;
-            lucide.createIcons();
+            // Render antrean di UI
+            renderPendingLog(queueItem);
+            updateSyncBadge();
 
-            const namaPetugas = document.getElementById('guru-nama').innerText;
-
-            fetch(CONFIG.scriptURL, {
-                method: 'POST',
-                body: JSON.stringify({ nisn: scannedQRString, action: "save", petugas: namaPetugas })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === "success") {
-                    btn.classList.replace('bg-blue-600', 'bg-green-500');
-                    btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Sukses ' + data.action;
-                    lucide.createIcons();
-                    
-                    // Catat Log Identitas Riil Pada Layar HP Guru Petugas
-                    pushToLocalLog(data.nama, data.kelas, data.action);
-
-                    setTimeout(() => {
-                        closeModal();
-                        btn.classList.replace('bg-green-500', 'bg-blue-600');
-                        btn.innerHTML = initialHTML;
-                        btn.disabled = false;
-                    }, 1200);
-                } else {
-                    throw new Error(data.message);
-                }
-            })
-            .catch(error => {
-                triggerAudioFeedback('error');
-                alert(error.message || "Gagal memproses pengiriman data. Periksa sinyal internet.");
-                btn.innerHTML = initialHTML;
-                btn.disabled = false;
-            });
+            // Modal Instan Tertutup & Kamera Siap Scan Siswa Lain!
+            closeModal();
+            processQueue();
         }
 
-        // 8. Manajemen Log Render Histori Harian di Sisi Client HP
-        function pushToLocalLog(nama, kelas, statusAbsen) {
-            const now = new Date();
-            const timeString = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-            
-            localHistoryLogs.unshift({ nama: nama, kelas: kelas, jam: timeString });
-            
+        async function processQueue() {
+            if (isProcessingQueue || scanQueue.length === 0) return;
+            isProcessingQueue = true;
+            updateSyncBadge();
+
+            const currentItem = scanQueue[0];
+
+            try {
+                const response = await fetch(CONFIG.scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ nisn: currentItem.qr, action: "save", petugas: currentItem.petugas })
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    updateLogToSuccess(currentItem.id, data.nama, data.kelas, data.action, currentItem.displayNisn);
+                } else {
+                    updateLogToFailed(currentItem.id, data.message);
+                }
+                scanQueue.shift();
+                localStorage.setItem('sapa_queue', JSON.stringify(scanQueue));
+
+            } catch (error) {
+                console.warn("Menunda pengiriman...", error);
+            }
+
+            isProcessingQueue = false;
+            updateSyncBadge();
+            if (scanQueue.length > 0) setTimeout(processQueue, 1500); 
+        }
+
+        function updateSyncBadge() {
+            const badge = document.getElementById('sync-badge');
+            if (scanQueue.length > 0) {
+                badge.className = "text-[9px] font-extrabold bg-amber-100 text-amber-600 px-2 py-0.5 rounded-md uppercase tracking-wider transition-colors animate-pulse";
+                badge.innerHTML = `<i data-lucide="loader-2" class="w-3 h-3 inline-block animate-spin mr-1"></i> ${scanQueue.length} Antrean`;
+            } else {
+                badge.className = "text-[9px] font-extrabold bg-green-100 text-green-600 px-2 py-0.5 rounded-md uppercase tracking-wider transition-colors";
+                badge.innerHTML = `<i data-lucide="cloud-check" class="w-3 h-3 inline-block mr-1"></i> Tersinkron`;
+            }
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // UI RENDERING & FITUR HAPUS DATA
+        // =========================================================================
+        function renderPendingLog(item) {
             const container = document.getElementById('log-container');
             const emptyState = document.getElementById('log-empty');
             if (emptyState) emptyState.remove();
-            
-            const logItem = document.createElement('div');
-            logItem.className = "flex items-center justify-between p-3.5 mb-2.5 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 shadow-sm";
-            logItem.innerHTML = `
+
+            const logDiv = document.createElement('div');
+            logDiv.id = item.id;
+            logDiv.className = "flex items-center justify-between p-3 mb-2.5 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 shadow-sm opacity-70 animate-pulse";
+            logDiv.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-xl">
-                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                    </div>
+                    <div class="p-2 bg-slate-200 dark:bg-slate-700 text-slate-500 rounded-xl"><i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i></div>
                     <div>
-                        <p class="text-xs font-bold text-slate-700 dark:text-slate-200">${nama}</p>
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide">Kelas ${kelas} • Status ${statusAbsen}</p>
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-200">${item.nama}</p>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Mengirim ke server...</p>
                     </div>
                 </div>
-                <span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-lg">${timeString} WIB</span>
             `;
-            
-            container.insertBefore(logItem, container.firstChild);
-            document.getElementById('log-count').innerText = localHistoryLogs.length + " Siswa";
+            container.insertBefore(logDiv, container.firstChild);
+            updateLogCount();
             lucide.createIcons();
         }
 
-        // Jalankan ekosistem aplikasi saat DOM siap
+        function updateLogToSuccess(id, nama, kelas, statusAbsen, rawNISN) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            const colorClass = statusAbsen === "Masuk" ? "text-emerald-600 bg-emerald-100" : "text-blue-600 bg-blue-100";
+            const iconType = statusAbsen === "Masuk" ? "log-in" : "log-out";
+
+            el.className = "flex items-center justify-between p-3 mb-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-emerald-200 dark:border-emerald-800/50 shadow-md group relative overflow-hidden transition-all duration-300";
+            el.innerHTML = `
+                <div class="flex items-center gap-3 z-10">
+                    <div class="p-2 rounded-xl ${colorClass}"><i data-lucide="${iconType}" class="w-5 h-5"></i></div>
+                    <div>
+                        <p class="text-sm font-bold text-slate-800 dark:text-slate-100">${nama}</p>
+                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wide">Kelas ${kelas} • Status ${statusAbsen}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 z-10">
+                    <button onclick="deleteLog('${rawNISN}', '${id}')" class="p-1.5 text-red-400 hover:text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Batalkan Presensi">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function updateLogToFailed(id, pesanError) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.className = "flex items-center justify-between p-3 mb-2.5 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 shadow-sm";
+            el.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-red-100 text-red-600 rounded-xl"><i data-lucide="x-octagon" class="w-5 h-5"></i></div>
+                    <div class="max-w-[200px]">
+                        <p class="text-xs font-bold text-red-700">Ditolak Server</p>
+                        <p class="text-[9px] font-semibold text-red-500 uppercase tracking-wide truncate">${pesanError}</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+            triggerAudioFeedback('error');
+        }
+
+        // FITUR BARU: FUNGSI HAPUS DATA
+        function deleteLog(rawNISN, elementId) {
+            const instansiGuru = document.getElementById('guru-instansi').innerText;
+            if(!confirm("Yakin ingin membatalkan/menghapus presensi terakhir anak ini?")) return;
+            
+            const el = document.getElementById(elementId);
+            el.style.opacity = '0.5';
+            
+            fetch(CONFIG.scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "delete", nisn: rawNISN, instansi: instansiGuru })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    el.remove();
+                    updateLogCount();
+                    alert("Presensi berhasil dihapus dari sistem.");
+                } else {
+                    alert("Gagal menghapus: " + data.message);
+                    el.style.opacity = '1';
+                }
+            }).catch(e => {
+                alert("Gangguan internet, gagal menghapus.");
+                el.style.opacity = '1';
+            });
+        }
+
+        function fetchSharedHistory(instansiGuru) {
+            fetch(CONFIG.scriptURL, {
+                method: 'POST',
+                body: JSON.stringify({ action: "get_history", instansi: instansiGuru })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success" && data.data.length > 0) {
+                    const container = document.getElementById('log-container');
+                    const emptyState = document.getElementById('log-empty');
+                    if (emptyState) emptyState.remove();
+
+                    data.data.forEach(item => {
+                        const internalId = 'hist_' + Math.random().toString(36).substr(2, 9);
+                        const logDiv = document.createElement('div');
+                        logDiv.id = internalId;
+                        container.appendChild(logDiv);
+                        updateLogToSuccess(internalId, item.nama, item.kelas, item.status, item.nisn);
+                    });
+                    updateLogCount();
+                }
+            }).catch(e => console.log("Gagal memuat log"));
+        }
+
+        function updateLogCount() {
+            const count = document.getElementById('log-container').children.length;
+            document.getElementById('log-count').innerText = count + " Siswa";
+        }
+
         document.addEventListener("DOMContentLoaded", initApp);
     </script>
 </body>
