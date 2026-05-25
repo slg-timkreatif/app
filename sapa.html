@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/ortu/refs/heads/main/sapa.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/ortu/refs/heads/main/sapa.png">
     <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    
     <title>SAPA - Sistem Absensi Pemantauan Anak</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,6 +20,7 @@
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -32,6 +37,10 @@
         .blob-2 { bottom: -10%; right: -10%; width: 250px; height: 250px; background: #e0e7ff; }
         .dark .blob-1 { background: #172554; opacity: 0.3; }
         .dark .blob-2 { background: #312e81; opacity: 0.3; }
+        
+        /* Modifikasi SweetAlert */
+        .swal2-popup { border-radius: 1.5rem !important; font-family: 'Plus Jakarta Sans', sans-serif !important; }
+        .swal2-confirm, .swal2-cancel { border-radius: 0.75rem !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen flex flex-col overflow-hidden relative transition-colors duration-500">
@@ -40,12 +49,15 @@
     <div class="blob blob-2 animate-pulse" style="animation-delay: 2s;"></div>
 
     <header class="px-6 py-4 flex items-center justify-between z-10 shrink-0 border-b border-slate-200/30 dark:border-slate-800/30">
-        <div>
-            <div class="flex items-center gap-2">
-                <h1 class="text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">SAPA</h1>
-                <span id="sync-badge" class="text-[9px] font-extrabold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-md uppercase tracking-wider transition-colors">Sinkronisasi</span>
+        <div class="flex items-center gap-3">
+            <img src="https://raw.githubusercontent.com/slg-timkreatif/ortu/refs/heads/main/sapa.png" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm">
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">SAPA</h1>
+                    <span id="sync-badge" class="text-[9px] font-extrabold bg-blue-100 text-blue-600 px-2 py-0.5 rounded-md uppercase tracking-wider transition-colors">Sinkronisasi</span>
+                </div>
+                <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Kecamatan Selogiri</p>
             </div>
-            <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Kecamatan Selogiri</p>
         </div>
         
         <div class="flex items-center gap-3 glass-panel px-3.5 py-1.5 rounded-full shadow-sm">
@@ -114,11 +126,9 @@
     </div>
 
     <script>
-        // =========================================================================
-        // CONFIGURASI UTAMA Backend Aplikasi SAPA
-        // =========================================================================
+        lucide.createIcons();
+
         const CONFIG = {
-            // URL Router Master Kecamatan
             scriptURL: "https://script.google.com/macros/s/AKfycby1OjnfEnQNu2nSgIfSZRHGNgAJpb_qmL9ChwSzjlW3Bf8dS2jhPDpo-0R6AcuqXv7uWA/exec"
         };
 
@@ -130,7 +140,6 @@
         let isProcessingQueue = false;
         
         function initApp() {
-            lucide.createIcons();
             initTheme();
             
             const savedProfile = localStorage.getItem('guru_profile');
@@ -148,22 +157,33 @@
                         document.getElementById('guru-icon-fallback').classList.add('hidden');
                     }
                 } catch(e) {}
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Mode Tamu',
+                    text: 'Sesi login Guru Berbagi tidak ditemukan.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
             }
             
             initScanner();
             updateSyncBadge();
-            
-            // Proses data offline yang tertunda
             if (scanQueue.length > 0) processQueue();
-            
-            // Tarik data histori awal (merging Masuk & Pulang)
             if(instansiGuru) fetchSharedHistory(instansiGuru);
         }
 
+        // TEMA OTOMATIS MENGIKUTI SISTEM HP (Real-time)
         function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            const hour = new Date().getHours();
-            if (savedTheme === 'dark' || (!savedTheme && (hour >= 18 || hour < 6))) document.documentElement.classList.add('dark');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            const applyTheme = (isDark) => {
+                if (isDark) document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+            };
+            applyTheme(prefersDark.matches);
+            prefersDark.addEventListener('change', (e) => applyTheme(e.matches));
         }
 
         function initScanner() {
@@ -175,15 +195,12 @@
                 Html5Qrcode.getCameras().then(devices => {
                     if (devices && devices.length) html5QrcodeScanner.start(devices[devices.length - 1].id, config, onScanSuccess);
                 }).catch(e => {
-                    document.getElementById('reader').innerHTML = `<div class="text-center p-6 text-red-500 text-xs font-bold"><i data-lucide="camera-off" class="w-10 h-10 mx-auto mb-3 opacity-80"></i>Gunakan Google Chrome Browser.</div>`;
+                    document.getElementById('reader').innerHTML = `<div class="text-center p-6 text-red-500 text-xs font-bold"><i data-lucide="camera-off" class="w-10 h-10 mx-auto mb-3 opacity-80"></i>Kamera terblokir. Gunakan Google Chrome.</div>`;
                     lucide.createIcons();
                 });
             });
         }
 
-        // =========================================================================
-        // ALUR SCAN & LOOKUP (Menampilkan Modal Konfirmasi)
-        // =========================================================================
         function onScanSuccess(decodedText) {
             html5QrcodeScanner.pause();
             scannedQRString = decodedText; 
@@ -213,7 +230,6 @@
                     document.getElementById('siswa-kelas-id').innerText = "Kelas: " + data.kelas + " | NISN: " + scannedQRString.split('-')[1];
                     
                     tempSiswaData = { nama: data.nama, kelas: data.kelas, qr: scannedQRString, petugas: namaPetugas };
-                    
                     btnSubmit.disabled = false;
                     btnSubmit.classList.remove('opacity-40', 'cursor-not-allowed');
                 } else {
@@ -263,9 +279,6 @@
             }, 300);
         }
 
-        // =========================================================================
-        // ANTRIAN PENGIRIMAN LATAR BELAKANG (Bikin Sistem Terasa "Sat-Set")
-        // =========================================================================
         function queuePresensi() {
             const now = new Date();
             const jam = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
@@ -273,23 +286,16 @@
             const rawNISN = tempSiswaData.qr.split('-').length > 1 ? tempSiswaData.qr.split('-')[1] : tempSiswaData.qr;
 
             const queueItem = {
-                id: internalId,
-                qr: tempSiswaData.qr,
-                nama: tempSiswaData.nama,
-                kelas: tempSiswaData.kelas,
-                petugas: tempSiswaData.petugas,
-                jam: jam,
-                displayNisn: rawNISN
+                id: internalId, qr: tempSiswaData.qr, nama: tempSiswaData.nama,
+                kelas: tempSiswaData.kelas, petugas: tempSiswaData.petugas, jam: jam, displayNisn: rawNISN
             };
 
-            // Simpan ke memori antrean HP
             scanQueue.push(queueItem);
             localStorage.setItem('sapa_queue', JSON.stringify(scanQueue));
             
             renderPendingLog(queueItem);
             updateSyncBadge();
 
-            // Modal Instan Tertutup & Kamera Siap Scan Lagi!
             closeModal();
             processQueue();
         }
@@ -314,7 +320,6 @@
                     updateLogToFailed(currentItem.id, data.message);
                 }
                 
-                // Buang dari antrean memori setelah selesai diproses server
                 scanQueue.shift();
                 localStorage.setItem('sapa_queue', JSON.stringify(scanQueue));
 
@@ -339,9 +344,6 @@
             lucide.createIcons();
         }
 
-        // =========================================================================
-        // KARTU TERPADU (MERGING MASUK & PULANG DI UI)
-        // =========================================================================
         function renderPendingLog(item) {
             const container = document.getElementById('log-container');
             const emptyState = document.getElementById('log-empty');
@@ -363,11 +365,8 @@
         }
 
         function updateLogToSuccess(id, nama, kelas, statusAbsen, rawNISN, jam) {
-            // Hapus kartu indikator antrean (loading)
             const el = document.getElementById(id);
             if (el) el.remove();
-            
-            // Eksekusi pembuatan/pembaruan Kartu Terpadu
             upsertCard(rawNISN, nama, kelas, statusAbsen, jam);
         }
 
@@ -388,7 +387,6 @@
             triggerAudioFeedback('error');
         }
 
-        // FUNGSI INTI KARTU TERPADU
         function upsertCard(nisn, nama, kelas, statusAbsen, jam) {
             const container = document.getElementById('log-container');
             const emptyState = document.getElementById('log-empty');
@@ -399,7 +397,6 @@
             let iconType = statusAbsen === "Masuk" ? "log-in" : "log-out";
             
             if (!card) {
-                // Skenario A: KARTU BARU (Anak belum pernah scan sama sekali hari ini)
                 card = document.createElement('div');
                 card.id = 'card_' + nisn;
                 card.className = "flex flex-col p-3.5 mb-2.5 rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-slate-200/50 dark:border-slate-700/50 shadow-sm transition-all duration-500";
@@ -435,57 +432,58 @@
                 `;
                 container.insertBefore(card, container.firstChild);
             } else {
-                // Skenario B: UPDATE KARTU LAMA (Jika data anak sudah ada, lengkapi jam-nya)
-                if (statusAbsen === "Masuk") {
-                    document.getElementById('masuk_' + nisn).innerText = jam;
-                } else if (statusAbsen === "Pulang") {
-                    document.getElementById('pulang_' + nisn).innerText = jam;
-                }
+                if (statusAbsen === "Masuk") document.getElementById('masuk_' + nisn).innerText = jam;
+                else if (statusAbsen === "Pulang") document.getElementById('pulang_' + nisn).innerText = jam;
                 
-                // Perbarui status dan warna ikon sesuai status terkini (Masuk / Pulang)
                 document.getElementById('status_' + nisn).innerText = `Kelas ${kelas} • Status ${statusAbsen}`;
                 const iconBox = document.getElementById('iconbox_' + nisn);
                 iconBox.className = `p-2 rounded-xl ${colorClass} z-10`;
                 iconBox.innerHTML = `<i data-lucide="${iconType}" class="w-5 h-5"></i>`;
                 
-                // Efek visual kedip menandakan data diperbarui
                 card.classList.add('ring-2', 'ring-blue-400', 'scale-[1.02]');
                 setTimeout(() => card.classList.remove('ring-2', 'ring-blue-400', 'scale-[1.02]'), 800);
-                
-                // Pindahkan kartu ini ke paling atas agar guru tahu anak ini baru saja lewat gerbang!
                 container.insertBefore(card, container.firstChild);
             }
-            
             updateLogCount();
             lucide.createIcons();
         }
 
-        // =========================================================================
-        // FITUR HAPUS (VOID) & REFRESH DARI CLOUD DATABASE
-        // =========================================================================
+        // HAPUS MENGGUNAKAN SWEETALERT2
         function deleteLog(rawNISN) {
             const instansiGuru = document.getElementById('guru-instansi').innerText;
-            if(!confirm("Yakin ingin membatalkan/menghapus riwayat presensi terakhir anak ini?")) return;
             
-            const card = document.getElementById('card_' + rawNISN);
-            if(card) card.style.opacity = '0.5';
-            
-            fetch(CONFIG.scriptURL, {
-                method: 'POST',
-                body: JSON.stringify({ action: "delete", nisn: rawNISN, instansi: instansiGuru })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === "success") {
-                    // Setelah dihapus di database, sinkronisasi ulang layar UI agar akurat
-                    fetchSharedHistory(instansiGuru); 
-                } else {
-                    alert("Gagal menghapus: " + data.message);
-                    if(card) card.style.opacity = '1';
+            Swal.fire({
+                title: 'Batalkan Presensi?',
+                text: "Apakah Anda yakin ingin menghapus riwayat terakhir anak ini?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const card = document.getElementById('card_' + rawNISN);
+                    if(card) card.style.opacity = '0.5';
+                    
+                    fetch(CONFIG.scriptURL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "delete", nisn: rawNISN, instansi: instansiGuru })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.status === "success") {
+                            Swal.fire({ icon: 'success', title: 'Dihapus!', text: 'Presensi berhasil dibatalkan.', timer: 1500, showConfirmButton: false });
+                            fetchSharedHistory(instansiGuru); 
+                        } else {
+                            Swal.fire('Gagal!', data.message, 'error');
+                            if(card) card.style.opacity = '1';
+                        }
+                    }).catch(e => {
+                        Swal.fire('Error!', 'Gangguan jaringan, gagal menghapus.', 'error');
+                        if(card) card.style.opacity = '1';
+                    });
                 }
-            }).catch(e => {
-                alert("Gangguan internet, gagal menghapus.");
-                if(card) card.style.opacity = '1';
             });
         }
 
@@ -497,10 +495,9 @@
             .then(res => res.json())
             .then(data => {
                 const container = document.getElementById('log-container');
-                container.innerHTML = ''; // Kosongkan layar dulu
+                container.innerHTML = ''; 
                 
                 if(data.status === "success" && data.data.length > 0) {
-                    // Urutan dibalik (reverse) agar 'Masuk' dieksekusi lebih dulu oleh upsertCard, lalu 'Pulang' akan menimpanya secara presisi
                     data.data.reverse().forEach(item => {
                         upsertCard(item.nisn, item.nama, item.kelas, item.status, item.jam);
                     });
@@ -512,7 +509,6 @@
         }
 
         function updateLogCount() {
-            // Berkat sistem "Kartu Terpadu", jumlah children (kartu UI) yang terhitung = jumlah fisik siswa nyata (Murni)
             const count = document.getElementById('log-container').children.length;
             const emptyEl = document.getElementById('log-empty');
             document.getElementById('log-count').innerText = (emptyEl ? 0 : count) + " Siswa";
