@@ -193,7 +193,7 @@
 
                 <div class="max-w-6xl mx-auto w-full space-y-8 px-4 md:px-8 mt-4 pb-32 md:pb-10">
                     
-                    <!-- GREETING CARD (Solid Color - Flat) -->
+                    <!-- GREETING CARD (Solid Color / Dinamis - Flat) -->
                     <div id="greeting-card" class="bg-blue-600 dark:bg-slate-800 rounded-[2rem] p-6 sm:p-8 md:p-10 text-white relative overflow-hidden transition-all duration-300 border border-blue-600 dark:border-slate-700 shadow-sm">
                         <!-- Pola Geometris Flat -->
                         <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-20 -mt-20 pointer-events-none"></div>
@@ -203,7 +203,8 @@
                             <p class="text-[10px] md:text-xs font-bold text-blue-100 uppercase tracking-widest mb-1.5">Selamat Datang</p>
                             <h3 class="text-2xl md:text-4xl font-extrabold mb-4 tracking-tight leading-tight flex items-center gap-3"><span id="greeting-text">Halo, Guru!</span></h3>
                             
-                            <div class="bg-black/10 rounded-xl p-4 inline-block max-w-2xl border border-white/10">
+                            <!-- KOTAK QUOTES (Flat, Solid Gelap) -->
+                            <div class="bg-slate-900 rounded-xl p-4 inline-block max-w-2xl border border-slate-800 shadow-sm">
                                 <p id="quote-text" class="text-white text-xs md:text-sm font-medium italic">"Memuat kata mutiara..."</p>
                                 <p id="quote-author" class="text-blue-200 text-[10px] mt-2 font-bold tracking-widest uppercase">-</p>
                             </div>
@@ -400,8 +401,12 @@
                 const list = document.getElementById('submenu-list'); 
                 
                 const colorSolid = {
-                    blue: 'bg-blue-600', red: 'bg-rose-600', green: 'bg-emerald-600', yellow: 'bg-amber-500',
-                    purple: 'bg-purple-600', pink: 'bg-pink-600', teal: 'bg-teal-600', indigo: 'bg-indigo-600'
+                    slate: 'bg-slate-600', red: 'bg-red-600', rose: 'bg-rose-600',
+                    orange: 'bg-orange-500', amber: 'bg-amber-500', yellow: 'bg-yellow-500',
+                    lime: 'bg-lime-500', green: 'bg-green-600', emerald: 'bg-emerald-600',
+                    teal: 'bg-teal-600', cyan: 'bg-cyan-600', sky: 'bg-sky-500',
+                    blue: 'bg-blue-600', indigo: 'bg-indigo-600', violet: 'bg-violet-600',
+                    purple: 'bg-purple-600', fuchsia: 'bg-fuchsia-600', pink: 'bg-pink-600'
                 }[color] || 'bg-blue-600';
 
                 list.innerHTML = children.map((child, index) => {
@@ -438,16 +443,26 @@
                 const container = document.getElementById('dynamic-menu-container'); let tempHTML = ''; const parents = menuList.filter(item => (item.parent || "").trim() === "");
                 if(parents.length === 0) { container.innerHTML = '<div class="col-span-2 text-center text-slate-500 text-sm py-10 font-bold">Belum ada menu.</div>'; return; }
                 
-                // Pemetaan warna KARTU SOLID dengan Harmoni Ikon & Teks (Warna-warni Soft)
+                // Pemetaan 18 WARNA FULL SOLID (Kartu selaras ikon)
                 const colorMap = {
-                    blue: { card: 'bg-blue-50 border-blue-100 dark:bg-blue-900 dark:border-blue-800', icon: 'bg-blue-600 text-white', title: 'text-blue-900 dark:text-blue-50', desc: 'text-blue-600 dark:text-blue-200' },
-                    red: { card: 'bg-rose-50 border-rose-100 dark:bg-rose-900 dark:border-rose-800', icon: 'bg-rose-600 text-white', title: 'text-rose-900 dark:text-rose-50', desc: 'text-rose-600 dark:text-rose-200' },
-                    green: { card: 'bg-emerald-50 border-emerald-100 dark:bg-emerald-900 dark:border-emerald-800', icon: 'bg-emerald-600 text-white', title: 'text-emerald-900 dark:text-emerald-50', desc: 'text-emerald-600 dark:text-emerald-200' },
-                    yellow: { card: 'bg-amber-50 border-amber-100 dark:bg-amber-900 dark:border-amber-800', icon: 'bg-amber-500 text-white', title: 'text-amber-900 dark:text-amber-50', desc: 'text-amber-700 dark:text-amber-200' },
-                    purple: { card: 'bg-purple-50 border-purple-100 dark:bg-purple-900 dark:border-purple-800', icon: 'bg-purple-600 text-white', title: 'text-purple-900 dark:text-purple-50', desc: 'text-purple-600 dark:text-purple-200' },
-                    pink: { card: 'bg-pink-50 border-pink-100 dark:bg-pink-900 dark:border-pink-800', icon: 'bg-pink-600 text-white', title: 'text-pink-900 dark:text-pink-50', desc: 'text-pink-600 dark:text-pink-200' },
-                    teal: { card: 'bg-teal-50 border-teal-100 dark:bg-teal-900 dark:border-teal-800', icon: 'bg-teal-600 text-white', title: 'text-teal-900 dark:text-teal-50', desc: 'text-teal-600 dark:text-teal-200' },
-                    indigo: { card: 'bg-indigo-50 border-indigo-100 dark:bg-indigo-900 dark:border-indigo-800', icon: 'bg-indigo-600 text-white', title: 'text-indigo-900 dark:text-indigo-50', desc: 'text-indigo-600 dark:text-indigo-200' }
+                    slate: { card: 'bg-slate-500 border-slate-600 dark:bg-slate-600 dark:border-slate-700', icon: 'bg-slate-600 text-white dark:bg-slate-700', title: 'text-white', desc: 'text-slate-100' },
+                    red: { card: 'bg-red-500 border-red-600 dark:bg-red-600 dark:border-red-700', icon: 'bg-red-600 text-white dark:bg-red-700', title: 'text-white', desc: 'text-red-100' },
+                    rose: { card: 'bg-rose-500 border-rose-600 dark:bg-rose-600 dark:border-rose-700', icon: 'bg-rose-600 text-white dark:bg-rose-700', title: 'text-white', desc: 'text-rose-100' },
+                    orange: { card: 'bg-orange-500 border-orange-600 dark:bg-orange-600 dark:border-orange-700', icon: 'bg-orange-600 text-white dark:bg-orange-700', title: 'text-white', desc: 'text-orange-100' },
+                    amber: { card: 'bg-amber-500 border-amber-600 dark:bg-amber-600 dark:border-amber-700', icon: 'bg-amber-600 text-white dark:bg-amber-700', title: 'text-white', desc: 'text-amber-100' },
+                    yellow: { card: 'bg-yellow-400 border-yellow-500 dark:bg-yellow-500 dark:border-yellow-600', icon: 'bg-yellow-500 text-white dark:bg-yellow-600', title: 'text-white', desc: 'text-yellow-50' },
+                    lime: { card: 'bg-lime-500 border-lime-600 dark:bg-lime-600 dark:border-lime-700', icon: 'bg-lime-600 text-white dark:bg-lime-700', title: 'text-white', desc: 'text-lime-100' },
+                    green: { card: 'bg-green-500 border-green-600 dark:bg-green-600 dark:border-green-700', icon: 'bg-green-600 text-white dark:bg-green-700', title: 'text-white', desc: 'text-green-100' },
+                    emerald: { card: 'bg-emerald-500 border-emerald-600 dark:bg-emerald-600 dark:border-emerald-700', icon: 'bg-emerald-600 text-white dark:bg-emerald-700', title: 'text-white', desc: 'text-emerald-100' },
+                    teal: { card: 'bg-teal-500 border-teal-600 dark:bg-teal-600 dark:border-teal-700', icon: 'bg-teal-600 text-white dark:bg-teal-700', title: 'text-white', desc: 'text-teal-100' },
+                    cyan: { card: 'bg-cyan-500 border-cyan-600 dark:bg-cyan-600 dark:border-cyan-700', icon: 'bg-cyan-600 text-white dark:bg-cyan-700', title: 'text-white', desc: 'text-cyan-100' },
+                    sky: { card: 'bg-sky-500 border-sky-600 dark:bg-sky-600 dark:border-sky-700', icon: 'bg-sky-600 text-white dark:bg-sky-700', title: 'text-white', desc: 'text-sky-100' },
+                    blue: { card: 'bg-blue-500 border-blue-600 dark:bg-blue-600 dark:border-blue-700', icon: 'bg-blue-600 text-white dark:bg-blue-700', title: 'text-white', desc: 'text-blue-100' },
+                    indigo: { card: 'bg-indigo-500 border-indigo-600 dark:bg-indigo-600 dark:border-indigo-700', icon: 'bg-indigo-600 text-white dark:bg-indigo-700', title: 'text-white', desc: 'text-indigo-100' },
+                    violet: { card: 'bg-violet-500 border-violet-600 dark:bg-violet-600 dark:border-violet-700', icon: 'bg-violet-600 text-white dark:bg-violet-700', title: 'text-white', desc: 'text-violet-100' },
+                    purple: { card: 'bg-purple-500 border-purple-600 dark:bg-purple-600 dark:border-purple-700', icon: 'bg-purple-600 text-white dark:bg-purple-700', title: 'text-white', desc: 'text-purple-100' },
+                    fuchsia: { card: 'bg-fuchsia-500 border-fuchsia-600 dark:bg-fuchsia-600 dark:border-fuchsia-700', icon: 'bg-fuchsia-600 text-white dark:bg-fuchsia-700', title: 'text-white', desc: 'text-fuchsia-100' },
+                    pink: { card: 'bg-pink-500 border-pink-600 dark:bg-pink-600 dark:border-pink-700', icon: 'bg-pink-600 text-white dark:bg-pink-700', title: 'text-white', desc: 'text-pink-100' }
                 };
                 
                 parents.forEach(item => {
@@ -478,18 +493,19 @@
 
                     const isWide = (item.ukuran || '').toLowerCase() === 'wide'; const colSpan = isWide ? 'col-span-2 md:col-span-4 lg:col-span-2' : 'col-span-1 md:col-span-2 lg:col-span-1';
                     
+                    // Penyesuaian Badge agar kontras di latar solid
                     let badge = ''; 
                     if (item.label) { 
-                        const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-rose-500 text-white border-rose-600' : `bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700`; 
+                        const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-white text-slate-800 border-transparent shadow-sm' : `bg-black/15 text-white border-transparent`; 
                         badge = `<span class="absolute top-4 right-4 ${bgLabel} border text-[9px] font-bold px-2 py-0.5 rounded-full z-10 uppercase tracking-widest">${item.label}</span>`; 
                     } 
                     
-                    // Style dasar untuk animasi hover tanpa bayangan berlebihan
-                    const baseCardStyle = "border rounded-[1.5rem] p-5 cursor-pointer relative overflow-hidden group transition-all duration-200 hover:-translate-y-1";
+                    // Base animasi halus & sedikit efek shadow
+                    const baseCardStyle = "border rounded-[1.5rem] p-5 cursor-pointer relative overflow-hidden group transition-all duration-200 hover:-translate-y-1 hover:shadow-md";
                     
                     if (isWide) { 
                         tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center text-left gap-4 ${baseCardStyle} ${cStyle.card}">${badge}
-                            <div class="w-14 h-14 rounded-xl ${cStyle.icon} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                            <div class="w-14 h-14 rounded-xl ${cStyle.icon} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-sm">
                                 <i data-lucide="${item.icon || 'circle'}" class="w-6 h-6"></i>
                             </div>
                             <div class="flex-1 min-w-0">
@@ -499,9 +515,9 @@
                         </${tag}>`; 
                     } else { 
                         tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-3 ${baseCardStyle} ${cStyle.card}">${badge}
-                            <div class="w-14 h-14 rounded-xl ${cStyle.icon} flex items-center justify-center mb-1 group-hover:scale-110 transition-transform relative">
+                            <div class="w-14 h-14 rounded-xl ${cStyle.icon} flex items-center justify-center mb-1 group-hover:scale-110 transition-transform relative shadow-sm">
                                 <i data-lucide="${item.icon || 'circle'}" class="w-6 h-6"></i>
-                                ${hasChildren ? `<div class="absolute -bottom-2 -right-2 w-6 h-6 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-700"><i data-lucide="layout-grid" class="w-3 h-3 text-slate-400"></i></div>` : ''}
+                                ${hasChildren ? `<div class="absolute -bottom-2 -right-2 w-6 h-6 bg-black/20 text-white rounded-full flex items-center justify-center border-2 border-transparent"><i data-lucide="layout-grid" class="w-3 h-3 text-white/80"></i></div>` : ''}
                             </div>
                             <div class="w-full mt-1">
                                 <h4 class="font-bold text-[13px] md:text-sm ${cStyle.title} leading-tight">${item.judul}</h4>
@@ -527,7 +543,6 @@
                     const iconWrapperClass = isActionCard ? "p-3 bg-white dark:bg-slate-800 rounded-[1rem] mt-0.5 shadow-sm" : "p-2 bg-white dark:bg-slate-800 rounded-[0.8rem] shrink-0 shadow-sm"; 
                     const iconSize = isActionCard ? "w-5 h-5" : "w-4 h-4"; 
                     
-                    // Papan Info (Banner) Full Solid Design
                     const colorMapInfo = {
                         red: 'bg-rose-100 text-rose-900 border-rose-200 dark:bg-rose-900 dark:text-rose-100 dark:border-rose-800',
                         green: 'bg-emerald-100 text-emerald-900 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-100 dark:border-emerald-800',
