@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <title>Modul Ajar Prompt Generator</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    colors: { darkbg: '#0f172a', darkcard: '#1e293b' }, 
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                } 
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Dekorasi Background Latar Belakang (Desktop & Mobile) */
+        .blob { position: fixed; filter: blur(90px); z-index: -1; opacity: 0.5; pointer-events: none; }
+        .blob-1 { top: -10%; left: -5%; width: 50vw; height: 50vw; max-width: 500px; max-height: 500px; background: #dbeafe; animation: float 15s infinite alternate; } 
+        .blob-2 { bottom: -10%; right: -5%; width: 45vw; height: 45vw; max-width: 450px; max-height: 450px; background: #e0e7ff; animation: float 12s infinite alternate-reverse; } 
+        .dark .blob-1 { background: #172554; opacity: 0.4; } 
+        .dark .blob-2 { background: #312e81; opacity: 0.4; }
+        @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(30px, 30px) rotate(5deg); } }
+        
+        /* Navbar Responsif */
+        .navbar-floating {
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 9999px; 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+        .dark .navbar-floating { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+        
+        /* Kartu Responsif */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen overflow-hidden relative transition-colors duration-500">
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    
+    <div class="w-full h-full overflow-y-auto scroll-smooth">
+        
+        <!-- HEADER -->
+        <div class="sticky top-0 z-30 px-4 md:px-6 pt-4 pb-2 max-w-5xl mx-auto w-full pointer-events-none">
+            <header class="navbar-floating px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between pointer-events-auto">
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30">
+                        <i data-lucide="bot" class="w-6 h-6 md:w-7 md:h-7"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-slate-800 dark:text-white text-base md:text-xl leading-tight">Modul Ajar Prompt Generator</h2>
+                        <p class="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium">Pembelajaran Mendalam 2025</p>
+                    </div>
+                </div>
+                <button onclick="app.toggleTheme()" class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-100/50 dark:bg-slate-800/50 hover:bg-white text-slate-600 dark:text-yellow-400 border border-transparent dark:border-slate-700 active:scale-90 transition-all flex items-center justify-center relative overflow-hidden">
+                    <i data-lucide="moon" class="w-4 h-4 md:w-5 md:h-5 absolute inset-0 m-auto transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
+                    <i data-lucide="sun" class="w-4 h-4 md:w-5 md:h-5 absolute inset-0 m-auto transition-all rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
+                </button>
+            </header>
+        </div>
+
+        <!-- MAIN FORM -->
+        <main class="max-w-5xl mx-auto w-full px-4 md:px-6 py-6 space-y-6 md:space-y-8 fade-in pb-10">
+            
+            <!-- SEKSI 1: IDENTITAS -->
+            <div class="glass-card rounded-[2rem] p-6 md:p-8 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2.5 md:p-3 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl"><i data-lucide="building" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold">Informasi Satuan Pendidikan</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <div class="md:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Satuan Pendidikan</label>
+                        <input type="text" id="sekolah" placeholder="Cth: SD Negeri 3 Krisak" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                    <div class="md:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Kepala Sekolah</label>
+                        <input type="text" id="kepsek" placeholder="Nama Kepala Sekolah" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                    <div class="md:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Nama Penyusun</label>
+                        <input type="text" id="penyusun" placeholder="Nama Guru Penyusun" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEKSI 2: KONTEN PEMBELAJARAN -->
+            <div class="glass-card rounded-[2rem] p-6 md:p-8 shadow-sm">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2.5 md:p-3 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-xl"><i data-lucide="layers" class="w-5 h-5 md:w-6 md:h-6"></i></div>
+                    <h3 class="text-lg md:text-xl font-bold">Desain Modul Pembelajaran</h3>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6 mb-5">
+                    <div class="col-span-2 md:col-span-2">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Fase / Jenjang</label>
+                        <select id="fase" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm appearance-none">
+                            <option value="PAUD (Fase Fondasi)">PAUD (Fase Fondasi)</option>
+                            <option value="SD (Fase A)">SD (Fase A)</option>
+                            <option value="SD (Fase B)">SD (Fase B)</option>
+                            <option value="SD (Fase C)">SD (Fase C)</option>
+                            <option value="SMP (Fase D)">SMP (Fase D)</option>
+                            <option value="SMA/SMK (Fase E)">SMA/SMK (Fase E)</option>
+                            <option value="SMA/SMK (Fase F)">SMA/SMK (Fase F)</option>
+                            <option value="Pendidikan Khusus (SLB)">Pendidikan Khusus (SLB/Inklusif)</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1 md:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Kelas</label>
+                        <input type="text" id="kelas" placeholder="Cth: 6" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                    <div class="col-span-1 md:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Semester</label>
+                        <select id="semester" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm appearance-none">
+                            <option value="1 (Ganjil)">1 (Ganjil)</option>
+                            <option value="2 (Genap)">2 (Genap)</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 md:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Alokasi Waktu</label>
+                        <input type="text" id="alokasi" placeholder="Cth: 15 JP (5 Pertemuan)" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-5">
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Mata Pelajaran</label>
+                        <input type="text" id="mapel" placeholder="Cth: IPAS, Bahasa Indonesia..." class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Materi Pokok</label>
+                        <input type="text" id="materi" placeholder="Cth: Pecahan Senilai, Siklus Air..." class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm">
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Tujuan Pembelajaran (TP)</label>
+                    <textarea id="tp" rows="3" placeholder="Ketik rumusan Tujuan Pembelajaran dari analisis CP..." class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm resize-y"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-5">
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1 block">Kondisi / Prasyarat Murid (Opsional)</label>
+                        <textarea id="kondisi" rows="3" placeholder="Kosongkan jika kondisi heterogen..." class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm resize-y"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-blue-500 dark:text-blue-400 uppercase tracking-wider ml-1 mb-1 block">Instruksi Khusus / Metode / Link (Opsional)</label>
+                        <textarea id="instruksiKhusus" rows="3" placeholder="Cth: Gunakan model PBL, masukkan link YouTube https://..., manfaatkan barang bekas..." class="w-full bg-blue-50/50 dark:bg-blue-900/20 backdrop-blur-sm border border-blue-200 dark:border-blue-800 rounded-xl px-4 py-3 text-sm md:text-base dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition shadow-sm resize-y"></textarea>
+                    </div>
+                </div>
+
+                <!-- Opsi Papan Interaktif Digital (IFP) -->
+                <div class="flex items-center justify-between p-4 md:p-5 bg-slate-100/50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 mb-6">
+                    <div class="pr-4">
+                        <h4 class="text-sm md:text-base font-bold text-slate-800 dark:text-slate-200">Papan Interaktif Digital (IFP)</h4>
+                        <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400">Aktifkan untuk mengintegrasikan interaksi layar sentuh di kelas.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                        <input type="checkbox" id="pidToggle" class="sr-only peer" checked>
+                        <div class="w-12 h-6 md:w-14 md:h-7 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] md:after:top-[3px] after:left-[2px] md:after:left-[3px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 md:after:h-5 md:after:w-6 peer-checked:after:w-5 md:peer-checked:after:w-6 after:transition-all dark:border-slate-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+
+                <!-- Dimensi Profil Lulusan -->
+                <div>
+                    <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-3 block">Dimensi Profil Lulusan (Pilih yang dituju)</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4" id="dimensiGroup">
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Keimanan dan Ketakwaan" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Keimanan</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Kewargaan" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kewargaan</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Penalaran Kritis" class="peer sr-only" checked>
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kritis</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Kreativitas" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kreativitas</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Kolaborasi" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kolaborasi</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Kemandirian" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kemandirian</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Kesehatan" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kesehatan</div>
+                        </label>
+                        <label class="cursor-pointer h-full">
+                            <input type="checkbox" value="Komunikasi" class="peer sr-only">
+                            <div class="h-full px-3 py-2 md:py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 flex items-center justify-center text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Komunikasi</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="app.generate()" class="w-full bg-blue-600 text-white font-bold text-base md:text-lg py-4 md:py-5 rounded-[1.5rem] shadow-xl shadow-blue-500/30 hover:scale-[1.02] hover:shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 mb-6">
+                <i data-lucide="sparkles" class="w-5 h-5 md:w-6 md:h-6"></i> Rakit Prompt AI
+            </button>
+
+            <!-- KOTAK HASIL -->
+            <div id="resultBox" class="glass-card rounded-[2rem] p-6 md:p-8 shadow-lg hidden transform transition-all duration-500 opacity-0 translate-y-4">
+                <div class="flex justify-between items-center mb-4 md:mb-5">
+                    <h3 class="text-lg md:text-xl font-bold text-blue-600 dark:text-blue-400">Hasil Super Prompt</h3>
+                    <button onclick="app.copy()" class="bg-slate-800 dark:bg-white text-white dark:text-slate-800 px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-bold hover:scale-105 active:scale-95 transition shadow-sm flex items-center gap-2">
+                        <i data-lucide="copy" class="w-3.5 h-3.5 md:w-4 md:h-4"></i> Salin
+                    </button>
+                </div>
+                <p class="text-xs md:text-sm text-slate-500 mb-3 md:mb-4">Salin dan tempel teks ini ke asisten AI (seperti Gemini) untuk menghasilkan Modul Ajar terstruktur.</p>
+                <textarea id="outputPrompt" readonly class="w-full h-64 md:h-80 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-4 text-sm md:text-base font-mono text-slate-700 dark:text-slate-300 focus:outline-none resize-y"></textarea>
+                
+                <!-- Disclaimer Box UI -->
+                <div class="mt-4 p-3 md:p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl flex gap-3 items-start">
+                    <i data-lucide="info" class="w-5 h-5 md:w-6 md:h-6 text-yellow-600 dark:text-yellow-500 shrink-0 mt-0.5"></i>
+                    <p class="text-xs md:text-sm text-yellow-700 dark:text-yellow-400 leading-relaxed">
+                        <strong>Catatan:</strong> Hasil rancangan RPP dari prompt ini merupakan draf inspirasi. Anda direkomendasikan untuk meninjau dan menyesuaikan kembali ragam aktivitas dan asesmen dengan kondisi serta ketersediaan sarana prasarana aktual di sekolah Anda.
+                    </p>
+                </div>
+            </div>
+            
+            <footer class="text-center pt-8 md:pt-12 pb-6 text-[10px] md:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-[0.2em]">
+                Tim Kreatif Kecamatan Selogiri | 2026
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full text-sm md:text-base font-medium shadow-2xl transition-all duration-300 opacity-0 translate-y-4 z-50 pointer-events-none flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-4 h-4 md:w-5 md:h-5 text-green-400"></i> Berhasil disalin!
+    </div>
+
+    <script>
+        const app = {
+            init: function() {
+                this.initTheme();
+                lucide.createIcons();
+                this.loadData();
+                this.setupAutoSave();
+            },
+
+            initTheme: function() {
+                const saved = localStorage.getItem('theme');
+                const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                if (isDark) document.documentElement.classList.add('dark');
+            },
+
+            toggleTheme: function() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            },
+
+            loadData: function() {
+                const fields = ['sekolah', 'kepsek', 'penyusun', 'kelas', 'semester', 'alokasi', 'mapel', 'materi', 'tp', 'kondisi', 'instruksiKhusus'];
+                fields.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        const savedVal = localStorage.getItem(id);
+                        if (savedVal) el.value = savedVal;
+                    }
+                });
+            },
+
+            setupAutoSave: function() {
+                const fields = ['sekolah', 'kepsek', 'penyusun', 'kelas', 'semester', 'alokasi', 'mapel', 'materi', 'tp', 'kondisi', 'instruksiKhusus'];
+                fields.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', (e) => {
+                            localStorage.setItem(id, e.target.value);
+                        });
+                    }
+                });
+            },
+
+            generate: function() {
+                const getVal = (id) => document.getElementById(id).value.trim() || `[Belum diisi: ${id}]`;
+                
+                const sekolah = document.getElementById('sekolah').value.trim() || "Satuan Pendidikan";
+                const kepsek = document.getElementById('kepsek').value.trim() || "Nama Kepala Sekolah";
+                const penyusun = document.getElementById('penyusun').value.trim() || "Nama Pendidik";
+                const fase = document.getElementById('fase').value;
+                const kelas = getVal('kelas');
+                const semester = getVal('semester');
+                const alokasi = getVal('alokasi');
+                const mapel = getVal('mapel');
+                const materi = getVal('materi');
+                const tp = getVal('tp');
+                
+                // Handling Kondisi Kosong
+                const kondisiMuridRaw = document.getElementById('kondisi').value.trim();
+                let kondisiMuridPrompt = "";
+                if (kondisiMuridRaw === "") {
+                    kondisiMuridPrompt = "- Jika parameter Kondisi Murid bernilai reguler atau belum ada data spesifik, proyeksikan (prediksi) secara logis pengetahuan prasyarat apa yang seharusnya sudah dikuasai murid untuk mencapai Tujuan Pembelajaran tersebut, lalu tuliskan narasinya dengan positif di bagian Identifikasi Murid.";
+                } else {
+                    kondisiMuridPrompt = `- Kondisi spesifik murid: ${kondisiMuridRaw}`;
+                }
+
+                // Handling Instruksi Khusus/Keywords
+                const instruksiRaw = document.getElementById('instruksiKhusus').value.trim();
+                let instruksiKhususPrompt = "";
+                if (instruksiRaw !== "") {
+                    instruksiKhususPrompt = `- ATURAN KHUSUS DARI GURU: Anda WAJIB mengintegrasikan metode/media/sumber belajar berikut ke dalam rancangan pembelajaran: "${instruksiRaw}".`;
+                }
+
+                // Get Dimensions
+                const cb = document.querySelectorAll('#dimensiGroup input:checked');
+                const dimensi = Array.from(cb).map(el => el.value).join(", ") || "[Dimensi belum dipilih]";
+                
+                // Get PID Status
+                const pidStatus = document.getElementById('pidToggle').checked ? "AKTIF" : "NONAKTIF";
+
+                // Constraints Setup
+                let asesmenConstraint = "- Pastikan asesmen formatif digunakan untuk perbaikan proses dan asesmen sumatif untuk mengukur ketercapaian tujuan.";
+                if (fase.includes("PAUD") || fase.includes("Fase A")) {
+                    asesmenConstraint = "- ATURAN MUTLAK FASE AWAL: Karena ini PAUD/Fase A, DILARANG KERAS menggunakan tes tertulis atau tes lisan. Gunakan teknik observasi, catatan anekdotal, unjuk kerja, atau portofolio.";
+                } else if (fase.includes("SMK")) {
+                    asesmenConstraint = "- ATURAN SMK: Selaraskan asesmen dengan Standar Kompetensi Kerja Nasional Indonesia (SKKNI) dan integrasikan Asesmen Praktik Kerja Lapangan (PKL).";
+                }
+
+                let pidConstraint = "";
+                if (pidStatus === "AKTIF") {
+                    pidConstraint = `- ATURAN PENGGUNAAN IFP: Rancang strategi yang mengintegrasikan Papan Interaktif Digital (IFP). DILARANG KERAS menggunakan aktivitas klise seperti "drag-and-drop", "menarik garis", atau sekadar "mencoret-coret". Anda WAJIB merancang interaksi layar sentuh tingkat tinggi (seperti simulasi dinamis, manipulasi objek 3D, atau gamifikasi pemecahan masalah) yang relevan dengan materi ${materi}.`;
+                } else {
+                    pidConstraint = "- ATURAN PENGGUNAAN IFP: Rancang pembelajaran TANPA menggunakan Papan Interaktif Digital (IFP). Sepenuhnya manfaatkan lingkungan fisik sekitar, papan tulis konvensional, interaksi tatap muka, dan alat peraga nyata.";
+                }
+
+                // Compile Prompt untuk UI Visual (Bukan JSON)
+                const promptString = `Anda adalah Ahli Kurikulum dan Pedagogi yang bertugas menyusun dokumen Perencanaan Pembelajaran dengan mematuhi Panduan Pembelajaran dan Asesmen Edisi Revisi 2025 dari Kemendikdasmen.
+
+DATA PARAMETER:
+- Satuan Pendidikan: ${sekolah}
+- Kepala Sekolah: ${kepsek}
+- Penyusun: ${penyusun}
+- Jenjang & Fase: ${fase}
+- Kelas / Semester: ${kelas} / ${semester}
+- Alokasi Waktu: ${alokasi}
+- Mata Pelajaran: ${mapel}
+- Materi Pokok: ${materi}
+- Tujuan Pembelajaran (TP): ${tp}
+- Dimensi Profil Lulusan: ${dimensi}
+- Status Papan Interaktif Digital (IFP): ${pidStatus}
+${kondisiMuridPrompt}
+
+INSTRUKSI PEDAGOGIS WAJIB (GAYA BAHASA & STRUKTUR):
+1. GAYA BAHASA: Gunakan bahasa akademis yang profesional, lugas, jelas, dan terukur (action-oriented). DILARANG menggunakan gaya bahasa yang mendayu-dayu, berlebihan, dramatis, atau seperti cerita fiksi. Tuliskan instruksi tindakan secara objektif.
+2. HEADER: Awali dokumen dengan Kop Judul resmi (misal: "MODUL AJAR / RENCANA PELAKSANAAN PEMBELAJARAN") diikuti dengan satu kalimat judul proyek/kegiatan yang relevan.
+3. IDENTIFIKASI MURID: Deskripsikan profil, pengetahuan prasyarat, dan minat menggunakan bahasa yang berfokus pada potensi (growth mindset).
+4. KOMPONEN INTI (WAJIB ADA & IKUTI FORMAT INI):
+   - Praktik Pedagogik: Tulis dalam satu paragraf utuh yang menyebutkan model pembelajaran, multi-metode, serta menegaskan penggunaan prinsip berkesadaran, bermakna, dan menggembirakan beserta alur memahami, mengaplikasi, dan merefleksi.
+   - Mitra Pembelajaran: Sajikan dalam format bullet point (misal: pihak eksternal, komunitas, wali murid).
+   - Lingkungan Pembelajaran: Deskripsikan tiga aspek sekaligus: ruang fisik, ruang maya/digital, dan iklim/budaya belajar (mendorong partisipasi aktif, dll).
+   - Pemanfaatan Digital: WAJIB dipecah menjadi 3 poin (Perencanaan, Pelaksanaan, Asesmen) dan sebutkan bentuk/aplikasi nyatanya.
+5. LANGKAH PEMBELAJARAN (SANGAT PENTING): 
+   - Jabarkan kegiatan dikelompokkan berdasarkan "Pertemuan" (misal: Pertemuan 1, Pertemuan 2, dst). Sesuaikan jumlah pertemuan agar persis dengan input Alokasi Waktu (${alokasi}).
+   - Di DALAM setiap Pertemuan, Anda WAJIB membagi aktivitas ke dalam tiga sub-judul tahapan berikut secara eksplisit:
+     * Tahap Memahami (Fokus: Berkesadaran & Bermakna)
+     * Tahap Mengaplikasi (Fokus: Berkesadaran, Bermakna & Menggembirakan)
+     * Tahap Merefleksi (Fokus: Berkesadaran & Bermakna)
+   - Penomoran langkah kegiatan harus terus berlanjut (continuous numbering) dari pertemuan pertama hingga akhir. Jangan me-reset nomor kegiatan di setiap pertemuan/tahap.
+
+ATURAN BERSYARAT (CONDITIONAL CONSTRAINTS):
+${asesmenConstraint}
+${pidConstraint}
+${instruksiKhususPrompt}
+
+INSTRUKSI FORMAT OUTPUT (VISUAL MARKDOWN & TANPA BASA-BASI):
+Keluarkan hasil HANYA dalam format teks visual (Markdown) yang rapi dan siap cetak.
+PENTING: Langsung mulai dengan Kop Judul dokumen. DILARANG memberikan kalimat sambutan, kalimat pengantar, penutup, atau catatan AI apa pun.
+Gunakan *heading* tebal untuk pemisah bagian.
+Untuk bagian "Asesmen dan Tindak Lanjut", WAJIB sajikan dalam bentuk TABEL visual dengan kolom: [Kriteria] | [Memenuhi] | [Belum Memenuhi]. Rencana Tindak Lanjut dimasukkan ke dalam baris terbawah tabel tersebut.
+Di bagian paling akhir dokumen, sediakan area tanda tangan yang sejajar antara Kepala Sekolah (${kepsek}) di kiri dan Penyusun (${penyusun}) di kanan.`;
+
+                // Display Result
+                const resBox = document.getElementById('resultBox');
+                document.getElementById('outputPrompt').value = promptString;
+                
+                resBox.classList.remove('hidden');
+                void resBox.offsetWidth; // Trigger reflow
+                resBox.classList.remove('opacity-0', 'translate-y-4');
+                
+                // Auto scroll
+                setTimeout(() => {
+                    resBox.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            },
+
+            copy: function() {
+                const textEl = document.getElementById('outputPrompt');
+                textEl.select();
+                textEl.setSelectionRange(0, 99999);
+                
+                const showToast = () => {
+                    const toast = document.getElementById('toast');
+                    toast.classList.remove('opacity-0', 'translate-y-4');
+                    setTimeout(() => {
+                        toast.classList.add('opacity-0', 'translate-y-4');
+                    }, 2500);
+                };
+
+                // Fallback untuk browser yang membuka file lokal (file:///)
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textEl.value).then(showToast).catch(() => {
+                        document.execCommand('copy');
+                        showToast();
+                    });
+                } else {
+                    document.execCommand('copy');
+                    showToast();
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <title>Generator RPP Kokurikuler</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    colors: { darkbg: '#0f172a', darkcard: '#1e293b' }, 
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                } 
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; pointer-events: none; }
+        .blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: #dbeafe; animation: float 15s infinite alternate; } 
+        .blob-2 { bottom: -10%; right: -10%; width: 350px; height: 350px; background: #e0e7ff; animation: float 12s infinite alternate-reverse; } 
+        .dark .blob-1 { background: #172554; opacity: 0.4; } 
+        .dark .blob-2 { background: #312e81; opacity: 0.4; }
+        @keyframes float { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(20px, 20px) rotate(5deg); } }
+        
+        .navbar-floating {
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 9999px; 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+        .dark .navbar-floating { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Animasi transisi yang halus untuk interaksi form */
+        input, select, textarea { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-darkbg dark:text-slate-200 h-screen overflow-hidden relative transition-colors duration-500">
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    
+    <div class="w-full h-full overflow-y-auto scroll-smooth">
+        
+        <!-- HEADER (Responsif: Padding menyesuaikan layar) -->
+        <div class="sticky top-0 z-30 px-4 md:px-8 pt-4 pb-2 max-w-5xl mx-auto w-full pointer-events-none">
+            <header class="navbar-floating px-4 py-3 sm:px-6 sm:py-4 flex items-center justify-between pointer-events-auto">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-slate-800 dark:text-white text-sm sm:text-lg md:text-xl leading-tight">Prompt Generator</h2>
+                        <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">RPP Kokurikuler 2025</p>
+                    </div>
+                </div>
+                <button onclick="app.toggleTheme()" class="w-9 h-9 shrink-0 rounded-full bg-slate-100/50 dark:bg-slate-800/50 hover:bg-white text-slate-600 dark:text-yellow-400 border border-transparent dark:border-slate-700 active:scale-90 transition-all flex items-center justify-center relative overflow-hidden">
+                    <i data-lucide="moon" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
+                    <i data-lucide="sun" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
+                </button>
+            </header>
+        </div>
+
+        <!-- MAIN FORM -->
+        <main class="max-w-5xl mx-auto w-full px-4 md:px-8 py-4 md:py-6 space-y-4 md:space-y-6 fade-in pb-12 md:pb-20">
+            
+            <!-- SEKSI 1: IDENTITAS -->
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 shadow-sm">
+                <div class="flex items-center gap-3 mb-5 md:mb-6">
+                    <div class="p-2 md:p-2.5 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg md:rounded-xl"><i data-lucide="building" class="w-4 h-4 md:w-5 md:h-5"></i></div>
+                    <h3 class="text-base md:text-lg font-bold">Identitas Penyusun</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Satuan Pendidikan</label>
+                        <input type="text" id="sekolah" placeholder="Cth: Nama Sekolah Anda" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Nama Penyusun</label>
+                        <input type="text" id="penyusun" placeholder="Nama Guru beserta Gelar" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
+                    </div>
+                    <div class="md:col-span-2 lg:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Kepala Sekolah</label>
+                        <input type="text" id="kepsek" placeholder="Nama Kepala Sekolah" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEKSI 2: DETAIL KEGIATAN -->
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 shadow-sm">
+                <div class="flex items-center gap-3 mb-5 md:mb-6">
+                    <div class="p-2 md:p-2.5 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-lg md:rounded-xl"><i data-lucide="layers" class="w-4 h-4 md:w-5 md:h-5"></i></div>
+                    <h3 class="text-base md:text-lg font-bold">Detail Kegiatan</h3>
+                </div>
+                <!-- Grid responsif: 1 kolom di HP, 2 di Tablet, 3 di Laptop -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Fase / Kelas</label>
+                        <select id="fase" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm appearance-none">
+                            <option value="Fase A (Kelas I - II)">Fase A (Kelas I - II)</option>
+                            <option value="Fase B (Kelas III - IV)">Fase B (Kelas III - IV)</option>
+                            <option value="Fase C (Kelas V - VI)">Fase C (Kelas V - VI)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Bentuk Kokurikuler</label>
+                        <select id="bentuk" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm appearance-none">
+                            <option value="Pembelajaran Kolaboratif Lintas Disiplin Ilmu">Kolaboratif Lintas Disiplin</option>
+                            <option value="Gerakan 7 Kebiasaan Anak Indonesia Hebat (7 KAIH)">Gerakan 7 KAIH</option>
+                            <option value="Cara Lainnya (Kearifan Lokal / Nilai Khas)">Cara Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-2 lg:col-span-1">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Tema</label>
+                        <input type="text" id="tema" placeholder="Cth: Peduli dan Berbagi" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Alokasi JP</label>
+                        <input type="number" id="jp" placeholder="136" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Guru Kolaborator</label>
+                        <input type="text" id="mapel" placeholder="Cth: Guru Kelas, PJOK, Pendidikan Agama" class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 md:py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm">
+                    </div>
+                </div>
+
+                <div class="mt-6 md:mt-8">
+                    <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-2 block">Target Dimensi Profil Lulusan (Pilih yang relevan)</label>
+                    <!-- Grid dimensi otomatis menyesuaikan lebar layar -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3" id="dimensiGroup">
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Keimanan dan Ketakwaan" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Keimanan</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Kewargaan" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kewargaan</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Penalaran Kritis" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kritis</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Kreativitas" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kreativitas</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Kolaborasi" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kolaborasi</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Kemandirian" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kemandirian</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Kesehatan" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Kesehatan</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="checkbox" value="Komunikasi" class="peer sr-only">
+                            <div class="px-2 py-2 md:px-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-700/50 text-center text-[11px] md:text-xs font-bold text-slate-500 dark:text-slate-300 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/30 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 transition shadow-sm hover:bg-white dark:hover:bg-slate-700">Komunikasi</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEKSI 3: KONTEN INTI -->
+            <div class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 shadow-sm mb-6">
+                <div class="flex items-center gap-3 mb-5 md:mb-6">
+                    <div class="p-2 md:p-2.5 bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 rounded-lg md:rounded-xl"><i data-lucide="target" class="w-4 h-4 md:w-5 md:h-5"></i></div>
+                    <h3 class="text-base md:text-lg font-bold">Pembelajaran & Tujuan</h3>
+                </div>
+                <div class="space-y-4 md:space-y-5">
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Tujuan Pembelajaran (TP)</label>
+                        <textarea id="tp" rows="4" placeholder="Ketik atau tempel spesifikasi Tujuan Pembelajaran di sini..." class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm resize-y leading-relaxed"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider ml-1 mb-1.5 block">Catatan Kondisi Kelas (Opsional)</label>
+                        <textarea id="kondisi" rows="2" placeholder="Contoh: Alat terbatas, terdapat anak berkebutuhan khusus..." class="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none shadow-sm resize-y leading-relaxed"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOMBOL AKSI UTAMA -->
+            <button onclick="app.generate()" class="w-full bg-blue-600 text-white font-bold py-3.5 md:py-4 rounded-[1.2rem] md:rounded-[1.5rem] shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 mb-6">
+                <i data-lucide="sparkles" class="w-5 h-5"></i> <span class="text-sm md:text-base">Buat Prompt AI</span>
+            </button>
+
+            <!-- KOTAK HASIL -->
+            <div id="resultBox" class="glass-card rounded-[1.5rem] md:rounded-[2rem] p-5 md:p-8 shadow-lg hidden transform transition-all duration-500 opacity-0 translate-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                    <h3 class="text-base md:text-lg font-bold text-blue-600 dark:text-blue-400">Hasil Prompt</h3>
+                    <button onclick="app.copy()" class="w-full sm:w-auto bg-slate-800 dark:bg-white text-white dark:text-slate-800 px-5 py-2.5 rounded-xl text-xs font-bold hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2">
+                        <i data-lucide="copy" class="w-4 h-4"></i> Salin Prompt
+                    </button>
+                </div>
+                <p class="text-[11px] md:text-xs text-slate-500 mb-4 leading-relaxed">Salin dan tempel teks ini ke asisten AI (seperti Gemini) untuk membuahkan dokumen RPP secara utuh.</p>
+                <textarea id="outputPrompt" readonly class="w-full h-48 md:h-64 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-4 text-xs md:text-sm font-mono text-slate-700 dark:text-slate-300 focus:outline-none resize-y leading-relaxed"></textarea>
+            </div>
+            
+            <!-- FOOTER -->
+            <footer class="text-center pt-8 md:pt-12 pb-6 text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-[0.2em]">
+                Tim Kreatif Kecamatan Selogiri | 2026
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-8 md:bottom-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-5 md:px-6 py-3 rounded-full text-xs md:text-sm font-medium shadow-2xl transition-all duration-300 opacity-0 translate-y-4 z-50 pointer-events-none flex items-center gap-2 whitespace-nowrap">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i> Berhasil disalin!
+    </div>
+
+    <script>
+        const app = {
+            init: function() {
+                this.initTheme();
+                lucide.createIcons();
+                this.loadData();
+                this.setupAutoSave();
+            },
+
+            initTheme: function() {
+                const saved = localStorage.getItem('theme');
+                const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                if (isDark) document.documentElement.classList.add('dark');
+            },
+
+            toggleTheme: function() {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            },
+
+            loadData: function() {
+                const fields = ['sekolah', 'penyusun', 'kepsek'];
+                fields.forEach(id => {
+                    const savedVal = localStorage.getItem(id);
+                    if (savedVal) document.getElementById(id).value = savedVal;
+                });
+            },
+
+            setupAutoSave: function() {
+                const fields = ['sekolah', 'penyusun', 'kepsek'];
+                fields.forEach(id => {
+                    document.getElementById(id).addEventListener('input', (e) => {
+                        localStorage.setItem(id, e.target.value);
+                    });
+                });
+            },
+
+            generate: function() {
+                const getVal = (id) => document.getElementById(id).value.trim() || `[Belum diisi: ${id}]`;
+                
+                const sekolah = document.getElementById('sekolah').value.trim() || "[Nama Sekolah]";
+                const penyusun = document.getElementById('penyusun').value.trim() || "[Nama Penyusun]";
+                const kepsek = document.getElementById('kepsek').value.trim() || "[Nama Kepala Sekolah]";
+                
+                const cb = document.querySelectorAll('#dimensiGroup input:checked');
+                const dimensi = Array.from(cb).map(el => el.value).join(", ") || "[Dimensi belum dipilih]";
+
+                const promptString = `Bertindaklah sebagai perancang kurikulum ahli. Buatkan RPP / Modul Kokurikuler secara detail berdasarkan "Panduan Kokurikuler 2025" Kemendikdasmen.
+
+IDENTITAS MODUL:
+- Satuan Pendidikan: ${sekolah}
+- Disusun Oleh: ${penyusun}
+- Kepala Sekolah: ${kepsek}
+- Fase/Kelas: ${getVal('fase')}
+- Mata Pelajaran Terlibat: ${getVal('mapel')}
+- Alokasi Waktu: ${getVal('jp')} JP
+
+DATA KEGIATAN:
+- Bentuk Kegiatan: ${getVal('bentuk')}
+- Tema: ${getVal('tema')}
+- Target Dimensi Profil Lulusan: ${dimensi}
+
+TUJUAN PEMBELAJARAN:
+${getVal('tp')}
+
+KONDISI KELAS KHUSUS:
+${document.getElementById('kondisi').value.trim() || 'Reguler'}
+
+INSTRUKSI WAJIB UNTUK AI:
+1. Susun dokumen dengan struktur profesional dan rapi, dimulai dari blok Identitas Modul.
+2. Rancang Langkah-Langkah Kegiatan yang secara aktif memuat pengalaman belajar: memahami, mengaplikasi, dan merefleksi.
+3. Pastikan praktik pedagogis menggunakan pendekatan eksploratif yang berkesadaran (mindful), bermakna (meaningful), dan menggembirakan (joyful).
+4. Buatkan alur kegiatan yang runtut dari tahap pengenalan, pelaksanaan aksi nyata/proyek, diskusi/observasi, hingga evaluasi akhir.
+5. Susun instrumen Asesmen Formatif (pemantauan selama proses) dan Asesmen Sumatif (penilaian akhir) berupa rubrik penilaian kinerja.
+6. Mengingat kegiatan ini melibatkan kolaborasi lintas disiplin, rincikan indikator keberhasilan pada rubrik asesmen sumatif sesuai dengan pembagian peran masing-masing guru/mata pelajaran yang terlibat.
+7. Di bagian paling bawah dokumen, buatkan blok tanda tangan pengesahan yang rapi, sejajar untuk Guru Penyusun (${penyusun}) dan Kepala Sekolah (${kepsek}).`;
+
+                const resBox = document.getElementById('resultBox');
+                document.getElementById('outputPrompt').value = promptString;
+                
+                resBox.classList.remove('hidden');
+                // Trigger reflow for animation
+                void resBox.offsetWidth;
+                resBox.classList.remove('opacity-0', 'translate-y-4');
+                
+                // Scroll to result smoothly
+                setTimeout(() => {
+                    resBox.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            },
+
+            copy: function() {
+                const textEl = document.getElementById('outputPrompt');
+                textEl.select();
+                textEl.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(textEl.value);
+                
+                const toast = document.getElementById('toast');
+                toast.classList.remove('opacity-0', 'translate-y-4');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-4');
+                }, 2500);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>
