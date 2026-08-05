@@ -123,7 +123,6 @@
             </div>
             
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
-                <!-- Info Pegawai Card -->
                 <div id="sidebar-bio-card" class="bg-slate-50 dark:bg-slate-700 p-5 rounded-2xl border border-slate-200 dark:border-slate-600 shadow-sm hidden">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="p-2.5 bg-blue-100 dark:bg-blue-900 rounded-xl text-blue-600 dark:text-blue-300"><i data-lucide="id-card" class="w-5 h-5"></i></div>
@@ -161,12 +160,10 @@
             </div>
         </aside>
 
-        <!-- Diperbarui pb-36 agar dock tidak menutupi footer saat discroll habis -->
         <main class="flex-1 flex flex-col relative overflow-hidden min-w-0 bg-transparent">
             <div id="main-scroll-area" class="flex-1 overflow-y-auto overscroll-y-auto h-full scroll-smooth relative z-10 pb-36 md:pb-10">
                 
                 <div class="sticky top-0 z-30 flex flex-col items-center w-full pointer-events-none pb-2 transition-all duration-300">
-                    
                     <div id="desktop-header" class="desktop-header-area w-full px-8 py-6 items-center justify-between pointer-events-auto border-b mb-4 transition-colors duration-500 ease-smooth bg-white dark:bg-darkbg border-slate-200 dark:border-slate-800 rounded-b-2xl shadow-sm">
                         <div>
                             <h2 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Dashboard</h2>
@@ -183,7 +180,6 @@
 
                 <div class="max-w-6xl mx-auto w-full space-y-6 px-5 md:px-8 mt-6 md:mt-2">
                     
-                    <!-- Judul Aplikasi Mobile & Label Versi (Kanan Atas) Flat UI -->
                     <div class="w-full flex justify-between items-start md:hidden mb-2 px-1">
                         <div class="flex flex-col">
                             <h1 class="font-extrabold text-2xl text-slate-800 dark:text-white leading-tight tracking-tight">Guru Berbagi</h1>
@@ -192,11 +188,10 @@
                         <span id="app-version-header" class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-white dark:bg-slate-800 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">Versi 7.6</span>
                     </div>
 
-                    <!-- Greeting Card: Diperbarui dengan efek cahaya gradasi statis (non-blur) -->
-                    <div id="greeting-card" class="bg-gradient-to-br from-blue-700 to-violet-800 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-lg relative overflow-hidden group transition-all duration-1000 border border-slate-200/20">
+                    <!-- Greeting Card: Tanpa Border, Shadow Tipis (shadow-md) -->
+                    <div id="greeting-card" class="bg-gradient-to-br from-blue-700 to-violet-800 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000">
                         
                         <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-32 md:h-32 rounded-full pointer-events-none z-0 opacity-40"></div>
-                        <!-- Efek cahaya gradasi sudut statis, jauh lebih ringan tanpa blur filter -->
                         <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-gradient-to-bl from-white/20 to-transparent opacity-30 -mr-10 -mt-10 pointer-events-none"></div>
                         
                         <div class="relative z-10 mt-1">
@@ -230,27 +225,23 @@
         </main>
     </div>
 
-    <!-- Bottom Dock (Flat Design tanpa blur) -->
+    <!-- Bottom Dock -->
     <nav id="bottom-dock" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm bg-white dark:bg-darkbg border-[2px] shadow-xl dark:shadow-2xl rounded-full px-5 py-2.5 flex items-center justify-between transition-colors duration-500 ease-smooth md:hidden border-slate-200 dark:border-slate-700">
         
-        <!-- Profile / Status -->
         <button onclick="app.openModal('profile-modal')" class="flex flex-col items-center gap-1 p-1.5 active:scale-95 transition-transform group shrink-0">
             <div id="dock-avatar-ring" class="w-9 h-9 rounded-full border-2 border-slate-300 dark:border-slate-600 overflow-hidden bg-slate-100 dark:bg-slate-700 p-[2px] transition-colors duration-300">
                 <img id="dock-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full rounded-full object-cover">
             </div>
         </button>
         
-        <!-- Pusat Bantuan -->
         <button onclick="app.openModal('feedback-modal')" class="flex flex-col items-center p-2 text-slate-400 hover:text-green-500 dark:hover:text-green-400 active:scale-95 transition-all">
             <i data-lucide="life-buoy" class="w-[22px] h-[22px]"></i>
         </button>
         
-        <!-- Aksi Utama (Pusat Kontrol) -->
         <button onclick="app.openModal('control-center')" class="w-11 h-11 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl flex items-center justify-center shadow-sm border border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-all group shrink-0">
             <i data-lucide="layout-grid" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
         </button>
         
-        <!-- Theme Toggle -->
         <button onclick="app.toggleTheme()" class="flex flex-col items-center p-2 text-slate-400 hover:text-blue-600 dark:hover:text-yellow-400 active:scale-95 transition-all">
             <div class="relative w-[22px] h-[22px]">
                 <i data-lucide="moon" class="absolute inset-0 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
@@ -258,12 +249,12 @@
             </div>
         </button>
         
-        <!-- Refresh Data -->
         <button onclick="app.refreshData(true)" id="dock-refresh-btn" class="flex flex-col items-center p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-all group">
             <i data-lucide="refresh-cw" class="w-[22px] h-[22px] group-active:rotate-180 transition-transform"></i>
         </button>
     </nav>
 
+    <!-- Modal Pusat Kontrol -->
     <div id="control-center" class="modal-base fixed inset-0 hidden flex items-end justify-center p-0 md:hidden">
         <div class="absolute inset-0 bg-slate-900/60 modal-overlay opacity-0" onclick="app.closeModal('control-center')"></div>
         <div class="bg-white dark:bg-slate-800 w-full rounded-t-[2.5rem] shadow-2xl relative z-10 p-6 transform translate-y-full opacity-0 modal-content transition-all duration-300 ease-smooth pb-10">
@@ -292,7 +283,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
     <div id="profile-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/60 modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-sm rounded-t-[2.5rem] md:rounded-[2rem] shadow-2xl relative z-10 p-6 md:p-8 transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
@@ -463,7 +453,8 @@
                         card.style.backgroundImage = `url('${dbImg}')`;
                         card.style.backgroundSize = 'cover';
                         card.style.backgroundPosition = 'center';
-                        card.className = `bg-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-lg relative overflow-hidden group transition-all duration-1000 border border-slate-700`;
+                        // Border dihapus dari string className
+                        card.className = `bg-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000`;
                         if(iconContainer) iconContainer.style.display = 'none'; 
                     } else {
                         card.style.backgroundImage = '';
@@ -471,7 +462,8 @@
                             iconContainer.style.display = 'block';
                             iconContainer.style = planetStyle;
                         }
-                        card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-lg relative overflow-hidden group transition-all duration-1000 border border-white/20 dark:border-slate-700`; 
+                        // Border dihapus dari string className
+                        card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000`; 
                     }
                 }
                 lucide.createIcons();
