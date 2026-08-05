@@ -1,4 +1,4 @@
-const CACHE_NAME = 'guru-berbagi-v1.6';
+const CACHE_NAME = 'guru-berbagi-v2.0';
 const urlsToCache = [
   './',
   './index.html',
