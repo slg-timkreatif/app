@@ -18,11 +18,18 @@
                 extend: { 
                     colors: { 
                         darkbg: '#0f172a', darkcard: '#1e293b',
+                        /* Sistem RGB Alpha baru untuk transparansi yang sempurna di Mode Gelap */
                         blue: {
-                            50: 'var(--theme-50, #eff6ff)', 100: 'var(--theme-100, #dbeafe)', 200: 'var(--theme-200, #bfdbfe)',
-                            300: 'var(--theme-300, #93c5fd)', 400: 'var(--theme-400, #60a5fa)', 500: 'var(--theme-500, #3b82f6)',
-                            600: 'var(--theme-600, #2563eb)', 700: 'var(--theme-700, #1d4ed8)', 800: 'var(--theme-800, #1e40af)',
-                            900: 'var(--theme-900, #1e3a8a)',
+                            50: 'rgba(var(--theme-50), <alpha-value>)',
+                            100: 'rgba(var(--theme-100), <alpha-value>)',
+                            200: 'rgba(var(--theme-200), <alpha-value>)',
+                            300: 'rgba(var(--theme-300), <alpha-value>)',
+                            400: 'rgba(var(--theme-400), <alpha-value>)',
+                            500: 'rgba(var(--theme-500), <alpha-value>)',
+                            600: 'rgba(var(--theme-600), <alpha-value>)',
+                            700: 'rgba(var(--theme-700), <alpha-value>)',
+                            800: 'rgba(var(--theme-800), <alpha-value>)',
+                            900: 'rgba(var(--theme-900), <alpha-value>)',
                         }
                     }, 
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['ui-monospace', 'SFMono-Regular', 'monospace'] },
@@ -34,7 +41,7 @@
         }
     </script>
     <style id="dynamic-theme">
-        :root { --theme-50: #eff6ff; --theme-100: #dbeafe; --theme-200: #bfdbfe; --theme-300: #93c5fd; --theme-400: #60a5fa; --theme-500: #3b82f6; --theme-600: #2563eb; --theme-700: #1d4ed8; --theme-800: #1e40af; --theme-900: #1e3a8a; }
+        :root { --theme-50: 239, 246, 255; --theme-100: 219, 234, 254; --theme-200: 191, 219, 254; --theme-300: 147, 197, 253; --theme-400: 96, 165, 250; --theme-500: 59, 130, 246; --theme-600: 37, 99, 235; --theme-700: 29, 78, 216; --theme-800: 30, 64, 175; --theme-900: 30, 58, 138; }
     </style>
     
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -50,14 +57,14 @@
         @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         .animate-item-masuk { animation: slideUpFade 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards; opacity: 0; }
         
-        /* Modal Transitions Optimized */
+        /* Modal Transitions - Disempurnakan untuk performa maksimal (60FPS) */
         .modal-overlay { transition: opacity 0.3s ease-out; will-change: opacity; }
-        .modal-content { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; backface-visibility: hidden; }
+        .modal-content { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; backface-visibility: hidden; transform: translateZ(0); }
         
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         .banner-sticky { animation: slideDown 0.5s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .input-group:focus-within .lock-icon { color: var(--theme-500, #3b82f6); }
+        .input-group:focus-within .lock-icon { color: rgba(var(--theme-500), 1); }
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } 
@@ -102,7 +109,7 @@
                 <div class="space-y-3">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Alat Cepat</p>
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="app.toggleTheme()" class="col-span-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex flex-col items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 group shadow-sm">
+                        <button onclick="app.triggerThemeToggle({checked: !document.documentElement.classList.contains('dark')})" class="col-span-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex flex-col items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 group shadow-sm">
                             <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-600 relative text-slate-700 dark:text-yellow-400">
                                 <i data-lucide="moon" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
                                 <i data-lucide="sun" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
@@ -164,7 +171,6 @@
                         </div>
                     </div>
 
-                    <!-- GREETING CARD -->
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 to-violet-800 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000 hidden">
                         <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-32 md:h-32 rounded-full pointer-events-none z-0 opacity-40"></div>
                         <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-gradient-to-bl from-white/20 to-transparent opacity-30 -mr-10 -mt-10 pointer-events-none"></div>
@@ -209,7 +215,6 @@
 
     <!-- Modal Pengaturan -->
     <div id="settings-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4 z-[70]">
-        <!-- Hapus blur dari semua overlay modal -->
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0 transition-opacity duration-300" onclick="app.closeModal('settings-modal')"></div>
         <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content overflow-hidden border border-slate-200 dark:border-slate-700">
             
@@ -437,7 +442,7 @@
     
     <!-- Modal Optimasi Sistem -->
     <div id="optimization-modal" class="modal-base fixed inset-0 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('optimization-modal')"></div>
+        <div class="absolute inset-0 bg-slate-900/80 modal-overlay opacity-0" onclick="app.closeModal('optimization-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 text-center modal-content overflow-hidden transform scale-95 opacity-0 transition-all duration-300 ease-smooth">
             <div class="w-24 h-24 mx-auto mb-6 relative z-10">
                 <div class="w-full h-full bg-blue-50 dark:bg-slate-700 rounded-full flex items-center justify-center border-4 border-blue-100 dark:border-slate-600">
@@ -643,12 +648,13 @@
             },
 
             setAccent: function(color, save = true) {
+                // Konfigurasi ini mendefinisikan ulang variabel CSS agar transparansi berfungsi sempurna di Tailwind
                 const palettes = {
-                    blue: "--theme-50: #eff6ff; --theme-100: #dbeafe; --theme-200: #bfdbfe; --theme-300: #93c5fd; --theme-400: #60a5fa; --theme-500: #3b82f6; --theme-600: #2563eb; --theme-700: #1d4ed8; --theme-800: #1e40af; --theme-900: #1e3a8a;",
-                    emerald: "--theme-50: #ecfdf5; --theme-100: #d1fae5; --theme-200: #a7f3d0; --theme-300: #6ee7b7; --theme-400: #34d399; --theme-500: #10b981; --theme-600: #059669; --theme-700: #047857; --theme-800: #065f46; --theme-900: #064e3b;",
-                    violet: "--theme-50: #f5f3ff; --theme-100: #ede9fe; --theme-200: #ddd6fe; --theme-300: #c4b5fd; --theme-400: #a78bfa; --theme-500: #8b5cf6; --theme-600: #7c3aed; --theme-700: #6d28d9; --theme-800: #5b21b6; --theme-900: #4c1d95;",
-                    rose: "--theme-50: #fff1f2; --theme-100: #ffe4e6; --theme-200: #fecdd3; --theme-300: #fda4af; --theme-400: #fb7185; --theme-500: #f43f5e; --theme-600: #e11d48; --theme-700: #be123c; --theme-800: #9f1239; --theme-900: #881337;",
-                    amber: "--theme-50: #fffbeb; --theme-100: #fef3c7; --theme-200: #fde68a; --theme-300: #fcd34d; --theme-400: #fbbf24; --theme-500: #f59e0b; --theme-600: #d97706; --theme-700: #b45309; --theme-800: #92400e; --theme-900: #78350f;"
+                    blue: "--theme-50: 239, 246, 255; --theme-100: 219, 234, 254; --theme-200: 191, 219, 254; --theme-300: 147, 197, 253; --theme-400: 96, 165, 250; --theme-500: 59, 130, 246; --theme-600: 37, 99, 235; --theme-700: 29, 78, 216; --theme-800: 30, 64, 175; --theme-900: 30, 58, 138;",
+                    emerald: "--theme-50: 236, 253, 245; --theme-100: 209, 250, 229; --theme-200: 167, 243, 208; --theme-300: 110, 231, 183; --theme-400: 52, 211, 153; --theme-500: 16, 185, 129; --theme-600: 5, 150, 105; --theme-700: 4, 120, 87; --theme-800: 6, 95, 70; --theme-900: 6, 78, 59;",
+                    violet: "--theme-50: 245, 243, 255; --theme-100: 237, 233, 254; --theme-200: 221, 214, 254; --theme-300: 196, 181, 253; --theme-400: 167, 139, 250; --theme-500: 139, 92, 246; --theme-600: 124, 58, 237; --theme-700: 109, 40, 217; --theme-800: 91, 33, 182; --theme-900: 76, 29, 149;",
+                    rose: "--theme-50: 255, 241, 242; --theme-100: 255, 228, 230; --theme-200: 254, 205, 211; --theme-300: 253, 164, 175; --theme-400: 251, 113, 133; --theme-500: 244, 63, 94; --theme-600: 225, 29, 72; --theme-700: 190, 18, 60; --theme-800: 159, 18, 57; --theme-900: 136, 19, 55;",
+                    amber: "--theme-50: 255, 251, 235; --theme-100: 254, 243, 199; --theme-200: 253, 230, 138; --theme-300: 252, 211, 77; --theme-400: 251, 191, 36; --theme-500: 245, 158, 11; --theme-600: 217, 119, 6; --theme-700: 180, 83, 9; --theme-800: 146, 64, 14; --theme-900: 120, 53, 15;"
                 };
 
                 if (color === 'default') { document.getElementById('dynamic-theme').innerHTML = `:root { ${palettes.blue} }`; } 
@@ -1240,7 +1246,7 @@
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
             processUpdateAnimation: async function(isRocket = false) { if(isRocket) app.closeModal('optimization-modal'); app.closeModal('settings-modal'); const overlay = document.getElementById('update-overlay'); const bar = document.getElementById('update-progress-bar'); const txt = document.getElementById('update-status-text'); const pct = document.getElementById('update-percent'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 50); const updateStep = (text, percent, delay) => { return new Promise(resolve => { txt.innerText = text; bar.style.width = percent + '%'; pct.innerText = percent + '%'; setTimeout(resolve, delay); }); }; await updateStep("Memeriksa Koneksi...", 15, 800); try { txt.innerText = "Membersihkan Cache Lama..."; if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); } } catch (e) { console.log("Cache error", e); } await updateStep("Sinkronisasi Database...", 45, 1000); await updateStep("Menyusun Ulang Tampilan...", 75, 800); await updateStep("Finalisasi Optimasi...", 100, 600); txt.innerText = "Selesai! Memuat Ulang..."; txt.classList.add("text-green-400"); setTimeout(() => { window.location.reload(true); }, 500); },
             
-            // FUNGSI MODAL DIOPTIMASI PENUH DENGAN requestAnimationFrame
+            // OPTIMASI RENDER MODAL TINGKAT LANJUT (Synchronous Repaint)
             openModal: function(id) { 
                 const el = document.getElementById(id); if (!el) return; 
                 document.body.classList.add('modal-open'); 
@@ -1248,17 +1254,16 @@
                 
                 if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } 
                 
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        const overlay = el.querySelector('.modal-overlay'); 
-                        const content = el.querySelector('.modal-content'); 
-                        if (overlay) overlay.classList.remove('opacity-0'); 
-                        if (content) { 
-                            content.classList.remove('opacity-0', 'scale-95', 'translate-y-full'); 
-                            content.classList.add('opacity-100', 'scale-100', 'translate-y-0'); 
-                        } 
-                    });
-                });
+                // Memaksa browser menghitung ulang tata letak sebelum menambahkan kelas transisi
+                void el.offsetWidth;
+                
+                const overlay = el.querySelector('.modal-overlay'); 
+                const content = el.querySelector('.modal-content'); 
+                if (overlay) overlay.classList.remove('opacity-0'); 
+                if (content) { 
+                    content.classList.remove('opacity-0', 'scale-95', 'translate-y-full'); 
+                    content.classList.add('opacity-100', 'scale-100', 'translate-y-0'); 
+                } 
                 
                 window.history.pushState(null, null, window.location.href); 
             },
