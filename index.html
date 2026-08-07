@@ -49,8 +49,11 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         .animate-item-masuk { animation: slideUpFade 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards; opacity: 0; }
-        .modal-overlay { transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1); will-change: opacity; }
-        .modal-content { transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); will-change: transform, opacity; backface-visibility: hidden; }
+        
+        /* Modal Transitions Optimized */
+        .modal-overlay { transition: opacity 0.3s ease-out; will-change: opacity; }
+        .modal-content { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; backface-visibility: hidden; }
+        
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         .banner-sticky { animation: slideDown 0.5s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
@@ -106,7 +109,7 @@
                             </div>
                             <span class="text-[10px] font-bold text-slate-600 dark:text-slate-200">Tema</span>
                         </button>
-                        <button onclick="app.refreshData(true)" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all ease-smooth active:scale-95 group shadow-sm">
+                        <button onclick="app.refreshData('manual')" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all ease-smooth active:scale-95 group shadow-sm">
                             <div class="w-8 h-8 rounded-full bg-blue-600 text-white shadow flex items-center justify-center group-hover:rotate-180 transition-transform"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
                             <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300">Refresh</span>
                         </button>
@@ -190,7 +193,6 @@
                         </div>
                         
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4 grid-flow-dense auto-rows-fr">
-                            <div class="col-span-2 md:col-span-4 text-center py-10 text-slate-400 hidden" id="empty-state-msg"><span class="text-xs">Menunggu data...</span></div>
                         </div>
                     </div>
 
@@ -207,8 +209,9 @@
 
     <!-- Modal Pengaturan -->
     <div id="settings-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4 z-[70]">
-        <div class="absolute inset-0 bg-slate-900/40 dark:bg-slate-900/60 backdrop-blur-sm modal-overlay opacity-0 transition-opacity duration-300" onclick="app.closeModal('settings-modal')"></div>
-        <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-400 ease-smooth overflow-hidden border border-slate-200 dark:border-slate-700">
+        <!-- Hapus blur dari semua overlay modal -->
+        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0 transition-opacity duration-300" onclick="app.closeModal('settings-modal')"></div>
+        <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content overflow-hidden border border-slate-200 dark:border-slate-700">
             
             <div class="px-6 py-5 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center shrink-0 shadow-sm relative z-10">
                 <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full absolute top-2 left-1/2 -translate-x-1/2 md:hidden"></div>
@@ -298,7 +301,6 @@
                     </div>
                 </div>
 
-                <!-- Sesi Sistem -->
                 <div>
                     <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest px-2 mb-2">Sistem & Penyimpanan</h4>
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
@@ -335,7 +337,7 @@
 
     <!-- Modal Profil Saya -->
     <div id="profile-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4">
-        <div class="absolute inset-0 bg-slate-900/60 modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
+        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-sm rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-6 md:p-8 transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
             <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6 md:hidden"></div>
             <div class="flex justify-between items-center mb-6">
@@ -393,7 +395,7 @@
 
     <!-- Modal Submenu -->
     <div id="submenu-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4">
-        <div class="absolute inset-0 bg-slate-900/60 modal-overlay opacity-0" onclick="app.closeModal('submenu-modal')"></div>
+        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('submenu-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full md:max-w-xl mx-auto rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth max-h-[85vh] flex flex-col">
             <div class="w-full flex justify-center pt-4 pb-2 md:hidden" onclick="app.closeModal('submenu-modal')">
                 <div class="w-16 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full cursor-pointer hover:bg-slate-300 transition"></div>
@@ -435,7 +437,7 @@
     
     <!-- Modal Optimasi Sistem -->
     <div id="optimization-modal" class="modal-base fixed inset-0 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 modal-overlay opacity-0" onclick="app.closeModal('optimization-modal')"></div>
+        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('optimization-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 text-center modal-content overflow-hidden transform scale-95 opacity-0 transition-all duration-300 ease-smooth">
             <div class="w-24 h-24 mx-auto mb-6 relative z-10">
                 <div class="w-full h-full bg-blue-50 dark:bg-slate-700 rounded-full flex items-center justify-center border-4 border-blue-100 dark:border-slate-600">
@@ -454,7 +456,7 @@
     
     <!-- Modal Flyer / Pop Up Info -->
     <div id="flyer-modal" class="modal-base fixed inset-0 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/80 modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
+        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-6 text-center transform scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
             <button onclick="app.closeModal('flyer-modal')" class="absolute top-4 right-4 p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 transition shadow-sm"><i data-lucide="x" class="w-5 h-5"></i></button>
             <h3 id="flyer-title" class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 mt-2">Info</h3>
@@ -561,6 +563,7 @@
             apiURL: "https://script.google.com/macros/s/AKfycbxvKz8ogmWbeUJWZbSFWnYHrXDr78nhdjakJsTETd8HkyIkMw2LOe-08pHcbxYLch7mRA/exec",
             deferredPrompt: null, menuMap: {}, backPressedTime: 0, cachedInfo: null, rawMenuList: [], userJabatan: "",
             modalList: ['profile-modal', 'settings-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
+            isSyncing: false,
 
             init: function() {
                 this.initTheme(); 
@@ -573,7 +576,7 @@
 
                 window.addEventListener('popstate', (event) => {
                     let modalOpen = false;
-                    for (let id of this.modalList) { const el = document.getElementById(id); if (el && !el.classList.contains('hidden')) { app.closeModal(id); modalOpen = true; break; } }
+                    for (let id of this.modalList) { const el = document.getElementById(id); if (el && !el.classList.contains('hidden')) { this.closeModal(id); modalOpen = true; break; } }
                     if (modalOpen) window.history.pushState(null, null, window.location.href); else { const now = new Date().getTime(); if (now - this.backPressedTime < 2000) {} else { this.backPressedTime = now; this.showToast(); window.history.pushState(null, null, window.location.href); } }
                 });
                 window.history.pushState(null, null, window.location.href);
@@ -590,14 +593,25 @@
                     } catch(e) {} 
                 }
                 
-                // Fast Auto-Sync pada awal buka aplikasi
-                this.refreshData(!hasValidCache); 
+                setTimeout(() => {
+                    this.refreshData(!hasValidCache); 
+                }, 500);
                 
                 this.trackUser(); this.setupInstallPrompt();
                 this.updateGreeting(); 
-                setInterval(() => app.updateGreeting(), 60000); 
+                setInterval(() => this.updateGreeting(), 60000); 
                 
-                try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { app.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
+                try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { this.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
+            },
+
+            updateClock: function() {
+                const now = new Date();
+                const clockEl = document.getElementById('desktop-clock');
+                if (clockEl) {
+                    const h = String(now.getHours()).padStart(2, '0');
+                    const m = String(now.getMinutes()).padStart(2, '0');
+                    clockEl.innerText = `${h}:${m}`;
+                }
             },
 
             loadLocalSettings: function() {
@@ -686,16 +700,17 @@
                 if (info && (info.Pop_Status === 'ON' || info.pop_status === 'ON')) {
                     infoIndicator = `<div class="absolute top-1 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border border-white dark:border-slate-900 animate-pulse"></div>`;
                 }
+                
+                const spinCls = this.isSyncing ? ' animate-spin' : '';
 
-                // Tombol Beranda Kini Merupakan Tombol Reset Fungsional (goHome)
                 const homeBtn = `<button onclick="app.goHome()" class="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-all w-12"><i data-lucide="home" class="w-5 h-5 md:w-6 md:h-6 mb-1"></i><span class="text-[9px] font-bold">Beranda</span></button>`;
                 const searchBtn = `<button onclick="app.activateSearch()" class="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-all w-12"><i data-lucide="search" class="w-5 h-5 md:w-6 md:h-6 mb-1"></i><span class="text-[9px] font-bold">Cari</span></button>`;
                 
                 let centerBtn = '';
                 if (style === 'bar') {
-                    centerBtn = `<div class="relative -top-5"><button onclick="app.refreshData(true)" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_15px_rgba(59,130,246,0.4)] hover:bg-blue-700 active:scale-95 transition-all ring-4 ring-white dark:ring-slate-900 group"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="w-5 h-5 group-active:rotate-180 transition-transform duration-500"></i></button></div>`;
+                    centerBtn = `<div class="relative -top-5"><button onclick="app.refreshData('manual')" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_15px_rgba(0,0,0,0.12)] hover:bg-blue-700 active:scale-95 transition-all ring-4 ring-white dark:ring-slate-900 group"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="lucide-refresh-cw w-5 h-5 transition-transform duration-500${spinCls}"></i></button></div>`;
                 } else {
-                    centerBtn = `<button onclick="app.refreshData(true)" class="w-11 h-11 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center shadow-sm hover:bg-blue-100 dark:hover:bg-blue-800 active:scale-95 transition-all group shrink-0 mx-1 border border-blue-100 dark:border-blue-800"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="w-5 h-5 group-active:rotate-180 transition-transform duration-500"></i></button>`;
+                    centerBtn = `<button onclick="app.refreshData('manual')" class="w-11 h-11 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center shadow-sm hover:bg-blue-100 dark:hover:bg-slate-700 active:scale-95 transition-all group shrink-0 mx-1 border border-blue-200 dark:border-slate-700"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="lucide-refresh-cw w-5 h-5 transition-transform duration-500${spinCls}"></i></button>`;
                 }
 
                 const infoBtn = `<button onclick="app.reopenFlyer()" class="relative flex flex-col items-center justify-center p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-all w-12"><i data-lucide="bell" class="w-5 h-5 md:w-6 md:h-6 mb-1"></i><span class="text-[9px] font-bold">Info</span>${infoIndicator}</button>`;
@@ -746,10 +761,7 @@
                 const localOpt = JSON.parse(localStorage.getItem('app_user_settings') || '{}');
                 if (localOpt.compactMode) isHelloActive = false;
                 
-                // Jika Mode Sapaan Aktif, sembunyikan kotak search. Jika Nonaktif, biarkan search box tetap tampil (sebagai ganti sapaan).
-                if (isHelloActive && searchContainer) { 
-                    searchContainer.classList.add('hidden'); 
-                }
+                if (isHelloActive && searchContainer) { searchContainer.classList.add('hidden'); }
             },
 
             filterMenu: function() {
@@ -960,7 +972,6 @@
                     if(card) card.classList.add('hidden');
                     if(searchContainer) searchContainer.classList.remove('hidden');
                 }
-                lucide.createIcons();
             },
 
             generateMenuHTML: function(items, isSearch = false) {
@@ -989,7 +1000,7 @@
                     slate: { b: 'bg-slate-500', w: 'bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400', i: 'bg-slate-100 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700/50 group-hover:bg-slate-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-slate-600 dark:group-hover:text-slate-400' }
                 };
 
-                const cAlias = { 'merah':'red', 'jingga':'orange', 'kuning':'yellow', 'hijau muda':'lime', 'hijau':'green', 'zamrud':'emerald', 'toska':'teal', 'sian':'cyan', 'biru muda':'sky', 'biru':'blue', 'nila':'indigo', 'ungu':'violet', 'ungu tua':'purple', 'fuksia':'fuchsia', 'merah muda':'pink', 'merah mawar':'rose', 'abu-abu':'slate' };
+                const cAlias = { 'merah':'red', 'jingga':'orange', 'kuning':'yellow', 'hijau muda':'lime', 'hijau':'green', 'zamrud':'emerald', 'toska':'teal', 'sian':'cyan', 'biru muda':'sky', 'biru':'blue', 'nila':'indigo', 'ungu':'violet', 'ungu tua':'purple', 'fuksia':'fuchsia', 'merah muda':'pink', 'merah mawar':'rose', 'abu-abu':'slate', 'abu':'slate' };
 
                 items.forEach(item => {
                     const hasChildren = this.menuMap[item.judul.toLowerCase().trim()] && this.menuMap[item.judul.toLowerCase().trim()].length > 0;
@@ -1058,7 +1069,11 @@
                 const container = document.getElementById('dynamic-menu-container'); 
                 const parents = menuList.filter(item => (item.parent || "").trim() === "");
                 
-                if(parents.length === 0) { container.innerHTML = '<div class="col-span-2 text-center text-slate-400 text-sm py-10">Belum ada menu.</div>'; return; }
+                if(parents.length === 0) { 
+                    container.innerHTML = '<div class="col-span-2 md:col-span-4 text-center py-10 text-slate-400 text-sm font-medium"><i data-lucide="folder-open" class="w-8 h-8 mx-auto mb-3 opacity-50"></i>Belum ada menu yang ditambahkan.</div>'; 
+                    lucide.createIcons();
+                    return; 
+                }
                 
                 const filteredParents = parents.filter(item => {
                     const requiredRole = (item.role || "").toLowerCase().trim(); 
@@ -1070,7 +1085,12 @@
                     return true;
                 });
 
-                container.innerHTML = this.generateMenuHTML(filteredParents, false);
+                if (filteredParents.length === 0) {
+                    container.innerHTML = '<div class="col-span-2 md:col-span-4 text-center py-10 text-slate-400 text-sm font-medium"><i data-lucide="lock" class="w-8 h-8 mx-auto mb-3 opacity-50"></i>Layanan ini khusus pengguna tertentu.</div>';
+                } else {
+                    container.innerHTML = this.generateMenuHTML(filteredParents, false);
+                }
+                
                 container.classList.remove('fade-in');
                 void container.offsetWidth; 
                 container.classList.add('fade-in');
@@ -1167,20 +1187,22 @@
             openWeb: function(url, title) { const frame = document.getElementById('web-frame'); const titleEl = document.getElementById('browser-title'); const extBtn = document.getElementById('browser-external-link'); const loader = document.getElementById('browser-loader'); frame.classList.add('opacity-0'); loader.classList.remove('hidden'); frame.src = 'about:blank'; titleEl.textContent = title || "Menjelajah"; extBtn.href = url; this.openModal('browser-modal'); setTimeout(() => { frame.src = url; }, 300); },
             handleLink: function(target) { if (!target) return; if (navigator.vibrate) navigator.vibrate(50); if (target.startsWith('ext:')) { window.open(target.substring(4), '_blank'); return; } if (target.startsWith('#')) { const command = target.substring(1).toLowerCase(); if (command === 'profil') this.openModal('profile-modal'); else if (command === 'bantuan') this.openModal('feedback-modal'); else if (command === 'install') this.openModal('install-modal'); else if (command === 'reset') this.processUpdateAnimation(true); else if (command === 'control') this.openModal('settings-modal'); else this.showAlert('info', 'Info', 'Fitur belum tersedia.'); } else if (target.startsWith('http')) { this.openWeb(target, 'Info Tautan'); } else { this.showAlert('info', 'Info', target); } },
             
-            refreshData: function(showSkeleton = false) { 
-                const btn = document.getElementById('dock-refresh-btn'); 
+            refreshData: function(forceSkeleton = false) { 
+                this.isSyncing = true;
                 const status = document.getElementById('sync-status'); 
                 const menuContainer = document.getElementById('dynamic-menu-container'); 
                 this.updateHeaderUI('syncing'); 
                 
-                let icon = document.getElementById('nav-refresh-icon'); 
-                if(icon) icon.classList.add('animate-spin'); 
+                document.querySelectorAll('.lucide-refresh-cw').forEach(el => el.classList.add('animate-spin'));
+                let navIcon = document.getElementById('nav-refresh-icon'); 
+                if(navIcon) navIcon.classList.add('animate-spin'); 
+                
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); status.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Menghubungkan...'; lucide.createIcons(); } 
                 
                 const hasContent = menuContainer && menuContainer.children.length > 0 && !menuContainer.querySelector('#empty-state-msg'); 
                 
-                if (showSkeleton || !hasContent) { 
-                    const skeletonHTML = `<div class="col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div>`; 
+                if (forceSkeleton === true || forceSkeleton === 'manual' || !hasContent) { 
+                    const skeletonHTML = `<div class="col-span-2 md:col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-2 md:col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div>`; 
                     if(menuContainer) menuContainer.innerHTML = skeletonHTML; 
                 } 
                 
@@ -1188,15 +1210,20 @@
                     localStorage.setItem('app_cache', JSON.stringify(data)); 
                     this.render(data); 
                     if(status) { status.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Terhubung'; lucide.createIcons(); } 
-                    app.updateGreeting(); app.updateHeaderUI('normal'); 
+                    this.updateGreeting(); 
+                    this.updateHeaderUI('normal'); 
                 }).catch(e => { 
                     if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); } 
                     if (localStorage.getItem('app_cache')) { this.render(JSON.parse(localStorage.getItem('app_cache'))); } 
-                    app.updateHeaderUI('offline'); 
+                    this.updateHeaderUI('offline'); 
                 }).finally(() => { 
                     setTimeout(() => { 
-                        let currentIcon = document.getElementById('nav-refresh-icon'); 
-                        if(currentIcon) currentIcon.classList.remove('animate-spin'); 
+                        this.isSyncing = false;
+                        document.querySelectorAll('.lucide-refresh-cw').forEach(el => el.classList.remove('animate-spin'));
+                        let navIcon = document.getElementById('nav-refresh-icon'); 
+                        if(navIcon) navIcon.classList.remove('animate-spin'); 
+                        let dockIcon = document.getElementById('dock-refresh-btn');
+                        if(dockIcon) { let svg = dockIcon.querySelector('svg'); if(svg) svg.classList.remove('animate-spin'); }
                         if(status) { setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000); } 
                     }, 500); 
                 }); 
@@ -1212,8 +1239,45 @@
             previewImage: function(i) { if(i.files&&i.files[0]){ const r=new FileReader(); r.onload=(e)=>document.getElementById('preview-photo').src=e.target.result; r.readAsDataURL(i.files[0]); } },
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
             processUpdateAnimation: async function(isRocket = false) { if(isRocket) app.closeModal('optimization-modal'); app.closeModal('settings-modal'); const overlay = document.getElementById('update-overlay'); const bar = document.getElementById('update-progress-bar'); const txt = document.getElementById('update-status-text'); const pct = document.getElementById('update-percent'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 50); const updateStep = (text, percent, delay) => { return new Promise(resolve => { txt.innerText = text; bar.style.width = percent + '%'; pct.innerText = percent + '%'; setTimeout(resolve, delay); }); }; await updateStep("Memeriksa Koneksi...", 15, 800); try { txt.innerText = "Membersihkan Cache Lama..."; if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); } } catch (e) { console.log("Cache error", e); } await updateStep("Sinkronisasi Database...", 45, 1000); await updateStep("Menyusun Ulang Tampilan...", 75, 800); await updateStep("Finalisasi Optimasi...", 100, 600); txt.innerText = "Selesai! Memuat Ulang..."; txt.classList.add("text-green-400"); setTimeout(() => { window.location.reload(true); }, 500); },
-            openModal: function(id) { const el = document.getElementById(id); if (!el) return; document.body.classList.add('modal-open'); if (id === 'settings-modal') { el.classList.remove('hidden'); setTimeout(() => { el.querySelector('.modal-overlay').classList.remove('opacity-0'); el.querySelector('.modal-content').classList.remove('opacity-0', 'translate-y-full', 'scale-95'); }, 10); window.history.pushState(null, null, window.location.href); return; } if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } el.classList.remove('hidden'); void el.offsetWidth; const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); if (overlay) overlay.classList.remove('opacity-0'); if (content) { content.classList.remove('opacity-0', 'scale-95'); content.classList.add('opacity-100', 'scale-100'); const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'settings-modal', 'flyer-modal'].some(k => id.includes(k)); if (isHybrid) { content.classList.remove('translate-y-full'); content.classList.add('translate-y-0'); } else { content.classList.remove('translate-y-full', 'translate-y-0'); } } window.history.pushState(null, null, window.location.href); },
-            closeModal: function(id) { const el = document.getElementById(id); if (!el) return; document.body.classList.remove('modal-open'); const overlay = el.querySelector('.modal-overlay'); const content = el.querySelector('.modal-content'); if (overlay) overlay.classList.add('opacity-0'); if (content) { content.classList.remove('opacity-100', 'scale-100', 'translate-y-0'); content.classList.add('opacity-0'); const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'settings-modal', 'flyer-modal'].some(k => id.includes(k)); if (isHybrid) { content.classList.add('translate-y-full'); content.classList.add('scale-95'); } else { content.classList.add('scale-95'); } } setTimeout(() => { el.classList.add('hidden'); }, 300); },
+            
+            // FUNGSI MODAL DIOPTIMASI PENUH DENGAN requestAnimationFrame
+            openModal: function(id) { 
+                const el = document.getElementById(id); if (!el) return; 
+                document.body.classList.add('modal-open'); 
+                el.classList.remove('hidden'); 
+                
+                if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } 
+                
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const overlay = el.querySelector('.modal-overlay'); 
+                        const content = el.querySelector('.modal-content'); 
+                        if (overlay) overlay.classList.remove('opacity-0'); 
+                        if (content) { 
+                            content.classList.remove('opacity-0', 'scale-95', 'translate-y-full'); 
+                            content.classList.add('opacity-100', 'scale-100', 'translate-y-0'); 
+                        } 
+                    });
+                });
+                
+                window.history.pushState(null, null, window.location.href); 
+            },
+
+            closeModal: function(id) { 
+                const el = document.getElementById(id); if (!el) return; 
+                document.body.classList.remove('modal-open'); 
+                const overlay = el.querySelector('.modal-overlay'); 
+                const content = el.querySelector('.modal-content'); 
+                if (overlay) overlay.classList.add('opacity-0'); 
+                if (content) { 
+                    content.classList.remove('opacity-100', 'scale-100', 'translate-y-0'); 
+                    content.classList.add('opacity-0'); 
+                    const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'settings-modal', 'flyer-modal'].some(k => id.includes(k)); 
+                    if (isHybrid) { content.classList.add('translate-y-full', 'scale-95'); } else { content.classList.add('scale-95'); } 
+                } 
+                setTimeout(() => { el.classList.add('hidden'); }, 300); 
+            },
+            
             showToast: function() { const x = document.getElementById("exit-toast"); if(x) { x.classList.add("show"); setTimeout(function(){ x.classList.remove("show"); }, 2000); } },
             trackUser: function() { const s=localStorage.getItem('guru_profile'); if(s){ const p=JSON.parse(s); fetch(`${this.apiURL}?action=track&email=${encodeURIComponent(p.email||'')}`).catch(()=>{}); } },
             setupInstallPrompt: function() { window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); this.deferredPrompt=e; if(!localStorage.getItem('install_dismissed')){ const today = new Date().toDateString(); const rocket = localStorage.getItem('rocket_shown_date'); const flyer = localStorage.getItem('flyer_shown_date'); if (rocket !== today && flyer !== today) { const inline = document.getElementById('install-inline-container'); if(inline) inline.classList.remove('hidden'); setTimeout(()=>this.openModal('install-modal'),4000); } } }); const btnInstall = document.getElementById('btn-install-trigger'); if (btnInstall) { btnInstall.addEventListener('click', async()=>{ this.closeModal('install-modal'); if(this.deferredPrompt){ this.deferredPrompt.prompt(); this.deferredPrompt=null; } }); } }
