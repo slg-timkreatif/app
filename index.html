@@ -106,7 +106,7 @@
                             </div>
                             <span class="text-[10px] font-bold text-slate-600 dark:text-slate-200">Tema</span>
                         </button>
-                        <button onclick="app.refreshData('manual')" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all ease-smooth active:scale-95 group shadow-sm">
+                        <button onclick="app.refreshData(true)" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all ease-smooth active:scale-95 group shadow-sm">
                             <div class="w-8 h-8 rounded-full bg-blue-600 text-white shadow flex items-center justify-center group-hover:rotate-180 transition-transform"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
                             <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300">Refresh</span>
                         </button>
@@ -161,6 +161,7 @@
                         </div>
                     </div>
 
+                    <!-- GREETING CARD -->
                     <div id="greeting-card" class="bg-gradient-to-br from-blue-700 to-violet-800 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000 hidden">
                         <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-32 md:h-32 rounded-full pointer-events-none z-0 opacity-40"></div>
                         <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-gradient-to-bl from-white/20 to-transparent opacity-30 -mr-10 -mt-10 pointer-events-none"></div>
@@ -297,6 +298,7 @@
                     </div>
                 </div>
 
+                <!-- Sesi Sistem -->
                 <div>
                     <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest px-2 mb-2">Sistem & Penyimpanan</h4>
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
@@ -576,10 +578,20 @@
                 });
                 window.history.pushState(null, null, window.location.href);
                 
+                let hasValidCache = false;
                 const cached = localStorage.getItem('app_cache');
-                if (cached) { try { this.render(JSON.parse(cached)); const container = document.getElementById('dynamic-menu-container'); if(container && container.innerHTML.includes('skeleton-shimmer')) container.innerHTML = ''; } catch(e) {} }
+                if (cached) { 
+                    try { 
+                        const parsed = JSON.parse(cached);
+                        if(parsed && parsed.menu && parsed.menu.length > 0) {
+                            this.render(parsed); 
+                            hasValidCache = true;
+                        }
+                    } catch(e) {} 
+                }
                 
-                this.refreshData('initial'); 
+                // Fast Auto-Sync pada awal buka aplikasi
+                this.refreshData(!hasValidCache); 
                 
                 this.trackUser(); this.setupInstallPrompt();
                 this.updateGreeting(); 
@@ -681,9 +693,9 @@
                 
                 let centerBtn = '';
                 if (style === 'bar') {
-                    centerBtn = `<div class="relative -top-5"><button onclick="app.refreshData('manual')" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_15px_rgba(59,130,246,0.4)] hover:bg-blue-700 active:scale-95 transition-all ring-4 ring-white dark:ring-slate-900 group"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="w-5 h-5 group-active:rotate-180 transition-transform duration-500"></i></button></div>`;
+                    centerBtn = `<div class="relative -top-5"><button onclick="app.refreshData(true)" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-[0_8px_15px_rgba(59,130,246,0.4)] hover:bg-blue-700 active:scale-95 transition-all ring-4 ring-white dark:ring-slate-900 group"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="w-5 h-5 group-active:rotate-180 transition-transform duration-500"></i></button></div>`;
                 } else {
-                    centerBtn = `<button onclick="app.refreshData('manual')" class="w-11 h-11 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center shadow-sm hover:bg-blue-100 dark:hover:bg-blue-800 active:scale-95 transition-all group shrink-0 mx-1 border border-blue-100 dark:border-blue-800"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="w-5 h-5 group-active:rotate-180 transition-transform duration-500"></i></button>`;
+                    centerBtn = `<button onclick="app.refreshData(true)" class="w-11 h-11 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center shadow-sm hover:bg-blue-100 dark:hover:bg-blue-800 active:scale-95 transition-all group shrink-0 mx-1 border border-blue-100 dark:border-blue-800"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="w-5 h-5 group-active:rotate-180 transition-transform duration-500"></i></button>`;
                 }
 
                 const infoBtn = `<button onclick="app.reopenFlyer()" class="relative flex flex-col items-center justify-center p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95 transition-all w-12"><i data-lucide="bell" class="w-5 h-5 md:w-6 md:h-6 mb-1"></i><span class="text-[9px] font-bold">Info</span>${infoIndicator}</button>`;
@@ -694,7 +706,6 @@
                 this.updateHeaderUI('normal');
             },
 
-            // Fungsionalitas Tombol Beranda (Home Reset)
             goHome: function() {
                 window.scrollTo({top:0, behavior:'smooth'});
                 this.closeSearch();
@@ -718,7 +729,6 @@
                 }, 200);
             },
 
-            // Menyembunyikan Search Box HANYA Jika Mode Sapaan Aktif
             closeSearch: function() {
                 const searchContainer = document.getElementById('search-container');
                 const input = document.getElementById('menu-search-input');
@@ -731,13 +741,12 @@
                 if(mainContainer) mainContainer.classList.remove('hidden');
                 if(resultsContainer) resultsContainer.classList.add('hidden');
                 
-                // Menentukan apakah Sapaan (Hello) sedang aktif atau tidak
                 let isHelloActive = true;
                 if (this.cachedInfo && (this.cachedInfo.status_hello || '').toUpperCase() === 'OFF') isHelloActive = false;
                 const localOpt = JSON.parse(localStorage.getItem('app_user_settings') || '{}');
                 if (localOpt.compactMode) isHelloActive = false;
                 
-                // Auto-hide HANYA terjadi jika Sapaan Hello Aktif. Jika tidak aktif, biarkan kolom pencarian tampil (sebagai pengganti hello).
+                // Jika Mode Sapaan Aktif, sembunyikan kotak search. Jika Nonaktif, biarkan search box tetap tampil (sebagai ganti sapaan).
                 if (isHelloActive && searchContainer) { 
                     searchContainer.classList.add('hidden'); 
                 }
@@ -1158,15 +1167,39 @@
             openWeb: function(url, title) { const frame = document.getElementById('web-frame'); const titleEl = document.getElementById('browser-title'); const extBtn = document.getElementById('browser-external-link'); const loader = document.getElementById('browser-loader'); frame.classList.add('opacity-0'); loader.classList.remove('hidden'); frame.src = 'about:blank'; titleEl.textContent = title || "Menjelajah"; extBtn.href = url; this.openModal('browser-modal'); setTimeout(() => { frame.src = url; }, 300); },
             handleLink: function(target) { if (!target) return; if (navigator.vibrate) navigator.vibrate(50); if (target.startsWith('ext:')) { window.open(target.substring(4), '_blank'); return; } if (target.startsWith('#')) { const command = target.substring(1).toLowerCase(); if (command === 'profil') this.openModal('profile-modal'); else if (command === 'bantuan') this.openModal('feedback-modal'); else if (command === 'install') this.openModal('install-modal'); else if (command === 'reset') this.processUpdateAnimation(true); else if (command === 'control') this.openModal('settings-modal'); else this.showAlert('info', 'Info', 'Fitur belum tersedia.'); } else if (target.startsWith('http')) { this.openWeb(target, 'Info Tautan'); } else { this.showAlert('info', 'Info', target); } },
             
-            refreshData: function(mode = 'manual') { 
-                const btn = document.getElementById('dock-refresh-btn'); const status = document.getElementById('sync-status'); const menuContainer = document.getElementById('dynamic-menu-container'); 
+            refreshData: function(showSkeleton = false) { 
+                const btn = document.getElementById('dock-refresh-btn'); 
+                const status = document.getElementById('sync-status'); 
+                const menuContainer = document.getElementById('dynamic-menu-container'); 
                 this.updateHeaderUI('syncing'); 
+                
                 let icon = document.getElementById('nav-refresh-icon'); 
                 if(icon) icon.classList.add('animate-spin'); 
                 if(status) { status.classList.remove('hidden'); status.classList.add('flex'); status.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Menghubungkan...'; lucide.createIcons(); } 
+                
                 const hasContent = menuContainer && menuContainer.children.length > 0 && !menuContainer.querySelector('#empty-state-msg'); 
-                if (mode === 'manual' || !hasContent) { const skeletonHTML = `<div class="col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div>`; if(menuContainer) menuContainer.innerHTML = skeletonHTML + skeletonHTML; } 
-                fetch(this.apiURL + "?t=" + new Date().getTime()).then(res => res.json()).then(data => { localStorage.setItem('app_cache', JSON.stringify(data)); this.render(data); if(status) { status.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Terhubung'; lucide.createIcons(); } app.updateGreeting(); app.updateHeaderUI('normal'); }).catch(e => { if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); } if (localStorage.getItem('app_cache')) { this.render(JSON.parse(localStorage.getItem('app_cache'))); } app.updateHeaderUI('offline'); }).finally(() => { setTimeout(() => { let currentIcon = document.getElementById('nav-refresh-icon'); if(currentIcon) currentIcon.classList.remove('animate-spin'); if(status) { setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000); } }, 500); }); 
+                
+                if (showSkeleton || !hasContent) { 
+                    const skeletonHTML = `<div class="col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div><div class="col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700"></div>`; 
+                    if(menuContainer) menuContainer.innerHTML = skeletonHTML; 
+                } 
+                
+                fetch(this.apiURL + "?t=" + new Date().getTime()).then(res => res.json()).then(data => { 
+                    localStorage.setItem('app_cache', JSON.stringify(data)); 
+                    this.render(data); 
+                    if(status) { status.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Terhubung'; lucide.createIcons(); } 
+                    app.updateGreeting(); app.updateHeaderUI('normal'); 
+                }).catch(e => { 
+                    if(status) { status.innerHTML = '<i data-lucide="wifi-off" class="w-3 h-3 text-red-500"></i> Offline'; lucide.createIcons(); } 
+                    if (localStorage.getItem('app_cache')) { this.render(JSON.parse(localStorage.getItem('app_cache'))); } 
+                    app.updateHeaderUI('offline'); 
+                }).finally(() => { 
+                    setTimeout(() => { 
+                        let currentIcon = document.getElementById('nav-refresh-icon'); 
+                        if(currentIcon) currentIcon.classList.remove('animate-spin'); 
+                        if(status) { setTimeout(() => { status.classList.add('hidden'); status.classList.remove('flex'); }, 2000); } 
+                    }, 500); 
+                }); 
             },
             
             loadProfile: function() { const s = localStorage.getItem('guru_profile'); const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; }; const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; }; const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }; const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }; const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); }; if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setSrc('sidebar-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); lockFields(false); } this.updateHeaderUI('normal'); },
