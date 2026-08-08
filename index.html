@@ -10,6 +10,23 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
     
+    <!-- MENCEGAH KEDIPAN PUTIH (FOUC) SAAT LOAD DI DARK MODE -->
+    <script>
+        try {
+            const saved = localStorage.getItem('theme');
+            const hour = new Date().getHours();
+            const isNight = hour >= 18 || hour < 6;
+            let isDark = false;
+            if (saved === 'dark') isDark = true;
+            else if (saved === 'light') isDark = false;
+            else if (isNight) isDark = true;
+            else isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (isDark) document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        } catch(e) {}
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -18,7 +35,6 @@
                 extend: { 
                     colors: { 
                         darkbg: '#0f172a', darkcard: '#1e293b',
-                        /* Sistem RGB Alpha baru untuk transparansi yang sempurna di Mode Gelap */
                         blue: {
                             50: 'rgba(var(--theme-50), <alpha-value>)',
                             100: 'rgba(var(--theme-100), <alpha-value>)',
@@ -33,7 +49,6 @@
                         }
                     }, 
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['ui-monospace', 'SFMono-Regular', 'monospace'] },
-                    transitionTimingFunction: { 'smooth': 'cubic-bezier(0.23, 1, 0.32, 1)', 'spring': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' },
                     animation: { 'shimmer': 'shimmer 2s infinite linear' },
                     keyframes: { shimmer: { '0%': { backgroundPosition: '-1000px 0' }, '100%': { backgroundPosition: '1000px 0' } } }
                 } 
@@ -52,18 +67,20 @@
         body.modal-open { overflow: hidden; }
         .hidden { display: none !important; }
         ::-webkit-scrollbar { width: 0px; }
-        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-        .animate-item-masuk { animation: slideUpFade 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards; opacity: 0; }
         
-        /* Modal Transitions - Disempurnakan untuk performa maksimal (60FPS) */
-        .modal-overlay { transition: opacity 0.3s ease-out; will-change: opacity; }
-        .modal-content { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; backface-visibility: hidden; transform: translateZ(0); }
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        .animate-item-masuk { animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards; opacity: 0; }
+        
+        /* TRANSISI MODAL SUPER GESIT ("SAT-SET") 60FPS */
+        .modal-overlay { transition: opacity 0.2s ease-out; will-change: opacity; }
+        .modal-content { transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
         
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
-        .banner-sticky { animation: slideDown 0.5s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .banner-sticky { animation: slideDown 0.4s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
         .input-group:focus-within .lock-icon { color: rgba(var(--theme-500), 1); }
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
@@ -80,13 +97,13 @@
         .dark .skeleton-shimmer { background: #1e293b; background-image: linear-gradient(to right, #1e293b 0%, #334155 20%, #1e293b 40%, #1e293b 100%); }
     </style>
 </head>
-<body class="bg-wave text-slate-800 dark:text-slate-200 h-screen overflow-hidden overscroll-none flex relative transition-colors duration-500">
+<body class="bg-wave text-slate-800 dark:text-slate-200 h-screen overflow-hidden overscroll-none flex relative transition-colors duration-300">
 
     <div id="main-layout" class="w-full h-full fade-in relative z-0 flex">
         
         <aside id="desktop-sidebar" class="bg-white dark:bg-darkcard border-r border-slate-200 dark:border-slate-700 flex-col z-30 shadow-lg transition-colors duration-300">
              <div class="p-8 flex flex-col items-center border-b border-slate-100 dark:border-slate-700 text-center relative">
-                <div class="relative w-28 h-28 mb-4 group cursor-pointer hover:scale-105 transition-transform duration-300 ease-smooth" onclick="app.openModal('profile-modal')">
+                <div class="relative w-28 h-28 mb-4 group cursor-pointer hover:scale-105 transition-transform duration-200" onclick="app.openModal('profile-modal')">
                     <img id="sidebar-user-photo" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" loading="lazy" decoding="async" class="w-full h-full rounded-full border-[4px] border-slate-100 dark:border-slate-700 shadow-xl object-cover relative z-10 bg-white">
                     <div class="absolute bottom-1 right-1 w-8 h-8 bg-blue-600 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center text-white shadow-md z-20"><i data-lucide="pencil" class="w-4 h-4"></i></div>
                 </div>
@@ -109,34 +126,34 @@
                 <div class="space-y-3">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Alat Cepat</p>
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="app.triggerThemeToggle({checked: !document.documentElement.classList.contains('dark')})" class="col-span-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex flex-col items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 group shadow-sm">
+                        <button onclick="app.triggerThemeToggle({checked: !document.documentElement.classList.contains('dark')})" class="col-span-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex flex-col items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95 group shadow-sm">
                             <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-600 relative text-slate-700 dark:text-yellow-400">
                                 <i data-lucide="moon" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
                                 <i data-lucide="sun" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
                             </div>
                             <span class="text-[10px] font-bold text-slate-600 dark:text-slate-200">Tema</span>
                         </button>
-                        <button onclick="app.refreshData('manual')" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all ease-smooth active:scale-95 group shadow-sm">
-                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white shadow flex items-center justify-center group-hover:rotate-180 transition-transform"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
+                        <button onclick="app.refreshData('manual')" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all active:scale-95 group shadow-sm">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 text-white shadow flex items-center justify-center group-hover:rotate-180 transition-transform duration-300"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
                             <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300">Refresh</span>
                         </button>
                     </div>
-                    <button onclick="app.openModal('settings-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="settings" class="w-4 h-4 text-slate-500"></i> Pengaturan Aplikasi</button>
-                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="life-buoy" class="w-4 h-4 text-green-500"></i> Pusat Bantuan</button>
+                    <button onclick="app.openModal('settings-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="settings" class="w-4 h-4 text-slate-500"></i> Pengaturan Aplikasi</button>
+                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="life-buoy" class="w-4 h-4 text-green-500"></i> Pusat Bantuan</button>
                 </div>
             </div>
 
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-darkcard">
-                 <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3.5 bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-800 transition-all ease-smooth active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-red-100 dark:border-red-700"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+                 <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3.5 bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-800 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-red-100 dark:border-red-700"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
                  <p class="text-[9px] text-slate-300 dark:text-slate-500 text-center mt-4 font-bold tracking-widest uppercase">Versi 7.6 Desktop</p>
             </div>
         </aside>
 
         <main class="flex-1 flex flex-col relative overflow-hidden min-w-0 bg-transparent">
-            <div id="main-scroll-area" class="flex-1 overflow-y-auto overscroll-y-auto h-full scroll-smooth relative z-10 pb-36 transition-all duration-500">
+            <div id="main-scroll-area" class="flex-1 overflow-y-auto overscroll-y-auto h-full scroll-smooth relative z-10 pb-36 transition-all duration-300">
                 
                 <div class="sticky top-0 z-30 flex flex-col items-center w-full pointer-events-none pb-2 transition-all duration-300">
-                    <div id="desktop-header" class="desktop-header-area w-full px-8 py-6 items-center justify-between pointer-events-auto border-b mb-4 transition-colors duration-500 ease-smooth bg-white dark:bg-darkbg border-slate-200 dark:border-slate-800 rounded-b-2xl shadow-sm">
+                    <div id="desktop-header" class="desktop-header-area w-full px-8 py-6 items-center justify-between pointer-events-auto border-b mb-4 transition-colors duration-300 bg-white dark:bg-darkbg border-slate-200 dark:border-slate-800 rounded-b-2xl shadow-sm">
                         <div>
                             <h2 class="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Dashboard</h2>
                             <p id="desktop-header-subtitle" class="text-sm text-slate-500 dark:text-slate-400">Selamat datang di Guru Berbagi</p>
@@ -159,7 +176,7 @@
                         <span id="app-version-header" class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-white dark:bg-slate-800 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">Versi 7.6</span>
                     </div>
 
-                    <div id="search-container" class="hidden w-full mb-2 transition-all duration-500">
+                    <div id="search-container" class="hidden w-full mb-2 transition-all duration-300">
                         <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 p-2.5 flex items-center group focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
                             <div class="p-2.5 bg-slate-50 dark:bg-slate-900 rounded-2xl text-slate-400 group-focus-within:text-blue-500 transition-colors">
                                 <i data-lucide="search" class="w-5 h-5"></i>
@@ -171,7 +188,8 @@
                         </div>
                     </div>
 
-                    <div id="greeting-card" class="bg-gradient-to-br from-blue-700 to-violet-800 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000 hidden">
+                    <!-- GREETING CARD -->
+                    <div id="greeting-card" class="bg-gradient-to-br from-blue-700 to-violet-800 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group hidden">
                         <div id="greeting-bg-icon" class="absolute -bottom-4 -right-4 w-20 h-20 md:w-32 md:h-32 rounded-full pointer-events-none z-0 opacity-40"></div>
                         <div class="absolute top-0 right-0 w-64 h-64 rounded-full bg-gradient-to-bl from-white/20 to-transparent opacity-30 -mr-10 -mt-10 pointer-events-none"></div>
                         
@@ -187,7 +205,7 @@
                             <p id="quote-author" class="text-white/70 text-[10px] md:text-xs mt-1.5 font-bold tracking-wide uppercase">-</p>
                             
                             <div id="install-inline-container" class="pwa-install-area hidden mt-6">
-                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:-translate-y-1 hover:shadow-sm hover:bg-white/30 active:scale-95 transition-all duration-300 ease-smooth text-xs md:text-sm shadow-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
+                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:-translate-y-1 hover:shadow-sm hover:bg-white/30 active:scale-95 transition-all duration-300 text-xs md:text-sm shadow-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
                             </div>
                         </div>
                     </div>
@@ -195,7 +213,7 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between px-1">
                             <div class="flex items-center gap-2.5"><div class="w-1 h-5 bg-blue-600 dark:bg-blue-500 rounded-full shadow-sm"></div><h3 class="text-base font-bold text-slate-800 dark:text-slate-200">Aplikasi & Layanan</h3></div>
-                            <span id="sync-status" class="text-[10px] bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-700 hidden items-center gap-1.5 shadow-sm"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Sinkronisasi...</span>
+                            <span id="sync-status" class="text-[10px] bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-700/50 hidden items-center gap-1.5 shadow-sm"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Sinkronisasi...</span>
                         </div>
                         
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4 grid-flow-dense auto-rows-fr">
@@ -211,12 +229,12 @@
         </main>
     </div>
 
-    <nav id="bottom-nav-container" class="fixed z-40 transition-all duration-500 ease-smooth hidden md:hidden"></nav>
+    <nav id="bottom-nav-container" class="fixed z-40 transition-all duration-300 hidden md:hidden"></nav>
 
-    <!-- Modal Pengaturan -->
+    <!-- Modal Pengaturan (Settings) - Bebas Blur untuk FPS Tinggi -->
     <div id="settings-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4 z-[70]">
-        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0 transition-opacity duration-300" onclick="app.closeModal('settings-modal')"></div>
-        <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content overflow-hidden border border-slate-200 dark:border-slate-700">
+        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('settings-modal')"></div>
+        <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full opacity-0 modal-content overflow-hidden border border-slate-200 dark:border-slate-700">
             
             <div class="px-6 py-5 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center shrink-0 shadow-sm relative z-10">
                 <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full absolute top-2 left-1/2 -translate-x-1/2 md:hidden"></div>
@@ -343,7 +361,7 @@
     <!-- Modal Profil Saya -->
     <div id="profile-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('profile-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-sm rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-6 md:p-8 transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
+        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-sm rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-6 md:p-8 transform translate-y-full opacity-0 modal-content transition-all duration-300 ease-smooth">
             <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6 md:hidden"></div>
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold text-slate-800 dark:text-white">Profil Pengguna</h3>
@@ -401,7 +419,7 @@
     <!-- Modal Submenu -->
     <div id="submenu-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('submenu-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full md:max-w-xl mx-auto rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth max-h-[85vh] flex flex-col">
+        <div class="bg-white dark:bg-slate-800 w-full md:max-w-xl mx-auto rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 transform translate-y-full opacity-0 modal-content transition-all duration-300 ease-smooth max-h-[85vh] flex flex-col">
             <div class="w-full flex justify-center pt-4 pb-2 md:hidden" onclick="app.closeModal('submenu-modal')">
                 <div class="w-16 h-1.5 bg-slate-200 dark:bg-slate-600 rounded-full cursor-pointer hover:bg-slate-300 transition"></div>
             </div>
@@ -443,7 +461,7 @@
     <!-- Modal Optimasi Sistem -->
     <div id="optimization-modal" class="modal-base fixed inset-0 hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-slate-900/80 modal-overlay opacity-0" onclick="app.closeModal('optimization-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 text-center modal-content overflow-hidden transform scale-95 opacity-0 transition-all duration-300 ease-smooth">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 text-center modal-content overflow-hidden transform opacity-0 transition-all duration-300 ease-smooth">
             <div class="w-24 h-24 mx-auto mb-6 relative z-10">
                 <div class="w-full h-full bg-blue-50 dark:bg-slate-700 rounded-full flex items-center justify-center border-4 border-blue-100 dark:border-slate-600">
                     <i data-lucide="rocket" class="w-10 h-10 text-blue-600 dark:text-blue-400"></i>
@@ -461,8 +479,8 @@
     
     <!-- Modal Flyer / Pop Up Info -->
     <div id="flyer-modal" class="modal-base fixed inset-0 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-6 text-center transform scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
+        <div class="absolute inset-0 bg-slate-900/80 modal-overlay opacity-0" onclick="app.closeModal('flyer-modal')"></div>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-6 text-center transform opacity-0 modal-content transition-all duration-300 ease-smooth">
             <button onclick="app.closeModal('flyer-modal')" class="absolute top-4 right-4 p-2 bg-slate-100 dark:bg-slate-700 rounded-full hover:bg-slate-200 transition shadow-sm"><i data-lucide="x" class="w-5 h-5"></i></button>
             <h3 id="flyer-title" class="text-xl font-extrabold text-slate-900 dark:text-white mb-2 mt-2">Info</h3>
             <div id="flyer-image-container" class="my-4 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 hidden">
@@ -476,7 +494,7 @@
     <!-- Modal Bantuan -->
     <div id="feedback-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('feedback-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 overflow-hidden transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
+        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 overflow-hidden transform translate-y-full opacity-0 modal-content transition-all duration-300 ease-smooth">
             <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mt-4 mb-2 md:hidden"></div>
             <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-900">
                 <div>
@@ -522,7 +540,7 @@
     <!-- Dialog General Kustom -->
     <div id="dialog-modal" class="modal-base fixed inset-0 hidden flex items-center justify-center p-4" style="z-index: 9999;">
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('dialog-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 text-center transform scale-95 opacity-0 modal-content transition-all duration-300 ease-smooth">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 text-center transform opacity-0 modal-content transition-all duration-300 ease-smooth">
             <div id="dialog-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 border border-slate-100 dark:border-slate-700 bg-blue-50 text-blue-600 shadow-sm"><i id="dialog-icon" data-lucide="info" class="w-10 h-10"></i></div>
             <h3 id="dialog-title" class="text-xl font-extrabold text-slate-800 dark:text-white mb-2">Info</h3>
             <p id="dialog-msg" class="text-sm text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">...</p>
@@ -551,7 +569,7 @@
     <!-- Modal Instalasi -->
     <div id="install-modal" class="modal-base fixed inset-0 hidden flex items-end justify-center p-0 md:p-4">
         <div class="absolute inset-0 bg-slate-900/60 modal-overlay opacity-0" onclick="app.closeModal('install-modal')"></div>
-        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 transform translate-y-full md:translate-y-0 md:scale-95 opacity-0 modal-content text-center transition-all duration-300 ease-smooth">
+        <div class="bg-white dark:bg-slate-800 w-full md:w-auto md:max-w-md rounded-t-[2.5rem] md:rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 relative z-10 p-8 transform translate-y-full opacity-0 modal-content text-center transition-all duration-300 ease-smooth">
             <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto -mt-4 mb-6"></div>
             <div class="w-20 h-20 bg-slate-50 dark:bg-slate-700 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-200 dark:border-slate-600">
                 <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" loading="lazy" decoding="async" class="w-16 h-16 rounded-2xl">
@@ -624,10 +642,6 @@
                 const compactToggle = document.getElementById('toggle-compact-mode');
                 if (compactToggle) compactToggle.checked = localOpt.compactMode;
                 
-                const isDark = document.documentElement.classList.contains('dark');
-                const darkToggle = document.getElementById('toggle-dark-mode');
-                if (darkToggle) darkToggle.checked = isDark;
-
                 this.setAccent(localOpt.accentColor || 'default', false);
                 this.setNavStyle(localOpt.navStyle || 'dock', false);
             },
@@ -648,7 +662,6 @@
             },
 
             setAccent: function(color, save = true) {
-                // Konfigurasi ini mendefinisikan ulang variabel CSS agar transparansi berfungsi sempurna di Tailwind
                 const palettes = {
                     blue: "--theme-50: 239, 246, 255; --theme-100: 219, 234, 254; --theme-200: 191, 219, 254; --theme-300: 147, 197, 253; --theme-400: 96, 165, 250; --theme-500: 59, 130, 246; --theme-600: 37, 99, 235; --theme-700: 29, 78, 216; --theme-800: 30, 64, 175; --theme-900: 30, 58, 138;",
                     emerald: "--theme-50: 236, 253, 245; --theme-100: 209, 250, 229; --theme-200: 167, 243, 208; --theme-300: 110, 231, 183; --theme-400: 52, 211, 153; --theme-500: 16, 185, 129; --theme-600: 5, 150, 105; --theme-700: 4, 120, 87; --theme-800: 6, 95, 70; --theme-900: 6, 78, 59;",
@@ -877,7 +890,16 @@
                 }
             },
 
-            initTheme: function() { const saved = localStorage.getItem('theme'); const hour = new Date().getHours(); const isNight = hour >= 18 || hour < 6; let isDark = false; if (saved === 'dark') { isDark = true; } else if (saved === 'light') { isDark = false; } else if (isNight) { isDark = true; } else { isDark = window.matchMedia('(prefers-color-scheme: dark)').matches; } if (isDark) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); this.updateStatusBar(isDark); },
+            initTheme: function() {
+                // Diambil dari class <html> yang di-set di tag <head> untuk menghindari Glitch!
+                const isDark = document.documentElement.classList.contains('dark');
+                this.updateStatusBar(isDark); 
+                
+                // Binding status toggle di dalam pengaturan
+                const darkToggle = document.getElementById('toggle-dark-mode');
+                if (darkToggle) darkToggle.checked = isDark;
+            },
+            
             updateStatusBar: function(isDark) { 
                 const color = isDark ? '#0f172a' : '#f8fafc';
                 const metaTags = document.querySelectorAll('meta[name="theme-color"]');
@@ -1246,7 +1268,6 @@
             confirmLogout: function() { this.showAlert('error','Keluar?','Data profil lokal akan dihapus.',()=>{ localStorage.removeItem('guru_profile'); location.reload(); }); },
             processUpdateAnimation: async function(isRocket = false) { if(isRocket) app.closeModal('optimization-modal'); app.closeModal('settings-modal'); const overlay = document.getElementById('update-overlay'); const bar = document.getElementById('update-progress-bar'); const txt = document.getElementById('update-status-text'); const pct = document.getElementById('update-percent'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 50); const updateStep = (text, percent, delay) => { return new Promise(resolve => { txt.innerText = text; bar.style.width = percent + '%'; pct.innerText = percent + '%'; setTimeout(resolve, delay); }); }; await updateStep("Memeriksa Koneksi...", 15, 800); try { txt.innerText = "Membersihkan Cache Lama..."; if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); for (let r of regs) await r.unregister(); } } catch (e) { console.log("Cache error", e); } await updateStep("Sinkronisasi Database...", 45, 1000); await updateStep("Menyusun Ulang Tampilan...", 75, 800); await updateStep("Finalisasi Optimasi...", 100, 600); txt.innerText = "Selesai! Memuat Ulang..."; txt.classList.add("text-green-400"); setTimeout(() => { window.location.reload(true); }, 500); },
             
-            // OPTIMASI RENDER MODAL TINGKAT LANJUT (Synchronous Repaint)
             openModal: function(id) { 
                 const el = document.getElementById(id); if (!el) return; 
                 document.body.classList.add('modal-open'); 
@@ -1254,7 +1275,7 @@
                 
                 if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } 
                 
-                // Memaksa browser menghitung ulang tata letak sebelum menambahkan kelas transisi
+                // Memicu sinkronisasi gaya untuk menghilangkan lag (Force Repaint)
                 void el.offsetWidth;
                 
                 const overlay = el.querySelector('.modal-overlay'); 
@@ -1280,7 +1301,7 @@
                     const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'settings-modal', 'flyer-modal'].some(k => id.includes(k)); 
                     if (isHybrid) { content.classList.add('translate-y-full', 'scale-95'); } else { content.classList.add('scale-95'); } 
                 } 
-                setTimeout(() => { el.classList.add('hidden'); }, 300); 
+                setTimeout(() => { el.classList.add('hidden'); }, 250); // Sesuaikan dengan durasi transisi 0.25s
             },
             
             showToast: function() { const x = document.getElementById("exit-toast"); if(x) { x.classList.add("show"); setTimeout(function(){ x.classList.remove("show"); }, 2000); } },
