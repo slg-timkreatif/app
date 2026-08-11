@@ -1,12 +1,8 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.timkreatif.guruberbagi",
-      "sha256_cert_fingerprints": [
-        "D9:B6:BB:FF:4E:99:79:D8:1E:B2:90:E6:E6:86:70:B4:33:13:23:CF:34:CB:67:46:FB:6C:32:B0:D8:7B:8E:70"
-      ]
-    }
-  }
-]
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.slg_timkreatif.twa",
+        "sha256_cert_fingerprints": ["F7:9E:C5:19:76:D5:B5:46:66:74:FB:E6:13:02:03:83:FE:7E:46:1E:81:E1:82:05:91:D0:56:AB:E2:46:57:B3"]
+      }
+    }]
