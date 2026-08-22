@@ -10,7 +10,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
     
-    <!-- MENCEGAH KEDIPAN PUTIH (FOUC) SAAT LOAD DI DARK MODE -->
+    <!-- Mencegah FOUC (Kedipan Putih) saat Dark Mode -->
     <script>
         try {
             const saved = localStorage.getItem('theme');
@@ -36,21 +36,13 @@
                     colors: { 
                         darkbg: '#0f172a', darkcard: '#1e293b',
                         blue: {
-                            50: 'rgba(var(--theme-50), <alpha-value>)',
-                            100: 'rgba(var(--theme-100), <alpha-value>)',
-                            200: 'rgba(var(--theme-200), <alpha-value>)',
-                            300: 'rgba(var(--theme-300), <alpha-value>)',
-                            400: 'rgba(var(--theme-400), <alpha-value>)',
-                            500: 'rgba(var(--theme-500), <alpha-value>)',
-                            600: 'rgba(var(--theme-600), <alpha-value>)',
-                            700: 'rgba(var(--theme-700), <alpha-value>)',
-                            800: 'rgba(var(--theme-800), <alpha-value>)',
+                            50: 'rgba(var(--theme-50), <alpha-value>)', 100: 'rgba(var(--theme-100), <alpha-value>)', 200: 'rgba(var(--theme-200), <alpha-value>)',
+                            300: 'rgba(var(--theme-300), <alpha-value>)', 400: 'rgba(var(--theme-400), <alpha-value>)', 500: 'rgba(var(--theme-500), <alpha-value>)',
+                            600: 'rgba(var(--theme-600), <alpha-value>)', 700: 'rgba(var(--theme-700), <alpha-value>)', 800: 'rgba(var(--theme-800), <alpha-value>)',
                             900: 'rgba(var(--theme-900), <alpha-value>)',
                         }
                     }, 
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['ui-monospace', 'SFMono-Regular', 'monospace'] },
-                    animation: { 'shimmer': 'shimmer 2s infinite linear' },
-                    keyframes: { shimmer: { '0%': { backgroundPosition: '-1000px 0' }, '100%': { backgroundPosition: '1000px 0' } } }
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
                 } 
             }
         }
@@ -68,33 +60,46 @@
         .hidden { display: none !important; }
         ::-webkit-scrollbar { width: 0px; }
         
-        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(15px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
         .animate-item-masuk { animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards; opacity: 0; }
         
-        /* TRANSISI MODAL SUPER GESIT ("SAT-SET") 60FPS */
+        /* Modal Transitions 60FPS Hardware Accelerated */
         .modal-overlay { transition: opacity 0.2s ease-out; will-change: opacity; }
         .modal-content { transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform, opacity; transform: translateZ(0); backface-visibility: hidden; }
         
         @media all and (display-mode: standalone) { .pwa-install-area { display: none !important; } }
         .banner-sticky { animation: slideDown 0.4s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
-        .input-group:focus-within .lock-icon { color: rgba(var(--theme-500), 1); }
+        
         .marquee-container { overflow: hidden; white-space: nowrap; position: relative; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
-        .marquee-container:hover .marquee-text { animation-play-state: paused; cursor: pointer; } 
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        
         .bg-wave { background-color: #f8fafc; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='40' viewBox='0 0 100 40'%3E%3Cpath d='M0,20 Q25,0 50,20 T100,20' fill='none' stroke='%23cbd5e1' stroke-width='1' stroke-opacity='0.4'/%3E%3C/svg%3E"); background-size: 100px 40px; }
         .dark .bg-wave { background-color: #0f172a; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='40' viewBox='0 0 100 40'%3E%3Cpath d='M0,20 Q25,0 50,20 T100,20' fill='none' stroke='%23334155' stroke-width='1' stroke-opacity='0.4'/%3E%3C/svg%3E"); }
+        
         #main-layout { flex-direction: column; }
         #desktop-sidebar { display: none; }
         .desktop-header-area { display: none; }
-        @media (min-width: 768px) { #main-layout { flex-direction: row !important; } #desktop-sidebar { display: flex !important; width: 300px !important; flex-shrink: 0 !important; height: 100vh !important; position: sticky !important; top: 0 !important; } .desktop-header-area { display: flex !important; } aside ::-webkit-scrollbar { width: 4px; } aside ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; } .dark aside ::-webkit-scrollbar-thumb { background: #334155; } }
+        @media (min-width: 768px) { #main-layout { flex-direction: row !important; } #desktop-sidebar { display: flex !important; width: 300px !important; flex-shrink: 0 !important; height: 100vh !important; position: sticky !important; top: 0 !important; } .desktop-header-area { display: flex !important; } }
         .modal-base { z-index: 60; }
-        .skeleton-shimmer { background: #e2e8f0; background-image: linear-gradient(to right, #e2e8f0 0%, #cbd5e1 20%, #e2e8f0 40%, #e2e8f0 100%); background-repeat: no-repeat; background-size: 800px 100%; }
-        .dark .skeleton-shimmer { background: #1e293b; background-image: linear-gradient(to right, #1e293b 0%, #334155 20%, #1e293b 40%, #1e293b 100%); }
+        
+        /* CSS Shimmer Solid Rendering (No Alpha Blend) */
+        @keyframes customShimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+        .skeleton-shimmer {
+            background-color: #e2e8f0;
+            background-image: linear-gradient(to right, #e2e8f0 0%, #cbd5e1 20%, #e2e8f0 40%, #e2e8f0 100%);
+            background-repeat: no-repeat;
+            background-size: 800px 100%;
+            animation: customShimmer 2s infinite linear;
+        }
+        .dark .skeleton-shimmer {
+            background-color: #1e293b;
+            background-image: linear-gradient(to right, #1e293b 0%, #334155 20%, #1e293b 40%, #1e293b 100%);
+        }
     </style>
 </head>
 <body class="bg-wave text-slate-800 dark:text-slate-200 h-screen overflow-hidden overscroll-none flex relative transition-colors duration-300">
@@ -126,25 +131,25 @@
                 <div class="space-y-3">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">Alat Cepat</p>
                     <div class="grid grid-cols-2 gap-3">
-                        <button onclick="app.triggerThemeToggle({checked: !document.documentElement.classList.contains('dark')})" class="col-span-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex flex-col items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95 group shadow-sm">
+                        <button onclick="app.triggerThemeToggle({checked: !document.documentElement.classList.contains('dark')})" class="col-span-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex flex-col items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 group shadow-sm">
                             <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-600 relative text-slate-700 dark:text-yellow-400">
                                 <i data-lucide="moon" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0 dark:opacity-0"></i>
                                 <i data-lucide="sun" class="w-4 h-4 absolute inset-0 m-auto transition-all rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100"></i>
                             </div>
                             <span class="text-[10px] font-bold text-slate-600 dark:text-slate-200">Tema</span>
                         </button>
-                        <button onclick="app.refreshData('manual')" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all active:scale-95 group shadow-sm">
+                        <button onclick="app.refreshData('manual')" class="col-span-1 p-3 rounded-xl bg-blue-50 dark:bg-blue-900 border border-blue-100 dark:border-blue-700 flex flex-col items-center justify-center gap-2 hover:bg-blue-100 dark:hover:bg-blue-800 transition-all ease-smooth active:scale-95 group shadow-sm">
                             <div class="w-8 h-8 rounded-full bg-blue-600 text-white shadow flex items-center justify-center group-hover:rotate-180 transition-transform duration-300"><i data-lucide="refresh-cw" class="w-4 h-4"></i></div>
                             <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300">Refresh</span>
                         </button>
                     </div>
-                    <button onclick="app.openModal('settings-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="settings" class="w-4 h-4 text-slate-500"></i> Pengaturan Aplikasi</button>
-                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="life-buoy" class="w-4 h-4 text-green-500"></i> Pusat Bantuan</button>
+                    <button onclick="app.openModal('settings-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="settings" class="w-4 h-4 text-slate-500"></i> Pengaturan Aplikasi</button>
+                    <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-600 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600 shadow-sm"><i data-lucide="life-buoy" class="w-4 h-4 text-green-500"></i> Pusat Bantuan</button>
                 </div>
             </div>
 
             <div class="p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-darkcard">
-                 <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3.5 bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-800 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-red-100 dark:border-red-700"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+                 <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3.5 bg-red-50 dark:bg-red-900 text-red-600 dark:text-red-300 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-800 transition-all ease-smooth active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-red-100 dark:border-red-700"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
                  <p class="text-[9px] text-slate-300 dark:text-slate-500 text-center mt-4 font-bold tracking-widest uppercase">Versi 7.6 Desktop</p>
             </div>
         </aside>
@@ -205,7 +210,7 @@
                             <p id="quote-author" class="text-white/70 text-[10px] md:text-xs mt-1.5 font-bold tracking-wide uppercase">-</p>
                             
                             <div id="install-inline-container" class="pwa-install-area hidden mt-6">
-                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:-translate-y-1 hover:shadow-sm hover:bg-white/30 active:scale-95 transition-all duration-300 text-xs md:text-sm shadow-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
+                                <button onclick="app.showInstallPrompt()" class="flex items-center gap-2 bg-white/20 border border-white/20 text-white font-bold py-2.5 px-5 rounded-xl hover:-translate-y-1 hover:shadow-sm hover:bg-white/30 active:scale-95 transition-all duration-300 ease-smooth text-xs md:text-sm shadow-sm"><i data-lucide="download" class="w-4 h-4"></i> Pasang Aplikasi</button>
                             </div>
                         </div>
                     </div>
@@ -213,7 +218,7 @@
                     <div class="space-y-4">
                         <div class="flex items-center justify-between px-1">
                             <div class="flex items-center gap-2.5"><div class="w-1 h-5 bg-blue-600 dark:bg-blue-500 rounded-full shadow-sm"></div><h3 class="text-base font-bold text-slate-800 dark:text-slate-200">Aplikasi & Layanan</h3></div>
-                            <span id="sync-status" class="text-[10px] bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-700/50 hidden items-center gap-1.5 shadow-sm"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Sinkronisasi...</span>
+                            <span id="sync-status" class="text-[10px] bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full border border-blue-100 dark:border-slate-700 hidden items-center gap-1.5 shadow-sm"><i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i> Sinkronisasi...</span>
                         </div>
                         
                         <div id="dynamic-menu-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4 grid-flow-dense auto-rows-fr">
@@ -231,7 +236,7 @@
 
     <nav id="bottom-nav-container" class="fixed z-40 transition-all duration-300 hidden md:hidden"></nav>
 
-    <!-- Modal Pengaturan (Settings) - Bebas Blur untuk FPS Tinggi -->
+    <!-- Modal Pengaturan -->
     <div id="settings-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4 z-[70]">
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('settings-modal')"></div>
         <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full opacity-0 modal-content overflow-hidden border border-slate-200 dark:border-slate-700">
@@ -393,24 +398,24 @@
                 <div class="space-y-3">
                     <div class="relative input-group">
                         <label class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 block">Nama Lengkap</label>
-                        <input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 pr-10 py-3 text-sm font-medium text-slate-800 dark:text-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-70 disabled:bg-slate-100 dark:disabled:bg-slate-800/80 disabled:border-transparent disabled:cursor-not-allowed shadow-sm">
+                        <input type="text" id="input-nama" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 pr-10 py-3 text-sm font-medium text-slate-800 dark:text-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-70 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:border-transparent disabled:cursor-not-allowed shadow-sm">
                         <i data-lucide="lock" class="absolute right-3.5 bottom-3.5 w-4 h-4 text-slate-400 hidden lock-icon"></i>
                     </div>
                     <div class="relative input-group">
                         <label class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 block">Unit Kerja</label>
-                        <input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 pr-10 py-3 text-sm font-medium text-slate-800 dark:text-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-70 disabled:bg-slate-100 dark:disabled:bg-slate-800/80 disabled:border-transparent disabled:cursor-not-allowed shadow-sm">
+                        <input type="text" id="input-instansi" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 pr-10 py-3 text-sm font-medium text-slate-800 dark:text-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-70 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:border-transparent disabled:cursor-not-allowed shadow-sm">
                         <i data-lucide="lock" class="absolute right-3.5 bottom-3.5 w-4 h-4 text-slate-400 hidden lock-icon"></i>
                     </div>
                     <div class="relative input-group">
                         <label class="text-[10px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5 ml-1 block">Jabatan</label>
-                        <input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 pr-10 py-3 text-sm font-medium text-slate-800 dark:text-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-70 disabled:bg-slate-100 dark:disabled:bg-slate-800/80 disabled:border-transparent disabled:cursor-not-allowed shadow-sm">
+                        <input type="text" id="input-jabatan" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 pr-10 py-3 text-sm font-medium text-slate-800 dark:text-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all disabled:opacity-70 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:border-transparent disabled:cursor-not-allowed shadow-sm">
                         <i data-lucide="lock" class="absolute right-3.5 bottom-3.5 w-4 h-4 text-slate-400 hidden lock-icon"></i>
                     </div>
                 </div>
                 
                 <div class="pt-4">
                     <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 ease-smooth flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
-                    <button type="button" onclick="app.confirmLogout()" class="w-full mt-3 py-3.5 text-xs font-bold text-red-600 bg-red-50 dark:text-red-300 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Akun</button>
+                    <button type="button" onclick="app.confirmLogout()" class="w-full mt-3 py-3.5 text-xs font-bold text-red-600 bg-red-50 dark:text-red-300 dark:bg-red-900 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-800 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Akun</button>
                 </div>
             </form>
         </div>
@@ -589,7 +594,6 @@
             isSyncing: false,
 
             init: function() {
-                this.initTheme(); 
                 this.loadLocalSettings();
                 lucide.createIcons(); 
                 this.loadProfile();
@@ -618,7 +622,7 @@
                 
                 setTimeout(() => {
                     this.refreshData(!hasValidCache); 
-                }, 500);
+                }, 150);
                 
                 this.trackUser(); this.setupInstallPrompt();
                 this.updateGreeting(); 
@@ -642,6 +646,10 @@
                 const compactToggle = document.getElementById('toggle-compact-mode');
                 if (compactToggle) compactToggle.checked = localOpt.compactMode;
                 
+                const isDark = document.documentElement.classList.contains('dark');
+                const darkToggle = document.getElementById('toggle-dark-mode');
+                if (darkToggle) darkToggle.checked = isDark;
+
                 this.setAccent(localOpt.accentColor || 'default', false);
                 this.setNavStyle(localOpt.navStyle || 'dock', false);
             },
@@ -650,7 +658,9 @@
                 const isDark = checkbox.checked;
                 if (isDark) { document.documentElement.classList.add('dark'); localStorage.setItem('theme', 'dark'); } 
                 else { document.documentElement.classList.remove('dark'); localStorage.setItem('theme', 'light'); }
-                this.updateStatusBar(isDark);
+                const color = isDark ? '#0f172a' : '#f8fafc';
+                const metaTags = document.querySelectorAll('meta[name="theme-color"]');
+                metaTags.forEach(tag => tag.setAttribute('content', color));
             },
 
             triggerCompactMode: function(checkbox) {
@@ -838,7 +848,7 @@
                 let userJabatan = "";
                 if (savedProfile) { userJabatan = (JSON.parse(savedProfile).jabatan || "").toLowerCase().trim(); }
 
-                if(deskHeader) deskHeader.className = "desktop-header-area w-full px-8 py-6 items-center justify-between pointer-events-auto border-b mb-4 transition-colors duration-500 ease-smooth bg-white dark:bg-darkbg border-slate-200 dark:border-slate-800 rounded-b-2xl shadow-sm";
+                if(deskHeader) deskHeader.className = "desktop-header-area w-full px-8 py-6 items-center justify-between pointer-events-auto border-b mb-4 transition-colors duration-300 bg-white dark:bg-darkbg border-slate-200 dark:border-slate-800 rounded-b-2xl shadow-sm";
 
                 const localOpt = JSON.parse(localStorage.getItem('app_user_settings') || '{"navStyle": "dock"}');
                 const style = localOpt.navStyle || 'dock';
@@ -856,9 +866,9 @@
 
                     let baseClass = "";
                     if (style === 'bar') {
-                        baseClass = "fixed bottom-0 left-0 w-full z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05)] px-4 pt-1.5 pb-3 md:hidden flex items-end justify-between transition-all duration-500 ease-smooth rounded-t-[1.75rem] ";
+                        baseClass = "fixed bottom-0 left-0 w-full z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05)] px-4 pt-1.5 pb-3 md:hidden flex items-end justify-between transition-all duration-300 ease-smooth rounded-t-[1.75rem] ";
                     } else { 
-                        baseClass = "fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm bg-white/95 dark:bg-darkbg/95 backdrop-blur-md border-[2px] shadow-2xl rounded-[2rem] px-3 py-1.5 flex items-center justify-between transition-all duration-500 ease-smooth md:hidden ";
+                        baseClass = "fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-sm bg-white/95 dark:bg-darkbg/95 backdrop-blur-md border-[2px] shadow-2xl rounded-[2rem] px-3 py-1.5 flex items-center justify-between transition-all duration-300 ease-smooth md:hidden ";
                     }
 
                     if (status === 'offline') {
@@ -890,22 +900,6 @@
                 }
             },
 
-            initTheme: function() {
-                // Diambil dari class <html> yang di-set di tag <head> untuk menghindari Glitch!
-                const isDark = document.documentElement.classList.contains('dark');
-                this.updateStatusBar(isDark); 
-                
-                // Binding status toggle di dalam pengaturan
-                const darkToggle = document.getElementById('toggle-dark-mode');
-                if (darkToggle) darkToggle.checked = isDark;
-            },
-            
-            updateStatusBar: function(isDark) { 
-                const color = isDark ? '#0f172a' : '#f8fafc';
-                const metaTags = document.querySelectorAll('meta[name="theme-color"]');
-                metaTags.forEach(tag => tag.setAttribute('content', color));
-            },
-            
             updateGreeting: function() {
                 const hour = new Date().getHours(); 
                 const card = document.getElementById('greeting-card'); 
@@ -939,9 +933,10 @@
                         if (isKS && jabatanText.toLowerCase().includes("guru professional")) { jabatanText = "Kepala Sekolah"; }
                         roleText.innerText = `${jabatanText} - ${instansiText}`;
                         badgeStatus.classList.remove('hidden');
-                        if (isKS) badgeStatus.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-indigo-300/30 bg-indigo-500/20 text-indigo-100 mb-3 shadow-sm drop-shadow-sm";
-                        else if (isGuru) badgeStatus.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-blue-300/30 bg-blue-500/20 text-blue-100 mb-3 shadow-sm drop-shadow-sm";
-                        else badgeStatus.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-300/30 bg-slate-500/20 text-slate-100 mb-3 shadow-sm drop-shadow-sm";
+                        
+                        if (isKS) badgeStatus.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-indigo-300/30 dark:border-indigo-700 bg-indigo-500/20 dark:bg-indigo-900 text-indigo-100 mb-3 shadow-sm drop-shadow-sm";
+                        else if (isGuru) badgeStatus.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-blue-300/30 dark:border-blue-700 bg-blue-500/20 dark:bg-blue-900 text-blue-100 mb-3 shadow-sm drop-shadow-sm";
+                        else badgeStatus.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-300/30 dark:border-slate-700 bg-slate-500/20 dark:bg-slate-800 text-slate-100 mb-3 shadow-sm drop-shadow-sm";
                     } else { badgeStatus.classList.add('hidden'); }
                 }
                 
@@ -953,7 +948,7 @@
                     greet = `Selamat Siang, ${name}`; theme = "from-blue-500 to-cyan-400"; timeKey = "siang";
                     planetStyle = "background: radial-gradient(circle at 30% 30%, #ffffff, #cffafe, #22d3ee);"; 
                 } else if (hour >= 15 && hour < 18) { 
-                    greet = `Selamat Sore, ${name}`; theme = "from-blue-500 to-blue-700"; timeKey = "sore"; 
+                    greet = `Selamat Sore, ${name}`; theme = "from-indigo-500 to-purple-500"; timeKey = "sore";
                     planetStyle = "background: radial-gradient(circle at 30% 30%, #fbcfe8, #f472b6, #db2777);"; 
                 } else { 
                     greet = `Selamat Malam, ${name}`; theme = "from-slate-800 to-slate-900"; timeKey = "malam";
@@ -993,7 +988,7 @@
                         } else {
                             card.style.backgroundImage = '';
                             if(iconContainer) { iconContainer.style.display = 'block'; iconContainer.style = planetStyle; }
-                            card.className = `bg-gradient-to-br ${theme === 'from-blue-500 to-blue-700' || theme.includes('orange') || theme.includes('slate') ? theme : 'from-blue-600 to-blue-800'} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000 border border-slate-200/10 dark:border-slate-700/50`; 
+                            card.className = `bg-gradient-to-br ${theme} dark:from-slate-800 dark:to-slate-900 rounded-[2rem] p-5 sm:p-6 md:p-10 text-white shadow-md relative overflow-hidden group transition-all duration-1000 border border-slate-200/10 dark:border-slate-700/50`; 
                         }
                     }
                 } else {
@@ -1002,31 +997,34 @@
                 }
             },
 
+            getBentoStyle: function(color) {
+                const cMap = {
+                    red: { b: 'bg-red-50', i: 'bg-red-500', a: 'group-hover:text-red-500 text-slate-300 dark:text-slate-600' },
+                    orange: { b: 'bg-orange-50', i: 'bg-orange-500', a: 'group-hover:text-orange-500 text-slate-300 dark:text-slate-600' },
+                    amber: { b: 'bg-amber-50', i: 'bg-amber-500', a: 'group-hover:text-amber-500 text-slate-300 dark:text-slate-600' },
+                    yellow: { b: 'bg-yellow-50', i: 'bg-yellow-500', a: 'group-hover:text-yellow-500 text-slate-300 dark:text-slate-600' },
+                    lime: { b: 'bg-lime-50', i: 'bg-lime-500', a: 'group-hover:text-lime-500 text-slate-300 dark:text-slate-600' },
+                    green: { b: 'bg-green-50', i: 'bg-green-500', a: 'group-hover:text-green-500 text-slate-300 dark:text-slate-600' },
+                    emerald: { b: 'bg-emerald-50', i: 'bg-emerald-500', a: 'group-hover:text-emerald-500 text-slate-300 dark:text-slate-600' },
+                    teal: { b: 'bg-teal-50', i: 'bg-teal-500', a: 'group-hover:text-teal-500 text-slate-300 dark:text-slate-600' },
+                    cyan: { b: 'bg-cyan-50', i: 'bg-cyan-500', a: 'group-hover:text-cyan-500 text-slate-300 dark:text-slate-600' },
+                    sky: { b: 'bg-sky-50', i: 'bg-sky-500', a: 'group-hover:text-sky-500 text-slate-300 dark:text-slate-600' },
+                    blue: { b: 'bg-blue-50', i: 'bg-blue-500', a: 'group-hover:text-blue-500 text-slate-300 dark:text-slate-600' },
+                    indigo: { b: 'bg-indigo-50', i: 'bg-indigo-500', a: 'group-hover:text-indigo-500 text-slate-300 dark:text-slate-600' },
+                    violet: { b: 'bg-violet-50', i: 'bg-violet-500', a: 'group-hover:text-violet-500 text-slate-300 dark:text-slate-600' },
+                    purple: { b: 'bg-purple-50', i: 'bg-purple-500', a: 'group-hover:text-purple-500 text-slate-300 dark:text-slate-600' },
+                    fuchsia: { b: 'bg-fuchsia-50', i: 'bg-fuchsia-500', a: 'group-hover:text-fuchsia-500 text-slate-300 dark:text-slate-600' },
+                    pink: { b: 'bg-pink-50', i: 'bg-pink-500', a: 'group-hover:text-pink-500 text-slate-300 dark:text-slate-600' },
+                    rose: { b: 'bg-rose-50', i: 'bg-rose-500', a: 'group-hover:text-rose-500 text-slate-300 dark:text-slate-600' },
+                    slate: { b: 'bg-slate-50', i: 'bg-slate-500', a: 'group-hover:text-slate-500 text-slate-300 dark:text-slate-600' }
+                };
+                return cMap[color] || cMap.blue;
+            },
+
             generateMenuHTML: function(items, isSearch = false) {
                 let tempHTML = '';
                 const localOpt = JSON.parse(localStorage.getItem('app_user_settings') || '{"accentColor": "default"}');
                 const isColorful = (localOpt.accentColor === 'default');
-
-                const cMap = {
-                    red: { b: 'bg-red-500', w: 'bg-red-50 dark:bg-red-900 border-red-100 dark:border-red-700 text-red-500 dark:text-red-400', i: 'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 border-red-200 dark:border-red-700/50 group-hover:bg-red-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-red-600 dark:group-hover:text-red-400' },
-                    orange: { b: 'bg-orange-500', w: 'bg-orange-50 dark:bg-orange-900 border-orange-100 dark:border-orange-700 text-orange-500 dark:text-orange-400', i: 'bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-700/50 group-hover:bg-orange-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-orange-600 dark:group-hover:text-orange-400' },
-                    amber: { b: 'bg-amber-500', w: 'bg-amber-50 dark:bg-amber-900 border-amber-100 dark:border-amber-700 text-amber-500 dark:text-amber-400', i: 'bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-700/50 group-hover:bg-amber-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-amber-600 dark:group-hover:text-amber-400' },
-                    yellow: { b: 'bg-yellow-500', w: 'bg-yellow-50 dark:bg-yellow-900 border-yellow-100 dark:border-yellow-700 text-yellow-500 dark:text-yellow-400', i: 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-700/50 group-hover:bg-yellow-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-yellow-600 dark:group-hover:text-yellow-400' },
-                    lime: { b: 'bg-lime-500', w: 'bg-lime-50 dark:bg-lime-900 border-lime-100 dark:border-lime-700 text-lime-500 dark:text-lime-400', i: 'bg-lime-100 dark:bg-lime-900/50 text-lime-600 dark:text-lime-400 border-lime-200 dark:border-lime-700/50 group-hover:bg-lime-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-lime-600 dark:group-hover:text-lime-400' },
-                    green: { b: 'bg-green-500', w: 'bg-green-50 dark:bg-green-900 border-green-100 dark:border-green-700 text-green-500 dark:text-green-400', i: 'bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 border-green-200 dark:border-green-700/50 group-hover:bg-green-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-green-600 dark:group-hover:text-green-400' },
-                    emerald: { b: 'bg-emerald-500', w: 'bg-emerald-50 dark:bg-emerald-900 border-emerald-100 dark:border-emerald-700 text-emerald-500 dark:text-emerald-400', i: 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700/50 group-hover:bg-emerald-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400' },
-                    teal: { b: 'bg-teal-500', w: 'bg-teal-50 dark:bg-teal-900 border-teal-100 dark:border-teal-700 text-teal-500 dark:text-teal-400', i: 'bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400 border-teal-200 dark:border-teal-700/50 group-hover:bg-teal-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-teal-600 dark:group-hover:text-teal-400' },
-                    cyan: { b: 'bg-cyan-500', w: 'bg-cyan-50 dark:bg-cyan-900 border-cyan-100 dark:border-cyan-700 text-cyan-500 dark:text-cyan-400', i: 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-700/50 group-hover:bg-cyan-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-cyan-600 dark:group-hover:text-cyan-400' },
-                    sky: { b: 'bg-sky-500', w: 'bg-sky-50 dark:bg-sky-900 border-sky-100 dark:border-sky-700 text-sky-500 dark:text-sky-400', i: 'bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400 border-sky-200 dark:border-sky-700/50 group-hover:bg-sky-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-sky-600 dark:group-hover:text-sky-400' },
-                    blue: { b: 'bg-blue-500', w: 'bg-blue-50 dark:bg-blue-900 border-blue-100 dark:border-blue-700 text-blue-500 dark:text-blue-400', i: 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-700/50 group-hover:bg-blue-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-blue-600 dark:group-hover:text-blue-400' },
-                    indigo: { b: 'bg-indigo-500', w: 'bg-indigo-50 dark:bg-indigo-900 border-indigo-100 dark:border-indigo-700 text-indigo-500 dark:text-indigo-400', i: 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-700/50 group-hover:bg-indigo-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-indigo-600 dark:group-hover:text-indigo-400' },
-                    violet: { b: 'bg-violet-500', w: 'bg-violet-50 dark:bg-violet-900 border-violet-100 dark:border-violet-700 text-violet-500 dark:text-violet-400', i: 'bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-700/50 group-hover:bg-violet-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-violet-600 dark:group-hover:text-violet-400' },
-                    purple: { b: 'bg-purple-500', w: 'bg-purple-50 dark:bg-purple-900 border-purple-100 dark:border-purple-700 text-purple-500 dark:text-purple-400', i: 'bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-700/50 group-hover:bg-purple-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-purple-600 dark:group-hover:text-purple-400' },
-                    fuchsia: { b: 'bg-fuchsia-500', w: 'bg-fuchsia-50 dark:bg-fuchsia-900 border-fuchsia-100 dark:border-fuchsia-700 text-fuchsia-500 dark:text-fuchsia-400', i: 'bg-fuchsia-100 dark:bg-fuchsia-900/50 text-fuchsia-600 dark:text-fuchsia-400 border-fuchsia-200 dark:border-fuchsia-700/50 group-hover:bg-fuchsia-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-fuchsia-600 dark:group-hover:text-fuchsia-400' },
-                    pink: { b: 'bg-pink-500', w: 'bg-pink-50 dark:bg-pink-900 border-pink-100 dark:border-pink-700 text-pink-500 dark:text-pink-400', i: 'bg-pink-100 dark:bg-pink-900/50 text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-700/50 group-hover:bg-pink-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-pink-600 dark:group-hover:text-pink-400' },
-                    rose: { b: 'bg-rose-500', w: 'bg-rose-50 dark:bg-rose-900 border-rose-100 dark:border-rose-700 text-rose-500 dark:text-rose-400', i: 'bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-700/50 group-hover:bg-rose-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-rose-600 dark:group-hover:text-rose-400' },
-                    slate: { b: 'bg-slate-500', w: 'bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400', i: 'bg-slate-100 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700/50 group-hover:bg-slate-600 group-hover:border-transparent group-hover:text-white', t: 'group-hover:text-slate-600 dark:group-hover:text-slate-400' }
-                };
 
                 const cAlias = { 'merah':'red', 'jingga':'orange', 'kuning':'yellow', 'hijau muda':'lime', 'hijau':'green', 'zamrud':'emerald', 'toska':'teal', 'sian':'cyan', 'biru muda':'sky', 'biru':'blue', 'nila':'indigo', 'ungu':'violet', 'ungu tua':'purple', 'fuksia':'fuchsia', 'merah muda':'pink', 'merah mawar':'rose', 'abu-abu':'slate', 'abu':'slate' };
 
@@ -1039,12 +1037,12 @@
                     const safeIcon = (item.icon || 'link').replace(/'/g, "\\'");
                     const safeUrl = (item.url || '').replace(/'/g, "\\'");
                     const openMode = (item.openMode || '').toLowerCase().trim(); const isAppView = openMode === 'app';
-                    let tag = 'a'; let attrs = '';
                     
+                    let tag = 'a'; let attrs = '';
                     let rawColor = (item.warna || 'blue').toLowerCase().trim();
                     if (cAlias[rawColor]) rawColor = cAlias[rawColor];
-                    const itemColorKey = isColorful ? (cMap[rawColor] ? rawColor : 'blue') : 'blue';
-                    const styleSet = cMap[itemColorKey] || cMap.blue;
+                    const itemColorKey = isColorful ? (this.getBentoStyle(rawColor) ? rawColor : 'blue') : 'blue';
+                    const st = this.getBentoStyle(itemColorKey);
 
                     if (hasChildren) { tag = 'button'; attrs = `type="button" onclick="app.openSubmenu('${safeTitle}', '${safeIcon}', '${itemColorKey}')"`; } 
                     else if (!item.url || item.url.trim().length < 1) { tag = 'button'; attrs = `type="button" onclick="app.showAlert('info', 'Belum Tersedia', 'Menu ini belum aktif.')"`; } 
@@ -1056,22 +1054,46 @@
                     
                     let badge = ''; 
                     if (isSearch && item.parent && item.parent.trim() !== '') {
-                        badge = `<span class="absolute top-3 left-3 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-slate-600 text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm z-10 opacity-80">${item.parent}</span>`;
+                        badge = `<span class="absolute top-4 right-4 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-600 text-[8px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10">${item.parent}</span>`;
                     } else if (item.label) { 
-                        const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : styleSet.b; 
-                        badge = `<span class="absolute top-3 left-3 ${bgLabel} text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm z-10">${item.label}</span>`; 
-                    } else if (hasChildren) { 
-                        badge = `<span class="absolute top-3 right-3 ${styleSet.w} p-1 rounded-lg border"><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></span>`; 
-                    }
+                        const bgLabel = item.label.toLowerCase() === 'baru' ? 'bg-red-500' : st.i; 
+                        badge = `<span class="absolute top-4 right-4 ${bgLabel} text-white text-[8px] md:text-[9px] font-bold px-2 py-0.5 rounded-full shadow-sm z-10 uppercase tracking-widest">${item.label}</span>`; 
+                    } 
                     
-                    const flatEffect = "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm"; 
-                    const hoverEffect = `hover:shadow-md hover:-translate-y-1 active:scale-[0.97] transition-all duration-300 ease-smooth group cursor-pointer`;
-                    const iconClass = `w-11 h-11 md:w-14 md:h-14 shrink-0 rounded-xl md:rounded-2xl flex items-center justify-center border shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-smooth ${styleSet.i}`;
+                    // Dark mode sepenuhnya solid (dark:bg-slate-800) untuk clean look dan max FPS
+                    const cardClass = `${st.b} dark:bg-slate-800 border border-black/5 dark:border-white/5 shadow-sm hover:shadow-md transition-all duration-300 ease-smooth active:scale-[0.97] group cursor-pointer relative flex flex-col overflow-hidden`;
+                    const iconClass = `${st.i} text-white rounded-full flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shrink-0`;
+                    const arrowClass = `absolute bottom-4 right-4 w-4 h-4 md:w-5 md:h-5 transition-colors ${st.a}`;
+                    
+                    // Chevron panah ditiadakan jika bukan folder
+                    const arrowHTML = hasChildren ? `<i data-lucide="chevron-right" class="${arrowClass} ${isWide ? 'top-1/2 -translate-y-1/2 bottom-auto' : ''}"></i>` : '';
                     
                     if (isWide) { 
-                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-row items-center justify-start text-left gap-4 md:gap-5 px-5 py-5 h-full min-h-[110px] relative overflow-hidden rounded-3xl ${flatEffect} ${hoverEffect}">${badge}<div class="${iconClass}"><i data-lucide="${item.icon || 'circle'}" class="w-6 h-6 md:w-7 md:h-7 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 flex flex-col justify-center"><h4 class="font-bold text-base md:text-lg text-slate-800 dark:text-slate-100 leading-tight mb-1 transition-colors ${styleSet.t}">${item.judul}</h4><p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`; 
+                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} ${cardClass} justify-center p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] min-h-[110px] flex-row items-center !flex text-left">
+                            <div class="${iconClass} w-12 h-12 md:w-14 md:h-14 mr-4">
+                                <i data-lucide="${item.icon || 'circle'}" class="w-6 h-6 md:w-7 md:h-7"></i>
+                            </div>
+                            <div class="flex-1 flex flex-col pr-8 z-10">
+                                <h4 class="font-bold text-[14px] md:text-[15px] text-slate-800 dark:text-slate-100 leading-tight mb-1">${item.judul}</h4>
+                                <p class="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-snug line-clamp-2">${item.deskripsi || ''}</p>
+                            </div>
+                            ${arrowHTML}
+                            ${badge}
+                        </${tag}>`; 
                     } else { 
-                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} flex flex-col items-center justify-center text-center gap-3 p-5 h-full min-h-[130px] relative overflow-hidden rounded-3xl ${flatEffect} ${hoverEffect}">${badge}<div class="${iconClass}"><i data-lucide="${item.icon || 'circle'}" class="w-6 h-6 md:w-7 md:h-7 stroke-[1.5]"></i></div><div class="flex-1 min-w-0 w-full flex flex-col justify-center"><h4 class="font-bold text-[13px] md:text-[15px] text-slate-800 dark:text-slate-100 leading-tight mb-1 transition-colors ${styleSet.t}">${item.judul}</h4><p class="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed line-clamp-2">${item.deskripsi || ''}</p></div></${tag}>`; 
+                        tempHTML += `<${tag} ${attrs} class="${visibility} ${colSpan} ${cardClass} justify-between p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] min-h-[135px] text-left">
+                            <div class="flex justify-between items-start w-full">
+                                <div class="${iconClass} w-10 h-10 md:w-11 md:h-11 mb-2">
+                                    <i data-lucide="${item.icon || 'circle'}" class="w-5 h-5"></i>
+                                </div>
+                                ${badge}
+                            </div>
+                            <div class="flex-1 flex flex-col justify-end w-full pr-5 relative z-10">
+                                <h4 class="font-bold text-[13px] md:text-[14px] text-slate-800 dark:text-slate-100 leading-tight mb-0.5">${item.judul}</h4>
+                                <p class="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-snug line-clamp-2">${item.deskripsi || ''}</p>
+                            </div>
+                            ${arrowHTML}
+                        </${tag}>`; 
                     }
                 });
                 return tempHTML;
@@ -1165,34 +1187,30 @@
             },
 
             openSubmenu: function(title, icon, color) { 
-                const cMap = {
-                    red: { box: 'bg-red-100 text-red-500 group-hover:bg-red-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-red-500' },
-                    orange: { box: 'bg-orange-100 text-orange-500 group-hover:bg-orange-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-orange-500' },
-                    amber: { box: 'bg-amber-100 text-amber-500 group-hover:bg-amber-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-amber-500' },
-                    yellow: { box: 'bg-yellow-100 text-yellow-500 group-hover:bg-yellow-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-yellow-500' },
-                    lime: { box: 'bg-lime-100 text-lime-500 group-hover:bg-lime-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-lime-500' },
-                    green: { box: 'bg-green-100 text-green-500 group-hover:bg-green-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-green-500' },
-                    emerald: { box: 'bg-emerald-100 text-emerald-500 group-hover:bg-emerald-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-emerald-500' },
-                    teal: { box: 'bg-teal-100 text-teal-500 group-hover:bg-teal-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-teal-500' },
-                    cyan: { box: 'bg-cyan-100 text-cyan-500 group-hover:bg-cyan-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-cyan-500' },
-                    sky: { box: 'bg-sky-100 text-sky-500 group-hover:bg-sky-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-sky-500' },
-                    blue: { box: 'bg-blue-100 text-blue-500 group-hover:bg-blue-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-blue-500' },
-                    indigo: { box: 'bg-indigo-100 text-indigo-500 group-hover:bg-indigo-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-indigo-500' },
-                    violet: { box: 'bg-violet-100 text-violet-500 group-hover:bg-violet-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-violet-500' },
-                    purple: { box: 'bg-purple-100 text-purple-500 group-hover:bg-purple-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-purple-500' },
-                    fuchsia: { box: 'bg-fuchsia-100 text-fuchsia-500 group-hover:bg-fuchsia-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-fuchsia-500' },
-                    pink: { box: 'bg-pink-100 text-pink-500 group-hover:bg-pink-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-pink-500' },
-                    rose: { box: 'bg-rose-100 text-rose-500 group-hover:bg-rose-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-rose-500' },
-                    slate: { box: 'bg-slate-100 text-slate-500 group-hover:bg-slate-600 group-hover:border-transparent group-hover:text-white', arrow: 'group-hover:text-slate-500' }
-                };
-                let st = cMap[color] || cMap.blue;
-
                 const key = title.toLowerCase().trim(); const children = this.menuMap[key] || []; 
                 if (children.length === 0) { this.showAlert('info', 'Kosong', 'Menu ini belum diisi.'); return; } 
                 document.getElementById('submenu-title').textContent = title; const list = document.getElementById('submenu-list'); 
+                
                 list.innerHTML = children.map((child, index) => {
                     const safeIcon = child.icon || 'link'; const url = (child.url || '#').replace(/'/g, "\\'"); const judul = (child.judul || '').replace(/'/g, "\\'");
-                    return `<a href="${url}" target="_blank" style="animation-delay: ${index * 0.04}s" class="animate-item-masuk flex items-center gap-3 md:gap-5 p-4 md:p-5 rounded-2xl md:rounded-[1.5rem] bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition-all duration-200 ease-out active:scale-95 group shadow-sm hover:shadow-md"><div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl border flex items-center justify-center transition-all ${st.box} dark:bg-slate-800 dark:border-slate-600 group-hover:scale-110"><i data-lucide="${safeIcon}" class="w-5 h-5 md:w-6 md:h-6"></i></div><div class="flex-1"><h5 class="font-bold text-[13px] md:text-sm text-slate-700 dark:text-white mb-0.5">${judul}</h5><p class="text-[10px] md:text-[11px] text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p></div><i data-lucide="chevron-right" class="w-4 h-4 md:w-5 md:h-5 text-slate-300 transition-colors ${st.arrow}"></i></a>`;
+                    
+                    const localOpt = JSON.parse(localStorage.getItem('app_user_settings') || '{"accentColor": "default"}');
+                    const cAlias = { 'merah':'red', 'jingga':'orange', 'kuning':'yellow', 'hijau muda':'lime', 'hijau':'green', 'zamrud':'emerald', 'toska':'teal', 'sian':'cyan', 'biru muda':'sky', 'biru':'blue', 'nila':'indigo', 'ungu':'violet', 'ungu tua':'purple', 'fuksia':'fuchsia', 'merah muda':'pink', 'merah mawar':'rose', 'abu-abu':'slate', 'abu':'slate' };
+                    let rawColor = color;
+                    if (cAlias[rawColor]) rawColor = cAlias[rawColor];
+                    const itemColorKey = (localOpt.accentColor === 'default') ? rawColor : 'blue';
+                    const st = this.getBentoStyle(itemColorKey);
+
+                    return `<a href="${url}" target="_blank" style="animation-delay: ${index * 0.04}s" class="animate-item-masuk flex items-center gap-4 md:gap-5 p-4 md:p-5 rounded-2xl md:rounded-[1.5rem] ${st.b} dark:bg-slate-800 border border-black/5 dark:border-white/5 hover:shadow-md transition-all duration-200 ease-out active:scale-[0.98] group shadow-sm">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl ${st.i} text-white flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 transition-transform shadow-sm shrink-0">
+                            <i data-lucide="${safeIcon}" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <div class="flex-1 pr-2">
+                            <h5 class="font-bold text-[13px] md:text-sm text-slate-800 dark:text-white mb-0.5">${judul}</h5>
+                            <p class="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 leading-tight">${child.deskripsi||'Ketuk untuk membuka'}</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 md:w-5 md:h-5 transition-colors ${st.a}"></i>
+                    </a>`;
                 }).join(''); 
                 lucide.createIcons(); this.openModal('submenu-modal'); 
             },
@@ -1230,7 +1248,7 @@
                 const hasContent = menuContainer && menuContainer.children.length > 0 && !menuContainer.querySelector('#empty-state-msg'); 
                 
                 if (forceSkeleton === true || forceSkeleton === 'manual' || !hasContent) { 
-                    const skeletonHTML = `<div class="col-span-2 md:col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-1 md:col-span-1 h-32 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div><div class="col-span-2 md:col-span-2 h-28 rounded-3xl skeleton-shimmer border border-slate-200 dark:border-slate-700 animate-shimmer"></div>`; 
+                    const skeletonHTML = `<div class="col-span-2 md:col-span-2 h-32 rounded-[1.5rem] skeleton-shimmer shadow-sm"></div><div class="col-span-1 md:col-span-1 h-32 rounded-[1.5rem] skeleton-shimmer shadow-sm"></div><div class="col-span-1 md:col-span-1 h-32 rounded-[1.5rem] skeleton-shimmer shadow-sm"></div><div class="col-span-1 md:col-span-1 h-32 rounded-[1.5rem] skeleton-shimmer shadow-sm"></div><div class="col-span-1 md:col-span-1 h-32 rounded-[1.5rem] skeleton-shimmer shadow-sm"></div><div class="col-span-2 md:col-span-2 h-32 rounded-[1.5rem] skeleton-shimmer shadow-sm"></div>`; 
                     if(menuContainer) menuContainer.innerHTML = skeletonHTML; 
                 } 
                 
@@ -1275,7 +1293,6 @@
                 
                 if (id === 'feedback-modal') { const s = localStorage.getItem('guru_profile'); if (s) { const p = JSON.parse(s); const elNama = document.getElementById('fb-nama'); if(elNama) elNama.value = p.nama || ''; } } 
                 
-                // Memicu sinkronisasi gaya untuk menghilangkan lag (Force Repaint)
                 void el.offsetWidth;
                 
                 const overlay = el.querySelector('.modal-overlay'); 
@@ -1301,7 +1318,7 @@
                     const isHybrid = ['submenu-modal', 'install-modal', 'profile-modal', 'feedback-modal', 'settings-modal', 'flyer-modal'].some(k => id.includes(k)); 
                     if (isHybrid) { content.classList.add('translate-y-full', 'scale-95'); } else { content.classList.add('scale-95'); } 
                 } 
-                setTimeout(() => { el.classList.add('hidden'); }, 250); // Sesuaikan dengan durasi transisi 0.25s
+                setTimeout(() => { el.classList.add('hidden'); }, 250); 
             },
             
             showToast: function() { const x = document.getElementById("exit-toast"); if(x) { x.classList.add("show"); setTimeout(function(){ x.classList.remove("show"); }, 2000); } },
