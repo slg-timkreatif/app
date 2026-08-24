@@ -147,14 +147,14 @@
                             <span class="text-[10px] font-bold text-blue-700 dark:text-slate-200">Refresh</span>
                         </button>
                     </div>
-                    <button onclick="app.openModal('settings-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600/50 shadow-sm"><i data-lucide="settings" class="w-4 h-4 text-slate-500"></i> Pengaturan Aplikasi</button>
+                    <button onclick="app.openSettings()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600/50 shadow-sm"><i data-lucide="settings" class="w-4 h-4 text-slate-500"></i> Pengaturan Aplikasi</button>
                     <button onclick="app.openModal('feedback-modal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all ease-smooth active:scale-95 text-xs font-bold border border-slate-200 dark:border-slate-600/50 shadow-sm"><i data-lucide="life-buoy" class="w-4 h-4 text-green-500"></i> Pusat Bantuan</button>
                 </div>
             </div>
 
             <div class="p-6 border-t border-slate-100 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-800">
                  <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-900/50 transition-all ease-smooth active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-red-100 dark:border-red-800"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
-                 <p id="sidebar-version-text" class="text-[9px] text-slate-300 dark:text-slate-500 text-center mt-4 font-bold tracking-widest uppercase">Versi 7.6 Desktop</p>
+                 <p id="sidebar-version-text" class="text-[9px] text-slate-300 dark:text-slate-500 text-center mt-4 font-bold tracking-widest uppercase">Versi 7.6</p>
             </div>
         </aside>
 
@@ -247,7 +247,7 @@
     <!-- M3 True Navigation Bar -->
     <nav id="bottom-nav-container" class="fixed bottom-0 left-0 w-full z-40 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05)] hidden items-center justify-around px-2 pt-2 pb-2 md:hidden"></nav>
 
-    <!-- Modal Pengaturan -->
+    <!-- Modal Pengaturan (Gated Experience - Akses hanya untuk yang sudah Login) -->
     <div id="settings-modal" class="modal-base fixed inset-0 hidden flex items-end md:items-center justify-center p-0 md:p-4 z-[70]">
         <div class="absolute inset-0 bg-slate-900/70 modal-overlay opacity-0" onclick="app.closeModal('settings-modal')"></div>
         <div class="bg-slate-50 dark:bg-slate-900 w-full md:max-w-md h-[88vh] md:h-[85vh] rounded-t-[2rem] md:rounded-[2rem] shadow-2xl relative z-10 flex flex-col transform translate-y-full opacity-0 modal-content overflow-hidden border border-slate-200 dark:border-slate-700">
@@ -282,12 +282,11 @@
                     <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest px-2 mb-2">Personalisasi Antarmuka</h4>
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm relative">
                         
-                        <!-- Tema Warna Aksen (Dengan M3 Subtle Lock Icon berdasar Login) -->
+                        <!-- Tema Warna Aksen (Bersih tanpa gembok) -->
                         <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-700/50 flex flex-col gap-3">
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center gap-2">
                                     <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Warna Aksen</span>
-                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 guest-lock hidden"></i>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3 overflow-visible pb-2 pt-2 px-1">
@@ -302,7 +301,7 @@
                             </div>
                         </div>
 
-                        <!-- Mode Gelap (Gratis) -->
+                        <!-- Mode Gelap -->
                         <label class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700/50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition select-none">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"><i data-lucide="moon" class="w-4 h-4"></i></div>
@@ -317,13 +316,12 @@
                             </div>
                         </label>
 
-                        <!-- Mode Ringkas (Dengan M3 Subtle Lock Icon berdasar Login) -->
+                        <!-- Mode Ringkas -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition select-none">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"><i data-lucide="layout-template" class="w-4 h-4"></i></div>
                                 <div class="text-left flex items-center gap-2">
                                     <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Mode Ringkas</span>
-                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 guest-lock hidden"></i>
                                 </div>
                             </div>
                             <div class="relative inline-flex items-center cursor-pointer">
@@ -362,7 +360,7 @@
                 </div>
 
                 <div class="text-center pt-2 pb-8">
-                    <!-- Penanda Versi PWA Murni -->
+                    <!-- Penanda Versi Murni -->
                     <p id="settings-version-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"></p>
                 </div>
             </div>
@@ -421,7 +419,6 @@
                 
                 <div class="pt-4">
                     <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 ease-smooth flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
-                    <button type="button" onclick="app.confirmLogout()" class="w-full mt-3 py-3.5 text-xs font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Akun</button>
                 </div>
             </form>
         </div>
@@ -603,7 +600,7 @@
                 this.updateStatusBar();
                 this.loadLocalSettings();
                 lucide.createIcons(); 
-                this.loadProfile(); // updateGuestLocks dipanggil di dalam loadProfile
+                this.loadProfile(); 
                 this.updateClock();
                 setInterval(() => this.updateClock(), 1000);
                 this.updateHeaderUI('normal');
@@ -638,24 +635,15 @@
                 try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { this.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
             },
 
-            showGuestUpsell: function() {
-                this.showAlert('info', 'Eksklusif Pegawai', 'Fitur personalisasi ini khusus untuk guru dan staf terdaftar. Silakan Tarik Data Database di menu Profil untuk membuka kunci!', () => {
+            // Fungsi Routing: Cegat Tamu yang mau masuk Pengaturan
+            openSettings: function() {
+                if (this.userJabatan && this.userJabatan.trim() !== "") {
+                    // Jika sudah login, izinkan masuk ke pengaturan
+                    this.openModal('settings-modal');
+                } else {
+                    // Jika belum login (Tamu), lempar langsung ke Modal Tarik Data (Login)
                     this.openModal('profile-modal');
-                }, 'Buka Profil');
-            },
-
-            updateGuestLocks: function() {
-                const savedProfile = localStorage.getItem('guru_profile');
-                let hasProfile = false;
-                if (savedProfile) {
-                    const p = JSON.parse(savedProfile);
-                    if (p.jabatan && p.jabatan.trim() !== "") hasProfile = true;
                 }
-                
-                document.querySelectorAll('.guest-lock').forEach(el => {
-                    if(hasProfile) el.classList.add('hidden');
-                    else el.classList.remove('hidden');
-                });
             },
 
             updateClock: function() {
@@ -689,11 +677,6 @@
             },
 
             triggerCompactMode: function(checkbox) {
-                if(!this.userJabatan) {
-                    checkbox.checked = false;
-                    this.showGuestUpsell();
-                    return;
-                }
                 const isCompact = checkbox.checked;
                 const localOpt = JSON.parse(localStorage.getItem('app_user_settings') || '{}');
                 localOpt.compactMode = isCompact;
@@ -702,12 +685,6 @@
             },
 
             setAccent: function(color, save = true) {
-                // Logika gembok warna (Gratis untuk yang sudah login)
-                if(!this.userJabatan && color !== 'default') {
-                    this.showGuestUpsell();
-                    return;
-                }
-
                 const palettes = {
                     blue: "--theme-50: 239, 246, 255; --theme-100: 219, 234, 254; --theme-200: 191, 219, 254; --theme-300: 147, 197, 253; --theme-400: 96, 165, 250; --theme-500: 59, 130, 246; --theme-600: 37, 99, 235; --theme-700: 29, 78, 216; --theme-800: 30, 64, 175; --theme-900: 30, 58, 138;",
                     emerald: "--theme-50: 236, 253, 245; --theme-100: 209, 250, 229; --theme-200: 167, 243, 208; --theme-300: 110, 231, 183; --theme-400: 52, 211, 153; --theme-500: 16, 185, 129; --theme-600: 5, 150, 105; --theme-700: 4, 120, 87; --theme-800: 6, 95, 70; --theme-900: 6, 78, 59;",
@@ -752,7 +729,7 @@
                 const searchBtn = `<button onclick="app.activateSearch()" class="flex flex-col items-center justify-center py-2 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 w-full group"><div class="w-16 h-8 rounded-full flex items-center justify-center mb-1 transition-colors group-hover:bg-slate-100 dark:group-hover:bg-slate-800"><i data-lucide="search" class="w-5 h-5"></i></div><span class="text-[11px] font-medium transition-colors">Cari</span></button>`;
                 const refreshBtn = `<button onclick="app.refreshData('manual')" class="flex flex-col items-center justify-center py-2 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 w-full group"><div class="w-16 h-8 rounded-full flex items-center justify-center mb-1 transition-colors group-hover:bg-slate-100 dark:group-hover:bg-slate-800"><i id="nav-refresh-icon" data-lucide="refresh-cw" class="lucide-refresh-cw w-5 h-5 ${spinCls}"></i></div><span class="text-[11px] font-medium transition-colors">Muat</span></button>`;
                 const infoBtn = `<button onclick="app.reopenFlyer()" class="relative flex flex-col items-center justify-center py-2 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 w-full group"><div class="w-16 h-8 rounded-full flex items-center justify-center mb-1 transition-colors group-hover:bg-slate-100 dark:group-hover:bg-slate-800"><i data-lucide="bell" class="w-5 h-5"></i></div><span class="text-[11px] font-medium transition-colors">Info</span>${infoIndicator}</button>`;
-                const accountBtn = `<button onclick="app.openModal('settings-modal')" class="flex flex-col items-center justify-center py-2 active:scale-95 transition-transform group w-full"><div id="nav-avatar-ring" class="w-7 h-7 rounded-full border border-slate-300 dark:border-slate-600 overflow-hidden mb-1.5"><img src="${foto}" class="w-full h-full object-cover"></div><span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200">Akun</span></button>`;
+                const accountBtn = `<button onclick="app.openSettings()" class="flex flex-col items-center justify-center py-2 active:scale-95 transition-transform group w-full"><div id="nav-avatar-ring" class="w-7 h-7 rounded-full border border-slate-300 dark:border-slate-600 overflow-hidden mb-1.5"><img src="${foto}" class="w-full h-full object-cover"></div><span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200">Akun</span></button>`;
 
                 navContainer.innerHTML = homeBtn + searchBtn + refreshBtn + infoBtn + accountBtn;
                 
@@ -1106,7 +1083,7 @@
 
                 // Render Versi Murni di Pengaturan
                 const setVer = document.getElementById('settings-version-text');
-                if(setVer) setVer.innerText = `VERSI ${(info.versi || '7.6')} • PORTAL WEB`;
+                if(setVer) setVer.innerText = `VERSI ${(info.versi || '7.6')}`;
 
                 const savedProfile = localStorage.getItem('guru_profile'); let userJabatan = ""; if (savedProfile) { const p = JSON.parse(savedProfile); userJabatan = (p.jabatan || "").toLowerCase().trim(); }
                 this.userJabatan = userJabatan;
@@ -1228,7 +1205,7 @@
                 }
             },
             openWeb: function(url, title) { const frame = document.getElementById('web-frame'); const titleEl = document.getElementById('browser-title'); const extBtn = document.getElementById('browser-external-link'); const loader = document.getElementById('browser-loader'); frame.classList.add('opacity-0'); loader.classList.remove('hidden'); frame.src = 'about:blank'; titleEl.textContent = title || "Menjelajah"; extBtn.href = url; this.openModal('browser-modal'); setTimeout(() => { frame.src = url; }, 300); },
-            handleLink: function(target) { if (!target) return; if (navigator.vibrate) navigator.vibrate(50); if (target.startsWith('ext:')) { window.open(target.substring(4), '_blank'); return; } if (target.startsWith('#')) { const command = target.substring(1).toLowerCase(); if (command === 'profil') this.openModal('profile-modal'); else if (command === 'bantuan') this.openModal('feedback-modal'); else if (command === 'install') this.openModal('install-modal'); else if (command === 'reset') this.processUpdateAnimation(true); else if (command === 'control') this.openModal('settings-modal'); else this.showAlert('info', 'Info', 'Fitur belum tersedia.'); } else if (target.startsWith('http')) { this.openWeb(target, 'Info Tautan'); } else { this.showAlert('info', 'Info', target); } },
+            handleLink: function(target) { if (!target) return; if (navigator.vibrate) navigator.vibrate(50); if (target.startsWith('ext:')) { window.open(target.substring(4), '_blank'); return; } if (target.startsWith('#')) { const command = target.substring(1).toLowerCase(); if (command === 'profil') this.openModal('profile-modal'); else if (command === 'bantuan') this.openModal('feedback-modal'); else if (command === 'install') this.openModal('install-modal'); else if (command === 'reset') this.processUpdateAnimation(true); else if (command === 'control') this.openSettings(); else this.showAlert('info', 'Info', 'Fitur belum tersedia.'); } else if (target.startsWith('http')) { this.openWeb(target, 'Info Tautan'); } else { this.showAlert('info', 'Info', target); } },
             
             refreshData: function(forceSkeleton = false) { 
                 this.isSyncing = true;
@@ -1271,7 +1248,7 @@
                 }); 
             },
             
-            loadProfile: function() { const s = localStorage.getItem('guru_profile'); const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; }; const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; }; const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }; const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }; const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); }; if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setSrc('sidebar-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); lockFields(false); } this.updateHeaderUI('normal'); this.updateGuestLocks(); },
+            loadProfile: function() { const s = localStorage.getItem('guru_profile'); const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; }; const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; }; const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }; const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }; const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); }; if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setSrc('sidebar-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); lockFields(false); } this.updateHeaderUI('normal'); },
             syncData: function() { const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>'; btn.disabled=true; lucide.createIcons(); fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' }).then(r=>r.json()).then(d=>{ if(d.status==='success'){ const safeSet = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; safeSet('input-nama', d.nama); safeSet('input-jabatan', d.jabatan); safeSet('input-instansi', d.instansi); const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); this.loadProfile(); this.buildNavUI(); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); },
             showAlert: function(type, title, msg, onYes, btnText = 'Ya') { 
                 const bgColors = {error:'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400', success:'bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400', info:'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'}; 
