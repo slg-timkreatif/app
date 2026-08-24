@@ -154,7 +154,7 @@
 
             <div class="p-6 border-t border-slate-100 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-800">
                  <button onclick="app.confirmLogout()" id="btn-logout-sidebar" class="hidden w-full px-4 py-3.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl text-xs font-bold hover:bg-red-100 dark:hover:bg-red-900/50 transition-all ease-smooth active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-red-100 dark:border-red-800"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
-                 <p class="text-[9px] text-slate-300 dark:text-slate-500 text-center mt-4 font-bold tracking-widest uppercase">Versi 7.6 Desktop</p>
+                 <p id="sidebar-version-text" class="text-[9px] text-slate-300 dark:text-slate-500 text-center mt-4 font-bold tracking-widest uppercase">Versi 7.6 Desktop</p>
             </div>
         </aside>
 
@@ -178,13 +178,12 @@
 
                 <div class="max-w-6xl mx-auto w-full space-y-6 px-5 md:px-8 mt-6 md:mt-2">
                     
+                    <!-- HEADER BERSIH (Tanpa lencana kasta) -->
                     <div class="w-full flex justify-between items-start md:hidden mb-2 px-1">
                         <div class="flex flex-col">
                             <h1 class="font-extrabold text-2xl text-slate-800 dark:text-white leading-tight tracking-tight">Guru Berbagi</h1>
                             <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">Portal Pendidikan Selogiri</span>
                         </div>
-                        <!-- Tempat Render Lencana Kasta VIP (Versi) -->
-                        <span id="app-version-header"></span>
                     </div>
 
                     <!-- M3 Tonal Search Bar -->
@@ -285,11 +284,14 @@
                     <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest px-2 mb-2">Personalisasi Antarmuka</h4>
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm relative">
                         
+                        <!-- Tema Warna Aksen (Dengan M3 Subtle Lock Icon) -->
                         <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-700/50 flex flex-col gap-3">
                             <div class="flex justify-between items-center">
-                                <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Warna Aksen</span>
-                                <!-- TWA Lock Label -->
-                                <span class="twa-lock hidden text-[8px] bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold uppercase border border-amber-200 dark:border-amber-800 shadow-sm"><i data-lucide="lock" class="w-2.5 h-2.5"></i> App Only</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Warna Aksen</span>
+                                    <!-- Ikon Gembok Minimalis M3 -->
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 twa-lock hidden"></i>
+                                </div>
                             </div>
                             <div class="flex items-center gap-3 overflow-visible pb-2 pt-2 px-1">
                                 <button onclick="app.setAccent('default')" data-color="default" class="accent-btn relative shrink-0 w-7 h-7 rounded-full bg-gradient-to-tr from-blue-400 via-emerald-400 to-rose-400 ring-0 ring-offset-2 hover:ring-2 ring-slate-400 dark:ring-offset-slate-800 transition-all shadow-sm overflow-hidden flex items-center justify-center">
@@ -303,7 +305,7 @@
                             </div>
                         </div>
 
-                        <!-- Mode Gelap (Tidak Dilock) -->
+                        <!-- Mode Gelap (Tidak Dilock - Hak Dasar Pengguna) -->
                         <label class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700/50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition select-none">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"><i data-lucide="moon" class="w-4 h-4"></i></div>
@@ -318,13 +320,13 @@
                             </div>
                         </label>
 
-                        <!-- Mode Ringkas -->
+                        <!-- Mode Ringkas (Dengan M3 Subtle Lock Icon) -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition select-none">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"><i data-lucide="layout-template" class="w-4 h-4"></i></div>
                                 <div class="text-left flex items-center gap-2">
                                     <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Mode Ringkas</span>
-                                    <span class="twa-lock hidden text-[8px] bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold uppercase border border-amber-200 dark:border-amber-800 shadow-sm"><i data-lucide="lock" class="w-2.5 h-2.5"></i> App Only</span>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 twa-lock hidden"></i>
                                 </div>
                             </div>
                             <div class="relative inline-flex items-center cursor-pointer">
@@ -363,6 +365,7 @@
                 </div>
 
                 <div class="text-center pt-2 pb-8">
+                    <!-- Penanda Versi di Bagian Bawah Pengaturan -->
                     <p id="settings-version-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"></p>
                 </div>
             </div>
@@ -421,7 +424,7 @@
                 
                 <div class="pt-4">
                     <button type="submit" class="w-full bg-slate-900 dark:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md active:scale-95 transition-all duration-300 ease-smooth flex items-center justify-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Profil</button>
-                    <button type="button" onclick="app.confirmLogout()" class="w-full mt-3 py-3.5 text-xs font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-800 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Akun</button>
+                    <button type="button" onclick="app.confirmLogout()" class="w-full mt-3 py-3.5 text-xs font-bold text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800 hover:bg-red-100 dark:hover:bg-red-900 transition flex items-center justify-center gap-2 shadow-sm"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Akun</button>
                 </div>
             </form>
         </div>
@@ -601,16 +604,24 @@
             isTWA: false, // Penanda Status VIP (App Resmi)
 
             init: function() {
-                // 1. DETEKTIF TWA: Cek apakah dibuka dengan parameter ?mode=twa
+                // 1. DETEKTIF TWA MURNI (ANTI BOCOR)
+                const isAndroidApp = document.referrer.includes('android-app://');
                 const urlParams = new URLSearchParams(window.location.search);
-                if(urlParams.has('mode') && urlParams.get('mode') === 'twa') {
-                    localStorage.setItem('app_mode', 'twa');
-                    // Hapus parameter dari URL agar terlihat bersih
-                    window.history.replaceState({}, document.title, window.location.pathname);
+                const isTwaUrl = urlParams.get('mode') === 'twa';
+                
+                // Gunakan referrer (paling akurat untuk TWA) atau SessionStorage (hanya bertahan selama tab dibuka)
+                if (isAndroidApp || isTwaUrl || sessionStorage.getItem('is_twa') === 'true') {
+                    this.isTWA = true;
+                    sessionStorage.setItem('is_twa', 'true');
+                    // Bersihkan URL agar rapi jika menggunakan parameter
+                    if(isTwaUrl) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } else {
+                    this.isTWA = false;
                 }
-                this.isTWA = localStorage.getItem('app_mode') === 'twa';
 
-                // Render Visual Lock (Gembok VIP)
+                // Render Visual Lock (Gembok Minimalis)
                 if(!this.isTWA) {
                     document.querySelectorAll('.twa-lock').forEach(el => el.classList.remove('hidden'));
                 } else {
@@ -655,9 +666,9 @@
                 try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { this.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
             },
 
-            // FITUR UPSELL: Menampilkan Penawaran App
+            // FITUR UPSELL ELEGAN
             showUpsell: function() {
-                this.showAlert('info', 'Eksklusif Aplikasi', 'Fitur kustomisasi antarmuka khusus untuk pengguna Aplikasi Android resmi Guru Berbagi. Unduh aplikasinya sekarang untuk pengalaman yang lebih optimal!', () => {
+                this.showAlert('info', 'Eksklusif Aplikasi', 'Fitur kustomisasi antarmuka ini khusus untuk pengguna Aplikasi Android resmi. Unduh sekarang untuk membuka kunci!', () => {
                     window.open('https://slg-timkreatif.github.io/site', '_blank');
                 }, 'Unduh APK');
             },
@@ -1109,23 +1120,10 @@
                     if(qAuth) qAuth.innerText = `- ${randomQuote.author.trim()}`; 
                 }
 
-                // RENDER LENCANA KASTA (VIP BADGE)
-                const verEl = document.getElementById('app-version-header'); 
-                if(verEl) {
-                    const verText = info.versi || 'Versi 7.6';
-                    if (this.isTWA) {
-                        verEl.className = "text-[9px] font-bold text-blue-800 dark:text-blue-300 uppercase tracking-widest bg-blue-100 dark:bg-blue-900/40 px-2.5 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm flex items-center gap-1.5 cursor-default";
-                        verEl.innerHTML = `<i data-lucide="badge-check" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i><span>App Resmi</span>`;
-                        verEl.onclick = null;
-                    } else {
-                        verEl.className = "text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-100 dark:bg-slate-800 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-1.5 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors active:scale-95";
-                        verEl.innerHTML = `<i data-lucide="globe" class="w-3 h-3 opacity-70"></i><span>Web (${verText})</span>`;
-                        verEl.onclick = () => this.showUpsell();
-                    }
-                }
-                
+                // Render Versi di Teks Bawah Pengaturan
                 const setVer = document.getElementById('settings-version-text');
-                if(setVer) setVer.innerText = (info.versi || 'VERSI 7.6');
+                const kastaTeks = this.isTWA ? 'Aplikasi Resmi' : 'Portal Web';
+                if(setVer) setVer.innerText = `VERSI ${(info.versi || '7.6')} • ${kastaTeks.toUpperCase()}`;
 
                 const savedProfile = localStorage.getItem('guru_profile'); let userJabatan = ""; if (savedProfile) { const p = JSON.parse(savedProfile); userJabatan = (p.jabatan || "").toLowerCase().trim(); }
                 this.userJabatan = userJabatan;
