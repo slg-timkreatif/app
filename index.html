@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- M3 PURE CANVAS: Mengunci warna Status Bar ke Tonal M3 -->
+    <!-- M3 PURE CANVAS -->
     <meta name="theme-color" id="theme-color-meta" content="#f8fafc">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     
@@ -13,7 +13,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
     
-    <!-- Mencegah FOUC (Kedipan Putih) & Set Pure M3 Canvas -->
+    <!-- Mencegah FOUC & Set Pure M3 Canvas -->
     <script>
         try {
             const saved = localStorage.getItem('theme');
@@ -178,14 +178,10 @@
 
                 <div class="max-w-6xl mx-auto w-full space-y-6 px-5 md:px-8 mt-6 md:mt-2">
                     
-                    <!-- MOBILE HEADER DENGAN LENCANA VIP/WEB -->
-                    <div class="w-full flex justify-between items-start md:hidden mb-2 px-1">
-                        <div class="flex flex-col">
-                            <h1 class="font-extrabold text-2xl text-slate-800 dark:text-white leading-tight tracking-tight">Guru Berbagi</h1>
-                            <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">Portal Pendidikan Selogiri</span>
-                        </div>
-                        <!-- Container Lencana Dinamis -->
-                        <div id="header-badge-container" class="mt-1 shrink-0"></div>
+                    <!-- HEADER RAMPING & ELEGAN (White Space Optimizer) -->
+                    <div class="w-full flex flex-col justify-center items-start md:hidden mb-1 px-2">
+                        <h1 class="font-bold text-xl text-slate-800 dark:text-white leading-tight tracking-tight">Guru Berbagi</h1>
+                        <span class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">Portal Pendidikan Selogiri</span>
                     </div>
 
                     <!-- M3 Tonal Search Bar -->
@@ -201,14 +197,14 @@
                         </div>
                     </div>
 
-                    <!-- GREETING CARD (M3 Tonal Container) -->
+                    <!-- GREETING CARD (Sapaan Megah) -->
                     <div id="greeting-card" class="bg-blue-50 dark:bg-slate-800 rounded-[2rem] p-6 md:p-8 shadow-sm relative overflow-hidden group hidden transition-colors duration-300">
                         
                         <!-- M3 Spot Icon -->
                         <div id="greeting-spot-container" class="absolute top-6 right-6 w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center bg-blue-100/50 dark:bg-slate-700/50 transition-colors duration-500"></div>
                         
                         <div class="relative z-10 flex flex-col h-full w-full">
-                            <h3 class="text-[22px] md:text-2xl font-extrabold mb-3 tracking-tight leading-tight text-blue-950 dark:text-white flex items-center gap-2">
+                            <h3 class="text-[22px] md:text-[26px] font-extrabold mb-3 tracking-tight leading-tight text-blue-950 dark:text-white flex items-center gap-2">
                                 <span id="greeting-text">Halo, Guru!</span>
                             </h3>
                             
@@ -286,13 +282,12 @@
                     <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest px-2 mb-2">Personalisasi Antarmuka</h4>
                     <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm relative">
                         
-                        <!-- Tema Warna Aksen (Dengan M3 Subtle Lock Icon) -->
+                        <!-- Tema Warna Aksen (Dengan M3 Subtle Lock Icon berdasar Login) -->
                         <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-700/50 flex flex-col gap-3">
                             <div class="flex justify-between items-center">
                                 <div class="flex items-center gap-2">
                                     <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Warna Aksen</span>
-                                    <!-- Ikon Gembok Minimalis M3 -->
-                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 twa-lock hidden"></i>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 guest-lock hidden"></i>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3 overflow-visible pb-2 pt-2 px-1">
@@ -307,7 +302,7 @@
                             </div>
                         </div>
 
-                        <!-- Mode Gelap (Tidak Dilock - Hak Dasar Pengguna) -->
+                        <!-- Mode Gelap (Gratis) -->
                         <label class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700/50 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition select-none">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"><i data-lucide="moon" class="w-4 h-4"></i></div>
@@ -322,13 +317,13 @@
                             </div>
                         </label>
 
-                        <!-- Mode Ringkas (Dengan M3 Subtle Lock Icon) -->
+                        <!-- Mode Ringkas (Dengan M3 Subtle Lock Icon berdasar Login) -->
                         <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition select-none">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"><i data-lucide="layout-template" class="w-4 h-4"></i></div>
                                 <div class="text-left flex items-center gap-2">
                                     <span class="text-sm font-bold text-slate-700 dark:text-slate-200 block">Mode Ringkas</span>
-                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 twa-lock hidden"></i>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 guest-lock hidden"></i>
                                 </div>
                             </div>
                             <div class="relative inline-flex items-center cursor-pointer">
@@ -367,7 +362,7 @@
                 </div>
 
                 <div class="text-center pt-2 pb-8">
-                    <!-- Penanda Versi di Bagian Bawah Pengaturan -->
+                    <!-- Penanda Versi PWA Murni -->
                     <p id="settings-version-text" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"></p>
                 </div>
             </div>
@@ -603,33 +598,12 @@
             deferredPrompt: null, menuMap: {}, backPressedTime: 0, cachedInfo: null, rawMenuList: [], userJabatan: "",
             modalList: ['profile-modal', 'settings-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
             isSyncing: false,
-            isTWA: false,
 
             init: function() {
-                // 1. DETEKTIF TWA MURNI (ANTI BOCOR)
-                const isAndroidApp = document.referrer.includes('android-app://');
-                const urlParams = new URLSearchParams(window.location.search);
-                const isTwaUrl = urlParams.get('mode') === 'twa';
-                
-                if (isAndroidApp || isTwaUrl || sessionStorage.getItem('is_twa') === 'true') {
-                    this.isTWA = true;
-                    sessionStorage.setItem('is_twa', 'true');
-                    if(isTwaUrl) { window.history.replaceState({}, document.title, window.location.pathname); }
-                } else {
-                    this.isTWA = false;
-                }
-
-                // Render Visual Lock (Gembok Minimalis)
-                if(!this.isTWA) {
-                    document.querySelectorAll('.twa-lock').forEach(el => el.classList.remove('hidden'));
-                } else {
-                    document.querySelectorAll('.twa-lock').forEach(el => el.classList.add('hidden'));
-                }
-
                 this.updateStatusBar();
                 this.loadLocalSettings();
                 lucide.createIcons(); 
-                this.loadProfile();
+                this.loadProfile(); // updateGuestLocks dipanggil di dalam loadProfile
                 this.updateClock();
                 setInterval(() => this.updateClock(), 1000);
                 this.updateHeaderUI('normal');
@@ -664,10 +638,24 @@
                 try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { this.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
             },
 
-            showUpsell: function() {
-                this.showAlert('info', 'Eksklusif Aplikasi', 'Fitur ini dioptimalkan khusus untuk pengguna Aplikasi Android resmi. Unduh sekarang untuk pengalaman maksimal!', () => {
-                    window.open('https://slg-timkreatif.github.io/site', '_blank');
-                }, 'Unduh APK');
+            showGuestUpsell: function() {
+                this.showAlert('info', 'Eksklusif Pegawai', 'Fitur personalisasi ini khusus untuk guru dan staf terdaftar. Silakan Tarik Data Database di menu Profil untuk membuka kunci!', () => {
+                    this.openModal('profile-modal');
+                }, 'Buka Profil');
+            },
+
+            updateGuestLocks: function() {
+                const savedProfile = localStorage.getItem('guru_profile');
+                let hasProfile = false;
+                if (savedProfile) {
+                    const p = JSON.parse(savedProfile);
+                    if (p.jabatan && p.jabatan.trim() !== "") hasProfile = true;
+                }
+                
+                document.querySelectorAll('.guest-lock').forEach(el => {
+                    if(hasProfile) el.classList.add('hidden');
+                    else el.classList.remove('hidden');
+                });
             },
 
             updateClock: function() {
@@ -701,9 +689,9 @@
             },
 
             triggerCompactMode: function(checkbox) {
-                if(!this.isTWA) {
+                if(!this.userJabatan) {
                     checkbox.checked = false;
-                    this.showUpsell();
+                    this.showGuestUpsell();
                     return;
                 }
                 const isCompact = checkbox.checked;
@@ -714,8 +702,9 @@
             },
 
             setAccent: function(color, save = true) {
-                if(!this.isTWA && color !== 'default') {
-                    this.showUpsell();
+                // Logika gembok warna (Gratis untuk yang sudah login)
+                if(!this.userJabatan && color !== 'default') {
+                    this.showGuestUpsell();
                     return;
                 }
 
@@ -1115,34 +1104,9 @@
                     if(qAuth) qAuth.innerText = `- ${randomQuote.author.trim()}`; 
                 }
 
-                // EKSEKUSI LENCANA HEADER (PWA VS TWA)
-                const badgeContainer = document.getElementById('header-badge-container');
-                if (badgeContainer) {
-                    const verText = info.versi || '7.6';
-                    // Membersihkan kata "Versi " agar lebih pendek (misal: "Versi 7.6" menjadi "7.6")
-                    const cleanVer = verText.toLowerCase().replace('versi ', '').trim();
-                    
-                    if (this.isTWA) {
-                        badgeContainer.innerHTML = `
-                            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800/50 rounded-full shadow-sm">
-                                <span class="text-[10px] font-bold text-blue-800 dark:text-blue-300">v${cleanVer}</span>
-                                <i data-lucide="badge-check" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
-                            </div>
-                        `;
-                    } else {
-                        badgeContainer.innerHTML = `
-                            <button onclick="window.open('https://slg-timkreatif.github.io/site', '_blank')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full shadow-sm active:scale-95 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all group cursor-pointer">
-                                <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Web Mode</span>
-                            </button>
-                        `;
-                    }
-                }
-
-                // Render Penanda di Pengaturan
+                // Render Versi Murni di Pengaturan
                 const setVer = document.getElementById('settings-version-text');
-                const kastaTeks = this.isTWA ? 'Aplikasi Resmi' : 'Portal Web';
-                if(setVer) setVer.innerText = `VERSI ${(info.versi || '7.6')} • ${kastaTeks.toUpperCase()}`;
+                if(setVer) setVer.innerText = `VERSI ${(info.versi || '7.6')} • PORTAL WEB`;
 
                 const savedProfile = localStorage.getItem('guru_profile'); let userJabatan = ""; if (savedProfile) { const p = JSON.parse(savedProfile); userJabatan = (p.jabatan || "").toLowerCase().trim(); }
                 this.userJabatan = userJabatan;
@@ -1307,7 +1271,7 @@
                 }); 
             },
             
-            loadProfile: function() { const s = localStorage.getItem('guru_profile'); const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; }; const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; }; const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }; const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }; const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); }; if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setSrc('sidebar-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); lockFields(false); } this.updateHeaderUI('normal'); },
+            loadProfile: function() { const s = localStorage.getItem('guru_profile'); const setTxt = (id, txt) => { const el = document.getElementById(id); if(el) el.innerText = txt; }; const setSrc = (id, src) => { const el = document.getElementById(id); if(el) el.src = src; }; const setVal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; const show = (id) => { const el = document.getElementById(id); if(el) el.classList.remove('hidden'); }; const hide = (id) => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); }; const lockFields = (isLocked) => { const inputs = ['input-nama', 'input-instansi', 'input-jabatan']; const icons = document.querySelectorAll('.lock-icon'); inputs.forEach(id => { const el = document.getElementById(id); if(el) { el.disabled = isLocked; } }); icons.forEach(ic => { if(isLocked) ic.classList.remove('hidden'); else ic.classList.add('hidden'); }); }; if(s){ const p = JSON.parse(s); setTxt('sidebar-user-name', p.nama); setSrc('sidebar-user-photo', p.foto); setSrc('preview-photo', p.foto); setVal('input-nama', p.nama); setVal('input-jabatan', p.jabatan); setVal('input-instansi', p.instansi); if(p.email) setVal('sync-email', p.email); show('btn-logout-sidebar'); setTxt('sidebar-status-text', "Online"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs font-bold text-green-500 tracking-wider block mt-1"; show('sidebar-bio-card'); setTxt('sidebar-jabatan', p.jabatan); setTxt('sidebar-instansi', p.instansi); if(p.email && p.email.length > 3) lockFields(true); else lockFields(false); } else { setTxt('sidebar-status-text', "Belum Login"); const st = document.getElementById('sidebar-status-text'); if(st) st.className = "text-xs text-slate-400 font-medium tracking-wider block mt-1"; hide('sidebar-bio-card'); hide('btn-logout-sidebar'); lockFields(false); } this.updateHeaderUI('normal'); this.updateGuestLocks(); },
             syncData: function() { const email=document.getElementById('sync-email').value; const pin=document.getElementById('sync-pin').value; const btn=document.getElementById('btn-sync'); if(!email||!pin){ this.showAlert('error','Gagal','Lengkapi Email & PIN'); return; } const oldTxt=btn.innerHTML; btn.innerHTML='<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>'; btn.disabled=true; lucide.createIcons(); fetch(`${this.apiURL}?action=sync&email=${email}&pin=${pin}`, { method: 'GET' }).then(r=>r.json()).then(d=>{ if(d.status==='success'){ const safeSet = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; }; safeSet('input-nama', d.nama); safeSet('input-jabatan', d.jabatan); safeSet('input-instansi', d.instansi); const p={ nama:d.nama, jabatan:d.jabatan, instansi:d.instansi, email:email, foto:document.getElementById('preview-photo').src }; localStorage.setItem('guru_profile',JSON.stringify(p)); this.showAlert('success','Berhasil',`Halo ${d.nama}, data ditemukan.`); this.loadProfile(); this.buildNavUI(); }else{ this.showAlert('error','Gagal',d.message); } }).catch(()=>this.showAlert('error','Error','Koneksi gagal')).finally(()=>{ btn.innerHTML=oldTxt; btn.disabled=false; }); },
             showAlert: function(type, title, msg, onYes, btnText = 'Ya') { 
                 const bgColors = {error:'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400', success:'bg-green-50 text-green-600 dark:bg-green-900/30 dark:text-green-400', info:'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'}; 
