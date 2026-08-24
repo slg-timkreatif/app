@@ -178,12 +178,14 @@
 
                 <div class="max-w-6xl mx-auto w-full space-y-6 px-5 md:px-8 mt-6 md:mt-2">
                     
-                    <!-- HEADER BERSIH (Tanpa lencana kasta) -->
+                    <!-- MOBILE HEADER DENGAN LENCANA VIP/WEB -->
                     <div class="w-full flex justify-between items-start md:hidden mb-2 px-1">
                         <div class="flex flex-col">
                             <h1 class="font-extrabold text-2xl text-slate-800 dark:text-white leading-tight tracking-tight">Guru Berbagi</h1>
                             <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">Portal Pendidikan Selogiri</span>
                         </div>
+                        <!-- Container Lencana Dinamis -->
+                        <div id="header-badge-container" class="mt-1 shrink-0"></div>
                     </div>
 
                     <!-- M3 Tonal Search Bar -->
@@ -601,7 +603,7 @@
             deferredPrompt: null, menuMap: {}, backPressedTime: 0, cachedInfo: null, rawMenuList: [], userJabatan: "",
             modalList: ['profile-modal', 'settings-modal', 'flyer-modal', 'submenu-modal', 'feedback-modal', 'install-modal', 'dialog-modal', 'browser-modal', 'optimization-modal'],
             isSyncing: false,
-            isTWA: false, // Penanda Status VIP (App Resmi)
+            isTWA: false,
 
             init: function() {
                 // 1. DETEKTIF TWA MURNI (ANTI BOCOR)
@@ -609,14 +611,10 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const isTwaUrl = urlParams.get('mode') === 'twa';
                 
-                // Gunakan referrer (paling akurat untuk TWA) atau SessionStorage (hanya bertahan selama tab dibuka)
                 if (isAndroidApp || isTwaUrl || sessionStorage.getItem('is_twa') === 'true') {
                     this.isTWA = true;
                     sessionStorage.setItem('is_twa', 'true');
-                    // Bersihkan URL agar rapi jika menggunakan parameter
-                    if(isTwaUrl) {
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                    }
+                    if(isTwaUrl) { window.history.replaceState({}, document.title, window.location.pathname); }
                 } else {
                     this.isTWA = false;
                 }
@@ -666,9 +664,8 @@
                 try { setTimeout(() => { const hash = window.location.hash; if (hash && hash.length > 1) { this.handleLink(hash); history.replaceState(null, null, ' '); } }, 1500); } catch (e) {}
             },
 
-            // FITUR UPSELL ELEGAN
             showUpsell: function() {
-                this.showAlert('info', 'Eksklusif Aplikasi', 'Fitur kustomisasi antarmuka ini khusus untuk pengguna Aplikasi Android resmi. Unduh sekarang untuk membuka kunci!', () => {
+                this.showAlert('info', 'Eksklusif Aplikasi', 'Fitur ini dioptimalkan khusus untuk pengguna Aplikasi Android resmi. Unduh sekarang untuk pengalaman maksimal!', () => {
                     window.open('https://slg-timkreatif.github.io/site', '_blank');
                 }, 'Unduh APK');
             },
@@ -704,9 +701,8 @@
             },
 
             triggerCompactMode: function(checkbox) {
-                // CEK KASTA: Jika bukan TWA, tolak dan kembalikan tuas
                 if(!this.isTWA) {
-                    checkbox.checked = false; // Kembalikan ke asal
+                    checkbox.checked = false;
                     this.showUpsell();
                     return;
                 }
@@ -718,7 +714,6 @@
             },
 
             setAccent: function(color, save = true) {
-                // CEK KASTA: Jika bukan TWA dan mencoba ganti warna selain default
                 if(!this.isTWA && color !== 'default') {
                     this.showUpsell();
                     return;
@@ -1120,7 +1115,31 @@
                     if(qAuth) qAuth.innerText = `- ${randomQuote.author.trim()}`; 
                 }
 
-                // Render Versi di Teks Bawah Pengaturan
+                // EKSEKUSI LENCANA HEADER (PWA VS TWA)
+                const badgeContainer = document.getElementById('header-badge-container');
+                if (badgeContainer) {
+                    const verText = info.versi || '7.6';
+                    // Membersihkan kata "Versi " agar lebih pendek (misal: "Versi 7.6" menjadi "7.6")
+                    const cleanVer = verText.toLowerCase().replace('versi ', '').trim();
+                    
+                    if (this.isTWA) {
+                        badgeContainer.innerHTML = `
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800/50 rounded-full shadow-sm">
+                                <span class="text-[10px] font-bold text-blue-800 dark:text-blue-300">v${cleanVer}</span>
+                                <i data-lucide="badge-check" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                        `;
+                    } else {
+                        badgeContainer.innerHTML = `
+                            <button onclick="window.open('https://slg-timkreatif.github.io/site', '_blank')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full shadow-sm active:scale-95 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all group cursor-pointer">
+                                <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Web Mode</span>
+                            </button>
+                        `;
+                    }
+                }
+
+                // Render Penanda di Pengaturan
                 const setVer = document.getElementById('settings-version-text');
                 const kastaTeks = this.isTWA ? 'Aplikasi Resmi' : 'Portal Web';
                 if(setVer) setVer.innerText = `VERSI ${(info.versi || '7.6')} • ${kastaTeks.toUpperCase()}`;
