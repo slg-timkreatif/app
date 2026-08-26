@@ -41,8 +41,8 @@
   --shadow-flat: none;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-1);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;padding-top:var(--nav-h);transition:background .25s var(--ease),color .25s var(--ease)}
+html{-webkit-text-size-adjust:100%;max-width:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-1);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;padding-top:var(--nav-h);transition:background .25s var(--ease),color .25s var(--ease);overflow-x:hidden;max-width:100%}
 img{display:block;max-width:100%}
 button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparent}
@@ -52,7 +52,7 @@ input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparen
 
 .navbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);z-index:100;display:flex;align-items:center;gap:12px;padding:0 16px;transition:background .25s var(--ease),border-color .25s var(--ease)}
 @media(min-width:768px){.navbar{padding:0 24px}}
-.brand{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0;min-width:0}
 .brand-icon{width:36px;height:36px;background:var(--primary);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:var(--on-primary);flex-shrink:0}
 .brand-icon svg{width:19px;height:19px}
 .brand-title{font-weight:800;font-size:.95rem;line-height:1.1;letter-spacing:-.01em;color:var(--text-1)}
@@ -84,7 +84,7 @@ input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparen
 .btn-danger-outline{background:var(--surface);color:var(--danger);border:1px solid var(--border-strong)}
 .btn-danger-outline:hover{background:var(--danger-soft)}
 
-.container{max-width:1200px;margin:0 auto;padding:0 16px}
+.container{max-width:1200px;margin:0 auto;padding:0 16px;min-width:0}
 @media(min-width:768px){.container{padding:0 24px}}
 
 .hero{background:var(--primary-soft);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px 20px;margin:16px 0 20px;display:none}
@@ -102,39 +102,17 @@ input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparen
 .filter-select{padding:8px 34px 8px 14px;border-radius:var(--r-full);border:1px solid var(--border-strong);background:var(--surface);font-size:.82rem;font-weight:700;color:var(--text-2);appearance:none;flex-shrink:0;outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa0ad' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;transition:border-color .15s}
 .filter-select:focus{border-color:var(--primary)}
 
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-bottom:32px}
-@media(max-width:560px){.gallery-grid{grid-template-columns:1fr;gap:10px}}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-bottom:32px;min-width:0}
+.gallery-grid > *{min-width:0}
 
-.card-karya{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .15s var(--ease);content-visibility:auto;contain-intrinsic-size:1px 300px;contain:layout style paint}
+/* ===== CARD (BASE / DESKTOP) ===== */
+.card-karya{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .15s var(--ease);content-visibility:auto;contain-intrinsic-size:1px 300px;contain:layout style paint;min-width:0;max-width:100%}
 .card-karya:hover{border-color:var(--border-strong)}
 @media(min-width:768px){.card-karya:hover{border-color:var(--primary)}}
-
-/* ===== MOBILE COMPACT CARD ===== */
-@media(max-width:560px){
-  .card-karya{flex-direction:row;align-items:stretch}
-  .card-thumb{width:92px;height:auto;min-height:104px;flex-shrink:0}
-  .card-body{padding:9px 12px;min-width:0}
-  .card-title{font-size:.83rem;line-height:1.3;-webkit-line-clamp:2;height:auto;margin-bottom:5px}
-  .card-tags{margin-bottom:5px;gap:4px}
-  .card-tags .tag{font-size:.56rem;padding:2px 7px}
-  .card-tags .tag:nth-child(2){display:none}
-  .card-footer{padding-top:5px;gap:6px}
-  .card-avatar{width:22px;height:22px;font-size:.55rem}
-  .card-guru-name{font-size:.68rem}
-  .card-guru-school{font-size:.56rem}
-  .card-date{font-size:.56rem;gap:3px}
-  .card-date svg{width:9px;height:9px}
-  .view-badge{bottom:5px;left:5px;font-size:.56rem;padding:2px 6px}
-  .view-badge svg{width:9px;height:9px}
-  .btn-fav{top:5px;right:5px;width:25px;height:25px}
-  .btn-fav svg{width:12px;height:12px}
-  .thumb-overlay{display:none}
-}
-
 .card-thumb{height:160px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .card-thumb img{width:100%;height:100%;object-fit:cover}
 .thumb-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent 55%);z-index:1}
-.thumb-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;z-index:1;padding:14px;text-align:center}
+.thumb-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;z-index:1;padding:14px;text-align:center;width:100%}
 .thumb-placeholder svg{width:34px;height:34px;opacity:.9}
 .thumb-placeholder span{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;opacity:.9}
 .bg-math{background:#3b82f6}.bg-ipa{background:#22c55e}.bg-indo{background:#f59e0b}.bg-agama{background:#14b8a6}.bg-seni{background:#a855f7}.bg-pjok{background:#ef4444}.bg-default{background:#64748b}
@@ -153,23 +131,21 @@ input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparen
 .tag-new{background:var(--accent-soft);color:#b45309;font-weight:800}
 [data-theme="dark"] .tag-new{color:#fbbf24}
 .card-title{font-weight:800;font-size:.925rem;line-height:1.35;letter-spacing:-.01em;color:var(--text-1);margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:2.7em}
-.card-footer{display:flex;align-items:center;gap:9px;margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
+.card-footer{display:flex;align-items:center;gap:9px;margin-top:auto;padding-top:12px;border-top:1px solid var(--border);min-width:0}
 .card-avatar{width:30px;height:30px;border-radius:var(--r-full);background:var(--surface-2);color:var(--text-2);font-weight:800;font-size:.68rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .card-guru{min-width:0}
 .card-guru-name{font-size:.75rem;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-guru-school{font-size:.62rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-date{display:flex;align-items:center;gap:4px;font-size:.62rem;font-weight:700;color:var(--text-3);white-space:nowrap;flex-shrink:0;margin-left:auto}
-.card-date svg{width:11px;height:11px}
+.card-date{display:flex;align-items:center;gap:4px;font-size:.62rem;font-weight:700;color:var(--text-3);white-space:nowrap;margin-left:auto}
+.card-date svg{width:11px;height:11px;flex-shrink:0}
 .card-date.is-new{color:var(--accent);font-weight:800}
 
-.skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-@media(max-width:560px){.skeleton-grid{grid-template-columns:1fr;gap:10px}}
+.skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;min-width:0}
 .skeleton-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
 .sk-thumb{height:160px;background:var(--surface-2)}
 .sk-body{padding:16px}
 .sk-line{height:12px;border-radius:6px;background:var(--surface-2);margin-bottom:10px}
 .sk-line.w80{width:80%}.sk-line.w60{width:60%}.sk-line.w40{width:40%}
-@media(max-width:560px){.skeleton-card{display:flex}.sk-thumb{width:92px;height:auto;min-height:104px}}
 
 .empty-state{text-align:center;padding:60px 20px;display:none}
 .empty-state.show{display:block}
@@ -209,7 +185,6 @@ input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparen
 .preview-frame{flex:1;width:100%;border:none;background:#fff}
 
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
 .form-full{grid-column:1/-1}
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-label{font-size:.75rem;font-weight:700;color:var(--text-2);display:flex;align-items:center;gap:5px}
@@ -325,6 +300,51 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .btn-back{width:36px;height:36px;border-radius:var(--r-full);border:1px solid var(--border-strong);background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex-shrink:0}
 .btn-back svg{width:15px;height:15px}
 .d-none{display:none!important}
+
+/* ============================================================
+   MOBILE OVERRIDES — WAJIB DI AKHIR agar menang cascade
+   ============================================================ */
+@media(max-width:560px){
+  .hero{display:none!important;margin:0!important}
+  .container{padding:0 12px}
+
+  /* Filter compact, select dibatasi lebar */
+  .filter-bar{gap:6px;padding:10px 0 10px;margin-bottom:10px}
+  .chip{padding:7px 13px;font-size:.78rem}
+  .filter-select{max-width:128px;padding:7px 26px 7px 11px;font-size:.76rem;background-position:right 9px center}
+
+  /* Grid 1 kolom */
+  .gallery-grid,.skeleton-grid{grid-template-columns:1fr;gap:8px}
+
+  /* Card list compact */
+  .card-karya{flex-direction:row;align-items:center;padding:8px;gap:10px;contain-intrinsic-size:1px 92px}
+  .card-thumb{width:72px;height:72px;min-height:72px;border-radius:var(--r-md)}
+  .thumb-placeholder{padding:4px;gap:3px}
+  .thumb-placeholder svg{width:22px;height:22px}
+  .thumb-placeholder span{font-size:.48rem;letter-spacing:.04em}
+  .card-body{padding:0;min-width:0;flex:1;overflow:hidden;gap:3px}
+  .card-tags{margin:0;gap:3px}
+  .card-tags .tag{font-size:.53rem;padding:1px 6px}
+  .card-tags .tag:nth-child(2){display:none}
+  .card-title{font-size:.83rem;line-height:1.25;height:auto;max-height:2.6em;margin:0}
+  .card-footer{padding:0;border-top:none;margin:0;gap:6px}
+  .card-avatar{display:none}
+  .card-guru-school{display:none}
+  .card-guru{flex:1;min-width:0}
+  .card-guru-name{font-size:.66rem}
+  .card-date{font-size:.56rem;gap:3px;max-width:46%;overflow:hidden;text-overflow:ellipsis}
+  .card-date svg{width:9px;height:9px}
+  .view-badge{bottom:4px;left:4px;font-size:.5rem;padding:1px 5px;gap:2px}
+  .view-badge svg{width:8px;height:8px}
+  .btn-fav{top:4px;right:4px;width:22px;height:22px}
+  .btn-fav svg{width:10px;height:10px}
+  .thumb-overlay{display:none}
+
+  /* Skeleton compact */
+  .skeleton-card{display:flex;padding:8px;gap:10px;align-items:center}
+  .sk-thumb{width:72px;height:72px;min-height:72px;border-radius:var(--r-md);flex-shrink:0}
+  .sk-body{padding:0;flex:1;min-width:0}
+}
 </style>
 </head>
 <body>
@@ -597,43 +617,26 @@ const STATE = {
 };
 let searchTimer = null;
 let DATA_CACHE = null;
-let LAST_ADDED_ID = null; // ← FIX: track karya baru untuk di-boost ke atas
+let LAST_ADDED_ID = null;
 const DOM = {};
 
-/* ============================================
-   FIX SORT: Parser timestamp multi-format (GLOBAL)
-   Urutan prioritas:
-   1. Angka 13 digit di ID (timestamp ms) → paling akurat utk karya baru
-   2. Parse kolom Timestamp (ISO / SQL datetime)
-   3. Parse format DD/MM/YYYY (data lama dari Sheets)
-   4. Fallback: angka apapun di ID
-   ============================================ */
 function parseTs(ts, id) {
-  // 1. ID dengan 13 digit = timestamp milliseconds (karya baru)
   const idMs = String(id || '').match(/(\d{13})/);
   if (idMs) return parseInt(idMs[1]);
-
-  // 2 & 3. Parse kolom Timestamp
   if (ts) {
     const s = String(ts).trim();
     if (s) {
-      // ISO 8601 / SQL datetime → native Date
       const d = new Date(s);
       if (!isNaN(d.getTime()) && d.getTime() > 946684800000) return d.getTime();
-      // DD/MM/YYYY atau DD-MM-YYYY / DD.MM.YYYY + waktu opsional
       const m = s.match(/(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})(?:[ ,]+(\d{1,2})[:.](\d{1,2})(?:[:.](\d{1,2}))?)?/);
       if (m) return new Date(+m[3], +m[2]-1, +m[1], +(m[4]||0), +(m[5]||0), +(m[6]||0)).getTime();
     }
   }
-
-  // 4. Fallback: angka panjang di ID
   const anyNum = String(id || '').match(/(\d{10,})/);
   if (anyNum) return parseInt(anyNum[1]);
-
   return 0;
 }
 
-/* Format tanggal rilis: relative (baru) atau absolute (lama) */
 function formatReleaseDate(ts, id) {
   const t = parseTs(ts, id);
   if (!t) return '';
@@ -651,7 +654,6 @@ function formatReleaseDate(ts, id) {
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
-/* Apakah karya termasuk baru (< 24 jam)? */
 function isNew(ts, id) {
   const t = parseTs(ts, id);
   return t > 0 && (Date.now() - t) < 86400000 && (Date.now() - t) >= 0;
@@ -751,16 +753,9 @@ async function loadData(){
   }
 }
 
-/* ============================================
-   FIX SORT: Sort robust + BOOST karya baru ke atas
-   ============================================ */
 function processData(data){
   const media = data.media || [];
-
-  // Sort kronologis descending (terbaru di atas)
   media.sort((a, b) => parseTs(b[0], b[13]) - parseTs(a[0], a[13]));
-
-  // BOOST: pastikan karya yang baru saja di-upload ada di posisi #1
   if (LAST_ADDED_ID) {
     const idx = media.findIndex(m => m[13] === LAST_ADDED_ID);
     if (idx > 0) {
@@ -769,7 +764,6 @@ function processData(data){
     }
     LAST_ADDED_ID = null;
   }
-
   STATE.all = media;
   STATE.settings = data.settings || [];
   populateSelects();
@@ -844,7 +838,6 @@ function renderGallery(){
   DOM.loadMoreWrap.classList.toggle('d-none', STATE.filtered.length <= STATE.limit);
 }
 
-/* CARD: tambah tanggal rilis + badge BARU */
 function createCard(item){
   const col = document.createElement('div');
   const card = document.createElement('div');
@@ -1240,7 +1233,7 @@ async function saveKarya(){
     if(mode === 'ADD'){
       rowData['ID'] = 'ID-' + Date.now();
       rowData['VIEWS'] = 0;
-      LAST_ADDED_ID = rowData['ID']; // ← FIX: tandai karya baru untuk di-boost
+      LAST_ADDED_ID = rowData['ID'];
       res = await supabaseClient.from('karya_guru').insert([rowData]);
     } else {
       res = await supabaseClient.from('karya_guru').update(rowData).eq('ID', editId);
