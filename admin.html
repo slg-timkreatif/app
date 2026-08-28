@@ -20,7 +20,7 @@
 </head>
 <body class="bg-slate-100 min-h-screen">
 
-<!-- ═══════════ LOGIN ADMIN (Supabase Auth) ═══════════ -->
+<!-- ═══════════ LOGIN ADMIN ═══════════ -->
 <div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
   <div class="w-full max-w-sm">
     <div class="text-center mb-8">
@@ -28,7 +28,7 @@
         <i data-lucide="shield-check" class="w-8 h-8 text-blue-400"></i>
       </div>
       <h1 class="text-2xl font-black text-white">Admin Panel</h1>
-      <p class="text-slate-400 text-sm mt-1">Guru Berbagi Selogiri · Command Center v3.3</p>
+      <p class="text-slate-400 text-sm mt-1">Guru Berbagi Selogiri · Command Center v3.4</p>
     </div>
     <form id="formLogin" class="card p-6 space-y-4">
       <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
@@ -41,7 +41,7 @@
 <!-- ═══════════ APLIKASI ADMIN ═══════════ -->
 <div id="scrApp" class="hidden min-h-screen flex flex-col md:flex-row">
 
-  <!-- ░░ TOP BAR HP (burger + logout) ░░ -->
+  <!-- ░░ TOP BAR HP ░░ -->
   <div class="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center gap-3">
     <button onclick="openDrawer()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="menu" class="w-5 h-5 text-slate-600"></i></button>
     <div class="flex items-center gap-2 flex-1 min-w-0">
@@ -51,7 +51,7 @@
     <button onclick="doLogout()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center active:scale-90 transition"><i data-lucide="log-out" class="w-4 h-4"></i></button>
   </div>
 
-  <!-- ░░ DRAWER HP (slide dari kiri) ░░ -->
+  <!-- ░░ DRAWER HP ░░ -->
   <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
     <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
     <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
@@ -59,7 +59,7 @@
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center overflow-hidden">
           <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
         </div>
-        <div class="flex-1"><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.3</p></div>
+        <div class="flex-1"><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.4</p></div>
         <button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
       </div>
       <nav class="space-y-1.5">
@@ -83,7 +83,7 @@
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center overflow-hidden">
         <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
       </div>
-      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.3</p></div>
+      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.4</p></div>
     </div>
     <nav class="flex flex-col gap-1 px-3">
       <button data-tab="dash" onclick="setTab('dash')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold bg-blue-50 text-blue-600"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Dashboard</button>
@@ -123,7 +123,6 @@
           <div id="topMenus" class="space-y-2 mt-4"></div>
         </div>
       </div>
-      <!-- AKTIVITAS TERBARU: siapa membuka apa -->
       <div class="card p-5">
         <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-blue-600"></i> Aktivitas Terbaru — Siapa Membuka Apa</p>
         <div id="actList" class="mt-3"></div>
@@ -134,12 +133,13 @@
       </div>
     </section>
 
-    <!-- ══ MENU ═ -->
+    <!-- ══ MENU (dengan urut naik/turun) ══ -->
     <section id="sec-menu" class="hidden space-y-4">
       <div class="flex gap-2">
         <input id="mSearch" type="text" placeholder="Cari menu…" class="inp flex-1">
         <button onclick="openMenuEditor()" class="shrink-0 bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Menu Baru</button>
       </div>
+      <p class="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5"><i data-lucide="info" class="w-3.5 h-3.5"></i> Gunakan tombol ↑ ↓ untuk mengatur urutan. <b>Menu teratas</b> tampil di Pintasan Cepat aplikasi guru.</p>
       <div class="card p-4 border-amber-200 bg-amber-50/60">
         <p class="text-xs font-extrabold text-amber-700 flex items-center gap-2"><i data-lucide="eye" class="w-4 h-4"></i> PREVIEW MODE TAMU — <span id="guestCount">0</span> menu induk terlihat sebelum login</p>
         <div id="guestPrev" class="flex flex-wrap gap-1.5 mt-2"></div>
@@ -210,15 +210,37 @@
       <div id="footList" class="space-y-2"></div>
     </section>
 
-    <!-- ══ QUOTES ══ -->
+    <!-- ══ QUOTES (impor massal CSV/paste + hapus semua) ══ -->
     <section id="sec-quotes" class="hidden space-y-4">
+      <!-- Impor massal -->
       <div class="card p-5 space-y-3">
-        <p class="text-sm font-extrabold text-slate-700">Tambah Kata Mutiara · <span id="qCount" class="text-blue-600">0</span> quotes</p>
+        <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="upload" class="w-4 h-4 text-blue-600"></i> Impor Massal (CSV / Paste dari Excel)</p>
+        <p class="text-[11px] text-slate-400 -mt-1">Satu baris = satu quote. Format: <b>Kutipan ⇥ Tokoh</b> (pemisah: TAB, |, ;, atau koma). Tokoh kosong → "Anonim". Baris header "Kutipan/Tokoh" dilewati otomatis.</p>
+        <div class="flex flex-wrap gap-2">
+          <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 transition"><i data-lucide="file-up" class="w-4 h-4"></i> Pilih File CSV/TXT
+            <input type="file" id="qFile" accept=".csv,.txt" class="hidden" onchange="bacaFileQuotes(event)"></label>
+          <button onclick="$('qPaste').classList.toggle('hidden')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 transition"><i data-lucide="clipboard-paste" class="w-4 h-4"></i> Tempel Teks</button>
+        </div>
+        <textarea id="qPaste" rows="5" class="inp hidden" placeholder="Ing ngarsa sung tuladha…	Ki Hajar Dewantara&#10;Pendidikan adalah senjata…	Nelson Mandela&#10;Quote tanpa tokoh otomatis Anonim"></textarea>
+        <div class="flex items-center gap-2">
+          <button onclick="pratinjauQuotes()" class="bg-blue-50 text-blue-600 font-bold px-4 py-2 rounded-xl text-xs">Pratinjau</button>
+          <p id="qPrevInfo" class="text-[11px] font-bold text-slate-400"></p>
+          <button id="qImportBtn" onclick="imporQuotes()" class="hidden ml-auto bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Impor Sekarang</button>
+        </div>
+      </div>
+      <!-- Tambah satuan -->
+      <div class="card p-5 space-y-3">
+        <p class="text-sm font-extrabold text-slate-700">Tambah Satu · Total <span id="qCount" class="text-blue-600">0</span> quotes</p>
         <div><label class="lbl">Kutipan</label><textarea id="iQuoteText" rows="2" class="inp"></textarea></div>
         <div class="flex gap-2">
           <input id="iQuoteAuthor" class="inp flex-1" placeholder="Tokoh">
           <button onclick="addQuote()" class="shrink-0 bg-blue-600 text-white font-bold px-5 py-2 rounded-xl text-sm">+ Tambah</button>
         </div>
+      </div>
+      <!-- Daftar + hapus semua -->
+      <div class="flex items-center justify-between">
+        <p class="text-xs font-bold text-slate-400">Daftar Quotes</p>
+        <button onclick="hapusSemuaQuotes()" class="text-[11px] font-black text-rose-500 bg-rose-50 px-3 py-2 rounded-lg flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus Semua</button>
       </div>
       <div id="quoteList" class="space-y-2"></div>
     </section>
@@ -308,7 +330,7 @@ function waktuRelatif(ts){
   return d.toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 }
 
-/* ─── DRAWER HP ─── */
+/* ─── DRAWER ─── */
 function openDrawer(){$('drawer').classList.remove('hidden');$('drawerEmail').textContent=$('adminEmail').textContent;requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));}
 function closeDrawer(){$('drawerSheet').classList.add('-translate-x-full');setTimeout(()=>$('drawer').classList.add('hidden'),300);}
 
@@ -330,7 +352,7 @@ async function init(){
 }
 async function doLogout(){await sb.auth.signOut();location.reload();}
 
-/* ─── LOAD DATA ─── */
+/* ─── LOAD ─── */
 async function loadAll(){
   const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru]=await Promise.all([
     sb.from('creative_menus').select('*').order('sort_order'),
@@ -349,7 +371,7 @@ async function loadAll(){
   renderDash();renderMenus();renderGuestPreview();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();fillInfo();icons();
 }
 
-/* ─── DASHBOARD (dengan log aktivitas guru) ─── */
+/* ─── DASHBOARD ─── */
 function renderDash(){
   const today=new Date();today.setHours(0,0,0,0);
   const week=new Date();week.setDate(week.getDate()-7);
@@ -358,7 +380,6 @@ function renderDash(){
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
-  // Grafik 7 hari
   const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d;});
   const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);
     return STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
@@ -366,10 +387,8 @@ function renderDash(){
   $('chartLogin').innerHTML=days.map((d,i)=>`<div class="flex-1 flex flex-col items-center gap-1">
     <div class="w-full bg-blue-500 rounded-t-lg transition-all" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px"></div>
     <span class="text-[9px] font-bold text-slate-400">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'][d.getDay()]}</span></div>`).join('');
-  // Menu terpopuler
   const cnt={};STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{const j=(l.detail||{}).judul;if(j)cnt[j]=(cnt[j]||0)+1;});
   $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
-  // Aktivitas terbaru: siapa membuka apa
   $('actList').innerHTML=STATE.log.slice(0,12).map(l=>{
     const a=AKSI[l.aksi]||['•',l.aksi];
     const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';
@@ -378,11 +397,10 @@ function renderDash(){
       <div class="flex-1 min-w-0"><p class="text-xs font-bold text-slate-700 truncate">${esc(namaGuru(l.guru_id))} <span class="text-slate-400 font-semibold">${a[1]}${det}</span></p></div>
       <span class="text-[10px] text-slate-400 font-semibold shrink-0">${waktuRelatif(l.created_at)}</span></div>`;
   }).join('')||'<p class="text-xs text-slate-400">Belum ada aktivitas.</p>';
-  // Leaderboard
-  $('leadBoard').innerHTML=STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(namaGuru(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  $('leadBoard').innerHTML=STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(namaGuru(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
 }
 
-/* ─── PREVIEW MODE TAMU ─── */
+/* ─── PREVIEW TAMU ─── */
 function guestVisible(m){
   if(!m.is_active||m.tampil_di==='off')return false;
   const r=m.akses_role;
@@ -394,18 +412,37 @@ function renderGuestPreview(){
   $('guestPrev').innerHTML=list.length?list.map(m=>`<span class="text-[10px] font-bold bg-white border border-amber-200 text-amber-700 px-2.5 py-1 rounded-lg">${esc(m.judul)}</span>`).join(''):'<p class="text-[11px] text-amber-600 font-semibold">Landing tamu kosong (tidak ada menu publik).</p>';
 }
 
-/* ─── MENU CRUD ─── */
+/* ─── MENU CRUD + URUT NAIK/TURUN ─── */
 function renderMenus(){
   const f=($('mSearch').value||'').toLowerCase();
-  $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map(m=>`<div class="card p-4 flex items-center gap-3">
+  $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map((m,idx)=>`<div class="card p-4 flex items-center gap-2">
+    <span class="w-6 text-center text-[10px] font-black text-slate-300 shrink-0">${idx+1}</span>
     <span class="w-10 h-10 rounded-xl ${COLOR[m.warna]||COLOR.blue} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
     <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${m.label}</span>`:''} ${!m.is_active?'<span class="text-[9px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">Nonaktif</span>':''}</p>
     <p class="text-[10px] text-slate-400 truncate">${m.sub_menu_dari?'↳ '+m.sub_menu_dari+' · ':''}${ROLE_LABEL[m.akses_role]||'🌐 Publik'} · ${m.tampil_di}</p></div>
+    <div class="flex flex-col gap-1 shrink-0">
+      <button onclick="moveMenu(${m.id},-1)" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center active:scale-90 transition"><i data-lucide="arrow-up" class="w-3 h-3"></i></button>
+      <button onclick="moveMenu(${m.id},1)" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center active:scale-90 transition"><i data-lucide="arrow-down" class="w-3 h-3"></i></button>
+    </div>
     <button onclick="openMenuEditor(${m.id})" class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button>
   </div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada menu.</p>';
   icons();
 }
 $('mSearch').addEventListener('input',renderMenus);
+/* Geser urutan menu → langsung tersimpan */
+async function moveMenu(id,dir){
+  const full=STATE.menus;
+  const i=full.findIndex(m=>m.id===id);
+  const j=i+dir;
+  if(i<0||j<0||j>=full.length)return;
+  const old=full.map(m=>({id:m.id,so:m.sort_order}));
+  [full[i],full[j]]=[full[j],full[i]];
+  full.forEach((m,idx)=>m.sort_order=idx+1);
+  renderMenus();renderGuestPreview();
+  const changed=full.filter((m,idx)=>old[idx].so!==m.sort_order);
+  await Promise.all(changed.map(m=>sb.from('creative_menus').update({sort_order:m.sort_order}).eq('id',m.id)));
+  toast('✅ Urutan menu disimpan');
+}
 function fillParentSelect(){
   $('eParent').innerHTML='<option value="">— Tidak ada —</option>'+STATE.menus.filter(m=>!m.sub_menu_dari).map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');
 }
@@ -487,7 +524,8 @@ function renderFooter(){
   icons();
 }
 
-/* ─── QUOTES ─── */
+/* ─── QUOTES: satuan + IMPOR MASSAL + hapus semua ─── */
+let qBuffer=[];
 async function reloadQuotes(){const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();}
 async function addQuote(){
   const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};
@@ -501,12 +539,73 @@ async function delQuote(id){
   await sb.from('creative_quotes').delete().eq('id',id);
   await reloadQuotes();
 }
+async function hapusSemuaQuotes(){
+  if(!confirm('Hapus SEMUA quotes? Aplikasi akan menampilkan fallback bawaan.'))return;
+  const {error}=await sb.from('creative_quotes').delete().not('id','is',null);
+  if(error)return toast('❌ '+error.message);
+  toast('🗑️ Semua quotes dihapus');await reloadQuotes();
+}
 function renderQuotes(){
   $('qCount').textContent=STATE.quotes.length;
   $('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`<div class="card p-4 flex items-center gap-3">
     <div class="flex-1 min-w-0"><p class="text-xs font-medium italic text-slate-600">"${esc(q.kutipan)}"</p><p class="text-[10px] font-bold text-slate-400 mt-1">— ${esc(q.tokoh)}</p></div>
     <button onclick="delQuote(${q.id})" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>`).join('');
   icons();
+}
+/* Parser CSV sederhana (mendukung tanda kutip) */
+function parseCSVLine(line,delim){
+  const out=[];let cur='';let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(inQ){
+      if(ch=='"'){if(line[i+1]=='"'){cur+='"';i++;}else inQ=false;}
+      else cur+=ch;
+    }else{
+      if(ch=='"')inQ=true;
+      else if(ch==delim){out.push(cur);cur='';}
+      else cur+=ch;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+function detectDelim(line){
+  const cands=['\t','|',';',','];
+  let best=null,bn=0;
+  for(const d of cands){const n=line.split(d).length-1;if(n>bn){bn=n;best=d;}}
+  return best;
+}
+function parseQuotesText(text){
+  const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
+  const rows=[];
+  for(const line of lines){
+    if(/kutipan/i.test(line)&&/tokoh/i.test(line))continue; // lewati header
+    const d=detectDelim(line);
+    let kut=line,tok='';
+    if(d){const p=parseCSVLine(line,d).map(s=>s.trim());kut=p[0]||'';tok=p.slice(1).join(' ').trim();}
+    if(kut)rows.push({kutipan:kut,tokoh:tok||'Anonim'});
+  }
+  return rows;
+}
+function bacaFileQuotes(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{$('qPaste').value=rd.result;$('qPaste').classList.remove('hidden');pratinjauQuotes();};
+  rd.readAsText(f);
+  ev.target.value='';
+}
+function pratinjauQuotes(){
+  qBuffer=parseQuotesText($('qPaste').value);
+  $('qPrevInfo').textContent=qBuffer.length?`✅ ${qBuffer.length} quote siap diimpor`:'⚠️ Tidak ada baris valid';
+  $('qImportBtn').classList.toggle('hidden',!qBuffer.length);
+}
+async function imporQuotes(){
+  if(!qBuffer.length)return;
+  const {error}=await sb.from('creative_quotes').insert(qBuffer);
+  if(error)return toast('❌ '+error.message);
+  toast(`✅ ${qBuffer.length} quote diimpor`);
+  qBuffer=[];$('qPaste').value='';$('qPaste').classList.add('hidden');$('qPrevInfo').textContent='';$('qImportBtn').classList.add('hidden');
+  await reloadQuotes();
 }
 
 /* ─── NOTIFIKASI ─── */
@@ -567,7 +666,7 @@ function renderGuru(){
 }
 $('gSearch').addEventListener('input',renderGuru);
 
-/* ─── TAB (sekalian tutup drawer) ─── */
+/* ─── TAB ── */
 function setTab(t){
   closeDrawer();
   document.querySelectorAll('.tab-btn').forEach(b=>{const on=b.dataset.tab===t;
