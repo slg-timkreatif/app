@@ -84,7 +84,7 @@ tailwind.config={darkMode:'class',theme:{extend:{
 
       <!-- ══ BERANDA ══ -->
       <section id="pageHome" class="space-y-4 min-w-0">
-        <!-- Sapaan + chip CUACA (tanpa jam) -->
+        <!-- Sapaan + chip CUACA -->
         <div class="flex items-end justify-between gap-3 animate-fade-up">
           <div class="min-w-0">
             <p id="txtTanggal" class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest"></p>
@@ -107,12 +107,12 @@ tailwind.config={darkMode:'class',theme:{extend:{
           </div>
         </div>
 
-        <!-- Kartu Pasang Aplikasi (PWA, auto-hilang jika terpasang) -->
+        <!-- Kartu Pasang Aplikasi (PWA) -->
         <div id="installCard" class="hidden card p-4 items-center gap-3 border-blue-100 dark:border-blue-900 animate-fade-up">
           <span class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span>
           <div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-400">Akses cepat dari layar utama HP Anda</p></div>
           <button onclick="pasangApp()" class="shrink-0 bg-blue-600 text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button>
-          <button onclick="$('installCard').classList.add('hidden')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button>
+          <button onclick="$('installCard').classList.add('hidden');$('installCard').classList.remove('flex')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 min-w-0">
@@ -121,12 +121,16 @@ tailwind.config={darkMode:'class',theme:{extend:{
             <p id="bannerPesan" class="flex-1 text-xs font-semibold leading-snug"></p>
             <button id="bannerBtn" class="shrink-0 bg-white/95 text-blue-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">Cek</button>
           </div>
+          <!-- Kartu Quote: tombol GANTI kini IKON REFRESH -->
           <div class="card p-4 relative overflow-hidden animate-fade-up min-w-0">
             <i data-lucide="quote" class="w-7 h-7 text-blue-100 dark:text-blue-900 absolute top-3 right-3"></i>
             <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 dark:text-slate-300 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
             <div class="flex items-center justify-between mt-2">
               <p id="quoteAuthor" class="text-[11px] font-bold text-slate-400">— …</p>
-              <button onclick="gantiQuote()" class="text-[11px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/40 px-2.5 py-1.5 rounded-lg active:scale-95 transition">Ganti</button>
+              <button id="btnQuote" onclick="gantiQuote()" title="Ganti kata mutiara"
+                class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center active:scale-90 transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -352,7 +356,7 @@ function setThemeColor(){
   document.querySelector('meta[name=theme-color]').setAttribute('content',dark?'#020617':'#f8fafc');
 }
 
-/* ═══ PWA (auto-hilang jika sudah terpasang) ═══ */
+/* ═══ PWA (auto-hilang jika terpasang) ═══ */
 let deferredPrompt=null;
 function initPWA(){
   const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
@@ -375,7 +379,7 @@ async function muatCuaca(){
     const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');
     const j=await r.json();
     if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}
-  }catch(e){/* jaringan gagal → chip tetap tersembunyi */}
+  }catch(e){}
 }
 function showWx(cw){
   const code=cw.weathercode;let icon='cloud-sun',label='Berawan';
@@ -471,19 +475,19 @@ function renderAuthUI(){
   $('profGuest').classList.toggle('hidden',on);
   $('profData').classList.toggle('hidden',!on);
   $('authCard').classList.toggle('hidden',on);
-  /* Tamu: sembunyikan pintasan, info terbaru, lanjukan, dan semua lonceng */
   ['quickBox','newsBox','bellHdr','sideNotif','navNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
   if(!on)$('recentBox').classList.add('hidden');
 }
 
-/* ═══ BOOT: guest-first ═══ */
+/* ═══ BOOT: guest-first + log buka_aplikasi ═══ */
 (async function boot(){
   if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
   setThemeColor();initPWA();muatCuaca();icons();
   const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');
   if(token&&saved){
     try{const v=await ssoVerify(token);
-      if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}
+      if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;
+        sb.rpc('creative_log_activity',{p_guru_id:STATE.profile.sub||STATE.profile.id,p_aksi:'buka_aplikasi',p_detail:{}});}
       else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}
     }catch(e){}
   }
@@ -502,7 +506,13 @@ async function muatSemuaData(){
     gid?sb.from('creative_gamification').select('*').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
     sb.from('creative_notifications').select('*').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(20),
   ]);
-  STATE.config=cfg.data;STATE.menus=menus.data||[];STATE.quotes=quotes.data||[];STATE.footer=footer.data||[];STATE.gam=gam.data;STATE.notifs=notifs.data||[];
+  STATE.config=cfg.data;STATE.menus=menus.data||[];STATE.quotes=quotes.data||[];
+  STATE.footer=(footer.data||[]).filter(f=>f.is_active!==false);
+  STATE.gam=gam.data;
+  /* Filter notifikasi sesuai target role */
+  const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
+  const myRole=isKS?'Kepala Sekolah':'Guru';
+  STATE.notifs=(notifs.data||[]).filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
   if(STATE.config){
     $('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;
     $('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;
@@ -544,8 +554,11 @@ function renderPopup(){
   $('popContent').innerHTML=c.pop_pesan.startsWith('<')?c.pop_pesan:`<div class="bg-white p-6 text-center"><h3 class="text-lg font-black text-slate-800">${c.pop_judul}</h3><p class="text-sm text-slate-500 mt-2">${c.pop_pesan}</p></div>`;
   $('mPop').classList.remove('hidden');$('mPop').classList.add('flex');
 }
+/* Quote: ikon refresh berputar saat diganti */
 function gantiQuote(){
   if(!STATE.quotes.length)return;
+  const b=$('btnQuote');
+  if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}
   const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];
   $('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;
 }
@@ -614,7 +627,7 @@ function bukaUrl(m){
 function tutupApp(){$('mApp').classList.add('hidden');$('mAppFrame').src='';}
 
 function renderRecent(){
-  if(!STATE.profile)return; // tamu tanpa "Lanjutkan"
+  if(!STATE.profile)return;
   const rec=JSON.parse(localStorage.getItem('gb_recent')||'[]');if(!rec.length)return;
   $('recentBox').classList.remove('hidden');
   $('recentList').innerHTML=rec.map(r=>{const [bg,tx]=COLOR[r.warna]||COLOR.blue;
@@ -624,7 +637,7 @@ function renderRecent(){
   icons();
 }
 function renderQuick(){
-  if(!STATE.profile)return; // tamu tanpa pintasan
+  if(!STATE.profile)return;
   const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari).slice(0,isMobile?4:8);
   $('quickList').innerHTML=list.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;
     return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0">
@@ -633,7 +646,7 @@ function renderQuick(){
   icons();
 }
 function renderNews(){
-  if(!STATE.profile)return; // tamu tanpa info terbaru
+  if(!STATE.profile)return;
   const n=STATE.notifs.slice(0,3);
   $('newsBox').classList.toggle('hidden',!n.length);
   $('newsList').innerHTML=n.map(x=>`<button onclick="openPanel('pNotif')" class="card w-full p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition min-w-0">
@@ -703,7 +716,7 @@ function toggleDark(){document.documentElement.classList.toggle('dark');localSto
 function bersihCache(){localStorage.removeItem('gb_recent');location.reload();}
 function kirimWA(){window.open('https://chat.whatsapp.com/LFaBoWvZ8l0DIaefiWiAl5','_blank');}
 
-/* ─── Feedback ─── */
+/* ─── Feedback ── */
 function setTipeFb(t,btn){STATE.tipeFb=t;document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('bg-blue-600','text-white');b.classList.add('bg-slate-100','text-slate-600');});btn.classList.add('bg-blue-600','text-white');}
 function renderStars(){$('starRow').innerHTML=[1,2,3,4,5].map(i=>`<button onclick="STATE.rating=${i};renderStars()">${i<=STATE.rating?'⭐':'☆'}</button>`).join('');}
 renderStars();
