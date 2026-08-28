@@ -15,8 +15,8 @@
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{
   fontFamily:{sans:['Inter','sans-serif']},
-  animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both'},
-  keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}}}
+  animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},
+  keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}
 }}}
 </script>
 <style>
@@ -35,7 +35,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
 
 <div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
 
-  <!-- ░░ SIDEBAR DESKTOP ░░ -->
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sticky top-0 h-screen">
     <div class="flex items-center gap-3 mb-8">
       <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center overflow-hidden">
@@ -54,12 +53,10 @@ tailwind.config={darkMode:'class',theme:{extend:{
       <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p>
       <div id="footSideList" class="space-y-0.5 opacity-80"></div>
     </div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.5</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.6</span></p>
   </aside>
 
-  <!-- ░░ KOLOM KONTEN ░░ -->
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
-
     <header class="sticky top-0 z-40 px-5 md:px-8 pt-5 pb-3 flex items-center justify-between bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
       <div class="flex items-center gap-3 md:hidden">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-700 shadow-md">
@@ -81,8 +78,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </header>
 
     <main class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 py-4 pb-28 md:pb-8 space-y-4">
-
-      <!-- ══ BERANDA ══ -->
       <section id="pageHome" class="space-y-4 min-w-0">
         <div class="flex items-end justify-between gap-3 animate-fade-up">
           <div class="min-w-0">
@@ -154,7 +149,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
         <div id="footList" class="flex gap-2 overflow-x-auto no-scroll pb-1 animate-fade-up md:hidden"></div>
       </section>
 
-      <!-- ══ APLIKASI ══ -->
       <section id="pageApps" class="hidden space-y-4 min-w-0">
         <div class="relative">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
@@ -173,7 +167,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </nav>
   </div>
 
-  <!-- ═══ SHEET LOGIN ═══ -->
   <div id="pLogin" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300" id="pLoginSheet">
@@ -195,7 +188,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </div>
   </div>
 
-  <!-- ═══ SHEET NOTIFIKASI ═══ -->
   <div id="pNotif" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-slate-50 dark:bg-slate-950 rounded-t-3xl translate-y-full transition-transform duration-300 flex flex-col max-h-[85vh]" id="pNotifSheet">
@@ -207,7 +199,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </div>
   </div>
 
-  <!-- ═══ SHEET PROFIL ═══ -->
   <div id="pProfil" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pProfil')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300 max-h-[85vh] overflow-y-auto no-scroll" id="pProfilSheet">
@@ -256,7 +247,6 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </div>
   </div>
 
-  <!-- ═══ SHEET PENGATURAN ═══ -->
   <div id="pSetting" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pSetting')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300 max-h-[80vh] overflow-y-auto no-scroll" id="pSettingSheet">
@@ -272,11 +262,10 @@ tailwind.config={darkMode:'class',theme:{extend:{
         <button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button>
         <button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 text-emerald-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button>
       </div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.5</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.6</span></p>
     </div>
   </div>
 
-  <!-- ═══ SHEET LAPORAN ═══ -->
   <div id="pFb" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300" id="pFbSheet">
@@ -302,26 +291,25 @@ tailwind.config={darkMode:'class',theme:{extend:{
     <iframe id="mAppFrame" class="w-full bg-white" style="height:calc(100% - 56px)"></iframe>
   </div>
 
-  <!-- ═══ POP-UP FLYER (FIX: gambar utuh sesuai rasio + tema emerald) ═══ -->
   <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
     <div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll">
       <div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div>
       <button onclick="document.getElementById('mPop').classList.add('hidden')" class="mt-4 w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg shadow-emerald-600/25">Mengerti</button>
     </div>
   </div>
+
   <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
     <div class="w-full max-w-sm card p-6 animate-pop">
       <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-3">Pasang di iPhone/iPad</p>
       <ol class="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside">
-        <li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas)</li>
+        <li>Ketuk tombol <b>Bagikan</b></li>
         <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
-        <li>Ketuk <b>Tambahkan</b> — selesai! 🎉</li>
+        <li>Ketuk <b>Tambahkan</b></li>
       </ol>
       <button onclick="document.getElementById('mIos').classList.add('hidden')" class="mt-5 w-full bg-emerald-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button>
     </div>
   </div>
 
-  <!-- ═══ TOAST MODERN ═══ -->
   <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]">
     <div class="flex items-center gap-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200/60 dark:border-slate-700 shadow-2xl shadow-slate-900/20 rounded-2xl pl-3 pr-5 py-3">
       <span id="toastIconWrap" class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span>
@@ -369,7 +357,13 @@ function toast(m,type){
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){
   if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;
-  try{const t=localStorage.getItem('gb_token');const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}
+  try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}
+}
+
+/* Helper log aktivitas: insert langsung (dijamin lolos RLS "Sistem: insert activity") */
+function logAktivitas(aksi,detail){
+  const gid=guruId();if(!gid)return;
+  sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});
 }
 
 function setThemeColor(){
@@ -482,7 +476,7 @@ $('formLogin').addEventListener('submit',async e=>{
     if(gid){
       const {data}=await sb.rpc('creative_update_gamification',{p_guru_id:gid});
       if(data&&data.poin_added>0)setTimeout(()=>toast('+'+data.poin_added+' poin! Pohon Ilmu kamu tumbuh.'),600);
-      sb.rpc('creative_log_activity',{p_guru_id:gid,p_aksi:'login',p_detail:{}});
+      logAktivitas('login');
     }
     renderAuthUI();setSapaan();muatSemuaData();
     toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');
@@ -509,8 +503,7 @@ function renderAuthUI(){
   if(token&&saved){
     try{const v=await ssoVerify(token);
       if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;
-        const gid=guruId();
-        if(gid)sb.rpc('creative_log_activity',{p_guru_id:gid,p_aksi:'buka_aplikasi',p_detail:{}});}
+        logAktivitas('buka_aplikasi');}
       else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}
     }catch(e){}
   }
@@ -518,7 +511,7 @@ function renderAuthUI(){
   renderAuthUI();setSapaan();muatSemuaData();
 })();
 
-/* ═══ DATA + SMART CACHE (FIX URUTAN: data personal diset sebelum render) ═══ */
+/* ═══ DATA + SMART CACHE ═══ */
 function applyPortal(p){
   STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];
   if(STATE.config){
@@ -544,13 +537,12 @@ async function muatSemuaData(){
   ]);
   const portal={config:cfg.data,menus:menus.data||[],quotes:quotes.data||[],footer:(footer.data||[]).filter(f=>f.is_active!==false)};
   try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:portal}));}catch(e){}
-  /* FIX: set data personal DULU, baru render portal */
   STATE.gam=gam.data;
   const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
   const myRole=isKS?'Kepala Sekolah':'Guru';
   STATE.notifs=(notifs.data||[]).filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
   applyPortal(portal);
-  renderPohon();renderRecent();renderNotif();renderProfil();icons();
+  renderPohon();renderNotif();renderProfil();icons();
 }
 
 function setSapaan(){
@@ -580,13 +572,11 @@ function renderBanner(){
   $('bannerPesan').textContent=c.banner_pesan;$('bannerBtn').textContent=c.banner_label||'Cek';
   $('bannerBtn').onclick=()=>{const u=c.banner_link;if(u&&u.startsWith('ext:'))window.open(u.slice(4),'_blank');else if(u)location.href=u;};
 }
-/* FIX POP-UP: gambar utuh sesuai rasio + aksen tema emerald */
 function renderPopup(){
   const c=STATE.config;if(!c||c.pop_status!=='ON')return;
   let html;
-  if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){
-    html=c.pop_pesan; /* flyer HTML kaya sudah punya gaya sendiri */
-  }else{
+  if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}
+  else{
     const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';
     html=`<div class="bg-white dark:bg-slate-900">
       <div class="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
@@ -658,8 +648,7 @@ function klikAnak(id){const m=STATE.menus.find(x=>x.id===id);if(!m)return;
   bukaUrl(m);}
 function bukaUrl(m){
   if(!m)return;
-  const gid=guruId();
-  if(gid)sb.rpc('creative_log_activity',{p_guru_id:gid,p_aksi:'buka_menu',p_detail:{judul:m.judul}});
+  logAktivitas('buka_menu',{judul:m.judul});
   let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);
   rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);
   localStorage.setItem('gb_recent',JSON.stringify(rec));renderRecent();
