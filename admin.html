@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}
   .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
@@ -16,11 +16,12 @@
   .inp{width:100%;border:1px solid #e2e8f0;border-radius:.75rem;background:#f8fafc;padding:.65rem .9rem;font-size:.85rem;font-weight:500;color:#334155;outline:none}
   .inp:focus{box-shadow:0 0 0 3px rgba(16,185,129,.15);border-color:#10b981}
   .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem}
+  @keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin .8s linear infinite}
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
 
-<!-- ═══════════ LOGIN ADMIN (senada dengan app guru) ═══════════ -->
+<!-- ═══════════ LOGIN ADMIN ═══════════ -->
 <div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-950">
   <div class="w-full max-w-sm">
     <div class="text-center mb-8">
@@ -31,11 +32,19 @@
       <p class="text-emerald-200 text-sm font-medium mt-1">Guru Berbagi Selogiri · Command Center</p>
     </div>
     <form id="formLogin" class="bg-white rounded-3xl p-6 space-y-4 shadow-xl">
-      <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
-      <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp" placeholder="••••••••"></div>
-      <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard</button>
+      <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id" autocomplete="username"></div>
+      <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp" placeholder="••••••••" autocomplete="current-password"></div>
+      <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="inRemember" type="checkbox" checked class="w-4 h-4 accent-emerald-600"> Ingat saya di perangkat ini</label>
+      <button id="btnLogin" type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard</button>
+      <p id="loginErr" class="hidden text-xs font-bold text-rose-500 text-center"></p>
     </form>
   </div>
+</div>
+
+<!-- ═══════════ LOADING SESI (saat refresh, cek sesi dulu) ═══════════ -->
+<div id="scrLoading" class="hidden fixed inset-0 z-[100] bg-slate-100 items-center justify-center flex-col gap-3">
+  <div class="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full spin"></div>
+  <p class="text-sm font-bold text-slate-500">Memulihkan sesi…</p>
 </div>
 
 <!-- ═══════════ APLIKASI ADMIN ═══════════ -->
@@ -59,7 +68,7 @@
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center overflow-hidden">
           <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
         </div>
-        <div class="flex-1"><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.5</p></div>
+        <div class="flex-1"><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.6</p></div>
         <button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
       </div>
       <nav class="space-y-1.5" id="navMobile"></nav>
@@ -74,7 +83,7 @@
       <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center overflow-hidden">
         <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo">
       </div>
-      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.5</p></div>
+      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.6</p></div>
     </div>
     <nav class="flex flex-col gap-1 px-3" id="navDesktop"></nav>
     <div class="mt-auto p-5">
@@ -86,7 +95,6 @@
   <!-- ░░ KONTEN ░░ -->
   <main class="flex-1 p-5 md:p-8 space-y-5 min-w-0">
 
-    <!-- ══ DASHBOARD ══ -->
     <section id="sec-dash" class="space-y-4">
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="users" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase tracking-wider text-slate-400">Total Guru</p><p id="stGuru" class="text-xl font-black text-slate-800">0</p></div></div>
@@ -97,7 +105,7 @@
       </div>
       <div class="grid lg:grid-cols-3 gap-4">
         <div class="card p-5 lg:col-span-2">
-          <p class="text-sm font-extrabold text-slate-700">Aktivitas Login · 7 Hari</p>
+          <p class="text-sm font-extrabold text-slate-700">Aktivitas Login · 7 Hari <span id="chartTotal" class="ml-1 text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">0 login</span></p>
           <div id="chartLogin" class="flex items-end gap-2 h-40 mt-4"></div>
         </div>
         <div class="card p-5">
@@ -106,7 +114,7 @@
         </div>
       </div>
       <div class="card p-5">
-        <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i> Aktivitas Terbaru — Siapa Membuka Apa</p>
+        <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-emerald-600"></i> Aktivitas Terbaru — Siapa Membuka Apa <span id="actCount" class="ml-1 text-[10px] font-black text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">0</span></p>
         <div id="actList" class="mt-3"></div>
       </div>
       <div class="card p-5">
@@ -115,7 +123,6 @@
       </div>
     </section>
 
-    <!-- ══ MENU ══ -->
     <section id="sec-menu" class="hidden space-y-4">
       <div class="flex gap-2">
         <input id="mSearch" type="text" placeholder="Cari menu…" class="inp flex-1">
@@ -129,7 +136,6 @@
       <div id="menuList" class="space-y-2"></div>
     </section>
 
-    <!-- ══ BANNER & POPUP ══ -->
     <section id="sec-info" class="hidden space-y-4">
       <div class="grid lg:grid-cols-2 gap-4">
         <div class="card p-5 space-y-3">
@@ -155,15 +161,12 @@
       </div>
       <div class="card p-5 space-y-3">
         <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="settings-2" class="w-4 h-4 text-slate-500"></i> Sistem</p>
-        <div class="grid grid-cols-3 gap-3">
-          <div class="col-span-3"><label class="lbl">Versi Aplikasi</label><input id="iVersi" class="inp"></div>
-        </div>
-        <p class="text-[10px] text-slate-400">Sapaan & cache kini otomatis di aplikasi guru (lebih simpel & aman).</p>
+        <div><label class="lbl">Versi Aplikasi</label><input id="iVersi" class="inp"></div>
+        <p class="text-[10px] text-slate-400">Sapaan & cache kini otomatis di aplikasi guru.</p>
       </div>
       <button onclick="saveInfo()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition"><i data-lucide="save" class="w-4 h-4"></i> Simpan Semua Pengaturan</button>
     </section>
 
-    <!-- ══ NOTIFIKASI ══ -->
     <section id="sec-notif" class="hidden space-y-4">
       <div class="card p-5 space-y-3">
         <p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman Baru</p>
@@ -180,7 +183,6 @@
       <div id="notList" class="space-y-2"></div>
     </section>
 
-    <!-- ══ FOOTER ══ -->
     <section id="sec-footer" class="hidden space-y-4">
       <div class="card p-5 grid md:grid-cols-4 gap-3">
         <div><label class="lbl">Judul</label><input id="iFootJudul" class="inp"></div>
@@ -191,17 +193,16 @@
       <div id="footList" class="space-y-2"></div>
     </section>
 
-    <!-- ══ QUOTES ══ -->
     <section id="sec-quotes" class="hidden space-y-4">
       <div class="card p-5 space-y-3">
         <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="upload" class="w-4 h-4 text-emerald-600"></i> Impor Massal (CSV / Paste dari Excel)</p>
-        <p class="text-[11px] text-slate-400 -mt-1">Satu baris = satu quote. Format: <b>Kutipan ⇥ Tokoh</b> (pemisah: TAB, |, ;, atau koma). Tokoh kosong → "Anonim".</p>
+        <p class="text-[11px] text-slate-400 -mt-1">Format: <b>Kutipan ⇥ Tokoh</b> (pemisah: TAB, |, ;, atau koma).</p>
         <div class="flex flex-wrap gap-2">
           <label class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 transition"><i data-lucide="file-up" class="w-4 h-4"></i> Pilih File CSV/TXT
             <input type="file" id="qFile" accept=".csv,.txt" class="hidden" onchange="bacaFileQuotes(event)"></label>
           <button onclick="$('qPaste').classList.toggle('hidden')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 transition"><i data-lucide="clipboard-paste" class="w-4 h-4"></i> Tempel Teks</button>
         </div>
-        <textarea id="qPaste" rows="5" class="inp hidden" placeholder="Ing ngarsa sung tuladha…	Ki Hajar Dewantara&#10;Pendidikan adalah senjata…	Nelson Mandela"></textarea>
+        <textarea id="qPaste" rows="5" class="inp hidden" placeholder="Ing ngarsa sung tuladha…	Ki Hajar Dewantara"></textarea>
         <div class="flex items-center gap-2">
           <button onclick="pratinjauQuotes()" class="bg-emerald-50 text-emerald-600 font-bold px-4 py-2 rounded-xl text-xs active:scale-95 transition">Pratinjau</button>
           <p id="qPrevInfo" class="text-[11px] font-bold text-slate-400"></p>
@@ -223,13 +224,11 @@
       <div id="quoteList" class="space-y-2"></div>
     </section>
 
-    <!-- ══ SARAN ══ -->
     <section id="sec-fb" class="hidden space-y-4">
       <select id="fbFilter" onchange="renderFb()" class="inp w-40"><option value="all">Semua Status</option><option value="baru">🔴 Baru</option><option value="diproses">🟡 Diproses</option><option value="selesai">🟢 Selesai</option></select>
       <div id="fbList" class="space-y-2"></div>
     </section>
 
-    <!-- ══ GURU ══ -->
     <section id="sec-guru" class="hidden space-y-4">
       <div class="flex items-center gap-2">
         <input id="gSearch" type="text" placeholder="Cari nama / email / sekolah…" class="inp flex-1">
@@ -284,20 +283,25 @@
   </div>
 </div>
 
-<!-- ═══ TOAST MODERN (seragam dengan app guru) ═══ -->
+<!-- ═══ TOAST MODERN ═══ -->
 <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]">
-  <div class="flex items-center gap-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200/60 shadow-2xl shadow-slate-900/20 rounded-2xl pl-3 pr-5 py-3">
+  <div class="flex items-center gap-3 bg-white/95 border border-slate-200 shadow-2xl shadow-slate-900/20 rounded-2xl pl-3 pr-5 py-3">
     <span id="toastIconWrap" class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span>
     <p id="toastMsg" class="text-[13px] font-bold text-slate-700 leading-snug">…</p>
   </div>
 </div>
 
 <script>
+/* ═══ KONFIG + SESI PERSISTEN ═══ */
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
-const sb=window.supabase.createClient(SB_URL,SB_ANON);
+/* Kunci sesi persisten: auto-refresh token + simpan di localStorage */
+const sb=window.supabase.createClient(SB_URL,SB_ANON,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}
+});
+
 const $=id=>document.getElementById(id);
-const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],gam:[],config:null,editMenuId:null};
+const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],gam:[],config:null,editMenuId:null,currentUser:null};
 const COLOR={teal:'bg-teal-100 text-teal-600',orange:'bg-orange-100 text-orange-600',blue:'bg-blue-100 text-blue-600',green:'bg-green-100 text-green-600',rose:'bg-rose-100 text-rose-600',violet:'bg-violet-100 text-violet-600',fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',red:'bg-red-100 text-red-600',emerald:'bg-emerald-100 text-emerald-600',yellow:'bg-yellow-100 text-yellow-600'};
 const ROLE_LABEL={'tamu':'👤 Tamu','all':'🌐 Publik','Guru':'🎓 Guru','Kepala Sekolah':'🏫 Kepsek','off':'🚫 Off','':'🌐 Publik'};
 const AKSI={login:['🔑','Login'],buka_aplikasi:['📱','Membuka aplikasi'],buka_menu:['📂','Membuka menu']};
@@ -314,7 +318,7 @@ function toast(m,type){
   $('toastIconWrap').className='w-8 h-8 rounded-full flex items-center justify-center shrink-0 '+cl;
   icons();
   const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');
-  clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);
+  clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2600);
 }
 function namaGuru(id){const g=STATE.guru.find(x=>x.id===id);return g?g.nama_lengkap.split(',')[0]:'Guru #'+id;}
 function waktuRelatif(ts){
@@ -326,7 +330,113 @@ function waktuRelatif(ts){
   return d.toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 }
 
-/* ─── NAV (dibangun dinamis agar HP & desktop seragam) ─── */
+/* ═══ MANAJEMEN SESI (FIX UTAMA) ═══ */
+/* Listener global: setiap kali Supabase memperbarui sesi (login/logout/refresh token), tangani */
+sb.auth.onAuthStateChange(async (event,session)=>{
+  console.log('[auth]',event,session?session.user.email:'null');
+  if(event==='SIGNED_IN'||event==='TOKEN_REFRESHED'){
+    /* User valid → cek admin, tampilkan app */
+    if(session&&session.user){
+      const {data:isAdmin}=await sb.rpc('creative_is_admin');
+      if(isAdmin){
+        STATE.currentUser=session.user;
+        $('adminEmail').textContent=session.user.email;
+        tampilkanApp();
+      }else{
+        /* Bukan admin → paksa logout */
+        toast('Akun ini bukan admin','error');
+        await sb.auth.signOut();
+      }
+    }
+  }else if(event==='SIGNED_OUT'){
+    STATE.currentUser=null;
+    tampilkanLogin();
+  }
+});
+
+function tampilkanLogin(){
+  $('scrLogin').classList.remove('hidden');
+  $('scrLogin').classList.add('flex');
+  $('scrApp').classList.add('hidden');
+  $('scrApp').classList.remove('flex');
+  $('scrLoading').classList.add('hidden');
+}
+function tampilkanApp(){
+  $('scrLogin').classList.add('hidden');
+  $('scrLogin').classList.remove('flex');
+  $('scrLoading').classList.add('hidden');
+  $('scrApp').classList.remove('hidden');
+  $('scrApp').classList.add('flex');
+  buildNav();loadAll();
+}
+
+/* ═══ BOOT: cek sesi tersimpan, tampilkan loading bila ada ═══ */
+(async function boot(){
+  icons();
+  const {data:{session}}=await sb.auth.getSession();
+  if(session&&session.user){
+    /* Ada sesi tersimpan → tampilkan loading sambil cek admin */
+    $('scrLoading').classList.remove('hidden');
+    $('scrLoading').classList.add('flex');
+    $('scrLogin').classList.add('hidden');
+    try{
+      const {data:isAdmin}=await sb.rpc('creative_is_admin');
+      if(isAdmin){
+        STATE.currentUser=session.user;
+        $('adminEmail').textContent=session.user.email;
+        tampilkanApp();
+      }else{
+        toast('Sesi bukan admin — silakan login ulang','error');
+        await sb.auth.signOut();
+        tampilkanLogin();
+      }
+    }catch(e){
+      toast('Gagal memulihkan sesi','error');
+      tampilkanLogin();
+    }
+  }else{
+    tampilkanLogin();
+  }
+})();
+
+/* Refresh sesi saat tab kembali aktif (jaga-jaga token stale) */
+document.addEventListener('visibilitychange',async ()=>{
+  if(document.visibilityState==='visible'&&STATE.currentUser){
+    try{await sb.auth.getSession();}catch(e){}
+  }
+});
+
+/* ═══ FORM LOGIN ═══ */
+$('formLogin').addEventListener('submit',async e=>{
+  e.preventDefault();
+  $('loginErr').classList.add('hidden');
+  $('btnLogin').disabled=true;
+  $('btnLogin').innerHTML='<span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full spin"></span> Memverifikasi…';
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({
+      email:$('inEmail').value.trim(),
+      password:$('inPass').value
+    });
+    if(error)throw error;
+    /* onAuthStateChange akan menangani transisi ke app */
+    $('inPass').value='';
+    toast('Login berhasil');
+  }catch(err){
+    $('loginErr').textContent='❌ '+err.message;
+    $('loginErr').classList.remove('hidden');
+    $('btnLogin').disabled=false;
+    $('btnLogin').innerHTML='<i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard';
+    icons();
+  }
+});
+
+async function doLogout(){
+  if(!confirm('Keluar dari sesi admin?'))return;
+  await sb.auth.signOut();
+  toast('Sesi diakhiri','info');
+}
+
+/* ═══ NAV ═══ */
 function buildNav(){
   const html=TABS.map(([t,i,l],idx)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold ${idx===0?'bg-emerald-50 text-emerald-600':'text-slate-500 hover:bg-slate-50'}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');
   $('navMobile').innerHTML=html;$('navDesktop').innerHTML=html;
@@ -340,25 +450,7 @@ function setTab(t){
   ['dash','menu','info','notif','footer','quotes','fb','guru'].forEach(s=>$('sec-'+s).classList.toggle('hidden',s!==t));
 }
 
-/* ─── AUTH ─── */
-$('formLogin').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const {error}=await sb.auth.signInWithPassword({email:$('inEmail').value.trim(),password:$('inPass').value});
-  if(error)return toast(error.message,'error');
-  init();
-});
-async function init(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session){icons();return;}
-  const {data:isAdmin}=await sb.rpc('creative_is_admin');
-  if(!isAdmin){toast('Akun ini bukan admin','error');await sb.auth.signOut();return;}
-  $('adminEmail').textContent=session.user.email;
-  $('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');
-  buildNav();loadAll();
-}
-async function doLogout(){await sb.auth.signOut();location.reload();}
-
-/* ─── LOAD ─── */
+/* ═══ LOAD DATA ═══ */
 async function loadAll(){
   const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru]=await Promise.all([
     sb.from('creative_menus').select('*').order('sort_order'),
@@ -377,7 +469,7 @@ async function loadAll(){
   renderDash();renderMenus();renderGuestPreview();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();fillInfo();icons();
 }
 
-/* ─── DASHBOARD ─── */
+/* ═══ DASHBOARD ═══ */
 function renderDash(){
   const today=new Date();today.setHours(0,0,0,0);
   const week=new Date();week.setDate(week.getDate()-7);
@@ -390,23 +482,29 @@ function renderDash(){
   const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);
     return STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
   const max=Math.max(...counts,1);
+  $('chartTotal').textContent=counts.reduce((a,b)=>a+b,0)+' login';
   $('chartLogin').innerHTML=days.map((d,i)=>`<div class="flex-1 flex flex-col items-center gap-1">
-    <div class="w-full bg-emerald-500 rounded-t-lg transition-all" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px"></div>
+    <div class="w-full bg-emerald-500 rounded-t-lg transition-all relative group" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px">
+      ${counts[i]>0?`<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] font-black text-emerald-600">${counts[i]}</span>`:''}
+    </div>
     <span class="text-[9px] font-bold text-slate-400">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'][d.getDay()]}</span></div>`).join('');
   const cnt={};STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{const j=(l.detail||{}).judul;if(j)cnt[j]=(cnt[j]||0)+1;});
-  $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
-  $('actList').innerHTML=STATE.log.slice(0,12).map(l=>{
+  const topList=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  $('topMenus').innerHTML=topList.length?topList.map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join(''):'<p class="text-xs text-slate-400">Belum ada data. Buka menu di aplikasi guru untuk memulai.</p>';
+  const recentLog=STATE.log.slice(0,12);
+  $('actCount').textContent=STATE.log.length;
+  $('actList').innerHTML=recentLog.length?recentLog.map(l=>{
     const a=AKSI[l.aksi]||['•',l.aksi];
     const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';
     return `<div class="flex items-center gap-3 py-2.5 border-b border-slate-50 last:border-0">
       <span class="text-base shrink-0">${a[0]}</span>
       <div class="flex-1 min-w-0"><p class="text-xs font-bold text-slate-700 truncate">${esc(namaGuru(l.guru_id))} <span class="text-slate-400 font-semibold">${a[1]}${det}</span></p></div>
       <span class="text-[10px] text-slate-400 font-semibold shrink-0">${waktuRelatif(l.created_at)}</span></div>`;
-  }).join('')||'<p class="text-xs text-slate-400">Belum ada aktivitas.</p>';
-  $('leadBoard').innerHTML=STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈',''][i]||''}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(namaGuru(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  }).join(''):'<p class="text-xs text-slate-400">Belum ada aktivitas. Login atau buka menu di aplikasi guru untuk memulai.</p>';
+  $('leadBoard').innerHTML=STATE.gam.length?STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(namaGuru(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join(''):'<p class="text-xs text-slate-400">Belum ada data.</p>';
 }
 
-/* ─── MENU ─── */
+/* ═══ MENU ═══ */
 function guestVisible(m){
   if(!m.is_active||m.tampil_di==='off')return false;
   const r=m.akses_role;
@@ -482,7 +580,7 @@ async function delMenu(){
   toast('Menu dihapus');closeMenu();await reloadMenus();
 }
 
-/* ─── INFO ─── */
+/* ═══ INFO ═══ */
 function fillInfo(){
   const c=STATE.config;if(!c)return;
   $('iBanStatus').value=c.banner_status;$('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;
@@ -499,7 +597,7 @@ async function saveInfo(){
   toast('Pengaturan tersimpan & live di portal guru');
 }
 
-/* ─── FOOTER ─── */
+/* ═══ FOOTER ═══ */
 async function reloadFooter(){const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();}
 async function addFooter(){
   const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};
@@ -527,7 +625,7 @@ function renderFooter(){
   icons();
 }
 
-/* ─── QUOTES ─── */
+/* ═══ QUOTES ═══ */
 let qBuffer=[];
 async function reloadQuotes(){const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();}
 async function addQuote(){
@@ -601,7 +699,7 @@ async function imporQuotes(){
   await reloadQuotes();
 }
 
-/* ─── NOTIFIKASI ─── */
+/* ═══ NOTIFIKASI ═══ */
 async function reloadNotif(){const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();}
 async function addNotif(){
   const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value};
@@ -626,7 +724,7 @@ function renderNotif(){
   icons();
 }
 
-/* ─── SARAN ─── */
+/* ═══ SARAN ═══ */
 async function setFbStatus(id,st){
   const {error}=await sb.from('creative_feedback').update({status:st}).eq('id',id);
   if(error)return toast(error.message,'error');
@@ -648,7 +746,7 @@ function renderFb(){
   icons();
 }
 
-/* ─── GURU ─── */
+/* ═══ GURU ═══ */
 function renderGuru(){
   const q=($('gSearch').value||'').toLowerCase();
   const list=STATE.guru.filter(g=>(g.nama_lengkap||'').toLowerCase().includes(q)||(g.email||'').toLowerCase().includes(q)||(g.satuan_pendidikan||'').toLowerCase().includes(q));
