@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Guru Berbagi Selogiri</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+<style>
+  *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}
+  .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
+  .card{background:#fff;border:1px solid #f1f5f9;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:1.25rem}
+  .inp{width:100%;border:1px solid #e2e8f0;border-radius:.75rem;background:#f8fafc;padding:.65rem .9rem;font-size:.85rem;font-weight:500;color:#334155;outline:none}
+  .inp:focus{box-shadow:0 0 0 3px rgba(37,99,235,.15);border-color:#3b82f6}
+  .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem}
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<!-- ═══════════ LOGIN ADMIN (Supabase Auth) ═══════════ -->
+<div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center mb-4">
+        <i data-lucide="shield-check" class="w-8 h-8 text-blue-400"></i>
+      </div>
+      <h1 class="text-2xl font-black text-white">Admin Panel</h1>
+      <p class="text-slate-400 text-sm mt-1">Guru Berbagi Selogiri · Command Center</p>
+    </div>
+    <form id="formLogin" class="card p-6 space-y-4">
+      <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
+      <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp" placeholder="••••••••"></div>
+      <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════ APLIKASI ADMIN ═══════════ -->
+<div id="scrApp" class="hidden min-h-screen flex flex-col md:flex-row">
+
+  <!-- Sidebar -->
+  <aside class="md:w-64 shrink-0 bg-white border-b md:border-b-0 md:border-r border-slate-200 md:min-h-screen md:sticky md:top-0 flex flex-col">
+    <div class="flex items-center gap-3 p-5">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center overflow-hidden">
+        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
+      </div>
+      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.0</p></div>
+    </div>
+    <nav class="flex md:flex-col gap-1 overflow-x-auto no-scroll px-3 pb-3 md:pb-0">
+      <button data-tab="dash" onclick="setTab('dash')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold bg-blue-50 text-blue-600"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Dashboard</button>
+      <button data-tab="menu" onclick="setTab('menu')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="layout-grid" class="w-4 h-4"></i>Menu</button>
+      <button data-tab="info" onclick="setTab('info')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="megaphone" class="w-4 h-4"></i>Banner & Popup</button>
+      <button data-tab="notif" onclick="setTab('notif')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi</button>
+      <button data-tab="footer" onclick="setTab('footer')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="link" class="w-4 h-4"></i>Footer</button>
+      <button data-tab="quotes" onclick="setTab('quotes')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="quote" class="w-4 h-4"></i>Quotes</button>
+      <button data-tab="fb" onclick="setTab('fb')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="lightbulb" class="w-4 h-4"></i>Saran</button>
+      <button data-tab="guru" onclick="setTab('guru')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="users" class="w-4 h-4"></i>Guru</button>
+    </nav>
+    <div class="mt-auto p-5 hidden md:block">
+      <p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p>
+      <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
+    </div>
+  </aside>
+
+  <!-- Konten -->
+  <main class="flex-1 p-5 md:p-8 space-y-5 min-w-0">
+
+    <!-- ══ DASHBOARD ══ -->
+    <section id="sec-dash" class="space-y-4">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="card p-4"><p class="lbl">Total Guru</p><p id="stGuru" class="text-2xl font-black text-slate-800">0</p></div>
+        <div class="card p-4"><p class="lbl">Login Hari Ini</p><p id="stLogin" class="text-2xl font-black text-blue-600">0</p></div>
+        <div class="card p-4"><p class="lbl">Poin Tersebar</p><p id="stPoin" class="text-2xl font-black text-amber-500">0</p></div>
+        <div class="card p-4"><p class="lbl">Saran Baru</p><p id="stFb" class="text-2xl font-black text-rose-500">0</p></div>
+      </div>
+      <div class="grid lg:grid-cols-3 gap-4">
+        <div class="card p-5 lg:col-span-2">
+          <p class="text-sm font-extrabold text-slate-700">Aktivitas Login · 7 Hari</p>
+          <div id="chartLogin" class="flex items-end gap-2 h-40 mt-4"></div>
+        </div>
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700">Menu Terpopuler</p>
+          <div id="topMenus" class="space-y-2 mt-4"></div>
+        </div>
+      </div>
+      <div class="card p-5">
+        <p class="text-sm font-extrabold text-slate-700">🏆 Leaderboard Pohon Ilmu</p>
+        <div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div>
+      </div>
+    </section>
+
+    <!-- ══ MENU ═ -->
+    <section id="sec-menu" class="hidden space-y-4">
+      <div class="flex gap-2">
+        <input id="mSearch" type="text" placeholder="Cari menu…" class="inp flex-1">
+        <button onclick="openMenuEditor()" class="shrink-0 bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Menu Baru</button>
+      </div>
+      <div id="menuList" class="space-y-2"></div>
+    </section>
+
+    <!-- ══ BANNER & POPUP ══ -->
+    <section id="sec-info" class="hidden space-y-4">
+      <div class="grid lg:grid-cols-2 gap-4">
+        <div class="card p-5 space-y-3">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-blue-600"></i> Banner Informasi</p>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl">Status</label><select id="iBanStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
+            <div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Hijau</option><option value="red">Merah</option></select></div>
+          </div>
+          <div><label class="lbl">Isi Pesan</label><textarea id="iBanPesan" rows="3" class="inp"></textarea></div>
+          <div><label class="lbl">Link Tujuan (awali ext: untuk browser luar)</label><input id="iBanLink" class="inp"></div>
+          <div><label class="lbl">Label Tombol</label><input id="iBanLabel" class="inp"></div>
+        </div>
+        <div class="card p-5 space-y-3">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i> Pop-up / Flyer</p>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl">Status</label><select id="iPopStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
+            <div><label class="lbl">Judul</label><input id="iPopJudul" class="inp"></div>
+          </div>
+          <div><label class="lbl">Pesan (mendukung HTML flyer)</label><textarea id="iPopPesan" rows="5" class="inp"></textarea></div>
+        </div>
+      </div>
+      <div class="card p-5 space-y-3">
+        <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="settings-2" class="w-4 h-4 text-slate-500"></i> Sistem</p>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="lbl">Versi Aplikasi</label><input id="iVersi" class="inp"></div>
+          <div><label class="lbl">Sapaan Hello</label><select id="iHello" class="inp"><option>ON</option><option>OFF</option></select></div>
+          <div><label class="lbl">Optimasi</label><select id="iOptimasi" class="inp"><option>ON</option><option>OFF</option></select></div>
+        </div>
+      </div>
+      <button onclick="saveInfo()" class="bg-blue-600 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Semua Pengaturan</button>
+    </section>
+
+    <!-- ══ NOTIFIKASI ══ -->
+    <section id="sec-notif" class="hidden space-y-4">
+      <div class="card p-5 space-y-3">
+        <p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman Baru</p>
+        <div class="grid md:grid-cols-2 gap-3">
+          <div><label class="lbl">Judul</label><input id="iNotJudul" class="inp" placeholder="Judul pengumuman"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">Pengumuman</option><option value="info">Info</option><option value="gamifikasi">Gamifikasi</option></select></div>
+            <div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div>
+          </div>
+        </div>
+        <div><label class="lbl">Pesan</label><textarea id="iNotPesan" rows="2" class="inp"></textarea></div>
+        <button onclick="addNotif()" class="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> Kirim Sekarang</button>
+      </div>
+      <div id="notList" class="space-y-2"></div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <section id="sec-footer" class="hidden space-y-4">
+      <div class="card p-5 grid md:grid-cols-4 gap-3">
+        <div><label class="lbl">Judul</label><input id="iFootJudul" class="inp"></div>
+        <div class="md:col-span-2"><label class="lbl">URL</label><input id="iFootUrl" class="inp"></div>
+        <div><label class="lbl">Icon Lucide</label><input id="iFootIcon" class="inp" placeholder="globe"></div>
+        <button onclick="addFooter()" class="md:col-span-4 bg-blue-600 text-white font-bold py-2.5 rounded-xl text-sm">+ Tambah Link Footer</button>
+      </div>
+      <div id="footList" class="space-y-2"></div>
+    </section>
+
+    <!-- ══ QUOTES ══ -->
+    <section id="sec-quotes" class="hidden space-y-4">
+      <div class="card p-5 space-y-3">
+        <p class="text-sm font-extrabold text-slate-700">Tambah Kata Mutiara · <span id="qCount" class="text-blue-600">0</span> quotes</p>
+        <div><label class="lbl">Kutipan</label><textarea id="iQuoteText" rows="2" class="inp"></textarea></div>
+        <div class="flex gap-2">
+          <input id="iQuoteAuthor" class="inp flex-1" placeholder="Tokoh">
+          <button onclick="addQuote()" class="shrink-0 bg-blue-600 text-white font-bold px-5 py-2 rounded-xl text-sm">+ Tambah</button>
+        </div>
+      </div>
+      <div id="quoteList" class="space-y-2"></div>
+    </section>
+
+    <!-- ══ SARAN ══ -->
+    <section id="sec-fb" class="hidden space-y-4">
+      <select id="fbFilter" onchange="renderFb()" class="inp w-40"><option value="all">Semua Status</option><option value="baru">Baru</option><option value="diproses">Diproses</option><option value="selesai">Selesai</option></select>
+      <div id="fbList" class="space-y-2"></div>
+    </section>
+
+    <!-- ══ GURU ══ -->
+    <section id="sec-guru" class="hidden space-y-4">
+      <div class="flex items-center gap-2">
+        <input id="gSearch" type="text" placeholder="Cari nama / email / sekolah…" class="inp flex-1">
+        <span class="text-xs font-bold text-slate-500 shrink-0"><span id="gCount">0</span> guru</span>
+      </div>
+      <div id="guruTable" class="card overflow-hidden"></div>
+    </section>
+  </main>
+</div>
+
+<!-- ═══ MODAL EDITOR MENU ═══ -->
+<div id="mMenu" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50">
+  <div class="w-full max-w-lg bg-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto no-scroll space-y-3">
+    <div class="flex items-center justify-between">
+      <p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p>
+      <button onclick="closeMenu()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+    <div><label class="lbl">Judul Menu</label><input id="eJudul" class="inp"></div>
+    <div><label class="lbl">Deskripsi</label><input id="eDesk" class="inp"></div>
+    <div><label class="lbl">URL Tujuan</label><input id="eUrl" class="inp" placeholder="https://… atau file.html"></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="lbl">Icon (Lucide)</label><input id="eIcon" class="inp" placeholder="bot"></div>
+      <div><label class="lbl">Warna</label><select id="eWarna" class="inp"><option>blue</option><option>teal</option><option>rose</option><option>orange</option><option>green</option><option>emerald</option><option>violet</option><option>fuchsia</option><option>cyan</option><option>red</option><option>yellow</option></select></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="lbl">Parent (Submenu)</label><select id="eParent" class="inp"><option value="">— Tidak ada —</option></select></div>
+      <div><label class="lbl">Tampil Di</label><select id="eTampil" class="inp"><option value="all">Semua</option><option value="mobile">HP Saja</option><option value="desktop">PC Saja</option><option value="off">Off</option></select></div>
+    </div>
+    <div class="grid grid-cols-3 gap-3">
+      <div><label class="lbl">Ukuran</label><select id="eUkuran" class="inp"><option value="normal">Normal</option><option value="wide">Lebar</option></select></div>
+      <div><label class="lbl">Akses</label><select id="eRole" class="inp"><option value="all">Umum</option><option value="Guru">Login Guru</option><option value="Kepala Sekolah">Kepsek</option><option value="tamu">Tamu</option><option value="off">Off</option></select></div>
+      <div><label class="lbl">Cara Buka</label><select id="eBuka" class="inp"><option value="">Browser Luar</option><option value="app">Dalam Aplikasi</option></select></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="lbl">Label Badge</label><input id="eLabel" class="inp" placeholder="Baru / Update / Beta"></div>
+      <div><label class="lbl">Urutan</label><input id="eSort" type="number" class="inp" value="0"></div>
+    </div>
+    <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="eActive" type="checkbox" checked class="w-4 h-4 accent-blue-600"> Aktif (tampil di portal)</label>
+    <div class="flex gap-2 pt-2">
+      <button onclick="saveMenu()" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl text-sm">Simpan Perubahan</button>
+      <button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 py-3 rounded-xl text-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[80] bg-slate-900 text-white text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl opacity-0 -translate-y-2 transition-all duration-300 pointer-events-none"><span id="toastMsg"></span></div>
+
+<script>
+const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
+const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
+const sb=window.supabase.createClient(SB_URL,SB_ANON);
+const $=id=>document.getElementById(id);
+const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],gam:[],config:null,editMenuId:null};
+const COLOR={teal:'bg-teal-100 text-teal-600',orange:'bg-orange-100 text-orange-600',blue:'bg-blue-100 text-blue-600',green:'bg-green-100 text-green-600',rose:'bg-rose-100 text-rose-600',violet:'bg-violet-100 text-violet-600',fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',red:'bg-red-100 text-red-600',emerald:'bg-emerald-100 text-emerald-600',yellow:'bg-yellow-100 text-yellow-600'};
+function toast(m){$('toastMsg').textContent=m;const t=$('toast');t.classList.remove('opacity-0','-translate-y-2');setTimeout(()=>t.classList.add('opacity-0','-translate-y-2'),2200);}
+function icons(){lucide.createIcons();}
+function esc(s){return (s||'').replace(/</g,'&lt;');}
+
+/* ─── AUTH ─── */
+$('formLogin').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const {error}=await sb.auth.signInWithPassword({email:$('inEmail').value.trim(),password:$('inPass').value});
+  if(error)return toast('❌ '+error.message);
+  init();
+});
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){icons();return;}
+  const {data:isAdmin}=await sb.rpc('creative_is_admin');
+  if(!isAdmin){toast('❌ Akun ini bukan admin');await sb.auth.signOut();return;}
+  $('adminEmail').textContent=session.user.email;
+  $('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');
+  loadAll();
+}
+async function doLogout(){await sb.auth.signOut();location.reload();}
+
+/* ─── LOAD DATA ─── */
+async function loadAll(){
+  const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru]=await Promise.all([
+    sb.from('creative_menus').select('*').order('sort_order'),
+    sb.from('creative_footers').select('*').order('sort_order'),
+    sb.from('creative_quotes').select('*').order('id'),
+    sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false}),
+    sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),
+    sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
+    sb.from('creative_gamification').select('*').order('total_poin',{ascending:false}),
+    sb.from('creative_activity_log').select('*').order('created_at',{ascending:false}).limit(2000),
+    sb.rpc('creative_admin_list_guru'),
+  ]);
+  STATE.menus=menus.data||[];STATE.footer=footer.data||[];STATE.quotes=quotes.data||[];
+  STATE.notifs=notifs.data||[];STATE.fb=fb.data||[];STATE.config=cfg.data;STATE.gam=gam.data||[];
+  STATE.log=log.data||[];STATE.guru=guru.data||[];
+  renderDash();renderMenus();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();fillInfo();fillParentSelect();icons();
+}
+
+/* ─── DASHBOARD ─── */
+function renderDash(){
+  const today=new Date();today.setHours(0,0,0,0);
+  $('stGuru').textContent=STATE.guru.length;
+  $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
+  $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
+  $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
+  // Chart 7 hari
+  const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d;});
+  const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);
+    return STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
+  const max=Math.max(...counts,1);
+  $('chartLogin').innerHTML=days.map((d,i)=>`<div class="flex-1 flex flex-col items-center gap-1">
+    <div class="w-full bg-blue-500 rounded-t-lg transition-all" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px"></div>
+    <span class="text-[9px] font-bold text-slate-400">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'][d.getDay()]}</span></div>`).join('');
+  // Top menu
+  const cnt={};STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{const j=(l.detail||{}).judul;if(j)cnt[j]=(cnt[j]||0)+1;});
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  $('topMenus').innerHTML=top.map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  // Leaderboard
+  const nama=id=>{const g=STATE.guru.find(x=>x.id===id);return g?g.nama_lengkap.split(',')[0]:'Guru #'+id;};
+  $('leadBoard').innerHTML=STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(nama(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+}
+
+/* ─── MENU CRUD ─── */
+function renderMenus(){
+  const f=($('mSearch').value||'').toLowerCase();
+  const list=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f));
+  $('menuList').innerHTML=list.map(m=>`<div class="card p-4 flex items-center gap-3">
+    <span class="w-10 h-10 rounded-xl ${COLOR[m.warna]||COLOR.blue} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
+    <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${m.label}</span>`:''} ${!m.is_active?'<span class="text-[9px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">Nonaktif</span>':''}</p>
+    <p class="text-[10px] text-slate-400 truncate">${m.sub_menu_dari?'↳ '+m.sub_menu_dari+' · ':''}${m.akses_role} · ${m.tampil_di}</p></div>
+    <button onclick="openMenuEditor(${m.id})" class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+  </div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada menu.</p>';
+  icons();
+}
+$('mSearch').addEventListener('input',renderMenus);
+function fillParentSelect(){
+  const parents=STATE.menus.filter(m=>!m.sub_menu_dari);
+  $('eParent').innerHTML='<option value="">— Tidak ada —</option>'+parents.map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');
+}
+function openMenuEditor(id){
+  STATE.editMenuId=id||null;
+  $('eTitle').textContent=id?'Edit Menu':'Menu Baru';
+  $('eDelete').classList.toggle('hidden',!id);
+  const m=id?STATE.menus.find(x=>x.id===id):null;
+  fillParentSelect();
+  $('eJudul').value=m?m.judul:'';$('eDesk').value=m?m.deskripsi:'';$('eUrl').value=m?m.url:'';
+  $('eIcon').value=m?m.icon:'';$('eWarna').value=m?m.warna:'blue';$('eParent').value=m?m.sub_menu_dari:'';
+  $('eTampil').value=m?m.tampil_di:'all';$('eUkuran').value=m?m.ukuran:'normal';$('eRole').value=m?m.akses_role:'Guru';
+  $('eBuka').value=m?m.cara_buka:'';$('eLabel').value=m?m.label:'';$('eSort').value=m?m.sort_order:0;$('eActive').checked=m?m.is_active:true;
+  $('mMenu').classList.remove('hidden');$('mMenu').classList.add('flex');icons();
+}
+function closeMenu(){$('mMenu').classList.add('hidden');$('mMenu').classList.remove('flex');}
+async function saveMenu(){
+  const row={judul:$('eJudul').value.trim(),deskripsi:$('eDesk').value.trim(),url:$('eUrl').value.trim(),
+    icon:$('eIcon').value.trim()||'app-window',warna:$('eWarna').value,tampil_di:$('eTampil').value,
+    sub_menu_dari:$('eParent').value,ukuran:$('eUkuran').value,label:$('eLabel').value.trim(),
+    akses_role:$('eRole').value,cara_buka:$('eBuka').value,is_active:$('eActive').checked,sort_order:parseInt($('eSort').value)||0};
+  if(!row.judul)return toast('❌ Judul wajib diisi');
+  const q=STATE.editMenuId?sb.from('creative_menus').update(row).eq('id',STATE.editMenuId):sb.from('creative_menus').insert(row);
+  const {error}=await q;
+  if(error)return toast('❌ '+error.message);
+  toast('✅ Menu tersimpan');closeMenu();
+  const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];
+  renderMenus();fillParentSelect();
+}
+async function delMenu(){
+  if(!confirm('Hapus menu ini?'))return;
+  const {error}=await sb.from('creative_menus').delete().eq('id',STATE.editMenuId);
+  if(error)return toast('❌ '+error.message);
+  toast('🗑️ Menu dihapus');closeMenu();
+  const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];renderMenus();fillParentSelect();
+}
+
+/* ─── INFO ─── */
+function fillInfo(){
+  const c=STATE.config;if(!c)return;
+  $('iBanStatus').value=c.banner_status;$('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;
+  $('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;
+  $('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;
+  $('iVersi').value=c.versi;$('iHello').value=c.status_hello;$('iOptimasi').value=c.optimasi;
+}
+async function saveInfo(){
+  const row={banner_status:$('iBanStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,
+    banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,pop_status:$('iPopStatus').value,
+    pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,versi:$('iVersi').value,
+    status_hello:$('iHello').value,optimasi:$('iOptimasi').value,updated_at:new Date().toISOString()};
+  const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);
+  if(error)return toast('❌ '+error.message);
+  toast('✅ Pengaturan tersimpan & live di portal guru');
+}
+
+/* ─── FOOTER ─── */
+async function addFooter(){
+  const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};
+  if(!row.judul)return toast('❌ Judul wajib');
+  const {error}=await sb.from('creative_footers').insert(row);
+  if(error)return toast('❌ '+error.message);
+  $('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';
+  toast('✅ Footer ditambah');
+  const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();
+}
+async function delFooter(id){
+  if(!confirm('Hapus link ini?'))return;
+  await sb.from('creative_footers').delete().eq('id',id);
+  const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();toast('🗑️ Dihapus');
+}
+function renderFooter(){
+  $('footList').innerHTML=STATE.footer.map(f=>`<div class="card p-4 flex items-center gap-3">
+    <i data-lucide="${f.icon||'globe'}" class="w-4 h-4 text-blue-600 shrink-0"></i>
+    <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800">${esc(f.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(f.url)}</p></div>
+    <button onclick="delFooter(${f.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');
+  icons();
+}
+
+/* ─── QUOTES ─── */
+async function addQuote(){
+  const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};
+  if(!row.kutipan)return toast('❌ Kutipan wajib');
+  const {error}=await sb.from('creative_quotes').insert(row);
+  if(error)return toast('❌ '+error.message);
+  $('iQuoteText').value='';$('iQuoteAuthor').value='';toast('✅ Quote ditambah');
+  const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();
+}
+async function delQuote(id){
+  if(!confirm('Hapus quote?'))return;
+  await sb.from('creative_quotes').delete().eq('id',id);
+  const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();
+}
+function renderQuotes(){
+  $('qCount').textContent=STATE.quotes.length;
+  $('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`<div class="card p-4 flex items-center gap-3">
+    <div class="flex-1 min-w-0"><p class="text-xs font-medium italic text-slate-600">"${esc(q.kutipan)}"</p><p class="text-[10px] font-bold text-slate-400 mt-1">— ${esc(q.tokoh)}</p></div>
+    <button onclick="delQuote(${q.id})" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>`).join('');
+  icons();
+}
+
+/* ─── NOTIFIKASI ─── */
+async function addNotif(){
+  const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value};
+  if(!row.judul)return toast('❌ Judul wajib');
+  const {error}=await sb.from('creative_notifications').insert(row);
+  if(error)return toast('❌ '+error.message);
+  $('iNotJudul').value='';$('iNotPesan').value='';toast('📣 Pengumuman terkirim ke semua guru');
+  const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();
+}
+async function toggleNotif(id,act){
+  await sb.from('creative_notifications').update({is_active:act}).eq('id',id);
+  const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();
+}
+async function delNotif(id){
+  if(!confirm('Hapus notifikasi?'))return;
+  await sb.from('creative_notifications').delete().eq('id',id);
+  const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();
+}
+function renderNotif(){
+  $('notList').innerHTML=STATE.notifs.map(n=>`<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}">
+    <span class="text-xl">${{info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢'}</span>
+    <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div>
+    <button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'bg-emerald-50 text-emerald-600':'bg-slate-100 text-slate-500'}">${n.is_active?'AKTIF':'OFF'}</button>
+    <button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');
+  icons();
+}
+
+/* ─── FEEDBACK ─── */
+async function setFbStatus(id,st){
+  const {error}=await sb.from('creative_feedback').update({status:st}).eq('id',id);
+  if(error)return toast('❌ '+error.message);
+  const {data}=await sb.from('creative_feedback').select('*').order('created_at',{ascending:false});STATE.fb=data||[];renderFb();renderDash();toast('✅ Status diperbarui');
+}
+function renderFb(){
+  const f=$('fbFilter').value;
+  const list=STATE.fb.filter(x=>f==='all'||x.status===f);
+  $('fbList').innerHTML=list.map(x=>`<div class="card p-4">
+    <div class="flex items-center gap-2 flex-wrap">
+      <span class="text-[10px] font-black px-2 py-1 rounded-lg uppercase ${{Saran:'bg-blue-50 text-blue-600',Bug:'bg-rose-50 text-rose-600',Pujian:'bg-amber-50 text-amber-600',Error:'bg-orange-50 text-orange-600'}[x.tipe]||'bg-slate-100'}">${x.tipe}</span>
+      <span class="text-[10px] font-bold text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐ · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</span>
+      <select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5 ${{baru:'text-rose-600',diproses:'text-amber-600',selesai:'text-emerald-600'}[x.status]}">
+        <option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option>
+        <option value="diproses" ${x.status==='diproses'?'selected':''}>🟡 Diproses</option>
+        <option value="selesai" ${x.status==='selesai'?'selected':''}>🟢 Selesai</option>
+      </select>
+    </div>
+    <p class="text-[13px] text-slate-700 mt-2 leading-relaxed">${esc(x.pesan)}</p></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada saran.</p>';
+  icons();
+}
+
+/* ─── GURU ─── */
+function renderGuru(){
+  const q=($('gSearch').value||'').toLowerCase();
+  const list=STATE.guru.filter(g=>(g.nama_lengkap||'').toLowerCase().includes(q)||(g.email||'').toLowerCase().includes(q)||(g.satuan_pendidikan||'').toLowerCase().includes(q));
+  $('gCount').textContent=list.length;
+  $('guruTable').innerHTML=`<div class="overflow-x-auto"><table class="w-full text-left">
+    <thead><tr class="border-b border-slate-100"><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Nama</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Sekolah</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Jabatan</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th></tr></thead>
+    <tbody>${list.map(g=>`<tr class="border-b border-slate-50"><td class="px-4 py-3"><p class="text-xs font-bold text-slate-700">${esc(g.nama_lengkap)}</p><p class="text-[10px] text-slate-400">${esc(g.email)}</p></td><td class="px-4 py-3 text-xs text-slate-500">${esc(g.satuan_pendidikan)}</td><td class="px-4 py-3 text-xs text-slate-500">${esc(g.jabatan)}</td><td class="px-4 py-3"><span class="text-[9px] font-black px-2 py-1 rounded ${g.status_akun==='Aktif'?'bg-emerald-50 text-emerald-600':'bg-slate-100 text-slate-400'}">${esc(g.status_akun||'Aktif')}</span></td></tr>`).join('')}</tbody></table></div>`;
+}
+$('gSearch').addEventListener('input',renderGuru);
+
+/* ─── TAB ─── */
+function setTab(t){
+  document.querySelectorAll('.tab-btn').forEach(b=>{const on=b.dataset.tab===t;
+    b.classList.toggle('bg-blue-50',on);b.classList.toggle('text-blue-600',on);b.classList.toggle('text-slate-500',!on);});
+  ['dash','menu','info','notif','footer','quotes','fb','guru'].forEach(s=>$('sec-'+s).classList.toggle('hidden',s!==t));
+}
+
+init();
+</script>
+</body>
+</html>
