@@ -2,8 +2,11 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2563eb">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f8fafc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -30,32 +33,10 @@ tailwind.config={darkMode:'class',theme:{extend:{
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 min-h-screen">
 
-<!-- ═══════════ LOGIN (SSO LITE) ═══════════ -->
-<div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900">
-  <div class="w-full max-w-sm">
-    <div class="text-center mb-8 animate-fade-up">
-      <div class="w-20 h-20 mx-auto rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 overflow-hidden">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-16 h-16 object-contain scale-[1.3]" alt="Logo">
-      </div>
-      <h1 class="text-2xl font-black text-white tracking-tight">Guru Berbagi</h1>
-      <p class="text-blue-200 text-sm font-medium mt-1">Korwilcambidik Selogiri · Portal GTK</p>
-    </div>
-    <form id="formLogin" class="card p-6 space-y-4 animate-fade-up" style="animation-delay:.08s">
-      <div><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Email</label>
-        <input id="inEmail" type="email" required placeholder="nama@guru.sd.belajar.id" class="mt-1.5 w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></div>
-      <div><label class="text-xs font-bold text-slate-500 uppercase tracking-wider">PIN</label>
-        <input id="inPin" type="password" required inputmode="numeric" placeholder="••••••" class="mt-1.5 w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50"></div>
-      <button id="btnLogin" type="submit" class="w-full bg-blue-600 hover:bg-blue-700 active:scale-[.98] transition text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2">
-        <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Portal</button>
-      <p class="text-[11px] text-center text-slate-400">Akun terdaftar di database pusat · Lupa PIN hubungi Admin</p>
-    </form>
-  </div>
-</div>
+<!-- ═══════════ APLIKASI (GUEST-FIRST: langsung terbuka) ═══════════ -->
+<div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
 
-<!-- ═══════════ APLIKASI (FULL-BLEED HP & DESKTOP) ═══════════ -->
-<div id="scrApp" class="hidden w-full min-h-screen relative flex flex-col md:flex-row">
-
-  <!-- ░░ SIDEBAR DESKTOP (mentok kiri, footer di bawah) ░░ -->
+  <!-- ░░ SIDEBAR DESKTOP ░░ -->
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sticky top-0 h-screen">
     <div class="flex items-center gap-3 mb-8">
       <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center overflow-hidden">
@@ -64,17 +45,21 @@ tailwind.config={darkMode:'class',theme:{extend:{
       <div><p class="font-extrabold text-slate-800 dark:text-white leading-tight">Guru Berbagi</p><p id="sideVersi" class="text-[11px] text-slate-400 font-semibold">Portal Selogiri</p></div>
     </div>
     <nav class="space-y-1.5">
-      <button data-nav="home" onclick="setActive('home')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-600 dark:bg-blue-900/40"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
-      <button data-nav="apps" onclick="setActive('apps')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="layout-grid" class="w-4 h-4"></i>Aplikasi</button>
+      <button data-nav="home" onclick="navPage('home')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-600 dark:bg-blue-900/40"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
+      <button data-nav="apps" onclick="navPage('apps')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="layout-grid" class="w-4 h-4"></i>Aplikasi</button>
       <button onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi
         <span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
-    <div id="footSide" class="mt-auto pt-6 space-y-1 border-t border-slate-100 dark:border-slate-800"></div>
-    <p class="pt-4 text-[11px] text-slate-400 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.0</span></p>
+    <!-- Footer link: minimal & soft (beda dari nav utama) -->
+    <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800">
+      <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p>
+      <div id="footSideList" class="space-y-0.5 opacity-80"></div>
+    </div>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.1</span></p>
   </aside>
 
-  <!-- ░░ KOLOM KONTEN (mentok kanan) ░░ -->
+  <!-- ░░ KOLOM KONTEN ░░ -->
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
 
     <header class="sticky top-0 z-40 px-5 md:px-8 pt-5 pb-3 flex items-center justify-between bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
@@ -86,6 +71,7 @@ tailwind.config={darkMode:'class',theme:{extend:{
       </div>
       <p class="hidden md:block text-sm font-extrabold text-slate-700 dark:text-slate-200" id="hdrPage">Beranda</p>
       <div class="flex items-center gap-2">
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden bg-blue-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md shadow-blue-600/25">Masuk</button>
         <button onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition md:hidden">
           <i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i>
           <span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-slate-50 dark:border-slate-950">0</span>
@@ -100,9 +86,24 @@ tailwind.config={darkMode:'class',theme:{extend:{
 
       <!-- ══ BERANDA ══ -->
       <section id="pageHome" class="space-y-4 min-w-0">
-        <div class="animate-fade-up">
-          <p id="txtTanggal" class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest"></p>
-          <h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-0.5"></h1>
+        <!-- Sapaan + chip jam (pengganti emoji) -->
+        <div class="flex items-end justify-between gap-3 animate-fade-up">
+          <div class="min-w-0">
+            <p id="txtTanggal" class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest"></p>
+            <h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-0.5 truncate"></h1>
+          </div>
+          <div class="card px-3.5 py-2.5 flex items-center gap-2 shrink-0">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span id="txtJam" class="text-xs font-black text-slate-600 dark:text-slate-300 tabular-nums">--.--</span>
+          </div>
+        </div>
+
+        <!-- Kartu Pasang Aplikasi (PWA) -->
+        <div id="installCard" class="hidden card p-4 flex items-center gap-3 border-blue-100 dark:border-blue-900 animate-fade-up">
+          <span class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span>
+          <div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-400">Akses cepat dari layar utama HP Anda</p></div>
+          <button onclick="pasangApp()" class="shrink-0 bg-blue-600 text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button>
+          <button onclick="$('installCard').classList.add('hidden')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 min-w-0">
@@ -155,73 +156,105 @@ tailwind.config={darkMode:'class',theme:{extend:{
       </section>
     </main>
 
-    <!-- Bottom Nav HP (mentok kiri-kanan) -->
+    <!-- Bottom Nav HP -->
     <nav class="fixed bottom-0 inset-x-0 w-full md:hidden z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 px-6 py-2 flex items-center justify-between">
-      <button data-nav="home" onclick="setActive('home')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-blue-600"><i data-lucide="home" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Beranda</span></button>
-      <button data-nav="apps" onclick="setActive('apps')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="layout-grid" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Aplikasi</span></button>
+      <button data-nav="home" onclick="navPage('home')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-blue-600"><i data-lucide="home" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Beranda</span></button>
+      <button data-nav="apps" onclick="navPage('apps')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="layout-grid" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Aplikasi</span></button>
       <button onclick="openPanel('pNotif')" class="flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="bell" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Notifikasi</span></button>
       <button onclick="openPanel('pProfil')" class="flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="user" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Profil</span></button>
     </nav>
   </div>
 
-  <!-- ═══ PANEL NOTIFIKASI ═══ -->
+  <!-- ═══ SHEET LOGIN (bukan layar awal) ═══ -->
+  <div id="pLogin" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300" id="pLoginSheet">
+      <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center overflow-hidden mb-3">
+          <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-11 h-11 object-contain scale-[1.3]" alt="Logo">
+        </div>
+        <p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p>
+        <p class="text-[11px] text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
+      </div>
+      <form id="formLogin" class="space-y-3">
+        <input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+        <input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+        <button id="btnLogin" type="submit" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk</button>
+      </form>
+      <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div></div>
+      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
+    </div>
+  </div>
+
+  <!-- ═══ SHEET NOTIFIKASI (naik dari bawah) ═══ -->
   <div id="pNotif" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="closePanel('pNotif')"></div>
-    <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-slate-50 dark:bg-slate-950 translate-x-full transition-transform duration-300 flex flex-col" id="pNotifSheet">
-      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
+    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-slate-50 dark:bg-slate-950 rounded-t-3xl translate-y-full transition-transform duration-300 flex flex-col max-h-[85vh]" id="pNotifSheet">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 rounded-t-3xl border-b border-slate-100 dark:border-slate-800">
         <p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Notifikasi</p>
-        <button onclick="closePanel('pNotif')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+        <button onclick="tutupPanel('pNotif')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
       </div>
       <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
     </div>
   </div>
 
-  <!-- ═══ PANEL PROFIL (Pohon Ilmu + Foto Lokal) ═══ -->
+  <!-- ═══ SHEET PROFIL ═══ -->
   <div id="pProfil" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="closePanel('pProfil')"></div>
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pProfil')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300 max-h-[85vh] overflow-y-auto no-scroll" id="pProfilSheet">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
-      <div class="flex items-center gap-4">
-        <div class="relative shrink-0">
-          <div class="w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 flex items-center justify-center text-xl font-black overflow-hidden" id="pfAvatar">G</div>
-          <button onclick="pilihFoto()" class="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md active:scale-90 transition"><i data-lucide="camera" class="w-3.5 h-3.5"></i></button>
-          <input type="file" id="inFoto" accept="image/*" class="hidden" onchange="uploadFoto(event)">
-        </div>
-        <div class="min-w-0">
-          <p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 truncate">—</p>
-          <p id="pfSekolah" class="text-xs text-slate-500 dark:text-slate-400 font-semibold truncate">—</p>
-          <p id="pfJabatan" class="text-[11px] text-blue-600 font-bold">—</p>
-        </div>
+
+      <!-- Kondisi TAMU -->
+      <div id="profGuest" class="text-center">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div>
+        <p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Mode Tamu</p>
+        <p class="text-xs text-slate-400 mt-1 mb-5">Masuk untuk akses penuh, Pohon Ilmu, dan poin gamifikasi.</p>
+        <button onclick="openPanel('pLogin')" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk dengan Akun</button>
+        <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="mt-2 w-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
       </div>
 
-      <div class="card p-4 flex items-center gap-4 mt-5">
-        <div id="treeIcon" class="tree-pulse w-14 h-14 shrink-0 rounded-full bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 flex items-center justify-center text-2xl">🌱</div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <p id="treeLevel" class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Biji</p>
-            <p class="text-[11px] font-bold text-amber-500 flex items-center gap-1"><i data-lucide="flame" class="w-3.5 h-3.5"></i><span id="treeStreak">0</span> hari</p>
+      <!-- Kondisi LOGIN -->
+      <div id="profData" class="hidden">
+        <div class="flex items-center gap-4">
+          <div class="relative shrink-0">
+            <div class="w-16 h-16 rounded-2xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 flex items-center justify-center text-xl font-black overflow-hidden" id="pfAvatar">G</div>
+            <button onclick="pilihFoto()" class="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md active:scale-90 transition"><i data-lucide="camera" class="w-3.5 h-3.5"></i></button>
+            <input type="file" id="inFoto" accept="image/*" class="hidden" onchange="uploadFoto(event)">
           </div>
-          <div class="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
-            <div id="treeBar" class="h-full bg-gradient-to-r from-blue-500 to-amber-400 rounded-full transition-all duration-700" style="width:0%"></div>
+          <div class="min-w-0">
+            <p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 truncate">—</p>
+            <p id="pfSekolah" class="text-xs text-slate-500 dark:text-slate-400 font-semibold truncate">—</p>
+            <p id="pfJabatan" class="text-[11px] text-blue-600 font-bold">—</p>
           </div>
-          <p class="text-[10px] text-slate-400 mt-1 font-semibold"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
         </div>
+        <div class="card p-4 flex items-center gap-4 mt-5">
+          <div id="treeIcon" class="tree-pulse w-14 h-14 shrink-0 rounded-full bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 flex items-center justify-center text-2xl">🌱</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between">
+              <p id="treeLevel" class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Biji</p>
+              <p class="text-[11px] font-bold text-amber-500 flex items-center gap-1"><i data-lucide="flame" class="w-3.5 h-3.5"></i><span id="treeStreak">0</span> hari</p>
+            </div>
+            <div class="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
+              <div id="treeBar" class="h-full bg-gradient-to-r from-blue-500 to-amber-400 rounded-full transition-all duration-700" style="width:0%"></div>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1 font-semibold"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+          <div class="card p-3"><p id="stPoin" class="text-lg font-black text-blue-600">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Poin</p></div>
+          <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Streak</p></div>
+          <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-600 dark:text-slate-300">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Login</p></div>
+        </div>
+        <button onclick="doLogout()" class="mt-5 w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
+          <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
       </div>
-
-      <div class="grid grid-cols-3 gap-2 mt-3 text-center">
-        <div class="card p-3"><p id="stPoin" class="text-lg font-black text-blue-600">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Poin</p></div>
-        <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Streak</p></div>
-        <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-600 dark:text-slate-300">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Login</p></div>
-      </div>
-
-      <button onclick="doLogout()" class="mt-5 w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
-        <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
     </div>
   </div>
 
-  <!-- ═══ PANEL PENGATURAN ═══ -->
+  <!-- ═══ SHEET PENGATURAN ═══ -->
   <div id="pSetting" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="closePanel('pSetting')"></div>
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pSetting')"></div>
     <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300 max-h-[80vh] overflow-y-auto no-scroll" id="pSettingSheet">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
       <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-4">Pengaturan</p>
@@ -230,26 +263,34 @@ tailwind.config={darkMode:'class',theme:{extend:{
           <div class="flex items-center gap-3"><i data-lucide="moon" class="w-4 h-4 text-slate-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p></div>
           <button onclick="toggleDark()" class="w-12 h-7 rounded-full bg-slate-200 dark:bg-blue-600 relative transition"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition dark:translate-x-5"></span></button>
         </div>
+        <button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 text-blue-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button>
         <button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button>
-        <button onclick="openFeedback()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button>
+        <button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button>
         <button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 text-blue-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button>
       </div>
-      <div id="formFb" class="hidden mt-4 card p-4 space-y-3">
-        <p class="text-sm font-extrabold text-slate-700 dark:text-slate-200">Kirim Laporan</p>
-        <div class="flex gap-2">
-          <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white">💡 Saran</button>
-          <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">🐞 Bug</button>
-          <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">⭐ Pujian</button>
-        </div>
-        <div id="starRow" class="flex gap-1 justify-center"></div>
-        <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/40"></textarea>
-        <button onclick="submitFb()" id="btnFb" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Kirim Laporan</button>
-      </div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.0</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.1</span></p>
     </div>
   </div>
 
-  <!-- Modal iframe, popup flyer, toast -->
+  <!-- ═══ SHEET LAPORAN (TERPISAH dari Pengaturan) ═══ -->
+  <div id="pFb" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
+    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300" id="pFbSheet">
+      <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
+      <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p>
+      <p class="text-[11px] text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram.</p>
+      <div class="flex gap-2">
+        <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white">💡 Saran</button>
+        <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">🐞 Bug</button>
+        <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">⭐ Pujian</button>
+      </div>
+      <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
+      <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/40"></textarea>
+      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full bg-blue-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Kirim Laporan</button>
+    </div>
+  </div>
+
+  <!-- Modal iframe, popup flyer, panduan iOS, toast -->
   <div id="mApp" class="fixed inset-0 z-[60] hidden bg-slate-950">
     <div class="flex items-center justify-between px-4 py-3 bg-slate-900">
       <p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p>
@@ -263,18 +304,31 @@ tailwind.config={darkMode:'class',theme:{extend:{
       <button onclick="document.getElementById('mPop').classList.add('hidden')" class="mt-4 w-full bg-white text-slate-700 font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button>
     </div>
   </div>
+  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
+    <div class="w-full max-w-sm card p-6 animate-pop">
+      <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-3">Pasang di iPhone/iPad</p>
+      <ol class="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside">
+        <li>Ketuk tombol <b>Bagikan</b> (kotak dengan panah ke atas)</li>
+        <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
+        <li>Ketuk <b>Tambahkan</b> — selesai! 🎉</li>
+      </ol>
+      <button onclick="document.getElementById('mIos').classList.add('hidden')" class="mt-5 w-full bg-blue-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button>
+    </div>
+  </div>
   <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[80] bg-slate-900 text-white text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl flex items-center gap-2 opacity-0 -translate-y-2 transition-all duration-300 pointer-events-none"><span id="toastMsg"></span></div>
 </div>
 
 <script>
-/* ═══ KONFIG PUSAT (SSO LITE) ═══ */
+/* ═══ KONFIG PUSAT ═══ */
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
+const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 
 const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],tipeFb:'Saran',rating:5};
 const COLOR={teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],yellow:['bg-yellow-100','text-yellow-600']};
 const LEVELS=[{n:'Biji',e:'🌰',min:0},{n:'Tunas',e:'🌱',min:50},{n:'Pohon Muda',e:'🪴',min:150},{n:'Pohon Rindang',e:'🌳',min:300},{n:'Pohon Berbuah',e:'🍎',min:500}];
+const PANELS=['pNotif','pProfil','pSetting','pFb','pLogin'];
 const $=id=>document.getElementById(id);
 const isMobile=matchMedia('(max-width:768px)').matches;
 function toast(m){$('toastMsg').textContent=m;const t=$('toast');t.classList.remove('opacity-0','-translate-y-2');setTimeout(()=>t.classList.add('opacity-0','-translate-y-2'),2200);}
@@ -285,8 +339,70 @@ function namaPanggil(full){
   const w=(n.split(/\s+/)[0]||'Guru');
   return w.charAt(0)+w.slice(1).toLowerCase();
 }
+const needsLogin=m=>['Guru','Kepala Sekolah'].includes(m.akses_role);
 
-/* ─── SSO LITE ─── */
+/* ═══ STATUS BAR MENYATU (theme-color dinamis) ═══ */
+function setThemeColor(){
+  const dark=document.documentElement.classList.contains('dark');
+  document.querySelector('meta[name=theme-color]').setAttribute('content',dark?'#020617':'#f8fafc');
+}
+
+/* ═══ PWA: manifest inline + install ═══ */
+let deferredPrompt=null;
+function initPWA(){
+  const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:'#f8fafc',theme_color:'#2563eb',icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};
+  const l=document.createElement('link');l.rel='manifest';l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));document.head.appendChild(l);
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('installCard').classList.remove('hidden');icons();});
+}
+function pasangApp(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;$('installCard').classList.add('hidden');}
+  else if(/iphone|ipad/i.test(navigator.userAgent)){$('mIos').classList.remove('hidden');$('mIos').classList.add('flex');}
+  else toast('ℹ️ Browser: menu ⋮ → "Tambahkan ke Layar Utama"');
+}
+
+/* ═══ HISTORY: back = kembali, bukan keluar ═══ */
+let applying=false;
+let CUR={view:'home',sub:null};
+function safePush(s){try{history.pushState(s,'')}catch(e){}}
+function setPageInstant(pg){
+  document.querySelectorAll('[data-nav]').forEach(b=>{
+    const on=b.dataset.nav===pg;
+    if(b.classList.contains('side-btn')){b.classList.toggle('bg-blue-50',on);b.classList.toggle('text-blue-600',on);b.classList.toggle('dark:bg-blue-900/40',on);b.classList.toggle('text-slate-500',!on);}
+    else{b.classList.toggle('text-blue-600',on);b.classList.toggle('text-slate-400',!on);}
+  });
+  $('pageHome').classList.toggle('hidden',pg!=='home');
+  $('pageApps').classList.toggle('hidden',pg!=='apps');
+  $('hdrPage').textContent=pg==='home'?'Beranda':'Aplikasi & Layanan';
+  CUR.view=pg;
+}
+function navPage(pg){if(applying)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});}
+window.addEventListener('popstate',e=>renderState(e.state||{view:'home'}));
+function renderState(s){
+  applying=true;
+  PANELS.forEach(closeInstant);
+  CUR={view:s.view||'home',sub:s.sub||null};
+  setPageInstant(CUR.view);
+  if(s.sub){const anak=STATE.menus.filter(c=>c.sub_menu_dari===s.sub&&visible(c));if(anak.length)bukaSubmenu(anak);else renderMenus($('inSearch').value);}
+  else if(CUR.view==='apps')renderMenus($('inSearch').value);
+  if(s.panel)showInstant(s.panel);
+  applying=false;
+}
+
+/* ═══ PANEL (semua naik/tenggelam vertikal) ═══ */
+function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.remove('translate-y-full'));}
+function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.add('translate-y-full');}
+function openPanel(id){showInstant(id);safePush({...CUR,panel:id});
+  if(id==='pNotif'&&STATE.profile)tandaiBaca();
+}
+function tutupPanel(id){try{history.back()}catch(e){closeInstant(id)}} // back agar riwayat konsisten
+async function tandaiBaca(){
+  const gid=STATE.profile.sub||STATE.profile.id;
+  const rows=STATE.notifs.map(n=>({notification_id:n.id,guru_id:gid}));
+  if(rows.length)await sb.from('creative_notification_reads').upsert(rows,{onConflict:'notification_id,guru_id',ignoreDuplicates:true});
+  setTimeout(()=>setBadge(0),1200);
+}
+
+/* ═══ SSO ═══ */
 async function ssoLogin(email,pin){
   const r=await fetch(SB_URL+'/functions/v1/login-guru',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON},body:JSON.stringify({email,pin})});
   if(!r.ok)throw new Error('Gagal');
@@ -302,40 +418,55 @@ $('formLogin').addEventListener('submit',async e=>{
   try{
     const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());
     localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));
-    await masukAplikasi(res.profile,res.token,true);
+    STATE.profile=res.profile;STATE.token=res.token;
+    tutupPanel('pLogin');
+    const gid=res.profile.sub||res.profile.id;
+    const {data}=await sb.rpc('creative_update_gamification',{p_guru_id:gid});
+    if(data&&data.poin_added>0)setTimeout(()=>toast(`🌱 +${data.poin_added} poin! Pohon Ilmu kamu tumbuh.`),600);
+    sb.rpc('creative_log_activity',{p_guru_id:gid,p_aksi:'login',p_detail:{}});
+    renderAuthUI();setSapaan();muatSemuaData();
+    toast('✅ Selamat datang, '+namaPanggil(res.profile.nama)+'!');
   }catch(err){toast('❌ Email/PIN salah atau akun nonaktif');}
-  $('btnLogin').disabled=false;$('btnLogin').innerHTML='<i data-lucide="log-in" class="w-4 h-4"></i> Masuk Portal';icons();
+  $('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';
 });
 function doLogout(){localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');location.reload();}
+function renderAuthUI(){
+  const on=!!STATE.profile;
+  $('btnMasuk').classList.toggle('hidden',on);
+  $('profGuest').classList.toggle('hidden',on);
+  $('profData').classList.toggle('hidden',!on);
+}
 
-/* Verifikasi token otomatis saat aplikasi dibuka */
+/* ═══ BOOT: guest-first ═══ */
 (async function boot(){
+  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
+  setThemeColor();initPWA();jamTick();icons();
   const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');
-  if(!token||!saved){icons();return;}
-  try{const v=await ssoVerify(token);if(v.valid)await masukAplikasi(v.profile||JSON.parse(saved),token,false);else doLogout();}catch(e){doLogout();}
+  if(token&&saved){
+    try{const v=await ssoVerify(token);
+      if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}
+      else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}
+    }catch(e){}
+  }
+  try{history.replaceState({view:'home'},'')}catch(e){}
+  renderAuthUI();setSapaan();muatSemuaData();
 })();
 
-async function masukAplikasi(profile,token,fresh){
-  STATE.profile=profile;STATE.token=token;
-  $('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');
-  setSapaan();
-  if(fresh){
-    const gid=profile.sub||profile.id;
-    const {data}=await sb.rpc('creative_update_gamification',{p_guru_id:gid});
-    if(data&&data.poin_added>0)setTimeout(()=>toast(`🌱 +${data.poin_added} poin! Pohon Ilmu kamu tumbuh.`),800);
-    sb.rpc('creative_log_activity',{p_guru_id:gid,p_aksi:'login',p_detail:{}});
-  }
-  muatSemuaData();
+/* Jam live (pengganti emoji matahari) */
+function jamTick(){
+  const f=()=>{const d=new Date();const el=$('txtJam');if(el)el.textContent=String(d.getHours()).padStart(2,'0')+'.'+String(d.getMinutes()).padStart(2,'0');};
+  f();setInterval(f,1000);
 }
 
 async function muatSemuaData(){
   renderSkeleton();
+  const gid=STATE.profile?(STATE.profile.sub||STATE.profile.id):null;
   const [cfg,menus,quotes,footer,gam,notifs]=await Promise.all([
     sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
     sb.from('creative_menus').select('*').order('sort_order'),
     sb.from('creative_quotes').select('*'),
     sb.from('creative_footers').select('*').order('sort_order'),
-    sb.from('creative_gamification').select('*').eq('guru_id',STATE.profile.sub||STATE.profile.id).maybeSingle(),
+    gid?sb.from('creative_gamification').select('*').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
     sb.from('creative_notifications').select('*').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(20),
   ]);
   STATE.config=cfg.data;STATE.menus=menus.data||[];STATE.quotes=quotes.data||[];STATE.footer=footer.data||[];STATE.gam=gam.data;STATE.notifs=notifs.data||[];
@@ -350,8 +481,9 @@ async function muatSemuaData(){
 
 function setSapaan(){
   const j=new Date().getHours();
-  const s=j<10?['Selamat Pagi','🌤️']:j<15?['Selamat Siang','☀️']:j<18?['Selamat Sore','🌇']:['Selamat Malam','🌙'];
-  $('txtSapaan').innerHTML=`${s[0]}, <span class="text-blue-600 dark:text-blue-400">${namaPanggil(STATE.profile.nama)}</span> ${s[1]}`;
+  const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
+  const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';
+  $('txtSapaan').innerHTML=`${s}, <span class="text-blue-600 dark:text-blue-400">${nama}</span>`;
   const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
 }
@@ -385,24 +517,27 @@ function gantiQuote(){
   $('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;
 }
 
-/* Filter menu sesuai role & perangkat */
+/* Filter: tamu lihat menu umum; menu guru terkunci */
 function visible(m){
   if(!m.is_active||m.tampil_di==='off')return false;
   if(m.tampil_di==='mobile'&&!isMobile)return false;
   if(m.tampil_di==='desktop'&&isMobile)return false;
-  const r=m.akses_role,isKS=(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
+  const r=m.akses_role;
+  if(!STATE.profile)return r!=='Kepala Sekolah';
+  const isKS=(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
   if(r==='Kepala Sekolah')return isKS;
   if(r==='tamu')return false;
   return true;
 }
 function renderSkeleton(){$('menuGrid').innerHTML=Array(10).fill('<div class="skeleton h-32"></div>').join('');}
 function renderMenus(filter=''){
-  const f=filter.toLowerCase();
+  const f=(filter||'').toLowerCase();
   const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari&&(m.judul.toLowerCase().includes(f)||m.deskripsi.toLowerCase().includes(f)));
   $('menuGrid').innerHTML=list.map(m=>{
     const [bg,tx]=COLOR[m.warna]||COLOR.blue;
     const anak=STATE.menus.filter(c=>c.sub_menu_dari===m.judul&&visible(c));
-    const badge=m.label?`<span class="absolute top-2 right-2 text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">${m.label}</span>`:'';
+    const lock=needsLogin(m)&&!STATE.profile;
+    const badge=m.label?`<span class="absolute top-2 right-2 text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">${m.label}</span>`:(lock?`<span class="absolute top-2 right-2 text-slate-300"><i data-lucide="lock" class="w-3 h-3"></i></span>`:'');
     const wide=m.ukuran==='wide'?'col-span-2':'';
     return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="relative card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0 ${wide}">
       ${badge}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
@@ -413,23 +548,30 @@ function renderMenus(filter=''){
 }
 $('inSearch').addEventListener('input',e=>renderMenus(e.target.value));
 
-/* Klik menu: jika folder → pindah ke halaman Aplikasi & tampilkan isinya */
 function klikMenu(judul){
+  const m=STATE.menus.find(x=>x.judul===judul);
+  if(m&&needsLogin(m)&&!STATE.profile){toast('🔒 Silakan masuk untuk membuka menu ini');openPanel('pLogin');return;}
   const anak=STATE.menus.filter(c=>c.sub_menu_dari===judul&&visible(c));
-  if(anak.length){setActive('apps');bukaSubmenu(anak);return;}
-  bukaUrl(STATE.menus.find(x=>x.judul===judul));
+  if(anak.length){
+    setPageInstant('apps');CUR.sub=judul;bukaSubmenu(anak);safePush({...CUR});return;
+  }
+  bukaUrl(m);
 }
 function bukaSubmenu(anak){
-  $('menuGrid').innerHTML=`<button onclick="renderMenus()" class="col-span-2 md:col-span-5 card p-3 flex items-center gap-2 text-sm font-bold text-blue-600"><i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali</button>`+
+  $('menuGrid').innerHTML=`<button onclick="riwayatKembali()" class="col-span-2 md:col-span-5 card p-3 flex items-center gap-2 text-sm font-bold text-blue-600"><i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali</button>`+
     anak.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-      return `<button onclick='bukaUrl(STATE.menus.find(x=>x.id===${m.id}))' class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0">
+      return `<button onclick='klikAnak(${m.id})' class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0">
         <span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon}" class="w-5 h-5"></i></span>
         <span class="text-[13px] font-extrabold text-slate-800 dark:text-slate-100">${m.judul}</span></button>`;}).join('');
   icons();
 }
+function riwayatKembali(){try{history.back()}catch(e){renderMenus()}}
+function klikAnak(id){const m=STATE.menus.find(x=>x.id===id);if(!m)return;
+  if(needsLogin(m)&&!STATE.profile){toast('🔒 Silakan masuk untuk membuka menu ini');openPanel('pLogin');return;}
+  bukaUrl(m);}
 function bukaUrl(m){
   if(!m)return;
-  sb.rpc('creative_log_activity',{p_guru_id:STATE.profile.sub||STATE.profile.id,p_aksi:'buka_menu',p_detail:{judul:m.judul}});
+  if(STATE.profile)sb.rpc('creative_log_activity',{p_guru_id:STATE.profile.sub||STATE.profile.id,p_aksi:'buka_menu',p_detail:{judul:m.judul}});
   let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);
   rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);
   localStorage.setItem('gb_recent',JSON.stringify(rec));renderRecent();
@@ -466,14 +608,14 @@ function renderNews(){
     <span class="min-w-0"><span class="block text-xs font-bold text-slate-700 dark:text-slate-200 truncate">${x.judul}</span>
     <span class="block text-[10px] text-slate-400 truncate">${x.pesan}</span></span></button>`).join('');
 }
-/* Footer: chip di HP (Beranda) + daftar di bawah sidebar Desktop */
 function renderFoot(){
   if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}
   $('footSide').classList.remove('hidden');
   $('footList').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition">
     <i data-lucide="${f.icon||'globe'}" class="w-4 h-4 text-blue-600"></i><span class="text-xs font-bold text-slate-600 dark:text-slate-300">${f.judul}</span></a>`).join('');
-  $('footSide').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-    <i data-lucide="${f.icon||'globe'}" class="w-3.5 h-3.5 text-blue-600"></i>${f.judul}</a>`).join('');
+  /* sidebar: minimal & soft */
+  $('footSideList').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
+    <i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</a>`).join('');
   icons();
 }
 
@@ -481,10 +623,13 @@ function renderFoot(){
 function setBadge(n){['badgeNotif','badgeNotifD'].forEach(id=>{const b=$(id);if(!b)return;
   if(n>0){b.classList.remove('hidden');b.textContent=n;}else b.classList.add('hidden');});}
 async function renderNotif(){
-  const gid=STATE.profile.sub||STATE.profile.id;
-  const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
-  const readIds=new Set((reads||[]).map(r=>r.notification_id));
-  setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
+  let readIds=new Set();
+  if(STATE.profile){
+    const gid=STATE.profile.sub||STATE.profile.id;
+    const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
+    readIds=new Set((reads||[]).map(r=>r.notification_id));
+    setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
+  } else setBadge(0);
   $('notifList').innerHTML=STATE.notifs.map(n=>{
     const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';
     const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -494,20 +639,10 @@ async function renderNotif(){
       <p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;
   }).join('')||'<p class="text-center text-sm text-slate-400 py-8">Belum ada notifikasi</p>';
 }
-async function openPanel(id){
-  $(id).classList.remove('hidden');
-  requestAnimationFrame(()=>{$(id+'Sheet').classList.remove('translate-x-full','translate-y-full');});
-  if(id==='pNotif'){
-    const gid=STATE.profile.sub||STATE.profile.id;
-    const rows=STATE.notifs.map(n=>({notification_id:n.id,guru_id:gid}));
-    if(rows.length)await sb.from('creative_notification_reads').upsert(rows,{onConflict:'notification_id,guru_id',ignoreDuplicates:true});
-    setTimeout(()=>setBadge(0),1500);
-  }
-}
-function closePanel(id){$(id+'Sheet').classList.add('translate-x-full','translate-y-full');setTimeout(()=>$(id).classList.add('hidden'),300);}
 
-/* ─── Profil + Foto Lokal (localStorage) ─── */
+/* ─── Profil + foto lokal ─── */
 function renderProfil(){
+  if(!STATE.profile)return;
   const p=STATE.profile;
   $('pfNama').textContent=p.nama||'—';$('pfSekolah').textContent=p.sekolah||'—';$('pfJabatan').textContent=p.jabatan||'—';
   const foto=localStorage.getItem('gb_foto');
@@ -524,45 +659,29 @@ function uploadFoto(ev){
       const s=Math.max(192/img.width,192/img.height);
       const w=img.width*s,h=img.height*s;
       ctx.drawImage(img,(192-w)/2,(192-h)/2,w,h);
-      try{
-        localStorage.setItem('gb_foto',c.toDataURL('image/jpeg',.8));
-        renderProfil();toast('✅ Foto profil tersimpan di perangkat');
-      }catch(e){toast('❌ Gagal menyimpan foto');}
+      try{localStorage.setItem('gb_foto',c.toDataURL('image/jpeg',.8));renderProfil();toast('✅ Foto profil tersimpan di perangkat');}
+      catch(e){toast('❌ Gagal menyimpan foto');}
     };
     img.src=rd.result;};
   rd.readAsDataURL(f);
   ev.target.value='';
 }
 
-/* ─── Navigasi (sinkron bottom nav HP + sidebar Desktop) ─── */
-function setActive(pg){
-  document.querySelectorAll('[data-nav]').forEach(b=>{
-    const on=b.dataset.nav===pg;
-    if(b.classList.contains('side-btn')){
-      b.classList.toggle('bg-blue-50',on);b.classList.toggle('text-blue-600',on);b.classList.toggle('dark:bg-blue-900/40',on);b.classList.toggle('text-slate-500',!on);
-    }else{b.classList.toggle('text-blue-600',on);b.classList.toggle('text-slate-400',!on);}
-  });
-  $('pageHome').classList.toggle('hidden',pg!=='home');
-  $('pageApps').classList.toggle('hidden',pg!=='apps');
-  $('hdrPage').textContent=pg==='home'?'Beranda':'Aplikasi & Layanan';
-}
-
-function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',document.documentElement.classList.contains('dark')?'1':'0');}
-if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
+function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',document.documentElement.classList.contains('dark')?'1':'0');setThemeColor();}
 function bersihCache(){localStorage.removeItem('gb_recent');location.reload();}
 function kirimWA(){window.open('https://chat.whatsapp.com/LFaBoWvZ8l0DIaefiWiAl5','_blank');}
 
-/* ─── Feedback → Edge Function + Telegram ─── */
-function openFeedback(){$('formFb').classList.toggle('hidden');renderStars();}
+/* ─── Feedback (sheet terpisah) ─── */
 function setTipeFb(t,btn){STATE.tipeFb=t;document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('bg-blue-600','text-white');b.classList.add('bg-slate-100','text-slate-600');});btn.classList.add('bg-blue-600','text-white');}
 function renderStars(){$('starRow').innerHTML=[1,2,3,4,5].map(i=>`<button onclick="STATE.rating=${i};renderStars()">${i<=STATE.rating?'⭐':'☆'}</button>`).join('');}
+renderStars();
 async function submitFb(){
   const pesan=$('fbPesan').value.trim();if(!pesan)return toast('Isi pesan dulu ya');
   $('btnFb').disabled=true;$('btnFb').textContent='Mengirim…';
-  const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:false,token_sso:STATE.token}});
+  const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});
   $('btnFb').disabled=false;$('btnFb').textContent='Kirim Laporan';
   if(error)toast('❌ Gagal mengirim, coba lagi');
-  else{$('fbPesan').value='';toast('✅ Terkirim! Admin mendapat notifikasi Telegram.');}
+  else{$('fbPesan').value='';tutupPanel('pFb');toast('✅ Terkirim! Admin mendapat notifikasi Telegram.');}
 }
 </script>
 </body>
