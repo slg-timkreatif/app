@@ -54,7 +54,7 @@ tailwind.config={darkMode:'class',theme:{extend:{
       <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p>
       <div id="footSideList" class="space-y-0.5 opacity-80"></div>
     </div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.4</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.5</span></p>
   </aside>
 
   <!-- ░░ KOLOM KONTEN ░░ -->
@@ -272,7 +272,7 @@ tailwind.config={darkMode:'class',theme:{extend:{
         <button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button>
         <button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 text-emerald-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button>
       </div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.4</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.5</span></p>
     </div>
   </div>
 
@@ -301,10 +301,12 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </div>
     <iframe id="mAppFrame" class="w-full bg-white" style="height:calc(100% - 56px)"></iframe>
   </div>
+
+  <!-- ═══ POP-UP FLYER (FIX: gambar utuh sesuai rasio + tema emerald) ═══ -->
   <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm animate-pop">
-      <div id="popContent" class="rounded-3xl overflow-hidden"></div>
-      <button onclick="document.getElementById('mPop').classList.add('hidden')" class="mt-4 w-full bg-white text-slate-700 font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button>
+    <div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll">
+      <div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div>
+      <button onclick="document.getElementById('mPop').classList.add('hidden')" class="mt-4 w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg shadow-emerald-600/25">Mengerti</button>
     </div>
   </div>
   <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
@@ -319,7 +321,7 @@ tailwind.config={darkMode:'class',theme:{extend:{
     </div>
   </div>
 
-  <!-- ═══ TOAST MODERN (kartu kaca + ikon bulat) ═══ -->
+  <!-- ═══ TOAST MODERN ═══ -->
   <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]">
     <div class="flex items-center gap-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200/60 dark:border-slate-700 shadow-2xl shadow-slate-900/20 rounded-2xl pl-3 pr-5 py-3">
       <span id="toastIconWrap" class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span>
@@ -349,7 +351,6 @@ function namaPanggil(full){
 }
 const needsLogin=m=>['Guru','Kepala Sekolah'].includes(m.akses_role);
 
-/* ═══ TOAST MODERN ═══ */
 function toast(m,type){
   type=type||'success';
   const map={success:['check','bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600'],
@@ -364,7 +365,7 @@ function toast(m,type){
   clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);
 }
 
-/* ═══ FIX GAMIFIKASI: ambil ID guru dari payload token ═══ */
+/* FIX GAMIFIKASI: ID guru dari payload token */
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){
   if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;
@@ -417,7 +418,7 @@ function showWx(cw){
   icons();
 }
 
-/* ═══ HISTORY ══ */
+/* ═══ HISTORY ═══ */
 let applying=false;
 let CUR={view:'home',sub:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
@@ -445,7 +446,7 @@ function renderState(s){
   applying=false;
 }
 
-/* ═══ PANEL ══ */
+/* ═══ PANEL ═══ */
 function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.remove('translate-y-full'));}
 function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.add('translate-y-full');}
 function openPanel(id){showInstant(id);safePush({...CUR,panel:id});
@@ -517,7 +518,7 @@ function renderAuthUI(){
   renderAuthUI();setSapaan();muatSemuaData();
 })();
 
-/* ═══ DATA + SMART CACHE (otomatis, tanpa toggle) ═══ */
+/* ═══ DATA + SMART CACHE (FIX URUTAN: data personal diset sebelum render) ═══ */
 function applyPortal(p){
   STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];
   if(STATE.config){
@@ -526,7 +527,7 @@ function applyPortal(p){
     $('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;
     renderBanner();renderPopup();
   }
-  renderMenus();renderQuick();renderNews();renderFoot();gantiQuote();
+  renderMenus();renderQuick();renderNews();renderFoot();renderRecent();gantiQuote();
 }
 async function muatSemuaData(){
   const now=Date.now();
@@ -543,11 +544,12 @@ async function muatSemuaData(){
   ]);
   const portal={config:cfg.data,menus:menus.data||[],quotes:quotes.data||[],footer:(footer.data||[]).filter(f=>f.is_active!==false)};
   try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:portal}));}catch(e){}
-  applyPortal(portal);
+  /* FIX: set data personal DULU, baru render portal */
   STATE.gam=gam.data;
   const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
   const myRole=isKS?'Kepala Sekolah':'Guru';
   STATE.notifs=(notifs.data||[]).filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
+  applyPortal(portal);
   renderPohon();renderRecent();renderNotif();renderProfil();icons();
 }
 
@@ -578,13 +580,22 @@ function renderBanner(){
   $('bannerPesan').textContent=c.banner_pesan;$('bannerBtn').textContent=c.banner_label||'Cek';
   $('bannerBtn').onclick=()=>{const u=c.banner_link;if(u&&u.startsWith('ext:'))window.open(u.slice(4),'_blank');else if(u)location.href=u;};
 }
+/* FIX POP-UP: gambar utuh sesuai rasio + aksen tema emerald */
 function renderPopup(){
   const c=STATE.config;if(!c||c.pop_status!=='ON')return;
   let html;
-  if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}
-  else{
-    const img=c.pop_gambar?`<img src="${c.pop_gambar}" class="w-full h-36 object-cover" alt="Flyer">`:'';
-    html=`<div class="bg-white dark:bg-slate-900">${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||''}</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-2">${c.pop_pesan||''}</p></div></div>`;
+  if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){
+    html=c.pop_pesan; /* flyer HTML kaya sudah punya gaya sendiri */
+  }else{
+    const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';
+    html=`<div class="bg-white dark:bg-slate-900">
+      <div class="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+      ${img}
+      <div class="p-6 text-center">
+        <h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||'Informasi'}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${c.pop_pesan||''}</p>
+      </div>
+    </div>`;
   }
   $('popContent').innerHTML=html;
   $('mPop').classList.remove('hidden');$('mPop').classList.add('flex');
@@ -681,7 +692,7 @@ function renderQuick(){
 }
 function renderNews(){
   if(!STATE.profile)return;
-  const n=STATE.notifs.slice(0,3);
+  const n=(STATE.notifs||[]).slice(0,3);
   $('newsBox').classList.toggle('hidden',!n.length);
   $('newsList').innerHTML=n.map(x=>`<button onclick="openPanel('pNotif')" class="card w-full p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition min-w-0">
     <span class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="megaphone" class="w-4 h-4"></i></span>
