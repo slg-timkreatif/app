@@ -28,7 +28,7 @@
         <i data-lucide="shield-check" class="w-8 h-8 text-blue-400"></i>
       </div>
       <h1 class="text-2xl font-black text-white">Admin Panel</h1>
-      <p class="text-slate-400 text-sm mt-1">Guru Berbagi Selogiri · Command Center</p>
+      <p class="text-slate-400 text-sm mt-1">Guru Berbagi Selogiri · Command Center v3.3</p>
     </div>
     <form id="formLogin" class="card p-6 space-y-4">
       <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
@@ -41,37 +41,74 @@
 <!-- ═══════════ APLIKASI ADMIN ═══════════ -->
 <div id="scrApp" class="hidden min-h-screen flex flex-col md:flex-row">
 
-  <!-- Sidebar -->
-  <aside class="md:w-64 shrink-0 bg-white border-b md:border-b-0 md:border-r border-slate-200 md:min-h-screen md:sticky md:top-0 flex flex-col">
+  <!-- ░░ TOP BAR HP (burger + logout) ░░ -->
+  <div class="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center gap-3">
+    <button onclick="openDrawer()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="menu" class="w-5 h-5 text-slate-600"></i></button>
+    <div class="flex items-center gap-2 flex-1 min-w-0">
+      <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-7 h-7 object-contain" alt="Logo">
+      <p class="text-sm font-extrabold text-slate-800 truncate">Admin Panel</p>
+    </div>
+    <button onclick="doLogout()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center active:scale-90 transition"><i data-lucide="log-out" class="w-4 h-4"></i></button>
+  </div>
+
+  <!-- ░░ DRAWER HP (slide dari kiri) ░░ -->
+  <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
+    <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center overflow-hidden">
+          <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
+        </div>
+        <div class="flex-1"><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.3</p></div>
+        <button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+      </div>
+      <nav class="space-y-1.5">
+        <button data-tab="dash" onclick="setTab('dash')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-600"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Dashboard</button>
+        <button data-tab="menu" onclick="setTab('menu')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="layout-grid" class="w-4 h-4"></i>Menu</button>
+        <button data-tab="info" onclick="setTab('info')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="megaphone" class="w-4 h-4"></i>Banner & Popup</button>
+        <button data-tab="notif" onclick="setTab('notif')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi</button>
+        <button data-tab="footer" onclick="setTab('footer')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="link" class="w-4 h-4"></i>Footer</button>
+        <button data-tab="quotes" onclick="setTab('quotes')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="quote" class="w-4 h-4"></i>Quotes</button>
+        <button data-tab="fb" onclick="setTab('fb')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="lightbulb" class="w-4 h-4"></i>Saran</button>
+        <button data-tab="guru" onclick="setTab('guru')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="users" class="w-4 h-4"></i>Guru</button>
+      </nav>
+      <p id="drawerEmail" class="mt-auto pt-4 text-[11px] font-bold text-slate-500 truncate border-t border-slate-100">—</p>
+      <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
+    </div>
+  </div>
+
+  <!-- ░░ SIDEBAR DESKTOP ░░ -->
+  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white md:min-h-screen md:sticky md:top-0">
     <div class="flex items-center gap-3 p-5">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center overflow-hidden">
         <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
       </div>
-      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.0</p></div>
+      <div><p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p><p class="text-[10px] text-slate-400 font-semibold">Creative App v3.3</p></div>
     </div>
-    <nav class="flex md:flex-col gap-1 overflow-x-auto no-scroll px-3 pb-3 md:pb-0">
-      <button data-tab="dash" onclick="setTab('dash')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold bg-blue-50 text-blue-600"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Dashboard</button>
-      <button data-tab="menu" onclick="setTab('menu')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="layout-grid" class="w-4 h-4"></i>Menu</button>
-      <button data-tab="info" onclick="setTab('info')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="megaphone" class="w-4 h-4"></i>Banner & Popup</button>
-      <button data-tab="notif" onclick="setTab('notif')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi</button>
-      <button data-tab="footer" onclick="setTab('footer')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="link" class="w-4 h-4"></i>Footer</button>
-      <button data-tab="quotes" onclick="setTab('quotes')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="quote" class="w-4 h-4"></i>Quotes</button>
-      <button data-tab="fb" onclick="setTab('fb')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="lightbulb" class="w-4 h-4"></i>Saran</button>
-      <button data-tab="guru" onclick="setTab('guru')" class="tab-btn shrink-0 flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="users" class="w-4 h-4"></i>Guru</button>
+    <nav class="flex flex-col gap-1 px-3">
+      <button data-tab="dash" onclick="setTab('dash')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold bg-blue-50 text-blue-600"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Dashboard</button>
+      <button data-tab="menu" onclick="setTab('menu')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="layout-grid" class="w-4 h-4"></i>Menu</button>
+      <button data-tab="info" onclick="setTab('info')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="megaphone" class="w-4 h-4"></i>Banner & Popup</button>
+      <button data-tab="notif" onclick="setTab('notif')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi</button>
+      <button data-tab="footer" onclick="setTab('footer')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="link" class="w-4 h-4"></i>Footer</button>
+      <button data-tab="quotes" onclick="setTab('quotes')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="quote" class="w-4 h-4"></i>Quotes</button>
+      <button data-tab="fb" onclick="setTab('fb')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="lightbulb" class="w-4 h-4"></i>Saran</button>
+      <button data-tab="guru" onclick="setTab('guru')" class="tab-btn flex items-center gap-3 px-4 py-2.5 rounded-xl text-[13px] font-bold text-slate-500 hover:bg-slate-50"><i data-lucide="users" class="w-4 h-4"></i>Guru</button>
     </nav>
-    <div class="mt-auto p-5 hidden md:block">
+    <div class="mt-auto p-5">
       <p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p>
       <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
     </div>
   </aside>
 
-  <!-- Konten -->
+  <!-- ░░ KONTEN ░░ -->
   <main class="flex-1 p-5 md:p-8 space-y-5 min-w-0">
 
     <!-- ══ DASHBOARD ══ -->
     <section id="sec-dash" class="space-y-4">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <div class="card p-4"><p class="lbl">Total Guru</p><p id="stGuru" class="text-2xl font-black text-slate-800">0</p></div>
+        <div class="card p-4"><p class="lbl">Aktif 7 Hari</p><p id="stAktif" class="text-2xl font-black text-emerald-600">0</p></div>
         <div class="card p-4"><p class="lbl">Login Hari Ini</p><p id="stLogin" class="text-2xl font-black text-blue-600">0</p></div>
         <div class="card p-4"><p class="lbl">Poin Tersebar</p><p id="stPoin" class="text-2xl font-black text-amber-500">0</p></div>
         <div class="card p-4"><p class="lbl">Saran Baru</p><p id="stFb" class="text-2xl font-black text-rose-500">0</p></div>
@@ -86,6 +123,11 @@
           <div id="topMenus" class="space-y-2 mt-4"></div>
         </div>
       </div>
+      <!-- AKTIVITAS TERBARU: siapa membuka apa -->
+      <div class="card p-5">
+        <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-blue-600"></i> Aktivitas Terbaru — Siapa Membuka Apa</p>
+        <div id="actList" class="mt-3"></div>
+      </div>
       <div class="card p-5">
         <p class="text-sm font-extrabold text-slate-700">🏆 Leaderboard Pohon Ilmu</p>
         <div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div>
@@ -98,6 +140,10 @@
         <input id="mSearch" type="text" placeholder="Cari menu…" class="inp flex-1">
         <button onclick="openMenuEditor()" class="shrink-0 bg-blue-600 text-white font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Menu Baru</button>
       </div>
+      <div class="card p-4 border-amber-200 bg-amber-50/60">
+        <p class="text-xs font-extrabold text-amber-700 flex items-center gap-2"><i data-lucide="eye" class="w-4 h-4"></i> PREVIEW MODE TAMU — <span id="guestCount">0</span> menu induk terlihat sebelum login</p>
+        <div id="guestPrev" class="flex flex-wrap gap-1.5 mt-2"></div>
+      </div>
       <div id="menuList" class="space-y-2"></div>
     </section>
 
@@ -106,6 +152,7 @@
       <div class="grid lg:grid-cols-2 gap-4">
         <div class="card p-5 space-y-3">
           <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 text-blue-600"></i> Banner Informasi</p>
+          <p class="text-[10px] text-slate-400 -mt-2">Tampil di Landing (tamu) & Dashboard guru.</p>
           <div class="grid grid-cols-2 gap-3">
             <div><label class="lbl">Status</label><select id="iBanStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
             <div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Hijau</option><option value="red">Merah</option></select></div>
@@ -121,6 +168,7 @@
             <div><label class="lbl">Judul</label><input id="iPopJudul" class="inp"></div>
           </div>
           <div><label class="lbl">Pesan (mendukung HTML flyer)</label><textarea id="iPopPesan" rows="5" class="inp"></textarea></div>
+          <div><label class="lbl">URL Gambar (opsional)</label><input id="iPopGambar" class="inp"></div>
         </div>
       </div>
       <div class="card p-5 space-y-3">
@@ -141,8 +189,8 @@
         <div class="grid md:grid-cols-2 gap-3">
           <div><label class="lbl">Judul</label><input id="iNotJudul" class="inp" placeholder="Judul pengumuman"></div>
           <div class="grid grid-cols-2 gap-3">
-            <div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">Pengumuman</option><option value="info">Info</option><option value="gamifikasi">Gamifikasi</option></select></div>
-            <div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div>
+            <div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣 Pengumuman</option><option value="info">📢 Info</option><option value="gamifikasi">🏆 Gamifikasi</option><option value="sistem">✨ Sistem</option></select></div>
+            <div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">🌐 Semua</option><option value="Guru">🎓 Guru Saja</option><option value="Kepala Sekolah">🏫 Kepsek Saja</option></select></div>
           </div>
         </div>
         <div><label class="lbl">Pesan</label><textarea id="iNotPesan" rows="2" class="inp"></textarea></div>
@@ -177,7 +225,7 @@
 
     <!-- ══ SARAN ══ -->
     <section id="sec-fb" class="hidden space-y-4">
-      <select id="fbFilter" onchange="renderFb()" class="inp w-40"><option value="all">Semua Status</option><option value="baru">Baru</option><option value="diproses">Diproses</option><option value="selesai">Selesai</option></select>
+      <select id="fbFilter" onchange="renderFb()" class="inp w-40"><option value="all">Semua Status</option><option value="baru">🔴 Baru</option><option value="diproses">🟡 Diproses</option><option value="selesai">🟢 Selesai</option></select>
       <div id="fbList" class="space-y-2"></div>
     </section>
 
@@ -212,14 +260,23 @@
     </div>
     <div class="grid grid-cols-3 gap-3">
       <div><label class="lbl">Ukuran</label><select id="eUkuran" class="inp"><option value="normal">Normal</option><option value="wide">Lebar</option></select></div>
-      <div><label class="lbl">Akses</label><select id="eRole" class="inp"><option value="all">Umum</option><option value="Guru">Login Guru</option><option value="Kepala Sekolah">Kepsek</option><option value="tamu">Tamu</option><option value="off">Off</option></select></div>
-      <div><label class="lbl">Cara Buka</label><select id="eBuka" class="inp"><option value="">Browser Luar</option><option value="app">Dalam Aplikasi</option></select></div>
+      <div class="col-span-2"><label class="lbl">Akses (Role)</label>
+        <select id="eRole" class="inp">
+          <option value="tamu">👤 Tamu / Sebelum Login</option>
+          <option value="all">🌐 Publik (Tamu + Login)</option>
+          <option value="Guru">🎓 Login Guru</option>
+          <option value="Kepala Sekolah">🏫 Kepala Sekolah</option>
+          <option value="off">🚫 Nonaktif</option>
+        </select></div>
     </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div><label class="lbl">Label Badge</label><input id="eLabel" class="inp" placeholder="Baru / Update / Beta"></div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="col-span-2"><label class="lbl">Label Badge</label><input id="eLabel" class="inp" placeholder="Baru / Update / Beta"></div>
       <div><label class="lbl">Urutan</label><input id="eSort" type="number" class="inp" value="0"></div>
     </div>
-    <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="eActive" type="checkbox" checked class="w-4 h-4 accent-blue-600"> Aktif (tampil di portal)</label>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="lbl">Cara Buka</label><select id="eBuka" class="inp"><option value="">Browser Luar</option><option value="app">Dalam Aplikasi</option></select></div>
+      <label class="flex items-center gap-2 text-sm font-bold text-slate-600 self-end pb-2"><input id="eActive" type="checkbox" checked class="w-4 h-4 accent-blue-600"> Aktif (tampil)</label>
+    </div>
     <div class="flex gap-2 pt-2">
       <button onclick="saveMenu()" class="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl text-sm">Simpan Perubahan</button>
       <button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 py-3 rounded-xl text-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
@@ -236,11 +293,26 @@ const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
 const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],gam:[],config:null,editMenuId:null};
 const COLOR={teal:'bg-teal-100 text-teal-600',orange:'bg-orange-100 text-orange-600',blue:'bg-blue-100 text-blue-600',green:'bg-green-100 text-green-600',rose:'bg-rose-100 text-rose-600',violet:'bg-violet-100 text-violet-600',fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',red:'bg-red-100 text-red-600',emerald:'bg-emerald-100 text-emerald-600',yellow:'bg-yellow-100 text-yellow-600'};
+const ROLE_LABEL={'tamu':'👤 Tamu','all':'🌐 Publik','Guru':'🎓 Guru','Kepala Sekolah':'🏫 Kepsek','off':'🚫 Off','':'🌐 Publik'};
+const AKSI={login:['🔑','Login'],buka_aplikasi:['📱','Membuka aplikasi'],buka_menu:['📂','Membuka menu']};
 function toast(m){$('toastMsg').textContent=m;const t=$('toast');t.classList.remove('opacity-0','-translate-y-2');setTimeout(()=>t.classList.add('opacity-0','-translate-y-2'),2200);}
 function icons(){lucide.createIcons();}
 function esc(s){return (s||'').replace(/</g,'&lt;');}
+function namaGuru(id){const g=STATE.guru.find(x=>x.id===id);return g?g.nama_lengkap.split(',')[0]:'Guru #'+id;}
+function waktuRelatif(ts){
+  const d=new Date(ts),diff=Math.floor((new Date()-d)/1000);
+  if(diff<60)return 'Baru saja';
+  if(diff<3600)return Math.floor(diff/60)+' mnt lalu';
+  if(diff<86400)return Math.floor(diff/3600)+' jam lalu';
+  if(diff<172800)return 'Kemarin';
+  return d.toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+}
 
-/* ─── AUTH ─── */
+/* ─── DRAWER HP ─── */
+function openDrawer(){$('drawer').classList.remove('hidden');$('drawerEmail').textContent=$('adminEmail').textContent;requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));}
+function closeDrawer(){$('drawerSheet').classList.add('-translate-x-full');setTimeout(()=>$('drawer').classList.add('hidden'),300);}
+
+/* ─── AUTH ── */
 $('formLogin').addEventListener('submit',async e=>{
   e.preventDefault();
   const {error}=await sb.auth.signInWithPassword({email:$('inEmail').value.trim(),password:$('inPass').value});
@@ -274,49 +346,68 @@ async function loadAll(){
   STATE.menus=menus.data||[];STATE.footer=footer.data||[];STATE.quotes=quotes.data||[];
   STATE.notifs=notifs.data||[];STATE.fb=fb.data||[];STATE.config=cfg.data;STATE.gam=gam.data||[];
   STATE.log=log.data||[];STATE.guru=guru.data||[];
-  renderDash();renderMenus();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();fillInfo();fillParentSelect();icons();
+  renderDash();renderMenus();renderGuestPreview();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();fillInfo();icons();
 }
 
-/* ─── DASHBOARD ─── */
+/* ─── DASHBOARD (dengan log aktivitas guru) ─── */
 function renderDash(){
   const today=new Date();today.setHours(0,0,0,0);
+  const week=new Date();week.setDate(week.getDate()-7);
   $('stGuru').textContent=STATE.guru.length;
+  $('stAktif').textContent=new Set(STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&l.guru_id&&new Date(l.created_at)>=week).map(l=>l.guru_id)).size;
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
-  // Chart 7 hari
+  // Grafik 7 hari
   const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d;});
   const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);
-    return STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
+    return STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
   const max=Math.max(...counts,1);
   $('chartLogin').innerHTML=days.map((d,i)=>`<div class="flex-1 flex flex-col items-center gap-1">
     <div class="w-full bg-blue-500 rounded-t-lg transition-all" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px"></div>
     <span class="text-[9px] font-bold text-slate-400">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'][d.getDay()]}</span></div>`).join('');
-  // Top menu
+  // Menu terpopuler
   const cnt={};STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{const j=(l.detail||{}).judul;if(j)cnt[j]=(cnt[j]||0)+1;});
-  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  $('topMenus').innerHTML=top.map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  // Aktivitas terbaru: siapa membuka apa
+  $('actList').innerHTML=STATE.log.slice(0,12).map(l=>{
+    const a=AKSI[l.aksi]||['•',l.aksi];
+    const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';
+    return `<div class="flex items-center gap-3 py-2.5 border-b border-slate-50 last:border-0">
+      <span class="text-base shrink-0">${a[0]}</span>
+      <div class="flex-1 min-w-0"><p class="text-xs font-bold text-slate-700 truncate">${esc(namaGuru(l.guru_id))} <span class="text-slate-400 font-semibold">${a[1]}${det}</span></p></div>
+      <span class="text-[10px] text-slate-400 font-semibold shrink-0">${waktuRelatif(l.created_at)}</span></div>`;
+  }).join('')||'<p class="text-xs text-slate-400">Belum ada aktivitas.</p>';
   // Leaderboard
-  const nama=id=>{const g=STATE.guru.find(x=>x.id===id);return g?g.nama_lengkap.split(',')[0]:'Guru #'+id;};
-  $('leadBoard').innerHTML=STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(nama(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  $('leadBoard').innerHTML=STATE.gam.slice(0,6).map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(namaGuru(g.guru_id))}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+}
+
+/* ─── PREVIEW MODE TAMU ─── */
+function guestVisible(m){
+  if(!m.is_active||m.tampil_di==='off')return false;
+  const r=m.akses_role;
+  return (r==='tamu'||r==='all'||r==='');
+}
+function renderGuestPreview(){
+  const list=STATE.menus.filter(m=>guestVisible(m)&&!m.sub_menu_dari);
+  $('guestCount').textContent=list.length;
+  $('guestPrev').innerHTML=list.length?list.map(m=>`<span class="text-[10px] font-bold bg-white border border-amber-200 text-amber-700 px-2.5 py-1 rounded-lg">${esc(m.judul)}</span>`).join(''):'<p class="text-[11px] text-amber-600 font-semibold">Landing tamu kosong (tidak ada menu publik).</p>';
 }
 
 /* ─── MENU CRUD ─── */
 function renderMenus(){
   const f=($('mSearch').value||'').toLowerCase();
-  const list=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f));
-  $('menuList').innerHTML=list.map(m=>`<div class="card p-4 flex items-center gap-3">
+  $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map(m=>`<div class="card p-4 flex items-center gap-3">
     <span class="w-10 h-10 rounded-xl ${COLOR[m.warna]||COLOR.blue} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
     <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${m.label}</span>`:''} ${!m.is_active?'<span class="text-[9px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">Nonaktif</span>':''}</p>
-    <p class="text-[10px] text-slate-400 truncate">${m.sub_menu_dari?'↳ '+m.sub_menu_dari+' · ':''}${m.akses_role} · ${m.tampil_di}</p></div>
+    <p class="text-[10px] text-slate-400 truncate">${m.sub_menu_dari?'↳ '+m.sub_menu_dari+' · ':''}${ROLE_LABEL[m.akses_role]||'🌐 Publik'} · ${m.tampil_di}</p></div>
     <button onclick="openMenuEditor(${m.id})" class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button>
   </div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada menu.</p>';
   icons();
 }
 $('mSearch').addEventListener('input',renderMenus);
 function fillParentSelect(){
-  const parents=STATE.menus.filter(m=>!m.sub_menu_dari);
-  $('eParent').innerHTML='<option value="">— Tidak ada —</option>'+parents.map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');
+  $('eParent').innerHTML='<option value="">— Tidak ada —</option>'+STATE.menus.filter(m=>!m.sub_menu_dari).map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');
 }
 function openMenuEditor(id){
   STATE.editMenuId=id||null;
@@ -331,6 +422,7 @@ function openMenuEditor(id){
   $('mMenu').classList.remove('hidden');$('mMenu').classList.add('flex');icons();
 }
 function closeMenu(){$('mMenu').classList.add('hidden');$('mMenu').classList.remove('flex');}
+async function reloadMenus(){const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];renderMenus();renderGuestPreview();}
 async function saveMenu(){
   const row={judul:$('eJudul').value.trim(),deskripsi:$('eDesk').value.trim(),url:$('eUrl').value.trim(),
     icon:$('eIcon').value.trim()||'app-window',warna:$('eWarna').value,tampil_di:$('eTampil').value,
@@ -340,16 +432,13 @@ async function saveMenu(){
   const q=STATE.editMenuId?sb.from('creative_menus').update(row).eq('id',STATE.editMenuId):sb.from('creative_menus').insert(row);
   const {error}=await q;
   if(error)return toast('❌ '+error.message);
-  toast('✅ Menu tersimpan');closeMenu();
-  const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];
-  renderMenus();fillParentSelect();
+  toast('✅ Menu tersimpan');closeMenu();await reloadMenus();
 }
 async function delMenu(){
   if(!confirm('Hapus menu ini?'))return;
   const {error}=await sb.from('creative_menus').delete().eq('id',STATE.editMenuId);
   if(error)return toast('❌ '+error.message);
-  toast('🗑️ Menu dihapus');closeMenu();
-  const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];renderMenus();fillParentSelect();
+  toast('🗑️ Menu dihapus');closeMenu();await reloadMenus();
 }
 
 /* ─── INFO ─── */
@@ -357,13 +446,13 @@ function fillInfo(){
   const c=STATE.config;if(!c)return;
   $('iBanStatus').value=c.banner_status;$('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;
   $('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;
-  $('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;
+  $('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;$('iPopGambar').value=c.pop_gambar||'';
   $('iVersi').value=c.versi;$('iHello').value=c.status_hello;$('iOptimasi').value=c.optimasi;
 }
 async function saveInfo(){
   const row={banner_status:$('iBanStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,
     banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,pop_status:$('iPopStatus').value,
-    pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,versi:$('iVersi').value,
+    pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,pop_gambar:$('iPopGambar').value,versi:$('iVersi').value,
     status_hello:$('iHello').value,optimasi:$('iOptimasi').value,updated_at:new Date().toISOString()};
   const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);
   if(error)return toast('❌ '+error.message);
@@ -371,41 +460,46 @@ async function saveInfo(){
 }
 
 /* ─── FOOTER ─── */
+async function reloadFooter(){const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();}
 async function addFooter(){
   const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};
   if(!row.judul)return toast('❌ Judul wajib');
   const {error}=await sb.from('creative_footers').insert(row);
   if(error)return toast('❌ '+error.message);
   $('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';
-  toast('✅ Footer ditambah');
-  const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();
+  toast('✅ Footer ditambah');await reloadFooter();
+}
+async function toggleFooter(id,act){
+  await sb.from('creative_footers').update({is_active:act}).eq('id',id);
+  await reloadFooter();toast(act?'✅ Footer ditampilkan':'🚫 Footer disembunyikan');
 }
 async function delFooter(id){
   if(!confirm('Hapus link ini?'))return;
   await sb.from('creative_footers').delete().eq('id',id);
-  const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();toast('🗑️ Dihapus');
+  await reloadFooter();toast('🗑️ Dihapus');
 }
 function renderFooter(){
-  $('footList').innerHTML=STATE.footer.map(f=>`<div class="card p-4 flex items-center gap-3">
+  $('footList').innerHTML=STATE.footer.map(f=>`<div class="card p-4 flex items-center gap-3 ${f.is_active===false?'opacity-50':''}">
     <i data-lucide="${f.icon||'globe'}" class="w-4 h-4 text-blue-600 shrink-0"></i>
     <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800">${esc(f.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(f.url)}</p></div>
+    <button onclick="toggleFooter(${f.id},${f.is_active===false})" class="text-[10px] font-black px-3 py-2 rounded-lg ${f.is_active===false?'bg-slate-100 text-slate-500':'bg-emerald-50 text-emerald-600'}">${f.is_active===false?'OFF':'AKTIF'}</button>
     <button onclick="delFooter(${f.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');
   icons();
 }
 
 /* ─── QUOTES ─── */
+async function reloadQuotes(){const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();}
 async function addQuote(){
   const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};
   if(!row.kutipan)return toast('❌ Kutipan wajib');
   const {error}=await sb.from('creative_quotes').insert(row);
   if(error)return toast('❌ '+error.message);
-  $('iQuoteText').value='';$('iQuoteAuthor').value='';toast('✅ Quote ditambah');
-  const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();
+  $('iQuoteText').value='';$('iQuoteAuthor').value='';toast('✅ Quote ditambah');await reloadQuotes();
 }
 async function delQuote(id){
   if(!confirm('Hapus quote?'))return;
   await sb.from('creative_quotes').delete().eq('id',id);
-  const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();
+  await reloadQuotes();
 }
 function renderQuotes(){
   $('qCount').textContent=STATE.quotes.length;
@@ -416,27 +510,25 @@ function renderQuotes(){
 }
 
 /* ─── NOTIFIKASI ─── */
+async function reloadNotif(){const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();}
 async function addNotif(){
   const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value};
   if(!row.judul)return toast('❌ Judul wajib');
   const {error}=await sb.from('creative_notifications').insert(row);
   if(error)return toast('❌ '+error.message);
-  $('iNotJudul').value='';$('iNotPesan').value='';toast('📣 Pengumuman terkirim ke semua guru');
-  const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();
+  $('iNotJudul').value='';$('iNotPesan').value='';toast('📣 Pengumuman terkirim');await reloadNotif();
 }
-async function toggleNotif(id,act){
-  await sb.from('creative_notifications').update({is_active:act}).eq('id',id);
-  const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();
-}
+async function toggleNotif(id,act){await sb.from('creative_notifications').update({is_active:act}).eq('id',id);await reloadNotif();}
 async function delNotif(id){
   if(!confirm('Hapus notifikasi?'))return;
   await sb.from('creative_notifications').delete().eq('id',id);
-  const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();
+  await reloadNotif();
 }
 function renderNotif(){
+  const TGT={'all':'🌐 Semua','Guru':'🎓 Guru','Kepala Sekolah':'🏫 Kepsek'};
   $('notList').innerHTML=STATE.notifs.map(n=>`<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}">
     <span class="text-xl">${{info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢'}</span>
-    <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div>
+    <div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)} <span class="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-black">${TGT[n.target_role]||'🌐 Semua'}</span></p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div>
     <button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'bg-emerald-50 text-emerald-600':'bg-slate-100 text-slate-500'}">${n.is_active?'AKTIF':'OFF'}</button>
     <button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');
   icons();
@@ -450,8 +542,7 @@ async function setFbStatus(id,st){
 }
 function renderFb(){
   const f=$('fbFilter').value;
-  const list=STATE.fb.filter(x=>f==='all'||x.status===f);
-  $('fbList').innerHTML=list.map(x=>`<div class="card p-4">
+  $('fbList').innerHTML=STATE.fb.filter(x=>f==='all'||x.status===f).map(x=>`<div class="card p-4">
     <div class="flex items-center gap-2 flex-wrap">
       <span class="text-[10px] font-black px-2 py-1 rounded-lg uppercase ${{Saran:'bg-blue-50 text-blue-600',Bug:'bg-rose-50 text-rose-600',Pujian:'bg-amber-50 text-amber-600',Error:'bg-orange-50 text-orange-600'}[x.tipe]||'bg-slate-100'}">${x.tipe}</span>
       <span class="text-[10px] font-bold text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐ · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</span>
@@ -476,8 +567,9 @@ function renderGuru(){
 }
 $('gSearch').addEventListener('input',renderGuru);
 
-/* ─── TAB ─── */
+/* ─── TAB (sekalian tutup drawer) ─── */
 function setTab(t){
+  closeDrawer();
   document.querySelectorAll('.tab-btn').forEach(b=>{const on=b.dataset.tab===t;
     b.classList.toggle('bg-blue-50',on);b.classList.toggle('text-blue-600',on);b.classList.toggle('text-slate-500',!on);});
   ['dash','menu','info','notif','footer','quotes','fb','guru'].forEach(s=>$('sec-'+s).classList.toggle('hidden',s!==t));
