@@ -10,73 +10,73 @@
 <title>Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-tailwind.config={darkMode:'class',theme:{extend:{
-  fontFamily:{sans:['Inter','sans-serif']},
+tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},
   animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},
-  keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}
-}}}
+  keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}html,body{overflow-x:hidden}
+  :root{--acc:#059669;--acc2:#0d9488;--acc-soft:#d1fae5;--acc-soft-d:#064e3b;--acc-ring:rgba(5,150,105,.35)}
+  html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-soft-d:#1e3a8a;--acc-ring:rgba(37,99,235,.35)}
+  html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-soft-d:#4c1d95;--acc-ring:rgba(124,58,237,.35)}
+  html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-soft-d:#78350f;--acc-ring:rgba(217,119,6,.35)}
+  html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-soft-d:#881337;--acc-ring:rgba(225,29,72,.35)}
   .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
   .card{background:#fff;border:1px solid #f1f5f9;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:1.25rem}
   .dark .card{background:#1e293b;border-color:#334155}
   .skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:.75rem}
   .dark .skeleton{background:linear-gradient(90deg,#334155 25%,#475569 50%,#334155 75%);background-size:800px 100%;animation:shim 1.3s linear infinite}
   @keyframes shim{0%{background-position:-400px 0}100%{background-position:400px 0}}
+  .acc-bg{background-color:var(--acc)}
+  .acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
+  .acc-soft{background-color:var(--acc-soft)}.dark .acc-soft{background-color:var(--acc-soft-d)}
+  .acc-text{color:var(--acc)}.dark .acc-text{color:var(--acc2)}
+  .acc-ring:focus{outline:none;box-shadow:0 0 0 3px var(--acc-ring)}
+  html.fs-besar{font-size:17.5px}
+  html.no-anim *,html.no-anim *::before,html.no-anim *::after{animation:none!important;transition:none!important}
   .tree-pulse{animation:tpulse 2.6s infinite}
-  @keyframes tpulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.35)}70%{box-shadow:0 0 0 10px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+  @keyframes tpulse{0%{box-shadow:0 0 0 0 var(--acc-ring)}70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
+  .sheet{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:28rem;max-height:92vh;border-radius:1.5rem 1.5rem 0 0;transform:translateY(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+  .sheet.sheet-open{transform:translateY(0)}
+  @media (min-width:768px){
+    .sheet{top:50%;left:50%;right:auto;bottom:auto;width:100%;border-radius:1.5rem;transform:translate(-50%,-50%) translateY(28px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease}
+    .sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}
+  }
 </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 min-h-screen">
-
 <div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
 
-  <!-- ░░ SIDEBAR DESKTOP ░░ -->
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sticky top-0 h-screen">
     <div class="flex items-center gap-3 mb-8">
-      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center overflow-hidden">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo">
-      </div>
+      <div class="w-11 h-11 rounded-xl acc-grad flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div>
       <div><p class="font-extrabold text-slate-800 dark:text-white leading-tight">Guru Berbagi</p><p id="sideVersi" class="text-[11px] text-slate-400 font-semibold">Portal Selogiri</p></div>
     </div>
     <nav class="space-y-1.5">
-      <button data-nav="home" onclick="navPage('home')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-600 dark:bg-emerald-900/40"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
-      <button data-nav="apps" onclick="navPage('apps')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="layout-grid" class="w-4 h-4"></i>Aplikasi</button>
-      <button id="sideNotif" onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi
-        <span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
+      <button data-nav="home" onclick="navPage('home')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold acc-soft acc-text"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
+      <button data-nav="apps" onclick="navPage('apps')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="layout-grid" class="w-4 h-4"></i>Layanan</button>
+      <button id="sideNotif" onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi<span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
+      <button data-nav="bagi" onclick="navPage('bagi')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
-    <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800">
-      <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p>
-      <div id="footSideList" class="space-y-0.5 opacity-80"></div>
-    </div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v3.8</span></p>
+    <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.4</span></p>
   </aside>
 
-  <!-- ░░ KOLOM KONTEN ░░ -->
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
-
     <header class="sticky top-0 z-40 px-5 md:px-8 pt-5 pb-3 flex items-center justify-between bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
       <div class="flex items-center gap-3 md:hidden">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-700 shadow-md">
-          <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo">
-        </div>
+        <div class="w-10 h-10 rounded-xl acc-grad flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-700 shadow-md"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div>
         <div><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100 leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-slate-400 font-semibold">Portal Selogiri</p></div>
       </div>
       <p class="hidden md:block text-sm font-extrabold text-slate-700 dark:text-slate-200" id="hdrPage">Beranda</p>
       <div class="flex items-center gap-2">
-        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden bg-emerald-600 text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md shadow-emerald-600/25">Masuk</button>
-        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition md:hidden">
-          <i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i>
-          <span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-slate-50 dark:border-slate-950">0</span>
-        </button>
-        <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition">
-          <i data-lucide="settings" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i>
-        </button>
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition md:hidden"><i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-slate-50 dark:border-slate-950">0</span></button>
+        <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i></button>
       </div>
     </header>
 
@@ -85,269 +85,165 @@ tailwind.config={darkMode:'class',theme:{extend:{
       <!-- ══ BERANDA ══ -->
       <section id="pageHome" class="space-y-4 min-w-0">
         <div class="flex items-end justify-between gap-3 animate-fade-up">
-          <div class="min-w-0">
-            <p id="txtTanggal" class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest"></p>
-            <h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-0.5 truncate"></h1>
-          </div>
-          <div id="wxChip" class="hidden card px-3.5 py-2.5 items-center gap-2 shrink-0">
-            <i id="wxIcon" data-lucide="cloud-sun" class="w-4 h-4 text-emerald-600"></i>
-            <span id="wxTemp" class="text-xs font-black text-slate-600 dark:text-slate-300 tabular-nums">--°</span>
-            <span id="wxLabel" class="text-[10px] font-bold text-slate-400">…</span>
-          </div>
+          <div class="min-w-0"><p id="txtTanggal" class="text-[10px] font-bold acc-text uppercase tracking-widest"></p><h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-0.5 truncate"></h1></div>
+          <div id="wxChip" class="hidden card px-3.5 py-2.5 items-center gap-2 shrink-0"><i id="wxIcon" data-lucide="cloud-sun" class="w-4 h-4 acc-text"></i><span id="wxTemp" class="text-xs font-black text-slate-600 dark:text-slate-300 tabular-nums">--°</span><span id="wxLabel" class="text-[10px] font-bold text-slate-400">…</span></div>
         </div>
-
-        <div id="authCard" class="hidden card p-5 text-center border-emerald-100 dark:border-emerald-900 animate-fade-up">
-          <p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Guru Selogiri?</p>
-          <p class="text-[11px] text-slate-400 mt-1 mb-4">Masuk untuk akses penuh: jurnal, prompt AI, Pohon Ilmu, dan poin apresiasi.</p>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="openPanel('pLogin')" class="bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button>
-            <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="bg-teal-50 dark:bg-teal-900/30 text-teal-600 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a>
-          </div>
-        </div>
-
-        <div id="installCard" class="hidden card p-4 items-center gap-3 border-emerald-100 dark:border-emerald-900 animate-fade-up">
-          <span class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span>
-          <div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-400">Akses cepat dari layar utama HP Anda</p></div>
-          <button onclick="pasangApp()" class="shrink-0 bg-emerald-600 text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button>
-          <button onclick="$('installCard').classList.add('hidden');$('installCard').classList.remove('flex')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-4 min-w-0">
-          <div id="bannerBox" class="hidden rounded-2xl p-4 text-white items-center gap-3 shadow-lg md:col-span-2 animate-fade-up">
-            <i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i>
-            <p id="bannerPesan" class="flex-1 text-xs font-semibold leading-snug"></p>
-            <button id="bannerBtn" class="shrink-0 bg-white/95 text-emerald-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">Cek</button>
-          </div>
-          <!-- Kartu Quote + tombol KARTU & GANTI -->
-          <div class="card p-4 relative overflow-hidden animate-fade-up min-w-0">
-            <i data-lucide="quote" class="w-7 h-7 text-emerald-100 dark:text-emerald-900 absolute top-3 right-3"></i>
-            <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 dark:text-slate-300 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
-            <div class="flex items-center justify-between mt-2 gap-2">
-              <p id="quoteAuthor" class="text-[11px] font-bold text-slate-400 truncate">— …</p>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="openQuoteGen()" title="Buat kartu quote" class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center active:scale-90 transition shadow-md shadow-emerald-600/25"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
-                <button id="btnQuote" onclick="gantiQuote()" title="Ganti kata mutiara" class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center active:scale-90 transition"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i></button>
-              </div>
+        <div class="relative animate-fade-up"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearchHome" type="text" placeholder="Cari layanan, jurnal, tools…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring" oninput="homeSearch(this.value)"></div>
+        <div id="authCard" class="hidden card p-5 text-center animate-fade-up"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Guru Selogiri?</p><p class="text-[11px] text-slate-400 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p><div class="grid grid-cols-2 gap-2"><button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button><a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a></div></div>
+        <div id="installCard" class="hidden card p-4 items-center gap-3 animate-fade-up"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-400">Akses cepat dari layar utama HP Anda</p></div><button onclick="pasangApp()" class="shrink-0 acc-bg text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button><button onclick="$('installCard').classList.add('hidden');$('installCard').classList.remove('flex')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+        <div id="caroBox" class="hidden animate-fade-up min-w-0"><div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div><div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div></div>
+        <div class="card p-4 relative overflow-hidden animate-fade-up min-w-0">
+          <i data-lucide="quote" class="w-7 h-7 text-slate-100 dark:text-slate-800 absolute top-3 right-3"></i>
+          <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 dark:text-slate-300 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
+          <div class="flex items-center justify-between mt-2 gap-2">
+            <p id="quoteAuthor" class="text-[11px] font-bold text-slate-400 truncate">— …</p>
+            <div class="flex items-center gap-2 shrink-0">
+              <button id="btnQuote" onclick="gantiQuote()" title="Ganti kata mutiara" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" title="Buat kartu quote" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
             </div>
           </div>
         </div>
-
-        <div class="grid md:grid-cols-3 gap-4 min-w-0">
-          <div class="md:col-span-2 space-y-4 min-w-0">
-            <div id="quickBox" class="animate-fade-up">
-              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Pintasan Cepat</p>
-              <div id="quickList" class="grid grid-cols-4 gap-2 min-w-0 max-w-full"></div>
-            </div>
-            <div id="recentBox" class="hidden animate-fade-up">
-              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Lanjutkan</p>
-              <div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-            </div>
-          </div>
-          <div id="newsBox" class="animate-fade-up min-w-0">
-            <div class="flex items-center justify-between mb-2">
-              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Info Terbaru</p>
-              <button onclick="openPanel('pNotif')" class="text-[11px] font-bold text-emerald-600">Lihat Semua</button>
-            </div>
-            <div id="newsList" class="space-y-2"></div>
-          </div>
-        </div>
-
+        <!-- TEASER INSPIRASI (tidak menggantikan quote) -->
+        <button id="inspTeaser" onclick="navPage('bagi')" class="hidden w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition animate-fade-up">
+          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
+          <span class="flex-1 min-w-0"><span class="block text-[10px] font-black uppercase tracking-wider acc-text">Inspirasi Guru</span><span id="teaserIsi" class="block text-[11px] text-slate-500 dark:text-slate-400 truncate"></span></span>
+          <span id="teaserLikes" class="text-[10px] font-black text-amber-500 flex items-center gap-1 shrink-0"><i data-lucide="heart" class="w-3 h-3 fill-current"></i>0</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+        </button>
+        <div id="quickBox" class="animate-fade-up"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Pintasan Cepat</p><div id="quickList" class="grid grid-cols-4 md:grid-cols-8 gap-2 min-w-0 max-w-full"></div></div>
+        <button onclick="navPage('apps')" class="w-full card p-3.5 flex items-center justify-center gap-2 text-sm font-extrabold acc-text active:scale-[.98] transition animate-fade-up" style="border-color:var(--acc-soft)"><i data-lucide="layout-grid" class="w-4 h-4"></i> Jelajahi Semua Layanan</button>
+        <div id="recentBox" class="hidden animate-fade-up"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Lanjutkan</p><div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div></div>
         <div id="footList" class="flex gap-2 overflow-x-auto no-scroll pb-1 animate-fade-up md:hidden"></div>
       </section>
 
-      <!-- ══ APLIKASI ══ -->
+      <!-- ══ LAYANAN ══ -->
       <section id="pageApps" class="hidden space-y-4 min-w-0">
-        <div class="relative">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
-          <input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…"
-            class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40">
+        <div class="flex items-center justify-between gap-2"><p class="text-sm font-extrabold text-slate-700 dark:text-slate-200">Semua Layanan</p><div class="flex items-center gap-1.5"><button id="vKotak" onclick="setView('kotak')" class="px-3 py-1.5 rounded-lg text-[11px] font-bold acc-bg text-white transition">Kotak</button><button id="vBaris" onclick="setView('baris')" class="px-3 py-1.5 rounded-lg text-[11px] font-bold card text-slate-500 transition">Baris</button></div></div>
+        <div class="relative"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring"></div>
+        <div id="layananBody"></div>
+      </section>
+
+      <!-- ══ BERBAGI (Pohon + Studio + Karya + Inspirasi + Apresiasi) ══ -->
+      <section id="pageBagi" class="hidden space-y-4 min-w-0">
+        <div><p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="share-2" class="w-4 h-4 acc-text"></i> Berbagi</p><p class="text-[10px] text-slate-400 mt-0.5">Berkarya, berbagi, tumbuh bersama</p></div>
+        <div id="treeGuest" class="hidden card p-6 text-center"><div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Pohon Ilmu menantimu</p><p class="text-xs text-slate-400 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Masuk Sekarang</button></div>
+        <div id="treeData" class="space-y-4">
+          <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden"><div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div><div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-black uppercase tracking-widest text-white/70">Pohon Ilmu</p><p id="treeLevel" class="text-lg font-black leading-tight">Biji</p><div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div><p class="text-[10px] font-semibold text-white/80 mt-1"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p></div><div class="text-right shrink-0"><p class="text-[10px] font-bold text-white/70 flex items-center gap-1 justify-end"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p></div></div>
+          <div class="grid grid-cols-4 gap-2 text-center"><div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Poin</p></div><div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Streak</p></div><div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-600 dark:text-slate-300">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Login</p></div><div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Lencana</p></div></div>
         </div>
-        <div id="menuGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3"></div>
+        <div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p><div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div></div>
+        <div id="karyaWrap" class="hidden"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p><div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div></div>
+        <!-- INSPIRASI -->
+        <div>
+          <div class="flex items-center justify-between mb-2"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p>
+            <div class="flex gap-1.5"><button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button><button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 transition">Terpopuler</button></div></div>
+          <div class="card p-4 space-y-2 mb-2">
+            <p id="inspTheme" class="text-[10px] font-bold acc-text"></p>
+            <div class="flex gap-2"><select id="inspKat" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-2 text-[11px] acc-ring"><option>Praktik Baik</option><option>Ide Kegiatan</option><option>Teladan</option></select><button onclick="usePrompt()" class="shrink-0 px-3 rounded-lg acc-soft acc-text text-[10px] font-bold flex items-center gap-1"><i data-lucide="sparkles" class="w-3 h-3"></i> Pancingan</button></div>
+            <textarea id="inspIsi" rows="2" placeholder="Bagikan ide / praktik baikmu…" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></textarea>
+            <button onclick="postInspirasi()" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">+ Bagikan Inspirasi</button>
+          </div>
+          <div id="inspList" class="space-y-2"></div>
+          <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
+        </div>
+        <div class="card p-4"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Papan Apresiasi</p><div id="leadList" class="space-y-2"></div></div>
+        <div class="card p-4"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><i data-lucide="medal" class="w-4 h-4 acc-text"></i> Koleksi Lencana</p><div id="badgeGrid" class="grid grid-cols-3 gap-2"></div></div>
       </section>
     </main>
 
-    <!-- Bottom Nav HP -->
     <nav class="fixed bottom-0 inset-x-0 w-full md:hidden z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 px-6 py-2 flex items-center justify-between">
-      <button data-nav="home" onclick="navPage('home')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-emerald-600"><i data-lucide="home" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Beranda</span></button>
-      <button data-nav="apps" onclick="navPage('apps')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="layout-grid" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Aplikasi</span></button>
-      <button id="navNotif" onclick="openPanel('pNotif')" class="flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="bell" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Notifikasi</span></button>
+      <button data-nav="home" onclick="navPage('home')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 acc-text"><i data-lucide="home" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Beranda</span></button>
+      <button data-nav="apps" onclick="navPage('apps')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="layout-grid" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Layanan</span></button>
+      <button data-nav="bagi" onclick="navPage('bagi')" class="nav-btn flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="share-2" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Berbagi</span></button>
       <button onclick="openPanel('pProfil')" class="flex flex-col items-center gap-0.5 py-1 px-3 text-slate-400"><i data-lucide="user" class="w-[22px] h-[22px]"></i><span class="text-[10px] font-bold">Profil</span></button>
     </nav>
   </div>
 
-  <!-- ═══ SHEET LOGIN ═══ -->
-  <div id="pLogin" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
-    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300" id="pLoginSheet">
+  <!-- SHEET LOGIN -->
+  <div id="pLogin" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+    <div id="pLoginSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
-      <div class="text-center mb-5">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center overflow-hidden mb-3">
-          <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-11 h-11 object-contain scale-[1.3]" alt="Logo">
-        </div>
-        <p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p>
-        <p class="text-[11px] text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
-      </div>
-      <form id="formLogin" class="space-y-3">
-        <input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
-        <input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
-        <button id="btnLogin" type="submit" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk</button>
-      </form>
+      <div class="text-center mb-5"><div class="w-14 h-14 mx-auto rounded-2xl acc-soft flex items-center justify-center overflow-hidden mb-3"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-11 h-11 object-contain scale-[1.3]" alt="Logo"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p><p class="text-[11px] text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p></div>
+      <form id="formLogin" class="space-y-3"><input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 acc-ring"><input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 acc-ring"><button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk</button></form>
       <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div></div>
-      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full bg-teal-50 dark:bg-teal-900/30 text-teal-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
-    </div>
-  </div>
+      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
+    </div></div>
 
-  <!-- ═══ SHEET NOTIFIKASI ═══ -->
-  <div id="pNotif" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
-    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-slate-50 dark:bg-slate-950 rounded-t-3xl translate-y-full transition-transform duration-300 flex flex-col max-h-[85vh]" id="pNotifSheet">
-      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 rounded-t-3xl border-b border-slate-100 dark:border-slate-800">
-        <p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Notifikasi</p>
-        <button onclick="tutupPanel('pNotif')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
-      </div>
-      <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
-    </div>
-  </div>
+  <!-- SHEET NOTIFIKASI -->
+  <div id="pNotif" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
+    <div id="pNotifSheet" class="sheet bg-slate-50 dark:bg-slate-950"><div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0"><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Notifikasi</p><button onclick="tutupPanel('pNotif')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button></div><div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div></div></div>
 
-  <!-- ═══ SHEET PROFIL ═══ -->
-  <div id="pProfil" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pProfil')"></div>
-    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300 max-h-[85vh] overflow-y-auto no-scroll" id="pProfilSheet">
-      <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
-      <div id="profGuest" class="text-center">
-        <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div>
-        <p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Mode Tamu</p>
-        <p class="text-xs text-slate-400 mt-1 mb-5">Masuk untuk akses penuh, Pohon Ilmu, dan poin gamifikasi.</p>
-        <button onclick="openPanel('pLogin')" class="w-full bg-emerald-600 text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk dengan Akun</button>
-        <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="mt-2 w-full bg-teal-50 dark:bg-teal-900/30 text-teal-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
-      </div>
-      <div id="profData" class="hidden">
-        <div class="flex items-center gap-4">
-          <div class="relative shrink-0">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 flex items-center justify-center text-xl font-black overflow-hidden" id="pfAvatar">G</div>
-            <button onclick="pilihFoto()" class="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-md active:scale-90 transition"><i data-lucide="camera" class="w-3.5 h-3.5"></i></button>
-            <input type="file" id="inFoto" accept="image/*" class="hidden" onchange="uploadFoto(event)">
-          </div>
-          <div class="min-w-0">
-            <p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 truncate">—</p>
-            <p id="pfSekolah" class="text-xs text-slate-500 dark:text-slate-400 font-semibold truncate">—</p>
-            <p id="pfJabatan" class="text-[11px] text-emerald-600 font-bold">—</p>
-          </div>
+  <!-- SHEET PROFIL -->
+  <div id="pProfil" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pProfil')"></div>
+    <div id="pProfilSheet" class="sheet bg-slate-50 dark:bg-slate-950"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mt-3 mb-2 shrink-0"></div>
+      <div class="flex-1 overflow-y-auto no-scroll p-6 space-y-4">
+        <div id="profGuest" class="text-center pt-8"><div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Mode Tamu</p><p class="text-xs text-slate-400 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk dengan Akun</button></div>
+        <div id="profData" class="hidden space-y-4">
+          <div class="flex items-center gap-4"><div class="relative shrink-0"><div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-md flex items-center justify-center text-xl font-black text-slate-400 overflow-hidden" id="pfAvatar">G</div><button onclick="pilihFoto()" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full acc-bg text-white flex items-center justify-center shadow-md active:scale-90 transition"><i data-lucide="camera" class="w-4 h-4"></i></button><input type="file" id="inFoto" accept="image/*" class="hidden" onchange="uploadFoto(event)"></div>
+            <div class="min-w-0"><p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 leading-tight truncate">—</p><p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p><span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span></div></div>
+          <div class="card p-4 space-y-2.5"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Kepegawaian</p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="mail" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dEmail" class="truncate">—</span></p></div>
+          <div class="card p-4 space-y-2.5"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(untuk watermark story)</span></p>
+            <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
+            <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.4</span></div>
+          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
-        <div class="card p-4 flex items-center gap-4 mt-5">
-          <div id="treeIcon" class="tree-pulse w-14 h-14 shrink-0 rounded-full bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-700 flex items-center justify-center text-2xl">🌱</div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <p id="treeLevel" class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Biji</p>
-              <p class="text-[11px] font-bold text-amber-500 flex items-center gap-1"><i data-lucide="flame" class="w-3.5 h-3.5"></i><span id="treeStreak">0</span> hari</p>
-            </div>
-            <div class="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
-              <div id="treeBar" class="h-full bg-gradient-to-r from-emerald-500 to-amber-400 rounded-full transition-all duration-700" style="width:0%"></div>
-            </div>
-            <p class="text-[10px] text-slate-400 mt-1 font-semibold"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-2 mt-3 text-center">
-          <div class="card p-3"><p id="stPoin" class="text-lg font-black text-emerald-600">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Poin</p></div>
-          <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Streak</p></div>
-          <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-600 dark:text-slate-300">0</p><p class="text-[10px] font-bold text-slate-400 uppercase">Login</p></div>
-        </div>
-        <button onclick="doLogout()" class="mt-5 w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
-          <i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
-      </div>
-    </div>
-  </div>
+      </div></div></div>
 
-  <!-- ═══ SHEET PENGATURAN ═══ -->
-  <div id="pSetting" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pSetting')"></div>
-    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300 max-h-[80vh] overflow-y-auto no-scroll" id="pSettingSheet">
+  <!-- SHEET PENGATURAN -->
+  <div id="pSetting" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pSetting')"></div>
+    <div id="pSettingSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
       <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-4">Pengaturan</p>
-      <div class="space-y-3">
-        <div class="card p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3"><i data-lucide="moon" class="w-4 h-4 text-slate-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p></div>
-          <button onclick="toggleDark()" class="w-12 h-7 rounded-full bg-slate-200 dark:bg-emerald-600 relative transition"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition dark:translate-x-5"></span></button>
-        </div>
-        <button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 text-emerald-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button>
-        <button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button>
-        <button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button>
-        <button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 text-emerald-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button>
-      </div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v3.8</span></p>
-    </div>
-  </div>
+      <div class="card p-4 space-y-4 mb-3"><p class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Personalisasi</p>
+        <div><p class="lbl">Warna Aksen</p><div class="flex gap-2.5 mt-1" id="accRow"><button data-acc="hijau" onclick="setAccent('hijau')" style="background:#059669" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button><button data-acc="biru" onclick="setAccent('biru')" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button><button data-acc="violet" onclick="setAccent('violet')" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button><button data-acc="amber" onclick="setAccent('amber')" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button><button data-acc="rose" onclick="setAccent('rose')" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button></div></div>
+        <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Teks Besar</p><button id="tglFs" onclick="setFs()" class="w-12 h-7 rounded-full bg-slate-200 relative transition"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+        <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" onclick="setAnim()" class="w-12 h-7 rounded-full bg-slate-200 relative transition"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+        <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button onclick="toggleDark()" class="w-12 h-7 rounded-full bg-slate-200 dark:acc-bg relative transition"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition dark:translate-x-5"></span></button></div></div>
+      <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.4</span></p>
+    </div></div>
 
-  <!-- ═══ SHEET LAPORAN ═══ -->
-  <div id="pFb" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
-    <div class="absolute left-0 right-0 bottom-0 mx-auto max-w-md bg-white dark:bg-slate-900 rounded-t-3xl p-6 translate-y-full transition-transform duration-300" id="pFbSheet">
-      <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
-      <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p>
-      <p class="text-[11px] text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram.</p>
-      <div class="flex gap-2">
-        <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white">💡 Saran</button>
-        <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">🐞 Bug</button>
-        <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">⭐ Pujian</button>
-      </div>
+  <!-- SHEET LAPORAN -->
+  <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
+    <div id="pFbSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p><p class="text-[11px] text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram. (+1 poin)</p>
+      <div class="flex gap-2"><button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold acc-bg text-white">💡 Saran</button><button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">🐞 Bug</button><button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">⭐ Pujian</button></div>
       <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
-      <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"></textarea>
-      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full bg-emerald-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Kirim Laporan</button>
+      <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 text-sm text-slate-700 dark:text-slate-200 acc-ring"></textarea>
+      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Kirim Laporan</button>
+    </div></div>
+
+  <!-- MODAL IFRAME -->
+  <div id="mApp" class="fixed inset-0 z-[60] hidden bg-slate-950"><div class="flex items-center justify-between px-4 py-3 bg-slate-900"><p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p><button onclick="tutupApp()" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button></div><iframe id="mAppFrame" class="w-full bg-white" style="height:calc(100% - 56px)"></iframe></div>
+
+  <!-- EDITOR STUDIO -->
+  <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50 dark:bg-slate-950">
+    <div class="px-4 py-3 flex items-center gap-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0">
+      <button onclick="tutupModal('mStudio')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 dark:text-slate-300"></i></button>
+      <p id="stTitle" class="text-sm font-extrabold text-slate-800 dark:text-slate-100 flex-1">Studio</p>
+      <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span>
+    </div>
+    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4">
+      <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100 dark:border-slate-700" style="aspect-ratio:9/16"></canvas>
+      <div id="stControls" class="space-y-1"></div>
+    </div>
+    <div class="p-4 grid grid-cols-2 gap-2 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
+      <button onclick="unduhStudio()" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
+      <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
     </div>
   </div>
 
-  <!-- ═══ MODAL IFRAME ═══ -->
-  <div id="mApp" class="fixed inset-0 z-[60] hidden bg-slate-950">
-    <div class="flex items-center justify-between px-4 py-3 bg-slate-900">
-      <p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p>
-      <button onclick="tutupApp()" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button>
-    </div>
-    <iframe id="mAppFrame" class="w-full bg-white" style="height:calc(100% - 56px)"></iframe>
-  </div>
-
-  <!-- ═══ MODAL GENERATOR KARTU QUOTE (BARU) ═══ -->
-  <div id="mQuote" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/70">
-    <div class="w-full max-w-sm animate-pop">
-      <div class="card p-3 rounded-3xl">
-        <p class="text-sm font-extrabold text-slate-800 dark:text-slate-100 text-center mb-2">🎨 Kartu Quote</p>
-        <canvas id="quoteCanvas" class="w-full rounded-2xl border border-slate-100 dark:border-slate-700" style="aspect-ratio:1/1"></canvas>
-        <div class="grid grid-cols-2 gap-2 mt-3">
-          <button onclick="unduhKartu()" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
-          <button onclick="bagiKartu()" class="bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-md shadow-emerald-600/25"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
-        </div>
-        <button onclick="tutupModal('mQuote')" class="mt-2 w-full text-slate-400 font-bold py-2 text-xs active:scale-95 transition">Tutup</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ POP-UP FLYER ═══ -->
-  <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll">
-      <div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div>
-      <button onclick="tutupPop()" class="mt-4 w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg shadow-emerald-600/25">Mengerti</button>
-    </div>
-  </div>
-
-  <!-- ═══ PANDUAN iOS ═══ -->
-  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm card p-6 animate-pop">
-      <p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-3">Pasang di iPhone/iPad</p>
-      <ol class="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside">
-        <li>Ketuk tombol <b>Bagikan</b></li>
-        <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
-        <li>Ketuk <b>Tambahkan</b></li>
-      </ol>
-      <button onclick="tutupModal('mIos')" class="mt-5 w-full bg-emerald-600 text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button>
-    </div>
-  </div>
-
-  <!-- ═══ TOAST HITAM ELEGAN ═══ -->
-  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]">
-    <div class="flex items-center gap-3 bg-slate-900/95 dark:bg-slate-800/95 backdrop-blur-md border border-white/10 dark:border-slate-600/50 shadow-2xl shadow-black/40 rounded-2xl pl-3 pr-5 py-3">
-      <span id="toastIconWrap" class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span>
-      <p id="toastMsg" class="text-[13px] font-bold text-white leading-snug">…</p>
-    </div>
-  </div>
+  <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll"><div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div><button onclick="tutupPop()" class="mt-4 w-full acc-grad text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg">Mengerti</button></div></div>
+  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-sm card p-6 animate-pop"><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-3">Pasang di iPhone/iPad</p><ol class="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside"><li>Ketuk tombol <b>Bagikan</b></li><li>Pilih <b>"Tambahkan ke Layar Utama"</b></li><li>Ketuk <b>Tambahkan</b></li></ol><button onclick="tutupModal('mIos')" class="mt-5 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button></div></div>
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 dark:bg-slate-800/95 backdrop-blur-md border border-white/10 dark:border-slate-600/50 shadow-2xl shadow-black/40 rounded-2xl pl-3 pr-5 py-3"><span id="toastIconWrap" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white leading-snug">…</p></div></div>
 </div>
 
 <script>
@@ -355,557 +251,236 @@ const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
-
-const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],tipeFb:'Saran',rating:5,quoteNow:null};
+const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:20,myLikes:new Set(),teaser:null};
 const COLOR={teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],yellow:['bg-yellow-100','text-yellow-600']};
-const LEVELS=[{n:'Biji',e:'🌰',min:0},{n:'Tunas',e:'🌱',min:50},{n:'Pohon Muda',e:'🪴',min:150},{n:'Pohon Rindang',e:'🌳',min:300},{n:'Pohon Berbuah',e:'🍎',min:500}];
+const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
+const BADGES=[{id:'first',n:'Langkah Pertama',d:'Login pertama',i:'footprints'},{id:'rajin7',n:'Rajin 7',d:'Streak 7 hari',i:'flame'},{id:'inspirasi',n:'Penyebar Inspirasi',d:'5× bagikan karya',i:'share-2'},{id:'suara',n:'Suara Guru',d:'Kirim saran',i:'lightbulb'},{id:'veteran',n:'Veteran',d:'50 login',i:'medal'},{id:'rindang',n:'Rindang',d:'Capai Pohon Rindang',i:'tree-pine'}];
+const KAT_ORDER=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspirasi','Komunitas & KKG','Kepala Sekolah','Tools & Arsip','Informasi','Umum'];
+const TPL={quote:{n:'Quote',i:'quote',f:[['text','Tulis quote…'],['author','Nama tokoh']]},ucapan:{n:'Ucapan',i:'party-popper',f:[['title','Judul ucapan'],['msg','Pesan']]},undangan:{n:'Undangan',i:'mail',f:[['title','Nama acara'],['date','Tanggal'],['time','Waktu'],['place','Tempat']]},prestasi:{n:'Prestasi',i:'trophy',ph:1,f:[['title','Judul prestasi'],['name','Nama peraih']]},cover:{n:'Cover Materi',i:'book-open',f:[['title','Judul materi'],['kelas','Kelas'],['guru','Nama guru']]},dokumentasi:{n:'Dokumentasi',i:'camera',ph:1,f:[['title','Caption kegiatan'],['date','Tanggal']]}};
+const FMT={story:{n:'Story 9:16',w:1080,h:1920},feed:{n:'Feed 1:1',w:1080,h:1080},potret:{n:'Potret 4:5',w:1080,h:1350},lanskap:{n:'Lanskap',w:1200,h:630},thumb:{n:'Thumb 16:9',w:1280,h:720}};
+const FONTS={modern:{n:'Modern',f:'Inter, Arial, sans-serif',w:'700'},elegan:{n:'Elegan',f:'"Playfair Display", Georgia, serif',w:'800'},hangat:{n:'Hangat',f:'Caveat, cursive',w:'700'}};
+const PROMPTS=['Kegiatan kecil apa yang bikin siswamu tersenyum minggu ini?','Cara unik apa yang kamu pakai agar siswa berani bertanya?','Alat sederhana apa yang paling membantu di kelasmu?','Momen apa yang membuatmu bangga menjadi guru bulan ini?','Trik apa yang kamu pakai menenangkan kelas yang ribut?','Kebiasaan baik apa yang ingin kamu tularkan ke rekan guru?'];
+const THEMES=['Literasi','Numerasi','Karakter','Disiplin Positif','Pembelajaran Mendalam','Kolaborasi'];
 const PANELS=['pNotif','pProfil','pSetting','pFb','pLogin'];
-const MODALS=['mApp','mPop','mIos','mQuote'];
+const MODALS=['mApp','mPop','mIos','mStudio'];
 const $=id=>document.getElementById(id);
 const isMobile=matchMedia('(max-width:768px)').matches;
 function icons(){lucide.createIcons();}
-function namaPanggil(full){
-  let n=(full||'').split(',')[0].trim();
-  n=n.replace(/^(Dra?\.|Dr\.|H\.|Hj\.|Ir\.|Prof\.)\s*/i,'');
-  const w=(n.split(/\s+/)[0]||'Guru');
-  return w.charAt(0)+w.slice(1).toLowerCase();
-}
+function esc(s){return (s||'').replace(/</g,'&lt;');}
+function namaPanggil(full){let n=(full||'').split(',')[0].trim();n=n.replace(/^(Dra?\.|Dr\.|H\.|Hj\.|Ir\.|Prof\.)\s*/i,'');const w=(n.split(/\s+/)[0]||'Guru');return w.charAt(0)+w.slice(1).toLowerCase();}
 const needsLogin=m=>['Guru','Kepala Sekolah'].includes(m.akses_role);
-
-function toast(m,type){
-  type=type||'success';
-  const map={success:['check','bg-emerald-500/20 text-emerald-400'],
-             error:['triangle-alert','bg-rose-500/20 text-rose-400'],
-             info:['info','bg-sky-500/20 text-sky-400']};
-  const [ic,cl]=map[type];
-  $('toastMsg').textContent=m;
-  $('toastIcon').setAttribute('data-lucide',ic);
-  $('toastIconWrap').className='w-8 h-8 rounded-full flex items-center justify-center shrink-0 '+cl;
-  icons();
-  const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');
-  clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);
-}
-
+function toast(m,type){type=type||'success';const ic={success:'check',error:'triangle-alert',info:'info'}[type]||'check';$('toastMsg').textContent=m;$('toastIcon').setAttribute('data-lucide',ic);icons();const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);}
+function setAccent(a){document.documentElement.dataset.acc=a;localStorage.setItem('gb_acc',a);markAcc();}
+function markAcc(){const cur=localStorage.getItem('gb_acc')||'hijau';document.querySelectorAll('#accRow button').forEach(b=>{const on=b.dataset.acc===cur;b.classList.toggle('ring-2',on);b.classList.toggle('ring-white',on);b.classList.toggle('scale-110',on);});}
+function setFs(){document.documentElement.classList.toggle('fs-besar');localStorage.setItem('gb_fs',document.documentElement.classList.contains('fs-besar')?'besar':'normal');paintToggles();}
+function setAnim(){document.documentElement.classList.toggle('no-anim');localStorage.setItem('gb_anim',document.documentElement.classList.contains('no-anim')?'off':'on');paintToggles();}
+function paintToggles(){[['tglFs',document.documentElement.classList.contains('fs-besar')],['tglAnim',document.documentElement.classList.contains('no-anim')]].forEach(([id,on])=>{const b=$(id);b.className='w-12 h-7 rounded-full relative transition '+(on?'acc-bg':'bg-slate-200');b.firstElementChild.className='absolute top-1 w-5 h-5 bg-white rounded-full transition '+(on?'left-6':'left-1');});}
+function initPrefs(){const a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;if(localStorage.getItem('gb_fs')==='besar')document.documentElement.classList.add('fs-besar');if(localStorage.getItem('gb_anim')==='off')document.documentElement.classList.add('no-anim');if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');STATE.sosmed=JSON.parse(localStorage.getItem('gb_sosmed')||'{}');markAcc();paintToggles();}
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
-function guruId(){
-  if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;
-  try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}
-}
-function logAktivitas(aksi,detail){
-  const gid=guruId();if(!gid)return;
-  sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});
-}
-
-function setThemeColor(){
-  const dark=document.documentElement.classList.contains('dark');
-  document.querySelector('meta[name=theme-color]').setAttribute('content',dark?'#020617':'#f8fafc');
-}
-
-/* ═══ PWA ═══ */
+function guruId(){if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}}
+function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
+function setThemeColor(){const dark=document.documentElement.classList.contains('dark');document.querySelector('meta[name=theme-color]').setAttribute('content',dark?'#020617':'#f8fafc');}
 let deferredPrompt=null;
-function initPWA(){
-  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
-  const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:'#f8fafc',theme_color:'#059669',icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};
-  const l=document.createElement('link');l.rel='manifest';l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));document.head.appendChild(l);
-  if(!standalone)window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const c=$('installCard');c.classList.remove('hidden');c.classList.add('flex');icons();});
-  window.addEventListener('appinstalled',()=>{$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');toast('Aplikasi terpasang di HP!');});
-}
-function pasangApp(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');}
-  else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}
-  else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');
-}
-
-/* ═══ CUACA ═══ */
-async function muatCuaca(){
-  try{
-    const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');
-    if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}
-    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');
-    const j=await r.json();
-    if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}
-  }catch(e){}
-}
-function showWx(cw){
-  const code=cw.weathercode;let icon='cloud-sun',label='Berawan';
-  if(code===0){icon='sun';label='Cerah';}
-  else if(code<=2){icon='cloud-sun';label='Cerah Berawan';}
-  else if(code===3){icon='cloud';label='Mendung';}
-  else if(code===45||code===48){icon='cloud-fog';label='Berkabut';}
-  else if(code>=51&&code<=57){icon='cloud-drizzle';label='Gerimis';}
-  else if((code>=61&&code<=67)||(code>=80&&code<=82)){icon='cloud-rain';label='Hujan';}
-  else if(code>=95){icon='cloud-lightning';label='Petir';}
-  $('wxIcon').setAttribute('data-lucide',icon);
-  $('wxTemp').textContent=Math.round(cw.temperature)+'°C';
-  $('wxLabel').textContent=label;
-  const c=$('wxChip');c.classList.remove('hidden');c.classList.add('flex');
-  icons();
-}
-
-/* ═══ HISTORY BACK v3.7 ═══ */
-let applying=false;
-let popDismissed=false;
+function initPWA(){const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:'#f8fafc',theme_color:'#059669',icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};const l=document.createElement('link');l.rel='manifest';l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));document.head.appendChild(l);if(!standalone)window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const c=$('installCard');c.classList.remove('hidden');c.classList.add('flex');icons();});window.addEventListener('appinstalled',()=>{$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');toast('Aplikasi terpasang di HP!');});}
+function pasangApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');}else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');}
+async function muatCuaca(){try{const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');const j=await r.json();if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}}catch(e){}}
+function showWx(cw){const code=cw.weathercode;let icon='cloud-sun',label='Berawan';if(code===0){icon='sun';label='Cerah';}else if(code<=2){icon='cloud-sun';label='Cerah Berawan';}else if(code===3){icon='cloud';label='Mendung';}else if(code===45||code===48){icon='cloud-fog';label='Berkabut';}else if(code>=51&&code<=57){icon='cloud-drizzle';label='Gerimis';}else if((code>=61&&code<=67)||(code>=80&&code<=82)){icon='cloud-rain';label='Hujan';}else if(code>=95){icon='cloud-lightning';label='Petir';}$('wxIcon').setAttribute('data-lucide',icon);$('wxTemp').textContent=Math.round(cw.temperature)+'°C';$('wxLabel').textContent=label;const c=$('wxChip');c.classList.remove('hidden');c.classList.add('flex');icons();}
+let applying=false,popDismissed=false;
 let CUR={view:'home',sub:null,panel:null,modal:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
-
 function setPageInstant(pg){
-  document.querySelectorAll('[data-nav]').forEach(b=>{
-    const on=b.dataset.nav===pg;
-    if(b.classList.contains('side-btn')){b.classList.toggle('bg-emerald-50',on);b.classList.toggle('text-emerald-600',on);b.classList.toggle('dark:bg-emerald-900/40',on);b.classList.toggle('text-slate-500',!on);}
-    else{b.classList.toggle('text-emerald-600',on);b.classList.toggle('text-slate-400',!on);}
-  });
+  if(pg==='home'||pg==='apps'||pg==='bagi'){document.querySelectorAll('[data-nav]').forEach(b=>{const on=b.dataset.nav===pg;if(b.classList.contains('side-btn')){b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);}else{b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-400',!on);}});}
   $('pageHome').classList.toggle('hidden',pg!=='home');
   $('pageApps').classList.toggle('hidden',pg!=='apps');
-  $('hdrPage').textContent=pg==='home'?'Beranda':'Aplikasi & Layanan';
+  $('pageBagi').classList.toggle('hidden',pg!=='bagi');
+  $('hdrPage').textContent={home:'Beranda',apps:'Layanan',bagi:'Berbagi'}[pg]||'Beranda';
   CUR.view=pg;
 }
-function navPage(pg){
-  if(applying)return;
-  if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;
-  setPageInstant(pg);CUR.sub=null;safePush({...CUR});
-}
+function navPage(pg){if(applying)return;if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});if(pg==='bagi')renderBagi();}
 window.addEventListener('popstate',e=>renderState(e.state||{view:'home',sub:null,panel:null,modal:null}));
-function renderState(s){
-  applying=true;
-  if(CUR.modal==='mPop'&&!s.modal)popDismissed=true;
-  PANELS.forEach(closeInstant);
-  MODALS.forEach(closeModalInstant);
-  CUR={view:s.view||'home',sub:s.sub||null,panel:s.panel||null,modal:s.modal||null};
-  setPageInstant(CUR.view);
-  if(s.sub){const anak=STATE.menus.filter(c=>c.sub_menu_dari===s.sub&&visible(c));if(anak.length)bukaSubmenu(anak);else renderMenus($('inSearch').value);}
-  else if(CUR.view==='apps')renderMenus($('inSearch').value);
-  if(s.panel)showInstant(s.panel);
-  if(s.modal)showModalInstant(s.modal);
-  applying=false;
-}
-
-function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.remove('translate-y-full'));}
-function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.add('translate-y-full');}
-function openPanel(id){showInstant(id);CUR.panel=id;safePush({...CUR});
-  if(id==='pNotif'&&STATE.profile)tandaiBaca();
-}
+function renderState(s){applying=true;if(CUR.modal==='mPop'&&!s.modal)popDismissed=true;PANELS.forEach(closeInstant);MODALS.forEach(closeModalInstant);CUR={view:s.view||'home',sub:s.sub||null,panel:s.panel||null,modal:s.modal||null};setPageInstant(CUR.view);if(CUR.view==='apps')renderLayanan($('inSearch').value);if(CUR.view==='bagi')renderBagi();if(s.panel)showInstant(s.panel);if(s.modal)showModalInstant(s.modal);applying=false;}
+function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.add('sheet-open'));}
+function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.remove('sheet-open');}
+function openPanel(id){showInstant(id);CUR.panel=id;safePush({...CUR});if(id==='pNotif'&&STATE.profile)tandaiBaca();}
 function tutupPanel(id){try{history.back()}catch(e){closeInstant(id);CUR.panel=null;}}
-async function tandaiBaca(){
-  const gid=guruId();if(!gid)return;
-  const rows=STATE.notifs.map(n=>({notification_id:n.id,guru_id:gid}));
-  if(rows.length)await sb.from('creative_notification_reads').upsert(rows,{onConflict:'notification_id,guru_id',ignoreDuplicates:true});
-  setTimeout(()=>setBadge(0),1200);
-}
-
+async function tandaiBaca(){const gid=guruId();if(!gid)return;const rows=STATE.notifs.map(n=>({notification_id:n.id,guru_id:gid}));if(rows.length)await sb.from('creative_notification_reads').upsert(rows,{onConflict:'notification_id,guru_id',ignoreDuplicates:true});setTimeout(()=>setBadge(0),1200);}
 function showModalInstant(id){$(id).classList.remove('hidden');$(id).classList.add('flex');}
 function closeModalInstant(id){$(id).classList.add('hidden');$(id).classList.remove('flex');}
-function openModal(id){
-  if(CUR.modal===id)return;
-  showModalInstant(id);CUR.modal=id;safePush({...CUR});
-}
-function tutupModal(id){
-  if(CUR.modal===id){try{history.back()}catch(e){closeModalInstant(id);CUR.modal=null;}}
-  else closeModalInstant(id);
-}
+function openModal(id){if(CUR.modal===id)return;showModalInstant(id);CUR.modal=id;safePush({...CUR});}
+function tutupModal(id){if(CUR.modal===id){try{history.back()}catch(e){closeModalInstant(id);CUR.modal=null;}}else closeModalInstant(id);}
 function tutupApp(){tutupModal('mApp');$('mAppFrame').src='';}
 function tutupPop(){popDismissed=true;tutupModal('mPop');}
+function homeSearch(v){if(CUR.view!=='apps'){setPageInstant('apps');CUR.sub=null;safePush({...CUR});}$('inSearch').value=v;renderLayanan(v);}
+let caroTick=false;
+function caroUpdate(){if(caroTick)return;caroTick=true;requestAnimationFrame(()=>{caroTick=false;const t=$('caroTrack'),dots=$('caroDots').children;if(!t.children.length||!dots.length)return;const w=t.children[0].offsetWidth+12;const i=Math.min(dots.length-1,Math.max(0,Math.round(t.scrollLeft/w)));[...dots].forEach((d,idx)=>{d.className=idx===i?'h-1.5 w-5 rounded-full acc-bg transition-all':'h-1.5 w-1.5 rounded-full bg-slate-300 dark:bg-slate-600 transition-all';});});}
+function caroGo(i){const t=$('caroTrack');if(!t.children.length)return;const w=t.children[0].offsetWidth+12;t.scrollTo({left:i*w,behavior:'smooth'});}
+function renderCarousel(){const slides=[];const c=STATE.config;if(c&&c.banner_status==='ON'){const w={blue:'from-blue-600 to-indigo-600',green:'from-emerald-600 to-teal-600',red:'from-rose-600 to-red-600'}[c.banner_warna]||'from-emerald-600 to-teal-600';slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white flex items-center gap-3 shadow-lg bg-gradient-to-r ${w}"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div>`);}
+  const NC={pengumuman:'from-emerald-600 to-teal-600',info:'from-sky-600 to-blue-600',gamifikasi:'from-amber-500 to-orange-600',sistem:'from-slate-600 to-slate-800'};const EM={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'};
+  STATE.notifs.slice(0,4).forEach(n=>{slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="text-xl shrink-0">${EM[n.tipe]||'📢'}</span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold truncate">${esc(n.judul)}</span><span class="block text-[10px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);});
+  $('caroBox').classList.toggle('hidden',!slides.length);$('caroTrack').innerHTML=slides.join('');$('caroDots').innerHTML=slides.length>1?slides.map((_,i)=>`<button onclick="caroGo(${i})" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300 dark:bg-slate-600'}"></button>`).join(''):'';icons();}
+function klikBanner(){const u=(STATE.config||{}).banner_link;if(u&&u.startsWith('ext:'))window.open(u.slice(4),'_blank');else if(u)location.href=u;}
+function setView(v){localStorage.setItem('gb_view',v);paintView();renderLayanan($('inSearch').value);}
+function paintView(){const v=localStorage.getItem('gb_view')||'kotak';$('vKotak').className='px-3 py-1.5 rounded-lg text-[11px] font-bold transition '+(v==='kotak'?'acc-bg text-white':'card text-slate-500');$('vBaris').className='px-3 py-1.5 rounded-lg text-[11px] font-bold transition '+(v==='baris'?'acc-bg text-white':'card text-slate-500');}
+function visible(m){if(!m.is_active||m.tampil_di==='off')return false;if(m.tampil_di==='mobile'&&!isMobile)return false;if(m.tampil_di==='desktop'&&isMobile)return false;const r=m.akses_role;if(!STATE.profile)return (r==='tamu'||r==='all'||r==='');const isKS=(STATE.profile.jabatan||'').toLowerCase().includes('kepala');if(r==='Kepala Sekolah')return isKS;if(r==='tamu')return false;return true;}
+function boxItem(m){const [bg,tx]=COLOR[m.warna]||COLOR.blue;const badge=m.label?`<span class="absolute top-2 right-2 text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">${m.label}</span>`:'';return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="relative card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0">${badge}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span><span class="block text-[13px] font-extrabold text-slate-800 dark:text-slate-100 leading-tight">${m.judul}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span></button>`;}
+function rowItem(m){const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 dark:text-slate-100 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></button>`;}
+function renderLayanan(filter=''){const f=filter.toLowerCase();const view=localStorage.getItem('gb_view')||'kotak';const items=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari&&(m.judul.toLowerCase().includes(f)||m.deskripsi.toLowerCase().includes(f)));const cats=KAT_ORDER.filter(k=>items.some(m=>(m.kategori||'Umum')===k));$('layananBody').innerHTML=cats.map(k=>{const list=items.filter(m=>(m.kategori||'Umum')===k);const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">${k}</p>`;return view==='baris'?`<div class="mb-5">${head}<div class="space-y-2">${list.map(rowItem).join('')}</div></div>`:`<div class="mb-5">${head}<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${list.map(boxItem).join('')}</div></div>`;}).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ditemukan 😕</p>';icons();}
+$('inSearch').addEventListener('input',e=>{$('inSearchHome').value=e.target.value;renderLayanan(e.target.value);});
+function klikMenu(judul){const m=STATE.menus.find(x=>x.judul===judul);if(m&&needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}bukaUrl(m);}
+function bukaUrl(m){if(!m)return;logAktivitas('buka_menu',{judul:m.judul});let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);localStorage.setItem('gb_recent',JSON.stringify(rec));renderRecent();const u=m.url||'#';if(m.cara_buka==='app'&&u.startsWith('http')){$('mAppTitle').textContent=m.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http'))window.open(u,'_blank');else if(u&&u!=='#')location.href=u;}
+function renderRecent(){if(!STATE.profile)return;const rec=JSON.parse(localStorage.getItem('gb_recent')||'[]');if(!rec.length)return;$('recentBox').classList.remove('hidden');$('recentList').innerHTML=rec.map(r=>{const [bg,tx]=COLOR[r.warna]||COLOR.blue;return `<button onclick='bukaUrl(${JSON.stringify(r).replace(/'/g,"&#39;")})' class="shrink-0 card flex items-center gap-2 px-3 py-2.5 active:scale-95 hover:shadow-md transition"><span class="w-8 h-8 rounded-lg ${bg} ${tx} flex items-center justify-center"><i data-lucide="${r.icon||'app-window'}" class="w-4 h-4"></i></span><span class="text-xs font-bold text-slate-700 dark:text-slate-200">${r.judul}</span></button>`;}).join('');icons();}
+function renderQuick(){if(!STATE.profile)return;const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari).slice(0,isMobile?4:8);$('quickList').innerHTML=list.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight truncate w-full">${m.judul}</span></button>`;}).join('');icons();}
+function renderFoot(){if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}$('footSide').classList.remove('hidden');$('footList').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><span class="text-xs font-bold text-slate-600 dark:text-slate-300">${f.judul}</span></a>`).join('');$('footSideList').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition"><i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</a>`).join('');icons();}
 
-/* ═══════════════════════════════════════════════════════════
-   GENERATOR KARTU QUOTE (canvas lokal — NOL kuota Supabase)
-   ═══════════════════════════════════════════════════════════ */
-function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
-function roundRect(ctx,x,y,w,h,r){
-  if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,y,w,h,r);return;}
-  ctx.beginPath();
-  ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
-}
-function wrapText(ctx,text,maxW){
-  const words=text.split(/\s+/);const lines=[];let cur='';
-  for(const w of words){
-    const t=cur?cur+' '+w:w;
-    if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}
-    else cur=t;
-  }
-  if(cur)lines.push(cur);
-  return lines;
-}
-function openQuoteGen(){
-  if(!STATE.quoteNow){toast('Quote belum dimuat','info');return;}
-  openModal('mQuote');
-  renderQuoteCard();
-}
-async function renderQuoteCard(){
-  const q=STATE.quoteNow;if(!q)return;
-  try{await document.fonts.ready;}catch(e){}
-  const cv=$('quoteCanvas');const ctx=cv.getContext('2d');
-  const W=1080,H=1080;cv.width=W;cv.height=H;
-  /* Latar gradasi emerald elegan */
-  const g=ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,'#022c22');g.addColorStop(.55,'#065f46');g.addColorStop(1,'#0d9488');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  /* Cahaya dekoratif */
-  ctx.save();ctx.globalAlpha=.10;
-  ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140,160,240,0,7);ctx.fill();
-  ctx.fillStyle='#34d399';ctx.beginPath();ctx.arc(140,H-160,200,0,7);ctx.fill();
-  ctx.restore();
-  /* Bingkai */
-  ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=3;roundRect(ctx,42,42,W-84,H-84,40);ctx.stroke();
-  /* Logo */
-  try{const im=await loadImg(LOGO);ctx.drawImage(im,(W-120)/2,96,120,120);}catch(e){}
-  ctx.textAlign='center';
-  ctx.fillStyle='rgba(255,255,255,.8)';ctx.font='800 28px Inter, Arial, sans-serif';
-  ctx.fillText('GURU BERBAGI · SELOGIRI',W/2,268);
-  ctx.strokeStyle='rgba(251,191,36,.8)';ctx.lineWidth=4;
-  ctx.beginPath();ctx.moveTo(W/2-70,292);ctx.lineTo(W/2+70,292);ctx.stroke();
-  /* Kutipan (auto-ukuran agar pas) */
-  const quoteStr='"'+q.kutipan+'"';
-  let fs=46,lines;
-  for(;;){ctx.font='600 '+fs+'px Inter, Arial, sans-serif';lines=wrapText(ctx,quoteStr,W-260);if(lines.length<=7||fs<=30)break;fs-=4;}
-  const lh=fs*1.45,blockH=lines.length*lh;
-  const y0=560-blockH/2+fs/2;
-  ctx.fillStyle='#ffffff';
-  lines.forEach((ln,i)=>ctx.fillText(ln,W/2,y0+i*lh));
-  /* Tokoh */
-  ctx.fillStyle='#fcd34d';ctx.font='800 34px Inter, Arial, sans-serif';
-  ctx.fillText('— '+(q.tokoh||'Anonim'),W/2,y0+blockH+80);
-  /* Footer: nama guru + tanggal */
-  ctx.fillStyle='rgba(255,255,255,.65)';ctx.font='600 26px Inter, Arial, sans-serif';
-  const who=STATE.profile?('Dibagikan oleh '+namaPanggil(STATE.profile.nama)):'Keluarga Besar GTK Selogiri';
-  ctx.fillText(who,W/2,H-110);
-  ctx.fillStyle='rgba(255,255,255,.45)';ctx.font='500 24px Inter, Arial, sans-serif';
-  ctx.fillText(new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}),W/2,H-72);
-}
-function unduhKartu(){
-  $('quoteCanvas').toBlob(b=>{
-    const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='quote-guru-berbagi.png';a.click();URL.revokeObjectURL(a.href);
-    logAktivitas('buat_kartu_quote',{tokoh:(STATE.quoteNow||{}).tokoh||''});
-    toast('Kartu quote diunduh!');
-  },'image/png');
-}
-async function bagiKartu(){
-  const cv=$('quoteCanvas');
-  try{
-    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
-    const file=new File([blob],'quote-guru-berbagi.png',{type:'image/png'});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({files:[file],title:'Guru Berbagi Selogiri',text:STATE.quoteNow?('"'+STATE.quoteNow.kutipan+'" — '+(STATE.quoteNow.tokoh||'Anonim')):''});
-      logAktivitas('bagi_kartu_quote',{tokoh:(STATE.quoteNow||{}).tokoh||''});
-      toast('Terima kasih sudah berbagi! 💚');
-    }else{unduhKartu();toast('Perangkat tidak mendukung share gambar — file diunduh','info');}
-  }catch(e){/* pengguna membatalkan share */}
-}
-
-/* ═══ SSO ═══ */
-async function ssoLogin(email,pin){
-  const r=await fetch(SB_URL+'/functions/v1/login-guru',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON},body:JSON.stringify({email,pin})});
-  if(!r.ok)throw new Error('Gagal');
-  return await r.json();
-}
-async function ssoVerify(token){
-  const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});
-  return await r.json();
-}
-$('formLogin').addEventListener('submit',async e=>{
-  e.preventDefault();
-  $('btnLogin').disabled=true;$('btnLogin').textContent='Memverifikasi…';
-  try{
-    const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());
-    localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));
-    STATE.profile=res.profile;STATE.token=res.token;
-    tutupPanel('pLogin');
-    const gid=guruId();
-    if(gid){
-      const {data}=await sb.rpc('creative_update_gamification',{p_guru_id:gid});
-      if(data&&data.poin_added>0)setTimeout(()=>toast('+'+data.poin_added+' poin! Pohon Ilmu kamu tumbuh.'),600);
-      logAktivitas('login');
-    }
-    renderAuthUI();setSapaan();muatSemuaData();
-    toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');
-  }catch(err){toast('Email/PIN salah atau akun nonaktif','error');}
-  $('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';
-});
-function doLogout(){localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');location.reload();}
-
-function renderAuthUI(){
+/* ═══ BERBAGI ═══ */
+function renderBagi(){
   const on=!!STATE.profile;
-  $('btnMasuk').classList.toggle('hidden',on);
-  $('profGuest').classList.toggle('hidden',on);
-  $('profData').classList.toggle('hidden',!on);
-  $('authCard').classList.toggle('hidden',on);
-  ['quickBox','newsBox','bellHdr','sideNotif','navNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
-  if(!on)$('recentBox').classList.add('hidden');
+  $('treeGuest').classList.toggle('hidden',on);
+  $('treeData').classList.toggle('hidden',!on);
+  renderTreeData();renderStudioGrid();renderKarya();
+  $('inspTheme').textContent='Tema minggu ini: '+weeklyTheme();
+  fetchInspirasi();renderLeadBadges();icons();
+}
+function weeklyTheme(){const start=new Date(new Date().getFullYear(),0,1);const doy=Math.floor((Date.now()-start)/86400000);return THEMES[Math.floor(doy/7)%THEMES.length];}
+function usePrompt(){const d=new Date();$('inspIsi').value=PROMPTS[(d.getDate()+d.getMonth())%PROMPTS.length];$('inspIsi').focus();}
+function renderTreeData(){if(!STATE.profile)return;const g=STATE.gam||{total_poin:0,streak_days:0,level:'Biji',total_login:0,badges:[]};const badges=Array.isArray(g.badges)?g.badges:[];const lv=[...LEVELS].reverse().find(l=>(g.total_poin||0)>=l.min)||LEVELS[0];const next=LEVELS[LEVELS.indexOf(lv)+1];$('treeIco').setAttribute('data-lucide',lv.i);$('treeLevel').textContent=lv.n;$('treeStreak').textContent=g.streak_days||0;$('treePoin').textContent=g.total_poin||0;if(next){$('treeNext').textContent=next.n;$('treeBar').style.width=Math.min(100,Math.round(((g.total_poin||0)-lv.min)/(next.min-lv.min)*100))+'%';}else{$('treeNext').textContent='Maksimal';$('treeBar').style.width='100%';}$('stPoin').textContent=g.total_poin||0;$('stStreak').textContent=g.streak_days||0;$('stLogin').textContent=g.total_login||0;$('stBadge').textContent=badges.length;
+  $('badgeGrid').innerHTML=BADGES.map(b=>{const onb=badges.includes(b.id);return `<div class="rounded-xl p-3 text-center ${onb?'acc-soft':'bg-slate-50 dark:bg-slate-800/50 opacity-50'}"><i data-lucide="${onb?b.i:'lock'}" class="w-5 h-5 mx-auto ${onb?'acc-text':'text-slate-400'}"></i><p class="text-[10px] font-extrabold text-slate-700 dark:text-slate-200 mt-1.5 leading-tight">${b.n}</p><p class="text-[9px] text-slate-400 mt-0.5 leading-tight">${b.d}</p></div>`;}).join('');}
+function renderLeadBadges(){const me=(STATE.profile||{}).nama||'';const RANK=[['trophy','text-amber-500'],['medal','text-slate-400'],['medal','text-orange-400']];$('leadList').innerHTML=(STATE.lead||[]).map((r,i)=>{const isMe=(r.nama_lengkap||'').trim()===(me||'').trim();const rk=i<3?RANK[i]:['sprout','acc-text'];return `<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ${isMe?'acc-soft':'bg-slate-50 dark:bg-slate-800/50'}"><span class="w-8 h-8 rounded-full ${isMe?'acc-bg text-white':'bg-white dark:bg-slate-700'} flex items-center justify-center shrink-0"><i data-lucide="${rk[0]}" class="w-4 h-4 ${isMe?'text-white':rk[1]}"></i></span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 dark:text-slate-200 truncate">${esc(r.nama_lengkap)}${isMe?' <span class="acc-text">(Anda)</span>':''}</span><span class="block text-[10px] text-slate-400 truncate">${esc(r.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-current"></i>${r.total_poin}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';icons();}
+function renderStudioGrid(){$('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<button onclick="openStudio('${k}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight">${t.n}</span></button>`).join('');icons();}
+
+/* ═══ INSPIRASI ═══ */
+function setInspMode(m){STATE.inspiMode=m;STATE.inspiLimit=20;$('inspBaru').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='baru'?'acc-bg text-white':'card text-slate-500');$('inspPop').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='populer'?'acc-bg text-white':'card text-slate-500');fetchInspirasi();}
+async function fetchInspirasi(){
+  const order=STATE.inspiMode==='populer'?'likes':'created_at';
+  const {data}=await sb.from('creative_inspirasi').select('*').eq('status','aktif').order(order,{ascending:false}).limit(STATE.inspiLimit);
+  STATE.inspi=data||[];
+  if(STATE.profile&&STATE.inspi.length){const gid=guruId();const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',gid).in('inspirasi_id',STATE.inspi.map(i=>i.id));STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));}else STATE.myLikes=new Set();
+  renderInspirasi();
+}
+function moreInspirasi(){STATE.inspiLimit+=10;fetchInspirasi();}
+function renderInspirasi(){
+  $('inspList').innerHTML=STATE.inspi.map(n=>{
+    const liked=STATE.myLikes.has(n.id);
+    return `<div class="card p-4 space-y-2">
+      <div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase tracking-wider acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-400">${waktuRelatif(n.created_at)}</span></div>
+      <p class="text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed">${esc(n.isi)}</p>
+      <div class="flex items-center justify-between">
+        <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate">${esc(n.nama)} · ${esc(n.sekolah||'')}</p>
+        <button onclick="apresiasi(${n.id})" class="shrink-0 flex items-center gap-1 text-[10px] font-black ${liked?'acc-text':'text-slate-400'} ${liked?'':'active:scale-90'} transition"><i data-lucide="heart" class="w-3.5 h-3.5 ${liked?'fill-current acc-text':''}"></i>${n.likes||0}</button>
+      </div></div>`;
+  }).join('')||'<p class="text-xs text-slate-400 text-center py-6">Jadilah yang pertama berbagi inspirasi 💡</p>';
+  $('inspMore').classList.toggle('hidden',STATE.inspi.length<STATE.inspiLimit);
+  icons();
+}
+async function postInspirasi(){
+  const gid=guruId();if(!gid){toast('Login untuk berbagi inspirasi','info');openPanel('pLogin');return;}
+  const isi=$('inspIsi').value.trim();if(!isi)return toast('Tulis inspirasimu dulu','info');
+  const {data}=await sb.rpc('creative_post_inspirasi',{p_guru_id:gid,p_kategori:$('inspKat').value,p_isi:isi});
+  if(data&&data.error)return toast(data.error,'error');
+  $('inspIsi').value='';poinAksi('inspirasi');
+  toast('Inspirasimu tayang! Terima kasih sudah berbagi 💚');
+  fetchInspirasi();
+}
+async function apresiasi(id){
+  const gid=guruId();if(!gid){toast('Login untuk mengapresiasi','info');openPanel('pLogin');return;}
+  if(STATE.myLikes.has(id))return;
+  const {data}=await sb.rpc('creative_apresiasi_inspirasi',{p_inspirasi_id:id,p_guru_id:gid});
+  if(data&&data.error)return toast(data.error,'error');
+  STATE.myLikes.add(id);
+  fetchInspirasi();
+  if(data&&data.added)toast('Terima kasih terkirim! Penulis +1 poin 🙏');
+}
+function renderTeaser(){
+  const t=STATE.teaser;
+  $('inspTeaser').classList.toggle('hidden',!t);
+  if(t){$('teaserIsi').textContent=t.isi;$('teaserLikes').lastChild.textContent=t.likes||0;}
 }
 
-/* ═══ BOOT (verify hemat) ═══ */
-(async function boot(){
-  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
-  setThemeColor();initPWA();muatCuaca();icons();
-  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');
-  if(token&&saved){
-    try{
-      let need=true;
-      try{
-        const p=JSON.parse(b64decode(token.split('.')[0]));
-        const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);
-        if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;
-      }catch(e){}
-      if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}
-      else{
-        const v=await ssoVerify(token);
-        localStorage.setItem('gb_last_verify',String(Date.now()));
-        if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}
-        else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}
-      }
-      if(STATE.token)logAktivitas('buka_aplikasi');
-    }catch(e){}
+/* ═══ STUDIO ═══ */
+let logoImg=null;loadImg(LOGO).then(i=>logoImg=i).catch(()=>{});
+function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
+function openStudio(tpl,pre){STATE.studio={tpl,fmt:'story',font:'modern',fields:Object.assign({},pre||{}),photo:null,photoSmall:null,showFoot:true,showTag:true,tagText:'#GuruBerbagiSelogiri #GTKSelogiri'};$('stTitle').textContent=TPL[tpl].n;buildControls();openModal('mStudio');renderStudio();}
+function setSFmt(k){STATE.studio.fmt=k;buildControls();renderStudio();}
+function setSFont(k){STATE.studio.font=k;buildControls();renderStudio();}
+function setField(k,v){STATE.studio.fields[k]=v;renderStudio();}
+function stTog(k,v){STATE.studio[k]=v;renderStudio();}
+function setStudioPhoto(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{STATE.studio.photo=img;const c=document.createElement('canvas');const s=Math.min(1,720/Math.max(img.width,img.height));c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);STATE.studio.photoSmall=c.toDataURL('image/jpeg',.8);buildControls();renderStudio();};img.src=rd.result;};rd.readAsDataURL(f);ev.target.value='';}
+function clearStudioPhoto(){STATE.studio.photo=null;STATE.studio.photoSmall=null;buildControls();renderStudio();}
+const sw=(on,fn)=>`<button onclick="${fn}" class="w-12 h-7 rounded-full relative transition ${on?'acc-bg':'bg-slate-200'}"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition ${on?'left-6':'left-1'}"></span></button>`;
+function buildControls(){const st=STATE.studio,t=TPL[st.tpl];let h='';
+  h+='<p class="lbl">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
+  h+='<p class="lbl mt-3">Font</p><div class="flex gap-1.5">'+Object.entries(FONTS).map(([k,v])=>`<button onclick="setSFont('${k}')" class="flex-1 py-2 rounded-lg text-[11px] font-bold transition ${k===st.font?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
+  h+=t.f.map(([k,ph])=>`<input value="${esc(st.fields[k]||'')}" oninput="setField('${k}',this.value)" placeholder="${ph}" class="mt-2 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-[12px] text-slate-700 dark:text-slate-200 acc-ring">`).join('');
+  h+=`<button onclick="$('stFoto').click()" class="mt-2 w-full py-2.5 rounded-xl acc-soft acc-text text-[11px] font-bold flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="image" class="w-4 h-4"></i> ${t.ph?'Foto utama':'Foto latar (opsional)'}</button><input type="file" id="stFoto" accept="image/*" class="hidden" onchange="setStudioPhoto(event)">`;
+  if(st.photo)h+=`<button onclick="clearStudioPhoto()" class="w-full text-[10px] font-bold text-slate-400">Hapus foto</button>`;
+  h+=`<div class="mt-3 space-y-3"><div class="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-300">Footnote aplikasi ${sw(st.showFoot,"stTog('showFoot',"+!st.showFoot+")")}</div><div class="flex items-center justify-between text-[11px] font-bold text-slate-600 dark:text-slate-300">Hashtag ${sw(st.showTag,"stTog('showTag',"+!st.showTag+")")}</div><input value="${esc(st.tagText)}" oninput="STATE.studio.tagText=this.value;renderStudio()" placeholder="Hashtag kustom" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-[12px] acc-ring"></div>`;
+  $('stControls').innerHTML=h;icons();}
+function roundRect(ctx,x,y,w,h,r){if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,y,w,h,r);return;}ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function wrapText(ctx,text,maxW){const words=text.split(/\s+/);const lines=[];let cur='';for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;}if(cur)lines.push(cur);return lines;}
+function drawCover(ctx,img,W,H){const ir=img.width/img.height,cr=W/H;let dw,dh,dx,dy;if(ir>cr){dh=H;dw=H*ir;dx=(W-dw)/2;dy=0;}else{dw=W;dh=W/ir;dx=0;dy=(H-dh)/2;}ctx.drawImage(img,dx,dy,dw,dh);}
+function handlesStr(){const s=STATE.sosmed||{};const parts=[];if(s.ig)parts.push('@'+s.ig);if(s.tiktok)parts.push('@'+s.tiktok);if(s.fb)parts.push(s.fb);if(s.yt)parts.push(s.yt);return parts.slice(0,2).join(' • ');}
+async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st.fmt],W=F.w,H=F.h,s=H>=W?H/1920:H/720;const cv=$('stCanvas');cv.width=W;cv.height=H;cv.style.aspectRatio=W+'/'+H;const ctx=cv.getContext('2d');
+  try{await document.fonts.load('700 64px Inter');await document.fonts.load('800 64px "Playfair Display"');await document.fonts.load('700 64px Caveat');}catch(e){}
+  const ff=FONTS[st.font];const f=st.fields;
+  if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(2,44,34,.55)');og.addColorStop(.5,'rgba(2,44,34,.25)');og.addColorStop(1,'rgba(2,44,34,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
+  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#059669';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#0d9488';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#022c22');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
+  ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3*s;roundRect(ctx,42*s,42*s,W-84*s,H-84*s,40*s);ctx.stroke();
+  ctx.textAlign='center';
+  const kick=t=>{ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`800 ${24*s}px Inter, sans-serif`;ctx.fillText(t.toUpperCase(),W/2,140*s);};
+  const wrapped=(text,fs,maxLines)=>{let lines;for(;;){ctx.font=`${ff.w} ${fs}px ${ff.f}`;lines=wrapText(ctx,text,W-220*s);if(lines.length<=maxLines||fs<=28*s)break;fs-=4*s;}return {lines,lh:fs*1.4};};
+  const cy=st.photo?H*0.62:H*0.45;
+  switch(st.tpl){
+    case 'quote':{const r=wrapped('"'+(f.text||'')+'"',64*s,7);const bh=r.lines.length*r.lh;const y0=cy-bh/2+32*s;ctx.fillStyle='#fff';r.lines.forEach((ln,i)=>ctx.fillText(ln,W/2,y0+i*r.lh));ctx.fillStyle='#fcd34d';ctx.font=`800 ${36*s}px ${ff.f}`;ctx.fillText('— '+(f.author||'Anonim'),W/2,y0+bh+70*s);break;}
+    case 'ucapan':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${84*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.85)';const r=wrapped(f.msg||'',36*s,5);r.lines.forEach((ln,i)=>ctx.fillText(ln,W/2,cy+80*s+i*r.lh));break;}
+    case 'undangan':{kick('Undangan');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${64*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy-40*s);ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${34*s}px Inter, sans-serif`;[f.date,f.time,f.place].filter(Boolean).forEach((ln,i)=>ctx.fillText(ln,W/2,cy+40*s+i*52*s));break;}
+    case 'prestasi':{kick('Prestasi');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${60*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='#fcd34d';ctx.font=`800 ${40*s}px ${ff.f}`;ctx.fillText(f.name||'',W/2,cy+80*s);break;}
+    case 'cover':{kick('Materi Pembelajaran');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${68*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${34*s}px Inter, sans-serif`;ctx.fillText((f.kelas||'')+(f.guru?' · '+f.guru:''),W/2,cy+70*s);break;}
+    case 'dokumentasi':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${52*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${32*s}px Inter, sans-serif`;ctx.fillText(f.date||'',W/2,cy+64*s);break;}
   }
-  try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
-  renderAuthUI();setSapaan();muatSemuaData();
-})();
+  if(st.showTag&&st.tagText){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.6)';ctx.font=`600 ${24*s}px Inter, sans-serif`;ctx.fillText(st.tagText,W-60*s,H-150*s);}
+  if(st.showFoot){const ls=64*s,lx=48*s,ly=H-118*s;ctx.save();roundRect(ctx,lx,ly,ls,ls,16*s);ctx.clip();ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);if(logoImg){const z=ls*1.25;ctx.drawImage(logoImg,lx-(z-ls)/2,ly-(z-ls)/2,z,z);}ctx.restore();
+    ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`700 ${24*s}px Inter, sans-serif`;ctx.fillText('Guru Berbagi · Selogiri',lx+ls+16*s,ly+ls/2+8*s);
+    const hd=handlesStr();if(hd&&STATE.profile){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${22*s}px Inter, sans-serif`;ctx.fillText(hd,W-48*s,ly+ls/2+8*s);}}
+}
+function simpanKarya(){if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}const st=STATE.studio;const cv=$('stCanvas');const t=document.createElement('canvas');const tw=216,th=Math.round(tw*cv.height/cv.width);t.width=tw;t.height=th;t.getContext('2d').drawImage(cv,0,0,tw,th);let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');arr.unshift({tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});arr=arr.slice(0,6);localStorage.setItem('gb_karya',JSON.stringify(arr));renderKarya();}
+function renderKarya(){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');$('karyaWrap').classList.toggle('hidden',!arr.length||!STATE.profile);$('karyaList').innerHTML=arr.map((k,i)=>`<button onclick="openKarya(${i})" class="shrink-0 w-24 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 active:scale-95 transition"><img src="${k.thumb}" class="w-24 h-32 object-cover"></button>`).join('');}
+function openKarya(i){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');const k=arr[i];if(!k)return;STATE.studio={tpl:k.tpl,fmt:k.fmt,font:k.font,fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,showFoot:k.showFoot,showTag:k.showTag,tagText:k.tagText};if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}$('stTitle').textContent=TPL[k.tpl].n;buildControls();openModal('mStudio');renderStudio();}
+function unduhStudio(){$('stCanvas').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='karya-guru-berbagi.png';a.click();URL.revokeObjectURL(a.href);simpanKarya();poinAksi('bagi_kartu');toast('Karya diunduh!');},'image/png');}
+async function bagiStudio(){const cv=$('stCanvas');try{const blob=await new Promise(r=>cv.toBlob(r,'image/png'));const file=new File([blob],'karya-guru-berbagi.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Guru Berbagi Selogiri'});simpanKarya();poinAksi('bagi_kartu');toast('Terima kasih sudah berbagi!');}else{unduhStudio();toast('Perangkat tidak mendukung share — file diunduh','info');}}catch(e){}}
+function poinAksi(aksi){const gid=guruId();if(!gid)return;sb.rpc('creative_add_poin',{p_guru_id:gid,p_poin:1,p_aksi:aksi}).then(r=>{if(r.data){STATE.gam=r.data;renderTreeData();}});}
 
-/* ═══ DATA (1 RPC portal + cache 15 mnt) ═══ */
-function applyPortal(p){
-  STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];
-  if(STATE.config){
-    $('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;
-    $('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;
-    $('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;
-    renderBanner();renderPopup();
-  }
-  renderMenus();renderQuick();renderNews();renderFoot();renderRecent();gantiQuote();
-}
-async function muatSemuaData(){
-  const now=Date.now();
-  const cache=JSON.parse(localStorage.getItem('gb_cache')||'null');
-  if(cache&&cache.d&&(now-cache.t)<900000){applyPortal(cache.d);}else{renderSkeleton();}
-  const gid=guruId();
-  const [portalRes,gam,notifs]=await Promise.all([
-    sb.rpc('creative_get_portal'),
-    gid?sb.from('creative_gamification').select('*').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
-    sb.from('creative_notifications').select('*').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(20),
-  ]);
-  const pp=portalRes.data||{};
-  const portal={config:pp.config||null,menus:pp.menus||[],quotes:pp.quotes||[],footer:pp.footer||[]};
-  try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:portal}));}catch(e){}
-  STATE.gam=gam.data;
-  const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
-  const myRole=isKS?'Kepala Sekolah':'Guru';
-  STATE.notifs=(notifs.data||[]).filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
-  applyPortal(portal);
-  renderPohon();renderNotif();renderProfil();icons();
-}
+async function ssoLogin(email,pin){const r=await fetch(SB_URL+'/functions/v1/login-guru',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON},body:JSON.stringify({email,pin})});if(!r.ok)throw new Error('Gagal');return await r.json();}
+async function ssoVerify(token){const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});return await r.json();}
+$('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('btnLogin').disabled=true;$('btnLogin').textContent='Memverifikasi…';try{const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));STATE.profile=res.profile;STATE.token=res.token;tutupPanel('pLogin');const gid=guruId();if(gid){const {data}=await sb.rpc('creative_update_gamification',{p_guru_id:gid});if(data){STATE.gam={...STATE.gam,...data};if(data.poin_added>0)setTimeout(()=>toast('+'+data.poin_added+' poin! Pohon Ilmu kamu tumbuh.'),600);}logAktivitas('login');const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}renderAuthUI();setSapaan();muatSemuaData();toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');}catch(err){toast('Email/PIN salah atau akun nonaktif','error');}$('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';});
+function doLogout(){localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');location.reload();}
+function renderAuthUI(){const on=!!STATE.profile;$('btnMasuk').classList.toggle('hidden',on);$('profGuest').classList.toggle('hidden',on);$('profData').classList.toggle('hidden',!on);$('authCard').classList.toggle('hidden',on);['quickBox','bellHdr','sideNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});if(!on)$('recentBox').classList.add('hidden');
+  if(on){const p=STATE.profile;$('pfNama').textContent=p.nama||'—';$('pfJabatan').textContent=p.jabatan||'—';$('dJabatan').textContent=p.jabatan||'—';$('dSekolah').textContent=p.sekolah||'—';$('dNpsn').textContent=p.npsn||'—';$('dEmail').textContent=p.email||'—';const s=STATE.sosmed||{};$('smIg').value=s.ig||'';$('smTiktok').value=s.tiktok||'';$('smFb').value=s.fb||'';$('smYt').value=s.yt||'';
+    const chips=[s.ig&&'IG @'+s.ig,s.tiktok&&'TT @'+s.tiktok,s.fb&&'FB '+s.fb,s.yt&&'YT '+s.yt].filter(Boolean);
+    const cw=$('smChips');if(chips.length){cw.classList.remove('hidden');cw.classList.add('flex');cw.innerHTML=chips.map(c=>`<span class="text-[9px] font-black acc-soft acc-text px-2 py-0.5 rounded-full">${esc(c)}</span>`).join('');}else{cw.classList.add('hidden');}
+    const foto=localStorage.getItem('gb_foto');$('pfAvatar').innerHTML=foto?`<img src="${foto}" class="w-full h-full object-cover">`:namaPanggil(p.nama)[0].toUpperCase();}}
+async function simpanSosmed(){const gid=guruId();if(!gid)return;const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});STATE.sosmed=clean;localStorage.setItem('gb_sosmed',JSON.stringify(clean));await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media tersimpan untuk watermark');}
+async function hapusSosmed(){const gid=guruId();if(!gid)return;STATE.sosmed={};localStorage.setItem('gb_sosmed','{}');await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media dihapus');}
 
-function setSapaan(){
-  const j=new Date().getHours();
-  const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
-  const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';
-  $('txtSapaan').innerHTML=`${s}, <span class="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent font-extrabold">${nama}</span>`;
-  const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
-}
+function waktuRelatif(ts){const d=new Date(ts),diff=Math.floor((Date.now()-d)/1000);if(diff<60)return 'Baru saja';if(diff<3600)return Math.floor(diff/60)+' mnt lalu';if(diff<86400)return Math.floor(diff/3600)+' jam lalu';if(diff<172800)return 'Kemarin';return d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});}
 
-function renderPohon(){
-  const g=STATE.gam||{total_poin:0,streak_days:0,level:'Biji',total_login:0};
-  const lv=[...LEVELS].reverse().find(l=>g.total_poin>=l.min)||LEVELS[0];
-  const next=LEVELS[LEVELS.indexOf(lv)+1];
-  $('treeIcon').textContent=lv.e;$('treeLevel').textContent=lv.n;
-  $('treeStreak').textContent=g.streak_days;$('treePoin').textContent=g.total_poin;
-  $('stPoin').textContent=g.total_poin;$('stStreak').textContent=g.streak_days;$('stLogin').textContent=g.total_login||0;
-  if(next){$('treeNext').textContent=next.n;$('treeBar').style.width=Math.min(100,Math.round((g.total_poin-lv.min)/(next.min-lv.min)*100))+'%';}
-  else{$('treeNext').textContent='Maksimal 🎉';$('treeBar').style.width='100%';}
-}
+(async function boot(){initPrefs();setThemeColor();initPWA();muatCuaca();icons();paintView();$('caroTrack').addEventListener('scroll',caroUpdate);const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}renderAuthUI();setSapaan();muatSemuaData();})();
 
-function renderBanner(){
-  const c=STATE.config;if(!c||c.banner_status!=='ON')return;
-  const w={blue:'bg-gradient-to-r from-blue-600 to-indigo-600',green:'bg-gradient-to-r from-emerald-600 to-teal-600',red:'bg-gradient-to-r from-rose-600 to-red-600'}[c.banner_warna]||'bg-emerald-600';
-  const box=$('bannerBox');box.classList.remove('hidden');box.classList.add('flex',...w.split(' '));
-  $('bannerPesan').textContent=c.banner_pesan;$('bannerBtn').textContent=c.banner_label||'Cek';
-  $('bannerBtn').onclick=()=>{const u=c.banner_link;if(u&&u.startsWith('ext:'))window.open(u.slice(4),'_blank');else if(u)location.href=u;};
-}
-function renderPopup(){
-  const c=STATE.config;if(!c||c.pop_status!=='ON'||popDismissed)return;
-  let html;
-  if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}
-  else{
-    const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';
-    html=`<div class="bg-white dark:bg-slate-900">
-      <div class="h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
-      ${img}
-      <div class="p-6 text-center">
-        <h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||'Informasi'}</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${c.pop_pesan||''}</p>
-      </div>
-    </div>`;
-  }
-  $('popContent').innerHTML=html;
-  openModal('mPop');
-}
-function gantiQuote(){
-  if(!STATE.quotes.length)return;
-  const b=$('btnQuote');
-  if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}
-  const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];
-  STATE.quoteNow=q;
-  $('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;
-}
-
-function visible(m){
-  if(!m.is_active||m.tampil_di==='off')return false;
-  if(m.tampil_di==='mobile'&&!isMobile)return false;
-  if(m.tampil_di==='desktop'&&isMobile)return false;
-  const r=m.akses_role;
-  if(!STATE.profile)return (r==='tamu'||r==='all'||r==='');
-  const isKS=(STATE.profile.jabatan||'').toLowerCase().includes('kepala');
-  if(r==='Kepala Sekolah')return isKS;
-  if(r==='tamu')return false;
-  return true;
-}
-function renderSkeleton(){$('menuGrid').innerHTML=Array(10).fill('<div class="skeleton h-32"></div>').join('');}
-function renderMenus(filter=''){
-  const f=(filter||'').toLowerCase();
-  const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari&&(m.judul.toLowerCase().includes(f)||m.deskripsi.toLowerCase().includes(f)));
-  $('menuGrid').innerHTML=list.map(m=>{
-    const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-    const anak=STATE.menus.filter(c=>c.sub_menu_dari===m.judul&&visible(c));
-    const badge=m.label?`<span class="absolute top-2 right-2 text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">${m.label}</span>`:'';
-    const wide=m.ukuran==='wide'?'col-span-2':'';
-    return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="relative card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0 ${wide}">
-      ${badge}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
-      <span><span class="block text-[13px] font-extrabold text-slate-800 dark:text-slate-100 leading-tight">${m.judul} ${anak.length?`<span class="text-[9px] text-slate-400 font-bold">(${anak.length})</span>`:''}</span>
-      <span class="block text-[10px] text-slate-400 mt-1 leading-snug">${m.deskripsi}</span></span></button>`;
-  }).join('')||'<p class="col-span-2 text-center text-sm text-slate-400 py-8">Tidak ditemukan 😕</p>';
-  icons();
-}
-$('inSearch').addEventListener('input',e=>renderMenus(e.target.value));
-
-function klikMenu(judul){
-  const m=STATE.menus.find(x=>x.judul===judul);
-  if(m&&needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}
-  const anak=STATE.menus.filter(c=>c.sub_menu_dari===judul&&visible(c));
-  if(anak.length){setPageInstant('apps');CUR.sub=judul;bukaSubmenu(anak);safePush({...CUR});return;}
-  bukaUrl(m);
-}
-function bukaSubmenu(anak){
-  $('menuGrid').innerHTML=`<button onclick="riwayatKembali()" class="col-span-2 md:col-span-5 card p-3 flex items-center gap-2 text-sm font-bold text-emerald-600"><i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali</button>`+
-    anak.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-      return `<button onclick='klikAnak(${m.id})' class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0">
-        <span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon}" class="w-5 h-5"></i></span>
-        <span class="text-[13px] font-extrabold text-slate-800 dark:text-slate-100">${m.judul}</span></button>`;}).join('');
-  icons();
-}
-function riwayatKembali(){try{history.back()}catch(e){renderMenus()}}
-function klikAnak(id){const m=STATE.menus.find(x=>x.id===id);if(!m)return;
-  if(needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}
-  bukaUrl(m);}
-function bukaUrl(m){
-  if(!m)return;
-  logAktivitas('buka_menu',{judul:m.judul});
-  let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);
-  rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);
-  localStorage.setItem('gb_recent',JSON.stringify(rec));renderRecent();
-  const u=m.url||'#';
-  if(m.cara_buka==='app'&&u.startsWith('http')){$('mAppTitle').textContent=m.judul;$('mAppFrame').src=u;openModal('mApp');}
-  else if(u.startsWith('http'))window.open(u,'_blank');
-  else if(u&&u!=='#')location.href=u;
-  else toast('Menu ini adalah induk submenu','info');
-}
-
-function renderRecent(){
-  if(!STATE.profile)return;
-  const rec=JSON.parse(localStorage.getItem('gb_recent')||'[]');if(!rec.length)return;
-  $('recentBox').classList.remove('hidden');
-  $('recentList').innerHTML=rec.map(r=>{const [bg,tx]=COLOR[r.warna]||COLOR.blue;
-    return `<button onclick='bukaUrl(${JSON.stringify(r).replace(/'/g,"&#39;")})' class="shrink-0 card flex items-center gap-2 px-3 py-2.5 active:scale-95 hover:shadow-md transition">
-      <span class="w-8 h-8 rounded-lg ${bg} ${tx} flex items-center justify-center"><i data-lucide="${r.icon||'app-window'}" class="w-4 h-4"></i></span>
-      <span class="text-xs font-bold text-slate-700 dark:text-slate-200">${r.judul}</span></button>`;}).join('');
-  icons();
-}
-function renderQuick(){
-  if(!STATE.profile)return;
-  const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari).slice(0,isMobile?4:8);
-  $('quickList').innerHTML=list.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-    return `<button onclick="klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0">
-      <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
-      <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight truncate w-full">${m.judul}</span></button>`;}).join('');
-  icons();
-}
-function renderNews(){
-  if(!STATE.profile)return;
-  const n=(STATE.notifs||[]).slice(0,3);
-  $('newsBox').classList.toggle('hidden',!n.length);
-  $('newsList').innerHTML=n.map(x=>`<button onclick="openPanel('pNotif')" class="card w-full p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition min-w-0">
-    <span class="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="megaphone" class="w-4 h-4"></i></span>
-    <span class="min-w-0"><span class="block text-xs font-bold text-slate-700 dark:text-slate-200 truncate">${x.judul}</span>
-    <span class="block text-[10px] text-slate-400 truncate">${x.pesan}</span></span></button>`).join('');
-}
-function renderFoot(){
-  if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}
-  $('footSide').classList.remove('hidden');
-  $('footList').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition">
-    <i data-lucide="${f.icon||'globe'}" class="w-4 h-4 text-emerald-600"></i><span class="text-xs font-bold text-slate-600 dark:text-slate-300">${f.judul}</span></a>`).join('');
-  $('footSideList').innerHTML=STATE.footer.map(f=>`<a href="${f.url}" target="_blank" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
-    <i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</a>`).join('');
-  icons();
-}
-
-function setBadge(n){['badgeNotif','badgeNotifD'].forEach(id=>{const b=$(id);if(!b)return;
-  if(n>0){b.classList.remove('hidden');b.textContent=n;}else b.classList.add('hidden');});}
-async function renderNotif(){
-  let readIds=new Set();
-  if(STATE.profile){
-    const gid=guruId();
-    if(gid){
-      const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
-      readIds=new Set((reads||[]).map(r=>r.notification_id));
-    }
-    setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
-  } else setBadge(0);
-  $('notifList').innerHTML=STATE.notifs.map(n=>{
-    const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';
-    const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-    return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}"><span class="text-xl">${em}</span>
-      <div><p class="text-[13px] font-bold text-slate-800 dark:text-slate-100">${n.judul}</p>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${n.pesan}</p>
-      <p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;
-  }).join('')||'<p class="text-center text-sm text-slate-400 py-8">Belum ada notifikasi</p>';
-}
-
-function renderProfil(){
-  if(!STATE.profile)return;
-  const p=STATE.profile;
-  $('pfNama').textContent=p.nama||'—';$('pfSekolah').textContent=p.sekolah||'—';$('pfJabatan').textContent=p.jabatan||'—';
-  const foto=localStorage.getItem('gb_foto');
-  $('pfAvatar').innerHTML=foto?`<img src="${foto}" class="w-full h-full object-cover">`:namaPanggil(p.nama)[0].toUpperCase();
-}
+function applyPortal(p){STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];if(STATE.config){$('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;$('aboutVer').textContent='v'+STATE.config.versi;renderPopup();}renderCarousel();renderLayanan($('inSearch').value);renderQuick();renderFoot();renderRecent();gantiQuote();}
+async function muatSemuaData(){const now=Date.now();const cache=JSON.parse(localStorage.getItem('gb_cache')||'null');if(cache&&cache.d&&(now-cache.t)<900000){applyPortal(cache.d);}else{$('layananBody').innerHTML='<div class="grid grid-cols-2 gap-3">'+Array(6).fill('<div class="skeleton h-32"></div>').join('')+'</div>';}const gid=guruId();const [portalRes,gam,notifs,lead,teaser]=await Promise.all([sb.rpc('creative_get_portal'),gid?sb.from('creative_gamification').select('*').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),sb.from('creative_notifications').select('*').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(20),sb.rpc('creative_leaderboard'),sb.from('creative_inspirasi').select('*').eq('status','aktif').order('created_at',{ascending:false}).limit(1)]);const pp=portalRes.data||{};const portal={config:pp.config||null,menus:pp.menus||[],quotes:pp.quotes||[],footer:pp.footer||[]};try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:portal}));}catch(e){}STATE.gam=gam.data;const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');const myRole=isKS?'Kepala Sekolah':'Guru';STATE.notifs=(notifs.data||[]).filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});STATE.lead=lead.data||[];STATE.teaser=(teaser.data||[])[0]||null;applyPortal(portal);renderTeaser();if(CUR.view==='bagi')renderBagi();renderNotif();icons();}
+function setSapaan(){const j=new Date().getHours();const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';$('txtSapaan').innerHTML=`${s}, <span class="font-extrabold bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--acc),var(--acc2))">${nama}</span>`;const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;}
+function renderPopup(){const c=STATE.config;if(!c||c.pop_status!=='ON'||popDismissed)return;let html;if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}else{const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';html=`<div class="bg-white dark:bg-slate-900"><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;}$('popContent').innerHTML=html;openModal('mPop');}
+function gantiQuote(){if(!STATE.quotes.length)return;const b=$('btnQuote');if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];STATE.quoteNow=q;$('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;}
+function setBadge(n){['badgeNotif','badgeNotifD'].forEach(id=>{const b=$(id);if(!b)return;if(n>0){b.classList.remove('hidden');b.textContent=n;}else b.classList.add('hidden');});}
+async function renderNotif(){let readIds=new Set();if(STATE.profile){const gid=guruId();if(gid){const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);readIds=new Set((reads||[]).map(r=>r.notification_id));}setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);}else setBadge(0);$('notifList').innerHTML=STATE.notifs.map(n=>{const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}"><span class="text-xl">${em}</span><div><p class="text-[13px] font-bold text-slate-800 dark:text-slate-100">${n.judul}</p><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${n.pesan}</p><p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;}).join('')||'<p class="text-center text-sm text-slate-400 py-8">Belum ada notifikasi</p>';}
 function pilihFoto(){$('inFoto').click();}
-function uploadFoto(ev){
-  const f=ev.target.files[0];if(!f)return;
-  const rd=new FileReader();
-  rd.onload=()=>{const img=new Image();
-    img.onload=()=>{
-      const c=document.createElement('canvas');c.width=192;c.height=192;
-      const ctx=c.getContext('2d');
-      const s=Math.max(192/img.width,192/img.height);
-      const w=img.width*s,h=img.height*s;
-      ctx.drawImage(img,(192-w)/2,(192-h)/2,w,h);
-      try{localStorage.setItem('gb_foto',c.toDataURL('image/jpeg',.8));renderProfil();toast('Foto profil tersimpan di perangkat');}
-      catch(e){toast('Gagal menyimpan foto','error');}
-    };
-    img.src=rd.result;};
-  rd.readAsDataURL(f);
-  ev.target.value='';
-}
-
+function uploadFoto(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=192;c.height=192;const ctx=c.getContext('2d');const s=Math.max(192/img.width,192/img.height);const w=img.width*s,h=img.height*s;ctx.drawImage(img,(192-w)/2,(192-h)/2,w,h);try{localStorage.setItem('gb_foto',c.toDataURL('image/jpeg',.8));renderAuthUI();toast('Foto profil tersimpan di perangkat');}catch(e){toast('Gagal menyimpan foto','error');}};img.src=rd.result;};rd.readAsDataURL(f);ev.target.value='';}
 function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',document.documentElement.classList.contains('dark')?'1':'0');setThemeColor();}
 function bersihCache(){localStorage.removeItem('gb_recent');localStorage.removeItem('gb_cache');localStorage.removeItem('gb_wx');location.reload();}
 function kirimWA(){window.open('https://chat.whatsapp.com/LFaBoWvZ8l0DIaefiWiAl5','_blank');}
-
-function setTipeFb(t,btn){STATE.tipeFb=t;document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('bg-emerald-600','text-white');b.classList.add('bg-slate-100','text-slate-600');});btn.classList.add('bg-emerald-600','text-white');}
+function setTipeFb(t,btn){STATE.tipeFb=t;document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('acc-bg','text-white');b.classList.add('bg-slate-100','text-slate-600');});btn.classList.add('acc-bg','text-white');}
 function renderStars(){$('starRow').innerHTML=[1,2,3,4,5].map(i=>`<button onclick="STATE.rating=${i};renderStars()">${i<=STATE.rating?'⭐':'☆'}</button>`).join('');}
 renderStars();
-async function submitFb(){
-  const pesan=$('fbPesan').value.trim();if(!pesan)return toast('Isi pesan dulu ya','info');
-  $('btnFb').disabled=true;$('btnFb').textContent='Mengirim…';
-  const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});
-  $('btnFb').disabled=false;$('btnFb').textContent='Kirim Laporan';
-  if(error)toast('Gagal mengirim, coba lagi','error');
-  else{$('fbPesan').value='';tutupPanel('pFb');toast('Terkirim! Admin mendapat notifikasi Telegram.');}
-}
+async function submitFb(){const pesan=$('fbPesan').value.trim();if(!pesan)return toast('Isi pesan dulu ya','info');$('btnFb').disabled=true;$('btnFb').textContent='Mengirim…';const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});$('btnFb').disabled=false;$('btnFb').textContent='Kirim Laporan';if(error)toast('Gagal mengirim, coba lagi','error');else{$('fbPesan').value='';poinAksi('saran');tutupPanel('pFb');toast('Terkirim! Admin mendapat notifikasi Telegram. +1 poin');}}
 </script>
 </body>
 </html>
