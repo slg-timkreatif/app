@@ -32,7 +32,7 @@
     <form id="formLogin" class="bg-white rounded-3xl p-6 space-y-4 shadow-xl">
       <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
       <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp" placeholder="••••••••"></div>
-      <button class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard</button>
+      <button class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> Masuk Dashboard</button>
       <p id="loginErr" class="hidden text-xs font-bold text-rose-500 text-center"></p>
     </form>
   </div>
@@ -53,7 +53,7 @@
   <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
     <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
     <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
-      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.6</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.8</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
       <nav class="space-y-1.5" id="navMobile"></nav>
       <p id="drawerEmail" class="mt-auto pt-4 text-[11px] font-bold text-slate-500 truncate border-t border-slate-100">—</p>
       <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
@@ -61,7 +61,7 @@
   </div>
 
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white md:min-h-screen md:sticky md:top-0">
-    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.6</p></div></div>
+    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.8</p></div></div>
     <nav class="flex flex-col gap-1 px-3" id="navDesktop"></nav>
     <div class="mt-auto p-5"><p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p><button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button></div>
   </aside>
@@ -88,7 +88,7 @@
       </div>
       <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah (aktivitas)</p><div id="leagueList" class="space-y-2 mt-3"></div></div>
       <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru</p><div id="actList" class="mt-3"></div></div>
-      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">🏆 Leaderboard Pohon Ilmu</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Leaderboard Pohon Ilmu</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div></div>
     </section>
 
     <section id="sec-menu" class="hidden space-y-4">
@@ -98,12 +98,18 @@
     </section>
 
     <section id="sec-info" class="hidden space-y-4">
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="monitor-smartphone" class="w-4 h-4 acc-text"></i> Tampilan Beranda (On/Off)</p>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="lbl">Banner</label><select id="iBanStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
+          <div><label class="lbl">Informasi</label><select id="iInfoStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
+          <div><label class="lbl">Quotes</label><select id="iQuoteStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
+        </div></div>
       <div class="grid lg:grid-cols-2 gap-4">
-        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner</p>
-          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Status</label><select id="iBanStatus" class="inp"><option>ON</option><option>OFF</option></select></div><div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Hijau</option><option value="red">Merah</option></select></div></div>
+        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner <span class="text-[10px] text-slate-400 font-bold">· rasio 4:3 (1200×900)</span></p>
+          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Hijau</option><option value="red">Merah</option></select></div><div><label class="lbl">Label Tombol</label><input id="iBanLabel" class="inp"></div></div>
           <div><label class="lbl">Pesan</label><textarea id="iBanPesan" rows="3" class="inp"></textarea></div>
           <div><label class="lbl">Link (awali ext: untuk luar)</label><input id="iBanLink" class="inp"></div>
-          <div><label class="lbl">Label Tombol</label><input id="iBanLabel" class="inp"></div></div>
+          <div><label class="lbl">URL Gambar Banner (opsional)</label><input id="iBanGambar" class="inp" placeholder="https://…"></div></div>
         <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i> Pop-up / Flyer</p>
           <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Status</label><select id="iPopStatus" class="inp"><option>ON</option><option>OFF</option></select></div><div><label class="lbl">Judul</label><input id="iPopJudul" class="inp"></div></div>
           <div><label class="lbl">Pesan (HTML flyer)</label><textarea id="iPopPesan" rows="5" class="inp"></textarea></div>
@@ -114,10 +120,11 @@
     </section>
 
     <section id="sec-notif" class="hidden space-y-4">
-      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman</p>
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman <span class="text-[10px] text-slate-400 font-bold">· gambar info rasio 4:3 (800×600)</span></p>
         <div class="grid md:grid-cols-2 gap-3"><div><label class="lbl">Judul</label><input id="iNotJudul" class="inp"></div>
           <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣 Pengumuman</option><option value="info">📢 Info</option><option value="gamifikasi">🏆 Gamifikasi</option><option value="sistem">✨ Sistem</option></select></div><div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div></div></div>
         <div><label class="lbl">Pesan</label><textarea id="iNotPesan" rows="2" class="inp"></textarea></div>
+        <div><label class="lbl">URL Gambar Informasi (opsional)</label><input id="iNotGambar" class="inp" placeholder="https://…"></div>
         <button onclick="addNotif()" class="acc-bg text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> Kirim</button></div>
       <div id="notList" class="space-y-2"></div>
     </section>
@@ -169,7 +176,6 @@
   </div>
 </div>
 
-<!-- CUSTOM CONFIRM -->
 <div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
   <div class="w-full max-w-xs bg-white rounded-3xl p-6 text-center">
     <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
@@ -191,7 +197,7 @@ const sb=window.supabase.createClient(SB_URL,SB_ANON,{auth:{persistSession:true,
 const $=id=>document.getElementById(id);
 const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],gam:[],lead:[],inspi:[],config:null,editMenuId:null};
 const COLOR={teal:'bg-teal-100 text-teal-600',orange:'bg-orange-100 text-orange-600',blue:'bg-blue-100 text-blue-600',green:'bg-green-100 text-green-600',rose:'bg-rose-100 text-rose-600',violet:'bg-violet-100 text-violet-600',fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',red:'bg-red-100 text-red-600',emerald:'bg-emerald-100 text-emerald-600',yellow:'bg-yellow-100 text-yellow-600'};
-const TABS=[['dash','bar-chart-3','Dashboard'],['menu','layout-grid','Menu'],['info','megaphone','Banner'],['notif','bell','Notifikasi'],['footer','link','Footer'],['quotes','quote','Quotes'],['fb','lightbulb','Saran'],['guru','users','Guru'],['inspirasi','share-2','Inspirasi']];
+const TABS=[['dash','layout-dashboard','Dashboard'],['menu','layout-grid','Menu'],['info','megaphone','Banner'],['notif','bell','Notifikasi'],['footer','link','Footer'],['quotes','quote','Quotes'],['fb','lightbulb','Saran'],['guru','users','Guru'],['inspirasi','share-2','Inspirasi']];
 function icons(){lucide.createIcons();}
 function esc(s){return (s||'').replace(/</g,'&lt;');}
 function toast(m,type){type=type||'success';const ic={success:'check',error:'triangle-alert',info:'info'}[type]||'check';$('toastMsg').textContent=m;$('toastIcon').setAttribute('data-lucide',ic);icons();const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);}
@@ -199,7 +205,7 @@ let cfCb=null;
 function confirmDialog(msg,onOk,title,okLabel){$('cfMsg').textContent=msg;$('cfTitle').textContent=title||'Yakin?';$('cfOk').textContent=okLabel||'Hapus';cfCb=onOk;const m=$('mConfirm');m.classList.remove('hidden');m.classList.add('flex');icons();}
 function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classList.remove('flex');cfCb=null;}
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
-function buildNav(){const h=TABS.map(([t,i,l],x)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold ${x===0?'acc-soft acc-text':'text-slate-500 hover:bg-slate-50'}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');$('navMobile').innerHTML=h;$('navDesktop').innerHTML=h;}
+function buildNav(){const h=TABS.map(([t,i,l],x)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold ${x===0?'acc-soft acc-text':'text-slate-500 hover:bg-slate-50'}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');$('navMobile').innerHTML=h;$('navDesktop').innerHTML=h;icons();}
 function openDrawer(){$('drawer').classList.remove('hidden');$('drawerEmail').textContent=$('adminEmail').textContent;requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));}
 function closeDrawer(){$('drawerSheet').classList.add('-translate-x-full');setTimeout(()=>$('drawer').classList.add('hidden'),300);}
 function setTab(t){closeDrawer();document.querySelectorAll('.tab-btn').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);});['dash','menu','info','notif','footer','quotes','fb','guru','inspirasi'].forEach(s=>$('sec-'+s).classList.toggle('hidden',s!==t));}
@@ -236,7 +242,6 @@ function renderDash(){
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
-  // Chart: normalisasi batas hari agar bar terisi penuh 00:00-24:00
   const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(6-i));return d;});
   const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);return STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
   const max=Math.max(...counts,1);
@@ -248,7 +253,7 @@ function renderDash(){
   $('actList').innerHTML=STATE.log.slice(0,12).map(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu'}[l.aksi]||l.aksi;const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0"><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span><span class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
   $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈',''][i]||''}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
 }
-async function purgeLog(){confirmDialog('Hapus log aktivitas >90 hari? Tindakan tidak dapat dibatalkan.',async()=>{const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast((data||0)+' log dipurge');loadAll();},'Purge Log?','Purge');}
+function purgeLog(){confirmDialog('Hapus log aktivitas >90 hari? Tindakan tidak dapat dibatalkan.',async()=>{const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast((data||0)+' log dipurge');loadAll();},'Purge Log?','Purge');}
 
 function guestVisible(m){if(!m.is_active||m.tampil_di==='off')return false;const r=m.akses_role;return (r==='tamu'||r==='all'||r==='');}
 function renderMenus(){const f=($('mSearch').value||'').toLowerCase();
@@ -263,14 +268,17 @@ async function reloadMenus(){const {data}=await sb.from('creative_menus').select
 async function saveMenu(){const row={judul:$('eJudul').value.trim(),deskripsi:$('eDesk').value.trim(),url:$('eUrl').value.trim(),icon:$('eIcon').value.trim()||'app-window',warna:$('eWarna').value,kategori:$('eKategori').value,sub_menu_dari:$('eParent').value,tampil_di:$('eTampil').value,ukuran:$('eUkuran').value,akses_role:$('eRole').value,cara_buka:$('eBuka').value,label:$('eLabel').value.trim(),sort_order:parseInt($('eSort').value)||0,is_active:$('eActive').checked};if(!row.judul)return toast('Judul wajib','error');const q=STATE.editMenuId?sb.from('creative_menus').update(row).eq('id',STATE.editMenuId):sb.from('creative_menus').insert(row);const {error}=await q;if(error)return toast(error.message,'error');toast('Menu tersimpan');closeMenu();await reloadMenus();}
 function delMenu(){confirmDialog('Hapus menu ini? Tindakan tidak dapat dibatalkan.',async()=>{const {error}=await sb.from('creative_menus').delete().eq('id',STATE.editMenuId);if(error)return toast(error.message,'error');toast('Menu dihapus');closeMenu();await reloadMenus();},'Hapus Menu?','Hapus');}
 
-function fillInfo(){const c=STATE.config;if(!c)return;$('iBanStatus').value=c.banner_status;$('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;$('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;$('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;$('iPopGambar').value=c.pop_gambar||'';$('iVersi').value=c.versi;}
-async function saveInfo(){const row={banner_status:$('iBanStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,pop_status:$('iPopStatus').value,pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,pop_gambar:$('iPopGambar').value,versi:$('iVersi').value,updated_at:new Date().toISOString()};const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);if(error)return toast(error.message,'error');toast('Pengaturan tersimpan & live');}
+function fillInfo(){const c=STATE.config;if(!c)return;
+  $('iBanStatus').value=c.banner_status;$('iInfoStatus').value=c.info_status||'ON';$('iQuoteStatus').value=c.quote_status||'ON';
+  $('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;$('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;$('iBanGambar').value=c.banner_gambar||'';
+  $('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;$('iPopGambar').value=c.pop_gambar||'';$('iVersi').value=c.versi;}
+async function saveInfo(){const row={banner_status:$('iBanStatus').value,info_status:$('iInfoStatus').value,quote_status:$('iQuoteStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,banner_gambar:$('iBanGambar').value,pop_status:$('iPopStatus').value,pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,pop_gambar:$('iPopGambar').value,versi:$('iVersi').value,updated_at:new Date().toISOString()};const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);if(error)return toast(error.message,'error');toast('Pengaturan tersimpan & live');}
 
 async function reloadNotif(){const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();}
-async function addNotif(){const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_notifications').insert(row);if(error)return toast(error.message,'error');$('iNotJudul').value='';$('iNotPesan').value='';toast('Pengumuman terkirim');await reloadNotif();}
+async function addNotif(){const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value,gambar:$('iNotGambar').value.trim()};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_notifications').insert(row);if(error)return toast(error.message,'error');$('iNotJudul').value='';$('iNotPesan').value='';$('iNotGambar').value='';toast('Pengumuman terkirim');await reloadNotif();}
 async function toggleNotif(id,act){await sb.from('creative_notifications').update({is_active:act}).eq('id',id);await reloadNotif();}
 function delNotif(id){confirmDialog('Hapus notifikasi ini?',async()=>{await sb.from('creative_notifications').delete().eq('id',id);await reloadNotif();toast('Notifikasi dihapus');},'Hapus Notifikasi?','Hapus');}
-function renderNotif(){$('notList').innerHTML=STATE.notifs.map(n=>`<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}"><span class="text-xl">${{info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢'}</span><div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div><button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${n.is_active?'AKTIF':'OFF'}</button><button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
+function renderNotif(){$('notList').innerHTML=STATE.notifs.map(n=>`<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}">${n.gambar?`<img src="${n.gambar}" class="w-12 h-12 rounded-lg object-cover">`:`<span class="text-xl">${{info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢'}</span>`}<div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div><button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${n.is_active?'AKTIF':'OFF'}</button><button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
 
 async function reloadFooter(){const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();}
 async function addFooter(){const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_footers').insert(row);if(error)return toast(error.message,'error');$('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';toast('Footer ditambah');await reloadFooter();}
