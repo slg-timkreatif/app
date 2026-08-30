@@ -11,9 +11,10 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://qamqqwfzhyiihqyzliwq.supabase.co">
 <link rel="preconnect" href="https://qdgtfhknuvncbzsbcbwo.supabase.co">
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -42,7 +43,7 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;max-width:100%}
-body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-1);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;padding-top:var(--nav-h);transition:background .25s var(--ease),color .25s var(--ease);overflow-x:hidden;max-width:100%}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-1);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;padding-top:var(--nav-h);transition:background .25s var(--ease),color .25s var(--ease);overflow-x:hidden;max-width:100%}
 img{display:block;max-width:100%}
 button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparent}
@@ -105,7 +106,6 @@ input,select,textarea{font-family:inherit;-webkit-tap-highlight-color:transparen
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-bottom:32px;min-width:0}
 .gallery-grid > *{min-width:0}
 
-/* ===== CARD (BASE / DESKTOP) ===== */
 .card-karya{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .15s var(--ease);content-visibility:auto;contain-intrinsic-size:1px 300px;contain:layout style paint;min-width:0;max-width:100%}
 .card-karya:hover{border-color:var(--border-strong)}
 @media(min-width:768px){.card-karya:hover{border-color:var(--primary)}}
@@ -279,14 +279,11 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .sidebar-item.danger:hover{background:var(--danger-soft)}
 .sidebar-divider{height:1px;background:var(--border);margin:10px 0}
 
-.login-box{max-width:360px;width:100%;padding:32px 28px;text-align:center}
+.login-box{max-width:380px;width:100%;padding:32px 28px;text-align:center}
 .login-icon{width:64px;height:64px;background:var(--primary);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;color:var(--on-primary);margin:0 auto 18px}
 .login-icon svg{width:28px;height:28px}
 .login-title{font-size:1.25rem;font-weight:800;margin-bottom:4px}
-.login-sub{color:var(--text-3);font-size:.85rem;margin-bottom:22px}
-.pin-input{width:100%;padding:14px;text-align:center;font-size:1.7rem;font-weight:800;letter-spacing:.35em;border:1px solid var(--border-strong);border-radius:var(--r-md);outline:none;background:var(--surface);color:var(--text-1);transition:border-color .15s}
-.pin-input:focus{border-color:var(--primary)}
-.pin-input::placeholder{letter-spacing:.1em;font-size:.95rem;color:var(--text-3);font-weight:500}
+.login-sub{color:var(--text-3);font-size:.82rem;margin-bottom:20px}
 
 .toast{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(70px);background:var(--text-1);color:var(--bg);padding:12px 20px;border-radius:var(--r-full);font-weight:700;font-size:.82rem;z-index:500;opacity:0;transition:transform .3s var(--ease-out),opacity .3s;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -301,22 +298,14 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .btn-back svg{width:15px;height:15px}
 .d-none{display:none!important}
 
-/* ============================================================
-   MOBILE OVERRIDES — WAJIB DI AKHIR agar menang cascade
-   ============================================================ */
+/* ===== MOBILE OVERRIDES (di akhir agar menang cascade) ===== */
 @media(max-width:560px){
   .hero{display:none!important;margin:0!important}
   .container{padding:0 12px}
-
-  /* Filter compact, select dibatasi lebar */
   .filter-bar{gap:6px;padding:10px 0 10px;margin-bottom:10px}
   .chip{padding:7px 13px;font-size:.78rem}
   .filter-select{max-width:128px;padding:7px 26px 7px 11px;font-size:.76rem;background-position:right 9px center}
-
-  /* Grid 1 kolom */
   .gallery-grid,.skeleton-grid{grid-template-columns:1fr;gap:8px}
-
-  /* Card list compact */
   .card-karya{flex-direction:row;align-items:center;padding:8px;gap:10px;contain-intrinsic-size:1px 92px}
   .card-thumb{width:72px;height:72px;min-height:72px;border-radius:var(--r-md)}
   .thumb-placeholder{padding:4px;gap:3px}
@@ -339,8 +328,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
   .btn-fav{top:4px;right:4px;width:22px;height:22px}
   .btn-fav svg{width:10px;height:10px}
   .thumb-overlay{display:none}
-
-  /* Skeleton compact */
   .skeleton-card{display:flex;padding:8px;gap:10px;align-items:center}
   .sk-thumb{width:72px;height:72px;min-height:72px;border-radius:var(--r-md);flex-shrink:0}
   .sk-body{padding:0;flex:1;min-width:0}
@@ -464,15 +451,26 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
   <iframe class="preview-frame" id="previewFrame" allowfullscreen allow="autoplay"></iframe>
 </div>
 
+<!-- ===== LOGIN SSO: EMAIL + PIN (akun pusat) ===== -->
 <div class="overlay" id="loginOverlay">
   <div class="modal-box login-box">
     <div class="login-icon"><i data-lucide="graduation-cap"></i></div>
     <div class="login-title">Login Guru</div>
-    <div class="login-sub">Masukkan PIN untuk melanjutkan</div>
-    <input type="password" class="pin-input" id="pinInput" placeholder="PIN" inputmode="numeric" maxlength="6">
-    <div id="loginError" style="color:var(--danger);font-size:.8rem;font-weight:600;margin-top:10px;display:none"></div>
-    <button class="btn btn-primary" style="width:100%;margin-top:18px;padding:13px" id="loginBtn" onclick="doLogin()"><i data-lucide="log-in"></i> Masuk</button>
+    <div class="login-sub">Gunakan akun terpusat Korwilcambidik Selogiri<br><b>Email + PIN</b></div>
+    <form onsubmit="event.preventDefault(); doLogin();">
+      <div class="form-group" style="text-align:left;margin-bottom:10px">
+        <label class="form-label"><i data-lucide="mail"></i> Email Terdaftar</label>
+        <input type="email" class="form-control" id="loginEmail" placeholder="nama@gmail.com" autocomplete="username" required>
+      </div>
+      <div class="form-group" style="text-align:left;margin-bottom:10px">
+        <label class="form-label"><i data-lucide="key-round"></i> PIN</label>
+        <input type="password" class="form-control" id="loginPin" placeholder="••••••" inputmode="numeric" maxlength="6" autocomplete="current-password" required style="text-align:center;letter-spacing:.3em;font-weight:800">
+      </div>
+      <div id="loginError" style="color:var(--danger);font-size:.8rem;font-weight:600;margin-top:8px;display:none"></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:14px;padding:13px" id="loginBtn"><i data-lucide="log-in"></i> Masuk</button>
+    </form>
     <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="closeLogin()">Batal</button>
+    <p style="margin-top:14px;font-size:.68rem;color:var(--text-3)">🔒 PIN tidak disimpan di aplikasi ini. Verifikasi dilakukan oleh server pusat.</p>
   </div>
 </div>
 
@@ -605,6 +603,14 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 </div>
 
 <script>
+// ============================================================
+// KONFIGURASI DUAL-PROJECT
+// - SSO/IDENTITAS : project PUSAT (KONTEKS-SSO.md)
+// - DATA GALERI   : project lama (karya_guru & settings tetap di sini)
+// ============================================================
+const SSO_URL  = 'https://qamqqwfzhyiihqyzliwq.supabase.co';
+const SSO_ANON = 'sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
+
 const supabaseClient = window.supabase.createClient(
   'https://qdgtfhknuvncbzsbcbwo.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkZ3RmaGtudXZuY2J6c2JjYndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzUyMzUsImV4cCI6MjEwMTg1MTIzNX0.GcEczGIaSO2twdTEK10_KedDPTzutr-EEl4vyNHG3bc'
@@ -612,7 +618,7 @@ const supabaseClient = window.supabase.createClient(
 
 const STATE = {
   all: [], filtered: [], settings: [],
-  user: { name:'Tamu', role:'GUEST', school:'-' },
+  user: null, // null = tamu; jika login berisi profile SSO
   limit: 12, isFavMode: false, sourceType: 'LINK'
 };
 let searchTimer = null;
@@ -620,6 +626,133 @@ let DATA_CACHE = null;
 let LAST_ADDED_ID = null;
 const DOM = {};
 
+function isGuest(){ return !STATE.user; }
+
+// ============================================================
+// SSO LITE — sesuai KONTEKS-SSO.md
+// ============================================================
+function mapProfile(p){
+  return {
+    sub: p.sub || null,
+    nama: p.nama || 'Tanpa Nama',
+    email: p.email || '',
+    sekolah: p.sekolah || '-',
+    jabatan: p.jabatan || '',
+    npsn: p.npsn || ''
+  };
+}
+
+// Verifikasi token ke function pusat. Mengembalikan true/false.
+async function verifyToken(){
+  const token = localStorage.getItem('gb_token');
+  if(!token) return false;
+  try {
+    const res = await fetch(SSO_URL + '/functions/v1/verify-guru', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SSO_ANON,
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const data = await res.json().catch(() => null);
+    if (data && data.valid === true) {
+      if (data.profile) {
+        STATE.user = mapProfile(data.profile);
+        localStorage.setItem('gb_profile', JSON.stringify(data.profile));
+      }
+      return true;
+    }
+    return false; // token tidak valid / akun nonaktif
+  } catch(e) {
+    // Gangguan jaringan: izinkan sesi tersimpan (akan diverifikasi ulang saat aksi penting)
+    const saved = localStorage.getItem('gb_profile');
+    if (saved) { try { STATE.user = mapProfile(JSON.parse(saved)); } catch(_){ } }
+    return !!STATE.user;
+  }
+}
+
+// Pulihkan sesi saat aplikasi dibuka
+async function restoreSession(){
+  const token = localStorage.getItem('gb_token');
+  const saved = localStorage.getItem('gb_profile');
+  if(!token || !saved) return; // tetap tamu
+  const ok = await verifyToken();
+  if (ok) {
+    if (isGuest()) { try { STATE.user = mapProfile(JSON.parse(saved)); } catch(_){ } }
+    updateAuthUI();
+  } else {
+    forceLogout('Sesi berakhir. Silakan login ulang.');
+  }
+}
+
+// Login EMAIL + PIN ke function pusat
+async function doLogin(){
+  const email = (DOM.loginEmail.value || '').trim().toLowerCase();
+  const pin = (DOM.loginPin.value || '').trim();
+  const errEl = DOM.loginError;
+  errEl.style.display = 'none';
+  if(!email || !pin){ errEl.textContent = 'Email dan PIN wajib diisi.'; errEl.style.display = 'block'; return; }
+
+  DOM.loginBtn.disabled = true;
+  DOM.loginBtn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>';
+  try {
+    const res = await fetch(SSO_URL + '/functions/v1/login-guru', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SSO_ANON },
+      body: JSON.stringify({ email, pin })
+    });
+    if (res.status === 401) {
+      errEl.textContent = 'Email/PIN salah atau akun nonaktif.';
+      errEl.style.display = 'block';
+      return;
+    }
+    if (!res.ok) {
+      errEl.textContent = 'Server sibuk (' + res.status + '). Coba lagi.';
+      errEl.style.display = 'block';
+      return;
+    }
+    const { token, profile } = await res.json();
+    // Simpan token + profile SAJA (PIN TIDAK disimpan)
+    localStorage.setItem('gb_token', token);
+    localStorage.setItem('gb_profile', JSON.stringify(profile));
+    STATE.user = mapProfile(profile);
+    closeLogin();
+    updateAuthUI();
+    switchView('DASHBOARD');
+    showToast(`Selamat datang, ${STATE.user.nama}! 🎉`, 'success');
+  } catch(e) {
+    errEl.textContent = 'Gagal terhubung ke server pusat. Periksa koneksi.';
+    errEl.style.display = 'block';
+  } finally {
+    DOM.loginBtn.disabled = false;
+    DOM.loginBtn.innerHTML = '<i data-lucide="log-in"></i> Masuk';
+    lucide.createIcons();
+  }
+}
+
+function forceLogout(msg){
+  localStorage.removeItem('gb_token');
+  localStorage.removeItem('gb_profile');
+  STATE.user = null;
+  updateAuthUI();
+  switchView('GALERI');
+  if (msg) showToast(msg, 'error');
+}
+function logout(){ forceLogout('Berhasil keluar.'); }
+
+// Pastikan token masih valid sebelum aksi penting (upload/hapus)
+async function ensureValid(){
+  if (isGuest()) { showToast('Silakan login terlebih dahulu.', 'error'); return false; }
+  const ok = await verifyToken();
+  if (!ok) { forceLogout('Sesi berakhir. Silakan login ulang.'); return false; }
+  updateAuthUI();
+  return true;
+}
+
+// ============================================================
+// UTILITAS WAKTU (sorting & tanggal rilis)
+// ============================================================
 function parseTs(ts, id) {
   const idMs = String(id || '').match(/(\d{13})/);
   if (idMs) return parseInt(idMs[1]);
@@ -636,7 +769,6 @@ function parseTs(ts, id) {
   if (anyNum) return parseInt(anyNum[1]);
   return 0;
 }
-
 function formatReleaseDate(ts, id) {
   const t = parseTs(ts, id);
   if (!t) return '';
@@ -653,12 +785,14 @@ function formatReleaseDate(ts, id) {
   const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
-
 function isNew(ts, id) {
   const t = parseTs(ts, id);
   return t > 0 && (Date.now() - t) < 86400000 && (Date.now() - t) >= 0;
 }
 
+// ============================================================
+// INIT & UI DASAR
+// ============================================================
 function cacheDom(){
   ['galleryGrid','skeletonGrid','emptyState','loadMoreWrap','heroBanner',
    'deskSearch','filterMapel','filterFase','chipAll','chipFav',
@@ -666,7 +800,7 @@ function cacheDom(){
    'dashLevelWrap','dashList','navAuthBtn','navAvatar','fabBtn',
    'sidebarOverlay','sidebar','sbGuest','sbUser','sbName','sbSchool','sbUserItems','sbGuestItems',
    'previewOverlay','previewTitle','previewFrame',
-   'loginOverlay','pinInput','loginError','loginBtn',
+   'loginOverlay','loginEmail','loginPin','loginError','loginBtn',
    'uploadOverlay','formMode','editRowId','feedbackAlert','feedbackMsg','uploadTitle',
    'inJudul','inMapel','manMapel','inJenis','manJenis','inFase','inSem',
    'inKaihType','kaihToggle','groupLink','groupStory','groupHtml',
@@ -687,16 +821,16 @@ function toggleTheme(){
   localStorage.setItem('gb_theme', next);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   initTheme();
   cacheDom();
   lucide.createIcons();
   showSkeleton(8);
-  try { const u = localStorage.getItem('gbUser'); if(u) STATE.user = JSON.parse(u); } catch(e){}
   updateAuthUI();
   loadData();
   setupInfiniteScroll();
   if(window.innerWidth >= 768) DOM.heroBanner.classList.add('show');
+  await restoreSession(); // SSO: pulihkan/verifikasi sesi
 });
 
 function showSkeleton(count){
@@ -724,6 +858,9 @@ function showSkeleton(count){
   DOM.skeletonGrid.appendChild(frag);
 }
 
+// ============================================================
+// DATA GALERI (project lama — tidak berubah)
+// ============================================================
 async function loadData(){
   if(DATA_CACHE){ processData(DATA_CACHE); return; }
   try {
@@ -758,10 +895,7 @@ function processData(data){
   media.sort((a, b) => parseTs(b[0], b[13]) - parseTs(a[0], a[13]));
   if (LAST_ADDED_ID) {
     const idx = media.findIndex(m => m[13] === LAST_ADDED_ID);
-    if (idx > 0) {
-      const [item] = media.splice(idx, 1);
-      media.unshift(item);
-    }
+    if (idx > 0) { const [item] = media.splice(idx, 1); media.unshift(item); }
     LAST_ADDED_ID = null;
   }
   STATE.all = media;
@@ -771,10 +905,7 @@ function processData(data){
   DOM.skeletonGrid.classList.add('d-none');
 }
 
-function debounceSearch(){
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(runFilter, 250);
-}
+function debounceSearch(){ clearTimeout(searchTimer); searchTimer = setTimeout(runFilter, 250); }
 
 function runFilter(){
   STATE.limit = 12;
@@ -801,6 +932,11 @@ function resetFilter(){
   DOM.chipFav.classList.remove('active');
   DOM.chipAll.classList.add('active');
   runFilter();
+}
+
+function userKey(){ return isGuest() ? 'GUEST' : (STATE.user.email || STATE.user.nama); }
+function getFavoritIds(){
+  try { return JSON.parse(localStorage.getItem('GB_FAV_' + userKey()) || '[]'); } catch(e){ return []; }
 }
 
 function filterFavorit(){
@@ -897,10 +1033,7 @@ const imgObserver = new IntersectionObserver((entries) => {
     }
   });
 }, { rootMargin: '200px' });
-
-function lazyLoadImages(){
-  document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
-}
+function lazyLoadImages(){ document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img)); }
 
 function setupInfiniteScroll(){
   const observer = new IntersectionObserver((entries) => {
@@ -934,20 +1067,18 @@ function getYoutubeId(url){
   const m = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
   return (m && m[2].length === 11) ? m[2] : null;
 }
-function getFavoritIds(){
-  const key = 'GB_FAV_' + (STATE.user.name || 'GUEST');
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ return []; }
-}
 function toggleFavorit(id){
-  const key = 'GB_FAV_' + (STATE.user.name || 'GUEST');
   let saved = getFavoritIds();
   if(saved.includes(id)){ saved = saved.filter(i => i !== id); showToast('Dihapus dari favorit','success'); }
   else { saved.push(id); showToast('Ditambahkan ke favorit ❤️','success'); }
-  localStorage.setItem(key, JSON.stringify(saved));
+  localStorage.setItem('GB_FAV_' + userKey(), JSON.stringify(saved));
   renderGallery();
   if(STATE.isFavMode) filterFavorit();
 }
 
+// ============================================================
+// PREVIEW KARYA
+// ============================================================
 function bukaPreview(idx){
   const item = STATE.all[idx];
   if(!item) return;
@@ -966,11 +1097,8 @@ function bukaPreview(idx){
     frame.src = URL.createObjectURL(blob);
   } else if(link){
     let url = link;
-    if(url.includes('drive.google')) url = url.replace('/view', '/preview');
-    if(url.includes('youtu')){
-      const y = getYoutubeId(url);
-      if(y) url = `https://www.youtube.com/embed/${y}?autoplay=1`;
-    }
+    if(url.includes('drive.google')) url = url.replace('/view','/preview');
+    if(url.includes('youtu')){ const y = getYoutubeId(url); if(y) url = `https://www.youtube.com/embed/${y}?autoplay=1`; }
     frame.src = url;
   }
 }
@@ -985,66 +1113,33 @@ function toggleFullscreen(){
   else DOM.previewOverlay.requestFullscreen();
 }
 
-function handleAuth(){ if(STATE.user.role === 'GUEST') openLogin(); else switchView('DASHBOARD'); }
+// ============================================================
+// NAVIGASI & AUTH UI
+// ============================================================
+function handleAuth(){ if(isGuest()) openLogin(); else switchView('DASHBOARD'); }
 function openLogin(){
   DOM.loginOverlay.classList.add('open');
-  DOM.pinInput.value = '';
+  DOM.loginEmail.value = '';
+  DOM.loginPin.value = '';
   DOM.loginError.style.display = 'none';
-  setTimeout(() => DOM.pinInput.focus(), 250);
+  setTimeout(() => DOM.loginEmail.focus(), 250);
 }
 function closeLogin(){ DOM.loginOverlay.classList.remove('open'); }
 
-async function doLogin(){
-  const pin = DOM.pinInput.value.trim();
-  if(!pin){ DOM.loginError.textContent = 'Masukkan PIN terlebih dahulu'; DOM.loginError.style.display = 'block'; return; }
-  DOM.loginBtn.disabled = true;
-  DOM.loginBtn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>';
-  try {
-    const { data, error } = await supabaseClient.from('users').select('*').eq('PIN', pin).maybeSingle();
-    if(error || !data){ DOM.loginError.textContent = 'PIN salah atau tidak terdaftar'; DOM.loginError.style.display = 'block'; return; }
-    STATE.user = {
-      name: data['Nama Guru'] || 'Tanpa Nama',
-      school: data['Nama Sekolah'] || '-',
-      role: (data['Role'] || 'GURU').toUpperCase().trim()
-    };
-    localStorage.setItem('gbUser', JSON.stringify(STATE.user));
-    closeLogin();
-    updateAuthUI();
-    switchView('DASHBOARD');
-    showToast(`Selamat datang, ${STATE.user.name}! 🎉`, 'success');
-  } catch(e){
-    DOM.loginError.textContent = 'Terjadi kesalahan: ' + e.message;
-    DOM.loginError.style.display = 'block';
-  } finally {
-    DOM.loginBtn.disabled = false;
-    DOM.loginBtn.innerHTML = '<i data-lucide="log-in"></i> Masuk';
-    lucide.createIcons();
-  }
-}
-document.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && DOM.loginOverlay.classList.contains('open')) doLogin();
-  if(e.key === 'Escape'){ closePreview(); closeLogin(); closeUpload(); closeCard(); closeSidebar(); }
-});
-
-function logout(){
-  localStorage.removeItem('gbUser');
-  STATE.user = { name:'Tamu', role:'GUEST', school:'-' };
-  updateAuthUI();
-  switchView('GALERI');
-  showToast('Berhasil keluar', 'success');
-}
-
 function updateAuthUI(){
-  const isGuest = STATE.user.role === 'GUEST';
-  DOM.navAuthBtn.classList.toggle('d-none', !isGuest);
-  DOM.navAvatar.classList.toggle('d-none', isGuest);
-  if(!isGuest) DOM.navAvatar.textContent = (STATE.user.name || 'U').charAt(0).toUpperCase();
-  DOM.fabBtn.classList.toggle('d-none', isGuest);
-  DOM.sbGuest.classList.toggle('d-none', !isGuest);
-  DOM.sbUser.classList.toggle('d-none', isGuest);
-  DOM.sbUserItems.classList.toggle('d-none', isGuest);
-  DOM.sbGuestItems.classList.toggle('d-none', !isGuest);
-  if(!isGuest){ DOM.sbName.textContent = STATE.user.name; DOM.sbSchool.textContent = STATE.user.school; }
+  const guest = isGuest();
+  DOM.navAuthBtn.classList.toggle('d-none', !guest);
+  DOM.navAvatar.classList.toggle('d-none', guest);
+  if(!guest) DOM.navAvatar.textContent = (STATE.user.nama || 'U').charAt(0).toUpperCase();
+  DOM.fabBtn.classList.toggle('d-none', guest);
+  DOM.sbGuest.classList.toggle('d-none', !guest);
+  DOM.sbUser.classList.toggle('d-none', guest);
+  DOM.sbUserItems.classList.toggle('d-none', guest);
+  DOM.sbGuestItems.classList.toggle('d-none', !guest);
+  if(!guest){
+    DOM.sbName.textContent = STATE.user.nama;
+    DOM.sbSchool.textContent = STATE.user.sekolah;
+  }
 }
 
 function switchView(view){
@@ -1057,11 +1152,13 @@ function switchView(view){
 }
 
 function renderDashboard(){
+  if (isGuest()) return;
   const user = STATE.user;
-  DOM.dashName.textContent = user.name || 'Guru';
-  DOM.dashSchool.textContent = user.school || '-';
-  DOM.dashAvatar.textContent = (user.name || 'U').charAt(0).toUpperCase();
-  const myWorks = STATE.all.filter(i => (i[1] || '').trim().toLowerCase() === (user.name || '').trim().toLowerCase());
+  DOM.dashName.textContent = user.nama;
+  DOM.dashSchool.textContent = user.sekolah + (user.jabatan ? ' • ' + user.jabatan : '');
+  DOM.dashAvatar.textContent = (user.nama || 'U').charAt(0).toUpperCase();
+  // Cocokkan karya lama berdasarkan nama (kompatibel data existing)
+  const myWorks = STATE.all.filter(i => (i[1] || '').trim().toLowerCase() === (user.nama || '').trim().toLowerCase());
   DOM.dashTotal.textContent = myWorks.length;
   DOM.dashViews.textContent = myWorks.reduce((a, c) => a + (parseInt(c[14]) || 0), 0);
   const lvl = getLevelInfo(myWorks.length);
@@ -1107,7 +1204,11 @@ function getLevelInfo(count){
   return { name:'PEMULA 🌱', color:'#64748b', quote:'Teruslah berkarya untuk bangsa.' };
 }
 
+// ============================================================
+// UPLOAD / EDIT / HAPUS KARYA
+// ============================================================
 function openUploadModal(){
+  if (isGuest()) { openLogin(); return; }
   DOM.formMode.value = 'ADD';
   DOM.editRowId.value = '';
   DOM.uploadTitle.textContent = 'Bagikan Karya';
@@ -1156,12 +1257,10 @@ function setSource(type){
   DOM.groupHtml.classList.toggle('d-none', type !== 'HTML');
   updateLivePreview();
 }
-
 function toggleKaih(){
   DOM.kaihToggle.classList.toggle('on');
   DOM.inKaihType.classList.toggle('d-none', !DOM.kaihToggle.classList.contains('on'));
 }
-
 function checkOther(selectId, inputId, value){
   document.getElementById(inputId).classList.toggle('d-none', value !== 'LAINNYA');
 }
@@ -1199,6 +1298,9 @@ function updateLivePreview(){
 }
 
 async function saveKarya(){
+  // SSO: wajib login + token valid (aksi penting)
+  if (!(await ensureValid())) return;
+
   const judul = DOM.inJudul.value.trim();
   if(!judul){ showToast('Judul karya tidak boleh kosong', 'error'); return; }
   const mapel = DOM.inMapel.value === 'LAINNYA' ? DOM.manMapel.value : DOM.inMapel.value;
@@ -1211,12 +1313,14 @@ async function saveKarya(){
   if(STATE.sourceType === 'STORY') linkLuar = DOM.inLinkStory.value;
   else if(STATE.sourceType === 'HTML') kodeHtml = DOM.inHtml.value;
   else linkLuar = DOM.inLink.value;
+
   DOM.saveBtn.disabled = true;
   DOM.saveBtn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div>';
   const rowData = {
     'Timestamp': new Date().toISOString(),
-    'Nama Guru': STATE.user.name,
-    'Nama Sekolah': STATE.user.school,
+    // Identitas pemilik: pakai nama dari profile SSO (kompatibel data lama)
+    'Nama Guru': STATE.user.nama,
+    'Nama Sekolah': STATE.user.sekolah,
     'Fase/Kelas': DOM.inFase.value,
     'Semester': DOM.inSem.value,
     'Judul Media': judul,
@@ -1253,6 +1357,7 @@ async function saveKarya(){
 }
 
 async function hapusKarya(idx){
+  if (!(await ensureValid())) return;
   const item = STATE.all[idx];
   if(!item) return;
   if(!confirm(`Hapus karya "${item[5]}"?`)) return;
@@ -1265,13 +1370,17 @@ async function hapusKarya(idx){
   } catch(e){ showToast('Gagal menghapus: ' + e.message, 'error'); }
 }
 
+// ============================================================
+// KARTU CREATOR
+// ============================================================
 function openCardModal(){
-  const myWorks = STATE.all.filter(i => (i[1] || '').trim().toLowerCase() === (STATE.user.name || '').trim().toLowerCase());
+  if (isGuest()) return;
+  const myWorks = STATE.all.filter(i => (i[1] || '').trim().toLowerCase() === (STATE.user.nama || '').trim().toLowerCase());
   const lvl = getLevelInfo(myWorks.length);
   const totalViews = myWorks.reduce((a, c) => a + (parseInt(c[14]) || 0), 0);
-  DOM.ccAvatar.textContent = (STATE.user.name || 'U').charAt(0).toUpperCase();
-  DOM.ccName.textContent = STATE.user.name;
-  DOM.ccSchool.textContent = STATE.user.school;
+  DOM.ccAvatar.textContent = (STATE.user.nama || 'U').charAt(0).toUpperCase();
+  DOM.ccName.textContent = STATE.user.nama;
+  DOM.ccSchool.textContent = STATE.user.sekolah;
   DOM.ccLevel.textContent = lvl.name;
   DOM.ccKarya.textContent = myWorks.length;
   DOM.ccViews.textContent = totalViews;
@@ -1283,7 +1392,7 @@ function closeCard(){ DOM.cardOverlay.classList.remove('open'); }
 function downloadCard(){
   html2canvas(DOM.creatorCard, { scale: 3, useCORS: true }).then(canvas => {
     const link = document.createElement('a');
-    link.download = 'Kartu_Creator_' + (STATE.user.name || 'Guru').replace(/\s+/g, '_') + '.png';
+    link.download = 'Kartu_Creator_' + (STATE.user.nama || 'Guru').replace(/\s+/g, '_') + '.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
     showToast('Kartu berhasil disimpan! 📸', 'success');
@@ -1323,6 +1432,10 @@ function showToast(msg, type = 'success'){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => DOM.toast.classList.remove('show'), 2800);
 }
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){ closePreview(); closeLogin(); closeUpload(); closeCard(); closeSidebar(); }
+});
 </script>
 </body>
 </html>
