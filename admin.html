@@ -17,6 +17,7 @@
   .inp:focus{box-shadow:0 0 0 3px rgba(5,150,105,.15);border-color:#10b981}
   .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem}
   .acc-bg{background-color:#059669}.acc-soft{background-color:#d1fae5}.acc-text{color:#059669}
+  @keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin .8s linear infinite}
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -38,7 +39,7 @@
 </div>
 
 <div id="scrLoading" class="hidden fixed inset-0 z-[100] bg-slate-100 items-center justify-center flex-col gap-3">
-  <div class="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full" style="animation:spin .8s linear infinite"></div>
+  <div class="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full spin"></div>
   <p class="text-sm font-bold text-slate-500">Memulihkan sesi…</p>
 </div>
 
@@ -52,7 +53,7 @@
   <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
     <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
     <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
-      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.5</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.6</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
       <nav class="space-y-1.5" id="navMobile"></nav>
       <p id="drawerEmail" class="mt-auto pt-4 text-[11px] font-bold text-slate-500 truncate border-t border-slate-100">—</p>
       <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
@@ -60,7 +61,7 @@
   </div>
 
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white md:min-h-screen md:sticky md:top-0">
-    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.5</p></div></div>
+    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.6</p></div></div>
     <nav class="flex flex-col gap-1 px-3" id="navDesktop"></nav>
     <div class="mt-auto p-5"><p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p><button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button></div>
   </aside>
@@ -115,7 +116,7 @@
     <section id="sec-notif" class="hidden space-y-4">
       <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman</p>
         <div class="grid md:grid-cols-2 gap-3"><div><label class="lbl">Judul</label><input id="iNotJudul" class="inp"></div>
-          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣</option><option value="info">📢</option><option value="gamifikasi">🏆</option><option value="sistem">✨</option></select></div><div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div></div></div>
+          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣 Pengumuman</option><option value="info">📢 Info</option><option value="gamifikasi">🏆 Gamifikasi</option><option value="sistem">✨ Sistem</option></select></div><div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div></div></div>
         <div><label class="lbl">Pesan</label><textarea id="iNotPesan" rows="2" class="inp"></textarea></div>
         <button onclick="addNotif()" class="acc-bg text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> Kirim</button></div>
       <div id="notList" class="space-y-2"></div>
@@ -146,8 +147,7 @@
     </section>
 
     <section id="sec-inspirasi" class="hidden space-y-4">
-      <div class="flex items-center justify-between"><p class="text-sm font-extrabold text-slate-700">Inspirasi Guru <span class="text-[10px] text-slate-400">(post-moderation: reaktif)</span></p>
-        <button onclick="purgeInspirasi()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge kadaluarsa</button></div>
+      <div class="flex items-center justify-between"><p class="text-sm font-extrabold text-slate-700">Moderasi Inspirasi</p><button onclick="purgeInspirasi()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge kadaluarsa</button></div>
       <div id="inspList" class="space-y-2"></div>
     </section>
   </main>
@@ -169,6 +169,19 @@
   </div>
 </div>
 
+<!-- CUSTOM CONFIRM -->
+<div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
+  <div class="w-full max-w-xs bg-white rounded-3xl p-6 text-center">
+    <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
+    <p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin?</p>
+    <p id="cfMsg" class="text-xs text-slate-500 mt-1">…</p>
+    <div class="grid grid-cols-2 gap-2 mt-5">
+      <button onclick="cfCancel()" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button>
+      <button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 backdrop-blur border border-white/10 shadow-2xl rounded-2xl pl-3 pr-5 py-3"><span id="toastIconWrap" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white">…</p></div></div>
 
 <script>
@@ -182,6 +195,10 @@ const TABS=[['dash','bar-chart-3','Dashboard'],['menu','layout-grid','Menu'],['i
 function icons(){lucide.createIcons();}
 function esc(s){return (s||'').replace(/</g,'&lt;');}
 function toast(m,type){type=type||'success';const ic={success:'check',error:'triangle-alert',info:'info'}[type]||'check';$('toastMsg').textContent=m;$('toastIcon').setAttribute('data-lucide',ic);icons();const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);}
+let cfCb=null;
+function confirmDialog(msg,onOk,title,okLabel){$('cfMsg').textContent=msg;$('cfTitle').textContent=title||'Yakin?';$('cfOk').textContent=okLabel||'Hapus';cfCb=onOk;const m=$('mConfirm');m.classList.remove('hidden');m.classList.add('flex');icons();}
+function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classList.remove('flex');cfCb=null;}
+$('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 function buildNav(){const h=TABS.map(([t,i,l],x)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold ${x===0?'acc-soft acc-text':'text-slate-500 hover:bg-slate-50'}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');$('navMobile').innerHTML=h;$('navDesktop').innerHTML=h;}
 function openDrawer(){$('drawer').classList.remove('hidden');$('drawerEmail').textContent=$('adminEmail').textContent;requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));}
 function closeDrawer(){$('drawerSheet').classList.add('-translate-x-full');setTimeout(()=>$('drawer').classList.add('hidden'),300);}
@@ -191,7 +208,7 @@ function exportCSV(name,rows){if(!rows||!rows.length)return toast('Tidak ada dat
 $('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('loginErr').classList.add('hidden');const {error}=await sb.auth.signInWithPassword({email:$('inEmail').value.trim(),password:$('inPass').value});if(error){$('loginErr').textContent='❌ '+error.message;$('loginErr').classList.remove('hidden');return;}init();});
 async function init(){const {data:{session}}=await sb.auth.getSession();if(!session){icons();return;}const {data:isAdmin}=await sb.rpc('creative_is_admin');if(!isAdmin){toast('Akun ini bukan admin','error');await sb.auth.signOut();return;}$('adminEmail').textContent=session.user.email;$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}
 sb.auth.onAuthStateChange((ev,ses)=>{if(ev==='SIGNED_IN'&&ses){init();}if(ev==='SIGNED_OUT'){$('scrApp').classList.add('hidden');$('scrLogin').classList.remove('hidden');}});
-(async function boot(){ $('scrLoading').classList.remove('hidden');$('scrLoading').classList.add('flex'); const {data:{session}}=await sb.auth.getSession(); if(session){const {data:isAdmin}=await sb.rpc('creative_is_admin'); if(isAdmin){$('adminEmail').textContent=session.user.email;$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}} $('scrLoading').classList.add('hidden'); icons(); })();
+(async function boot(){$('scrLoading').classList.remove('hidden');$('scrLoading').classList.add('flex');const {data:{session}}=await sb.auth.getSession();if(session){const {data:isAdmin}=await sb.rpc('creative_is_admin');if(isAdmin){$('adminEmail').textContent=session.user.email;$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}}$('scrLoading').classList.add('hidden');icons();})();
 async function doLogout(){await sb.auth.signOut();location.reload();}
 
 async function loadAll(){
@@ -219,7 +236,8 @@ function renderDash(){
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
-  const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));return d;});
+  // Chart: normalisasi batas hari agar bar terisi penuh 00:00-24:00
+  const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(6-i));return d;});
   const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);return STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
   const max=Math.max(...counts,1);
   $('chartLogin').innerHTML=days.map((d,i)=>`<div class="flex-1 flex flex-col items-center gap-1"><div class="w-full bg-emerald-500 rounded-t-lg" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px"></div><span class="text-[9px] font-bold text-slate-400">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'][d.getDay()]}</span></div>`).join('');
@@ -228,8 +246,9 @@ function renderDash(){
   const league={};STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);if(g){const s=g.satuan_pendidikan||'—';league[s]=(league[s]||0)+1;}});
   $('leagueList').innerHTML=Object.entries(league).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([s,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s)}</span><span class="text-xs font-black text-slate-400">${c}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
   $('actList').innerHTML=STATE.log.slice(0,12).map(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu'}[l.aksi]||l.aksi;const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0"><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span><span class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-  $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈','🥉'][i]||'🌱'}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈',''][i]||''}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
 }
+async function purgeLog(){confirmDialog('Hapus log aktivitas >90 hari? Tindakan tidak dapat dibatalkan.',async()=>{const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast((data||0)+' log dipurge');loadAll();},'Purge Log?','Purge');}
 
 function guestVisible(m){if(!m.is_active||m.tampil_di==='off')return false;const r=m.akses_role;return (r==='tamu'||r==='all'||r==='');}
 function renderMenus(){const f=($('mSearch').value||'').toLowerCase();
@@ -242,7 +261,7 @@ function openMenuEditor(id){STATE.editMenuId=id||null;$('eTitle').textContent=id
 function closeMenu(){$('mMenu').classList.add('hidden');$('mMenu').classList.remove('flex');}
 async function reloadMenus(){const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];renderMenus();}
 async function saveMenu(){const row={judul:$('eJudul').value.trim(),deskripsi:$('eDesk').value.trim(),url:$('eUrl').value.trim(),icon:$('eIcon').value.trim()||'app-window',warna:$('eWarna').value,kategori:$('eKategori').value,sub_menu_dari:$('eParent').value,tampil_di:$('eTampil').value,ukuran:$('eUkuran').value,akses_role:$('eRole').value,cara_buka:$('eBuka').value,label:$('eLabel').value.trim(),sort_order:parseInt($('eSort').value)||0,is_active:$('eActive').checked};if(!row.judul)return toast('Judul wajib','error');const q=STATE.editMenuId?sb.from('creative_menus').update(row).eq('id',STATE.editMenuId):sb.from('creative_menus').insert(row);const {error}=await q;if(error)return toast(error.message,'error');toast('Menu tersimpan');closeMenu();await reloadMenus();}
-async function delMenu(){if(!confirm('Hapus menu?'))return;const {error}=await sb.from('creative_menus').delete().eq('id',STATE.editMenuId);if(error)return toast(error.message,'error');toast('Menu dihapus');closeMenu();await reloadMenus();}
+function delMenu(){confirmDialog('Hapus menu ini? Tindakan tidak dapat dibatalkan.',async()=>{const {error}=await sb.from('creative_menus').delete().eq('id',STATE.editMenuId);if(error)return toast(error.message,'error');toast('Menu dihapus');closeMenu();await reloadMenus();},'Hapus Menu?','Hapus');}
 
 function fillInfo(){const c=STATE.config;if(!c)return;$('iBanStatus').value=c.banner_status;$('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;$('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;$('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;$('iPopGambar').value=c.pop_gambar||'';$('iVersi').value=c.versi;}
 async function saveInfo(){const row={banner_status:$('iBanStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,pop_status:$('iPopStatus').value,pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,pop_gambar:$('iPopGambar').value,versi:$('iVersi').value,updated_at:new Date().toISOString()};const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);if(error)return toast(error.message,'error');toast('Pengaturan tersimpan & live');}
@@ -250,25 +269,24 @@ async function saveInfo(){const row={banner_status:$('iBanStatus').value,banner_
 async function reloadNotif(){const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();}
 async function addNotif(){const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_notifications').insert(row);if(error)return toast(error.message,'error');$('iNotJudul').value='';$('iNotPesan').value='';toast('Pengumuman terkirim');await reloadNotif();}
 async function toggleNotif(id,act){await sb.from('creative_notifications').update({is_active:act}).eq('id',id);await reloadNotif();}
-async function delNotif(id){if(!confirm('Hapus?'))return;await sb.from('creative_notifications').delete().eq('id',id);await reloadNotif();}
+function delNotif(id){confirmDialog('Hapus notifikasi ini?',async()=>{await sb.from('creative_notifications').delete().eq('id',id);await reloadNotif();toast('Notifikasi dihapus');},'Hapus Notifikasi?','Hapus');}
 function renderNotif(){$('notList').innerHTML=STATE.notifs.map(n=>`<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}"><span class="text-xl">${{info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢'}</span><div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div><button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${n.is_active?'AKTIF':'OFF'}</button><button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
 
 async function reloadFooter(){const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();}
 async function addFooter(){const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_footers').insert(row);if(error)return toast(error.message,'error');$('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';toast('Footer ditambah');await reloadFooter();}
 async function toggleFooter(id,act){await sb.from('creative_footers').update({is_active:act}).eq('id',id);await reloadFooter();}
-async function delFooter(id){if(!confirm('Hapus?'))return;await sb.from('creative_footers').delete().eq('id',id);await reloadFooter();}
+function delFooter(id){confirmDialog('Hapus link footer ini?',async()=>{await sb.from('creative_footers').delete().eq('id',id);await reloadFooter();toast('Footer dihapus');},'Hapus Footer?','Hapus');}
 function renderFooter(){$('footList').innerHTML=STATE.footer.map(f=>`<div class="card p-4 flex items-center gap-3 ${f.is_active===false?'opacity-50':''}"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800">${esc(f.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(f.url)}</p></div><button onclick="toggleFooter(${f.id},${f.is_active===false})" class="text-[10px] font-black px-3 py-2 rounded-lg ${f.is_active===false?'bg-slate-100 text-slate-500':'acc-soft acc-text'}">${f.is_active===false?'OFF':'AKTIF'}</button><button onclick="delFooter(${f.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
 
-let qBuffer=[];
 function parseCSVLine(line,delim){const out=[];let cur='';let inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(inQ){if(ch=='"'){if(line[i+1]=='"'){cur+='"';i++;}else inQ=false;}else cur+=ch;}else{if(ch=='"')inQ=true;else if(ch==delim){out.push(cur);cur='';}else cur+=ch;}}out.push(cur);return out;}
 function detectDelim(l){const c=['\t','|',';',','];let b=null,n=0;for(const d of c){const x=l.split(d).length-1;if(x>n){n=x;b=d;}}return b;}
 function parseQuotesText(t){const rows=[];t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(line=>{if(/kutipan/i.test(line)&&/tokoh/i.test(line))return;const d=detectDelim(line);let k=line,tok='';if(d){const p=parseCSVLine(line,d).map(s=>s.trim());k=p[0]||'';tok=p.slice(1).join(' ').trim();}if(k)rows.push({kutipan:k,tokoh:tok||'Anonim'});});return rows;}
 function bacaFileQuotes(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{$('qPaste').value=rd.result;$('qPaste').classList.remove('hidden');pratinjauQuotes();};rd.readAsText(f);ev.target.value='';}
-function pratinjauQuotes(){qBuffer=parseQuotesText($('qPaste').value);$('qPrevInfo').textContent=qBuffer.length?`✅ ${qBuffer.length} siap`:'⚠️ kosong';$('qImportBtn').classList.toggle('hidden',!qBuffer.length);}
-async function imporQuotes(){if(!qBuffer.length)return;const {error}=await sb.from('creative_quotes').insert(qBuffer);if(error)return toast(error.message,'error');toast(qBuffer.length+' quote diimpor');qBuffer=[];$('qPaste').value='';$('qPaste').classList.add('hidden');$('qImportBtn').classList.add('hidden');await reloadQuotes();}
+function pratinjauQuotes(){const b=parseQuotesText($('qPaste').value);window._qbuf=b;$('qPrevInfo').textContent=b.length?`✅ ${b.length} siap`:'⚠️ kosong';$('qImportBtn').classList.toggle('hidden',!b.length);}
+async function imporQuotes(){const b=window._qbuf||[];if(!b.length)return;const {error}=await sb.from('creative_quotes').insert(b);if(error)return toast(error.message,'error');toast(b.length+' quote diimpor');window._qbuf=[];$('qPaste').value='';$('qPaste').classList.add('hidden');$('qImportBtn').classList.add('hidden');await reloadQuotes();}
 async function reloadQuotes(){const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();}
 async function addQuote(){const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};if(!row.kutipan)return toast('Kutipan wajib','error');const {error}=await sb.from('creative_quotes').insert(row);if(error)return toast(error.message,'error');$('iQuoteText').value='';$('iQuoteAuthor').value='';toast('Quote ditambah');await reloadQuotes();}
-async function delQuote(id){if(!confirm('Hapus?'))return;await sb.from('creative_quotes').delete().eq('id',id);await reloadQuotes();}
+function delQuote(id){confirmDialog('Hapus quote ini?',async()=>{await sb.from('creative_quotes').delete().eq('id',id);await reloadQuotes();toast('Quote dihapus');},'Hapus Quote?','Hapus');}
 function renderQuotes(){$('qCount').textContent=STATE.quotes.length;$('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`<div class="card p-4 flex items-center gap-3"><div class="flex-1 min-w-0"><p class="text-xs italic text-slate-600">"${esc(q.kutipan)}"</p><p class="text-[10px] font-bold text-slate-400 mt-1">— ${esc(q.tokoh)}</p></div><button onclick="delQuote(${q.id})" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>`).join('');icons();}
 
 async function setFbStatus(id,st){const {error}=await sb.from('creative_feedback').update({status:st}).eq('id',id);if(error)return toast(error.message,'error');const {data}=await sb.from('creative_feedback').select('*').order('created_at',{ascending:false});STATE.fb=data||[];renderFb();renderDash();toast('Status diperbarui');}
@@ -281,10 +299,9 @@ function renderGuru(){const q=($('gSearch').value||'').toLowerCase();const list=
 $('gSearch').addEventListener('input',renderGuru);
 
 async function toggleInsp(id,st){await sb.from('creative_inspirasi').update({status:st}).eq('id',id);const {data}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=data||[];renderInspirasi();toast('Status inspirasi diperbarui');}
-async function delInsp(id){if(!confirm('Hapus inspirasi?'))return;await sb.from('creative_inspirasi').delete().eq('id',id);const {data}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=data||[];renderInspirasi();toast('Inspirasi dihapus');}
-async function purgeInspirasi(){if(!confirm('Purge inspirasi kadaluarsa (<10 like & >30 hari) + tersembunyi?'))return;const {data}=await sb.rpc('creative_admin_purge_inspirasi',{p_hari:30});toast(data+' inspirasi dipurge');const {data:d2}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=d2||[];renderInspirasi();}
-async function purgeLog(){if(!confirm('Purge log aktivitas >90 hari?'))return;const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast(data+' log dipurge');}
-function renderInspirasi(){$('inspList').innerHTML=STATE.inspi.map(n=>`<div class="card p-4 space-y-2 ${n.status!=='aktif'?'opacity-50':''}"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-400">${esc(n.nama)} · ${new Date(n.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</span><span class="ml-auto text-[10px] font-black text-amber-500">❤ ${n.likes||0}</span></div><p class="text-[13px] text-slate-700">${esc(n.isi)}</p><div class="flex gap-2"><button onclick="toggleInsp(${n.id},'${n.status==='aktif'?'disembunyikan':'aktif'}')" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.status==='aktif'?'bg-slate-100 text-slate-500':'acc-soft acc-text'}">${n.status==='aktif'?'SEMBUNYIKAN':'TAYANGKAN'}</button><button onclick="delInsp(${n.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Belum ada inspirasi.</p>';icons();}
+function delInsp(id){confirmDialog('Hapus inspirasi ini?',async()=>{await sb.from('creative_inspirasi').delete().eq('id',id);const {data}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=data||[];renderInspirasi();toast('Inspirasi dihapus');},'Hapus Inspirasi?','Hapus');}
+function purgeInspirasi(){confirmDialog('Purge inspirasi kadaluarsa (<10 like & >30 hari) + tersembunyi?',async()=>{const {data}=await sb.rpc('creative_admin_purge_inspirasi',{p_hari:30});toast((data||0)+' inspirasi dipurge');const {data:d2}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=d2||[];renderInspirasi();},'Purge Inspirasi?','Purge');}
+function renderInspirasi(){$('inspList').innerHTML=STATE.inspi.map(n=>`<div class="card p-4 space-y-2 ${n.status!=='aktif'?'opacity-50':''}"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-400">${esc(n.nama)} · ${new Date(n.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</span><span class="ml-auto text-[10px] font-black text-rose-500 flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3 fill-current"></i>${n.likes||0}</span></div><p class="text-[13px] text-slate-700">${esc(n.isi)}</p><div class="flex gap-2"><button onclick="toggleInsp(${n.id},'${n.status==='aktif'?'disembunyikan':'aktif'}')" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.status==='aktif'?'bg-slate-100 text-slate-500':'acc-soft acc-text'}">${n.status==='aktif'?'SEMBUNYIKAN':'TAYANGKAN'}</button><button onclick="delInsp(${n.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Belum ada inspirasi.</p>';icons();}
 </script>
 </body>
 </html>
