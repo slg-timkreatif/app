@@ -32,7 +32,7 @@
     <form id="formLogin" class="bg-white rounded-3xl p-6 space-y-4 shadow-xl">
       <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
       <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp" placeholder="••••••••"></div>
-      <button class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock" class="w-4 h-4"></i> Masuk Dashboard</button>
+      <button class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard</button>
       <p id="loginErr" class="hidden text-xs font-bold text-rose-500 text-center"></p>
     </form>
   </div>
@@ -53,7 +53,7 @@
   <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
     <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
     <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
-      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.8</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.9</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
       <nav class="space-y-1.5" id="navMobile"></nav>
       <p id="drawerEmail" class="mt-auto pt-4 text-[11px] font-bold text-slate-500 truncate border-t border-slate-100">—</p>
       <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
@@ -61,7 +61,7 @@
   </div>
 
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white md:min-h-screen md:sticky md:top-0">
-    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.8</p></div></div>
+    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.9</p></div></div>
     <nav class="flex flex-col gap-1 px-3" id="navDesktop"></nav>
     <div class="mt-auto p-5"><p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p><button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button></div>
   </aside>
@@ -87,8 +87,8 @@
         <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">Menu Terpopuler</p><div id="topMenus" class="space-y-2 mt-4"></div></div>
       </div>
       <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah (aktivitas)</p><div id="leagueList" class="space-y-2 mt-3"></div></div>
-      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru</p><div id="actList" class="mt-3"></div></div>
-      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Leaderboard Pohon Ilmu</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru <span id="logCount" class="text-[10px] text-slate-400"></span></p><div id="actList" class="mt-3"></div><button id="logMore" onclick="loadMoreLog()" class="mt-2 w-full card p-2.5 text-[11px] font-bold text-slate-500">Muat Lebih Banyak</button></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">🏆 Leaderboard Pohon Ilmu</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div></div>
     </section>
 
     <section id="sec-menu" class="hidden space-y-4">
@@ -105,7 +105,7 @@
           <div><label class="lbl">Quotes</label><select id="iQuoteStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
         </div></div>
       <div class="grid lg:grid-cols-2 gap-4">
-        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner <span class="text-[10px] text-slate-400 font-bold">· rasio 4:3 (1200×900)</span></p>
+        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner <span class="text-[10px] text-slate-400 font-bold">· rasio 4:3</span></p>
           <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Hijau</option><option value="red">Merah</option></select></div><div><label class="lbl">Label Tombol</label><input id="iBanLabel" class="inp"></div></div>
           <div><label class="lbl">Pesan</label><textarea id="iBanPesan" rows="3" class="inp"></textarea></div>
           <div><label class="lbl">Link (awali ext: untuk luar)</label><input id="iBanLink" class="inp"></div>
@@ -120,7 +120,7 @@
     </section>
 
     <section id="sec-notif" class="hidden space-y-4">
-      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman <span class="text-[10px] text-slate-400 font-bold">· gambar info rasio 4:3 (800×600)</span></p>
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman <span class="text-[10px] text-slate-400 font-bold">· gambar rasio 4:3</span></p>
         <div class="grid md:grid-cols-2 gap-3"><div><label class="lbl">Judul</label><input id="iNotJudul" class="inp"></div>
           <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣 Pengumuman</option><option value="info">📢 Info</option><option value="gamifikasi">🏆 Gamifikasi</option><option value="sistem">✨ Sistem</option></select></div><div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div></div></div>
         <div><label class="lbl">Pesan</label><textarea id="iNotPesan" rows="2" class="inp"></textarea></div>
@@ -188,14 +188,14 @@
   </div>
 </div>
 
-<div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 backdrop-blur border border-white/10 shadow-2xl rounded-2xl pl-3 pr-5 py-3"><span id="toastIconWrap" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white">…</p></div></div>
+<div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 backdrop-blur border border-white/10 shadow-2xl rounded-2xl pl-3 pr-5 py-3"><span class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white">…</p></div></div>
 
 <script>
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const sb=window.supabase.createClient(SB_URL,SB_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
 const $=id=>document.getElementById(id);
-const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],gam:[],lead:[],inspi:[],config:null,editMenuId:null};
+const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,gam:[],lead:[],inspi:[],config:null,editMenuId:null};
 const COLOR={teal:'bg-teal-100 text-teal-600',orange:'bg-orange-100 text-orange-600',blue:'bg-blue-100 text-blue-600',green:'bg-green-100 text-green-600',rose:'bg-rose-100 text-rose-600',violet:'bg-violet-100 text-violet-600',fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',red:'bg-red-100 text-red-600',emerald:'bg-emerald-100 text-emerald-600',yellow:'bg-yellow-100 text-yellow-600'};
 const TABS=[['dash','layout-dashboard','Dashboard'],['menu','layout-grid','Menu'],['info','megaphone','Banner'],['notif','bell','Notifikasi'],['footer','link','Footer'],['quotes','quote','Quotes'],['fb','lightbulb','Saran'],['guru','users','Guru'],['inspirasi','share-2','Inspirasi']];
 function icons(){lucide.createIcons();}
@@ -226,14 +226,17 @@ async function loadAll(){
     sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),
     sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
     sb.from('creative_gamification').select('*').order('total_poin',{ascending:false}),
-    sb.from('creative_activity_log').select('*').order('created_at',{ascending:false}).limit(2000),
+    sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).limit(50),
     sb.rpc('creative_admin_list_guru'),
     sb.rpc('creative_leaderboard'),
     sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
   ]);
   STATE.menus=menus.data||[];STATE.footer=footer.data||[];STATE.quotes=quotes.data||[];STATE.notifs=notifs.data||[];STATE.fb=fb.data||[];STATE.config=cfg.data;STATE.gam=gam.data||[];STATE.log=log.data||[];STATE.guru=guru.data||[];STATE.lead=lead.data||[];STATE.inspi=inspi.data||[];
+  sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{STATE.logTotal=r.count||0;renderActCount();});
   renderDash();renderMenus();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();renderInspirasi();fillInfo();icons();
 }
+function renderActCount(){const el=$('logCount');if(el)el.textContent=`(${STATE.log.length} / ${STATE.logTotal||0})`;}
+async function loadMoreLog(){const from=STATE.log.length;const {data}=await sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).range(from,from+49);if(data&&data.length){STATE.log=STATE.log.concat(data);renderDash();}renderActCount();if(STATE.log.length>=(STATE.logTotal||0)){const b=$('logMore');if(b)b.style.display='none';}}
 
 function renderDash(){
   const today=new Date();today.setHours(0,0,0,0);const week=new Date();week.setDate(week.getDate()-7);
@@ -250,7 +253,8 @@ function renderDash(){
   $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
   const league={};STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);if(g){const s=g.satuan_pendidikan||'—';league[s]=(league[s]||0)+1;}});
   $('leagueList').innerHTML=Object.entries(league).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([s,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s)}</span><span class="text-xs font-black text-slate-400">${c}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-  $('actList').innerHTML=STATE.log.slice(0,12).map(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu'}[l.aksi]||l.aksi;const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0"><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span><span class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  $('actList').innerHTML=STATE.log.map(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu'}[l.aksi]||l.aksi;const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0"><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span><span class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  renderActCount();
   $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈',''][i]||''}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
 }
 function purgeLog(){confirmDialog('Hapus log aktivitas >90 hari? Tindakan tidak dapat dibatalkan.',async()=>{const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast((data||0)+' log dipurge');loadAll();},'Purge Log?','Purge');}
