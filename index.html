@@ -7,6 +7,20 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Ikon tab browser -->
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<!-- Thumbnail WA / share (Open Graph) -->
+<meta property="og:site_name" content="Guru Berbagi Selogiri">
+<meta property="og:title" content="Guru Berbagi Selogiri">
+<meta property="og:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri. Berkarya, berbagi, tumbuh bersama.">
+<meta property="og:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<meta property="og:url" content="https://slg-timkreatif.github.io/app/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guru Berbagi Selogiri">
+<meta name="twitter:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <title>Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -65,7 +79,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.18</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.19</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
@@ -207,7 +221,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.18</span></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.19</span></div>
           <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </div></div></div>
@@ -230,7 +244,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.18</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.19</span></p>
     </div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
@@ -480,7 +494,7 @@ function poinAksi(aksi){const gid=guruId();if(!gid)return;sb.rpc('creative_add_p
 
 async function ssoLogin(email,pin){const r=await fetch(SB_URL+'/functions/v1/login-guru',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON},body:JSON.stringify({email,pin})});if(!r.ok)throw new Error('Gagal');return await r.json();}
 async function ssoVerify(token){const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});return await r.json();}
-$('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('btnLogin').disabled=true;$('btnLogin').textContent='Memverifikasi…';try{const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));STATE.profile=res.profile;STATE.token=res.token;tutupPanel('pLogin');const gid=guruId();if(gid){const {data}=await sb.rpc('creative_update_gamification',{p_guru_id:gid});if(data){STATE.gam={...STATE.gam,...data};if(data.poin_added>0)setTimeout(()=>toast('+'+data.poin_added+' poin! Pohon Ilmu kamu tumbuh.'),600);}logAktivitas('login');const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}renderAuthUI();setSapaan();muatSemuaData();toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');}catch(err){toast('Email/PIN salah atau akun nonaktif','error');}$('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';});
+$('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('btnLogin').disabled=true;$('btnLogin').textContent='Memverifikasi…';try{const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));STATE.profile=res.profile;STATE.token=res.token;tutupPanel('pLogin');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}renderAuthUI();setSapaan();muatSemuaData(true);toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');}catch(err){toast('Email/PIN salah atau akun nonaktif','error');}$('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';});
 function doLogout(){localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');location.reload();}
 function renderAuthUI(){const on=!!STATE.profile;$('btnMasuk').classList.toggle('hidden',on);$('profGuest').classList.toggle('hidden',on);$('profData').classList.toggle('hidden',!on);$('authCard').classList.toggle('hidden',on);['quickBox','bellHdr','sideNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
   if(on){const p=STATE.profile;$('pfNama').textContent=p.nama||'—';$('pfJabatan').textContent=p.jabatan||'—';$('dJabatan').textContent=p.jabatan||'—';$('dSekolah').textContent=p.sekolah||'—';$('dNpsn').textContent=p.npsn||'—';$('dEmail').textContent=p.email||'—';const s=STATE.sosmed||{};$('smIg').value=s.ig||'';$('smTiktok').value=s.tiktok||'';$('smFb').value=s.fb||'';$('smYt').value=s.yt||'';
@@ -489,35 +503,51 @@ function renderAuthUI(){const on=!!STATE.profile;$('btnMasuk').classList.toggle(
 async function simpanSosmed(){const gid=guruId();if(!gid)return;const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});STATE.sosmed=clean;localStorage.setItem('gb_sosmed',JSON.stringify(clean));await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media tersimpan untuk watermark');}
 async function hapusSosmed(){const gid=guruId();if(!gid)return;STATE.sosmed={};localStorage.setItem('gb_sosmed','{}');await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media dihapus');}
 
+/* ===== CACHE-FIRST + SILENT REFRESH (v4.19) ===== */
+function readCache(){try{return JSON.parse(localStorage.getItem('gb_cache')||'null');}catch(e){return null;}}
+function renderFromCache(){const cache=readCache();if(!cache||!cache.d)return false;
+  applyPortal(cache.d);
+  if(cache.dyn){STATE.gam=cache.dyn.gam||null;STATE.notifs=cache.dyn.notifs||[];STATE.inspi=cache.dyn.inspi||[];
+    renderCarousel();renderNotif();renderInspirasi();if(CUR.view==='bagi')renderBagi();icons();}
+  return true;}
+async function silentRefresh(force){const now=Date.now();const cache=readCache();const cacheAge=cache?(now-cache.t):Infinity;
+  // portal version-gated (24 jam)
+  let serverVersi=null;try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
+  const cacheVersi=(cache&&cache.d&&cache.d.config)?cache.d.config.versi:null;
+  if(!cache||!cache.d||cacheAge>=86400000||(serverVersi&&serverVersi!==cacheVersi)){
+    const {data:pd}=await sb.rpc('creative_get_portal');
+    if(pd){try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:pd,dyn:cache?cache.dyn:null}));}catch(e){}applyPortal(pd);}
+  }
+  // data dinamis: refresh hanya jika force / tidak ada / cache > 5 menit
+  const dynStale=force||!cache||!cache.dyn||cacheAge>=300000;
+  if(dynStale){
+    const gid=guruId();
+    const [rGam,rNotif,rInsp]=await Promise.allSettled([
+      gid?sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
+      sb.from('creative_notifications').select('id,judul,pesan,tipe,gambar,scheduled_at,target_role').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(8),
+      sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order('created_at',{ascending:false}).limit(STATE.inspiLimit)
+    ]);
+    STATE.gam=(rGam.status==='fulfilled'?rGam.value:{data:null}).data;
+    const notifs=(rNotif.status==='fulfilled'?rNotif.value:{data:[]}).data||[];
+    const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');const myRole=isKS?'Kepala Sekolah':'Guru';
+    STATE.notifs=notifs.filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
+    STATE.inspi=(rInsp.status==='fulfilled'?rInsp.value:{data:[]}).data||[];
+    if(STATE.profile&&STATE.inspi.length){const g2=guruId();const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',g2).in('inspirasi_id',STATE.inspi.map(i=>i.id));STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));}else STATE.myLikes=new Set();
+    try{const c2=readCache();const d=(c2&&c2.d)?c2.d:null;localStorage.setItem('gb_cache',JSON.stringify({t:now,d:d,dyn:{gam:STATE.gam,notifs:STATE.notifs,inspi:STATE.inspi}}));}catch(e){}
+    renderCarousel();renderNotif();renderInspirasi();if(CUR.view==='bagi')renderBagi();icons();
+  }
+}
+async function muatSemuaData(force){const had=renderFromCache();if(!had){$('layananBody').innerHTML='<div class="grid grid-cols-2 gap-3">'+Array(6).fill('<div class="skeleton h-32"></div>').join('')+'</div>';}await silentRefresh(force);}
+
 (async function boot(){initPrefs();setThemeColor();initPWA();muatCuaca();icons();paintToggles();$('caroTrack').addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault());
-  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}renderAuthUI();setSapaan();muatSemuaData();})();
+  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}renderAuthUI();setSapaan();muatSemuaData(false);})();
 
 function applyPortal(p){STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];if(STATE.config){$('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;$('aboutVer').textContent='v'+STATE.config.versi;renderPopup();}
   const c=STATE.config||{};
   $('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
   renderCarousel();renderLayanan($('inSearch').value);renderQuick();renderFoot();gantiQuote();}
-async function muatSemuaData(){const now=Date.now();
-  // #1 Version-gated cache: fetch kecil utk cek versi; portal berat hanya jika versi berubah (cache 24 jam)
-  let portal=null;const cache=JSON.parse(localStorage.getItem('gb_cache')||'null');
-  let serverVersi=null;try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
-  const cacheVersi=(cache&&cache.d&&cache.d.config)?cache.d.config.versi:null;
-  if(cache&&cache.d&&(now-cache.t)<86400000&&serverVersi&&serverVersi===cacheVersi){portal=cache.d;}
-  else{const {data:pd}=await sb.rpc('creative_get_portal');portal=pd||{config:null,menus:[],quotes:[],footer:[]};try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:portal}));}catch(e){}}
-  applyPortal(portal);
-  // #2/#3 select kolom spesifik + lazy leaderboard
-  const gid=guruId();
-  const [rGam,rNotif]=await Promise.allSettled([
-    gid?sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
-    sb.from('creative_notifications').select('id,judul,pesan,tipe,gambar,scheduled_at,target_role').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(8)
-  ]);
-  const gam=rGam.status==='fulfilled'?rGam.value:{data:null};
-  const notifs=rNotif.status==='fulfilled'?rNotif.value:{data:[]};
-  STATE.gam=gam.data;
-  const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');const myRole=isKS?'Kepala Sekolah':'Guru';
-  STATE.notifs=(notifs.data||[]).filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
-  renderCarousel();fetchInspirasi();if(CUR.view==='bagi')renderBagi();renderNotif();icons();}
 function setSapaan(){const j=new Date().getHours();const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';$('txtSapaan').innerHTML=`${s}, <span class="font-extrabold bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--acc),var(--acc2))">${nama}</span>`;const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;}
 function renderPopup(){const c=STATE.config;if(!c||c.pop_status!=='ON'||popDismissed)return;let html;if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}else{const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';html=`<div class="bg-white dark:bg-slate-900"><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;}$('popContent').innerHTML=html;openModal('mPop');}
 function gantiQuote(){if(!STATE.quotes.length)return;const b=$('btnQuote');if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];STATE.quoteNow=q;$('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;}
