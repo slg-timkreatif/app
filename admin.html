@@ -53,7 +53,7 @@
   <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
     <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
     <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
-      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.9</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.10</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
       <nav class="space-y-1.5" id="navMobile"></nav>
       <p id="drawerEmail" class="mt-auto pt-4 text-[11px] font-bold text-slate-500 truncate border-t border-slate-100">—</p>
       <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
@@ -61,7 +61,7 @@
   </div>
 
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white md:min-h-screen md:sticky md:top-0">
-    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.9</p></div></div>
+    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.10</p></div></div>
     <nav class="flex flex-col gap-1 px-3" id="navDesktop"></nav>
     <div class="mt-auto p-5"><p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p><button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button></div>
   </aside>
@@ -82,11 +82,10 @@
         <button onclick="exportCSV('guru',STATE.guru)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i> Export Guru</button>
         <button onclick="purgeLog()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge Log &gt;90 hari</button>
       </div>
-      <div class="grid lg:grid-cols-3 gap-4">
-        <div class="card p-5 lg:col-span-2"><p class="text-sm font-extrabold text-slate-700">Aktivitas Login · 7 Hari</p><div id="chartLogin" class="flex items-end gap-2 h-40 mt-4"></div></div>
+      <div class="grid lg:grid-cols-2 gap-4">
         <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">Menu Terpopuler</p><div id="topMenus" class="space-y-2 mt-4"></div></div>
+        <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah (aktivitas)</p><div id="leagueList" class="space-y-2 mt-3"></div></div>
       </div>
-      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah (aktivitas)</p><div id="leagueList" class="space-y-2 mt-3"></div></div>
       <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru <span id="logCount" class="text-[10px] text-slate-400"></span></p><div id="actList" class="mt-3"></div><button id="logMore" onclick="loadMoreLog()" class="mt-2 w-full card p-2.5 text-[11px] font-bold text-slate-500">Muat Lebih Banyak</button></div>
       <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">🏆 Leaderboard Pohon Ilmu</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div></div>
     </section>
@@ -144,12 +143,13 @@
     </section>
 
     <section id="sec-fb" class="hidden space-y-4">
-      <select id="fbFilter" onchange="renderFb()" class="inp w-40"><option value="all">Semua</option><option value="baru">🔴 Baru</option><option value="diproses">🟡</option><option value="selesai">🟢</option></select>
+      <select id="fbFilter" onchange="renderFb()" class="inp w-44"><option value="all">Semua</option><option value="baru">🔴 Baru</option><option value="diproses">🟡 Diproses</option><option value="selesai">🟢 Selesai</option></select>
       <div id="fbList" class="space-y-2"></div>
     </section>
 
     <section id="sec-guru" class="hidden space-y-4">
       <div class="flex items-center gap-2"><input id="gSearch" type="text" placeholder="Cari nama / sekolah…" class="inp flex-1"><span class="text-xs font-bold text-slate-500"><span id="gCount">0</span> guru</span></div>
+      <p class="text-[11px] text-slate-400 flex items-center gap-1.5"><i data-lucide="info" class="w-3.5 h-3.5"></i> Akun terpusat di SSO — tabel ini hanya baca (read-only).</p>
       <div id="guruTable" class="card overflow-hidden"></div>
     </section>
 
@@ -245,10 +245,6 @@ function renderDash(){
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
-  const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(6-i));return d;});
-  const counts=days.map(d=>{const nx=new Date(d);nx.setDate(nx.getDate()+1);return STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=d&&new Date(l.created_at)<nx).length;});
-  const max=Math.max(...counts,1);
-  $('chartLogin').innerHTML=days.map((d,i)=>`<div class="flex-1 flex flex-col items-center gap-1"><div class="w-full bg-emerald-500 rounded-t-lg" style="height:${Math.round(counts[i]/max*100)}%;min-height:4px"></div><span class="text-[9px] font-bold text-slate-400">${['Min','Sen','Sel','Rab','Kam','Jum','Sab'][d.getDay()]}</span></div>`).join('');
   const cnt={};STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{const j=(l.detail||{}).judul;if(j)cnt[j]=(cnt[j]||0)+1;});
   $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
   const league={};STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);if(g){const s=g.satuan_pendidikan||'—';league[s]=(league[s]||0)+1;}});
@@ -302,12 +298,11 @@ function delQuote(id){confirmDialog('Hapus quote ini?',async()=>{await sb.from('
 function renderQuotes(){$('qCount').textContent=STATE.quotes.length;$('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`<div class="card p-4 flex items-center gap-3"><div class="flex-1 min-w-0"><p class="text-xs italic text-slate-600">"${esc(q.kutipan)}"</p><p class="text-[10px] font-bold text-slate-400 mt-1">— ${esc(q.tokoh)}</p></div><button onclick="delQuote(${q.id})" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>`).join('');icons();}
 
 async function setFbStatus(id,st){const {error}=await sb.from('creative_feedback').update({status:st}).eq('id',id);if(error)return toast(error.message,'error');const {data}=await sb.from('creative_feedback').select('*').order('created_at',{ascending:false});STATE.fb=data||[];renderFb();renderDash();toast('Status diperbarui');}
-function renderFb(){const f=$('fbFilter').value;$('fbList').innerHTML=STATE.fb.filter(x=>f==='all'||x.status===f).map(x=>`<div class="card p-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-[10px] font-black px-2 py-1 rounded-lg uppercase ${{Saran:'acc-soft acc-text',Bug:'bg-rose-50 text-rose-600',Pujian:'bg-amber-50 text-amber-600'}[x.tipe]||'bg-slate-100'}">${x.tipe}</span><span class="text-[10px] font-bold text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span><select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5"><option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option><option value="diproses" ${x.status==='diproses'?'selected':''}>🟡</option><option value="selesai" ${x.status==='selesai'?'selected':''}>🟢</option></select></div><p class="text-[13px] text-slate-700 mt-2">${esc(x.pesan)}</p></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada.</p>';icons();}
+function renderFb(){const f=$('fbFilter').value;$('fbList').innerHTML=STATE.fb.filter(x=>f==='all'||x.status===f).map(x=>`<div class="card p-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-[10px] font-black px-2 py-1 rounded-lg uppercase ${{Saran:'acc-soft acc-text',Bug:'bg-rose-50 text-rose-600',Pujian:'bg-amber-50 text-amber-600'}[x.tipe]||'bg-slate-100'}">${x.tipe}</span><span class="text-[10px] font-bold text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span><select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5"><option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option><option value="diproses" ${x.status==='diproses'?'selected':''}>🟡 Diproses</option><option value="selesai" ${x.status==='selesai'?'selected':''}>🟢 Selesai</option></select></div><p class="text-[13px] text-slate-700 mt-2">${esc(x.pesan)}</p></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada.</p>';icons();}
 
-async function resetPin(id){const pin=String(Math.floor(100000+Math.random()*900000));await sb.rpc('creative_admin_set_guru',{p_id:id,p_pin:pin});toast('PIN baru: '+pin);renderGuru();}
-async function toggleGuru(id,st){await sb.rpc('creative_admin_set_guru',{p_id:id,p_status:st});toast('Status diperbarui');renderGuru();}
+/* GURU: READ-ONLY (terpusat di SSO) */
 function renderGuru(){const q=($('gSearch').value||'').toLowerCase();const list=STATE.guru.filter(g=>(g.nama_lengkap||'').toLowerCase().includes(q)||(g.satuan_pendidikan||'').toLowerCase().includes(q));$('gCount').textContent=list.length;
-  $('guruTable').innerHTML=`<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b border-slate-100"><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Nama</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Sekolah</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Aksi</th></tr></thead><tbody>${list.map(g=>`<tr class="border-b border-slate-50"><td class="px-4 py-3"><p class="text-xs font-bold text-slate-700">${esc(g.nama_lengkap)}</p><p class="text-[10px] text-slate-400">${esc(g.email)}</p></td><td class="px-4 py-3 text-xs text-slate-500">${esc(g.satuan_pendidikan)}</td><td class="px-4 py-3"><span class="text-[9px] font-black px-2 py-1 rounded ${g.status_akun==='Aktif'?'acc-soft acc-text':'bg-slate-100 text-slate-400'}">${esc(g.status_akun||'Aktif')}</span></td><td class="px-4 py-3"><div class="flex gap-1"><button onclick="resetPin(${g.id})" title="Reset PIN" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center"><i data-lucide="key" class="w-3.5 h-3.5"></i></button><button onclick="toggleGuru(${g.id},'${g.status_akun==='Aktif'?'Non Aktif':'Aktif'}')" class="w-8 h-8 rounded-lg ${g.status_akun==='Aktif'?'bg-rose-50 text-rose-600':'acc-soft acc-text'} flex items-center justify-center"><i data-lucide="${g.status_akun==='Aktif'?'user-x':'user-check'}" class="w-3.5 h-3.5"></i></button></div></td></tr>`).join('')}</tbody></table></div>`;icons();}
+  $('guruTable').innerHTML=`<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b border-slate-100"><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Nama</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Sekolah</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th></tr></thead><tbody>${list.map(g=>`<tr class="border-b border-slate-50"><td class="px-4 py-3"><p class="text-xs font-bold text-slate-700">${esc(g.nama_lengkap)}</p><p class="text-[10px] text-slate-400">${esc(g.email)}</p></td><td class="px-4 py-3 text-xs text-slate-500">${esc(g.satuan_pendidikan)}</td><td class="px-4 py-3"><span class="text-[9px] font-black px-2 py-1 rounded ${g.status_akun==='Aktif'?'acc-soft acc-text':'bg-slate-100 text-slate-400'}">${esc(g.status_akun||'Aktif')}</span></td></tr>`).join('')}</tbody></table></div>`;icons();}
 $('gSearch').addEventListener('input',renderGuru);
 
 async function toggleInsp(id,st){await sb.from('creative_inspirasi').update({status:st}).eq('id',id);const {data}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=data||[];renderInspirasi();toast('Status inspirasi diperbarui');}
