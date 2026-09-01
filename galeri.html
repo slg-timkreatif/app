@@ -24,7 +24,6 @@ button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparen
 input,select,textarea{font-family:inherit}
 .d-none{display:none!important}
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-
 .navbar{position:fixed;top:0;left:0;right:0;height:60px;background:var(--surface);border-bottom:1px solid var(--border);z-index:100;display:flex;align-items:center;gap:12px;padding:0 16px}
 .brand{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
 .brand-icon{width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--onprimary)}
@@ -43,7 +42,6 @@ input,select,textarea{font-family:inherit}
 .icon-btn svg{width:19px;height:19px}
 .icon-sun{display:none}[data-theme="dark"] .icon-sun{display:block}[data-theme="dark"] .icon-moon{display:none}
 .avatar{width:36px;height:36px;border-radius:999px;background:var(--primary);color:var(--onprimary);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center;border:none}
-
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;border-radius:999px;font-weight:700;font-size:.85rem;padding:10px 20px;transition:all .15s var(--ease);white-space:nowrap}
 .btn:active{transform:scale(.97)}
 .btn svg{width:16px;height:16px}
@@ -52,28 +50,22 @@ input,select,textarea{font-family:inherit}
 .btn-outline{background:var(--surface);color:var(--t1);border:1px solid var(--border2)}
 .btn-outline:hover{background:var(--surface2)}
 .btn-danger-outline{background:var(--surface);color:var(--danger);border:1px solid var(--border2)}
-
 .container{max-width:1200px;margin:0 auto;padding:0 16px;min-width:0}
 @media(min-width:768px){.container{padding:0 24px}}
-
-/* Banner sambutan (statis, 0 egress) */
 .hero{background:var(--primarysoft);border:1px solid var(--border);border-radius:16px;padding:20px;margin:14px 0 16px}
 .hero h2{font-size:1.15rem;font-weight:800;color:var(--t1);margin-bottom:4px}
 .hero p{font-size:.85rem;color:var(--t2)}
 @media(min-width:768px){.hero{padding:28px}.hero h2{font-size:1.35rem}.hero p{font-size:.9rem}}
-
 .filter-bar{display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none;padding:12px 0;margin-bottom:12px;position:sticky;top:60px;background:var(--bg);z-index:50}
 .filter-bar::-webkit-scrollbar{display:none}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;border:1px solid var(--border2);background:var(--surface);font-size:.82rem;font-weight:700;color:var(--t2);white-space:nowrap;flex-shrink:0}
 .chip svg{width:14px;height:14px}
 .chip.active{background:var(--t1);color:var(--bg);border-color:var(--t1)}
 .filter-select{padding:8px 30px 8px 14px;border-radius:999px;border:1px solid var(--border2);background:var(--surface);font-size:.82rem;font-weight:700;color:var(--t2);appearance:none;flex-shrink:0;outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa0ad' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center}
-
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
 .stat b{display:block;font-size:1.3rem;font-weight:800;color:var(--primary)}
 .stat span{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.05em}
-
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-bottom:32px;min-width:0}
 .gallery-grid>*{min-width:0}
 .card-karya{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;min-width:0;max-width:100%;transition:border-color .15s}
@@ -106,14 +98,12 @@ input,select,textarea{font-family:inherit}
 .card-date{display:flex;align-items:center;gap:4px;font-size:.62rem;font-weight:700;color:var(--t3);white-space:nowrap;flex-shrink:0}
 .card-date svg{width:11px;height:11px}
 .card-date.is-new{color:var(--accent)}
-
 .skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .skeleton-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
 .sk-thumb{height:160px;background:var(--surface2)}
 .sk-body{padding:16px}
 .sk-line{height:12px;border-radius:6px;background:var(--surface2);margin-bottom:10px}
 .sk-line.w80{width:80%}.sk-line.w60{width:60%}
-
 .empty-state{text-align:center;padding:50px 20px;color:var(--t3);font-size:.875rem;display:none}
 .empty-state.show{display:block}
 .empty-state svg{width:36px;height:36px;margin:0 auto 10px;opacity:.4;display:block}
@@ -121,7 +111,6 @@ input,select,textarea{font-family:inherit}
 .scroll-sentinel{height:1px}
 .fab{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));right:20px;width:56px;height:56px;border-radius:16px;background:var(--primary);color:var(--onprimary);border:none;display:flex;align-items:center;justify-content:center;z-index:90}
 .fab svg{width:24px;height:24px}
-
 .overlay{position:fixed;inset:0;background:rgba(15,18,25,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
 .overlay.open{opacity:1;pointer-events:auto}
 .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-width:860px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
@@ -129,7 +118,6 @@ input,select,textarea{font-family:inherit}
 .modal-head h3{font-size:.95rem;font-weight:800}
 .modal-body{padding:20px;overflow-y:auto;flex:1}
 .modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
-
 .preview-overlay{position:fixed;inset:0;background:#000;z-index:300;display:none;flex-direction:column}
 .preview-overlay.open{display:flex}
 .preview-header{padding:10px 14px;background:#111;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -139,7 +127,6 @@ input,select,textarea{font-family:inherit}
 .btn-preview.close{border-color:rgba(239,68,68,.5);color:#fca5a5}
 .btn-preview svg{width:13px;height:13px}
 .preview-frame{flex:1;width:100%;border:none;background:#fff}
-
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .form-full{grid-column:1/-1}
 .form-group{display:flex;flex-direction:column;gap:6px}
@@ -164,7 +151,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
 .revisi-alert b{font-size:.8rem;color:#b45309;display:flex;align-items:center;gap:6px}
 .revisi-alert b svg{width:13px;height:13px}
 .revisi-alert p{font-size:.8rem;color:var(--t2);margin-top:4px}
-
 .profile-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:16px}
 .profile-avatar{width:76px;height:76px;border-radius:999px;background:var(--primary);color:var(--onprimary);font-size:1.9rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
 .profile-name{font-size:1.2rem;font-weight:800}
@@ -181,7 +167,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
 .dash-actions{display:flex;gap:6px}
 .iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--t2)}
 .iconbtn svg{width:15px;height:15px}
-
 .creator-card{width:300px;height:480px;background:#14171d;border-radius:16px;color:#fff;position:relative;overflow:hidden;margin:0 auto}
 .cc-inner{position:relative;z-index:2;padding:26px 22px;display:flex;flex-direction:column;height:100%;justify-content:space-between}
 .cc-top{display:flex;justify-content:space-between;align-items:center}
@@ -205,7 +190,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
 .cc-bottom{text-align:center}
 .cc-qr{background:#fff;padding:5px;border-radius:7px;display:inline-block;margin-bottom:9px}
 .cc-footer{font-size:.48rem;font-weight:800;letter-spacing:.12em;opacity:.4;text-transform:uppercase}
-
 .sidebar-overlay{position:fixed;inset:0;background:rgba(15,18,25,.5);z-index:150;opacity:0;pointer-events:none;transition:opacity .2s}
 .sidebar-overlay.open{opacity:1;pointer-events:auto}
 .sidebar{position:fixed;top:0;right:0;bottom:0;width:290px;max-width:84vw;background:var(--surface);border-left:1px solid var(--border);z-index:160;transform:translateX(100%);transition:transform .25s var(--ease);display:flex;flex-direction:column}
@@ -219,19 +203,16 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
 .sidebar-item svg{width:17px;height:17px}
 .sidebar-item.danger{color:var(--danger)}
 .sidebar-divider{height:1px;background:var(--border);margin:10px 0}
-
 .login-box{max-width:380px;width:100%;padding:32px 28px;text-align:center}
 .login-icon{width:64px;height:64px;background:var(--primary);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--onprimary);margin:0 auto 18px}
 .login-icon svg{width:28px;height:28px}
 .login-title{font-size:1.25rem;font-weight:800;margin-bottom:4px}
 .login-sub{color:var(--t3);font-size:.82rem;margin-bottom:20px}
-
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--t1);color:var(--bg);padding:11px 20px;border-radius:999px;font-weight:700;font-size:.8rem;z-index:500;opacity:0;transition:all .3s var(--ease);display:flex;gap:8px;align-items:center;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast svg{width:15px;height:15px}
 .spinner{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:20px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 @media(max-width:560px){
   .container{padding:0 12px}
   .stats{gap:6px}
@@ -281,9 +262,7 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
 </nav>
 
 <div class="container">
-  <!-- GALERI -->
   <div id="viewGaleri">
-    <!-- [1] Banner sambutan dipulihkan (statis) -->
     <div class="hero">
       <h2>Selamat Datang, Pendidik Hebat! 👋</h2>
       <p>Temukan ratusan media pembelajaran kreatif karya guru-guru terbaik Kecamatan Selogiri. Mari berbagi dan menginspirasi.</p>
@@ -306,7 +285,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
     <div class="scroll-sentinel" id="scrollSentinel"></div>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="viewDashboard" class="d-none" style="padding-top:16px">
     <div class="profile-card">
       <div class="profile-avatar" id="dashAvatar">U</div>
@@ -351,7 +329,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- PREVIEW -->
 <div class="preview-overlay" id="previewOverlay">
   <div class="preview-header">
     <span class="preview-title" id="previewTitle">Preview</span>
@@ -363,7 +340,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   <iframe class="preview-frame" id="previewFrame" allowfullscreen allow="autoplay"></iframe>
 </div>
 
-<!-- LOGIN SSO -->
 <div class="overlay" id="loginOverlay">
   <div class="modal-box login-box">
     <div class="login-icon"><i data-lucide="graduation-cap"></i></div>
@@ -385,14 +361,12 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- UPLOAD -->
 <div class="overlay" id="uploadOverlay">
   <div class="modal-box">
     <div class="modal-head"><h3 id="uploadTitle">Bagikan Karya</h3><button class="icon-btn" onclick="closeUpload()"><i data-lucide="x"></i></button></div>
     <div class="modal-body">
       <input type="hidden" id="formMode" value="ADD">
       <input type="hidden" id="editRowId" value="">
-      <!-- [5] Alert catatan revisi (muncul hanya jika ada) -->
       <div class="revisi-alert d-none" id="feedbackAlert">
         <b><i data-lucide="alert-triangle"></i> CATATAN REVISI:</b>
         <p id="feedbackMsg"></p>
@@ -444,7 +418,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- KARTU CREATOR -->
 <div class="overlay" id="cardOverlay">
   <div class="modal-box" style="max-width:380px;padding:24px">
     <div style="display:flex;justify-content:space-between;margin-bottom:18px"><h3 style="font-weight:800">Kartu Tanda Creator</h3><button class="icon-btn" onclick="closeCard()"><i data-lucide="x"></i></button></div>
@@ -481,19 +454,18 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
 /* ============================================================
    KONFIGURASI DUAL-PROJECT
    - SSO  : project PUSAT (login-guru / verify-guru)
-   - DATA : project lama (karya_guru, settings)
+   - DATA : project lama (baca langsung via RLS; TULIS via Edge Function)
    ============================================================ */
 const SSO_URL  = 'https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SSO_ANON = 'sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
-const db = window.supabase.createClient(
-  'https://qdgtfhknuvncbzsbcbwo.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkZ3RmaGtudXZuY2J6c2JjYndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzUyMzUsImV4cCI6MjEwMTg1MTIzNX0.GcEczGIaSO2twdTEK10_KedDPTzutr-EEl4vyNHG3bc'
-);
+const DATA_URL = 'https://qdgtfhknuvncbzsbcbwo.supabase.co';
+const DATA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkZ3RmaGtudXZuY2J6c2JjYndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzUyMzUsImV4cCI6MjEwMTg1MTIzNX0.GcEczGIaSO2twdTEK10_KedDPTzutr-EEl4vyNHG3bc';
+const db = window.supabase.createClient(DATA_URL, DATA_ANON);
 
-/* [1] Kolom ringan: tanpa "Kode HTML/Canvas" & "Komentar" */
+/* Kolom ringan: tanpa "Kode HTML/Canvas" & "Komentar" */
 const LITE_COLS = 'ID, Timestamp, "Nama Guru", "Nama Sekolah", "Fase/Kelas", Semester, "Judul Media", "Mata Pelajaran", "Link Media Luar", "Jenis Konten", VIEWS';
 const PAGE_SIZE = 12;
-const CACHE_KEY = 'gb_lite_cache_v2';
+const CACHE_KEY = 'gb_lite_cache_v3';
 
 const STATE = { filtered: [], settings: [], user: null, myWorks: [], sourceType: 'LINK', favMode: false };
 let page = 0, totalRows = 0, loading = false, searchTimer = null, currentNote = '';
@@ -539,7 +511,7 @@ function formatReleaseDate(ts, id){
 }
 function isNew(ts,id){ const t=parseTs(ts,id); return t>0 && (Date.now()-t)<86400000; }
 
-/* ================= [5] SIDIK JARI & CACHE SESI ================= */
+/* ================= CACHE SESI + SIDIK JARI ================= */
 async function getFingerprint(){
   const { data, error, count } = await db.from('karya_guru')
     .select('ID', { count: 'exact' }).eq('Status','DISETUJUI')
@@ -555,7 +527,7 @@ async function saveCache(){
 }
 function clearCache(){ try{ sessionStorage.removeItem(CACHE_KEY); }catch(e){} }
 
-/* ================= [2][7] PAGINATION + FILTER SERVER-SIDE ================= */
+/* ================= BACA TERPAGINASI (RLS: publik hanya DISETUJUI) ================= */
 async function loadPage(reset){
   if (loading) return; loading = true;
   try{
@@ -594,7 +566,7 @@ async function initGallery(){
   }
 }
 
-/* ================= [4] STATISTIK AGREGAT ================= */
+/* ================= STATISTIK AGREGAT ================= */
 async function loadStats(){
   try{
     const { data, error } = await db.rpc('stats_karya');
@@ -690,7 +662,7 @@ function toggleFavorit(id){
   if (STATE.favMode) loadPage(true);
 }
 
-/* ================= [3] LAZY DETAIL + [8] DEDUPE VIEW ================= */
+/* ================= LAZY DETAIL + DEDUPE VIEW ================= */
 async function getKaryaDetail(id){
   const { data } = await db.from('karya_guru').select('"Kode HTML/Canvas"').eq('ID', id).single();
   return (data && data['Kode HTML/Canvas']) || '';
@@ -723,7 +695,7 @@ async function openPreviewRow(row){
 function closePreview(){ if(document.fullscreenElement)document.exitFullscreen(); DOM.previewOverlay.classList.remove('open'); DOM.previewFrame.src=''; document.body.style.overflow=''; }
 function toggleFullscreen(){ if(document.fullscreenElement)document.exitFullscreen(); else DOM.previewOverlay.requestFullscreen(); }
 
-/* ================= SSO (KONTEKS-SSO.md) ================= */
+/* ================= SSO PUSAT ================= */
 function mapProfile(p){ return { sub:p.sub||null, nama:p.nama||'Tanpa Nama', email:p.email||'', sekolah:p.sekolah||'-', jabatan:p.jabatan||'', npsn:p.npsn||'' }; }
 async function verifyToken(){
   const token = localStorage.getItem('gb_token'); if(!token) return false;
@@ -784,7 +756,7 @@ function updateAuthUI(){
   if(!g){ DOM.sbName.textContent=STATE.user.nama; DOM.sbSchool.textContent=STATE.user.sekolah; }
 }
 
-/* ================= DASHBOARD (tanpa tombol hapus) ================= */
+/* ================= DASHBOARD (via Edge Function karya-saya) ================= */
 function switchView(v){
   const g = v==='GALERI';
   DOM.viewGaleri.classList.toggle('d-none', !g);
@@ -794,11 +766,14 @@ function switchView(v){
 }
 async function loadMyWorks(){
   if (isGuest()) return;
-  const { data } = await db.from('karya_guru')
-    .select('ID, Timestamp, "Nama Guru", "Nama Sekolah", "Fase/Kelas", Semester, "Judul Media", "Mata Pelajaran", "Link Media Luar", Status, Feedback, "Jenis Konten", VIEWS')
-    .eq('Nama Guru', STATE.user.nama).order('ID',{ascending:false}).limit(100);
-  STATE.myWorks = (data||[]).map(mapRow);
-  renderDashboard();
+  try{
+    const res = await fetch(DATA_URL + '/functions/v1/karya-saya',
+      { headers: { apikey: DATA_ANON, Authorization: 'Bearer ' + localStorage.getItem('gb_token') } });
+    const out = await res.json().catch(()=> ({}));
+    if (!res.ok){ toast(out.error || 'Gagal memuat karya'); return; }
+    STATE.myWorks = (out.data || []).map(r => { const a = mapRow(r); a[7] = r['Kode HTML/Canvas'] || ''; a[10] = r['Feedback'] || ''; return a; });
+    renderDashboard();
+  }catch(e){ toast('Gagal terhubung: '+e.message); }
 }
 function renderDashboard(){
   const u = STATE.user;
@@ -834,7 +809,7 @@ function getLevelInfo(n){
   return{name:'PEMULA 🌱',color:'#64748b'};
 }
 
-/* ================= UPLOAD / EDIT ================= */
+/* ================= UPLOAD / EDIT (via Edge Function simpan-karya) ================= */
 function openUploadModal(){
   if (isGuest()){ openLogin(); return; }
   DOM.formMode.value='ADD'; DOM.editRowId.value=''; DOM.uploadTitle.textContent='Bagikan Karya';
@@ -849,7 +824,6 @@ function openUploadModal(){
 }
 async function openEdit(i){
   const row = STATE.myWorks[i]; if(!row) return;
-  if (!row[7] && !row[8]) row[7] = await getKaryaDetail(row[13]);
   DOM.formMode.value='EDIT'; DOM.editRowId.value=row[13]; DOM.uploadTitle.textContent='Edit Karya';
   DOM.inJudul.value=row[5]||'';
   setValOrOther('inMapel','manMapel',row[6]||'');
@@ -864,7 +838,7 @@ async function openEdit(i){
   if (isK) DOM.inKaihType.value = fb;
   DOM.feedbackAlert.classList.toggle('d-none', !isNote);
   if (isNote) DOM.feedbackMsg.textContent = fb;
-  if (row[7]){ setSource('HTML'); DOM.inHtml.value=row[7]; } else { setSource(row[8]&&''?'LINK':'LINK'); DOM.inLink.value=row[8]||''; DOM.inLinkStory.value=''; }
+  if (row[7]){ setSource('HTML'); DOM.inHtml.value=row[7]; } else { setSource('LINK'); DOM.inLink.value=row[8]||''; DOM.inLinkStory.value=''; }
   updateLivePreview();
   DOM.uploadOverlay.classList.add('open');
 }
@@ -915,19 +889,22 @@ async function saveKarya(){
     'Status':'DISETUJUI', 'Feedback': kaihOn ? DOM.inKaihType.value : currentNote, 'Jenis Konten': jenis
   };
   try{
+    const res = await fetch(DATA_URL + '/functions/v1/simpan-karya', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', apikey: DATA_ANON, Authorization:'Bearer '+localStorage.getItem('gb_token') },
+      body: JSON.stringify({ mode, id: editId, row: rowData })
+    });
+    const out = await res.json().catch(()=> ({}));
+    if (!res.ok) throw new Error(out.error || ('Gagal ('+res.status+')'));
     if (mode==='ADD'){
-      const newID = 'ID-'+Date.now();
-      rowData['ID']=newID; rowData['VIEWS']=0; rowData['Timestamp']=new Date().toISOString();
-      const { error } = await db.from('karya_guru').insert([rowData]);
-      if (error) throw error;
-      if (isDefaultView()){ STATE.filtered.unshift(mapRow(rowData)); totalRows++; renderGallery(); }
+      const nr = mapRow(Object.assign({}, rowData, { ID: out.id || ('ID-'+Date.now()), VIEWS: 0, Timestamp: new Date().toISOString() }));
+      if (isDefaultView()){ STATE.filtered.unshift(nr); totalRows++; renderGallery(); }
       clearCache(); loadStats();
       toast('Karya berhasil diterbitkan! 🎉');
     } else {
-      const { error } = await db.from('karya_guru').update(rowData).eq('ID', editId);
-      if (error) throw error;
       clearCache();
       toast('Karya berhasil diperbarui ✅');
+      loadMyWorks();
     }
     closeUpload();
   }catch(e){ toast('Gagal menyimpan: '+e.message); }
@@ -960,7 +937,7 @@ function toggleTheme(){
   document.documentElement.setAttribute('data-theme', n); localStorage.setItem('gb_theme', n);
 }
 
-/* [6] FIX DROPDOWN: map objek -> array (kompatibel nama kolom lama/baru) */
+/* FIX DROPDOWN: map objek -> array (kompatibel nama kolom lama/baru) */
 function normSettings(rows){
   return (rows||[]).map(r => [
     (r['Jenis']!==undefined? r['Jenis'] : r['JenisKonten']),
