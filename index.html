@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#064e3b">
+<meta name="theme-color" content="#f8fafc">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>
-(function(){try{var d=localStorage.getItem('gb_dark')==='1';if(d)document.documentElement.classList.add('dark');var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;}catch(e){}})();
+(function(){try{var d=localStorage.getItem('gb_dark')==='1';if(d)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',d?'#020617':'#f8fafc');var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;}catch(e){}})();
 </script>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
@@ -19,6 +19,9 @@
 <meta property="og:url" content="https://slg-timkreatif.github.io/app/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guru Berbagi Selogiri">
+<meta name="twitter:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <title>Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -32,13 +35,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}html,body{overflow-x:hidden;touch-action:manipulation}
   a{-webkit-touch-callout:default}
-  :root{--acc:#059669;--acc2:#0d9488;--acc-soft:#d1fae5;--acc-soft-d:#064e3b;--acc-text:#059669;--acc-text-d:#34d399;--acc-ring:rgba(5,150,105,.35)}
-  html[data-acc="abu"]{--acc:#334155;--acc2:#475569;--acc-soft:#e2e8f0;--acc-soft-d:#334155;--acc-text:#334155;--acc-text-d:#cbd5e1;--acc-ring:rgba(51,65,85,.25)}
+  :root{--acc:#334155;--acc2:#475569;--acc-soft:#e2e8f0;--acc-soft-d:#334155;--acc-text:#334155;--acc-text-d:#cbd5e1;--acc-ring:rgba(51,65,85,.25)}
+  html[data-acc="hijau"]{--acc:#059669;--acc2:#0d9488;--acc-soft:#d1fae5;--acc-soft-d:#064e3b;--acc-text:#059669;--acc-text-d:#34d399;--acc-ring:rgba(5,150,105,.35)}
   html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-soft-d:#1e3a8a;--acc-text:#2563eb;--acc-text-d:#60a5fa;--acc-ring:rgba(37,99,235,.35)}
   html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-soft-d:#4c1d95;--acc-text:#7c3aed;--acc-text-d:#a78bfa;--acc-ring:rgba(124,58,237,.35)}
   html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-soft-d:#78350f;--acc-text:#d97706;--acc-text-d:#fbbf24;--acc-ring:rgba(217,119,6,.35)}
   html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-soft-d:#881337;--acc-text:#e11d48;--acc-text-d:#fb7185;--acc-ring:rgba(225,29,72,.35)}
-  .brand-band{background:linear-gradient(160deg,#064e3b 0%,#065f46 45%,#0d9488 100%)}
   .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
   .card{background:#fff;border:1px solid #f1f5f9;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:1.25rem}
   .dark .card{background:#1e293b;border-color:#334155}
@@ -79,32 +81,34 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.24</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.22</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
-
-    <header class="brand-band text-white relative z-20 rounded-b-[2rem]" style="padding-top:env(safe-area-inset-top)">
-      <div class="px-5 pt-4 pb-2 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div>
-        <div class="flex-1 min-w-0"><p class="text-sm font-extrabold leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-white/60 font-semibold">Portal Selogiri</p></div>
-        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-white"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-emerald-900">0</span></button>
-        <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-white"></i></button>
+    <header class="sticky top-0 z-40 px-5 md:px-8 pt-5 pb-3 flex items-center justify-between bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
+      <div class="flex items-center gap-3 md:hidden">
+        <div class="w-10 h-10 rounded-xl acc-grad flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-700 shadow-md"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div>
+        <div><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100 leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-slate-400 font-semibold">Portal Selogiri</p></div>
       </div>
-      <div id="bandHome" class="px-5 pb-10">
-        <p id="txtTanggal" class="text-[10px] font-bold text-white/70 uppercase tracking-widest truncate"></p>
-        <div class="flex items-center justify-between gap-2 mt-1">
-          <h1 id="txtSapaan" class="flex-1 min-w-0 text-lg md:text-xl font-extrabold text-white leading-tight truncate"></h1>
-          <div id="wxChip" class="hidden px-3 py-2 items-center gap-1.5 shrink-0 rounded-full bg-white/15 border border-white/20"><i id="wxIcon" data-lucide="cloud-sun" class="w-4 h-4 text-white"></i><span id="wxTemp" class="text-xs font-black text-white tabular-nums">--°</span></div>
-        </div>
-        <div class="relative mt-4"><i data-lucide="search" class="w-4 h-4 text-white/60 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearchHome" type="text" placeholder="Cari layanan, jurnal, tools…" class="w-full rounded-2xl bg-white/15 border border-white/20 pl-11 pr-4 py-3 text-sm font-medium text-white placeholder-white/60 acc-ring" oninput="homeSearch(this.value)"></div>
+      <p class="hidden md:block text-sm font-extrabold text-slate-700 dark:text-slate-200" id="hdrPage">Beranda</p>
+      <div class="flex items-center gap-2">
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition md:hidden"><i data-lucide="bell" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-slate-50 dark:border-slate-950">0</span></button>
+        <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl card flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i></button>
       </div>
-      <div id="bandPage" class="hidden px-5 pb-10"><p id="hdrPage" class="text-lg font-extrabold text-white">Beranda</p></div>
     </header>
 
-    <main class="relative z-10 -mt-8 rounded-t-3xl flex-1 overflow-y-auto overflow-x-hidden no-scroll bg-slate-50 dark:bg-slate-950 px-5 md:px-8 pt-5 pb-28 md:pb-8 space-y-4">
+    <main class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 py-4 pb-28 md:pb-8 space-y-4">
 
       <section id="pageHome" class="space-y-4 min-w-0">
+        <div class="flex items-center justify-between gap-2 animate-fade-up">
+          <div class="min-w-0">
+            <p id="txtTanggal" class="text-[10px] font-bold acc-text uppercase tracking-widest truncate"></p>
+            <h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-1 truncate"></h1>
+          </div>
+          <div id="wxChip" class="hidden px-3 py-2 items-center gap-1.5 shrink-0 rounded-full border border-slate-100 dark:border-slate-800"><i id="wxIcon" data-lucide="cloud-sun" class="w-4 h-4"></i><span id="wxTemp" class="text-xs font-black text-slate-600 dark:text-slate-300 tabular-nums">--°</span></div>
+        </div>
+        <div class="relative animate-fade-up"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearchHome" type="text" placeholder="Cari layanan, jurnal, tools…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring" oninput="homeSearch(this.value)"></div>
         <div id="authCard" class="hidden card p-5 text-center animate-fade-up"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Guru Selogiri?</p><p class="text-[11px] text-slate-400 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p><div class="grid grid-cols-2 gap-2"><button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button><a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a></div></div>
         <div id="installCard" class="hidden card p-4 items-center gap-3 animate-fade-up"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-400">Akses cepat dari layar utama HP Anda</p></div><button onclick="pasangApp()" class="shrink-0 acc-bg text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button><button onclick="$('installCard').classList.add('hidden');$('installCard').classList.remove('flex')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button></div>
 
@@ -188,7 +192,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </nav>
   </div>
 
-  <div id="pLogin" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+  <div id="pLogin" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
     <div id="pLoginSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
       <div class="text-center mb-5"><div class="w-14 h-14 mx-auto rounded-2xl acc-soft flex items-center justify-center overflow-hidden mb-3"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-11 h-11 object-contain scale-[1.3]" alt="Logo"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p><p class="text-[11px] text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p></div>
@@ -219,7 +223,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.24</span></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.22</span></div>
           <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </div></div></div>
@@ -231,8 +235,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <div class="card p-4 space-y-4 mb-3"><p class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Personalisasi</p>
         <div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Warna Aksen</p>
           <div class="flex gap-2.5 mt-2" id="accRow">
-            <button data-acc="default" onclick="setAccent('default')" title="Default (Emerald-Teal)" style="background:linear-gradient(135deg,#059669,#0d9488)" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-            <button data-acc="abu" onclick="setAccent('abu')" title="Abu (elegan)" style="background:#334155" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+            <button data-acc="default" onclick="setAccent('default')" title="Default (netral elegan)" style="background:#334155" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+            <button data-acc="hijau" onclick="setAccent('hijau')" style="background:#059669" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="biru" onclick="setAccent('biru')" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="violet" onclick="setAccent('violet')" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="amber" onclick="setAccent('amber')" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
@@ -242,7 +246,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.24</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.22</span></p>
     </div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
@@ -296,7 +300,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
-const BRAND='#064e3b';
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
 const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],leadLoaded:false,tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:10,myLikes:new Set()};
@@ -319,6 +322,7 @@ let cfCb=null;
 function confirmDialog(msg,onOk,title,okLabel){$('cfMsg').textContent=msg;$('cfTitle').textContent=title||'Yakin?';$('cfOk').textContent=okLabel||'Hapus';cfCb=onOk;const m=$('mConfirm');m.classList.remove('hidden');m.classList.add('flex');icons();}
 function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classList.remove('flex');cfCb=null;}
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
+/* ===== DEEP LINK ===== */
 function dl(path){return location.pathname+path;}
 function studioFieldsFromQuery(q){const reserved=['page','menu','studio','panel'];const pre={};q.forEach((v,k)=>{if(!reserved.includes(k))pre[k]=v;});return pre;}
 function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;
@@ -338,26 +342,28 @@ function initPrefs(){const a=localStorage.getItem('gb_acc')||'default';document.
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}}
 function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
-function setThemeColor(){const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',BRAND);}
+function setThemeColor(){const dark=document.documentElement.classList.contains('dark');const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',dark?'#020617':'#f8fafc');}
 let deferredPrompt=null;
-function buildManifest(){const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:BRAND,theme_color:BRAND,icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
+function buildManifest(){const dark=localStorage.getItem('gb_dark')==='1';const surface=dark?'#020617':'#f8fafc';const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:surface,theme_color:surface,icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
 function initPWA(){buildManifest();const standalone=matchMedia('(display-mode: standalone').matches||navigator.standalone;if(!standalone)window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const c=$('installCard');c.classList.remove('hidden');c.classList.add('flex');icons();});window.addEventListener('appinstalled',()=>{$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');toast('Aplikasi terpasang di HP!');});}
 function pasangApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');}else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');}
 async function muatCuaca(){try{const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');const j=await r.json();if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}}catch(e){}}
+function timeTheme(){const h=new Date().getHours();
+  if(h>=4&&h<10)return{t:'text-amber-500',chip:'bg-amber-50 dark:bg-amber-900/20'};
+  if(h>=10&&h<15)return{t:'text-sky-500',chip:'bg-sky-50 dark:bg-sky-900/20'};
+  if(h>=15&&h<18)return{t:'text-orange-500',chip:'bg-orange-50 dark:bg-orange-900/20'};
+  return{t:'text-indigo-400',chip:'bg-indigo-50 dark:bg-indigo-900/20'};}
 function showWx(cw){const cd=cw.weathercode;let icon='cloud-sun';if(cd===0){icon='sun';}else if(cd<=2){icon='cloud-sun';}else if(cd===3){icon='cloud';}else if(cd>=51&&cd<=57){icon='cloud-drizzle';}else if((cd>=61&&cd<=67)||(cd>=80&&cd<=82)){icon='cloud-rain';}else if(cd>=95){icon='cloud-lightning';}
-  $('wxIcon').setAttribute('data-lucide',icon);$('wxIcon').className='w-4 h-4 text-white';$('wxTemp').textContent=Math.round(cw.temperature)+'°';$('wxChip').classList.remove('hidden');$('wxChip').classList.add('flex');icons();}
+  const tt=timeTheme();$('wxIcon').setAttribute('data-lucide',icon);$('wxIcon').className='w-4 h-4 '+tt.t;$('wxTemp').textContent=Math.round(cw.temperature)+'°';$('wxChip').className='px-3 py-2 flex items-center gap-1.5 shrink-0 rounded-full border border-slate-100 dark:border-slate-800 '+tt.chip;icons();}
 let applying=false,popDismissed=false;
 let CUR={view:'home',sub:null,panel:null,modal:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
 function setPageInstant(pg){
-  const isHome=pg==='home';
-  $('bandHome').classList.toggle('hidden',!isHome);
-  $('bandPage').classList.toggle('hidden',isHome);
-  if(!isHome)$('hdrPage').textContent={apps:'Layanan',bagi:'Berbagi'}[pg]||'';
   if(pg==='home'||pg==='apps'||pg==='bagi'){document.querySelectorAll('[data-nav]').forEach(b=>{const on=b.dataset.nav===pg;if(b.classList.contains('side-btn')){b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);}else{b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-400',!on);}});}
   $('pageHome').classList.toggle('hidden',pg!=='home');
   $('pageApps').classList.toggle('hidden',pg!=='apps');
   $('pageBagi').classList.toggle('hidden',pg!=='bagi');
+  $('hdrPage').textContent={home:'Beranda',apps:'Layanan',bagi:'Berbagi'}[pg]||'Beranda';
   CUR.view=pg;
 }
 function navPage(pg){if(applying)return;if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});if(pg==='bagi')renderBagi();}
@@ -402,6 +408,7 @@ function renderCarousel(){const c=STATE.config||{};const box=$('caroBox');const 
 function setView(v){localStorage.setItem('gb_view',v);paintView();renderLayanan($('inSearch').value);}
 function paintView(){const v=localStorage.getItem('gb_view')||'kotak';$('vKotak').className='px-3 py-1.5 rounded-lg text-[11px] font-bold transition '+(v==='kotak'?'acc-bg text-white':'card text-slate-500 dark:text-slate-400');$('vBaris').className='px-3 py-1.5 rounded-lg text-[11px] font-bold transition '+(v==='baris'?'acc-bg text-white':'card text-slate-500 dark:text-slate-400');}
 function visible(m){if(!m.is_active||m.tampil_di==='off')return false;if(m.tampil_di==='mobile'&&!isMobile)return false;if(m.tampil_di==='desktop'&&isMobile)return false;const r=m.akses_role;if(!STATE.profile)return (r==='tamu'||r==='all'||r==='');const isKS=(STATE.profile.jabatan||'').toLowerCase().includes('kepala');if(r==='Kepala Sekolah')return isKS;if(r==='tamu')return false;return true;}
+/* Item menu sebagai <a> agar klik-tahan memunculkan menu native (salin tautan) */
 function boxItem(m){const [bg,tx]=COLOR[m.warna]||COLOR.blue;const badge=m.label?`<span class="absolute top-2 right-2 text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded">${m.label}</span>`:'';return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="relative card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0">${badge}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span><span class="block text-[13px] font-extrabold text-slate-800 dark:text-slate-100 leading-tight">${m.judul}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span></a>`;}
 function rowItem(m){const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 dark:text-slate-100 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></a>`;}
 function renderLayanan(filter=''){const f=filter.toLowerCase();const view=localStorage.getItem('gb_view')||'kotak';const items=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari&&(m.judul.toLowerCase().includes(f)||m.deskripsi.toLowerCase().includes(f)));const cats=KAT_ORDER.filter(k=>items.some(m=>(m.kategori||'Umum')===k));$('layananBody').innerHTML=cats.map(k=>{const list=items.filter(m=>(m.kategori||'Umum')===k);const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">${k}</p>`;return view==='baris'?`<div class="mb-5">${head}<div class="space-y-2">${list.map(rowItem).join('')}</div></div>`:`<div class="mb-5">${head}<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${list.map(boxItem).join('')}</div></div>`;}).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ditemukan 😕</p>';icons();}
@@ -469,7 +476,7 @@ async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st
   try{await document.fonts.load('700 64px Inter');await document.fonts.load('800 64px "Playfair Display"');await document.fonts.load('700 64px Caveat');}catch(e){}
   const ff=FONTS[st.font];const f=st.fields;
   if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(2,44,34,.55)');og.addColorStop(.5,'rgba(2,44,34,.25)');og.addColorStop(1,'rgba(2,44,34,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
-  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#059669';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#0d9488';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#064e3b');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
+  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#334155';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#475569';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#0f172a');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
   ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3*s;roundRect(ctx,42*s,42*s,W-84*s,H-84*s,40*s);ctx.stroke();
   ctx.textAlign='center';
   const kick=t=>{ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`800 ${24*s}px Inter, sans-serif`;ctx.fillText(t.toUpperCase(),W/2,140*s);};
@@ -546,24 +553,20 @@ async function muatSemuaData(force){const had=renderFromCache();if(!had){$('laya
 (async function boot(){initPrefs();setThemeColor();initPWA();muatCuaca();icons();paintToggles();$('caroTrack').addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault());
-  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}
-  try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
-  try{renderAuthUI();}catch(e){console.warn('auth',e);}
-  try{setSapaan();}catch(e){console.warn('sapaan',e);}
-  muatSemuaData(false).catch(e=>console.warn('refresh',e));})();
+  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}renderAuthUI();setSapaan();muatSemuaData(false);})();
 
 function applyPortal(p){STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];if(STATE.config){$('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;$('aboutVer').textContent='v'+STATE.config.versi;renderPopup();}
   const c=STATE.config||{};
   $('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
   renderCarousel();renderLayanan($('inSearch').value);renderQuick();renderFoot();gantiQuote();}
-function setSapaan(){const j=new Date().getHours();const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';$('txtSapaan').textContent=`${s}, ${nama}`;const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;}
+function setSapaan(){const j=new Date().getHours();const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';$('txtSapaan').innerHTML=`${s}, <span class="font-extrabold bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--acc),var(--acc2))">${nama}</span>`;const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;}
 function renderPopup(){const c=STATE.config;if(!c||c.pop_status!=='ON'||popDismissed)return;let html;if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}else{const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';html=`<div class="bg-white dark:bg-slate-900"><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;}$('popContent').innerHTML=html;openModal('mPop');}
 function gantiQuote(){if(!STATE.quotes.length)return;const b=$('btnQuote');if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];STATE.quoteNow=q;$('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;}
 function setBadge(n){['badgeNotif','badgeNotifD'].forEach(id=>{const b=$(id);if(!b)return;if(n>0){b.classList.remove('hidden');b.textContent=n;}else b.classList.add('hidden');});}
 async function renderNotif(){let readIds=new Set();if(STATE.profile){const gid=guruId();if(gid){const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);readIds=new Set((reads||[]).map(r=>r.notification_id));}setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);}else setBadge(0);$('notifList').innerHTML=STATE.notifs.map(n=>{const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}"><span class="text-xl">${em}</span><div><p class="text-[13px] font-bold text-slate-800 dark:text-slate-100">${n.judul}</p><p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${n.pesan}</p><p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;}).join('')||'<p class="text-center text-sm text-slate-400 py-8">Belum ada notifikasi</p>';}
 function pilihFoto(){$('inFoto').click();}
 function uploadFoto(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=192;c.height=192;const ctx=c.getContext('2d');const s=Math.max(192/img.width,192/img.height);const w=img.width*s,h=img.height*s;ctx.drawImage(img,(192-w)/2,(192-h)/2,w,h);try{localStorage.setItem('gb_foto',c.toDataURL('image/jpeg',.8));renderAuthUI();toast('Foto profil tersimpan di perangkat');}catch(e){toast('Gagal menyimpan foto','error');}};img.src=rd.result;};rd.readAsDataURL(f);ev.target.value='';}
-function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',document.documentElement.classList.contains('dark')?'1':'0');setThemeColor();paintToggles();}
+function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',document.documentElement.classList.contains('dark')?'1':'0');setThemeColor();buildManifest();paintToggles();}
 function bersihCache(){localStorage.removeItem('gb_recent');localStorage.removeItem('gb_cache');localStorage.removeItem('gb_wx');location.reload();}
 function kirimWA(){window.open('https://chat.whatsapp.com/LFaBoWvZ8l0DIaefiWiAl5','_blank');}
 function setTipeFb(t,btn){STATE.tipeFb=t;document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('acc-bg','text-white');b.classList.add('bg-slate-100','text-slate-600');});btn.classList.add('acc-bg','text-white');}
