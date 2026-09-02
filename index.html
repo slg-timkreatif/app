@@ -32,14 +32,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}html,body{overflow-x:hidden;touch-action:manipulation}
   a{-webkit-touch-callout:default}
-  /* DEFAULT = Emerald-Teal (brand) */
   :root{--acc:#059669;--acc2:#0d9488;--acc-soft:#d1fae5;--acc-soft-d:#064e3b;--acc-text:#059669;--acc-text-d:#34d399;--acc-ring:rgba(5,150,105,.35)}
   html[data-acc="abu"]{--acc:#334155;--acc2:#475569;--acc-soft:#e2e8f0;--acc-soft-d:#334155;--acc-text:#334155;--acc-text-d:#cbd5e1;--acc-ring:rgba(51,65,85,.25)}
   html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-soft-d:#1e3a8a;--acc-text:#2563eb;--acc-text-d:#60a5fa;--acc-ring:rgba(37,99,235,.35)}
   html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-soft-d:#4c1d95;--acc-text:#7c3aed;--acc-text-d:#a78bfa;--acc-ring:rgba(124,58,237,.35)}
   html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-soft-d:#78350f;--acc-text:#d97706;--acc-text-d:#fbbf24;--acc-ring:rgba(217,119,6,.35)}
   html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-soft-d:#881337;--acc-text:#e11d48;--acc-text-d:#fb7185;--acc-ring:rgba(225,29,72,.35)}
-  /* Header brand: konstan, menutup status bar */
   .brand-band{background:linear-gradient(160deg,#064e3b 0%,#065f46 45%,#0d9488 100%)}
   .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
   .card{background:#fff;border:1px solid #f1f5f9;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:1.25rem}
@@ -81,32 +79,30 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.23</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.24</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
 
-    <!-- HEADER BRAND (menyatu status bar) -->
-    <header class="brand-band text-white relative z-20" style="padding-top:env(safe-area-inset-top)">
+    <header class="brand-band text-white relative z-20 rounded-b-[2rem]" style="padding-top:env(safe-area-inset-top)">
       <div class="px-5 pt-4 pb-2 flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div>
         <div class="flex-1 min-w-0"><p class="text-sm font-extrabold leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-white/60 font-semibold">Portal Selogiri</p></div>
         <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-white"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-emerald-900">0</span></button>
         <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-white"></i></button>
       </div>
-      <div id="bandHome" class="px-5 pb-14">
+      <div id="bandHome" class="px-5 pb-10">
         <p id="txtTanggal" class="text-[10px] font-bold text-white/70 uppercase tracking-widest truncate"></p>
         <div class="flex items-center justify-between gap-2 mt-1">
-          <h1 id="txtSapaan" class="text-lg md:text-xl font-extrabold text-white leading-tight truncate"></h1>
+          <h1 id="txtSapaan" class="flex-1 min-w-0 text-lg md:text-xl font-extrabold text-white leading-tight truncate"></h1>
           <div id="wxChip" class="hidden px-3 py-2 items-center gap-1.5 shrink-0 rounded-full bg-white/15 border border-white/20"><i id="wxIcon" data-lucide="cloud-sun" class="w-4 h-4 text-white"></i><span id="wxTemp" class="text-xs font-black text-white tabular-nums">--°</span></div>
         </div>
         <div class="relative mt-4"><i data-lucide="search" class="w-4 h-4 text-white/60 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearchHome" type="text" placeholder="Cari layanan, jurnal, tools…" class="w-full rounded-2xl bg-white/15 border border-white/20 pl-11 pr-4 py-3 text-sm font-medium text-white placeholder-white/60 acc-ring" oninput="homeSearch(this.value)"></div>
       </div>
-      <div id="bandPage" class="hidden px-5 pb-14"><p id="hdrPage" class="text-lg font-extrabold text-white">Beranda</p></div>
+      <div id="bandPage" class="hidden px-5 pb-10"><p id="hdrPage" class="text-lg font-extrabold text-white">Beranda</p></div>
     </header>
 
-    <!-- SHEET KONTEN -->
-    <main class="relative z-10 -mt-8 rounded-t-3xl flex-1 overflow-y-auto overflow-x-hidden no-scroll bg-slate-50 dark:bg-slate-950 px-5 md:px-8 pt-6 pb-28 md:pb-8 space-y-4">
+    <main class="relative z-10 -mt-8 rounded-t-3xl flex-1 overflow-y-auto overflow-x-hidden no-scroll bg-slate-50 dark:bg-slate-950 px-5 md:px-8 pt-5 pb-28 md:pb-8 space-y-4">
 
       <section id="pageHome" class="space-y-4 min-w-0">
         <div id="authCard" class="hidden card p-5 text-center animate-fade-up"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Guru Selogiri?</p><p class="text-[11px] text-slate-400 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p><div class="grid grid-cols-2 gap-2"><button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button><a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a></div></div>
@@ -192,7 +188,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </nav>
   </div>
 
-  <div id="pLogin" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+  <div id="pLogin" class="fixed inset-0 z-[80] hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
     <div id="pLoginSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
       <div class="text-center mb-5"><div class="w-14 h-14 mx-auto rounded-2xl acc-soft flex items-center justify-center overflow-hidden mb-3"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-11 h-11 object-contain scale-[1.3]" alt="Logo"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p><p class="text-[11px] text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p></div>
@@ -223,7 +219,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.23</span></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.24</span></div>
           <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </div></div></div>
@@ -246,7 +242,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.23</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.24</span></p>
     </div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
@@ -342,7 +338,6 @@ function initPrefs(){const a=localStorage.getItem('gb_acc')||'default';document.
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}}
 function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
-/* theme-color KONSTAN = warna header brand → status bar selalu menyatu */
 function setThemeColor(){const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',BRAND);}
 let deferredPrompt=null;
 function buildManifest(){const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:BRAND,theme_color:BRAND,icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
@@ -551,7 +546,11 @@ async function muatSemuaData(force){const had=renderFromCache();if(!had){$('laya
 (async function boot(){initPrefs();setThemeColor();initPWA();muatCuaca();icons();paintToggles();$('caroTrack').addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault());
-  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}renderAuthUI();setSapaan();muatSemuaData(false);})();
+  const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}
+  try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
+  try{renderAuthUI();}catch(e){console.warn('auth',e);}
+  try{setSapaan();}catch(e){console.warn('sapaan',e);}
+  muatSemuaData(false).catch(e=>console.warn('refresh',e));})();
 
 function applyPortal(p){STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];if(STATE.config){$('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;$('aboutVer').textContent='v'+STATE.config.versi;renderPopup();}
   const c=STATE.config||{};
