@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#059669">
+<meta name="theme-color" content="#0D9488">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>
-(function(){try{var d=localStorage.getItem('gb_dark')==='1';if(d)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',d?'#064e3b':'#059669');var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;}catch(e){}})();
+(function(){try{var d=localStorage.getItem('gb_dark')==='1';if(d)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',d?'#115E59':'#0D9488');var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;}catch(e){}})();
 </script>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
@@ -35,7 +35,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}html,body{overflow-x:hidden;touch-action:manipulation}
   a{-webkit-touch-callout:default}
-  :root{--acc:#059669;--acc2:#0d9488;--acc-soft:#d1fae5;--acc-soft-d:#064e3b;--acc-text:#059669;--acc-text-d:#34d399;--acc-ring:rgba(5,150,105,.35)}
+  /* BRAND TEAL #0D9488 */
+  :root{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#CCFBF1;--acc-soft-d:#134E4A;--acc-text:#0D9488;--acc-text-d:#2DD4BF;--acc-ring:rgba(13,148,136,.35)}
+  html[data-acc="hijau"]{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#CCFBF1;--acc-soft-d:#134E4A;--acc-text:#0D9488;--acc-text-d:#2DD4BF;--acc-ring:rgba(13,148,136,.35)}
   html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-soft-d:#1e3a8a;--acc-text:#2563eb;--acc-text-d:#60a5fa;--acc-ring:rgba(37,99,235,.35)}
   html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-soft-d:#4c1d95;--acc-text:#7c3aed;--acc-text-d:#a78bfa;--acc-ring:rgba(124,58,237,.35)}
   html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-soft-d:#78350f;--acc-text:#d97706;--acc-text-d:#fbbf24;--acc-ring:rgba(217,119,6,.35)}
@@ -51,11 +53,10 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .acc-soft{background-color:var(--acc-soft)}.dark .acc-soft{background-color:var(--acc-soft-d)}
   .acc-text{color:var(--acc-text)}.dark .acc-text{color:var(--acc-text-d)}
   .acc-ring:focus{outline:none;box-shadow:0 0 0 3px var(--acc-ring)}
-  .brand-grad{background-image:linear-gradient(135deg,#059669,#047857 55%,#064e3b)}
-  .dark .brand-grad{background-image:linear-gradient(135deg,#047857,#065f46 55%,#022c22)}
-  /* Header solid = sama persis dengan theme_color agar menyatu dgn status bar */
-  .brand-solid{background-color:#059669}
-  .dark .brand-solid{background-color:#064e3b}
+  .brand-grad{background-image:linear-gradient(135deg,#0D9488,#0F766E 55%,#134E4A)}
+  .dark .brand-grad{background-image:linear-gradient(135deg,#0F766E,#115E59 55%,#042f2e)}
+  .brand-solid{background-color:#0D9488}
+  .dark .brand-solid{background-color:#115E59}
   .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem}
   html.fs-besar{font-size:17.5px}
   html.no-anim *,html.no-anim *::before,html.no-anim *::after{animation:none!important;transition:none!important}
@@ -85,20 +86,19 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.25</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.26</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
-    <!-- HEADER SOLID: menyatu dgn status bar -->
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+1rem)] pb-14 flex items-center justify-between text-white brand-solid">
       <div class="flex items-center gap-3 md:hidden">
         <div class="w-10 h-10 rounded-xl bg-white shadow-md overflow-hidden flex items-center justify-center"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo"></div>
-        <div><p class="text-sm font-extrabold text-white leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-emerald-100/80 font-semibold">Portal Selogiri</p></div>
+        <div><p class="text-sm font-extrabold text-white leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-teal-100/80 font-semibold">Portal Selogiri</p></div>
       </div>
       <p class="hidden md:block text-sm font-extrabold text-white" id="hdrPage">Beranda</p>
       <div class="flex items-center gap-2">
-        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden bg-white text-emerald-700 text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
-        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center active:scale-90 transition md:hidden"><i data-lucide="bell" class="w-5 h-5 text-white"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-emerald-700">0</span></button>
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden bg-white text-teal-700 text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center active:scale-90 transition md:hidden"><i data-lucide="bell" class="w-5 h-5 text-white"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-teal-700">0</span></button>
         <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-white"></i></button>
       </div>
     </header>
@@ -215,7 +215,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div id="profGuest" class="text-center pt-8"><div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Mode Tamu</p><p class="text-xs text-slate-400 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk dengan Akun</button></div>
         <div id="profData" class="hidden space-y-4">
           <div class="flex items-center gap-4"><div class="relative shrink-0"><div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-md flex items-center justify-center text-xl font-black text-slate-400 overflow-hidden" id="pfAvatar">G</div><button onclick="pilihFoto()" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full acc-bg text-white flex items-center justify-center shadow-md active:scale-90 transition"><i data-lucide="camera" class="w-4 h-4"></i></button><input type="file" id="inFoto" accept="image/*" class="hidden" onchange="uploadFoto(event)"></div>
-            <div class="min-w-0"><p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 leading-tight truncate">—</p><p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p><span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span></div></div>
+            <div class="min-w-0"><p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 leading-tight truncate">—</p><p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p><span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-teal-50 text-teal-600 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span></div></div>
           <div class="card p-4 space-y-2.5"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
@@ -228,7 +228,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
             <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.25</span></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.26</span></div>
           <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </div></div></div>
@@ -240,7 +240,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <div class="card p-4 space-y-4 mb-3"><p class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Personalisasi</p>
         <div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Warna Aksen</p>
           <div class="flex gap-2.5 mt-2" id="accRow">
-            <button data-acc="hijau" onclick="setAccent('hijau')" title="Emerald (default)" style="background:#059669" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+            <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal (default)" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="biru" onclick="setAccent('biru')" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="violet" onclick="setAccent('violet')" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="amber" onclick="setAccent('amber')" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
@@ -250,7 +250,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.25</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.26</span></p>
     </div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
@@ -345,9 +345,9 @@ function initPrefs(){const a=localStorage.getItem('gb_acc')||'hijau';document.do
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}}
 function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
-function setThemeColor(){const dark=document.documentElement.classList.contains('dark');const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',dark?'#064e3b':'#059669');}
+function setThemeColor(){const dark=document.documentElement.classList.contains('dark');const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',dark?'#115E59':'#0D9488');}
 let deferredPrompt=null;
-function buildManifest(){const dark=localStorage.getItem('gb_dark')==='1';const surface=dark?'#064e3b':'#059669';const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:surface,theme_color:surface,icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
+function buildManifest(){const dark=localStorage.getItem('gb_dark')==='1';const surface=dark?'#115E59':'#0D9488';const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:surface,theme_color:surface,icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
 function initPWA(){buildManifest();const standalone=matchMedia('(display-mode: standalone').matches||navigator.standalone;if(!standalone)window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const c=$('installCard');c.classList.remove('hidden');c.classList.add('flex');icons();});window.addEventListener('appinstalled',()=>{$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');toast('Aplikasi terpasang di HP!');});}
 function pasangApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');}else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');}
 async function muatCuaca(){try{const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');const j=await r.json();if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}}catch(e){}}
@@ -390,13 +390,13 @@ function caroGo(i){const t=$('caroTrack');if(!t.children.length)return;const w=t
 function klikBanner(){const u=(STATE.config||{}).banner_link;if(u&&u.startsWith('ext:'))window.open(u.slice(4),'_blank');else if(u)location.href=u;}
 function renderCarousel(){const c=STATE.config||{};const box=$('caroBox');const slides=[];
   const retry=`onerror="if(this.dataset.r){this.style.display='none'}else{this.dataset.r='1';this.src=this.src}"`;
-  if(c.banner_status==='ON'){const w={blue:'from-blue-600 to-indigo-600',green:'from-emerald-600 to-teal-600',red:'from-rose-600 to-red-600'}[c.banner_warna]||'from-emerald-600 to-teal-600';
+  if(c.banner_status==='ON'){const w={blue:'from-blue-600 to-indigo-600',green:'from-teal-600 to-teal-500',red:'from-rose-600 to-red-600'}[c.banner_warna]||'from-teal-600 to-teal-500';
     if(c.banner_gambar){
       slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${w} text-white"><div class="flex h-40"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt=""><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="mt-2 self-start bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div></div>`);
     }else{
       slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);
     }}
-  if(c.info_status!=='OFF'){const NC={pengumuman:'from-emerald-600 to-teal-600',info:'from-sky-600 to-blue-600',gamifikasi:'from-amber-500 to-orange-600',sistem:'from-slate-600 to-slate-800'};const EM={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'};
+  if(c.info_status!=='OFF'){const NC={pengumuman:'from-teal-600 to-teal-500',info:'from-sky-600 to-blue-600',gamifikasi:'from-amber-500 to-orange-600',sistem:'from-slate-600 to-slate-800'};const EM={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'};
     STATE.notifs.slice(0,4).forEach(n=>{
       if(n.gambar){
         slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt=""><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
@@ -477,8 +477,8 @@ function handlesStr(){const s=STATE.sosmed||{};const parts=[];if(s.ig)parts.push
 async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st.fmt],W=F.w,H=F.h,s=H>=W?H/1920:H/720;const cv=$('stCanvas');cv.width=W;cv.height=H;cv.style.aspectRatio=W+'/'+H;const ctx=cv.getContext('2d');
   try{await document.fonts.load('700 64px Inter');await document.fonts.load('800 64px "Playfair Display"');await document.fonts.load('700 64px Caveat');}catch(e){}
   const ff=FONTS[st.font];const f=st.fields;
-  if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(2,44,34,.55)');og.addColorStop(.5,'rgba(2,44,34,.25)');og.addColorStop(1,'rgba(2,44,34,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
-  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#059669';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#0d9488';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#064e3b');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
+  if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(19,78,74,.55)');og.addColorStop(.5,'rgba(19,78,74,.25)');og.addColorStop(1,'rgba(19,78,74,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
+  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#0D9488';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#14B8A6';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#134E4A');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
   ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3*s;roundRect(ctx,42*s,42*s,W-84*s,H-84*s,40*s);ctx.stroke();
   ctx.textAlign='center';
   const kick=t=>{ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`800 ${24*s}px Inter, sans-serif`;ctx.fillText(t.toUpperCase(),W/2,140*s);};
