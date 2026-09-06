@@ -12,133 +12,147 @@
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}
   .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
-  .card{background:#fff;border:1px solid #f1f5f9;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:1.25rem}
-  .inp{width:100%;border:1px solid #e2e8f0;border-radius:.75rem;background:#f8fafc;padding:.65rem .9rem;font-size:.85rem;font-weight:500;color:#334155;outline:none}
-  .inp:focus{box-shadow:0 0 0 3px rgba(5,150,105,.15);border-color:#10b981}
-  .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem}
-  .acc-bg{background-color:#059669}.acc-soft{background-color:#d1fae5}.acc-text{color:#059669}
+  .card{background:#fff;border:1px solid #E8E6EE;box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
+  .inp{width:100%;border:1px solid #E8E6EE;border-radius:.75rem;background:#F6F5F9;padding:.6rem .9rem;font-size:.85rem;font-weight:500;color:#1E1C24;outline:none}
+  .inp:focus{box-shadow:0 0 0 3px rgba(13,148,136,.2);border-color:#0D9488}
+  .lbl{display:block;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8B8794;margin-bottom:.3rem}
+  .acc-bg{background:#0D9488}.acc-soft{background:#DDF5F2}.acc-text{color:#0B7C72}
+  .brand-grad{background-image:linear-gradient(135deg,#0D9488,#0F766E 55%,#134E4A)}
   @keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin .8s linear infinite}
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
 
-<div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-950">
+<div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 brand-grad">
   <div class="w-full max-w-sm">
-    <div class="text-center mb-8">
-      <div class="w-20 h-20 mx-auto rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-14 h-14 object-contain scale-[1.3]" alt="Logo"></div>
-      <h1 class="text-2xl font-black text-white tracking-tight">Admin Panel</h1>
-      <p class="text-emerald-200 text-sm font-medium mt-1">Guru Berbagi Selogiri · Command Center</p>
-    </div>
+    <div class="text-center mb-8"><div class="w-20 h-20 mx-auto rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-14 h-14 object-contain scale-[1.3]" alt="Logo"></div><h1 class="text-2xl font-black text-white">Admin Panel</h1><p class="text-teal-200 text-sm mt-1">Guru Berbagi Selogiri · Command Center</p></div>
     <form id="formLogin" class="bg-white rounded-3xl p-6 space-y-4 shadow-xl">
-      <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp" placeholder="admin@guru.berbagi.id"></div>
-      <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp" placeholder="••••••••"></div>
-      <button class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2"><i data-lucide="lock-keyhole" class="w-4 h-4"></i> Masuk Dashboard</button>
+      <div><label class="lbl">Email Admin</label><input id="inEmail" type="email" required class="inp"></div>
+      <div><label class="lbl">Password</label><input id="inPass" type="password" required class="inp"></div>
+      <button class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk Dashboard</button>
       <p id="loginErr" class="hidden text-xs font-bold text-rose-500 text-center"></p>
     </form>
   </div>
 </div>
 
-<div id="scrLoading" class="hidden fixed inset-0 z-[100] bg-slate-100 items-center justify-center flex-col gap-3">
-  <div class="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full spin"></div>
-  <p class="text-sm font-bold text-slate-500">Memulihkan sesi…</p>
-</div>
-
 <div id="scrApp" class="hidden min-h-screen flex flex-col md:flex-row">
-  <div class="md:hidden sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center gap-3">
-    <button onclick="openDrawer()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="menu" class="w-5 h-5 text-slate-600"></i></button>
-    <p class="text-sm font-extrabold text-slate-800 flex-1">Admin Panel</p>
+  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white sticky top-0 h-screen">
+    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl brand-grad overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.14</p></div></div>
+    <nav class="flex flex-col gap-1 px-3 overflow-y-auto no-scroll" id="navDesktop"></nav>
+    <div class="mt-auto p-5"><p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p><button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i>Keluar</button></div>
+  </aside>
+  <div class="md:hidden sticky top-0 z-40 bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3">
+    <button onclick="openDrawer()" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="menu" class="w-5 h-5"></i></button>
+    <p class="text-sm font-extrabold flex-1">Admin Panel</p>
     <button onclick="doLogout()" class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="log-out" class="w-4 h-4"></i></button>
   </div>
-
-  <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div>
-    <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform duration-300 flex flex-col p-5">
-      <div class="flex items-center gap-3 mb-6"><div class="w-10 h-10 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-8 h-8 object-contain scale-[1.3]" alt="Logo"></div><div class="flex-1"><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.10</p></div><button onclick="closeDrawer()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-      <nav class="space-y-1.5" id="navMobile"></nav>
-      <p id="drawerEmail" class="mt-auto pt-4 text-[11px] font-bold text-slate-500 truncate border-t border-slate-100">—</p>
-      <button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button>
-    </div>
-  </div>
-
-  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white md:min-h-screen md:sticky md:top-0">
-    <div class="flex items-center gap-3 p-5"><div class="w-11 h-11 rounded-xl acc-bg flex items-center justify-center overflow-hidden"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-9 h-9 object-contain scale-[1.3]" alt="Logo"></div><div><p class="font-extrabold text-slate-800 text-sm">Admin Panel</p><p class="text-[10px] text-slate-400">v4.10</p></div></div>
-    <nav class="flex flex-col gap-1 px-3" id="navDesktop"></nav>
-    <div class="mt-auto p-5"><p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p><button onclick="doLogout()" class="mt-2 w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2"><i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar</button></div>
-  </aside>
+  <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden"><div class="absolute inset-0 bg-black/40" onclick="closeDrawer()"></div><div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white -translate-x-full transition-transform flex flex-col p-5 overflow-y-auto no-scroll"><div class="flex items-center justify-between mb-4"><p class="font-extrabold">Menu</p><button onclick="closeDrawer()"><i data-lucide="x" class="w-5 h-5"></i></button></div><nav class="space-y-1" id="navMobile"></nav></div></div>
 
   <main class="flex-1 p-5 md:p-8 space-y-5 min-w-0">
 
     <section id="sec-dash" class="space-y-4">
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="users" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Total Guru</p><p id="stGuru" class="text-xl font-black text-slate-800">0</p></div></div>
-        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center"><i data-lucide="activity" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Aktif 7 Hari</p><p id="stAktif" class="text-xl font-black text-teal-600">0</p></div></div>
-        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center"><i data-lucide="log-in" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Login Hari Ini</p><p id="stLogin" class="text-xl font-black text-sky-600">0</p></div></div>
-        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center"><i data-lucide="star" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Poin Tersebar</p><p id="stPoin" class="text-xl font-black text-amber-500">0</p></div></div>
-        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center"><i data-lucide="lightbulb" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Saran Baru</p><p id="stFb" class="text-xl font-black text-rose-500">0</p></div></div>
+        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="users" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Total Guru</p><p id="stGuru" class="text-xl font-black text-slate-800">0</p></div></div>
+        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Aktif 7 Hari</p><p id="stAktif" class="text-xl font-black text-teal-600">0</p></div></div>
+        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0"><i data-lucide="log-in" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Login Hari Ini</p><p id="stLogin" class="text-xl font-black text-sky-600">0</p></div></div>
+        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="star" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Poin Tersebar</p><p id="stPoin" class="text-xl font-black text-amber-500">0</p></div></div>
+        <div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-5 h-5"></i></span><div><p class="text-[10px] font-black uppercase text-slate-400">Saran Baru</p><p id="stFb" class="text-xl font-black text-rose-500">0</p></div></div>
       </div>
       <div class="flex flex-wrap gap-2">
-        <button onclick="exportCSV('aktivitas',STATE.log)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i> Export Aktivitas</button>
-        <button onclick="exportCSV('feedback',STATE.fb)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i> Export Feedback</button>
-        <button onclick="exportCSV('guru',STATE.guru)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i> Export Guru</button>
-        <button onclick="purgeLog()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge Log &gt;90 hari</button>
+        <button onclick="exportCSV('aktivitas',STATE.log)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i>Export Aktivitas</button>
+        <button onclick="exportCSV('guru',STATE.guru)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i>Export Guru</button>
+        <button onclick="exportCSV('penukaran',STATE.redem)" class="card px-3 py-2 text-[11px] font-bold text-slate-600 flex items-center gap-1.5"><i data-lucide="download" class="w-3.5 h-3.5"></i>Export Penukaran</button>
+        <button onclick="purgeLog()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Purge Log &gt;90 hari</button>
       </div>
       <div class="grid lg:grid-cols-2 gap-4">
-        <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">Menu Terpopuler</p><div id="topMenus" class="space-y-2 mt-4"></div></div>
-        <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah (aktivitas)</p><div id="leagueList" class="space-y-2 mt-3"></div></div>
+        <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="mouse-pointer-click" class="w-4 h-4 acc-text"></i>Menu Terpopuler</p><div id="topMenus" class="space-y-2 mt-3"></div></div>
+        <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i>Liga Sekolah</p><div id="leagueList" class="space-y-2 mt-3"></div></div>
       </div>
-      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru <span id="logCount" class="text-[10px] text-slate-400"></span></p><div id="actList" class="mt-3"></div><button id="logMore" onclick="loadMoreLog()" class="mt-2 w-full card p-2.5 text-[11px] font-bold text-slate-500">Muat Lebih Banyak</button></div>
-      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700">🏆 Leaderboard Pohon Ilmu</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-4"></div></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="history" class="w-4 h-4 acc-text"></i>Aktivitas Terbaru <span id="logCount" class="text-[10px] text-slate-400"></span></p><div id="actList" class="mt-3"></div><button id="logMore" onclick="loadMoreLog()" class="mt-2 w-full card p-2.5 text-[11px] font-bold text-slate-500">Muat Lebih Banyak</button></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i>Leaderboard</p><div id="leadBoard" class="grid md:grid-cols-2 gap-2 mt-3"></div></div>
     </section>
 
     <section id="sec-menu" class="hidden space-y-4">
-      <div class="flex gap-2"><input id="mSearch" type="text" placeholder="Cari menu…" class="inp flex-1"><button onclick="openMenuEditor()" class="shrink-0 acc-bg text-white font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Menu Baru</button></div>
-      <div class="card p-4 border-amber-200 bg-amber-50/60"><p class="text-xs font-extrabold text-amber-700 flex items-center gap-2"><i data-lucide="eye" class="w-4 h-4"></i> PREVIEW MODE TAMU — <span id="guestCount">0</span> menu</p><div id="guestPrev" class="flex flex-wrap gap-1.5 mt-2"></div></div>
+      <div class="flex gap-2"><input id="mSearch" oninput="renderMenus()" class="inp flex-1" placeholder="Cari menu…"><button onclick="openMenuEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Menu</button></div>
       <div id="menuList" class="space-y-2"></div>
     </section>
 
+    <section id="sec-agenda" class="hidden space-y-4">
+      <div class="flex gap-2"><button onclick="openAgendaEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Agenda</button></div>
+      <div id="agendaList" class="space-y-2"></div>
+    </section>
+
+    <section id="sec-dokumen" class="hidden space-y-4">
+      <div class="flex gap-2"><input id="docSearch" oninput="renderDocsAdmin()" class="inp flex-1" placeholder="Cari dokumen…"><button onclick="openDocEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Dokumen</button></div>
+      <div id="docListAdmin" class="space-y-2"></div>
+    </section>
+
+    <section id="sec-rewards" class="hidden space-y-4">
+      <div class="flex gap-2"><button onclick="openRewardEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Reward</button></div>
+      <div id="rewardListAdmin" class="space-y-2"></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="shopping-bag" class="w-4 h-4 acc-text"></i>Daftar Penukaran</p><div id="redemList" class="space-y-2 mt-3"></div></div>
+    </section>
+
+    <section id="sec-kudos" class="hidden space-y-4">
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="heart" class="w-4 h-4 text-rose-500"></i>Top Penerima Apresiasi</p><div id="kudosTopAdmin" class="space-y-2 mt-3"></div></div>
+      <div class="card p-5"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="history" class="w-4 h-4 acc-text"></i>Riwayat Apresiasi</p><div id="kudosList" class="space-y-2 mt-3"></div></div>
+    </section>
+
     <section id="sec-info" class="hidden space-y-4">
-      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="monitor-smartphone" class="w-4 h-4 acc-text"></i> Tampilan Beranda (On/Off)</p>
-        <div class="grid grid-cols-3 gap-3">
-          <div><label class="lbl">Banner</label><select id="iBanStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
-          <div><label class="lbl">Informasi</label><select id="iInfoStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
-          <div><label class="lbl">Quotes</label><select id="iQuoteStatus" class="inp"><option>ON</option><option>OFF</option></select></div>
-        </div></div>
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="monitor-smartphone" class="w-4 h-4 acc-text"></i>Tampilan Beranda (On/Off)</p>
+        <div class="grid grid-cols-3 gap-3"><div><label class="lbl">Banner</label><select id="iBanStatus" class="inp"><option>ON</option><option>OFF</option></select></div><div><label class="lbl">Informasi</label><select id="iInfoStatus" class="inp"><option>ON</option><option>OFF</option></select></div><div><label class="lbl">Quotes</label><select id="iQuoteStatus" class="inp"><option>ON</option><option>OFF</option></select></div></div></div>
       <div class="grid lg:grid-cols-2 gap-4">
-        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner <span class="text-[10px] text-slate-400 font-bold">· rasio 4:3</span></p>
-          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Hijau</option><option value="red">Merah</option></select></div><div><label class="lbl">Label Tombol</label><input id="iBanLabel" class="inp"></div></div>
+        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="megaphone" class="w-4 h-4 acc-text"></i>Banner</p>
+          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Warna</label><select id="iBanWarna" class="inp"><option value="blue">Biru</option><option value="green">Teal</option><option value="red">Merah</option></select></div><div><label class="lbl">Label Tombol</label><input id="iBanLabel" class="inp"></div></div>
           <div><label class="lbl">Pesan</label><textarea id="iBanPesan" rows="3" class="inp"></textarea></div>
           <div><label class="lbl">Link (awali ext: untuk luar)</label><input id="iBanLink" class="inp"></div>
-          <div><label class="lbl">URL Gambar Banner (opsional)</label><input id="iBanGambar" class="inp" placeholder="https://…"></div></div>
-        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i> Pop-up / Flyer</p>
+          <div><label class="lbl">URL Gambar</label><input id="iBanGambar" class="inp"></div></div>
+        <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>Pop-up / Flyer</p>
           <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Status</label><select id="iPopStatus" class="inp"><option>ON</option><option>OFF</option></select></div><div><label class="lbl">Judul</label><input id="iPopJudul" class="inp"></div></div>
-          <div><label class="lbl">Pesan (HTML flyer)</label><textarea id="iPopPesan" rows="5" class="inp"></textarea></div>
+          <div><label class="lbl">Pesan</label><textarea id="iPopPesan" rows="4" class="inp"></textarea></div>
           <div><label class="lbl">URL Gambar</label><input id="iPopGambar" class="inp"></div></div>
       </div>
-      <div class="card p-5"><label class="lbl">Versi Aplikasi</label><input id="iVersi" class="inp"></div>
-      <button onclick="saveInfo()" class="acc-bg text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i> Simpan Pengaturan</button>
+      <div class="card p-5"><label class="lbl">Versi</label><input id="iVersi" class="inp"></div>
+      <button onclick="saveInfo()" class="acc-bg text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2"><i data-lucide="save" class="w-4 h-4"></i>Simpan Pengaturan</button>
     </section>
 
     <section id="sec-notif" class="hidden space-y-4">
-      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Kirim Pengumuman <span class="text-[10px] text-slate-400 font-bold">· gambar rasio 4:3</span></p>
-        <div class="grid md:grid-cols-2 gap-3"><div><label class="lbl">Judul</label><input id="iNotJudul" class="inp"></div>
-          <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣 Pengumuman</option><option value="info">📢 Info</option><option value="gamifikasi">🏆 Gamifikasi</option><option value="sistem">✨ Sistem</option></select></div><div><label class="lbl">Target</label><select id="iNotTarget" class="inp"><option value="all">Semua</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div></div></div>
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="send" class="w-4 h-4 acc-text"></i>Kirim Pengumuman / Pesan Khusus</p>
+        <div class="grid md:grid-cols-2 gap-3">
+          <div><label class="lbl">Judul</label><input id="iNotJudul" class="inp"></div>
+          <div><label class="lbl">Tipe</label><select id="iNotTipe" class="inp"><option value="pengumuman">📣 Pengumuman</option><option value="info">📢 Info</option><option value="gamifikasi">🏆 Gamifikasi</option><option value="sistem">✨ Sistem</option></select></div>
+        </div>
         <div><label class="lbl">Pesan</label><textarea id="iNotPesan" rows="2" class="inp"></textarea></div>
-        <div><label class="lbl">URL Gambar Informasi (opsional)</label><input id="iNotGambar" class="inp" placeholder="https://…"></div>
-        <button onclick="addNotif()" class="acc-bg text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i> Kirim</button></div>
+        <div><label class="lbl">URL Gambar (opsional)</label><input id="iNotGambar" class="inp"></div>
+        <div><label class="lbl">URL Lampiran (Google Drive / eksternal, opsional)</label><input id="iNotLink" class="inp" placeholder="https://drive.google.com/..."></div>
+        <div class="card p-3 bg-amber-50/50 border-amber-200"><p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-2"><i data-lucide="target" class="w-4 h-4 text-amber-600"></i>Penerima (Scope)</p>
+          <div class="grid md:grid-cols-2 gap-3">
+            <div><label class="lbl">Jenis</label>
+              <select id="iNotScopeType" class="inp" onchange="scopeHint()">
+                <option value="all">Semua guru</option>
+                <option value="role">Per Role (Guru / Kepala Sekolah)</option>
+                <option value="school">Per Sekolah (nama sekolah)</option>
+                <option value="user">Per Guru (guru_id)</option>
+              </select></div>
+            <div><label class="lbl" id="scopeLbl">—</label><input id="iNotScopeVal" class="inp" placeholder="—"></div>
+          </div>
+          <p id="scopeHint" class="text-[10px] text-slate-500 mt-2"></p>
+        </div>
+        <button onclick="addNotif()" class="acc-bg text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="send" class="w-4 h-4"></i>Kirim</button></div>
       <div id="notList" class="space-y-2"></div>
     </section>
 
     <section id="sec-footer" class="hidden space-y-4">
-      <div class="card p-5 grid md:grid-cols-4 gap-3"><div><label class="lbl">Judul</label><input id="iFootJudul" class="inp"></div><div class="md:col-span-2"><label class="lbl">URL</label><input id="iFootUrl" class="inp"></div><div><label class="lbl">Icon</label><input id="iFootIcon" class="inp" placeholder="globe"></div><button onclick="addFooter()" class="md:col-span-4 acc-bg text-white font-bold py-2.5 rounded-xl text-sm">+ Tambah Footer</button></div>
+      <div class="card p-5 grid md:grid-cols-4 gap-3"><div><label class="lbl">Judul</label><input id="iFootJudul" class="inp"></div><div class="md:col-span-2"><label class="lbl">URL</label><input id="iFootUrl" class="inp"></div><div><label class="lbl">Icon</label><input id="iFootIcon" class="inp" placeholder="globe"></div><button onclick="addFooter()" class="md:col-span-4 acc-bg text-white font-bold py-2.5 rounded-xl text-sm">+ Footer</button></div>
       <div id="footList" class="space-y-2"></div>
     </section>
 
     <section id="sec-quotes" class="hidden space-y-4">
-      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="upload" class="w-4 h-4 acc-text"></i> Impor Massal Quotes</p>
-        <div class="flex flex-wrap gap-2"><label class="cursor-pointer bg-slate-100 text-slate-600 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2"><i data-lucide="file-up" class="w-4 h-4"></i> File CSV<input type="file" id="qFile" accept=".csv,.txt" class="hidden" onchange="bacaFileQuotes(event)"></label><button onclick="$('qPaste').classList.toggle('hidden')" class="bg-slate-100 text-slate-600 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2"><i data-lucide="clipboard-paste" class="w-4 h-4"></i> Tempel</button></div>
-        <textarea id="qPaste" rows="4" class="inp hidden" placeholder="kutipan	tokoh"></textarea>
-        <div class="flex items-center gap-2"><button onclick="pratinjauQuotes()" class="acc-soft acc-text font-bold px-4 py-2 rounded-xl text-xs">Pratinjau</button><p id="qPrevInfo" class="text-[11px] font-bold text-slate-400"></p><button id="qImportBtn" onclick="imporQuotes()" class="hidden ml-auto acc-bg text-white font-bold px-4 py-2 rounded-xl text-xs">Impor</button></div></div>
-      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Tambah Satu · <span id="qCount" class="acc-text">0</span></p><div><label class="lbl">Kutipan</label><textarea id="iQuoteText" rows="2" class="inp"></textarea></div><div class="flex gap-2"><input id="iQuoteAuthor" class="inp flex-1" placeholder="Tokoh"><button onclick="addQuote()" class="shrink-0 acc-bg text-white font-bold px-5 py-2 rounded-xl text-sm">+ Tambah</button></div></div>
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700 flex items-center gap-2"><i data-lucide="upload" class="w-4 h-4 acc-text"></i>Impor Massal Quotes</p>
+        <div class="flex gap-2"><label class="cursor-pointer bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2"><i data-lucide="file-up" class="w-4 h-4"></i>File CSV<input type="file" id="qFile" accept=".csv,.txt" class="hidden" onchange="bacaFileQuotes(event)"></label><button onclick="$('qPaste').classList.toggle('hidden')" class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2"><i data-lucide="clipboard-paste" class="w-4 h-4"></i>Tempel</button></div>
+        <textarea id="qPaste" rows="3" class="inp hidden" placeholder="kutipan	tokoh"></textarea>
+        <button onclick="imporQuotes()" class="acc-bg text-white font-bold px-4 py-2 rounded-xl text-xs">Impor</button></div>
+      <div class="card p-5 space-y-3"><p class="text-sm font-extrabold text-slate-700">Tambah Satu · <span id="qCount" class="acc-text">0</span></p><div><label class="lbl">Kutipan</label><textarea id="iQuoteText" rows="2" class="inp"></textarea></div><div class="flex gap-2"><input id="iQuoteAuthor" class="inp flex-1" placeholder="Tokoh"><button onclick="addQuote()" class="acc-bg text-white font-bold px-5 rounded-xl text-sm">+ Tambah</button></div></div>
       <div id="quoteList" class="space-y-2"></div>
     </section>
 
@@ -148,167 +162,191 @@
     </section>
 
     <section id="sec-guru" class="hidden space-y-4">
-      <div class="flex items-center gap-2"><input id="gSearch" type="text" placeholder="Cari nama / sekolah…" class="inp flex-1"><span class="text-xs font-bold text-slate-500"><span id="gCount">0</span> guru</span></div>
-      <p class="text-[11px] text-slate-400 flex items-center gap-1.5"><i data-lucide="info" class="w-3.5 h-3.5"></i> Akun terpusat di SSO — tabel ini hanya baca (read-only).</p>
+      <p class="text-[11px] text-slate-500 flex items-center gap-1.5"><i data-lucide="info" class="w-3.5 h-3.5"></i>Akun terpusat di SSO — tabel hanya baca.</p>
+      <input id="gSearch" oninput="renderGuru()" class="inp" placeholder="Cari nama / sekolah…">
       <div id="guruTable" class="card overflow-hidden"></div>
     </section>
 
     <section id="sec-inspirasi" class="hidden space-y-4">
-      <div class="flex items-center justify-between"><p class="text-sm font-extrabold text-slate-700">Moderasi Inspirasi</p><button onclick="purgeInspirasi()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge kadaluarsa</button></div>
+      <button onclick="purgeInspirasi()" class="card px-3 py-2 text-[11px] font-bold text-rose-500 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Purge kadaluarsa</button>
       <div id="inspList" class="space-y-2"></div>
     </section>
   </main>
 </div>
 
-<div id="mMenu" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50">
-  <div class="w-full max-w-lg bg-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto no-scroll space-y-3">
-    <div class="flex items-center justify-between"><p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p><button onclick="closeMenu()" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-    <div><label class="lbl">Judul</label><input id="eJudul" class="inp"></div>
-    <div><label class="lbl">Deskripsi</label><input id="eDesk" class="inp"></div>
-    <div><label class="lbl">URL</label><input id="eUrl" class="inp"></div>
-    <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Icon</label><input id="eIcon" class="inp"></div><div><label class="lbl">Warna</label><select id="eWarna" class="inp"><option>blue</option><option>teal</option><option>rose</option><option>orange</option><option>green</option><option>emerald</option><option>violet</option><option>fuchsia</option><option>cyan</option><option>red</option><option>yellow</option></select></div></div>
-    <div><label class="lbl">Kategori</label><select id="eKategori" class="inp"><option>AI & Perangkat Ajar</option><option>Jurnal & Administrasi</option><option>Karya & Inspirasi</option><option>Komunitas & KKG</option><option>Kepala Sekolah</option><option>Tools & Arsip</option><option>Informasi</option><option>Umum</option></select></div>
-    <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Parent</label><select id="eParent" class="inp"><option value="">—</option></select></div><div><label class="lbl">Tampil Di</label><select id="eTampil" class="inp"><option value="all">Semua</option><option value="mobile">HP</option><option value="desktop">PC</option><option value="off">Off</option></select></div></div>
-    <div class="grid grid-cols-3 gap-3"><div><label class="lbl">Ukuran</label><select id="eUkuran" class="inp"><option value="normal">Normal</option><option value="wide">Lebar</option></select></div><div><label class="lbl">Akses</label><select id="eRole" class="inp"><option value="all">Publik</option><option value="tamu">Tamu</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option><option value="off">Off</option></select></div><div><label class="lbl">Urutan</label><input id="eSort" type="number" class="inp" value="0"></div></div>
-    <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Label Badge</label><input id="eLabel" class="inp"></div><div><label class="lbl">Cara Buka</label><select id="eBuka" class="inp"><option value="">Luar</option><option value="app">Dalam</option></select></div></div>
-    <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="eActive" type="checkbox" checked class="w-4 h-4 accent-emerald-600"> Aktif</label>
-    <div class="flex gap-2 pt-2"><button onclick="saveMenu()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm">Simpan</button><button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 py-3 rounded-xl text-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
-  </div>
-</div>
+<div id="mMenu" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50"><div class="w-full max-w-lg bg-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto no-scroll space-y-3">
+  <p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p>
+  <div><label class="lbl">Judul</label><input id="eJudul" class="inp"></div>
+  <div><label class="lbl">Deskripsi</label><input id="eDesk" class="inp"></div>
+  <div><label class="lbl">URL</label><input id="eUrl" class="inp"></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Icon</label><input id="eIcon" class="inp" placeholder="app-window"></div><div><label class="lbl">Warna</label><select id="eWarna" class="inp"><option>blue</option><option>teal</option><option>rose</option><option>orange</option><option>green</option><option>emerald</option><option>violet</option><option>fuchsia</option><option>cyan</option><option>red</option><option>yellow</option></select></div></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Kategori</label><select id="eKategori" class="inp"><option>AI & Perangkat Ajar</option><option>Jurnal & Administrasi</option><option>Karya & Inspirasi</option><option>Komunitas & KKG</option><option>Kepala Sekolah</option><option>Tools & Arsip</option><option>Informasi</option><option>Umum</option></select></div><div><label class="lbl">Parent (submenu)</label><select id="eParent" class="inp"><option value="">—</option></select></div></div>
+  <div class="grid grid-cols-3 gap-3"><div><label class="lbl">Tampil Di</label><select id="eTampil" class="inp"><option value="all">Semua</option><option value="mobile">HP</option><option value="desktop">PC</option><option value="off">Off</option></select></div><div><label class="lbl">Akses</label><select id="eRole" class="inp"><option value="all">Publik</option><option value="tamu">Tamu</option><option value="Guru">Guru</option><option value="Kepala Sekolah">Kepsek</option></select></div><div><label class="lbl">Cara Buka</label><select id="eBuka" class="inp"><option value="">Luar</option><option value="app">Dalam</option></select></div></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Label Badge</label><input id="eLabel" class="inp" placeholder="BARU / HOT"></div><div><label class="lbl">Urutan</label><input id="eSort" type="number" class="inp" value="0"></div></div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="eActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif</label>
+  <div class="flex gap-2"><button onclick="saveMenu()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm">Simpan</button><button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm">Hapus</button><button onclick="closeModal('mMenu')" class="bg-slate-100 px-4 rounded-xl text-sm">Tutup</button></div>
+</div></div>
 
-<div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
-  <div class="w-full max-w-xs bg-white rounded-3xl p-6 text-center">
-    <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
-    <p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin?</p>
-    <p id="cfMsg" class="text-xs text-slate-500 mt-1">…</p>
-    <div class="grid grid-cols-2 gap-2 mt-5">
-      <button onclick="cfCancel()" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button>
-      <button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button>
-    </div>
-  </div>
-</div>
+<div id="mAgenda" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50"><div class="w-full max-w-lg bg-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto no-scroll space-y-3">
+  <p class="text-base font-extrabold text-slate-800" id="aTitle">Editor Agenda</p>
+  <div><label class="lbl">Judul</label><input id="aJudul" class="inp"></div>
+  <div><label class="lbl">Deskripsi</label><textarea id="aDesk" rows="2" class="inp"></textarea></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Tanggal</label><input id="aTanggal" type="date" class="inp"></div><div><label class="lbl">Waktu</label><input id="aWaktu" class="inp" placeholder="08.00"></div></div>
+  <div><label class="lbl">Tempat</label><input id="aTempat" class="inp"></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Kategori</label><input id="aKategori" class="inp" value="Kegiatan"></div><div><label class="lbl">Link (opsional)</label><input id="aLink" class="inp"></div></div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="aActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif</label>
+  <div class="flex gap-2"><button onclick="saveAgenda()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm">Simpan</button><button id="aDelete" onclick="delAgenda()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm">Hapus</button><button onclick="closeModal('mAgenda')" class="bg-slate-100 px-4 rounded-xl text-sm">Tutup</button></div>
+</div></div>
 
-<div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 backdrop-blur border border-white/10 shadow-2xl rounded-2xl pl-3 pr-5 py-3"><span class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white">…</p></div></div>
+<div id="mDoc" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50"><div class="w-full max-w-lg bg-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto no-scroll space-y-3">
+  <p class="text-base font-extrabold text-slate-800" id="docTitle">Editor Dokumen</p>
+  <div><label class="lbl">Judul</label><input id="docJudul" class="inp"></div>
+  <div><label class="lbl">Deskripsi</label><input id="docDesk" class="inp"></div>
+  <div><label class="lbl">Link (Google Drive / eksternal)</label><input id="docLink" class="inp" placeholder="https://drive.google.com/…"></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Kategori</label><input id="docKat" class="inp" value="Umum"></div><div><label class="lbl">Icon</label><input id="docIcon" class="inp" value="file-text"></div></div>
+  <div><label class="lbl">Warna</label><select id="docWarna" class="inp"><option>blue</option><option>teal</option><option>rose</option><option>orange</option><option>green</option><option>emerald</option><option>violet</option><option>fuchsia</option><option>cyan</option><option>red</option><option>yellow</option></select></div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="docActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif</label>
+  <div class="flex gap-2"><button onclick="saveDoc()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm">Simpan</button><button id="docDelete" onclick="delDoc()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm">Hapus</button><button onclick="closeModal('mDoc')" class="bg-slate-100 px-4 rounded-xl text-sm">Tutup</button></div>
+</div></div>
+
+<div id="mReward" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50"><div class="w-full max-w-lg bg-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto no-scroll space-y-3">
+  <p class="text-base font-extrabold text-slate-800" id="rTitle">Editor Reward</p>
+  <div><label class="lbl">Judul</label><input id="rJudul" class="inp"></div>
+  <div><label class="lbl">Deskripsi</label><input id="rDesk" class="inp"></div>
+  <div class="grid grid-cols-2 gap-3"><div><label class="lbl">Biaya Poin</label><input id="rBiaya" type="number" class="inp" value="50"></div><div><label class="lbl">Stok (-1 = ∞)</label><input id="rStok" type="number" class="inp" value="-1"></div></div>
+  <div><label class="lbl">Link (opsional)</label><input id="rLink" class="inp"></div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-600"><input id="rActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif</label>
+  <div class="flex gap-2"><button onclick="saveReward()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm">Simpan</button><button id="rDelete" onclick="delReward()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm">Hapus</button><button onclick="closeModal('mReward')" class="bg-slate-100 px-4 rounded-xl text-sm">Tutup</button></div>
+</div></div>
+
+<div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-xs bg-white rounded-3xl p-6 text-center"><div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div><p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin?</p><p id="cfMsg" class="text-xs text-slate-500 mt-1">…</p><div class="grid grid-cols-2 gap-2 mt-5"><button onclick="cfCancel()" class="bg-slate-100 font-bold py-2.5 rounded-xl text-sm">Batal</button><button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm">Hapus</button></div></div></div>
+<div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[99] pointer-events-none opacity-0 -translate-y-3 transition-all"><div class="bg-slate-900/95 text-white text-[13px] font-bold px-5 py-3 rounded-2xl shadow-2xl" id="toastMsg">…</div></div>
 
 <script>
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
-const sb=window.supabase.createClient(SB_URL,SB_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}});
+const sb=window.supabase.createClient(SB_URL,SB_ANON,{auth:{persistSession:true,storage:window.localStorage}});
 const $=id=>document.getElementById(id);
-const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,gam:[],lead:[],inspi:[],config:null,editMenuId:null};
-const COLOR={teal:'bg-teal-100 text-teal-600',orange:'bg-orange-100 text-orange-600',blue:'bg-blue-100 text-blue-600',green:'bg-green-100 text-green-600',rose:'bg-rose-100 text-rose-600',violet:'bg-violet-100 text-violet-600',fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',red:'bg-red-100 text-red-600',emerald:'bg-emerald-100 text-emerald-600',yellow:'bg-yellow-100 text-yellow-600'};
-const TABS=[['dash','layout-dashboard','Dashboard'],['menu','layout-grid','Menu'],['info','megaphone','Banner'],['notif','bell','Notifikasi'],['footer','link','Footer'],['quotes','quote','Quotes'],['fb','lightbulb','Saran'],['guru','users','Guru'],['inspirasi','share-2','Inspirasi']];
+const COLOR={teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],yellow:['bg-yellow-100','text-yellow-600']};
+const STATE={menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,gam:[],lead:[],inspi:[],config:null,agenda:[],docs:[],rewards:[],redem:[],kudos:[],kudosTop:[],editMenu:null,editAgenda:null,editDoc:null,editReward:null};
+const TABS=[['dash','layout-dashboard','Dashboard'],['menu','layout-grid','Menu'],['agenda','calendar-days','Agenda'],['dokumen','folder-open','Dokumen'],['rewards','gift','Toko Poin'],['kudos','heart-handshake','Apresiasi'],['info','megaphone','Banner'],['notif','bell','Notifikasi'],['footer','link','Footer'],['quotes','quote','Quotes'],['fb','lightbulb','Saran'],['guru','users','Guru'],['inspirasi','share-2','Inspirasi']];
 function icons(){lucide.createIcons();}
 function esc(s){return (s||'').replace(/</g,'&lt;');}
-function toast(m,type){type=type||'success';const ic={success:'check',error:'triangle-alert',info:'info'}[type]||'check';$('toastMsg').textContent=m;$('toastIcon').setAttribute('data-lucide',ic);icons();const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);}
+function toast(m){$('toastMsg').textContent=m;const t=$('toast');t.classList.remove('opacity-0','-translate-y-3');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2200);}
 let cfCb=null;
-function confirmDialog(msg,onOk,title,okLabel){$('cfMsg').textContent=msg;$('cfTitle').textContent=title||'Yakin?';$('cfOk').textContent=okLabel||'Hapus';cfCb=onOk;const m=$('mConfirm');m.classList.remove('hidden');m.classList.add('flex');icons();}
+function confirmDialog(msg,onOk,title){$('cfMsg').textContent=msg;$('cfTitle').textContent=title||'Yakin?';cfCb=onOk;$('mConfirm').classList.remove('hidden');$('mConfirm').classList.add('flex');}
 function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classList.remove('flex');cfCb=null;}
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
-function buildNav(){const h=TABS.map(([t,i,l],x)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold ${x===0?'acc-soft acc-text':'text-slate-500 hover:bg-slate-50'}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');$('navMobile').innerHTML=h;$('navDesktop').innerHTML=h;icons();}
-function openDrawer(){$('drawer').classList.remove('hidden');$('drawerEmail').textContent=$('adminEmail').textContent;requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));}
+function openModal(id){$(id).classList.remove('hidden');$(id).classList.add('flex');}
+function closeModal(id){$(id).classList.add('hidden');$(id).classList.remove('flex');}
+function openDrawer(){$('drawer').classList.remove('hidden');requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));}
 function closeDrawer(){$('drawerSheet').classList.add('-translate-x-full');setTimeout(()=>$('drawer').classList.add('hidden'),300);}
-function setTab(t){closeDrawer();document.querySelectorAll('.tab-btn').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);});['dash','menu','info','notif','footer','quotes','fb','guru','inspirasi'].forEach(s=>$('sec-'+s).classList.toggle('hidden',s!==t));}
-function exportCSV(name,rows){if(!rows||!rows.length)return toast('Tidak ada data','info');const keys=Object.keys(rows[0]);const csv=[keys.join(',')].concat(rows.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"').join(','))).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=name+'.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV diunduh');}
+function buildNav(){const h=TABS.map(([t,i,l],x)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold ${x===0?'acc-soft acc-text':'text-slate-500'}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');$('navDesktop').innerHTML=h;$('navMobile').innerHTML=h;icons();}
+function setTab(t){closeDrawer();document.querySelectorAll('.tab-btn').forEach(b=>{const on=b.dataset.tab===t;b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);});TABS.forEach(([k])=>$('sec-'+k).classList.toggle('hidden',k!==t));}
+function exportCSV(name,rows){if(!rows||!rows.length)return toast('Tidak ada data');const keys=Object.keys(rows[0]);const csv=[keys.join(',')].concat(rows.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"').join(','))).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=name+'.csv';a.click();toast('CSV diunduh');}
 
 $('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('loginErr').classList.add('hidden');const {error}=await sb.auth.signInWithPassword({email:$('inEmail').value.trim(),password:$('inPass').value});if(error){$('loginErr').textContent='❌ '+error.message;$('loginErr').classList.remove('hidden');return;}init();});
-async function init(){const {data:{session}}=await sb.auth.getSession();if(!session){icons();return;}const {data:isAdmin}=await sb.rpc('creative_is_admin');if(!isAdmin){toast('Akun ini bukan admin','error');await sb.auth.signOut();return;}$('adminEmail').textContent=session.user.email;$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}
-sb.auth.onAuthStateChange((ev,ses)=>{if(ev==='SIGNED_IN'&&ses){init();}if(ev==='SIGNED_OUT'){$('scrApp').classList.add('hidden');$('scrLogin').classList.remove('hidden');}});
-(async function boot(){$('scrLoading').classList.remove('hidden');$('scrLoading').classList.add('flex');const {data:{session}}=await sb.auth.getSession();if(session){const {data:isAdmin}=await sb.rpc('creative_is_admin');if(isAdmin){$('adminEmail').textContent=session.user.email;$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}}$('scrLoading').classList.add('hidden');icons();})();
+async function init(){const {data:isAdmin}=await sb.rpc('creative_is_admin');if(!isAdmin){toast('Bukan admin');await sb.auth.signOut();return;}$('adminEmail').textContent=((await sb.auth.getUser()).data?.user?.email)||'admin';$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}
+sb.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_OUT'){$('scrApp').classList.add('hidden');$('scrLogin').classList.remove('hidden');}});
+(async function boot(){const {data:{session}}=await sb.auth.getSession();if(session){const {data:isAdmin}=await sb.rpc('creative_is_admin');if(isAdmin){$('adminEmail').textContent=session?.user?.email||'admin';$('scrLogin').classList.add('hidden');$('scrApp').classList.remove('hidden');buildNav();loadAll();}}icons();})();
 async function doLogout(){await sb.auth.signOut();location.reload();}
 
 async function loadAll(){
-  const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,inspi]=await Promise.all([
-    sb.from('creative_menus').select('*').order('sort_order'),
-    sb.from('creative_footers').select('*').order('sort_order'),
-    sb.from('creative_quotes').select('*').order('id'),
-    sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false}),
-    sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),
-    sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
+  const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,inspi,agenda,docs,rewards,redem,kudos,kudosTop]=await Promise.all([
+    sb.from('creative_menus').select('*').order('sort_order'),sb.from('creative_footers').select('*').order('sort_order'),
+    sb.from('creative_quotes').select('*').order('id'),sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false}),
+    sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
     sb.from('creative_gamification').select('*').order('total_poin',{ascending:false}),
     sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).limit(50),
-    sb.rpc('creative_admin_list_guru'),
-    sb.rpc('creative_leaderboard'),
-    sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
-  ]);
-  STATE.menus=menus.data||[];STATE.footer=footer.data||[];STATE.quotes=quotes.data||[];STATE.notifs=notifs.data||[];STATE.fb=fb.data||[];STATE.config=cfg.data;STATE.gam=gam.data||[];STATE.log=log.data||[];STATE.guru=guru.data||[];STATE.lead=lead.data||[];STATE.inspi=inspi.data||[];
+    sb.rpc('creative_admin_list_guru'),sb.rpc('creative_leaderboard'),sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
+    sb.from('creative_agenda').select('*').order('tanggal',{ascending:false}),
+    sb.from('creative_documents').select('*').order('kategori'),sb.from('creative_rewards').select('*').order('biaya_poin'),
+    sb.from('creative_redemptions').select('*').order('created_at',{ascending:false}),sb.from('creative_kudos').select('*').order('created_at',{ascending:false}),
+    sb.rpc('creative_kudos_top')]);
+  STATE.menus=menus.data||[];STATE.footer=footer.data||[];STATE.quotes=quotes.data||[];STATE.notifs=notifs.data||[];STATE.fb=fb.data||[];STATE.config=cfg.data;STATE.gam=gam.data||[];STATE.log=log.data||[];STATE.guru=guru.data||[];STATE.lead=lead.data||[];STATE.inspi=inspi.data||[];STATE.agenda=agenda.data||[];STATE.docs=docs.data||[];STATE.rewards=rewards.data||[];STATE.redem=redem.data||[];STATE.kudos=kudos.data||[];STATE.kudosTop=kudosTop.data||[];
   sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{STATE.logTotal=r.count||0;renderActCount();});
-  renderDash();renderMenus();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();renderInspirasi();fillInfo();icons();
+  renderDash();renderMenus();renderAgendaAdmin();renderDocsAdmin();renderRewardsAdmin();renderKudosAdmin();renderFooter();renderQuotes();renderNotif();renderFb();renderGuru();renderInspirasi();fillInfo();scopeHint();icons();
 }
-function renderActCount(){const el=$('logCount');if(el)el.textContent=`(${STATE.log.length} / ${STATE.logTotal||0})`;}
-async function loadMoreLog(){const from=STATE.log.length;const {data}=await sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).range(from,from+49);if(data&&data.length){STATE.log=STATE.log.concat(data);renderDash();}renderActCount();if(STATE.log.length>=(STATE.logTotal||0)){const b=$('logMore');if(b)b.style.display='none';}}
-
-function renderDash(){
-  const today=new Date();today.setHours(0,0,0,0);const week=new Date();week.setDate(week.getDate()-7);
+function renderActCount(){$('logCount').textContent=`(${STATE.log.length}/${STATE.logTotal||0})`;}
+async function loadMoreLog(){const from=STATE.log.length;const {data}=await sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).range(from,from+49);if(data&&data.length){STATE.log=STATE.log.concat(data);renderDash();}renderActCount();if(STATE.log.length>=(STATE.logTotal||0))$('logMore').style.display='none';}
+function renderDash(){const today=new Date();today.setHours(0,0,0,0);const week=new Date();week.setDate(week.getDate()-7);
   $('stGuru').textContent=STATE.guru.length;
-  $('stAktif').textContent=new Set(STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&l.guru_id&&new Date(l.created_at)>=week).map(l=>l.guru_id)).size;
+  $('stAktif').textContent=new Set(STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=week).map(l=>l.guru_id)).size;
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
   const cnt={};STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{const j=(l.detail||{}).judul;if(j)cnt[j]=(cnt[j]||0)+1;});
   $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span><span class="text-xs font-black text-slate-400">${c}×</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-  const league={};STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);if(g){const s=g.satuan_pendidikan||'—';league[s]=(league[s]||0)+1;}});
-  $('leagueList').innerHTML=Object.entries(league).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([s,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s)}</span><span class="text-xs font-black text-slate-400">${c}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-  $('actList').innerHTML=STATE.log.map(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu'}[l.aksi]||l.aksi;const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0"><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span><span class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  const lg={};STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);if(g)lg[g.satuan_pendidikan||'-']=(lg[g.satuan_pendidikan||'-']||0)+1;});
+  $('leagueList').innerHTML=Object.entries(lg).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([s,c],i)=>`<div class="flex items-center gap-3"><span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s)}</span><span class="text-xs font-black text-slate-400">${c}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  $('actList').innerHTML=STATE.log.map(l=>{const g=STATE.guru.find(x=>x.id===l.guru_id);const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu'}[l.aksi]||l.aksi;const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0"><span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span><span class="text-[10px] text-slate-400">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>`;}).join('');
   renderActCount();
-  $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','🥈',''][i]||''}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${g.level}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-}
-function purgeLog(){confirmDialog('Hapus log aktivitas >90 hari? Tindakan tidak dapat dibatalkan.',async()=>{const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast((data||0)+' log dipurge');loadAll();},'Purge Log?','Purge');}
+  $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`<div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5"><span class="text-lg">${['🥇','','🥉'][i]||''}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span><span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span><span class="text-[10px] font-bold text-slate-400">${esc(g.level||'')}</span></div>`).join('');}
+function purgeLog(){confirmDialog('Hapus log >90 hari?',async()=>{const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});toast((data||0)+' log dipurge');loadAll();},'Purge Log?');}
 
-function guestVisible(m){if(!m.is_active||m.tampil_di==='off')return false;const r=m.akses_role;return (r==='tamu'||r==='all'||r==='');}
-function renderMenus(){const f=($('mSearch').value||'').toLowerCase();
-  $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map((m,idx)=>`<div class="card p-4 flex items-center gap-2"><span class="w-6 text-center text-[10px] font-black text-slate-300">${idx+1}</span><span class="w-10 h-10 rounded-xl ${COLOR[m.warna]||COLOR.blue} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${m.label}</span>`:''} ${!m.is_active?'<span class="text-[9px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase">Nonaktif</span>':''}</p><p class="text-[10px] text-slate-400 truncate">${m.sub_menu_dari?'↳ '+m.sub_menu_dari+' · ':''}${m.kategori||'Umum'} · ${m.akses_role}</p></div><div class="flex flex-col gap-1"><button onclick="moveMenu(${m.id},-1)" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center"><i data-lucide="arrow-up" class="w-3 h-3"></i></button><button onclick="moveMenu(${m.id},1)" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center"><i data-lucide="arrow-down" class="w-3 h-3"></i></button></div><button onclick="openMenuEditor(${m.id})" class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="pencil" class="w-4 h-4"></i></button></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada.</p>';
-  const g=STATE.menus.filter(guestVisible);$('guestCount').textContent=g.length;$('guestPrev').innerHTML=g.map(m=>`<span class="text-[10px] font-bold bg-white border border-amber-200 text-amber-700 px-2.5 py-1 rounded-lg">${esc(m.judul)}</span>`).join('')||'<p class="text-[11px] text-amber-600">Kosong.</p>';icons();}
-$('mSearch').addEventListener('input',renderMenus);
+function renderMenus(){const f=($('mSearch').value||'').toLowerCase();$('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map((m,idx)=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${esc(m.label)}</span>`:''} ${!m.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p><p class="text-[10px] text-slate-400 truncate">${idx+1} · ${esc(m.kategori||'Umum')} · ${esc(m.akses_role||'all')}${m.sub_menu_dari?' · ↳ '+esc(m.sub_menu_dari):''}</p></div><div class="flex flex-col gap-1"><button onclick="moveMenu(${m.id},-1)" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center"><i data-lucide="arrow-up" class="w-3 h-3"></i></button><button onclick="moveMenu(${m.id},1)" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center"><i data-lucide="arrow-down" class="w-3 h-3"></i></button></div><button onclick="openMenuEditor(${m.id})" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada menu.</p>';icons();}
 async function moveMenu(id,dir){const full=STATE.menus;const i=full.findIndex(m=>m.id===id);const j=i+dir;if(i<0||j<0||j>=full.length)return;const old={};full.forEach(m=>old[m.id]=m.sort_order);[full[i],full[j]]=[full[j],full[i]];full.forEach((m,idx)=>m.sort_order=idx+1);renderMenus();const ch=full.filter(m=>old[m.id]!==m.sort_order);await Promise.all(ch.map(m=>sb.from('creative_menus').update({sort_order:m.sort_order}).eq('id',m.id)));toast('Urutan disimpan');}
 function fillParentSelect(){$('eParent').innerHTML='<option value="">—</option>'+STATE.menus.filter(m=>!m.sub_menu_dari).map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');}
-function openMenuEditor(id){STATE.editMenuId=id||null;$('eTitle').textContent=id?'Edit Menu':'Menu Baru';$('eDelete').classList.toggle('hidden',!id);const m=id?STATE.menus.find(x=>x.id===id):null;fillParentSelect();$('eJudul').value=m?m.judul:'';$('eDesk').value=m?m.deskripsi:'';$('eUrl').value=m?m.url:'';$('eIcon').value=m?m.icon:'';$('eWarna').value=m?m.warna:'blue';$('eKategori').value=m?(m.kategori||'Umum'):'Umum';$('eParent').value=m?m.sub_menu_dari:'';$('eTampil').value=m?m.tampil_di:'all';$('eUkuran').value=m?m.ukuran:'normal';$('eRole').value=m?m.akses_role:'all';$('eBuka').value=m?m.cara_buka:'';$('eLabel').value=m?m.label:'';$('eSort').value=m?m.sort_order:0;$('eActive').checked=m?m.is_active:true;$('mMenu').classList.remove('hidden');$('mMenu').classList.add('flex');icons();}
-function closeMenu(){$('mMenu').classList.add('hidden');$('mMenu').classList.remove('flex');}
-async function reloadMenus(){const {data}=await sb.from('creative_menus').select('*').order('sort_order');STATE.menus=data||[];renderMenus();}
-async function saveMenu(){const row={judul:$('eJudul').value.trim(),deskripsi:$('eDesk').value.trim(),url:$('eUrl').value.trim(),icon:$('eIcon').value.trim()||'app-window',warna:$('eWarna').value,kategori:$('eKategori').value,sub_menu_dari:$('eParent').value,tampil_di:$('eTampil').value,ukuran:$('eUkuran').value,akses_role:$('eRole').value,cara_buka:$('eBuka').value,label:$('eLabel').value.trim(),sort_order:parseInt($('eSort').value)||0,is_active:$('eActive').checked};if(!row.judul)return toast('Judul wajib','error');const q=STATE.editMenuId?sb.from('creative_menus').update(row).eq('id',STATE.editMenuId):sb.from('creative_menus').insert(row);const {error}=await q;if(error)return toast(error.message,'error');toast('Menu tersimpan');closeMenu();await reloadMenus();}
-function delMenu(){confirmDialog('Hapus menu ini? Tindakan tidak dapat dibatalkan.',async()=>{const {error}=await sb.from('creative_menus').delete().eq('id',STATE.editMenuId);if(error)return toast(error.message,'error');toast('Menu dihapus');closeMenu();await reloadMenus();},'Hapus Menu?','Hapus');}
+function openMenuEditor(id){STATE.editMenu=id||null;$('eTitle').textContent=id?'Edit Menu':'Menu Baru';$('eDelete').classList.toggle('hidden',!id);const m=id?STATE.menus.find(x=>x.id===id):null;fillParentSelect();$('eJudul').value=m?m.judul:'';$('eDesk').value=m?m.deskripsi:'';$('eUrl').value=m?m.url:'';$('eIcon').value=m?m.icon:'';$('eWarna').value=m?m.warna:'blue';$('eKategori').value=m?(m.kategori||'Umum'):'Umum';$('eParent').value=m?(m.sub_menu_dari||''):'';$('eTampil').value=m?m.tampil_di:'all';$('eRole').value=m?m.akses_role:'all';$('eBuka').value=m?m.cara_buka:'';$('eLabel').value=m?m.label||'':'';$('eSort').value=m?m.sort_order:0;$('eActive').checked=m?m.is_active:true;openModal('mMenu');}
+async function saveMenu(){const row={judul:$('eJudul').value.trim(),deskripsi:$('eDesk').value.trim(),url:$('eUrl').value.trim(),icon:$('eIcon').value.trim()||'app-window',warna:$('eWarna').value,kategori:$('eKategori').value,sub_menu_dari:$('eParent').value,tampil_di:$('eTampil').value,akses_role:$('eRole').value,cara_buka:$('eBuka').value,label:$('eLabel').value.trim(),sort_order:parseInt($('eSort').value)||0,is_active:$('eActive').checked};if(!row.judul)return toast('Judul wajib');const q=STATE.editMenu?sb.from('creative_menus').update(row).eq('id',STATE.editMenu):sb.from('creative_menus').insert(row);const {error}=await q;if(error)return toast(error.message);toast('Menu tersimpan');closeModal('mMenu');loadAll();}
+function delMenu(){confirmDialog('Hapus menu?',async()=>{await sb.from('creative_menus').delete().eq('id',STATE.editMenu);toast('Menu dihapus');closeModal('mMenu');loadAll();},'Hapus Menu?');}
 
-function fillInfo(){const c=STATE.config;if(!c)return;
-  $('iBanStatus').value=c.banner_status;$('iInfoStatus').value=c.info_status||'ON';$('iQuoteStatus').value=c.quote_status||'ON';
-  $('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;$('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;$('iBanGambar').value=c.banner_gambar||'';
-  $('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;$('iPopGambar').value=c.pop_gambar||'';$('iVersi').value=c.versi;}
-async function saveInfo(){const row={banner_status:$('iBanStatus').value,info_status:$('iInfoStatus').value,quote_status:$('iQuoteStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,banner_gambar:$('iBanGambar').value,pop_status:$('iPopStatus').value,pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,pop_gambar:$('iPopGambar').value,versi:$('iVersi').value,updated_at:new Date().toISOString()};const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);if(error)return toast(error.message,'error');toast('Pengaturan tersimpan & live');}
+function renderAgendaAdmin(){$('agendaList').innerHTML=STATE.agenda.map(a=>`<div class="card p-4 flex items-center gap-3"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${new Date(a.tanggal).getDate()}</span><span class="text-[8px] font-bold uppercase">${new Date(a.tanggal).toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800 truncate">${esc(a.judul)} ${!a.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.kategori||'')} · ${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div><button onclick="openAgendaEditor(${a.id})" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada agenda.</p>';icons();}
+function openAgendaEditor(id){STATE.editAgenda=id||null;$('aTitle').textContent=id?'Edit Agenda':'Agenda Baru';$('aDelete').classList.toggle('hidden',!id);const a=id?STATE.agenda.find(x=>x.id===id):null;$('aJudul').value=a?a.judul:'';$('aDesk').value=a?a.deskripsi||'':'';$('aTanggal').value=a?a.tanggal:'';$('aWaktu').value=a?a.waktu||'':'';$('aTempat').value=a?a.tempat||'':'';$('aKategori').value=a?a.kategori||'Kegiatan':'Kegiatan';$('aLink').value=a?a.link||'':'';$('aActive').checked=a?a.is_active:true;openModal('mAgenda');}
+async function saveAgenda(){const row={judul:$('aJudul').value.trim(),deskripsi:$('aDesk').value.trim(),tanggal:$('aTanggal').value,waktu:$('aWaktu').value.trim(),tempat:$('aTempat').value.trim(),kategori:$('aKategori').value.trim(),link:$('aLink').value.trim(),is_active:$('aActive').checked};if(!row.judul||!row.tanggal)return toast('Judul & tanggal wajib');const q=STATE.editAgenda?sb.from('creative_agenda').update(row).eq('id',STATE.editAgenda):sb.from('creative_agenda').insert(row);const {error}=await q;if(error)return toast(error.message);toast('Agenda tersimpan');closeModal('mAgenda');loadAll();}
+function delAgenda(){confirmDialog('Hapus agenda?',async()=>{await sb.from('creative_agenda').delete().eq('id',STATE.editAgenda);toast('Agenda dihapus');closeModal('mAgenda');loadAll();},'Hapus Agenda?');}
 
-async function reloadNotif(){const {data}=await sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false});STATE.notifs=data||[];renderNotif();}
-async function addNotif(){const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:$('iNotTarget').value,gambar:$('iNotGambar').value.trim()};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_notifications').insert(row);if(error)return toast(error.message,'error');$('iNotJudul').value='';$('iNotPesan').value='';$('iNotGambar').value='';toast('Pengumuman terkirim');await reloadNotif();}
-async function toggleNotif(id,act){await sb.from('creative_notifications').update({is_active:act}).eq('id',id);await reloadNotif();}
-function delNotif(id){confirmDialog('Hapus notifikasi ini?',async()=>{await sb.from('creative_notifications').delete().eq('id',id);await reloadNotif();toast('Notifikasi dihapus');},'Hapus Notifikasi?','Hapus');}
-function renderNotif(){$('notList').innerHTML=STATE.notifs.map(n=>`<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}">${n.gambar?`<img src="${n.gambar}" class="w-12 h-12 rounded-lg object-cover">`:`<span class="text-xl">${{info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢'}</span>`}<div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(n.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(n.pesan)}</p></div><button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${n.is_active?'AKTIF':'OFF'}</button><button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
+function renderDocsAdmin(){const f=($('docSearch').value||'').toLowerCase();$('docListAdmin').innerHTML=STATE.docs.filter(d=>d.judul.toLowerCase().includes(f)).map(d=>{const [bg,tx]=COLOR[d.warna]||COLOR.blue;return `<div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${d.icon||'file-text'}" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800 truncate">${esc(d.judul)} ${!d.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p><p class="text-[10px] text-slate-500 truncate">${esc(d.kategori||'Umum')}</p></div><a href="${esc(d.link)}" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a><button onclick="openDocEditor(${d.id})" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada dokumen.</p>';icons();}
+function openDocEditor(id){STATE.editDoc=id||null;$('docTitle').textContent=id?'Edit Dokumen':'Dokumen Baru';$('docDelete').classList.toggle('hidden',!id);const d=id?STATE.docs.find(x=>x.id===id):null;$('docJudul').value=d?d.judul:'';$('docDesk').value=d?d.deskripsi||'':'';$('docLink').value=d?d.link:'';$('docKat').value=d?d.kategori||'Umum':'Umum';$('docIcon').value=d?d.icon||'file-text':'file-text';$('docWarna').value=d?d.warna||'blue':'blue';$('docActive').checked=d?d.is_active:true;openModal('mDoc');}
+async function saveDoc(){const row={judul:$('docJudul').value.trim(),deskripsi:$('docDesk').value.trim(),link:$('docLink').value.trim(),kategori:$('docKat').value.trim(),icon:$('docIcon').value.trim()||'file-text',warna:$('docWarna').value,is_active:$('docActive').checked};if(!row.judul||!row.link)return toast('Judul & link wajib');const q=STATE.editDoc?sb.from('creative_documents').update(row).eq('id',STATE.editDoc):sb.from('creative_documents').insert(row);const {error}=await q;if(error)return toast(error.message);toast('Dokumen tersimpan');closeModal('mDoc');loadAll();}
+function delDoc(){confirmDialog('Hapus dokumen?',async()=>{await sb.from('creative_documents').delete().eq('id',STATE.editDoc);toast('Dokumen dihapus');closeModal('mDoc');loadAll();},'Hapus Dokumen?');}
 
-async function reloadFooter(){const {data}=await sb.from('creative_footers').select('*').order('sort_order');STATE.footer=data||[];renderFooter();}
-async function addFooter(){const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};if(!row.judul)return toast('Judul wajib','error');const {error}=await sb.from('creative_footers').insert(row);if(error)return toast(error.message,'error');$('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';toast('Footer ditambah');await reloadFooter();}
-async function toggleFooter(id,act){await sb.from('creative_footers').update({is_active:act}).eq('id',id);await reloadFooter();}
-function delFooter(id){confirmDialog('Hapus link footer ini?',async()=>{await sb.from('creative_footers').delete().eq('id',id);await reloadFooter();toast('Footer dihapus');},'Hapus Footer?','Hapus');}
-function renderFooter(){$('footList').innerHTML=STATE.footer.map(f=>`<div class="card p-4 flex items-center gap-3 ${f.is_active===false?'opacity-50':''}"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><div class="flex-1 min-w-0"><p class="text-[13px] font-extrabold text-slate-800">${esc(f.judul)}</p><p class="text-[10px] text-slate-400 truncate">${esc(f.url)}</p></div><button onclick="toggleFooter(${f.id},${f.is_active===false})" class="text-[10px] font-black px-3 py-2 rounded-lg ${f.is_active===false?'bg-slate-100 text-slate-500':'acc-soft acc-text'}">${f.is_active===false?'OFF':'AKTIF'}</button><button onclick="delFooter(${f.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
+function renderRewardsAdmin(){$('rewardListAdmin').innerHTML=STATE.rewards.map(r=>`<div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="gift" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800 truncate">${esc(r.judul)} ${!r.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p><p class="text-[10px] text-slate-500">⭐ ${r.biaya_poin} poin · stok ${r.stok<0?'∞':r.stok}</p></div><button onclick="openRewardEditor(${r.id})" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0"><i data-lucide="pencil" class="w-4 h-4"></i></button></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada reward.</p>';
+  $('redemList').innerHTML=STATE.redem.map(x=>{const rw=STATE.rewards.find(r=>r.id===x.reward_id);return `<div class="card p-4 flex items-center gap-3"><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800 truncate">${esc(rw?rw.judul:'Reward')}</p><p class="text-[10px] text-slate-500 truncate">ID guru: …${String(x.guru_id).slice(-6)} · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</p></div><select onchange="setRedemStatus(${x.id},this.value)" class="text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5"><option value="menunggu" ${x.status==='menunggu'?'selected':''}>Menunggu</option><option value="selesai" ${x.status==='selesai'?'selected':''}>Selesai</option><option value="ditolak" ${x.status==='ditolak'?'selected':''}>Ditolak</option></select></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada penukaran.</p>';icons();}
+function openRewardEditor(id){STATE.editReward=id||null;$('rTitle').textContent=id?'Edit Reward':'Reward Baru';$('rDelete').classList.toggle('hidden',!id);const r=id?STATE.rewards.find(x=>x.id===id):null;$('rJudul').value=r?r.judul:'';$('rDesk').value=r?r.deskripsi||'':'';$('rBiaya').value=r?r.biaya_poin:50;$('rStok').value=r?r.stok:-1;$('rLink').value=r?r.link||'':'';$('rActive').checked=r?r.is_active:true;openModal('mReward');}
+async function saveReward(){const row={judul:$('rJudul').value.trim(),deskripsi:$('rDesk').value.trim(),biaya_poin:parseInt($('rBiaya').value)||50,stok:parseInt($('rStok').value),link:$('rLink').value.trim(),is_active:$('rActive').checked};if(!row.judul)return toast('Judul wajib');const q=STATE.editReward?sb.from('creative_rewards').update(row).eq('id',STATE.editReward):sb.from('creative_rewards').insert(row);const {error}=await q;if(error)return toast(error.message);toast('Reward tersimpan');closeModal('mReward');loadAll();}
+function delReward(){confirmDialog('Hapus reward?',async()=>{await sb.from('creative_rewards').delete().eq('id',STATE.editReward);toast('Reward dihapus');closeModal('mReward');loadAll();},'Hapus Reward?');}
+async function setRedemStatus(id,st){await sb.from('creative_redemptions').update({status:st}).eq('id',id);toast('Status diperbarui');loadAll();}
 
-function parseCSVLine(line,delim){const out=[];let cur='';let inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(inQ){if(ch=='"'){if(line[i+1]=='"'){cur+='"';i++;}else inQ=false;}else cur+=ch;}else{if(ch=='"')inQ=true;else if(ch==delim){out.push(cur);cur='';}else cur+=ch;}}out.push(cur);return out;}
-function detectDelim(l){const c=['\t','|',';',','];let b=null,n=0;for(const d of c){const x=l.split(d).length-1;if(x>n){n=x;b=d;}}return b;}
-function parseQuotesText(t){const rows=[];t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(line=>{if(/kutipan/i.test(line)&&/tokoh/i.test(line))return;const d=detectDelim(line);let k=line,tok='';if(d){const p=parseCSVLine(line,d).map(s=>s.trim());k=p[0]||'';tok=p.slice(1).join(' ').trim();}if(k)rows.push({kutipan:k,tokoh:tok||'Anonim'});});return rows;}
-function bacaFileQuotes(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{$('qPaste').value=rd.result;$('qPaste').classList.remove('hidden');pratinjauQuotes();};rd.readAsText(f);ev.target.value='';}
-function pratinjauQuotes(){const b=parseQuotesText($('qPaste').value);window._qbuf=b;$('qPrevInfo').textContent=b.length?`✅ ${b.length} siap`:'⚠️ kosong';$('qImportBtn').classList.toggle('hidden',!b.length);}
-async function imporQuotes(){const b=window._qbuf||[];if(!b.length)return;const {error}=await sb.from('creative_quotes').insert(b);if(error)return toast(error.message,'error');toast(b.length+' quote diimpor');window._qbuf=[];$('qPaste').value='';$('qPaste').classList.add('hidden');$('qImportBtn').classList.add('hidden');await reloadQuotes();}
-async function reloadQuotes(){const {data}=await sb.from('creative_quotes').select('*').order('id');STATE.quotes=data||[];renderQuotes();}
-async function addQuote(){const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};if(!row.kutipan)return toast('Kutipan wajib','error');const {error}=await sb.from('creative_quotes').insert(row);if(error)return toast(error.message,'error');$('iQuoteText').value='';$('iQuoteAuthor').value='';toast('Quote ditambah');await reloadQuotes();}
-function delQuote(id){confirmDialog('Hapus quote ini?',async()=>{await sb.from('creative_quotes').delete().eq('id',id);await reloadQuotes();toast('Quote dihapus');},'Hapus Quote?','Hapus');}
-function renderQuotes(){$('qCount').textContent=STATE.quotes.length;$('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`<div class="card p-4 flex items-center gap-3"><div class="flex-1 min-w-0"><p class="text-xs italic text-slate-600">"${esc(q.kutipan)}"</p><p class="text-[10px] font-bold text-slate-400 mt-1">— ${esc(q.tokoh)}</p></div><button onclick="delQuote(${q.id})" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>`).join('');icons();}
+function renderKudosAdmin(){$('kudosTopAdmin').innerHTML=(STATE.kudosTop||[]).map((k,i)=>`<div class="flex items-center gap-3"><span class="w-7 h-7 rounded-full acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(k.nama_lengkap)}</span><span class="text-[10px] font-black text-rose-500">❤ ${k.jumlah}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  $('kudosList').innerHTML=STATE.kudos.map(k=>`<div class="card p-4"><p class="text-xs font-bold text-slate-700">→ ${esc(k.to_nama||'')}</p><p class="text-[11px] text-slate-500 mt-1">${esc(k.pesan||'—')}</p><p class="text-[10px] text-slate-400 mt-1">${new Date(k.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</p></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';icons();}
 
-async function setFbStatus(id,st){const {error}=await sb.from('creative_feedback').update({status:st}).eq('id',id);if(error)return toast(error.message,'error');const {data}=await sb.from('creative_feedback').select('*').order('created_at',{ascending:false});STATE.fb=data||[];renderFb();renderDash();toast('Status diperbarui');}
-function renderFb(){const f=$('fbFilter').value;$('fbList').innerHTML=STATE.fb.filter(x=>f==='all'||x.status===f).map(x=>`<div class="card p-4"><div class="flex items-center gap-2 flex-wrap"><span class="text-[10px] font-black px-2 py-1 rounded-lg uppercase ${{Saran:'acc-soft acc-text',Bug:'bg-rose-50 text-rose-600',Pujian:'bg-amber-50 text-amber-600'}[x.tipe]||'bg-slate-100'}">${x.tipe}</span><span class="text-[10px] font-bold text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span><select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5"><option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option><option value="diproses" ${x.status==='diproses'?'selected':''}>🟡 Diproses</option><option value="selesai" ${x.status==='selesai'?'selected':''}>🟢 Selesai</option></select></div><p class="text-[13px] text-slate-700 mt-2">${esc(x.pesan)}</p></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ada.</p>';icons();}
+function fillInfo(){const c=STATE.config;if(!c)return;$('iBanStatus').value=c.banner_status;$('iInfoStatus').value=c.info_status||'ON';$('iQuoteStatus').value=c.quote_status||'ON';$('iBanWarna').value=c.banner_warna;$('iBanPesan').value=c.banner_pesan;$('iBanLink').value=c.banner_link;$('iBanLabel').value=c.banner_label;$('iBanGambar').value=c.banner_gambar||'';$('iPopStatus').value=c.pop_status;$('iPopJudul').value=c.pop_judul;$('iPopPesan').value=c.pop_pesan;$('iPopGambar').value=c.pop_gambar||'';$('iVersi').value=c.versi;}
+async function saveInfo(){const row={banner_status:$('iBanStatus').value,info_status:$('iInfoStatus').value,quote_status:$('iQuoteStatus').value,banner_warna:$('iBanWarna').value,banner_pesan:$('iBanPesan').value,banner_link:$('iBanLink').value,banner_label:$('iBanLabel').value,banner_gambar:$('iBanGambar').value,pop_status:$('iPopStatus').value,pop_judul:$('iPopJudul').value,pop_pesan:$('iPopPesan').value,pop_gambar:$('iPopGambar').value,versi:$('iVersi').value,updated_at:new Date().toISOString()};const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);if(error)return toast(error.message);toast('Tersimpan & live');}
 
-/* GURU: READ-ONLY (terpusat di SSO) */
-function renderGuru(){const q=($('gSearch').value||'').toLowerCase();const list=STATE.guru.filter(g=>(g.nama_lengkap||'').toLowerCase().includes(q)||(g.satuan_pendidikan||'').toLowerCase().includes(q));$('gCount').textContent=list.length;
-  $('guruTable').innerHTML=`<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b border-slate-100"><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Nama</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Sekolah</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th></tr></thead><tbody>${list.map(g=>`<tr class="border-b border-slate-50"><td class="px-4 py-3"><p class="text-xs font-bold text-slate-700">${esc(g.nama_lengkap)}</p><p class="text-[10px] text-slate-400">${esc(g.email)}</p></td><td class="px-4 py-3 text-xs text-slate-500">${esc(g.satuan_pendidikan)}</td><td class="px-4 py-3"><span class="text-[9px] font-black px-2 py-1 rounded ${g.status_akun==='Aktif'?'acc-soft acc-text':'bg-slate-100 text-slate-400'}">${esc(g.status_akun||'Aktif')}</span></td></tr>`).join('')}</tbody></table></div>`;icons();}
-$('gSearch').addEventListener('input',renderGuru);
+/* SCOPE UI helper */
+function scopeHint(){const t=$('iNotScopeType').value;const h={
+  all:'Pesan akan diterima semua guru.',
+  role:'Contoh: <b>Guru</b> atau <b>Kepala Sekolah</b>. Bisa isi beberapa dipisah koma.',
+  school:'Contoh: <b>SD N 1 Pule, SD N 3 Krisak</b>. Pisahkan nama sekolah dengan koma.',
+  user:'Contoh: <b>uuid-1,uuid-2</b>. Pisahkan guru_id dengan koma.'
+};$('scopeHint').innerHTML=h[t]||'';$('scopeLbl').textContent={all:'—',role:'Role',school:'Nama Sekolah',user:'Guru ID'}[t];$('iNotScopeVal').value='';$('iNotScopeVal').placeholder=t==='all'?'—':h[t].replace(/<[^>]+>/g,'').replace('Contoh: ','');}
 
-async function toggleInsp(id,st){await sb.from('creative_inspirasi').update({status:st}).eq('id',id);const {data}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=data||[];renderInspirasi();toast('Status inspirasi diperbarui');}
-function delInsp(id){confirmDialog('Hapus inspirasi ini?',async()=>{await sb.from('creative_inspirasi').delete().eq('id',id);const {data}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=data||[];renderInspirasi();toast('Inspirasi dihapus');},'Hapus Inspirasi?','Hapus');}
-function purgeInspirasi(){confirmDialog('Purge inspirasi kadaluarsa (<10 like & >30 hari) + tersembunyi?',async()=>{const {data}=await sb.rpc('creative_admin_purge_inspirasi',{p_hari:30});toast((data||0)+' inspirasi dipurge');const {data:d2}=await sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false});STATE.inspi=d2||[];renderInspirasi();},'Purge Inspirasi?','Purge');}
-function renderInspirasi(){$('inspList').innerHTML=STATE.inspi.map(n=>`<div class="card p-4 space-y-2 ${n.status!=='aktif'?'opacity-50':''}"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-400">${esc(n.nama)} · ${new Date(n.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</span><span class="ml-auto text-[10px] font-black text-rose-500 flex items-center gap-1"><i data-lucide="heart" class="w-3 h-3 fill-current"></i>${n.likes||0}</span></div><p class="text-[13px] text-slate-700">${esc(n.isi)}</p><div class="flex gap-2"><button onclick="toggleInsp(${n.id},'${n.status==='aktif'?'disembunyikan':'aktif'}')" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.status==='aktif'?'bg-slate-100 text-slate-500':'acc-soft acc-text'}">${n.status==='aktif'?'SEMBUNYIKAN':'TAYANGKAN'}</button><button onclick="delInsp(${n.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('')||'<p class="text-sm text-slate-400 text-center py-8">Belum ada inspirasi.</p>';icons();}
+async function addNotif(){const row={judul:$('iNotJudul').value.trim(),pesan:$('iNotPesan').value.trim(),tipe:$('iNotTipe').value,target_role:'all',gambar:$('iNotGambar').value.trim(),link:$('iNotLink').value.trim(),scope_type:$('iNotScopeType').value,scope_value:$('iNotScopeVal').value.trim()};if(!row.judul)return toast('Judul wajib');const {error}=await sb.from('creative_notifications').insert(row);if(error)return toast(error.message);$('iNotJudul').value='';$('iNotPesan').value='';$('iNotGambar').value='';$('iNotLink').value='';$('iNotScopeType').value='all';$('iNotScopeVal').value='';scopeHint();toast('Terkirim');loadAll();}
+function renderNotif(){$('notList').innerHTML=STATE.notifs.map(n=>{const scopeBadge=(n.scope_type&&n.scope_type!=='all')?`<span class="text-[8px] font-black bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded uppercase ml-1">KHUSUS: ${esc(n.scope_type)}${n.scope_value?' · '+esc(String(n.scope_value).slice(0,30)+(String(n.scope_value).length>30?'…':'')):''}</span>`:'';return `<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-50'}">${n.gambar?`<img src="${n.gambar}" class="w-10 h-10 rounded-lg object-cover shrink-0">`:''}<div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800 truncate">${esc(n.judul)} ${!n.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">OFF</span>':''}${scopeBadge}</p><p class="text-[10px] text-slate-500 truncate">${esc(n.pesan)}${n.link?' · 🔗 ':''}</p></div><button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100'}">${n.is_active?'AKTIF':'OFF'}</button><button onclick="delNotif('${n.id}')" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`;}).join('');icons();}
+async function toggleNotif(id,act){await sb.from('creative_notifications').update({is_active:act}).eq('id',id);loadAll();}
+function delNotif(id){confirmDialog('Hapus notifikasi?',async()=>{await sb.from('creative_notifications').delete().eq('id',id);loadAll();},'Hapus?');}
+
+async function addFooter(){const row={judul:$('iFootJudul').value.trim(),url:$('iFootUrl').value.trim(),icon:$('iFootIcon').value.trim()||'globe',sort_order:STATE.footer.length+1};if(!row.judul)return toast('Judul wajib');const {error}=await sb.from('creative_footers').insert(row);if(error)return toast(error.message);toast('Footer ditambah');loadAll();}
+function renderFooter(){$('footList').innerHTML=STATE.footer.map(f=>`<div class="card p-4 flex items-center gap-3"><span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-800">${esc(f.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(f.url)}</p></div><button onclick="delFooter(${f.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');icons();}
+function delFooter(id){confirmDialog('Hapus footer?',async()=>{await sb.from('creative_footers').delete().eq('id',id);loadAll();},'Hapus?');}
+
+function parseQuotesText(t){const rows=[];t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(line=>{if(/kutipan/i.test(line)&&/tokoh/i.test(line))return;const d=['\t','|',';',','].find(x=>line.split(x).length>1);let k=line,tok='';if(d){const p=line.split(d).map(s=>s.trim());k=p[0];tok=p.slice(1).join(' ').trim();}if(k)rows.push({kutipan:k,tokoh:tok||'Anonim'});});return rows;}
+function bacaFileQuotes(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{$('qPaste').value=rd.result;$('qPaste').classList.remove('hidden');};rd.readAsText(f);ev.target.value='';}
+async function imporQuotes(){const b=parseQuotesText($('qPaste').value);if(!b.length)return toast('Kosong');const {error}=await sb.from('creative_quotes').insert(b);if(error)return toast(error.message);toast(b.length+' quote diimpor');$('qPaste').value='';loadAll();}
+async function addQuote(){const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};if(!row.kutipan)return toast('Kutipan wajib');const {error}=await sb.from('creative_quotes').insert(row);if(error)return toast(error.message);toast('Quote ditambah');loadAll();}
+function renderQuotes(){$('qCount').textContent=STATE.quotes.length;$('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`<div class="card p-4 flex items-center gap-3"><div class="flex-1 min-w-0"><p class="text-xs italic text-slate-600">"${esc(q.kutipan)}"</p><p class="text-[10px] text-slate-400">— ${esc(q.tokoh)}</p></div><button onclick="delQuote(${q.id})" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div>`).join('');icons();}
+function delQuote(id){confirmDialog('Hapus quote?',async()=>{await sb.from('creative_quotes').delete().eq('id',id);loadAll();},'Hapus?');}
+
+async function setFbStatus(id,st){await sb.from('creative_feedback').update({status:st}).eq('id',id);loadAll();}
+function renderFb(){const f=$('fbFilter').value;$('fbList').innerHTML=STATE.fb.filter(x=>f==='all'||x.status===f).map(x=>`<div class="card p-4"><div class="flex items-center gap-2"><span class="text-[10px] font-black px-2 py-1 rounded-lg acc-soft acc-text">${esc(x.tipe)}</span><span class="text-[10px] text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span><select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5"><option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option><option value="diproses" ${x.status==='diproses'?'selected':''}>🟡 Diproses</option><option value="selesai" ${x.status==='selesai'?'selected':''}>🟢 Selesai</option></select></div><p class="text-[13px] text-slate-600 mt-2">${esc(x.pesan)}</p></div>`).join('')||'<p class="text-xs text-slate-400">Tidak ada.</p>';icons();}
+
+function renderGuru(){const q=($('gSearch').value||'').toLowerCase();const list=STATE.guru.filter(g=>(g.nama_lengkap||'').toLowerCase().includes(q)||(g.satuan_pendidikan||'').toLowerCase().includes(q));$('guruTable').innerHTML=`<div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="border-b border-slate-100"><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Nama</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Sekolah</th><th class="px-4 py-3 text-[10px] font-black text-slate-400 uppercase">Status</th></tr></thead><tbody>${list.map(g=>`<tr class="border-b border-slate-50"><td class="px-4 py-3"><p class="text-xs font-bold text-slate-700">${esc(g.nama_lengkap)}</p><p class="text-[10px] text-slate-400">${esc(g.email||'')}</p></td><td class="px-4 py-3 text-xs text-slate-500">${esc(g.satuan_pendidikan||'')}</td><td class="px-4 py-3"><span class="text-[9px] font-black px-2 py-1 rounded ${g.status_akun==='Aktif'?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${esc(g.status_akun||'Aktif')}</span></td></tr>`).join('')}</tbody></table></div>`;icons();}
+
+async function toggleInsp(id,st){await sb.from('creative_inspirasi').update({status:st}).eq('id',id);loadAll();}
+function delInsp(id){confirmDialog('Hapus inspirasi?',async()=>{await sb.from('creative_inspirasi').delete().eq('id',id);loadAll();},'Hapus?');}
+function purgeInspirasi(){confirmDialog('Purge inspirasi kadaluarsa?',async()=>{const {data}=await sb.rpc('creative_admin_purge_inspirasi',{p_hari:30});toast((data||0)+' dipurge');loadAll();},'Purge?');}
+function renderInspirasi(){$('inspList').innerHTML=STATE.inspi.map(n=>`<div class="card p-4 space-y-2 ${n.status==='aktif'?'':'opacity-50'}"><p class="text-[13px] text-slate-600">${esc(n.isi)}</p><p class="text-[10px] text-slate-400">${esc(n.nama)} · ❤ ${n.likes||0}</p><div class="flex gap-2"><button onclick="toggleInsp(${n.id},'${n.status==='aktif'?'disembunyikan':'aktif'}')" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.status==='aktif'?'bg-slate-100 text-slate-500':'acc-soft acc-text'}">${n.status==='aktif'?'SEMBUNYIKAN':'TAYANGKAN'}</button><button onclick="delInsp(${n.id})" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';icons();}
 </script>
 </body>
 </html>
