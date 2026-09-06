@@ -3,25 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#059669">
+<meta name="theme-color" content="#0D9488">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script>
-(function(){try{var d=localStorage.getItem('gb_dark')==='1';if(d)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',d?'#064e3b':'#059669');var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;}catch(e){}})();
+(function(){try{var d=localStorage.getItem('gb_dark')==='1';if(d)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#0D9488');var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;}catch(e){}})();
 </script>
 <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <meta property="og:site_name" content="Guru Berbagi Selogiri">
 <meta property="og:title" content="Guru Berbagi Selogiri">
-<meta property="og:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri. Berkarya, berbagi, tumbuh bersama.">
+<meta property="og:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
 <meta property="og:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <meta property="og:url" content="https://slg-timkreatif.github.io/app/">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Guru Berbagi Selogiri">
-<meta name="twitter:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <title>Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -35,28 +31,26 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}html,body{overflow-x:hidden;touch-action:manipulation}
   a{-webkit-touch-callout:default}
-  :root{--acc:#059669;--acc2:#0d9488;--acc-soft:#d1fae5;--acc-soft-d:#064e3b;--acc-text:#059669;--acc-text-d:#34d399;--acc-ring:rgba(5,150,105,.35)}
-  html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-soft-d:#1e3a8a;--acc-text:#2563eb;--acc-text-d:#60a5fa;--acc-ring:rgba(37,99,235,.35)}
-  html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-soft-d:#4c1d95;--acc-text:#7c3aed;--acc-text-d:#a78bfa;--acc-ring:rgba(124,58,237,.35)}
-  html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-soft-d:#78350f;--acc-text:#d97706;--acc-text-d:#fbbf24;--acc-ring:rgba(217,119,6,.35)}
-  html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-soft-d:#881337;--acc-text:#e11d48;--acc-text-d:#fb7185;--acc-ring:rgba(225,29,72,.35)}
+  :root{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-soft-d:rgba(20,184,166,.14);--acc-text:#0B7C72;--acc-text-d:#5EEAD4;--acc-ring:rgba(13,148,136,.35)}
+  html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-soft-d:rgba(37,99,235,.16);--acc-text:#2563eb;--acc-text-d:#93C5FD;--acc-ring:rgba(37,99,235,.35)}
+  html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-soft-d:rgba(124,58,237,.16);--acc-text:#7c3aed;--acc-text-d:#C4B5FD;--acc-ring:rgba(124,58,237,.35)}
+  html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-soft-d:rgba(217,119,6,.16);--acc-text:#d97706;--acc-text-d:#FCD34D;--acc-ring:rgba(217,119,6,.35)}
+  html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-soft-d:rgba(225,29,72,.16);--acc-text:#e11d48;--acc-text-d:#FDA4AF;--acc-ring:rgba(225,29,72,.35)}
   .no-scroll::-webkit-scrollbar{display:none}.no-scroll{scrollbar-width:none}
-  .card{background:#fff;border:1px solid #f1f5f9;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:1.25rem}
-  .dark .card{background:#1e293b;border-color:#334155}
-  .skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:.75rem}
-  .dark .skeleton{background:linear-gradient(90deg,#334155 25%,#475569 50%,#334155 75%);background-size:800px 100%;animation:shim 1.3s linear infinite}
+  .card{background:#fff;border:1px solid #E8E6EE;box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
+  .dark .card{background:#1C1B20;border-color:#302E37;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  .skeleton{background:linear-gradient(90deg,#ECEAF2 25%,#F6F5F9 50%,#ECEAF2 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:.75rem}
+  .dark .skeleton{background:linear-gradient(90deg,#242229 25%,#2B2932 50%,#242229 75%);background-size:800px 100%;animation:shim 1.3s linear infinite}
   @keyframes shim{0%{background-position:-400px 0}100%{background-position:400px 0}}
   .acc-bg{background-color:var(--acc)}
   .acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
   .acc-soft{background-color:var(--acc-soft)}.dark .acc-soft{background-color:var(--acc-soft-d)}
   .acc-text{color:var(--acc-text)}.dark .acc-text{color:var(--acc-text-d)}
   .acc-ring:focus{outline:none;box-shadow:0 0 0 3px var(--acc-ring)}
-  .brand-grad{background-image:linear-gradient(135deg,#059669,#047857 55%,#064e3b)}
-  .dark .brand-grad{background-image:linear-gradient(135deg,#047857,#065f46 55%,#022c22)}
-  /* Header solid = sama persis dengan theme_color agar menyatu dgn status bar */
-  .brand-solid{background-color:#059669}
-  .dark .brand-solid{background-color:#064e3b}
-  .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:.35rem}
+  .brand-grad{background-image:linear-gradient(135deg,#0D9488,#0F766E 55%,#134E4A)}
+  .brand-solid{background-color:#0D9488}
+  .grad-text{text-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .lbl{display:block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8B8794;margin-bottom:.35rem}
   html.fs-besar{font-size:17.5px}
   html.no-anim *,html.no-anim *::before,html.no-anim *::after{animation:none!important;transition:none!important}
   .tree-pulse{animation:tpulse 2.6s infinite}
@@ -67,6 +61,19 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     .sheet{top:50%;left:50%;right:auto;bottom:auto;width:100%;border-radius:1.5rem;transform:translate(-50%,-50%) translateY(28px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease}
     .sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}
   }
+  /* Palet Soft Porcelain / Charcoal-Plum (scoped agar tidak menimpa elemen kecil) */
+  html:not(.dark) .bg-slate-50{background-color:#F6F5F9}
+  .dark .dark\:bg-slate-950{background-color:#16151A!important}
+  .dark .dark\:bg-slate-900{background-color:#1C1B20!important}
+  .dark .dark\:bg-slate-800{background-color:#242229!important}
+  .dark .dark\:bg-slate-700{background-color:#2B2932!important}
+  .dark .dark\:border-slate-800{border-color:#302E37!important}
+  .dark .dark\:border-slate-700{border-color:#3A3742!important}
+  .dark .dark\:text-slate-100,.dark .dark\:text-slate-200{color:#EDEBF2!important}
+  .dark .dark\:text-slate-300{color:#C9C6D2!important}
+  .dark .dark\:text-slate-400{color:#A9A6B4!important}
+  .dark .dark\:text-slate-500{color:#8B8794!important}
+  .dark .dark\:hover\:bg-slate-800:hover{background-color:#2B2932!important}
 </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 min-h-screen">
@@ -80,25 +87,27 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <nav class="space-y-1.5">
       <button data-nav="home" onclick="navPage('home')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold acc-soft acc-text"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
       <button data-nav="apps" onclick="navPage('apps')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="layout-grid" class="w-4 h-4"></i>Layanan</button>
+      <button data-nav="agenda" onclick="navPage('agenda')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="calendar-days" class="w-4 h-4"></i>Agenda</button>
+      <button data-nav="dokumen" onclick="navPage('dokumen')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="folder-open" class="w-4 h-4"></i>Dokumen</button>
+      <button data-nav="direktori" onclick="navPage('direktori')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="school" class="w-4 h-4"></i>Direktori</button>
       <button id="sideNotif" onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi<span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
       <button data-nav="bagi" onclick="navPage('bagi')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
       <button onclick="openPanel('pProfil')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.25</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.30</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
-    <!-- HEADER SOLID: menyatu dgn status bar -->
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+1rem)] pb-14 flex items-center justify-between text-white brand-solid">
       <div class="flex items-center gap-3 md:hidden">
         <div class="w-10 h-10 rounded-xl bg-white shadow-md overflow-hidden flex items-center justify-center"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo"></div>
-        <div><p class="text-sm font-extrabold text-white leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-emerald-100/80 font-semibold">Portal Selogiri</p></div>
+        <div><p class="text-sm font-extrabold text-white leading-tight">Guru Berbagi</p><p id="hdrVersi" class="text-[10px] text-teal-100/80 font-semibold">Portal Selogiri</p></div>
       </div>
       <p class="hidden md:block text-sm font-extrabold text-white" id="hdrPage">Beranda</p>
       <div class="flex items-center gap-2">
-        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden bg-white text-emerald-700 text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
-        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center active:scale-90 transition md:hidden"><i data-lucide="bell" class="w-5 h-5 text-white"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-emerald-700">0</span></button>
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden bg-white text-teal-700 text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+        <button id="bellHdr" onclick="openPanel('pNotif')" class="relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center active:scale-90 transition md:hidden"><i data-lucide="bell" class="w-5 h-5 text-white"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-teal-700">0</span></button>
         <button onclick="openPanel('pSetting')" class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-white"></i></button>
       </div>
     </header>
@@ -107,60 +116,35 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
       <section id="pageHome" class="space-y-4 min-w-0">
         <div class="flex items-center justify-between gap-2 animate-fade-up">
-          <div class="min-w-0">
-            <p id="txtTanggal" class="text-[10px] font-bold acc-text uppercase tracking-widest truncate"></p>
-            <h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-1 truncate"></h1>
-          </div>
+          <div class="min-w-0"><p id="txtTanggal" class="text-[10px] font-bold acc-text uppercase tracking-widest truncate"></p><h1 id="txtSapaan" class="text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 leading-tight mt-1 truncate"></h1></div>
           <div id="wxChip" class="hidden px-3 py-2 items-center gap-1.5 shrink-0 rounded-full border border-slate-100 dark:border-slate-800"><i id="wxIcon" data-lucide="cloud-sun" class="w-4 h-4"></i><span id="wxTemp" class="text-xs font-black text-slate-600 dark:text-slate-300 tabular-nums">--°</span></div>
         </div>
         <div class="relative animate-fade-up"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearchHome" type="text" placeholder="Cari layanan, jurnal, tools…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring" oninput="homeSearch(this.value)"></div>
-        <div id="authCard" class="hidden card p-5 text-center animate-fade-up"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Guru Selogiri?</p><p class="text-[11px] text-slate-400 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p><div class="grid grid-cols-2 gap-2"><button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button><a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a></div></div>
-        <div id="installCard" class="hidden card p-4 items-center gap-3 animate-fade-up"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-400">Akses cepat dari layar utama HP Anda</p></div><button onclick="pasangApp()" class="shrink-0 acc-bg text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button><button onclick="$('installCard').classList.add('hidden');$('installCard').classList.remove('flex')" class="text-slate-300"><i data-lucide="x" class="w-4 h-4"></i></button></div>
-
+        <div id="authCard" class="hidden card p-5 text-center animate-fade-up"><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Guru Selogiri?</p><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p><div class="grid grid-cols-2 gap-2"><button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button><a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a></div></div>
+        <div id="installCard" class="hidden card p-4 items-center gap-3 animate-fade-up"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200">Pasang Aplikasi</p><p class="text-[10px] text-slate-500 dark:text-slate-400">Akses cepat dari layar utama HP Anda</p></div><button onclick="pasangApp()" class="shrink-0 acc-bg text-white text-[11px] font-bold px-3.5 py-2 rounded-lg active:scale-95 transition">Pasang</button><button onclick="$('installCard').classList.add('hidden');$('installCard').classList.remove('flex')" class="text-slate-300 dark:text-slate-500"><i data-lucide="x" class="w-4 h-4"></i></button></div>
         <div id="caroBox" class="hidden animate-fade-up min-w-0"><div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div><div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div></div>
-
         <div id="quoteBox" class="card p-4 relative overflow-hidden animate-fade-up min-w-0">
           <i data-lucide="quote" class="w-7 h-7 text-slate-100 dark:text-slate-800 absolute top-3 right-3"></i>
           <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 dark:text-slate-300 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
-          <div class="flex items-center justify-between mt-2 gap-2">
-            <p id="quoteAuthor" class="text-[11px] font-bold text-slate-400 truncate">— …</p>
-            <div class="flex items-center gap-2 shrink-0">
-              <button id="btnQuote" onclick="gantiQuote()" title="Ganti" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" title="Buat kartu" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
-            </div>
-          </div>
+          <div class="flex items-center justify-between mt-2 gap-2"><p id="quoteAuthor" class="text-[11px] font-bold text-slate-500 dark:text-slate-400 truncate">— …</p><div class="flex items-center gap-2 shrink-0"><button id="btnQuote" onclick="gantiQuote()" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button><button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button></div></div>
         </div>
-
         <div id="quickBox" class="animate-fade-up"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Pintasan Cepat</p><div id="quickList" class="grid grid-cols-4 md:grid-cols-8 gap-2 min-w-0 max-w-full"></div></div>
-        <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition animate-fade-up">
-          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="layout-grid" class="w-4 h-4"></i></span>
-          <span class="flex-1 text-xs font-extrabold text-slate-700 dark:text-slate-200">Jelajahi Semua Layanan</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i>
-        </a>
-
+        <div class="grid grid-cols-3 gap-2 animate-fade-up">
+          <a href="?page=agenda" onclick="event.preventDefault();navPage('agenda')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 transition"><span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="calendar-days" class="w-4 h-4"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">Agenda</span></a>
+          <a href="?page=dokumen" onclick="event.preventDefault();navPage('dokumen')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 transition"><span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="folder-open" class="w-4 h-4"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">Dokumen</span></a>
+          <a href="?page=direktori" onclick="event.preventDefault();navPage('direktori')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 transition"><span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="school" class="w-4 h-4"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300">Direktori</span></a>
+        </div>
+        <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition animate-fade-up"><span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="layout-grid" class="w-4 h-4"></i></span><span class="flex-1 text-xs font-extrabold text-slate-700 dark:text-slate-200">Jelajahi Semua Layanan</span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></a>
         <div class="animate-fade-up">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p>
-            <div class="flex gap-1.5"><button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button><button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 dark:text-slate-400 transition">Terpopuler</button></div>
-          </div>
-          <button id="inspOpenBtn" onclick="toggleInspForm(true)" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition" style="border-color:var(--acc-soft)">
-            <span class="w-9 h-9 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
-            <span class="flex-1 text-xs font-extrabold acc-text">Bagikan Inspirasi</span>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i>
-          </button>
+          <div class="flex items-center justify-between mb-2"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p><div class="flex gap-1.5"><button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button><button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 dark:text-slate-400 transition">Terpopuler</button></div></div>
+          <button id="inspOpenBtn" onclick="toggleInspForm(true)" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition" style="border-color:var(--acc-soft)"><span class="w-9 h-9 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span><span class="flex-1 text-xs font-extrabold text-slate-700 dark:text-slate-200">Bagikan Inspirasi</span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></button>
           <div id="inspForm" class="hidden card p-4 space-y-2 mt-2">
-            <div class="flex items-center justify-between">
-              <p class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Tulis inspirasimu…</p>
-              <button onclick="toggleInspForm(false)" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
-            </div>
+            <div class="flex items-center justify-between"><p class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Tulis inspirasimu…</p><button onclick="toggleInspForm(false)" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500 dark:text-slate-400"></i></button></div>
             <textarea id="inspIsi" rows="2" placeholder="Bagikan ide / praktik baikmu…" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></textarea>
-            <div class="flex gap-2">
-              <select id="inspKat" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-2.5 text-[11px] acc-ring"><option>Praktik Baik</option><option>Ide Kegiatan</option><option>Teladan</option></select>
-              <button onclick="postInspirasi()" class="shrink-0 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-[.98] transition">+ Bagikan</button>
-            </div>
+            <div class="flex gap-2"><select id="inspKat" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2 py-2.5 text-[11px] text-slate-700 dark:text-slate-200 acc-ring"><option>Praktik Baik</option><option>Ide Kegiatan</option><option>Teladan</option></select><button onclick="postInspirasi()" class="shrink-0 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">+ Bagikan</button></div>
           </div>
           <div id="inspList" class="space-y-2 mt-2"></div>
-          <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 active:scale-[.98] transition">Muat lagi</button>
+          <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 dark:text-slate-300 active:scale-[.98] transition">Muat lagi</button>
         </div>
         <div id="footList" class="flex gap-2 overflow-x-auto no-scroll pb-1 animate-fade-up md:hidden"></div>
       </section>
@@ -171,21 +155,43 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div id="layananBody"></div>
       </section>
 
+      <section id="pageAgenda" class="hidden space-y-4 min-w-0">
+        <p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="calendar-days" class="w-4 h-4 acc-text"></i> Agenda Kegiatan</p>
+        <div id="agendaNext"></div><div id="agendaList" class="space-y-2"></div>
+      </section>
+
+      <section id="pageDokumen" class="hidden space-y-2 min-w-0">
+        <p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="folder-open" class="w-4 h-4 acc-text"></i> Bank Dokumen</p>
+        <div id="dokList"></div>
+      </section>
+
+      <section id="pageDirektori" class="hidden space-y-4 min-w-0">
+        <p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="school" class="w-4 h-4 acc-text"></i> Direktori Sekolah</p>
+        <div class="relative"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inDirSearch" type="text" placeholder="Cari sekolah / NPSN / kepala…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring" oninput="renderDirektori()"></div>
+        <div id="dirList" class="space-y-2"></div>
+      </section>
+
       <section id="pageBagi" class="hidden space-y-4 min-w-0">
-        <div><p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="share-2" class="w-4 h-4 acc-text"></i> Berbagi</p><p class="text-[10px] text-slate-400 mt-0.5">Berkarya, berbagi, tumbuh bersama</p></div>
-        <div id="treeGuest" class="hidden card p-6 text-center"><div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Pohon Ilmu menantimu</p><p class="text-xs text-slate-400 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Masuk Sekarang</button></div>
+        <div><p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="share-2" class="w-4 h-4 acc-text"></i> Berbagi</p><p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Berkarya, berbagi, tumbuh bersama</p></div>
+        <div id="treeGuest" class="hidden card p-6 text-center"><div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div><p class="text-sm font-extrabold text-slate-800 dark:text-slate-100">Pohon Ilmu menantimu</p><p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Masuk Sekarang</button></div>
         <div id="treeData" class="space-y-4">
-          <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden"><div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div><div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-black uppercase tracking-widest text-white/70">Pohon Ilmu</p><p id="treeLevel" class="text-lg font-black leading-tight">Biji</p><div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div><p class="text-[10px] font-semibold text-white/80 mt-1"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p></div><div class="text-right shrink-0"><p class="text-[10px] font-bold text-white/70 flex items-center gap-1 justify-end"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p></div></div>
-          <div class="grid grid-cols-4 gap-2 text-center"><div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Poin</p></div><div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Streak</p></div><div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-600 dark:text-slate-300">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Login</p></div><div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500">0</p><p class="text-[9px] font-bold text-slate-400 uppercase">Lencana</p></div></div>
+          <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden"><div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div><div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div><div class="flex-1 min-w-0"><p class="text-[10px] font-black uppercase tracking-widest text-white/80 grad-text">Pohon Ilmu</p><p id="treeLevel" class="text-lg font-black leading-tight grad-text">Biji</p><div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div><p class="text-[10px] font-semibold text-white/90 mt-1 grad-text"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p></div><div class="text-right shrink-0"><p class="text-[10px] font-bold text-white/80 flex items-center gap-1 justify-end grad-text"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p></div></div>
+          <div class="grid grid-cols-4 gap-2 text-center"><div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase">Poin</p></div><div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase">Streak</p></div><div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-700 dark:text-slate-200">0</p><p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase">Login</p></div><div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500 dark:text-violet-400">0</p><p class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase">Lencana</p></div></div>
+        </div>
+        <div class="card p-4"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 acc-text"></i> Toko Poin</p><div id="rewardList" class="space-y-2"></div></div>
+        <div class="card p-4"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="heart-handshake" class="w-4 h-4 text-rose-500"></i> Apresiasi Antar-Guru</p>
+          <div id="kudosTop" class="space-y-2 mt-3"></div>
+          <div class="mt-3 space-y-2">
+            <select id="kudosTo" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></select>
+            <input id="kudosPesan" placeholder="Tulis apresiasi (opsional)" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-[12px] text-slate-700 dark:text-slate-200 acc-ring">
+            <button onclick="sendKudos()" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Kirim Apresiasi 🙏</button>
+          </div>
         </div>
         <div><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p><div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div></div>
         <div id="karyaWrap" class="hidden"><p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p><div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div></div>
         <div class="card p-4"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Papan Apresiasi</p><div id="leadList" class="space-y-2"></div></div>
         <div class="card p-4"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2"><i data-lucide="medal" class="w-4 h-4 acc-text"></i> Koleksi Lencana</p><div id="badgeGrid" class="grid grid-cols-3 gap-2"></div></div>
-        <div class="rounded-2xl acc-soft acc-text p-4 text-[11px] leading-relaxed">
-          <p class="font-bold flex items-center gap-1.5"><i data-lucide="sprout" class="w-3.5 h-3.5"></i> Filosofi Pohon Ilmu</p>
-          <p class="mt-1 opacity-80">"Bila seratus tahun, didiklah manusia." Setiap poin adalah benih, streak adalah air, dan lencana adalah buah — untuk murid yang teduh di naungan Anda.</p>
-        </div>
+        <div class="rounded-2xl acc-soft acc-text p-4 text-[11px] leading-relaxed"><p class="font-bold flex items-center gap-1.5"><i data-lucide="sprout" class="w-3.5 h-3.5"></i> Filosofi Pohon Ilmu</p><p class="mt-1 opacity-80">"Bila seratus tahun, didiklah manusia." Setiap poin adalah benih, streak adalah air, dan lencana adalah buah — untuk murid yang teduh di naungan Anda.</p></div>
       </section>
     </main>
 
@@ -200,22 +206,22 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <div id="pLogin" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
     <div id="pLoginSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll">
       <div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div>
-      <div class="text-center mb-5"><div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p><p class="text-[11px] text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p></div>
-      <form id="formLogin" class="space-y-3"><input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 acc-ring"><input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 acc-ring"><button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk</button></form>
+      <div class="text-center mb-5"><div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Masuk Portal</p><p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p></div>
+      <form id="formLogin" class="space-y-3"><input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 acc-ring"><input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3.5 text-sm font-medium text-slate-800 dark:text-slate-100 acc-ring"><button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk</button></form>
       <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div></div>
       <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
     </div></div>
 
   <div id="pNotif" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
-    <div id="pNotifSheet" class="sheet bg-slate-50 dark:bg-slate-950"><div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0"><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Notifikasi</p><button onclick="tutupPanel('pNotif')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button></div><div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div></div></div>
+    <div id="pNotifSheet" class="sheet bg-slate-50 dark:bg-slate-950"><div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0"><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Notifikasi</p><button onclick="tutupPanel('pNotif')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500 dark:text-slate-400"></i></button></div><div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div></div></div>
 
   <div id="pProfil" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pProfil')"></div>
     <div id="pProfilSheet" class="sheet bg-slate-50 dark:bg-slate-950"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mt-3 mb-2 shrink-0"></div>
       <div class="flex-1 overflow-y-auto no-scroll p-6 space-y-4">
-        <div id="profGuest" class="text-center pt-8"><div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Mode Tamu</p><p class="text-xs text-slate-400 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition">Masuk dengan Akun</button></div>
+        <div id="profGuest" class="text-center pt-8"><div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100">Mode Tamu</p><p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button></div>
         <div id="profData" class="hidden space-y-4">
           <div class="flex items-center gap-4"><div class="relative shrink-0"><div class="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-md flex items-center justify-center text-xl font-black text-slate-400 overflow-hidden" id="pfAvatar">G</div><button onclick="pilihFoto()" class="absolute -bottom-1.5 -right-1.5 w-8 h-8 rounded-full acc-bg text-white flex items-center justify-center shadow-md active:scale-90 transition"><i data-lucide="camera" class="w-4 h-4"></i></button><input type="file" id="inFoto" accept="image/*" class="hidden" onchange="uploadFoto(event)"></div>
-            <div class="min-w-0"><p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 leading-tight truncate">—</p><p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p><span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span></div></div>
+            <div class="min-w-0"><p id="pfNama" class="text-base font-extrabold text-slate-800 dark:text-slate-100 leading-tight truncate">—</p><p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p><span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span></div></div>
           <div class="card p-4 space-y-2.5"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
@@ -223,13 +229,13 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600 dark:text-slate-300"><i data-lucide="mail" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dEmail" class="truncate">—</span></p></div>
           <div class="card p-4 space-y-2.5"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
             <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] acc-ring"></div>
-            <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.25</span></div>
-          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 dark:bg-rose-900/30 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
+            <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.30</span></div>
+          <button onclick="doLogout()" class="w-full bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </div></div></div>
 
@@ -240,7 +246,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <div class="card p-4 space-y-4 mb-3"><p class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Personalisasi</p>
         <div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Warna Aksen</p>
           <div class="flex gap-2.5 mt-2" id="accRow">
-            <button data-acc="hijau" onclick="setAccent('hijau')" title="Emerald (default)" style="background:#059669" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+            <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal (default)" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="biru" onclick="setAccent('biru')" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="violet" onclick="setAccent('violet')" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
             <button data-acc="amber" onclick="setAccent('amber')" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
@@ -250,54 +256,30 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.25</span></p>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.30</span></p>
     </div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
-    <div id="pFbSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p><p class="text-[11px] text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram. (+1 poin)</p>
+    <div id="pFbSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p><p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram. (+1 poin)</p>
       <div class="flex gap-2"><button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold acc-bg text-white">💡 Saran</button><button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">🐞 Bug</button><button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">⭐ Pujian</button></div>
       <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
       <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-3 text-sm text-slate-700 dark:text-slate-200 acc-ring"></textarea>
-      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Kirim Laporan</button>
+      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Kirim Laporan</button>
     </div></div>
 
-  <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
-    <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0"><p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p><button onclick="tutupApp()" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button></div>
-    <iframe id="mAppFrame" class="w-full flex-1 bg-white"></iframe>
-  </div>
+  <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950"><div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0"><p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p><button onclick="tutupApp()" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button></div><iframe id="mAppFrame" class="w-full flex-1 bg-white"></iframe></div>
 
   <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50 dark:bg-slate-950">
-    <div class="px-4 py-3 flex items-center gap-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0">
-      <button onclick="tutupModal('mStudio')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 dark:text-slate-300"></i></button>
-      <p id="stTitle" class="text-sm font-extrabold text-slate-800 dark:text-slate-100 flex-1">Studio</p>
-      <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span>
-    </div>
-    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4">
-      <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100 dark:border-slate-700" style="aspect-ratio:9/16"></canvas>
-      <div id="stControls" class="space-y-1"></div>
-    </div>
-    <div class="p-4 grid grid-cols-2 gap-2 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0">
-      <button onclick="unduhStudio()" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
-      <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
-    </div>
+    <div class="px-4 py-3 flex items-center gap-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0"><button onclick="tutupModal('mStudio')" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600 dark:text-slate-300"></i></button><p id="stTitle" class="text-sm font-extrabold text-slate-800 dark:text-slate-100 flex-1">Studio</p><span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span></div>
+    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4"><canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100 dark:border-slate-700" style="aspect-ratio:9/16"></canvas><div id="stControls" class="space-y-1"></div></div>
+    <div class="p-4 grid grid-cols-2 gap-2 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shrink-0"><button onclick="unduhStudio()" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button><button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button></div>
   </div>
 
   <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll"><div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div><button onclick="tutupPop()" class="mt-4 w-full brand-grad text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg">Mengerti</button></div></div>
-  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-sm card p-6 animate-pop"><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-3">Pasang di iPhone/iPad</p><ol class="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside"><li>Ketuk tombol <b>Bagikan</b></li><li>Pilih <b>"Tambahkan ke Layar Utama"</b></li><li>Ketuk <b>Tambahkan</b></li></ol><button onclick="tutupModal('mIos')" class="mt-5 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition">Mengerti</button></div></div>
+  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-sm card p-6 animate-pop"><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-3">Pasang di iPhone/iPad</p><ol class="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-decimal list-inside"><li>Ketuk tombol <b>Bagikan</b></li><li>Pilih <b>"Tambahkan ke Layar Utama"</b></li><li>Ketuk <b>Tambahkan</b></li></ol><button onclick="tutupModal('mIos')" class="mt-5 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Mengerti</button></div></div>
 
-  <div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-xs card p-6 text-center animate-pop">
-      <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 dark:bg-rose-900/30 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
-      <p id="cfTitle" class="text-base font-extrabold text-slate-800 dark:text-slate-100">Yakin?</p>
-      <p id="cfMsg" class="text-xs text-slate-500 dark:text-slate-400 mt-1">…</p>
-      <div class="grid grid-cols-2 gap-2 mt-5">
-        <button onclick="cfCancel()" class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button>
-        <button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 dark:bg-slate-800/95 backdrop-blur-md border border-white/10 dark:border-slate-600/50 shadow-2xl shadow-black/40 rounded-2xl pl-3 pr-5 py-3"><span id="toastIconWrap" class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white leading-snug">…</p></div></div>
+  <div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60"><div class="w-full max-w-xs card p-6 text-center animate-pop"><div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 dark:bg-rose-900/30 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div><p id="cfTitle" class="text-base font-extrabold text-slate-800 dark:text-slate-100">Yakin?</p><p id="cfMsg" class="text-xs text-slate-500 dark:text-slate-400 mt-1">…</p><div class="grid grid-cols-2 gap-2 mt-5"><button onclick="cfCancel()" class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button><button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button></div></div></div>
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]"><div class="flex items-center gap-3 bg-slate-900/95 dark:bg-slate-800/95 backdrop-blur-md border border-white/10 dark:border-slate-600/50 shadow-2xl shadow-black/40 rounded-2xl pl-3 pr-5 py-3"><span class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span><p id="toastMsg" class="text-[13px] font-bold text-white leading-snug">…</p></div></div>
 </div>
 
 <script>
@@ -306,7 +288,7 @@ const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
-const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],leadLoaded:false,tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:10,myLikes:new Set()};
+const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],leadLoaded:false,tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:10,myLikes:new Set(),agenda:[],schools:[],docs:[],rewards:[],kudosTop:[],guruList:[]};
 const COLOR={teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],yellow:['bg-yellow-100','text-yellow-600']};
 const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
 const BADGES=[{id:'first',n:'Langkah Pertama',d:'Login pertama',i:'footprints'},{id:'rajin7',n:'Rajin 7',d:'Streak 7 hari',i:'flame'},{id:'inspirasi',n:'Penyebar Inspirasi',d:'5× bagikan karya',i:'share-2'},{id:'suara',n:'Suara Guru',d:'Kirim saran',i:'lightbulb'},{id:'veteran',n:'Veteran',d:'50 login',i:'medal'},{id:'rindang',n:'Rindang',d:'Capai Pohon Rindang',i:'tree-pine'}];
@@ -328,13 +310,7 @@ function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classLis
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 function dl(path){return location.pathname+path;}
 function studioFieldsFromQuery(q){const reserved=['page','menu','studio','panel'];const pre={};q.forEach((v,k)=>{if(!reserved.includes(k))pre[k]=v;});return pre;}
-function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;
-  const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel');
-  if(page&&['home','apps','bagi'].includes(page))navPage(page);
-  if(panel==='notif')openPanel('pNotif');else if(panel==='profil')openPanel('pProfil');else if(panel==='setting')openPanel('pSetting');
-  if(menu){const m=STATE.menus.find(x=>x.judul===menu);if(m)klikMenu(m.judul);}
-  if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
-  history.replaceState(CUR,'',location.pathname);}catch(e){}}
+function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;const pg=q.get('page');if(pg)navPage(pg);history.replaceState(CUR,'',location.pathname);}catch(e){}}
 function setAccent(a){document.documentElement.dataset.acc=a;localStorage.setItem('gb_acc',a);markAcc();}
 function markAcc(){const cur=localStorage.getItem('gb_acc')||'hijau';document.querySelectorAll('#accRow button').forEach(b=>{const on=b.dataset.acc===cur;b.classList.toggle('ring-2',on);b.classList.toggle('ring-white',on);b.classList.toggle('scale-110',on);});}
 function setFs(){document.documentElement.classList.toggle('fs-besar');localStorage.setItem('gb_fs',document.documentElement.classList.contains('fs-besar')?'besar':'normal');paintToggles();}
@@ -345,28 +321,27 @@ function initPrefs(){const a=localStorage.getItem('gb_acc')||'hijau';document.do
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}}
 function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
-function setThemeColor(){const dark=document.documentElement.classList.contains('dark');const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',dark?'#064e3b':'#059669');}
+function setThemeColor(){const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#0D9488');}
 let deferredPrompt=null;
-function buildManifest(){const dark=localStorage.getItem('gb_dark')==='1';const surface=dark?'#064e3b':'#059669';const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:surface,theme_color:surface,icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
+function buildManifest(){const manifest={name:'Guru Berbagi Selogiri',short_name:'GuruBerbagi',start_url:location.href,display:'standalone',background_color:'#0D9488',theme_color:'#0D9488',icons:[{src:LOGO,sizes:'192x192',type:'image/png',purpose:'any'},{src:LOGO,sizes:'512x512',type:'image/png',purpose:'maskable'}]};let l=document.querySelector('link[rel="manifest"]');if(!l){l=document.createElement('link');l.rel='manifest';document.head.appendChild(l);}l.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify(manifest));}
 function initPWA(){buildManifest();const standalone=matchMedia('(display-mode: standalone').matches||navigator.standalone;if(!standalone)window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const c=$('installCard');c.classList.remove('hidden');c.classList.add('flex');icons();});window.addEventListener('appinstalled',()=>{$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');toast('Aplikasi terpasang di HP!');});}
 function pasangApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;$('installCard').classList.add('hidden');$('installCard').classList.remove('flex');}else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');}
 async function muatCuaca(){try{const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');const j=await r.json();if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}}catch(e){}}
-function timeTheme(){const h=new Date().getHours();
-  if(h>=4&&h<10)return{t:'text-amber-500',chip:'bg-amber-50 dark:bg-amber-900/20'};
-  if(h>=10&&h<15)return{t:'text-sky-500',chip:'bg-sky-50 dark:bg-sky-900/20'};
-  if(h>=15&&h<18)return{t:'text-orange-500',chip:'bg-orange-50 dark:bg-orange-900/20'};
-  return{t:'text-indigo-400',chip:'bg-indigo-50 dark:bg-indigo-900/20'};}
+function timeTheme(){const h=new Date().getHours();if(h>=4&&h<10)return{t:'text-amber-500',chip:'bg-amber-50 dark:bg-amber-900/20'};if(h>=10&&h<15)return{t:'text-sky-500',chip:'bg-sky-50 dark:bg-sky-900/20'};if(h>=15&&h<18)return{t:'text-orange-500',chip:'bg-orange-50 dark:bg-orange-900/20'};return{t:'text-indigo-400',chip:'bg-indigo-50 dark:bg-indigo-900/20'};}
 function showWx(cw){const cd=cw.weathercode;let icon='cloud-sun';if(cd===0){icon='sun';}else if(cd<=2){icon='cloud-sun';}else if(cd===3){icon='cloud';}else if(cd>=51&&cd<=57){icon='cloud-drizzle';}else if((cd>=61&&cd<=67)||(cd>=80&&cd<=82)){icon='cloud-rain';}else if(cd>=95){icon='cloud-lightning';}
   const tt=timeTheme();$('wxIcon').setAttribute('data-lucide',icon);$('wxIcon').className='w-4 h-4 '+tt.t;$('wxTemp').textContent=Math.round(cw.temperature)+'°';$('wxChip').className='px-3 py-2 flex items-center gap-1.5 shrink-0 rounded-full border border-slate-100 dark:border-slate-800 '+tt.chip;icons();}
 let applying=false,popDismissed=false;
 let CUR={view:'home',sub:null,panel:null,modal:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
 function setPageInstant(pg){
-  if(pg==='home'||pg==='apps'||pg==='bagi'){document.querySelectorAll('[data-nav]').forEach(b=>{const on=b.dataset.nav===pg;if(b.classList.contains('side-btn')){b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);}else{b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-400',!on);}});}
+  if(pg==='home'||pg==='apps'||pg==='bagi'||pg==='agenda'||pg==='direktori'||pg==='dokumen'){document.querySelectorAll('[data-nav]').forEach(b=>{const on=b.dataset.nav===pg;if(b.classList.contains('side-btn')){b.classList.toggle('acc-soft',on);b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-500',!on);}else{b.classList.toggle('acc-text',on);b.classList.toggle('text-slate-400',!on);}});}
   $('pageHome').classList.toggle('hidden',pg!=='home');
   $('pageApps').classList.toggle('hidden',pg!=='apps');
   $('pageBagi').classList.toggle('hidden',pg!=='bagi');
-  $('hdrPage').textContent={home:'Beranda',apps:'Layanan',bagi:'Berbagi'}[pg]||'Beranda';
+  $('pageAgenda').classList.toggle('hidden',pg!=='agenda');
+  $('pageDokumen').classList.toggle('hidden',pg!=='dokumen');
+  $('pageDirektori').classList.toggle('hidden',pg!=='direktori');
+  $('hdrPage').textContent={home:'Beranda',apps:'Layanan',bagi:'Berbagi',agenda:'Agenda',dokumen:'Dokumen',direktori:'Direktori'}[pg]||'Beranda';
   CUR.view=pg;
 }
 function navPage(pg){if(applying)return;if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});if(pg==='bagi')renderBagi();}
@@ -390,24 +365,17 @@ function caroGo(i){const t=$('caroTrack');if(!t.children.length)return;const w=t
 function klikBanner(){const u=(STATE.config||{}).banner_link;if(u&&u.startsWith('ext:'))window.open(u.slice(4),'_blank');else if(u)location.href=u;}
 function renderCarousel(){const c=STATE.config||{};const box=$('caroBox');const slides=[];
   const retry=`onerror="if(this.dataset.r){this.style.display='none'}else{this.dataset.r='1';this.src=this.src}"`;
-  if(c.banner_status==='ON'){const w={blue:'from-blue-600 to-indigo-600',green:'from-emerald-600 to-teal-600',red:'from-rose-600 to-red-600'}[c.banner_warna]||'from-emerald-600 to-teal-600';
-    if(c.banner_gambar){
-      slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${w} text-white"><div class="flex h-40"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt=""><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="mt-2 self-start bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div></div>`);
-    }else{
-      slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);
-    }}
-  if(c.info_status!=='OFF'){const NC={pengumuman:'from-emerald-600 to-teal-600',info:'from-sky-600 to-blue-600',gamifikasi:'from-amber-500 to-orange-600',sistem:'from-slate-600 to-slate-800'};const EM={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'};
+  if(c.banner_status==='ON'){const w={blue:'from-blue-600 to-indigo-600',green:'from-teal-600 to-teal-500',red:'from-rose-600 to-red-600'}[c.banner_warna]||'from-teal-600 to-teal-500';
+    if(c.banner_gambar){slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${w} text-white"><div class="flex h-40"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt=""><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="mt-2 self-start bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div></div>`);}
+    else{slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);}}
+  if(c.info_status!=='OFF'){const NC={pengumuman:'from-teal-600 to-teal-500',info:'from-sky-600 to-blue-600',gamifikasi:'from-amber-500 to-orange-600',sistem:'from-slate-600 to-slate-800'};const EM={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'};
     STATE.notifs.slice(0,4).forEach(n=>{
-      if(n.gambar){
-        slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt=""><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
-      }else{
-        slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="text-xl shrink-0">${EM[n.tipe]||'📢'}</span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);
-      }});}
+      if(n.gambar){slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt=""><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);}
+      else{slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="text-xl shrink-0">${EM[n.tipe]||'📢'}</span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);}});}
   box.classList.toggle('hidden',!slides.length);
   $('caroTrack').innerHTML=slides.join('');
   $('caroDots').innerHTML=slides.length>1?slides.map((_,i)=>`<button onclick="caroGo(${i})" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300 dark:bg-slate-600'}"></button>`).join(''):'';
   icons();}
-
 function setView(v){localStorage.setItem('gb_view',v);paintView();renderLayanan($('inSearch').value);}
 function paintView(){const v=localStorage.getItem('gb_view')||'kotak';$('vKotak').className='px-3 py-1.5 rounded-lg text-[11px] font-bold transition '+(v==='kotak'?'acc-bg text-white':'card text-slate-500 dark:text-slate-400');$('vBaris').className='px-3 py-1.5 rounded-lg text-[11px] font-bold transition '+(v==='baris'?'acc-bg text-white':'card text-slate-500 dark:text-slate-400');}
 function visible(m){if(!m.is_active||m.tampil_di==='off')return false;if(m.tampil_di==='mobile'&&!isMobile)return false;if(m.tampil_di==='desktop'&&isMobile)return false;const r=m.akses_role;if(!STATE.profile)return (r==='tamu'||r==='all'||r==='');const isKS=(STATE.profile.jabatan||'').toLowerCase().includes('kepala');if(r==='Kepala Sekolah')return isKS;if(r==='tamu')return false;return true;}
@@ -416,21 +384,46 @@ function rowItem(m){const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<a href="${
 function renderLayanan(filter=''){const f=filter.toLowerCase();const view=localStorage.getItem('gb_view')||'kotak';const items=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari&&(m.judul.toLowerCase().includes(f)||m.deskripsi.toLowerCase().includes(f)));const cats=KAT_ORDER.filter(k=>items.some(m=>(m.kategori||'Umum')===k));$('layananBody').innerHTML=cats.map(k=>{const list=items.filter(m=>(m.kategori||'Umum')===k);const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">${k}</p>`;return view==='baris'?`<div class="mb-5">${head}<div class="space-y-2">${list.map(rowItem).join('')}</div></div>`:`<div class="mb-5">${head}<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${list.map(boxItem).join('')}</div></div>`;}).join('')||'<p class="text-sm text-slate-400 text-center py-8">Tidak ditemukan 😕</p>';icons();}
 $('inSearch').addEventListener('input',e=>{$('inSearchHome').value=e.target.value;renderLayanan(e.target.value);});
 function klikMenu(judul){const m=STATE.menus.find(x=>x.judul===judul);if(m&&needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}bukaUrl(m);}
-function bukaUrl(m){if(!m)return;logAktivitas('buka_menu',{judul:m.judul});let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);localStorage.setItem('gb_recent',JSON.stringify(rec));renderRecent();const u=m.url||'#';if(m.cara_buka==='app'&&u.startsWith('http')){$('mAppTitle').textContent=m.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http'))window.open(u,'_blank');else if(u&&u!=='#')location.href=u;}
+function bukaUrl(m){if(!m)return;logAktivitas('buka_menu',{judul:m.judul});let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);localStorage.setItem('gb_recent',JSON.stringify(rec));const u=m.url||'#';if(m.cara_buka==='app'&&u.startsWith('http')){$('mAppTitle').textContent=m.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http'))window.open(u,'_blank');else if(u&&u!=='#')location.href=u;}
 function bukaFoot(f){const u=f.url||'';if(u.startsWith('http')&&u.includes('github.io')){$('mAppTitle').textContent=f.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http')){window.open(u,'_blank');}else if(u)location.href=u;}
-function renderRecent(){if(!STATE.profile)return;const rec=JSON.parse(localStorage.getItem('gb_recent')||'[]');if(!rec.length)return;}
 function renderQuick(){if(!STATE.profile)return;const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari).slice(0,8);$('quickList').innerHTML=list.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight truncate w-full">${m.judul}</span></a>`;}).join('');icons();}
 function renderFoot(){if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}$('footSide').classList.remove('hidden');
   $('footList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><span class="text-xs font-bold text-slate-600 dark:text-slate-300">${f.judul}</span></button>`).join('');
   $('footSideList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition"><i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</button>`).join('');icons();}
 
-function renderBagi(){const on=!!STATE.profile;$('treeGuest').classList.toggle('hidden',on);$('treeData').classList.toggle('hidden',!on);renderTreeData();renderStudioGrid();renderKarya();renderLeadBadges();if(!STATE.leadLoaded)loadLeaderboard();icons();}
+/* ===== AGENDA ===== */
+function renderAgenda(){const today=new Date().toISOString().slice(0,10);
+  const up=(STATE.agenda||[]).filter(a=>a.tanggal>=today).sort((a,b)=>a.tanggal.localeCompare(b.tanggal));
+  const past=(STATE.agenda||[]).filter(a=>a.tanggal<today).sort((a,b)=>b.tanggal.localeCompare(a.tanggal)).slice(0,3);
+  $('agendaNext').innerHTML=up.slice(0,1).map(a=>{const d=new Date(a.tanggal);const diff=Math.ceil((new Date(a.tanggal)-new Date(today))/86400000);
+    return `<div class="card p-4 acc-grad text-white relative overflow-hidden"><p class="text-[10px] font-black uppercase tracking-widest text-white/80">${esc(a.kategori||'Kegiatan')}</p><p class="text-base font-extrabold mt-1 grad-text">${esc(a.judul)}</p><p class="text-[11px] text-white/90 mt-1">${d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}${a.waktu?' · '+esc(a.waktu):''}${a.tempat?' · '+esc(a.tempat):''}</p><div class="flex items-center gap-2 mt-3">${a.link?`<a href="${esc(a.link)}" target="_blank" class="bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg">Detail</a>`:''}<span class="text-[10px] font-bold bg-white/15 px-2.5 py-1.5 rounded-lg">${diff<=0?'Hari ini':'H-'+diff}</span></div></div>`;}).join('')||'<p class="text-xs text-slate-400">Tidak ada agenda mendatang.</p>';
+  $('agendaList').innerHTML=[...up.slice(1),...past].map(a=>{const d=new Date(a.tanggal);const isPast=a.tanggal<today;
+    return `<div class="card p-3.5 flex items-center gap-3 ${isPast?'opacity-60':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${d.getDate()}</span><span class="text-[8px] font-bold uppercase">${d.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${a.link?`<a href="${esc(a.link)}" target="_blank" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;}).join('');
+  icons();}
+/* ===== DOKUMEN ===== */
+function renderDokumen(){const cats=[...new Set((STATE.docs||[]).map(d=>d.kategori||'Umum'))];
+  $('dokList').innerHTML=cats.map(c=>{const list=STATE.docs.filter(d=>(d.kategori||'Umum')===c);
+    return `<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 mt-4">${esc(c)}</p><div class="grid grid-cols-2 gap-2">`+list.map(d=>{const [bg,tx]=COLOR[d.warna]||COLOR.blue;
+      return `<a href="${esc(d.link)}" target="_blank" class="card p-4 flex flex-col gap-2 active:scale-[.96] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${d.icon||'file-text'}" class="w-5 h-5"></i></span><span class="text-[12px] font-extrabold text-slate-800 dark:text-slate-100 leading-tight">${esc(d.judul)}</span><span class="text-[10px] text-slate-400 line-clamp-2">${esc(d.deskripsi||'')}</span></a>`;}).join('')+`</div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada dokumen.</p>';
+  icons();}
+/* ===== DIREKTORI ===== */
+function renderDirektori(){const q=($('inDirSearch').value||'').toLowerCase();
+  const list=(STATE.schools||[]).filter(s=>!q||(s.nama||'').toLowerCase().includes(q)||(s.npsn||'').includes(q)||(s.kepala||'').toLowerCase().includes(q));
+  $('dirList').innerHTML=list.map(s=>`<div class="card p-4 space-y-1.5"><div class="flex items-center gap-2"><span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="school" class="w-4 h-4"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 truncate">${esc(s.nama)}</p><p class="text-[10px] text-slate-500 dark:text-slate-400">NPSN ${esc(s.npsn||'-')}</p></div></div><p class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5 acc-text"></i>${esc(s.kepala||'-')}</p><p class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 acc-text"></i>${esc(s.alamat||'-')}</p><div class="flex gap-2 pt-1">${s.telepon?`<a href="tel:${esc(s.telepon)}" class="flex-1 text-center acc-soft acc-text text-[10px] font-bold py-2 rounded-lg">Telepon</a>`:''}${s.email?`<a href="mailto:${esc(s.email)}" class="flex-1 text-center acc-soft acc-text text-[10px] font-bold py-2 rounded-lg">Email</a>`:''}</div></div>`).join('')||'<p class="text-xs text-slate-400">Tidak ditemukan.</p>';
+  icons();}
+/* ===== TOKO POIN & KUDOS ===== */
+function renderToko(){$('rewardList').innerHTML=(STATE.rewards||[]).map(r=>`<div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="gift" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 truncate">${esc(r.judul)}</p><p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">${esc(r.deskripsi||'')}</p></div><div class="text-right shrink-0"><p class="text-[10px] font-black text-amber-500">⭐ ${r.biaya_poin}</p><button onclick="redeemReward(${r.id})" class="mt-1 acc-bg text-white text-[10px] font-bold px-3 py-1.5 rounded-lg active:scale-95 transition shadow-sm">Tukar</button></div></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada reward.</p>';icons();}
+async function redeemReward(id){if(!STATE.profile)return toast('Login dulu','info');const {data}=await sb.rpc('creative_redeem_reward',{p_guru_id:guruId(),p_reward_id:id});if(data&&data.error)return toast(data.error,'error');toast('Berhasil ditukar! Sisa poin: '+data.sisa_poin);const gid=guruId();const {data:g}=await sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle();if(g){STATE.gam=g;renderTreeData();}}
+function renderKudos(){$('kudosTop').innerHTML=(STATE.kudosTop||[]).map((k,i)=>`<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 bg-slate-50 dark:bg-slate-800/60"><span class="w-7 h-7 rounded-full acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 dark:text-slate-200 truncate">${esc(k.nama_lengkap)}</span><span class="block text-[10px] text-slate-400 truncate">${esc(k.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-rose-500">❤ ${k.jumlah}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada apresiasi.</p>';
+  $('kudosTo').innerHTML='<option value="">Pilih rekan…</option>'+(STATE.guruList||[]).map(g=>`<option value="${esc(g.guru_id)}" data-nama="${esc(g.nama_lengkap)}" data-sek="${esc(g.satuan_pendidikan)}">${esc(g.nama_lengkap)} — ${esc(g.satuan_pendidikan)}</option>`).join('');icons();}
+async function sendKudos(){if(!STATE.profile)return toast('Login dulu','info');const sel=$('kudosTo');if(!sel.value)return toast('Pilih rekan dulu','info');const opt=sel.selectedOptions[0];const {data}=await sb.rpc('creative_send_kudos',{p_from:guruId(),p_to:sel.value,p_nama:opt.dataset.nama||'',p_sek:opt.dataset.sek||'',p_pesan:$('kudosPesan').value.trim()});if(data&&data.error)return toast(data.error,'error');$('kudosPesan').value='';toast('Apresiasi terkirim! 🙏');const {data:kt}=await sb.rpc('creative_kudos_top');STATE.kudosTop=kt||[];renderKudos();}
+
+function renderBagi(){const on=!!STATE.profile;$('treeGuest').classList.toggle('hidden',on);$('treeData').classList.toggle('hidden',!on);renderTreeData();renderToko();renderKudos();renderStudioGrid();renderKarya();renderLeadBadges();if(!STATE.leadLoaded)loadLeaderboard();icons();}
 async function loadLeaderboard(){STATE.leadLoaded=true;const {data}=await sb.rpc('creative_leaderboard');STATE.lead=data||[];renderLeadBadges();icons();}
 function renderTreeData(){if(!STATE.profile)return;const g=STATE.gam||{total_poin:0,streak_days:0,level:'Biji',total_login:0,badges:[]};const badges=Array.isArray(g.badges)?g.badges:[];const lv=[...LEVELS].reverse().find(l=>(g.total_poin||0)>=l.min)||LEVELS[0];const next=LEVELS[LEVELS.indexOf(lv)+1];$('treeIco').setAttribute('data-lucide',lv.i);$('treeLevel').textContent=lv.n;$('treeStreak').textContent=g.streak_days||0;$('treePoin').textContent=g.total_poin||0;if(next){$('treeNext').textContent=next.n;$('treeBar').style.width=Math.min(100,Math.round(((g.total_poin||0)-lv.min)/(next.min-lv.min)*100))+'%';}else{$('treeNext').textContent='Maksimal';$('treeBar').style.width='100%';}$('stPoin').textContent=g.total_poin||0;$('stStreak').textContent=g.streak_days||0;$('stLogin').textContent=g.total_login||0;$('stBadge').textContent=badges.length;
-  $('badgeGrid').innerHTML=BADGES.map(b=>{const onb=badges.includes(b.id);return `<div class="rounded-xl p-3 text-center ${onb?'acc-soft':'bg-slate-50 dark:bg-slate-800/50 opacity-50'}"><i data-lucide="${onb?b.i:'lock'}" class="w-5 h-5 mx-auto ${onb?'acc-text':'text-slate-400'}"></i><p class="text-[10px] font-extrabold text-slate-700 dark:text-slate-200 mt-1.5 leading-tight">${b.n}</p><p class="text-[9px] text-slate-400 mt-0.5 leading-tight">${b.d}</p></div>`;}).join('');}
-function renderLeadBadges(){const me=(STATE.profile||{}).nama||'';const RANK=[['trophy','text-amber-500'],['medal','text-slate-400'],['medal','text-orange-400']];$('leadList').innerHTML=(STATE.lead||[]).map((r,i)=>{const isMe=(r.nama_lengkap||'').trim()===(me||'').trim();const rk=i<3?RANK[i]:['sprout','acc-text'];return `<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ${isMe?'acc-soft':'bg-slate-50 dark:bg-slate-800/50'}"><span class="w-8 h-8 rounded-full ${isMe?'acc-bg text-white':'bg-white dark:bg-slate-700'} flex items-center justify-center shrink-0"><i data-lucide="${rk[0]}" class="w-4 h-4 ${isMe?'text-white':rk[1]}"></i></span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 dark:text-slate-200 truncate">${esc(r.nama_lengkap)}${isMe?' <span class="acc-text">(Anda)</span>':''}</span><span class="block text-[10px] text-slate-400 truncate">${esc(r.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-current"></i>${r.total_poin}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';icons();}
+  $('badgeGrid').innerHTML=BADGES.map(b=>{const onb=badges.includes(b.id);return `<div class="rounded-xl p-3 text-center ${onb?'acc-soft':'bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200/70 dark:border-slate-700/50'}"><i data-lucide="${onb?b.i:'lock'}" class="w-5 h-5 mx-auto ${onb?'acc-text':'text-slate-400 dark:text-slate-600'}"></i><p class="text-[10px] font-extrabold mt-1.5 leading-tight ${onb?'text-slate-700 dark:text-slate-200':'text-slate-500 dark:text-slate-500'}">${b.n}</p><p class="text-[9px] mt-0.5 leading-tight ${onb?'text-slate-400':'text-slate-400 dark:text-slate-600'}">${b.d}</p></div>`;}).join('');}
+function renderLeadBadges(){const me=(STATE.profile||{}).nama||'';const RANK=[['trophy','text-amber-500'],['medal','text-slate-400'],['medal','text-orange-400']];$('leadList').innerHTML=(STATE.lead||[]).map((r,i)=>{const isMe=(r.nama_lengkap||'').trim()===(me||'').trim();const rk=i<3?RANK[i]:['sprout','acc-text'];return `<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ${isMe?'acc-soft':'bg-slate-50 dark:bg-slate-800/60'}"><span class="w-8 h-8 rounded-full ${isMe?'acc-bg text-white':'bg-white dark:bg-slate-700'} flex items-center justify-center shrink-0"><i data-lucide="${rk[0]}" class="w-4 h-4 ${isMe?'text-white':rk[1]}"></i></span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 dark:text-slate-200 truncate">${esc(r.nama_lengkap)}${isMe?' <span class="acc-text">(Anda)</span>':''}</span><span class="block text-[10px] text-slate-400 truncate">${esc(r.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-current"></i>${r.total_poin}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';icons();}
 function renderStudioGrid(){$('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<a href="${dl('?studio='+k)}" onclick="event.preventDefault();openStudio('${k}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight">${t.n}</span></a>`).join('');icons();}
-
 function toggleInspForm(show){const f=$('inspForm');if(show===undefined)show=f.classList.contains('hidden');f.classList.toggle('hidden',!show);$('inspOpenBtn').classList.toggle('hidden',show);if(show)$('inspIsi').focus();}
 function setInspMode(m){STATE.inspiMode=m;STATE.inspiLimit=10;$('inspBaru').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='baru'?'acc-bg text-white':'card text-slate-500 dark:text-slate-400');$('inspPop').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='populer'?'acc-bg text-white':'card text-slate-500 dark:text-slate-400');fetchInspirasi();}
 async function fetchInspirasi(){const order=STATE.inspiMode==='populer'?'likes':'created_at';const {data}=await sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order(order,{ascending:false}).limit(STATE.inspiLimit);STATE.inspi=data||[];
@@ -439,19 +432,12 @@ async function fetchInspirasi(){const order=STATE.inspiMode==='populer'?'likes':
 function moreInspirasi(){STATE.inspiLimit+=10;fetchInspirasi();}
 function renderInspirasi(){const myId=guruId();
   $('inspList').innerHTML=STATE.inspi.map(n=>{const liked=STATE.myLikes.has(n.id);const own=myId&&n.guru_id===myId;
-    return `<div class="card p-4 space-y-2">
-      <div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase tracking-wider acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-400">${waktuRelatif(n.created_at)}</span>${own?`<button onclick="hapusInspSendiri(${n.id})" class="ml-auto text-[10px] font-bold text-rose-500">Hapus</button>`:''}</div>
-      <p class="text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed">${esc(n.isi)}</p>
-      <div class="flex items-center justify-between">
-        <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate">${esc(n.nama)} · ${esc(n.sekolah||'')}</p>
-        <button onclick="apresiasi(${n.id})" class="shrink-0 flex items-center gap-1 text-[10px] font-black ${liked?'acc-text':'text-slate-400'} active:scale-90 transition"><i data-lucide="heart" class="w-3.5 h-3.5 ${liked?'fill-current acc-text':''}"></i>${n.likes||0}</button>
-      </div></div>`;}).join('')||'<p class="text-xs text-slate-400 text-center py-6">Jadilah yang pertama berbagi inspirasi 💡</p>';
+    return `<div class="card p-4 space-y-2"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase tracking-wider acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-500 dark:text-slate-400">${waktuRelatif(n.created_at)}</span>${own?`<button onclick="hapusInspSendiri(${n.id})" class="ml-auto text-[10px] font-bold text-rose-500 dark:text-rose-400">Hapus</button>`:''}</div><p class="text-[13px] text-slate-700 dark:text-slate-200 leading-relaxed">${esc(n.isi)}</p><div class="flex items-center justify-between"><p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate">${esc(n.nama)} · ${esc(n.sekolah||'')}</p><button onclick="apresiasi(${n.id})" class="shrink-0 flex items-center gap-1 text-[10px] font-black ${liked?'acc-text':'text-slate-400'} active:scale-90 transition"><i data-lucide="heart" class="w-3.5 h-3.5 ${liked?'fill-current acc-text':''}"></i>${n.likes||0}</button></div></div>`;}).join('')||'<p class="text-xs text-slate-400 text-center py-6">Jadilah yang pertama berbagi inspirasi 💡</p>';
   $('inspMore').classList.toggle('hidden',STATE.inspi.length<STATE.inspiLimit);icons();}
 function hapusInspSendiri(id){confirmDialog('Hapus inspirasi ini? Tindakan tidak dapat dibatalkan.',async()=>{const gid=guruId();await sb.rpc('creative_delete_inspirasi',{p_id:id,p_guru_id:gid});toast('Inspirasi dihapus');fetchInspirasi();},'Hapus Inspirasi?','Hapus');}
 async function postInspirasi(){const gid=guruId();if(!gid){toast('Login untuk berbagi inspirasi','info');openPanel('pLogin');return;}const isi=$('inspIsi').value.trim();if(!isi)return toast('Tulis inspirasimu dulu','info');const {data}=await sb.rpc('creative_post_inspirasi',{p_guru_id:gid,p_kategori:$('inspKat').value,p_isi:isi});if(data&&data.error)return toast(data.error,'error');$('inspIsi').value='';toggleInspForm(false);poinAksi('inspirasi');toast('Inspirasimu tayang! Terima kasih 💚');fetchInspirasi();}
 async function apresiasi(id){const gid=guruId();if(!gid){toast('Login untuk mengapresiasi','info');openPanel('pLogin');return;}if(STATE.myLikes.has(id))return;const {data}=await sb.rpc('creative_apresiasi_inspirasi',{p_inspirasi_id:id,p_guru_id:gid});if(data&&data.error)return toast(data.error,'error');STATE.myLikes.add(id);fetchInspirasi();if(data&&data.added)toast('Terima kasih terkirim! Penulis +1 poin 🙏');}
 function waktuRelatif(ts){const d=new Date(ts),diff=Math.floor((Date.now()-d)/1000);if(diff<60)return 'Baru saja';if(diff<3600)return Math.floor(diff/60)+' mnt lalu';if(diff<86400)return Math.floor(diff/3600)+' jam lalu';if(diff<172800)return 'Kemarin';return d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});}
-
 let logoImg=null;loadImg(LOGO).then(i=>logoImg=i).catch(()=>{});
 function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
 function openStudio(tpl,pre){STATE.studio={tpl,fmt:'story',font:'modern',fields:Object.assign({},pre||{}),photo:null,photoSmall:null,showFoot:true,showTag:true,tagText:'#GuruBerbagiSelogiri #GTKSelogiri'};$('stTitle').textContent=TPL[tpl].n;buildControls();openModal('mStudio');renderStudio();}
@@ -477,8 +463,8 @@ function handlesStr(){const s=STATE.sosmed||{};const parts=[];if(s.ig)parts.push
 async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st.fmt],W=F.w,H=F.h,s=H>=W?H/1920:H/720;const cv=$('stCanvas');cv.width=W;cv.height=H;cv.style.aspectRatio=W+'/'+H;const ctx=cv.getContext('2d');
   try{await document.fonts.load('700 64px Inter');await document.fonts.load('800 64px "Playfair Display"');await document.fonts.load('700 64px Caveat');}catch(e){}
   const ff=FONTS[st.font];const f=st.fields;
-  if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(2,44,34,.55)');og.addColorStop(.5,'rgba(2,44,34,.25)');og.addColorStop(1,'rgba(2,44,34,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
-  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#059669';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#0d9488';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#064e3b');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
+  if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(19,78,74,.55)');og.addColorStop(.5,'rgba(19,78,74,.25)');og.addColorStop(1,'rgba(19,78,74,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
+  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#0D9488';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#14B8A6';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#134E4A');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
   ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3*s;roundRect(ctx,42*s,42*s,W-84*s,H-84*s,40*s);ctx.stroke();
   ctx.textAlign='center';
   const kick=t=>{ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`800 ${24*s}px Inter, sans-serif`;ctx.fillText(t.toUpperCase(),W/2,140*s);};
@@ -490,24 +476,15 @@ async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st
     case 'undangan':{kick('Undangan');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${60*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy-40*s);ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${32*s}px Inter, sans-serif`;[f.date,f.time,f.place].filter(Boolean).forEach((ln,i)=>ctx.fillText(ln,W/2,cy+40*s+i*50*s));break;}
     case 'prestasi':{kick('Prestasi');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${56*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='#fcd34d';ctx.font=`800 ${38*s}px ${ff.f}`;ctx.fillText(f.name||'',W/2,cy+76*s);break;}
     case 'cover':{kick('Materi Pembelajaran');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${62*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${32*s}px Inter, sans-serif`;ctx.fillText((f.kelas||'')+(f.guru?' · '+f.guru:''),W/2,cy+66*s);break;}
-    case 'dokumentasi':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${50*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(f.date||'',W/2,cy+60*s);break;}
-  }
+    case 'dokumentasi':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${50*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(f.date||'',W/2,cy+60*s);break;}}
   if(st.showTag&&st.tagText){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.6)';ctx.font=`600 ${26*s}px Inter, sans-serif`;ctx.fillText(st.tagText,W-60*s,H-200*s);}
-  if(st.showFoot){const ls=120*s,lx=70*s,ly=H-190*s;
-    ctx.save();roundRect(ctx,lx,ly,ls,ls,28*s);ctx.clip();ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);
-    if(logoImg){const z=ls*1.18;ctx.drawImage(logoImg,lx+(ls-z)/2,ly+(ls-z)/2,z,z);}ctx.restore();
-    ctx.textAlign='left';
-    ctx.fillStyle='rgba(255,255,255,.95)';ctx.font=`800 ${42*s}px Inter, sans-serif`;ctx.fillText('Guru Berbagi',lx+ls+26*s,ly+ls/2-8*s);
-    ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText('Creative App',lx+ls+26*s,ly+ls/2+34*s);
-    const hd=handlesStr();if(hd&&STATE.profile){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(hd,W-70*s,ly+ls/2+10*s);}}
-}
+  if(st.showFoot){const ls=120*s,lx=70*s,ly=H-190*s;ctx.save();roundRect(ctx,lx,ly,ls,ls,28*s);ctx.clip();ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);if(logoImg){const z=ls*1.18;ctx.drawImage(logoImg,lx+(ls-z)/2,ly+(ls-z)/2,z,z);}ctx.restore();ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.95)';ctx.font=`800 ${42*s}px Inter, sans-serif`;ctx.fillText('Guru Berbagi',lx+ls+26*s,ly+ls/2-8*s);ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText('Creative App',lx+ls+26*s,ly+ls/2+34*s);const hd=handlesStr();if(hd&&STATE.profile){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(hd,W-70*s,ly+ls/2+10*s);}}}
 function simpanKarya(){if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}const st=STATE.studio;const cv=$('stCanvas');const t=document.createElement('canvas');const tw=216,th=Math.round(tw*cv.height/cv.width);t.width=tw;t.height=th;t.getContext('2d').drawImage(cv,0,0,tw,th);let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');arr.unshift({tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});arr=arr.slice(0,6);localStorage.setItem('gb_karya',JSON.stringify(arr));renderKarya();}
 function renderKarya(){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');$('karyaWrap').classList.toggle('hidden',!arr.length||!STATE.profile);$('karyaList').innerHTML=arr.map((k,i)=>`<button onclick="openKarya(${i})" class="shrink-0 w-24 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 active:scale-95 transition"><img src="${k.thumb}" class="w-24 h-32 object-cover"></button>`).join('');}
 function openKarya(i){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');const k=arr[i];if(!k)return;STATE.studio={tpl:k.tpl,fmt:k.fmt,font:k.font,fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,showFoot:k.showFoot,showTag:k.showTag,tagText:k.tagText};if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}$('stTitle').textContent=TPL[k.tpl].n;buildControls();openModal('mStudio');renderStudio();}
 function unduhStudio(){$('stCanvas').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='karya-guru-berbagi.png';a.click();URL.revokeObjectURL(a.href);simpanKarya();poinAksi('bagi_kartu');toast('Karya diunduh!');},'image/png');}
 async function bagiStudio(){const cv=$('stCanvas');try{const blob=await new Promise(r=>cv.toBlob(r,'image/png'));const file=new File([blob],'karya-guru-berbagi.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Guru Berbagi Selogiri'});simpanKarya();poinAksi('bagi_kartu');toast('Terima kasih sudah berbagi!');}else{unduhStudio();toast('Perangkat tidak mendukung share — file diunduh','info');}}catch(e){}}
 function poinAksi(aksi){const gid=guruId();if(!gid)return;sb.rpc('creative_add_poin',{p_guru_id:gid,p_poin:1,p_aksi:aksi}).then(r=>{if(r.data){STATE.gam=r.data;renderTreeData();}});}
-
 async function ssoLogin(email,pin){const r=await fetch(SB_URL+'/functions/v1/login-guru',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON},body:JSON.stringify({email,pin})});if(!r.ok)throw new Error('Gagal');return await r.json();}
 async function ssoVerify(token){const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});return await r.json();}
 $('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('btnLogin').disabled=true;$('btnLogin').textContent='Memverifikasi…';try{const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));STATE.profile=res.profile;STATE.token=res.token;tutupPanel('pLogin');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}renderAuthUI();setSapaan();muatSemuaData(true);toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');}catch(err){toast('Email/PIN salah atau akun nonaktif','error');}$('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';});
@@ -518,48 +495,48 @@ function renderAuthUI(){const on=!!STATE.profile;$('btnMasuk').classList.toggle(
     const foto=localStorage.getItem('gb_foto');$('pfAvatar').innerHTML=foto?`<img src="${foto}" class="w-full h-full object-cover">`:namaPanggil(p.nama)[0].toUpperCase();}}
 async function simpanSosmed(){const gid=guruId();if(!gid)return;const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});STATE.sosmed=clean;localStorage.setItem('gb_sosmed',JSON.stringify(clean));await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media tersimpan untuk watermark');}
 async function hapusSosmed(){const gid=guruId();if(!gid)return;STATE.sosmed={};localStorage.setItem('gb_sosmed','{}');await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media dihapus');}
-
 function readCache(){try{return JSON.parse(localStorage.getItem('gb_cache')||'null');}catch(e){return null;}}
 function renderFromCache(){const cache=readCache();if(!cache||!cache.d)return false;
   applyPortal(cache.d);
-  if(cache.dyn){STATE.gam=cache.dyn.gam||null;STATE.notifs=cache.dyn.notifs||[];STATE.inspi=cache.dyn.inspi||[];
-    renderCarousel();renderNotif();renderInspirasi();if(CUR.view==='bagi')renderBagi();icons();}
+  if(cache.dyn){STATE.gam=cache.dyn.gam||null;STATE.notifs=cache.dyn.notifs||[];STATE.inspi=cache.dyn.inspi||[];STATE.agenda=cache.dyn.agenda||[];STATE.schools=cache.dyn.schools||[];STATE.docs=cache.dyn.docs||[];STATE.rewards=cache.dyn.rewards||[];STATE.kudosTop=cache.dyn.kudosTop||[];STATE.guruList=cache.dyn.guruList||[];
+    renderCarousel();renderNotif();renderInspirasi();renderAgenda();renderDirektori();renderDokumen();if(CUR.view==='bagi')renderBagi();icons();}
   return true;}
 async function silentRefresh(force){const now=Date.now();const cache=readCache();const cacheAge=cache?(now-cache.t):Infinity;
   let serverVersi=null;try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
   const cacheVersi=(cache&&cache.d&&cache.d.config)?cache.d.config.versi:null;
   if(!cache||!cache.d||cacheAge>=86400000||(serverVersi&&serverVersi!==cacheVersi)){
     const {data:pd}=await sb.rpc('creative_get_portal');
-    if(pd){try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:pd,dyn:cache?cache.dyn:null}));}catch(e){}applyPortal(pd);}
-  }
+    if(pd){try{localStorage.setItem('gb_cache',JSON.stringify({t:now,d:pd,dyn:cache?cache.dyn:null}));}catch(e){}applyPortal(pd);}}
   const dynStale=force||!cache||!cache.dyn||cacheAge>=300000;
-  if(dynStale){
-    const gid=guruId();
-    const [rGam,rNotif,rInsp]=await Promise.allSettled([
+  if(dynStale){const gid=guruId();
+    const [rGam,rNotif,rInsp,rAgenda,rSchools,rDocs,rRewards,rKudos,rGuru]=await Promise.allSettled([
       gid?sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
       sb.from('creative_notifications').select('id,judul,pesan,tipe,gambar,scheduled_at,target_role').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(8),
-      sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order('created_at',{ascending:false}).limit(STATE.inspiLimit)
-    ]);
+      sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order('created_at',{ascending:false}).limit(STATE.inspiLimit),
+      sb.from('creative_agenda').select('*').eq('is_active',true).order('tanggal',{ascending:false}).limit(30),
+      sb.from('creative_schools').select('*').eq('is_active',true).order('nama').limit(100),
+      sb.from('creative_documents').select('*').eq('is_active',true).order('kategori').limit(100),
+      sb.from('creative_rewards').select('*').eq('is_active',true).order('biaya_poin').limit(50),
+      sb.rpc('creative_kudos_top'),
+      gid?sb.rpc('creative_guru_list'):Promise.resolve({data:[]})]);
     STATE.gam=(rGam.status==='fulfilled'?rGam.value:{data:null}).data;
-    const notifs=(rNotif.status==='fulfilled'?rNotif.value:{data:[]}).data||[];
-    const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');const myRole=isKS?'Kepala Sekolah':'Guru';
-    STATE.notifs=notifs.filter(n=>{const t=n.target_role||'all';return t==='all'||(STATE.profile&&t===myRole);});
+    STATE.notifs=((rNotif.status==='fulfilled'?rNotif.value:{data:[]}).data||[]).filter(n=>{const t=n.target_role||'all';const isKS=STATE.profile&&(STATE.profile.jabatan||'').toLowerCase().includes('kepala');const myRole=isKS?'Kepala Sekolah':'Guru';return t==='all'||(STATE.profile&&t===myRole);});
     STATE.inspi=(rInsp.status==='fulfilled'?rInsp.value:{data:[]}).data||[];
+    STATE.agenda=(rAgenda.status==='fulfilled'?rAgenda.value:{data:[]}).data||[];
+    STATE.schools=(rSchools.status==='fulfilled'?rSchools.value:{data:[]}).data||[];
+    STATE.docs=(rDocs.status==='fulfilled'?rDocs.value:{data:[]}).data||[];
+    STATE.rewards=(rRewards.status==='fulfilled'?rRewards.value:{data:[]}).data||[];
+    STATE.kudosTop=(rKudos.status==='fulfilled'?rKudos.value:{data:[]}).data||[];
+    STATE.guruList=(rGuru.status==='fulfilled'?rGuru.value:{data:[]}).data||[];
     if(STATE.profile&&STATE.inspi.length){const g2=guruId();const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',g2).in('inspirasi_id',STATE.inspi.map(i=>i.id));STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));}else STATE.myLikes=new Set();
-    try{const c2=readCache();const d=(c2&&c2.d)?c2.d:null;localStorage.setItem('gb_cache',JSON.stringify({t:now,d:d,dyn:{gam:STATE.gam,notifs:STATE.notifs,inspi:STATE.inspi}}));}catch(e){}
-    renderCarousel();renderNotif();renderInspirasi();if(CUR.view==='bagi')renderBagi();icons();
-  }
-}
+    try{const c2=readCache();const d=(c2&&c2.d)?c2.d:null;localStorage.setItem('gb_cache',JSON.stringify({t:now,d:d,dyn:{gam:STATE.gam,notifs:STATE.notifs,inspi:STATE.inspi,agenda:STATE.agenda,schools:STATE.schools,docs:STATE.docs,rewards:STATE.rewards,kudosTop:STATE.kudosTop,guruList:STATE.guruList}}));}catch(e){}
+    renderCarousel();renderNotif();renderInspirasi();renderAgenda();renderDirektori();renderDokumen();if(CUR.view==='bagi')renderBagi();icons();}}
 async function muatSemuaData(force){const had=renderFromCache();if(!had){$('layananBody').innerHTML='<div class="grid grid-cols-2 gap-3">'+Array(6).fill('<div class="skeleton h-32"></div>').join('')+'</div>';}await silentRefresh(force);handleDeepLink();}
-
 (async function boot(){initPrefs();setThemeColor();initPWA();muatCuaca();icons();paintToggles();$('caroTrack').addEventListener('scroll',caroUpdate);
-  document.addEventListener('gesturestart',e=>e.preventDefault());
-  document.addEventListener('dblclick',e=>e.preventDefault());
+  document.addEventListener('gesturestart',e=>e.preventDefault());document.addEventListener('dblclick',e=>e.preventDefault());
   const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');if(token&&saved){try{let need=true;try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}}catch(e){}}try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}renderAuthUI();setSapaan();muatSemuaData(false);})();
-
 function applyPortal(p){STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];if(STATE.config){$('hdrVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;$('aboutVer').textContent='v'+STATE.config.versi;renderPopup();}
-  const c=STATE.config||{};
-  $('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
+  const c=STATE.config||{};$('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
   renderCarousel();renderLayanan($('inSearch').value);renderQuick();renderFoot();gantiQuote();}
 function setSapaan(){const j=new Date().getHours();const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';const nama=STATE.profile?namaPanggil(STATE.profile.nama):'Guru';$('txtSapaan').innerHTML=`${s}, <span class="font-extrabold bg-clip-text text-transparent" style="background-image:linear-gradient(90deg,var(--acc),var(--acc2))">${nama}</span>`;const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];const d=new Date();$('txtTanggal').textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;}
 function renderPopup(){const c=STATE.config;if(!c||c.pop_status!=='ON'||popDismissed)return;let html;if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=c.pop_pesan;}else{const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100 dark:border-slate-800" style="max-height:260px;object-fit:contain"></div>`:'';html=`<div class="bg-white dark:bg-slate-900"><div class="h-1.5 brand-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800 dark:text-slate-100">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;}$('popContent').innerHTML=html;openModal('mPop');}
