@@ -112,9 +112,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
       <section id="pageApps" class="hidden space-y-4 min-w-0">
         <p class="text-sm font-extrabold text-slate-700 dark:text-slate-200">Semua Layanan</p>
-        <div class="grid grid-cols-2 gap-2">
-          <a href="?page=dokumen" onclick="event.preventDefault();navPage('dokumen')" class="card p-3 flex items-center gap-2.5 active:scale-[.96] transition"><span class="w-9 h-9 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="folder-open" class="w-4 h-4"></i></span><span class="flex-1 min-w-0"><span class="block text-[11px] font-extrabold text-slate-800 dark:text-slate-100 truncate">Bank Dokumen</span><span id="docCount" class="block text-[9px] text-slate-400 mt-0.5">0 dokumen</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></a>
-          <button onclick="navPage('bagi')" class="card p-3 flex items-center gap-2.5 text-left active:scale-[.96] transition"><span id="karyaIcon" class="w-9 h-9 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="image" class="w-4 h-4"></i></span><span class="flex-1 min-w-0"><span class="block text-[11px] font-extrabold text-slate-800 dark:text-slate-100 truncate">Karya Terbaru</span><span id="karyaCount" class="block text-[9px] text-slate-400 mt-0.5">0 karya</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></button>
+        <div id="dokWidgetBox" class="card overflow-hidden">
+          <div class="flex items-center justify-between px-4 pt-3 pb-1.5">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Bank Dokumen · <span id="dokTotal">0</span> file</p>
+            <a href="?page=dokumen" onclick="event.preventDefault();navPage('dokumen')" class="text-[10px] font-bold acc-text">Lihat semua →</a>
+          </div>
+          <div id="dokWidget" class="px-4 pb-3"></div>
         </div>
         <div class="relative"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring"></div>
         <div class="flex items-center gap-1.5"><span class="text-[10px] font-bold text-slate-400 mr-1">Tampilan:</span><button id="vKotak" onclick="setView('kotak')" class="px-3 py-1.5 rounded-lg text-[11px] font-bold acc-bg text-white transition">Kotak</button><button id="vBaris" onclick="setView('baris')" class="px-3 py-1.5 rounded-lg text-[11px] font-bold card text-slate-500 dark:text-slate-400 transition">Baris</button></div>
@@ -244,7 +247,13 @@ function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classLis
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 function dl(path){return location.pathname+path;}
 function studioFieldsFromQuery(q){const reserved=['page','menu','studio','panel'];const pre={};q.forEach((v,k)=>{if(!reserved.includes(k))pre[k]=v;});return pre;}
-function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;const pg=q.get('page');if(pg)navPage(pg);history.replaceState(CUR,'',location.pathname);}catch(e){}}
+function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;
+  const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel');
+  if(page)navPage(page);
+  if(panel==='notif')openPanel('pNotif');else if(panel==='setting')openPanel('pSetting');else if(panel==='login')openPanel('pLogin');
+  if(menu){const m=STATE.menus.find(x=>x.judul===menu);if(m)klikMenu(m.judul);else toast('Menu tidak ditemukan: '+menu,'info');}
+  if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
+  history.replaceState(CUR,'',location.pathname);}catch(e){}}
 function setAccent(a){document.documentElement.dataset.acc=a;localStorage.setItem('gb_acc',a);markAcc();}
 function markAcc(){const cur=localStorage.getItem('gb_acc')||'hijau';document.querySelectorAll('#accRow button').forEach(b=>{const on=b.dataset.acc===cur;b.classList.toggle('ring-2',on);b.classList.toggle('ring-white',on);b.classList.toggle('scale-110',on);});}
 function setFs(){document.documentElement.classList.toggle('fs-besar');localStorage.setItem('gb_fs',document.documentElement.classList.contains('fs-besar')?'besar':'normal');paintToggles();}
@@ -330,9 +339,23 @@ function bukaUrl(m){if(!m)return;logAktivitas('buka_menu',{judul:m.judul});let r
 function bukaFoot(f){const u=f.url||'';if(u.startsWith('http')&&u.includes('github.io')){$('mAppTitle').textContent=f.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http')){window.open(u,'_blank');}else if(u)location.href=u;}
 function renderQuick(){if(!STATE.profile)return;const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari).slice(0,8);$('quickList').innerHTML=list.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight truncate w-full">${m.judul}</span></a>`;}).join('');icons();}
 /* Card Layanan compact: thumbnail karya menggantikan ikon */
-function renderKaryaMini(){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');$('docCount').textContent=(STATE.docs||[]).length+' dokumen';$('karyaCount').textContent=arr.length+' karya';const ic=$('karyaIcon');
-  if(arr.length){ic.className='flex -space-x-2 shrink-0';ic.innerHTML=arr.slice(0,3).map(k=>`<img src="${k.thumb}" class="w-9 h-9 rounded-lg object-cover border-2 border-white dark:border-slate-800">`).join('');}
-  else{ic.className='w-9 h-9 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0';ic.innerHTML='<i data-lucide="image" class="w-4 h-4"></i>';}
+function fileType(link){const l=(link||'').toLowerCase();if(l.includes('.pdf'))return{c:'#EF4444',i:'file-text',t:'PDF'};if(l.includes('.doc'))return{c:'#3B82F6',i:'file-text',t:'DOC'};if(l.includes('.xls')||l.includes('.csv'))return{c:'#22C55E',i:'sheet',t:'XLS'};if(l.includes('.ppt'))return{c:'#F97316',i:'presentation',t:'PPT'};if(l.includes('.png')||l.includes('.jpg')||l.includes('.jpeg'))return{c:'#A855F7',i:'image',t:'IMG'};return{c:'#64748B',i:'file',t:'FILE'};}
+function renderDokWidget(){const docs=(STATE.docs||[]);const total=docs.length;$('dokTotal').textContent=total;const box=$('dokWidgetBox');
+  if(!total){box.classList.add('hidden');$('dokWidget').innerHTML='';return;}
+  box.classList.remove('hidden');
+  const recent=docs.slice().sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||'')).slice(0,2);
+  $('dokWidget').innerHTML=`<div class="flex items-center gap-3">
+    <div class="w-20 shrink-0 relative pt-2">
+      <div class="absolute top-0 left-1 w-9 h-3 rounded-t-lg bg-amber-400 dark:bg-amber-500"></div>
+      <div class="rounded-xl rounded-tl-none bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 h-16 flex flex-col items-center justify-center">
+        <i data-lucide="folder" class="w-6 h-6 text-amber-500 dark:text-amber-400"></i>
+        <p class="text-[9px] font-black text-amber-700 dark:text-amber-300 mt-0.5">${total} file</p>
+      </div>
+    </div>
+    <div class="flex-1 min-w-0 divide-y divide-slate-100 dark:divide-slate-800">
+      ${recent.map(d=>{const ft=fileType(d.link);const dt=d.created_at?new Date(d.created_at).toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit'}):'';return `<a href="${esc(d.link)}" target="_blank" class="flex items-center gap-2.5 py-1.5"><span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:${ft.c}1A;color:${ft.c}"><i data-lucide="${ft.i}" class="w-4 h-4"></i></span><span class="flex-1 min-w-0"><span class="block text-[11px] font-bold text-slate-700 dark:text-slate-200 truncate">${esc(d.judul)}</span><span class="block text-[9px] text-slate-400">${ft.t} · ${dt}</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></a>`;}).join('')}
+    </div>
+  </div>`;
   icons();}
 function renderFoot(){if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}$('footSide').classList.remove('hidden');
   $('footList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><span class="text-xs font-bold text-slate-600 dark:text-slate-300">${f.judul}</span></button>`).join('');
