@@ -72,7 +72,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button data-nav="profile" onclick="navPage('profile')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.35</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.36</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
@@ -112,9 +112,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
       <section id="pageApps" class="hidden space-y-4 min-w-0">
         <p class="text-sm font-extrabold text-slate-700 dark:text-slate-200">Semua Layanan</p>
-        <div class="grid grid-cols-2 gap-2">
-          <a href="?page=dokumen" onclick="event.preventDefault();navPage('dokumen')" class="card p-3 flex items-center gap-2.5 active:scale-[.96] transition"><span class="w-9 h-9 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="folder-open" class="w-4 h-4"></i></span><span class="flex-1 min-w-0"><span class="block text-[11px] font-extrabold text-slate-800 dark:text-slate-100 truncate">Bank Dokumen</span><span id="docCount" class="block text-[9px] text-slate-400 mt-0.5">0 dokumen</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></a>
-          <button onclick="navPage('bagi')" class="card p-3 flex items-center gap-2.5 text-left active:scale-[.96] transition"><span id="karyaIcon" class="w-9 h-9 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="image" class="w-4 h-4"></i></span><span class="flex-1 min-w-0"><span class="block text-[11px] font-extrabold text-slate-800 dark:text-slate-100 truncate">Karya Terbaru</span><span id="karyaCount" class="block text-[9px] text-slate-400 mt-0.5">0 karya</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></button>
+        <div id="dokWidgetBox" class="card overflow-hidden">
+          <div class="flex items-center justify-between px-4 pt-3 pb-1.5">
+            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Bank Dokumen · <span id="dokTotal">0</span> file</p>
+            <a href="?page=dokumen" onclick="event.preventDefault();navPage('dokumen')" class="text-[10px] font-bold acc-text">Lihat semua →</a>
+          </div>
+          <div id="dokWidget" class="px-4 pb-3"></div>
         </div>
         <div class="relative"><i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i><input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 acc-ring"></div>
         <div class="flex items-center gap-1.5"><span class="text-[10px] font-bold text-slate-400 mr-1">Tampilan:</span><button id="vKotak" onclick="setView('kotak')" class="px-3 py-1.5 rounded-lg text-[11px] font-bold acc-bg text-white transition">Kotak</button><button id="vBaris" onclick="setView('baris')" class="px-3 py-1.5 rounded-lg text-[11px] font-bold card text-slate-500 dark:text-slate-400 transition">Baris</button></div>
@@ -141,7 +144,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
             <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.35</span></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.36</span></div>
           <button onclick="doLogout()" class="w-full bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </section>
@@ -193,7 +196,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.35</span></p></div></div>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.36</span></p></div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
     <div id="pFbSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p><p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram. (+1 poin)</p>
@@ -244,6 +247,7 @@ function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classLis
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 function dl(path){return location.pathname+path;}
 function studioFieldsFromQuery(q){const reserved=['page','menu','studio','panel'];const pre={};q.forEach((v,k)=>{if(!reserved.includes(k))pre[k]=v;});return pre;}
+/* DEEPLINK lengkap: page / menu / studio / panel */
 function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;
   const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel');
   if(page)navPage(page);
@@ -335,15 +339,28 @@ function klikMenu(judul){const m=STATE.menus.find(x=>x.judul===judul);if(m&&need
 function bukaUrl(m){if(!m)return;logAktivitas('buka_menu',{judul:m.judul});let rec=JSON.parse(localStorage.getItem('gb_recent')||'[]').filter(r=>r.judul!==m.judul);rec.unshift({judul:m.judul,icon:m.icon,warna:m.warna,url:m.url,cara:m.cara_buka});rec=rec.slice(0,3);localStorage.setItem('gb_recent',JSON.stringify(rec));const u=m.url||'#';if(m.cara_buka==='app'&&u.startsWith('http')){$('mAppTitle').textContent=m.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http'))window.open(u,'_blank');else if(u&&u!=='#')location.href=u;}
 function bukaFoot(f){const u=f.url||'';if(u.startsWith('http')&&u.includes('github.io')){$('mAppTitle').textContent=f.judul;$('mAppFrame').src=u;openModal('mApp');}else if(u.startsWith('http')){window.open(u,'_blank');}else if(u)location.href=u;}
 function renderQuick(){if(!STATE.profile)return;const list=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari).slice(0,8);$('quickList').innerHTML=list.map(m=>{const [bg,tx]=COLOR[m.warna]||COLOR.blue;return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 text-center leading-tight truncate w-full">${m.judul}</span></a>`;}).join('');icons();}
-/* Card Layanan compact: thumbnail karya menggantikan ikon */
-function renderKaryaMini(){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');$('docCount').textContent=(STATE.docs||[]).length+' dokumen';$('karyaCount').textContent=arr.length+' karya';const ic=$('karyaIcon');
-  if(arr.length){ic.className='flex -space-x-2 shrink-0';ic.innerHTML=arr.slice(0,3).map(k=>`<img src="${k.thumb}" class="w-9 h-9 rounded-lg object-cover border-2 border-white dark:border-slate-800">`).join('');}
-  else{ic.className='w-9 h-9 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0';ic.innerHTML='<i data-lucide="image" class="w-4 h-4"></i>';}
+/* WIDGET BANK DOKUMEN (file-explorer): folder manila + 2 file terbaru */
+function fileType(link){const l=(link||'').toLowerCase();if(l.includes('.pdf'))return{c:'#EF4444',i:'file-text',t:'PDF'};if(l.includes('.doc'))return{c:'#3B82F6',i:'file-text',t:'DOC'};if(l.includes('.xls')||l.includes('.csv'))return{c:'#22C55E',i:'sheet',t:'XLS'};if(l.includes('.ppt'))return{c:'#F97316',i:'presentation',t:'PPT'};if(l.includes('.png')||l.includes('.jpg')||l.includes('.jpeg'))return{c:'#A855F7',i:'image',t:'IMG'};return{c:'#64748B',i:'file',t:'FILE'};}
+function renderDokWidget(){const docs=(STATE.docs||[]);const total=docs.length;$('dokTotal').textContent=total;const box=$('dokWidgetBox');
+  if(!total){box.classList.add('hidden');$('dokWidget').innerHTML='';return;}
+  box.classList.remove('hidden');
+  const recent=docs.slice().sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||'')).slice(0,2);
+  $('dokWidget').innerHTML=`<div class="flex items-center gap-3">
+    <div class="w-20 shrink-0 relative pt-2">
+      <div class="absolute top-0 left-1 w-9 h-3 rounded-t-lg bg-amber-400 dark:bg-amber-500"></div>
+      <div class="rounded-xl rounded-tl-none bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 h-16 flex flex-col items-center justify-center">
+        <i data-lucide="folder" class="w-6 h-6 text-amber-500 dark:text-amber-400"></i>
+        <p class="text-[9px] font-black text-amber-700 dark:text-amber-300 mt-0.5">${total} file</p>
+      </div>
+    </div>
+    <div class="flex-1 min-w-0 divide-y divide-slate-100 dark:divide-slate-800">
+      ${recent.map(d=>{const ft=fileType(d.link);const dt=d.created_at?new Date(d.created_at).toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit'}):'';return `<a href="${esc(d.link)}" target="_blank" class="flex items-center gap-2.5 py-1.5"><span class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:${ft.c}1A;color:${ft.c}"><i data-lucide="${ft.i}" class="w-4 h-4"></i></span><span class="flex-1 min-w-0"><span class="block text-[11px] font-bold text-slate-700 dark:text-slate-200 truncate">${esc(d.judul)}</span><span class="block text-[9px] text-slate-400">${ft.t} · ${dt}</span></span><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0"></i></a>`;}).join('')}
+    </div>
+  </div>`;
   icons();}
 function renderFoot(){if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}$('footSide').classList.remove('hidden');
   $('footList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><span class="text-xs font-bold text-slate-600 dark:text-slate-300">${f.judul}</span></button>`).join('');
   $('footSideList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition"><i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</button>`).join('');icons();}
-/* AGENDA: Terdekat (merah) / Arsip Kegiatan (slate) / hide bila kosong */
 function renderAgenda(){const today=new Date();const tstr=today.toISOString().slice(0,10);
   const diff=a=>Math.ceil((new Date(a.tanggal)-new Date(tstr))/86400000);
   const up=(STATE.agenda||[]).filter(a=>a.tanggal>=tstr).sort((a,b)=>a.tanggal.localeCompare(b.tanggal));
@@ -435,7 +452,7 @@ async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st
     case 'dokumentasi':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${50*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(f.date||'',W/2,cy+60*s);break;}}
   if(st.showTag&&st.tagText){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.6)';ctx.font=`600 ${26*s}px Inter, sans-serif`;ctx.fillText(st.tagText,W-60*s,H-200*s);}
   if(st.showFoot){const ls=120*s,lx=70*s,ly=H-190*s;ctx.save();roundRect(ctx,lx,ly,ls,ls,28*s);ctx.clip();ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);if(logoImg){const z=ls*1.18;ctx.drawImage(logoImg,lx+(ls-z)/2,ly+(ls-z)/2,z,z);}ctx.restore();ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.95)';ctx.font=`800 ${42*s}px Inter, sans-serif`;ctx.fillText('Guru Berbagi',lx+ls+26*s,ly+ls/2-8*s);ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText('Creative App',lx+ls+26*s,ly+ls/2+34*s);const hd=handlesStr();if(hd&&STATE.profile){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(hd,W-70*s,ly+ls/2+10*s);}}}
-function simpanKarya(){if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}const st=STATE.studio;const cv=$('stCanvas');const t=document.createElement('canvas');const tw=216,th=Math.round(tw*cv.height/cv.width);t.width=tw;t.height=th;t.getContext('2d').drawImage(cv,0,0,tw,th);let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');arr.unshift({tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});arr=arr.slice(0,6);localStorage.setItem('gb_karya',JSON.stringify(arr));renderKarya();renderKaryaMini();}
+function simpanKarya(){if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}const st=STATE.studio;const cv=$('stCanvas');const t=document.createElement('canvas');const tw=216,th=Math.round(tw*cv.height/cv.width);t.width=tw;t.height=th;t.getContext('2d').drawImage(cv,0,0,tw,th);let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');arr.unshift({tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});arr=arr.slice(0,6);localStorage.setItem('gb_karya',JSON.stringify(arr));renderKarya();}
 function renderKarya(){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');$('karyaWrap').classList.toggle('hidden',!arr.length||!STATE.profile);$('karyaList').innerHTML=arr.map((k,i)=>`<button onclick="openKarya(${i})" class="shrink-0 w-24 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 active:scale-95 transition"><img src="${k.thumb}" class="w-24 h-32 object-cover"></button>`).join('');}
 function openKarya(i){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');const k=arr[i];if(!k)return;STATE.studio={tpl:k.tpl,fmt:k.fmt,font:k.font,fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,showFoot:k.showFoot,showTag:k.showTag,tagText:k.tagText};if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}$('stTitle').textContent=TPL[k.tpl].n;buildControls();openModal('mStudio');renderStudio();}
 function unduhStudio(){$('stCanvas').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='karya-guru-berbagi.png';a.click();URL.revokeObjectURL(a.href);simpanKarya();poinAksi('bagi_kartu');toast('Karya diunduh!');},'image/png');}
@@ -458,7 +475,7 @@ function readCache(){try{return JSON.parse(localStorage.getItem('gb_cache')||'nu
 function renderFromCache(){const cache=readCache();if(!cache||!cache.d)return false;
   applyPortal(cache.d);
   if(cache.dyn){STATE.gam=cache.dyn.gam||null;STATE.notifs=cache.dyn.notifs||[];STATE.inspi=cache.dyn.inspi||[];STATE.agenda=cache.dyn.agenda||[];STATE.docs=cache.dyn.docs||[];STATE.rewards=cache.dyn.rewards||[];STATE.kudosTop=cache.dyn.kudosTop||[];STATE.guruList=cache.dyn.guruList||[];
-    renderCarousel();renderNotif();renderInspirasi();renderAgenda();renderDokumen();renderKaryaMini();if(CUR.view==='bagi')renderBagi();icons();}
+    renderCarousel();renderNotif();renderInspirasi();renderAgenda();renderDokumen();renderDokWidget();if(CUR.view==='bagi')renderBagi();icons();}
   return true;}
 async function silentRefresh(force){const now=Date.now();const cache=readCache();const cacheAge=cache?(now-cache.t):Infinity;
   let serverVersi=null;try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
@@ -487,7 +504,7 @@ async function silentRefresh(force){const now=Date.now();const cache=readCache()
     STATE.guruList=(rGuru.status==='fulfilled'?rGuru.value:{data:[]}).data||[];
     if(STATE.profile&&STATE.inspi.length){const g2=guruId();const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',g2).in('inspirasi_id',STATE.inspi.map(i=>i.id));STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));}else STATE.myLikes=new Set();
     try{const c2=readCache();const d=(c2&&c2.d)?c2.d:null;localStorage.setItem('gb_cache',JSON.stringify({t:now,d:d,dyn:{gam:STATE.gam,notifs:STATE.notifs,inspi:STATE.inspi,agenda:STATE.agenda,docs:STATE.docs,rewards:STATE.rewards,kudosTop:STATE.kudosTop,guruList:STATE.guruList}}));}catch(e){}
-    renderCarousel();renderNotif();renderInspirasi();renderAgenda();renderDokumen();renderKaryaMini();if(CUR.view==='bagi')renderBagi();icons();}}
+    renderCarousel();renderNotif();renderInspirasi();renderAgenda();renderDokumen();renderDokWidget();if(CUR.view==='bagi')renderBagi();icons();}}
 async function muatSemuaData(force){const had=renderFromCache();if(!had){$('layananBody').innerHTML='<div class="grid grid-cols-2 gap-3">'+Array(6).fill('<div class="skeleton h-32"></div>').join('')+'</div>';}await silentRefresh(force);handleDeepLink();}
 (async function boot(){initPrefs();setThemeColor();initPWA();muatCuaca();icons();paintToggles();$('caroTrack').addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());document.addEventListener('dblclick',e=>e.preventDefault());
