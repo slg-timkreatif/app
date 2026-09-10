@@ -1,24 +1,56 @@
 {
-  "name": "Guru Berbagi",
-  "short_name": "Guru Berbagi",
-  "start_url": "/app/",
+  "name": "Guru Berbagi Selogiri",
+  "short_name": "GuruBerbagi",
+  "description": "Portal berbagi & berkarya GTK Kecamatan Selogiri.",
+  "id": "/app/",
+  "start_url": "/app/creative.html",
+  "scope": "/app/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#f8fafc",
-  "description": "Portal Pendidikan Selogiri",
-  "orientation": "portrait",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0D9488",
+  "theme_color": "#0D9488",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Studio Kreatif",
+      "short_name": "Studio",
+      "url": "/app/creative.html?page=bagi",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Tulis Inspirasi",
+      "short_name": "Inspirasi",
+      "url": "/app/creative.html?page=bagi#inspirasi",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Agenda Kegiatan",
+      "short_name": "Agenda",
+      "url": "/app/creative.html?page=agenda",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
     }
   ]
 }
