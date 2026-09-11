@@ -3,7 +3,7 @@
   "short_name": "GuruBerbagi",
   "description": "Portal berbagi & berkarya GTK Kecamatan Selogiri.",
   "id": "/app/",
-  "start_url": "/app/creative.html",
+  "start_url": "/app/index.html",
   "scope": "/app/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
@@ -37,19 +37,25 @@
     {
       "name": "Studio Kreatif",
       "short_name": "Studio",
-      "url": "/app/creative.html?page=bagi",
-      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Tulis Inspirasi",
-      "short_name": "Inspirasi",
-      "url": "/app/creative.html?page=bagi#inspirasi",
+      "url": "/app/index.html?page=bagi",
       "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
     },
     {
       "name": "Agenda Kegiatan",
       "short_name": "Agenda",
-      "url": "/app/creative.html?page=agenda",
+      "url": "/app/index.html?page=agenda",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Bank Dokumen",
+      "short_name": "Dokumen",
+      "url": "/app/index.html?page=dokumen",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin Panel",
+      "short_name": "Admin",
+      "url": "/app/admin.html",
       "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
     }
   ]
