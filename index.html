@@ -78,7 +78,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button data-nav="profile" onclick="navPage('profile')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.37</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.38</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative bg-slate-50 dark:bg-slate-950 min-w-0">
@@ -131,16 +131,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       </section>
 
       <section id="pageAgenda" class="hidden space-y-4 min-w-0">
-        <div class="card overflow-hidden">
-          <div class="flex items-center justify-between px-4 pt-3 pb-2">
-            <button onclick="calNav(-1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-            <p id="calTitle" class="text-sm font-extrabold text-slate-700 dark:text-slate-200"></p>
-            <button onclick="calNav(1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
-          </div>
-          <div class="grid grid-cols-7 px-2 pb-1 text-center text-[9px] font-black uppercase text-slate-400"><span>Sn</span><span>Sl</span><span>Rb</span><span>Km</span><span>Jm</span><span>Sb</span><span>Mg</span></div>
-          <div id="calGrid" class="grid grid-cols-7 gap-1 px-2 pb-3"></div>
-        </div>
-        <div id="calDayList" class="space-y-2"></div>
+        <div id="calChips" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+        <div id="agendaTimeline" class="space-y-4"></div>
       </section>
 
       <section id="pageDokumen" class="hidden space-y-2 min-w-0"><p class="text-sm font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="folder-open" class="w-4 h-4 acc-text"></i> Bank Dokumen</p><div id="dokList"></div></section>
@@ -161,7 +153,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-[12px] text-slate-700 dark:text-slate-200 acc-ring"></div>
             <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.37</span></div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.38</span></div>
           <button onclick="doLogout()" class="w-full bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </section>
@@ -213,7 +205,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
         <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Mode Gelap</p><button id="tglDark" class="w-12 h-7 rounded-full relative transition" onclick="toggleDark()"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
       <div class="space-y-3"><button onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Pasang Aplikasi di HP</p></button><button onclick="kirimWA()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="message-circle" class="w-4 h-4 text-green-600"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Chat Admin via WhatsApp</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Kirim Saran / Laporan Bug</p></button><button onclick="bersihCache()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Muat Ulang & Bersihkan Cache</p></button></div>
-      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.37</span></p></div></div>
+      <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.38</span></p></div></div>
 
   <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
     <div id="pFbSheet" class="sheet bg-white dark:bg-slate-900 p-6 overflow-y-auto no-scroll"><div class="w-10 h-1 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-5"></div><p class="text-base font-extrabold text-slate-800 dark:text-slate-100 mb-1">Kirim Laporan</p><p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">Saran Anda langsung diterima Admin via Telegram. (+1 poin)</p>
@@ -242,7 +234,7 @@ const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
-const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],leadLoaded:false,tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:10,myLikes:new Set(),agenda:[],docs:[],rewards:[],kudosTop:[],guruList:[],cal:null};
+const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],leadLoaded:false,tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:10,myLikes:new Set(),agenda:[],docs:[],rewards:[],kudosTop:[],guruList:[]};
 const COLOR={teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],yellow:['bg-yellow-100','text-yellow-600']};
 const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
 const BADGES=[{id:'first',n:'Langkah Pertama',d:'Login pertama',i:'footprints'},{id:'rajin7',n:'Rajin 7',d:'Streak 7 hari',i:'flame'},{id:'inspirasi',n:'Penyebar Inspirasi',d:'5× bagikan karya',i:'share-2'},{id:'suara',n:'Suara Guru',d:'Kirim saran',i:'lightbulb'},{id:'veteran',n:'Veteran',d:'50 login',i:'medal'},{id:'rindang',n:'Rindang',d:'Capai Pohon Rindang',i:'tree-pine'}];
@@ -304,9 +296,9 @@ function setPageInstant(pg){
   $('hdrPage').textContent={home:'Beranda',apps:'Layanan',bagi:'Berbagi',agenda:'Agenda',dokumen:'Dokumen',profile:'Profil'}[pg]||'Beranda';
   CUR.view=pg;
 }
-function navPage(pg){if(applying)return;if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});if(pg==='bagi')renderBagi();if(pg==='profile')renderProfile();if(pg==='agenda')calRender();}
+function navPage(pg){if(applying)return;if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});if(pg==='bagi')renderBagi();if(pg==='profile')renderProfile();if(pg==='agenda')renderAgendaPage();}
 window.addEventListener('popstate',e=>renderState(e.state||{view:'home',sub:null,panel:null,modal:null}));
-function renderState(s){applying=true;if(CUR.modal==='mPop'&&!s.modal)popDismissed=true;PANELS.forEach(closeInstant);MODALS.forEach(closeModalInstant);CUR={view:s.view||'home',sub:s.sub||null,panel:s.panel||null,modal:s.modal||null};setPageInstant(CUR.view);if(CUR.view==='apps')renderLayanan($('inSearch').value);if(CUR.view==='bagi')renderBagi();if(CUR.view==='profile')renderProfile();if(CUR.view==='agenda')calRender();if(s.panel)showInstant(s.panel);if(s.modal)showModalInstant(s.modal);applying=false;}
+function renderState(s){applying=true;if(CUR.modal==='mPop'&&!s.modal)popDismissed=true;PANELS.forEach(closeInstant);MODALS.forEach(closeModalInstant);CUR={view:s.view||'home',sub:s.sub||null,panel:s.panel||null,modal:s.modal||null};setPageInstant(CUR.view);if(CUR.view==='apps')renderLayanan($('inSearch').value);if(CUR.view==='bagi')renderBagi();if(CUR.view==='profile')renderProfile();if(CUR.view==='agenda')renderAgendaPage();if(s.panel)showInstant(s.panel);if(s.modal)showModalInstant(s.modal);applying=false;}
 function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.add('sheet-open'));}
 function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.remove('sheet-open');}
 function openPanel(id){showInstant(id);CUR.panel=id;safePush({...CUR});if(id==='pNotif'&&STATE.profile)tandaiBaca();}
@@ -390,26 +382,27 @@ function renderAgenda(){const today=new Date();const tstr=today.toISOString().sl
       $('agendaLabel').innerHTML=`<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Arsip Kegiatan`;
       el.innerHTML=`<div class="flex items-center gap-3"><div class="w-16 shrink-0 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm"><div class="py-0.5 text-center text-[8px] font-black uppercase tracking-widest text-white" style="background:#64748B">${d.toLocaleDateString('id-ID',{weekday:'short'})}</div><div class="py-1.5 text-center"><p class="text-xl font-black text-slate-500 dark:text-slate-400 leading-none">${d.getDate()}</p><p class="text-[8px] font-bold uppercase text-slate-400 mt-0.5">${d.toLocaleDateString('id-ID',{month:'short'})}</p></div></div><div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-[13px] font-extrabold text-slate-600 dark:text-slate-300 leading-snug line-clamp-2">${esc(a.judul)}</p><span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:#64748B">SELESAI</span></div><p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i><span class="truncate">${esc(a.tempat||'—')}</span><span class="shrink-0 text-slate-300 dark:text-slate-600">·</span><i data-lucide="clock" class="w-3 h-3 shrink-0"></i><span class="shrink-0">${esc(a.waktu||'—')}</span></p></div></div>`;}}
   icons();
-  if(!$('pageAgenda').classList.contains('hidden'))calRender();}
-/* ===== KALENDER BULANAN (client-side, tanpa query tambahan) ===== */
-function localKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function agendaByDate(){const m={};(STATE.agenda||[]).forEach(a=>{const k=(a.tanggal||'').slice(0,10);if(k)(m[k]=m[k]||[]).push(a);});return m;}
-function calInit(){if(STATE.cal)return;const t=new Date();const todayK=localKey(t);const map=agendaByDate();let y=t.getFullYear(),mo=t.getMonth(),sel=null;
-  if(map[todayK])sel=todayK;
-  else{const nx=(STATE.agenda||[]).filter(a=>(a.tanggal||'')>todayK).sort((a,b)=>(a.tanggal||'').localeCompare(b.tanggal||''))[0];
-    if(nx){sel=(nx.tanggal||'').slice(0,10);const pd=new Date(nx.tanggal);y=pd.getFullYear();mo=pd.getMonth();}
-    else{const ps=(STATE.agenda||[]).filter(a=>(a.tanggal||'')<todayK).sort((a,b)=>(b.tanggal||'').localeCompare(a.tanggal||''))[0];if(ps){sel=(ps.tanggal||'').slice(0,10);const pd=new Date(ps.tanggal);y=pd.getFullYear();mo=pd.getMonth();}}}
-  STATE.cal={y,m:mo,sel};}
-function calNav(dir){calInit();const c=STATE.cal;c.m+=dir;if(c.m<0){c.m=11;c.y--;}if(c.m>11){c.m=0;c.y++;}calRender();}
-function calSelect(k){calInit();STATE.cal.sel=(STATE.cal.sel===k?null:k);calRender();}
-function calRender(){calInit();const c=STATE.cal;const map=agendaByDate();const first=new Date(c.y,c.m,1);const startDow=(first.getDay()+6)%7;const daysIn=new Date(c.y,c.m+1,0).getDate();const todayK=localKey(new Date());
-  $('calTitle').textContent=first.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
-  let cells='';for(let i=0;i<startDow;i++)cells+='<span></span>';
-  for(let d=1;d<=daysIn;d++){const k=c.y+'-'+String(c.m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');const n=(map[k]||[]).length;const isToday=k===todayK;const isSel=c.sel===k;
-    cells+=`<button onclick="calSelect('${k}')" class="relative h-10 rounded-lg flex items-center justify-center text-[12px] font-bold ${isSel?'acc-bg text-white':isToday?'acc-soft acc-text':'text-slate-600 dark:text-slate-300'} active:scale-90 transition">${d}${n?`<span class="absolute bottom-0.5 ${isSel?'bg-white text-teal-700':'bg-rose-500 text-white'} text-[8px] font-black min-w-[14px] h-[14px] px-0.5 rounded-full flex items-center justify-center">${n}</span>`:''}</button>`;}
-  $('calGrid').innerHTML=cells;
-  const list=c.sel?(map[c.sel]||[]):[];
-  $('calDayList').innerHTML=c.sel?(list.length?list.map(a=>`<div class="card p-3.5 flex items-center gap-3"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${new Date(a.tanggal).getDate()}</span><span class="text-[8px] font-bold uppercase">${new Date(a.tanggal).toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${a.link?`<a href="${esc(a.link)}" target="_blank" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`).join(''):`<p class="text-xs text-slate-400 text-center py-4">Tidak ada agenda pada tanggal ini.</p>`):`<p class="text-xs text-slate-400 text-center py-4">Ketuk tanggal untuk melihat agenda.</p>`;
+  if(!$('pageAgenda').classList.contains('hidden'))renderAgendaPage();}
+/* ===== TIMELINE AGENDA (lintas bulan, chip lompat) ===== */
+function jumpMonth(mk){const el=document.getElementById('m-'+mk);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function agendaRow(a,isPast,tstr){const dd=new Date(a.tanggal);const diff=Math.ceil((dd-new Date(tstr))/86400000);
+  const badge=isPast?`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:#64748B">SELESAI</span>`:(diff<=0?`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:#DC2626">HARI INI</span>`:`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:${diff<=3?'#F59E0B':'#0D9488'}">H-${diff}</span>`);
+  return `<div class="card p-3.5 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 dark:text-slate-400 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${a.link?`<a href="${esc(a.link)}" target="_blank" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;}
+function monthSection(mk,items,isPast,tstr){const d=new Date(mk+'-01T00:00:00');
+  return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 bg-slate-50 dark:bg-slate-950 py-1 z-10">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p>${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div>`;}
+function renderAgendaPage(){const today=new Date();const tstr=today.toISOString().slice(0,10);
+  const list=(STATE.agenda||[]).slice().sort((a,b)=>(a.tanggal||'').localeCompare(b.tanggal||''));
+  const up=list.filter(a=>(a.tanggal||'')>=tstr);
+  const past=list.filter(a=>(a.tanggal||'')<tstr).reverse();
+  const months=[...new Set(list.map(a=>(a.tanggal||'').slice(0,7)))].sort();
+  $('calChips').innerHTML=months.map(mk=>{const d=new Date(mk+'-01T00:00:00');return `<button onclick="jumpMonth('${mk}')" class="shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-bold card text-slate-600 dark:text-slate-300 active:scale-95 transition">${d.toLocaleDateString('id-ID',{month:'short',year:'2-digit'})}</button>`;}).join('');
+  let html='';
+  const upMonths=[...new Set(up.map(a=>(a.tanggal||'').slice(0,7)))].sort();
+  upMonths.forEach(mk=>{html+=monthSection(mk,up.filter(a=>(a.tanggal||'').slice(0,7)===mk),false,tstr);});
+  if(past.length){html+=`<div class="flex items-center gap-3 pt-2"><span class="h-px flex-1 bg-slate-200 dark:bg-slate-800"></span><span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Telah Selesai</span><span class="h-px flex-1 bg-slate-200 dark:bg-slate-800"></span></div>`;
+    const pastMonths=[...new Set(past.map(a=>(a.tanggal||'').slice(0,7)))].sort().reverse();
+    pastMonths.forEach(mk=>{html+=monthSection(mk,past.filter(a=>(a.tanggal||'').slice(0,7)===mk),true,tstr);});}
+  $('agendaTimeline').innerHTML=html||`<p class="text-xs text-slate-400 text-center py-8">Belum ada agenda.</p>`;
   icons();}
 function renderDokumen(){const cats=[...new Set((STATE.docs||[]).map(d=>d.kategori||'Umum'))];
   $('dokList').innerHTML=cats.map(c=>{const list=STATE.docs.filter(d=>(d.kategori||'Umum')===c);
@@ -526,7 +519,7 @@ async function silentRefresh(force){const now=Date.now();const cache=readCache()
       gid?sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null}),
       sb.from('creative_notifications').select('*').eq('is_active',true).order('scheduled_at',{ascending:false}).limit(20),
       sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order('created_at',{ascending:false}).limit(STATE.inspiLimit),
-      sb.from('creative_agenda').select('*').eq('is_active',true).order('tanggal',{ascending:false}).limit(30),
+      sb.from('creative_agenda').select('*').eq('is_active',true).order('tanggal',{ascending:false}).limit(60),
       sb.from('creative_documents').select('*').eq('is_active',true).order('kategori').limit(100),
       sb.from('creative_rewards').select('*').eq('is_active',true).order('biaya_poin').limit(50),
       sb.rpc('creative_kudos_top'),
