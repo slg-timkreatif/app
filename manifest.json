@@ -2,33 +2,18 @@
   "name": "Guru Berbagi Selogiri",
   "short_name": "GuruBerbagi",
   "description": "Portal berbagi & berkarya GTK Kecamatan Selogiri. Berkarya, berbagi, tumbuh bersama.",
-  "id": "/app/",
-  "start_url": "/app/index.html",
-  "scope": "/app/",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "lang": "id",
   "categories": ["education", "productivity"],
-  "background_color": "#0D9488",
-  "theme_color": "#0D9488",
+  "background_color": "#F6F5F9",
+  "theme_color": "#F6F5F9",
   "icons": [
-    {
-      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
