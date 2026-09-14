@@ -169,11 +169,11 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <p id="hdrName" class="text-xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
           <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
           <p id="hdrTitle" class="hidden text-xl font-black text-slate-800 leading-tight truncate"></p>
-          <p id="hdrMetaRow" class="text-[11px] font-semibold text-slate-500 truncate mt-2">
-            <span id="txtTanggal"></span>
-            <span class="text-slate-300 mx-1">·</span>
-            <span id="wxInline" class="text-amber-600 font-bold">☀️ --°</span>
-          </p>
+          <div id="hdrMetaRow" class="text-[11px] font-semibold text-slate-500 mt-2 flex items-center gap-1.5 min-w-0">
+            <span id="txtTanggal" class="truncate"></span>
+            <span class="text-slate-300 shrink-0">·</span>
+            <span id="wxInline" class="text-amber-600 font-bold shrink-0">☀️ --°</span>
+          </div>
         </div>
         <div class="flex items-center gap-2 shrink-0 pt-1">
           <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
