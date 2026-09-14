@@ -163,25 +163,24 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
   <div class="flex-1 flex flex-col relative min-w-0">
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2">
-      <div class="flex items-start gap-4">
-        <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil"><img id="hdrAvatar" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil"></button>
-        <div class="flex-1 min-w-0 pt-1.5">
-          <p id="hdrName" class="text-xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
-          <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
-          <p id="hdrTitle" class="hidden text-xl font-black text-slate-800 leading-tight truncate"></p>
-          <div id="hdrMetaRow" class="text-[11px] font-semibold text-slate-500 mt-2 flex items-center gap-1.5 min-w-0">
-            <span id="txtTanggal" class="truncate"></span>
-            <span class="text-slate-300 shrink-0">·</span>
-            <span id="wxInline" class="text-amber-600 font-bold shrink-0">☀️ --°</span>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 shrink-0 pt-1">
-          <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
-          <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-slate-600"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span></button>
-          <button onclick="openPanel('pSetting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600"></i></button>
-        </div>
+  <div class="flex items-start gap-4">
+    <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil"><img id="hdrAvatar" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil"></button>
+    <div class="flex-1 min-w-0 pt-1.5">
+      <p id="hdrName" class="text-xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
+      <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
+      <p id="hdrTitle" class="hidden text-xl font-black text-slate-800 leading-tight truncate"></p>
+      <p id="txtTanggal" class="text-[11px] font-semibold text-slate-500 truncate mt-2"></p>
+    </div>
+    <div class="flex flex-col items-end gap-2 shrink-0 pt-1">
+      <div id="hdrMetaRow" class="flex items-center gap-2">
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+        <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-slate-600"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span></button>
+        <button onclick="openPanel('pSetting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600"></i></button>
       </div>
-    </header>
+      <p id="wxInline" class="text-[11px] font-bold text-amber-600 whitespace-nowrap">☀️ --°</p>
+    </div>
+  </div>
+</header>
   <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
 
   <section id="pageHome" class="space-y-4 min-w-0">
@@ -272,12 +271,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </section>
   </main>
 
-  <nav class="fixed left-3 right-3 md:hidden z-40 bg-white/85 backdrop-blur-xl border border-slate-200/60 rounded-2xl shadow-xl shadow-black/5 px-2 py-1.5 flex items-center justify-between" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem)">
-    <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl acc-soft acc-text transition active:scale-95"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
-    <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-slate-400 transition active:scale-95"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
-    <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-slate-400 transition active:scale-95"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
-    <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-slate-400 transition active:scale-95"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
-  </nav>
+  <nav class="fixed left-3 right-3 md:hidden z-40 rounded-2xl shadow-xl shadow-black/20 px-2 py-1.5 flex items-center justify-between" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem);background:#1E293B">
+  <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl acc-bg text-white transition active:scale-95"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
+  <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-white/60 transition active:scale-95"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
+  <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-white/60 transition active:scale-95"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
+  <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-white/60 transition active:scale-95"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
+</nav>
 </div>
 
 <div id="pLogin" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
@@ -594,13 +593,13 @@ window.addEventListener('offline',updateOnlineStatus);
 /* Cuaca */
 async function muatCuaca(){try{const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');const j=await r.json();if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}}catch(e){}}
 function showWx(cw){const cd=cw.weathercode;const h=new Date().getHours();const night=(h<5||h>=18);
-  let emoji='☁️',label='Berawan',color='text-slate-500';
-  if(cd===0){emoji=night?'🌙':'☀️';label='Cerah';color=night?'text-indigo-500':'text-amber-600';}
-  else if(cd<=2){emoji='🌤️';label='Berawan';color=night?'text-indigo-500':'text-amber-600';}
-  else if(cd===3){emoji='☁️';label='Berawan';color='text-slate-500';}
-  else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';label='Hujan';color='text-sky-600';}
-  else if(cd>=95){emoji='⛈️';label='Petir';color='text-sky-600';}
-  const el=$('wxInline');if(el){el.className='font-bold '+color;el.textContent=emoji+' '+Math.round(cw.temperature)+'° '+label;}
+  let emoji='☁️',color='text-slate-500';
+  if(cd===0){emoji=night?'🌙':'☀️';color=night?'text-indigo-500':'text-amber-600';}
+  else if(cd<=2){emoji='🌤️';color=night?'text-indigo-500':'text-amber-600';}
+  else if(cd===3){emoji='☁️';color='text-slate-500';}
+  else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';color='text-sky-600';}
+  else if(cd>=95){emoji='⛈️';color='text-sky-600';}
+  const el=$('wxInline');if(el){el.className='text-[11px] font-bold whitespace-nowrap '+color;el.textContent=emoji+' '+Math.round(cw.temperature)+'°';}
 }
 
 /* Router */
