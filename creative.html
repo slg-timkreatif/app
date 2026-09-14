@@ -33,7 +33,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 </script>
 <style>
   *{-webkit-tap-highlight-color:transparent}body{font-family:'Inter',sans-serif}html,body{overflow-x:hidden;touch-action:manipulation}
-  main{overscroll-behavior-y:contain}
   a{-webkit-touch-callout:default}
   :root{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-text:#0B7C72;--acc-ring:rgba(13,148,136,.35);--bg:#F6F5F9;--card:#fff;--border:#E8E6EE}
   html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-text:#2563eb;--acc-ring:rgba(37,99,235,.35)}
@@ -61,7 +60,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   body{background:var(--bg)}
   .sync-bar{width:0;animation:syncprog 1.4s ease-in-out infinite}
   @keyframes syncprog{0%{width:0}60%{width:80%}100%{width:100%}}
-  #pullIndicator{will-change:transform}
 
   /* ============================================
      A11Y UTILITIES
@@ -1177,58 +1175,6 @@ function recordLastSync(){try{localStorage.setItem('gb_last_sync',String(Date.no
 function showLastSync(){const t=localStorage.getItem('gb_last_sync');const el=$('lastSyncLbl');if(el)el.textContent=t?('· terakhir '+waktuRelatif(parseInt(t,10))):'';}
 
 /* ============================================================
-   Pull-to-refresh
-   ============================================================ */
-function initPullRefresh(){
-  const main=document.querySelector('main');
-  if(!main)return;
-  const THRESHOLD=70;
-  let indicator=$('pullIndicator');
-  if(!indicator){
-    indicator=document.createElement('div');
-    indicator.id='pullIndicator';
-    indicator.className='fixed left-1/2 top-3 z-30 w-10 h-10 rounded-full bg-white shadow-lg border border-slate-100 flex items-center justify-center transition-transform duration-200';
-    indicator.style.transform='translate(-50%, -80px)';
-    indicator.innerHTML='<i data-lucide="arrow-down" class="w-5 h-5 acc-text"></i>';
-    document.body.appendChild(indicator);
-    icons();
-  }
-  let startY=0,pulling=false,dist=0;
-  main.addEventListener('touchstart',(e)=>{
-    if(main.scrollTop<=0){startY=e.touches[0].clientY;pulling=true;}
-  },{passive:true});
-  main.addEventListener('touchmove',(e)=>{
-    if(!pulling)return;
-    const d=e.touches[0].clientY-startY;
-    if(d>0&&main.scrollTop<=0){
-      dist=Math.min(d*0.5,100);
-      indicator.style.transform=`translate(-50%, ${dist-40}px)`;
-      const ic=indicator.querySelector('i');
-      if(ic)ic.setAttribute('data-lucide',dist>=THRESHOLD?'refresh-cw':'arrow-down');
-      icons();
-    }
-  },{passive:true});
-  main.addEventListener('touchend',()=>{
-    if(!pulling)return;
-    if(dist>=THRESHOLD){
-      indicator.style.transform='translate(-50%, 12px)';
-      const ic=indicator.querySelector('i');
-      ic?.classList.add('animate-spin');
-      silentRefresh(true).finally(()=>{
-        setTimeout(()=>{
-          indicator.style.transform='translate(-50%, -80px)';
-          ic?.classList.remove('animate-spin');
-          toast('Data diperbarui ✓');
-        },500);
-      });
-    }else{
-      indicator.style.transform='translate(-50%, -80px)';
-    }
-    pulling=false;dist=0;
-  });
-}
-
-/* ============================================================
    Swipe-to-close sheet
    ============================================================ */
 function initSheetSwipe(){
@@ -1400,7 +1346,6 @@ async function submitFb(){const pesan=$('fbPesan').value.trim();if(!pesan)return
   initPrefs();
   setSapaan();
   initPWA();
-  initPullRefresh();
   initSheetSwipe();
   initQuickLongPress();
   updateOnlineStatus();
@@ -1438,7 +1383,13 @@ async function submitFb(){const pesan=$('fbPesan').value.trim();if(!pesan)return
       try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}
       if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}
       else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}
-      if(STATE.token){logAktivitas('buka_aplikasi');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}
+      if(STATE.token){
+  const _lastOpenLog=parseInt(localStorage.getItem('gb_last_open_log')||'0',10);
+  if(Date.now()-_lastOpenLog>5*60*1000){
+    localStorage.setItem('gb_last_open_log',String(Date.now()));
+    logAktivitas('buka_aplikasi');
+  }
+  const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}}
     }catch(e){}
   }
   try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
