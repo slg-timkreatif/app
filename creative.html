@@ -77,6 +77,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .bg-slate-200{background:#2A2D35!important}
   html.dark .border-slate-200{border-color:#2A2D35!important}
   html.dark .border-slate-100{border-color:#252A33!important}
+html.dark .divide-slate-100 > * + *{border-color:#252A33!important}
+html.dark .divide-slate-100{border-color:#252A33!important}
+html.dark .active\:bg-slate-50:active{background:#252A33!important}
   html.dark .text-slate-800{color:#F1F5F9!important}
   html.dark .text-slate-700{color:#E2E8F0!important}
   html.dark .text-slate-600{color:#CBD5E1!important}
@@ -173,9 +176,154 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   }
+/* ============================================
+   KUSTOMISASI TEMA — Navbar Style
+   ============================================ */
+.app-navbar{transition:left .2s,bottom .2s,border-radius .2s,box-shadow .2s}
+
+body[data-navbar="floating"] .app-navbar{
+  left:12px;right:12px;
+  bottom:calc(env(safe-area-inset-bottom) + 0.75rem);
+  border-radius:1rem;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);
+}
+/* ============================================
+   NAVBAR STYLE — FIX: bottom pakai style inline
+   ============================================ */
+body[data-navbar="floating"] .app-navbar{
+  left:12px !important;
+  right:12px !important;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem) !important;
+  border-radius:1rem !important;
+  border:0;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);
+}
+body[data-navbar="classic"] .app-navbar{
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  border-radius:0 !important;
+  border:0;
+  border-top:1px solid var(--border);
+  box-shadow:0 -2px 12px rgba(0,0,0,.08);
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);
+}
+
+/* ============================================
+   NAVBAR COLOR — DARK
+   ============================================ */
+body[data-navbar-color="dark"] .app-navbar{
+  background:#0F0F12;
+  color:#fff;
+}
+body[data-navbar-color="dark"] .app-navbar .nav-btn.nav-active{
+  background:var(--acc);color:#fff;
+}
+body[data-navbar-color="dark"] .app-navbar .nav-btn.nav-active i,
+body[data-navbar-color="dark"] .app-navbar .nav-btn.nav-active span{color:#fff!important}
+body[data-navbar-color="dark"] .app-navbar .nav-btn.nav-inactive{
+  background:transparent;color:rgba(255,255,255,.65);
+}
+body[data-navbar-color="dark"] .app-navbar .nav-btn.nav-inactive i,
+body[data-navbar-color="dark"] .app-navbar .nav-btn.nav-inactive span{color:rgba(255,255,255,.65)!important}
+
+/* ============================================
+   NAVBAR COLOR — LIGHT v3 (fix icon invisible)
+   Target svg + stroke, bukan hanya i/span
+   ============================================ */
+body[data-navbar-color="light"] .app-navbar{
+  background:#fff;
+  color:#1E293B;
+  border:1px solid #E8E6EE;
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn{
+  background:transparent;
+  color:#1E293B;
+}
+/* Set color DAN stroke svg langsung — menang lawan class text-slate-* */
+body[data-navbar-color="light"] .app-navbar .nav-btn svg{
+  color:#1E293B !important;
+  stroke:#1E293B !important;
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn span{
+  color:#1E293B !important;
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn.nav-active{
+  background:var(--acc);
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn.nav-active svg{
+  color:#fff !important;
+  stroke:#fff !important;
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn.nav-active span{
+  color:#fff !important;
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn.nav-inactive svg{
+  color:#64748B !important;
+  stroke:#64748B !important;
+}
+body[data-navbar-color="light"] .app-navbar .nav-btn.nav-inactive span{
+  color:#64748B !important;
+}
+
+/* ============================================
+   DARK MODE + NAVBAR LIGHT → tetap terang
+   ============================================ */
+html.dark body[data-navbar-color="light"] .app-navbar{
+  background:#F1F5F9;
+  border-color:#334155;
+}
+html.dark body[data-navbar-color="light"] .app-navbar .nav-btn svg{
+  color:#1E293B !important;
+  stroke:#1E293B !important;
+}
+html.dark body[data-navbar-color="light"] .app-navbar .nav-btn span{
+  color:#1E293B !important;
+}
+html.dark body[data-navbar-color="light"] .app-navbar .nav-btn.nav-active svg{
+  color:#fff !important;
+  stroke:#fff !important;
+}
+html.dark body[data-navbar-color="light"] .app-navbar .nav-btn.nav-active span{
+  color:#fff !important;
+}
+html.dark body[data-navbar-color="light"] .app-navbar .nav-btn.nav-inactive svg{
+  color:#64748B !important;
+  stroke:#64748B !important;
+}
+html.dark body[data-navbar-color="light"] .app-navbar .nav-btn.nav-inactive span{
+  color:#64748B !important;
+}
+
+/* Border classic menyesuaikan */
+body[data-navbar="classic"][data-navbar-color="dark"] .app-navbar{border-top:0}
+body[data-navbar="classic"][data-navbar-color="light"] .app-navbar{
+  border:0;
+  border-top:1px solid #E8E6EE;
+}
+html.dark body[data-navbar="classic"][data-navbar-color="light"] .app-navbar{
+  border-top:1px solid #334155;
+}
+
+/* Density spacing */
+body[data-density="compact"] main > section > * + *{margin-top:.5rem!important}
+body[data-density="compact"] .card{padding:.75rem!important}
+body[data-density="lega"] main > section > * + *{margin-top:1.5rem!important}
+body[data-density="lega"] .card{padding:1.25rem!important}
+
+/* Segmented control untuk panel kustomisasi */
+.seg-btn{
+  padding:10px 12px;border-radius:12px;font-size:11px;font-weight:800;
+  background:#F6F5F9;color:#64748B;border:1px solid #E8E6EE;cursor:pointer;
+  transition:all .15s;
+}
+.seg-btn:active{transform:scale(.97)}
+.seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+html.dark .seg-btn{background:#1F232B;color:#94A3B8;border-color:#2A2D35}
+html.dark .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 </style>
 </head>
-<body class="min-h-screen" data-page="home">
+<body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-density="normal">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
 <div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
 
@@ -192,6 +340,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button data-nav="dokumen" onclick="navPage('dokumen')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="folder-open" class="w-4 h-4"></i>Dokumen</button>
       <button id="sideNotif" onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi<span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
       <button data-nav="bagi" onclick="navPage('bagi')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
+      <button data-nav="setting" onclick="navPage('setting')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="settings" class="w-4 h-4"></i>Pengaturan</button>
       <button data-nav="profile" onclick="navPage('profile')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
@@ -215,7 +364,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="flex items-center gap-2 shrink-0">
               <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
               <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-slate-600"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span></button>
-              <button onclick="openPanel('pSetting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600"></i></button>
+              <button onclick="navPage('setting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600"></i></button>
             </div>
           </div>
 
@@ -279,7 +428,99 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </div>
     <div id="dokList"></div>
   </section>
+  
+  <section id="pageSetting" class="hidden space-y-4 min-w-0">
 
+  <!-- Kartu 1: Preset Cepat -->
+  <div class="card p-4">
+    <p class="text-[13px] font-extrabold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 acc-text"></i> Tema Cepat</p>
+    <div class="grid grid-cols-2 gap-2">
+      <button data-preset="profesional" onclick="applyPreset('profesional')" class="seg-btn">Profesional</button>
+      <button data-preset="hangat" onclick="applyPreset('hangat')" class="seg-btn">Hangat</button>
+      <button data-preset="fresh" onclick="applyPreset('fresh')" class="seg-btn">Fresh</button>
+      <button data-preset="elegan" onclick="applyPreset('elegan')" class="seg-btn">Elegan</button>
+    </div>
+  </div>
+
+  <!-- Kartu 2: Tampilan -->
+  <div class="card p-4 space-y-4">
+    <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Tampilan</p>
+
+    <div>
+      <p class="text-[11px] font-bold text-slate-500 mb-2">Warna Aksen</p>
+      <div class="flex gap-2.5" id="accRow">
+        <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+        <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+        <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+        <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+        <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Mode Gelap</p><button id="tglDark" onclick="setDark()" aria-label="Mode gelap" class="w-12 h-7 rounded-full relative transition bg-slate-200"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+    <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+    <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+  </div>
+
+  <!-- Kartu 3: Navbar -->
+  <div class="card p-4 space-y-4">
+    <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4 acc-text"></i> Navbar</p>
+
+    <div>
+      <p class="text-[11px] font-bold text-slate-500 mb-2">Gaya</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
+        <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
+      </div>
+    </div>
+
+    <div>
+      <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
+        <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kartu 4: Kepadatan -->
+  <div class="card p-4">
+    <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="rows-3" class="w-4 h-4 acc-text"></i> Kepadatan Konten</p>
+    <div class="grid grid-cols-3 gap-2">
+      <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
+      <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
+      <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
+    </div>
+  </div>
+
+<!-- Kartu 5: Aplikasi -->
+<div class="card p-4">
+  <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="settings" class="w-4 h-4 acc-text"></i> Aplikasi</p>
+  <div class="divide-y divide-slate-100">
+    <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+      <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
+      <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+    </button>
+    <button onclick="navPage('bagi')" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+      <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
+      <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+    </button>
+    <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+      <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
+      <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+    </button>
+  </div>
+</div>
+
+  <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
+    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
+  </button>
+
+  <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.51</span></p>
+</section>
   <section id="pageProfile" class="hidden space-y-4 min-w-0">
     <div id="profGuest" class="card p-6 text-center"><div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div><p class="text-base font-extrabold text-slate-800">Mode Tamu</p><p class="text-xs text-slate-500 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p><button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button></div>
     <div id="profData" class="hidden space-y-4">
@@ -316,7 +557,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </section>
   </main>
 
-  <nav class="fixed left-3 right-3 md:hidden z-40 px-2 py-1.5 flex items-center justify-between rounded-2xl shadow-xl" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem); background:#0F0F12">
+  <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
     <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
     <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
     <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
@@ -332,21 +573,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
 <div id="pNotif" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
   <div id="pNotifSheet" class="sheet bg-slate-50"><div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0"><p class="text-base font-extrabold text-slate-800">Notifikasi</p><button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button></div><div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div></div></div>
-
-<div id="pSetting" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pSetting')"></div>
-  <div id="pSettingSheet" class="sheet p-6 overflow-y-auto no-scroll"><div class="sheet-drag" data-sheet-handle></div><p class="text-base font-extrabold text-slate-800 mb-4">Pengaturan</p>
-    <div class="card p-4 space-y-4 mb-3"><p class="text-sm font-bold text-slate-700 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Personalisasi</p>
-      <div><p class="text-sm font-bold text-slate-700">Warna Aksen</p><div class="flex gap-2.5 mt-2" id="accRow">
-        <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal (default)" aria-label="Warna teal" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-        <button data-acc="biru" onclick="setAccent('biru')" title="Biru" aria-label="Warna biru" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-        <button data-acc="violet" onclick="setAccent('violet')" title="Violet" aria-label="Warna violet" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-        <button data-acc="amber" onclick="setAccent('amber')" title="Amber" aria-label="Warna amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-        <button data-acc="rose" onclick="setAccent('rose')" title="Rose" aria-label="Warna rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button></div></div>
-      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Mode Gelap</p><button id="tglDark" onclick="setDark()" aria-label="Aktifkan mode gelap" class="w-12 h-7 rounded-full relative transition bg-slate-200"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Aktifkan teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
-    <div class="space-y-3"><button id="setInstallBtn" onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700">Pasang Aplikasi di HP</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700">Ceritakan ke Kami</p></button><button id="btnForceSync" onclick="forceSync()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><div class="flex-1 min-w-0 text-left"><p class="text-sm font-bold text-slate-700 leading-tight">Force Sync</p><p class="text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></p></div></button></div>
-    <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.50</span></p></div></div>
 
 <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
   <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll"><div class="sheet-drag" data-sheet-handle></div><p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p><p class="text-[11px] text-slate-500 mb-4">Masukanmu kami baca & langsung diteruskan ke admin. (+1 poin)</p>
@@ -521,7 +747,7 @@ const KAT_ORDER=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspiras
 const TPL={quote:{n:'Quote',i:'quote',f:[['text','Tulis quote…'],['author','Nama tokoh']]},ucapan:{n:'Ucapan',i:'party-popper',f:[['title','Judul ucapan'],['msg','Pesan']]},undangan:{n:'Undangan',i:'mail',f:[['title','Nama acara'],['date','Tanggal'],['time','Waktu'],['place','Tempat']]},prestasi:{n:'Prestasi',i:'trophy',ph:1,f:[['title','Judul prestasi'],['name','Nama peraih']]},cover:{n:'Cover Materi',i:'book-open',f:[['title','Judul materi'],['kelas','Kelas'],['guru','Nama guru']]},dokumentasi:{n:'Dokumentasi',i:'camera',ph:1,f:[['title','Caption kegiatan'],['date','Tanggal']]}};
 const FMT={story:{n:'Story 9:16',w:1080,h:1920},feed:{n:'Feed 1:1',w:1080,h:1080},potret:{n:'Potret 4:5',w:1080,h:1350},lanskap:{n:'Lanskap',w:1200,h:630},thumb:{n:'Thumb 16:9',w:1280,h:720}};
 const FONTS={modern:{n:'Modern',f:'Inter, Arial, sans-serif',w:'700'},elegan:{n:'Elegan',f:'"Playfair Display", Georgia, serif',w:'800'},hangat:{n:'Hangat',f:'Caveat, cursive',w:'700'}};
-const PANELS=['pNotif','pSetting','pFb','pLogin'];
+const PANELS=['pNotif','pFb','pLogin'];
 const MODALS=['mApp','mPop','mIos','mStudio'];
 const isMobile=matchMedia('(max-width:768px)').matches;
 const RENDER_SIG={};
@@ -579,7 +805,7 @@ function studioFieldsFromQuery(q){const reserved=['page','menu','studio','panel'
 function handleDeepLink(){try{const q=new URLSearchParams(location.search);if(!q.toString())return;
   const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel');
   if(page)navPage(page);
-  if(panel==='notif')openPanel('pNotif');else if(panel==='setting')openPanel('pSetting');else if(panel==='login')openPanel('pLogin');
+  if(panel==='notif')openPanel('pNotif');else if(panel==='setting')navPage('setting');else if(panel==='login')openPanel('pLogin');
   if(menu){const m=STATE.menus.find(x=>x.judul===menu);if(m)klikMenu(m.judul);else toast('Menu tidak ditemukan: '+menu,'info');}
   if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
   history.replaceState(CUR,'',location.pathname);}catch(e){}}
@@ -588,9 +814,85 @@ function markAcc(){const cur=localStorage.getItem('gb_acc')||'hijau';document.qu
 function setFs(){document.documentElement.classList.toggle('fs-besar');localStorage.setItem('gb_fs',document.documentElement.classList.contains('fs-besar')?'besar':'normal');paintToggles();}
 function setAnim(){document.documentElement.classList.toggle('no-anim');localStorage.setItem('gb_anim',document.documentElement.classList.contains('no-anim')?'off':'on');paintToggles();}
 function setDark(){const on=document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',on?'1':'0');document.querySelector('meta[name=theme-color]')?.setAttribute('content','#F6F5F9');paintToggles();}
+/* ============================================================
+   KUSTOMISASI TEMA
+   ============================================================ */
+
+function applyPreset(name){
+  const p=PRESETS[name];
+  if(!p)return;
+  document.body.dataset.navbar=p.navbar;
+  document.body.dataset.navbarColor=p.navcolor;
+  document.documentElement.dataset.acc=p.accent;
+  document.body.dataset.density=p.density;
+  localStorage.setItem('gb_navbar_style',p.navbar);
+  localStorage.setItem('gb_navbar_color',p.navcolor);
+  localStorage.setItem('gb_acc',p.accent);
+  localStorage.setItem('gb_density',p.density);
+  localStorage.setItem('gb_preset',name);
+  markAcc();
+  paintToggles();
+  paintCustomizeUI();
+  toast('Tema "'+name+'" diterapkan');
+}
+
+function setNavbarStyle(v){
+  if(!['floating','classic'].includes(v))return;
+  document.body.dataset.navbar=v;
+  localStorage.setItem('gb_navbar_style',v);
+  localStorage.removeItem('gb_preset');
+  paintCustomizeUI();
+}
+function setNavbarColor(v){
+  if(!['dark','light'].includes(v))return;
+  document.body.dataset.navbarColor=v;
+  localStorage.setItem('gb_navbar_color',v);
+  localStorage.removeItem('gb_preset');
+  paintCustomizeUI();
+}
+function setDensity(v){
+  if(!['compact','normal','lega'].includes(v))return;
+  document.body.dataset.density=v;
+  localStorage.setItem('gb_density',v);
+  localStorage.removeItem('gb_preset');
+  paintCustomizeUI();
+}
+function resetTheme() {
+  confirmDialog('Kembalikan semua pengaturan tampilan ke default?', () => {
+    ['gb_preset', 'gb_navbar_style', 'gb_navbar_color', 'gb_density', 'gb_acc'].forEach(k => localStorage.removeItem(k));
+    document.documentElement.dataset.acc = 'hijau';
+    document.body.dataset.navbar = 'floating';
+    document.body.dataset.navbarColor = 'dark';
+    document.body.dataset.density = 'normal';
+    markAcc();
+    paintToggles();
+    paintCustomizeUI();
+    toast('Tema direset ke default');
+  }, 'Reset Tema?', 'Reset');
+}
+function paintCustomizeUI(){
+  document.querySelectorAll('[data-navstyle]').forEach(b=>b.classList.toggle('on',b.dataset.navstyle===document.body.dataset.navbar));
+  document.querySelectorAll('[data-navcolor]').forEach(b=>b.classList.toggle('on',b.dataset.navcolor===document.body.dataset.navbarColor));
+  document.querySelectorAll('[data-density]').forEach(b=>b.classList.toggle('on',b.dataset.density===document.body.dataset.density));
+  const ap=localStorage.getItem('gb_preset');
+  document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('on',b.dataset.preset===ap));
+}
 function paintToggles(){const fs=document.documentElement.classList.contains('fs-besar');const an=document.documentElement.classList.contains('no-anim');const dk=document.documentElement.classList.contains('dark');
   [['tglFs',fs],['tglAnim',an],['tglDark',dk]].forEach(([id,on])=>{const b=$(id);if(!b)return;b.className='w-12 h-7 rounded-full relative transition '+(on?'acc-bg':'bg-slate-200');b.firstElementChild.className='absolute top-1 w-5 h-5 bg-white rounded-full transition '+(on?'left-6':'left-1');});}
-function initPrefs(){const a=localStorage.getItem('gb_acc')||'hijau';document.documentElement.dataset.acc=a;if(localStorage.getItem('gb_fs')==='besar')document.documentElement.classList.add('fs-besar');if(localStorage.getItem('gb_anim')==='off')document.documentElement.classList.add('no-anim');if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');STATE.sosmed=JSON.parse(localStorage.getItem('gb_sosmed')||'{}');markAcc();paintToggles();}
+function initPrefs() {
+  const a = localStorage.getItem('gb_acc') || 'hijau';
+  document.documentElement.dataset.acc = a;
+  if (localStorage.getItem('gb_fs') === 'besar') document.documentElement.classList.add('fs-besar');
+  if (localStorage.getItem('gb_anim') === 'off') document.documentElement.classList.add('no-anim');
+  if (localStorage.getItem('gb_dark') === '1') document.documentElement.classList.add('dark');
+  document.body.dataset.navbar = localStorage.getItem('gb_navbar_style') || 'floating';
+  document.body.dataset.navbarColor = localStorage.getItem('gb_navbar_color') || 'dark';
+  document.body.dataset.density = localStorage.getItem('gb_density') || 'normal';
+  STATE.sosmed = JSON.parse(localStorage.getItem('gb_sosmed') || '{}');
+  markAcc();
+  paintToggles();
+  paintCustomizeUI();
+}
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}}
 function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
@@ -687,46 +989,48 @@ let applying=false,popDismissed=false;
 let CUR={view:'home',sub:null,panel:null,modal:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
 
-function setPageInstant(pg){
+function setPageInstant(pg) {
   const isHome = pg === 'home';
-  const validPages = ['home','apps','bagi','agenda','dokumen','profile'];
-
-  // ===== 1. Set data-page di body — CSS yang handle visibility header =====
+  const validPages = ['home', 'apps', 'bagi', 'agenda', 'dokumen', 'profile', 'setting'];
+  
   document.body.dataset.page = pg;
-
-  // ===== 2. Toggle section halaman =====
+  
   validPages.forEach(p => {
     const id = 'page' + p.charAt(0).toUpperCase() + p.slice(1);
     const el = $(id);
     if (el) el.classList.toggle('hidden', p !== pg);
   });
-
-  // ===== 3. Set judul halaman (hdrTitle) =====
+  
   const tt = $('hdrTitle');
   if (tt) {
     tt.textContent = ({
-      apps:'Layanan',
-      bagi:'Berbagi',
-      agenda:'Agenda Kegiatan',
-      dokumen:'Dokumen',
-      profile:'Profil'
+      apps: 'Layanan',
+      bagi: 'Berbagi',
+      agenda: 'Agenda Kegiatan',
+      dokumen: 'Dokumen',
+      profile: 'Profil',
+      setting: 'Pengaturan'
     })[pg] || '';
   }
-
-  // ===== 4. Navbar state — pakai class baru nav-active / nav-inactive =====
+  
   document.querySelectorAll('[data-nav]').forEach(b => {
     const on = b.dataset.nav === pg;
-    b.classList.remove('acc-soft','acc-text','text-slate-400','text-slate-500');
+    b.classList.remove('acc-soft', 'acc-text', 'text-slate-400', 'text-slate-500');
     b.classList.toggle('nav-active', on);
     b.classList.toggle('nav-inactive', !on);
   });
-
-  // ===== 5. Aksi khusus halaman =====
+  
   if (pg === 'dokumen') {
     paintDokView();
     renderDokumen($('inSearchDok')?.value || '');
   }
-
+  if (pg === 'setting') {
+    paintCustomizeUI();
+    paintToggles();
+    markAcc();
+    showLastSync();
+  }
+  
   CUR.view = pg;
 }
 
@@ -764,7 +1068,8 @@ function renderState(s){
 }
 function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.add('sheet-open'));}
 function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.remove('sheet-open');}
-function openPanel(id){showInstant(id);CUR.panel=id;safePush({...CUR});if(id==='pNotif'&&STATE.profile)tandaiBaca();if(id==='pSetting')showLastSync();}
+function openPanel(id){showInstant(id);CUR.panel=id;safePush({...CUR});if(id==='pNotif'&&STATE.profile)tandaiBaca();
+}
 function tutupPanel(id){try{history.back()}catch(e){closeInstant(id);CUR.panel=null;}}
 async function tandaiBaca(){const gid=guruId();if(!gid)return;const rows=STATE.notifs.map(n=>({notification_id:n.id,guru_id:gid}));if(rows.length)await sb.from('creative_notification_reads').upsert(rows,{onConflict:'notification_id,guru_id',ignoreDuplicates:true});setTimeout(()=>setBadge(0),1200);}
 function showModalInstant(id){$(id).classList.remove('hidden');$(id).classList.add('flex');}
