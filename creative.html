@@ -133,12 +133,49 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .ctx-menu button{color:#E2E8F0}
   html.dark .ctx-menu button:hover{background:#252A33}
 
+  /* ============================================
+     HEADER VISIBILITY — CSS-based (bulletproof)
+     ============================================ */
+  body:not([data-page="home"]) #hdrAvatarBtn,
+  body:not([data-page="home"]) #hdrInfoBlock,
+  body:not([data-page="home"]) #hdrMetaRow{
+    display: none !important;
+  }
+  body[data-page="home"] #hdrTitle{
+    display: none !important;
+  }
+
+  /* ============================================
+     NAVBAR STATE — CSS-based
+     ============================================ */
+  .nav-btn.nav-active{
+    background-color: var(--acc) !important;
+    color: #fff !important;
+  }
+  .nav-btn.nav-active i,
+  .nav-btn.nav-active span{ color:#fff !important; }
+  .nav-btn.nav-inactive{
+    background-color: transparent !important;
+    color: rgba(255,255,255,.65) !important;
+  }
+  .nav-btn.nav-inactive i,
+  .nav-btn.nav-inactive span{ color: rgba(255,255,255,.65) !important; }
+
+  .side-btn.nav-active{
+    background-color: var(--acc-soft) !important;
+    color: var(--acc-text) !important;
+  }
+  .side-btn.nav-inactive{
+    background-color: transparent !important;
+    color: #64748b !important;
+  }
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   }
 </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen" data-page="home">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
 <div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
 
@@ -149,39 +186,47 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white p-5 sticky top-0 h-screen">
     <div class="flex items-center gap-3 mb-8"><div class="w-11 h-11 rounded-xl overflow-hidden border border-slate-200"><img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo"></div><div><p class="font-extrabold text-slate-800 leading-tight">Guru Berbagi</p><p id="sideVersi" class="text-[11px] text-slate-400 font-semibold">Portal Selogiri</p></div></div>
     <nav class="space-y-1.5">
-      <button data-nav="home" onclick="navPage('home')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold acc-soft acc-text"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
-      <button data-nav="apps" onclick="navPage('apps')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="layout-grid" class="w-4 h-4"></i>Layanan</button>
-      <button data-nav="agenda" onclick="navPage('agenda')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="calendar-days" class="w-4 h-4"></i>Agenda</button>
-      <button data-nav="dokumen" onclick="navPage('dokumen')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="folder-open" class="w-4 h-4"></i>Dokumen</button>
+      <button data-nav="home" onclick="navPage('home')" class="side-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
+      <button data-nav="apps" onclick="navPage('apps')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="layout-grid" class="w-4 h-4"></i>Layanan</button>
+      <button data-nav="agenda" onclick="navPage('agenda')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="calendar-days" class="w-4 h-4"></i>Agenda</button>
+      <button data-nav="dokumen" onclick="navPage('dokumen')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="folder-open" class="w-4 h-4"></i>Dokumen</button>
       <button id="sideNotif" onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi<span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
-      <button data-nav="bagi" onclick="navPage('bagi')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
-      <button data-nav="profile" onclick="navPage('profile')" class="side-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
+      <button data-nav="bagi" onclick="navPage('bagi')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
+      <button data-nav="profile" onclick="navPage('profile')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
     <div id="footSide" class="mt-auto pt-5 border-t border-slate-100"><p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300">Tautan</p><div id="footSideList" class="space-y-0.5 opacity-80"></div></div>
-    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.49</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.50</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative min-w-0">
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2">
-  <div class="flex items-start gap-4">
-    <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil"><img id="hdrAvatar" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil"></button>
-    <div class="flex-1 min-w-0 pt-1.5">
-      <p id="hdrName" class="text-xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
-      <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
-      <p id="hdrTitle" class="hidden text-xl font-black text-slate-800 leading-tight truncate"></p>
-      <p id="txtTanggal" class="text-[11px] font-semibold text-slate-500 truncate mt-2"></p>
-    </div>
-    <div class="flex flex-col items-end gap-2 shrink-0 pt-1">
-      <div id="hdrMetaRow" class="flex items-center gap-2">
-        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
-        <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-slate-600"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span></button>
-        <button onclick="openPanel('pSetting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600"></i></button>
+      <div class="flex items-start gap-4">
+        <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil"><img id="hdrAvatar" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil"></button>
+
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-3 pt-1.5">
+            <div class="min-w-0 flex-1">
+              <div id="hdrInfoBlock">
+                <p id="hdrName" class="text-xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
+                <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
+              </div>
+              <p id="hdrTitle" class="text-xl font-black text-slate-800 leading-tight truncate"></p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+              <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="bell" class="w-5 h-5 text-slate-600"></i><span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span></button>
+              <button onclick="openPanel('pSetting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="settings" class="w-5 h-5 text-slate-600"></i></button>
+            </div>
+          </div>
+
+          <div id="hdrMetaRow" class="flex items-center justify-between gap-3 mt-2">
+            <p id="txtTanggal" class="text-[11px] font-semibold text-slate-500 truncate"></p>
+            <p id="wxInline" class="text-[11px] font-bold text-amber-600 shrink-0">☀️ --°</p>
+          </div>
+        </div>
       </div>
-      <p id="wxInline" class="text-[11px] font-bold text-amber-600 whitespace-nowrap">☀️ --°</p>
-    </div>
-  </div>
-</header>
-  <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
+    </header>
+    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
 
   <section id="pageHome" class="space-y-4 min-w-0">
     <div class="relative animate-fade-up">
@@ -251,7 +296,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
         <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
         <div class="flex gap-2"><button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button><button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button></div></div>
-      <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.49</span></div>
+      <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500"><span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span><span id="aboutVer">v4.50</span></div>
       <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
     </div>
   </section>
@@ -271,12 +316,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </section>
   </main>
 
-  <nav class="fixed left-3 right-3 md:hidden z-40 rounded-2xl shadow-xl shadow-black/20 px-2 py-1.5 flex items-center justify-between" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem);background:#1E293B">
-  <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl acc-bg text-white transition active:scale-95"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
-  <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-white/60 transition active:scale-95"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
-  <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-white/60 transition active:scale-95"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
-  <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl text-white/60 transition active:scale-95"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
-</nav>
+  <nav class="fixed left-3 right-3 md:hidden z-40 px-2 py-1.5 flex items-center justify-between rounded-2xl shadow-xl" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem); background:#0F0F12">
+    <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
+    <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
+    <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
+    <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
+  </nav>
 </div>
 
 <div id="pLogin" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
@@ -301,7 +346,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Aktifkan teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
       <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div></div>
     <div class="space-y-3"><button id="setInstallBtn" onclick="pasangApp()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="download" class="w-4 h-4 acc-text"></i><p class="text-sm font-bold text-slate-700">Pasang Aplikasi di HP</p></button><button onclick="openPanel('pFb')" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500"></i><p class="text-sm font-bold text-slate-700">Ceritakan ke Kami</p></button><button id="btnForceSync" onclick="forceSync()" class="card w-full p-4 flex items-center gap-3 active:scale-[.98] transition"><i data-lucide="refresh-cw" class="w-4 h-4 acc-text"></i><div class="flex-1 min-w-0 text-left"><p class="text-sm font-bold text-slate-700 leading-tight">Force Sync</p><p class="text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></p></div></button></div>
-    <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.49</span></p></div></div>
+    <p class="text-[10px] text-center text-slate-400 mt-5">Tim Kreatif © 2026 · <span id="setVersi">v4.50</span></p></div></div>
 
 <div id="pFb" class="fixed inset-0 z-50 hidden"><div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
   <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll"><div class="sheet-drag" data-sheet-handle></div><p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p><p class="text-[11px] text-slate-500 mb-4">Masukanmu kami baca & langsung diteruskan ke admin. (+1 poin)</p>
@@ -309,7 +354,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
     <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 acc-ring"></textarea>
     <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Kirim</button></div></div>
-    <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950"><div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0"><p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p><button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button></div><iframe id="mAppFrame" class="w-full flex-1 bg-white"></iframe></div>
+      <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950"><div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0"><p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p><button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button></div><iframe id="mAppFrame" class="w-full flex-1 bg-white"></iframe></div>
 
   <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
     <div class="px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0"><button onclick="tutupModal('mStudio')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button><p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1">Studio</p><span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span></div>
@@ -350,6 +395,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 </div>
 
 <script>
+/* ============================================================
+   KONSTANTA DASAR
+   ============================================================ */
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
@@ -359,7 +407,9 @@ function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
 
-/* IndexedDB mini wrapper */
+/* ============================================================
+   IndexedDB mini wrapper
+   ============================================================ */
 const idb=(()=>{
   let dbp=null;
   function open(){
@@ -405,7 +455,9 @@ const idb=(()=>{
   return {get,set,clear};
 })();
 
-/* Error boundary global */
+/* ============================================================
+   Error boundary global
+   ============================================================ */
 const _errBuf=[];
 function logLocalError(aksi,meta){
   _errBuf.push({t:Date.now(),aksi,meta});
@@ -428,7 +480,9 @@ window.addEventListener('unhandledrejection',(e)=>{
   }
 });
 
-/* Foto cache IndexedDB */
+/* ============================================================
+   Foto cache — IndexedDB
+   ============================================================ */
 async function fotoCacheGet(gid){if(!gid)return null;const rec=await idb.get('foto',gid);return rec?rec.data:null;}
 async function fotoCachePut(gid,data){return idb.set('foto',gid,{data,t:Date.now()});}
 async function fotoCacheFresh(gid){const rec=await idb.get('foto',gid);return !!(rec&&rec.t&&(Date.now()-rec.t)<86400000);}
@@ -456,7 +510,9 @@ function cacheFotoFromNet(gid){
   img.src=net;
 }
 
-/* STATE */
+/* ============================================================
+   STATE global
+   ============================================================ */
 const STATE={profile:null,token:null,menus:[],config:null,quotes:[],footer:[],gam:null,notifs:[],lead:[],leadLoaded:false,tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,inspi:[],inspiMode:'baru',inspiLimit:10,myLikes:new Set(),agenda:[],docs:[],rewards:[],kudosTop:[],guruList:[],favs:new Set(JSON.parse(localStorage.getItem('gb_favs')||'[]'))};
 const COLOR={teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],yellow:['bg-yellow-100','text-yellow-600']};
 const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
@@ -474,6 +530,9 @@ function resetRenderSig(){for(const k in RENDER_SIG)delete RENDER_SIG[k];}
 function icons(){lucide.createIcons();}
 function esc(s){return (s||'').replace(/</g,'&lt;');}
 
+/* ============================================================
+   Sanitizer HTML mini
+   ============================================================ */
 function sanitizeHtml(html){
   if(!html)return '';
   const allowedTags=new Set(['B','I','U','EM','STRONG','BR','P','SPAN','DIV','A','UL','OL','LI','H1','H2','H3','H4','IMG','HR','SMALL','CODE']);
@@ -538,7 +597,9 @@ function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('cr
 let deferredPrompt=null;
 function initPWA(){const sib=$('setInstallBtn');if(sib&&isTWA)sib.classList.add('hidden');const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone||isTWA;if(!standalone&&!isTWA)window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});window.addEventListener('appinstalled',()=>{toast('Aplikasi terpasang di HP!');});}
 function pasangApp(){if(isTWA)return toast('Sudah terpasang sebagai aplikasi Play Store','info');if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');}
-/* Offline Queue */
+/* ============================================================
+   Offline Queue
+   ============================================================ */
 async function queueOffline(aksi,payload){
   const queue=(await idb.get('misc','offline_queue'))||[];
   queue.push({aksi,payload,t:Date.now()});
@@ -590,52 +651,117 @@ function updateOnlineStatus(){
 window.addEventListener('online',updateOnlineStatus);
 window.addEventListener('offline',updateOnlineStatus);
 
-/* Cuaca */
-async function muatCuaca(){try{const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');const j=await r.json();if(j&&j.current_weather){localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));showWx(j.current_weather);}}catch(e){}}
-function showWx(cw){const cd=cw.weathercode;const h=new Date().getHours();const night=(h<5||h>=18);
-  let emoji='☁️',color='text-slate-500';
-  if(cd===0){emoji=night?'🌙':'☀️';color=night?'text-indigo-500':'text-amber-600';}
-  else if(cd<=2){emoji='🌤️';color=night?'text-indigo-500':'text-amber-600';}
-  else if(cd===3){emoji='☁️';color='text-slate-500';}
-  else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';color='text-sky-600';}
-  else if(cd>=95){emoji='⛈️';color='text-sky-600';}
-  const el=$('wxInline');if(el){el.className='text-[11px] font-bold whitespace-nowrap '+color;el.textContent=emoji+' '+Math.round(cw.temperature)+'°';}
+/* ============================================================
+   Cuaca
+   ============================================================ */
+async function muatCuaca(){
+  try{
+    const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');
+    if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}
+    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');
+    const j=await r.json();
+    if(j&&j.current_weather){
+      localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));
+      showWx(j.current_weather);
+    }
+  }catch(e){}
+}
+function showWx(cw){
+  const cd=cw.weathercode;
+  const h=new Date().getHours();
+  const night=(h<5||h>=18);
+  let emoji='☁️',label='Berawan',color='text-slate-500';
+  if(cd===0){emoji=night?'🌙':'☀️';label='Cerah';color=night?'text-indigo-500':'text-amber-600';}
+  else if(cd<=2){emoji='🌤️';label='Berawan';color=night?'text-indigo-500':'text-amber-600';}
+  else if(cd===3){emoji='☁️';label='Berawan';color='text-slate-500';}
+  else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';label='Hujan';color='text-sky-600';}
+  else if(cd>=95){emoji='⛈️';label='Petir';color='text-sky-600';}
+  const el=$('wxInline');
+  if(el){el.className='text-[11px] font-bold shrink-0 '+color;el.textContent=emoji+' '+Math.round(cw.temperature)+'° '+label;}
 }
 
-/* Router */
+/* ============================================================
+   Router
+   ============================================================ */
 let applying=false,popDismissed=false;
 let CUR={view:'home',sub:null,panel:null,modal:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
+
 function setPageInstant(pg){
-  if(['home','apps','bagi','agenda','dokumen','profile'].includes(pg)){
-    document.querySelectorAll('[data-nav]').forEach(b=>{
-      const on=b.dataset.nav===pg;
-      if(b.classList.contains('side-btn')){
-        b.classList.toggle('acc-soft',on);
-        b.classList.toggle('acc-text',on);
-        b.classList.toggle('text-slate-500',!on);
-      }else{
-        b.classList.toggle('acc-soft',on);
-        b.classList.toggle('acc-text',on);
-        b.classList.toggle('text-slate-400',!on);
-      }
-    });
+  const isHome = pg === 'home';
+  const validPages = ['home','apps','bagi','agenda','dokumen','profile'];
+
+  // ===== 1. Set data-page di body — CSS yang handle visibility header =====
+  document.body.dataset.page = pg;
+
+  // ===== 2. Toggle section halaman =====
+  validPages.forEach(p => {
+    const id = 'page' + p.charAt(0).toUpperCase() + p.slice(1);
+    const el = $(id);
+    if (el) el.classList.toggle('hidden', p !== pg);
+  });
+
+  // ===== 3. Set judul halaman (hdrTitle) =====
+  const tt = $('hdrTitle');
+  if (tt) {
+    tt.textContent = ({
+      apps:'Layanan',
+      bagi:'Berbagi',
+      agenda:'Agenda Kegiatan',
+      dokumen:'Dokumen',
+      profile:'Profil'
+    })[pg] || '';
   }
-  $('pageHome').classList.toggle('hidden',pg!=='home');
-  $('pageApps').classList.toggle('hidden',pg!=='apps');
-  $('pageBagi').classList.toggle('hidden',pg!=='bagi');
-  $('pageAgenda').classList.toggle('hidden',pg!=='agenda');
-  $('pageDokumen').classList.toggle('hidden',pg!=='dokumen');
-  $('pageProfile').classList.toggle('hidden',pg!=='profile');
-  const isHome=pg==='home';
-  ['hdrAvatarBtn','hdrName','hdrSub','hdrMetaRow'].forEach(id=>{const e=$(id);if(e)e.classList.toggle('hidden',!isHome);});
-  if(pg==='dokumen'){paintDokView();renderDokumen($('inSearchDok')?.value||'');}
-  const tt=$('hdrTitle');if(tt){tt.classList.toggle('hidden',isHome);tt.textContent={apps:'Layanan',bagi:'Berbagi',agenda:'Agenda Kegiatan',dokumen:'Dokumen',profile:'Profil'}[pg]||'';}
-  CUR.view=pg;
+
+  // ===== 4. Navbar state — pakai class baru nav-active / nav-inactive =====
+  document.querySelectorAll('[data-nav]').forEach(b => {
+    const on = b.dataset.nav === pg;
+    b.classList.remove('acc-soft','acc-text','text-slate-400','text-slate-500');
+    b.classList.toggle('nav-active', on);
+    b.classList.toggle('nav-inactive', !on);
+  });
+
+  // ===== 5. Aksi khusus halaman =====
+  if (pg === 'dokumen') {
+    paintDokView();
+    renderDokumen($('inSearchDok')?.value || '');
+  }
+
+  CUR.view = pg;
 }
-function navPage(pg){if(applying)return;if(CUR.view===pg&&!CUR.sub&&!CUR.modal&&!CUR.panel)return;setPageInstant(pg);CUR.sub=null;safePush({...CUR});if(pg==='bagi')renderBagi();if(pg==='profile')renderProfile();if(pg==='agenda')renderAgenda();}
+
+function navPage(pg){
+  if(applying) return;
+  if(CUR.view===pg && !CUR.sub && !CUR.modal && !CUR.panel) return;
+  setPageInstant(pg);
+  CUR.sub = null;
+  safePush({...CUR});
+  if (pg==='bagi') renderBagi();
+  if (pg==='profile') renderProfile();
+  if (pg==='agenda') renderAgenda();
+}
+
 window.addEventListener('popstate',e=>renderState(e.state||{view:'home',sub:null,panel:null,modal:null}));
-function renderState(s){applying=true;if(CUR.modal==='mPop'&&!s.modal)popDismissed=true;PANELS.forEach(closeInstant);MODALS.forEach(closeModalInstant);CUR={view:s.view||'home',sub:s.sub||null,panel:s.panel||null,modal:s.modal||null};setPageInstant(CUR.view);if(CUR.view==='apps')renderLayanan($('inSearch').value);if(CUR.view==='bagi')renderBagi();if(CUR.view==='profile')renderProfile();if(CUR.view==='agenda')renderAgenda();if(s.panel)showInstant(s.panel);if(s.modal)showModalInstant(s.modal);applying=false;}
+function renderState(s){
+  applying=true;
+  try{
+    if(CUR.modal==='mPop'&&!s.modal)popDismissed=true;
+    PANELS.forEach(closeInstant);
+    MODALS.forEach(closeModalInstant);
+    CUR={view:s.view||'home',sub:s.sub||null,panel:s.panel||null,modal:s.modal||null};
+    setPageInstant(CUR.view);
+    if(CUR.view==='apps')renderLayanan($('inSearch').value);
+    if(CUR.view==='bagi')renderBagi();
+    if(CUR.view==='profile')renderProfile();
+    if(CUR.view==='agenda')renderAgenda();
+    if(s.panel)showInstant(s.panel);
+    if(s.modal)showModalInstant(s.modal);
+  }catch(e){
+    console.error('renderState error:',e);
+  }finally{
+    applying=false;
+  }
+}
 function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.add('sheet-open'));}
 function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.remove('sheet-open');}
 function openPanel(id){showInstant(id);CUR.panel=id;safePush({...CUR});if(id==='pNotif'&&STATE.profile)tandaiBaca();if(id==='pSetting')showLastSync();}
@@ -648,7 +774,9 @@ function tutupModal(id){if(CUR.modal===id){try{history.back()}catch(e){closeModa
 function tutupApp(){tutupModal('mApp');$('mAppFrame').src='';}
 function tutupPop(){popDismissed=true;tutupModal('mPop');}
 
-/* Search + history */
+/* ============================================================
+   Search + Riwayat Pencarian
+   ============================================================ */
 const SEARCH_HIST_KEY='gb_search_history';
 let _homeSearchTimer=null;
 function homeSearch(v){
@@ -677,7 +805,9 @@ function hideSearchHistorySoon(){setTimeout(()=>$('searchHistory')?.classList.re
 function applySearchHistory(q){const inp=$('inSearchHome');if(inp)inp.value=q;homeSearch(q);$('searchHistory')?.classList.remove('show');}
 function clearSearchHistory(){localStorage.removeItem(SEARCH_HIST_KEY);$('searchHistory')?.classList.remove('show');}
 
-/* Carousel */
+/* ============================================================
+   Carousel
+   ============================================================ */
 let caroTick=false;
 function caroUpdate(){if(caroTick)return;caroTick=true;requestAnimationFrame(()=>{caroTick=false;const t=$('caroTrack'),dots=$('caroDots').children;if(!t.children.length||!dots.length)return;const w=t.children[0].offsetWidth+12;const i=Math.min(dots.length-1,Math.max(0,Math.round(t.scrollLeft/w)));[...dots].forEach((d,idx)=>{d.className=idx===i?'h-1.5 w-5 rounded-full acc-bg transition-all':'h-1.5 w-1.5 rounded-full bg-slate-300 transition-all';});});}
 function caroGo(i){const t=$('caroTrack');if(!t.children.length)return;const w=t.children[0].offsetWidth+12;t.scrollTo({left:i*w,behavior:'smooth'});}
@@ -704,7 +834,9 @@ function renderCarousel(){const c=STATE.config||{};const box=$('caroBox');const 
   $('caroDots').innerHTML=slides.length>1?slides.map((_,i)=>`<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300'}"></button>`).join(''):'';
   icons();}
 
-/* Layanan + Favorit */
+/* ============================================================
+   Layanan + Favorit
+   ============================================================ */
 function setView(v){localStorage.setItem('gb_view',v);paintView();renderLayanan($('inSearch').value);}
 function paintView(){const v=localStorage.getItem('gb_view')||'kotak';const ic=$('viewToggleIcon');if(ic){ic.setAttribute('data-lucide',v==='kotak'?'layout-grid':'list');icons();}}
 function toggleView(){const v=localStorage.getItem('gb_view')||'kotak';setView(v==='kotak'?'baris':'kotak');}
@@ -779,48 +911,83 @@ function renderQuick(){
 function emptyState(icon,title,desc,cta){
   return `<div class="empty-state"><div class="es-icon"><i data-lucide="${icon}" class="w-6 h-6"></i></div><p class="es-title">${esc(title)}</p><p class="es-desc">${esc(desc)}</p>${cta?`<button onclick="${cta.action}" class="mt-4 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-95 transition">${esc(cta.label)}</button>`:''}</div>`;
 }
-/* Dok widget + Footer */
-function renderDokWidget(){const docs=(STATE.docs||[]);const total=docs.length;const rc=$('dokRowContent');if(!rc)return;
-  if(total){const latest=docs.slice().sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''))[0];
+/* ============================================================
+   Dok widget + Footer
+   ============================================================ */
+function renderDokWidget(){
+  const docs=(STATE.docs||[]);
+  const total=docs.length;
+  const rc=$('dokRowContent');
+  if(!rc)return;
+  if(total){
+    const latest=docs.slice().sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''))[0];
     rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center shadow-sm" style="background:linear-gradient(135deg,#FBBF24,#F59E0B)"><i data-lucide="folder" class="w-5 h-5 text-white" style="stroke-width:2.5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-snug line-clamp-1">Dokumen</span><span class="block text-[10px] text-slate-500 truncate mt-0.5">${esc(latest.judul)}</span></span><span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md bg-amber-100 text-amber-700">${total} file</span>`;
-  }else{rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="folder-open" class="w-5 h-5 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Dokumen</span><span class="block text-[10px] text-slate-500 mt-0.5">Belum ada dokumen</span></span>`;}
-  icons();}
-function renderFoot(){if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}$('footSide').classList.remove('hidden');
+  }else{
+    rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="folder-open" class="w-5 h-5 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Dokumen</span><span class="block text-[10px] text-slate-500 mt-0.5">Belum ada dokumen</span></span>`;
+  }
+  icons();
+}
+function renderFoot(){
+  if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}
+  $('footSide').classList.remove('hidden');
   $('footList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="shrink-0 card flex items-center gap-2 px-3.5 py-2.5 active:scale-95 transition"><i data-lucide="${f.icon||'globe'}" class="w-4 h-4 acc-text"></i><span class="text-xs font-bold text-slate-600">${f.judul}</span></button>`).join('');
-  $('footSideList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 transition"><i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</button>`).join('');icons();}
+  $('footSideList').innerHTML=STATE.footer.map(f=>`<button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 transition"><i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60"></i>${f.judul}</button>`).join('');
+  icons();
+}
 
-/* Agenda */
-function renderAgenda(){const today=new Date();const tstr=today.toISOString().slice(0,10);
+/* ============================================================
+   Agenda
+   ============================================================ */
+function renderAgenda(){
+  const today=new Date();
+  const tstr=today.toISOString().slice(0,10);
   const diff=a=>Math.ceil((new Date(a.tanggal)-new Date(tstr))/86400000);
   const up=(STATE.agenda||[]).filter(a=>a.tanggal>=tstr).sort((a,b)=>a.tanggal.localeCompare(b.tanggal));
   const past=(STATE.agenda||[]).filter(a=>a.tanggal<tstr).sort((a,b)=>b.tanggal.localeCompare(a.tanggal));
   const rc=$('agendaRowContent');
-  if(rc){ if(up.length){const a=up[0];const d=new Date(a.tanggal);const dd=diff(a);const bc=dd<=1?'#DC2626':dd<=3?'#F59E0B':'#0D9488';const bl=dd<=0?'HARI INI':'H-'+dd;
+  if(rc){
+    if(up.length){
+      const a=up[0];const d=new Date(a.tanggal);const dd=diff(a);
+      const bc=dd<=1?'#DC2626':dd<=3?'#F59E0B':'#0D9488';
+      const bl=dd<=0?'HARI INI':'H-'+dd;
       rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-white border border-rose-200 flex flex-col items-center justify-center shadow-sm relative overflow-hidden"><span class="absolute top-0 left-0 right-0 h-4 text-center text-[7px] font-black uppercase tracking-widest text-white leading-4" style="background:#DC2626">${d.toLocaleDateString('id-ID',{weekday:'short'})}</span><span class="text-lg font-black text-slate-800 leading-none mt-3">${d.getDate()}</span></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-snug line-clamp-1">${esc(a.judul)}</span><span class="block text-[10px] text-slate-500 truncate mt-0.5">${d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})}${a.tempat?' · '+esc(a.tempat):''}${a.waktu?' · '+esc(a.waktu):''}</span></span><span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:${bc}">${bl}</span>`;
-    } else { rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="calendar-x" class="w-5 h-5 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Agenda</span><span class="block text-[10px] text-slate-500 mt-0.5">${past.length?past.length+' arsip kegiatan':'Belum ada agenda'}</span></span>`; } }
+    }else{
+      rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="calendar-x" class="w-5 h-5 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Agenda</span><span class="block text-[10px] text-slate-500 mt-0.5">${past.length?past.length+' arsip kegiatan':'Belum ada agenda'}</span></span>`;
+    }
+  }
   const list=(STATE.agenda||[]).slice().sort((a,b)=>(a.tanggal||'').localeCompare(b.tanggal||''));
   const months=[...new Set(list.map(a=>(a.tanggal||'').slice(0,7)))].sort();
   $('calChips').innerHTML=months.map(mk=>{const d=new Date(mk+'-01T00:00:00');return `<button onclick="jumpMonth('${mk}')" class="shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-bold card text-slate-600 active:scale-95 transition">${d.toLocaleDateString('id-ID',{month:'short',year:'2-digit'})}</button>`;}).join('');
   let html='';
   const upMonths=[...new Set(up.map(a=>(a.tanggal||'').slice(0,7)))].sort();
   upMonths.forEach(mk=>{html+=monthSection(mk,up.filter(a=>(a.tanggal||'').slice(0,7)===mk),false,tstr);});
-  if(past.length){html+=`<div class="flex items-center gap-3 pt-2"><span class="h-px flex-1 bg-slate-200"></span><span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Telah Selesai</span><span class="h-px flex-1 bg-slate-200"></span></div>`;
+  if(past.length){
+    html+=`<div class="flex items-center gap-3 pt-2"><span class="h-px flex-1 bg-slate-200"></span><span class="text-[9px] font-black uppercase tracking-widest text-slate-400">Telah Selesai</span><span class="h-px flex-1 bg-slate-200"></span></div>`;
     const pastMonths=[...new Set(past.map(a=>(a.tanggal||'').slice(0,7)))].sort().reverse();
-    pastMonths.forEach(mk=>{html+=monthSection(mk,past.filter(a=>(a.tanggal||'').slice(0,7)===mk),true,tstr);});}
+    pastMonths.forEach(mk=>{html+=monthSection(mk,past.filter(a=>(a.tanggal||'').slice(0,7)===mk),true,tstr);});
+  }
   $('agendaTimeline').innerHTML=html||emptyState('calendar-plus','Belum ada agenda','Kegiatan KKG & kecamatan akan tampil di sini.');
-  icons();}
+  icons();
+}
 function jumpMonth(mk){const el=document.getElementById('m-'+mk);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-function agendaRow(a,isPast,tstr){const dd=new Date(a.tanggal);const diff=Math.ceil((dd-new Date(tstr))/86400000);
+function agendaRow(a,isPast,tstr){
+  const dd=new Date(a.tanggal);
+  const diff=Math.ceil((dd-new Date(tstr))/86400000);
   const badge=isPast?`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:#64748B">SELESAI</span>`:(diff<=0?`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:#DC2626">HARI INI</span>`:`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:${diff<=3?'#F59E0B':'#0D9488'}">H-${diff}</span>`);
-  return `<div class="card p-3.5 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;}
+  return `<div class="card p-3.5 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
+}
 function monthSection(mk,items,isPast,tstr){const d=new Date(mk+'-01T00:00:00');
   return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p>${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div>`;}
 
-/* Dokumen */
-function dokGridItem(d){const [bg,tx]=COLOR[d.warna]||COLOR.blue;
+/* ============================================================
+   Dokumen
+   ============================================================ */
+function dokGridItem(d){
+  const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   return `<a href="${esc(d.link)}" target="_blank" rel="noopener" class="card p-4 flex flex-col gap-2 active:scale-[.96] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${d.icon||'file-text'}" class="w-5 h-5"></i></span><span class="text-[12px] font-extrabold text-slate-800 leading-tight">${esc(d.judul)}</span><span class="text-[10px] text-slate-400 line-clamp-2">${esc(d.deskripsi||'')}</span></a>`;
 }
-function dokRowItem(d){const [bg,tx]=COLOR[d.warna]||COLOR.blue;
+function dokRowItem(d){
+  const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   return `<a href="${esc(d.link)}" target="_blank" rel="noopener" class="card p-3.5 flex items-center gap-3 active:scale-[.99] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${d.icon||'file-text'}" class="w-5 h-5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${esc(d.judul)}</span><span class="block text-[10px] text-slate-400 truncate mt-0.5">${esc(d.deskripsi||'')}</span></span><i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
 }
 function renderDokumen(filter=''){
@@ -844,19 +1011,48 @@ function renderDokumen(filter=''){
 function paintDokView(){const v=localStorage.getItem('gb_dok_view')||'grid';const ic=$('dokViewIcon');if(ic){ic.setAttribute('data-lucide',v==='grid'?'layout-grid':'list');icons();}}
 function toggleDokView(){const v=localStorage.getItem('gb_dok_view')||'grid';localStorage.setItem('gb_dok_view',v==='grid'?'list':'grid');paintDokView();renderDokumen($('inSearchDok')?.value||'');}
 
-/* Profile */
+/* ============================================================
+   Profile
+   ============================================================ */
 function renderProfile(){const on=!!STATE.profile;$('profGuest').classList.toggle('hidden',on);$('profData').classList.toggle('hidden',!on);icons();}
 
-/* Toko Poin */
-function renderToko(){const has=(STATE.rewards||[]).length>0;$('tokoWrap').classList.toggle('hidden',!has||!STATE.profile);if(!has)return;$('rewardList').innerHTML=STATE.rewards.map(r=>`<div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="gift" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(r.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(r.deskripsi||'')}</p></div><div class="text-right shrink-0"><p class="text-[10px] font-black text-amber-500">⭐ ${r.biaya_poin}</p><button onclick="redeemReward(${r.id})" class="mt-1 acc-bg text-white text-[10px] font-bold px-3 py-1.5 rounded-lg active:scale-95 transition shadow-sm">Tukar</button></div></div>`).join('');icons();}
-async function redeemReward(id){if(!STATE.profile)return toast('Login dulu','info');const {data}=await sb.rpc('creative_redeem_reward',{p_guru_id:guruId(),p_reward_id:id});if(data&&data.error)return toast(data.error,'error');toast('Berhasil ditukar! Sisa poin: '+data.sisa_poin);const gid=guruId();const {data:g}=await sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle();if(g){STATE.gam=g;renderTreeData();}}
+/* ============================================================
+   Toko Poin
+   ============================================================ */
+function renderToko(){
+  const has=(STATE.rewards||[]).length>0;
+  $('tokoWrap').classList.toggle('hidden',!has||!STATE.profile);
+  if(!has)return;
+  $('rewardList').innerHTML=STATE.rewards.map(r=>`<div class="card p-4 flex items-center gap-3"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="gift" class="w-5 h-5"></i></span><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(r.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(r.deskripsi||'')}</p></div><div class="text-right shrink-0"><p class="text-[10px] font-black text-amber-500">⭐ ${r.biaya_poin}</p><button onclick="redeemReward(${r.id})" class="mt-1 acc-bg text-white text-[10px] font-bold px-3 py-1.5 rounded-lg active:scale-95 transition shadow-sm">Tukar</button></div></div>`).join('');
+  icons();
+}
+async function redeemReward(id){
+  if(!STATE.profile)return toast('Login dulu','info');
+  const {data}=await sb.rpc('creative_redeem_reward',{p_guru_id:guruId(),p_reward_id:id});
+  if(data&&data.error)return toast(data.error,'error');
+  toast('Berhasil ditukar! Sisa poin: '+data.sisa_poin);
+  const gid=guruId();
+  const {data:g}=await sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle();
+  if(g){STATE.gam=g;renderTreeData();}
+}
 
-/* Kudos */
-function toggleKudosForm(show){const f=$('kudosForm');if(show===undefined)show=f.classList.contains('hidden');f.classList.toggle('hidden',!show);$('kudosOpenBtn').classList.toggle('hidden',show);if(show)$('kudosTo').focus();}
-function renderKudos(){const top=STATE.kudosTop||[];
+/* ============================================================
+   Kudos
+   ============================================================ */
+function toggleKudosForm(show){
+  const f=$('kudosForm');
+  if(show===undefined)show=f.classList.contains('hidden');
+  f.classList.toggle('hidden',!show);
+  $('kudosOpenBtn').classList.toggle('hidden',show);
+  if(show)$('kudosTo').focus();
+}
+function renderKudos(){
+  const top=STATE.kudosTop||[];
   $('kudosTeaser').textContent=top.length?(`❤ ${top[0].nama_lengkap} · ${top[0].jumlah} apresiasi`):'Kirim bintang untuk rekanmu';
   $('kudosTop').innerHTML=top.map((k,i)=>`<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 bg-slate-50"><span class="w-7 h-7 rounded-full acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 truncate">${esc(k.nama_lengkap)}</span><span class="block text-[10px] text-slate-400 truncate">${esc(k.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-rose-500">❤ ${k.jumlah}</span></div>`).join('')||'<p class="text-xs text-slate-400">Belum ada apresiasi.</p>';
-  $('kudosTo').innerHTML='<option value="">Pilih rekan…</option>'+(STATE.guruList||[]).map(g=>`<option value="${esc(g.guru_id)}" data-nama="${esc(g.nama_lengkap)}" data-sek="${esc(g.satuan_pendidikan)}">${esc(g.nama_lengkap)} — ${esc(g.satuan_pendidikan)}</option>`).join('');icons();}
+  $('kudosTo').innerHTML='<option value="">Pilih rekan…</option>'+(STATE.guruList||[]).map(g=>`<option value="${esc(g.guru_id)}" data-nama="${esc(g.nama_lengkap)}" data-sek="${esc(g.satuan_pendidikan)}">${esc(g.nama_lengkap)} — ${esc(g.satuan_pendidikan)}</option>`).join('');
+  icons();
+}
 async function sendKudos(){
   if(!STATE.profile)return toast('Login dulu','info');
   const sel=$('kudosTo');
@@ -871,35 +1067,130 @@ async function sendKudos(){
   }
   const {data}=await sb.rpc('creative_send_kudos',payload);
   if(data&&data.error)return toast(data.error,'error');
-  $('kudosPesan').value='';toast('Apresiasi terkirim! 🙏');
+  $('kudosPesan').value='';
+  toast('Apresiasi terkirim! 🙏');
   const {data:kt}=await sb.rpc('creative_kudos_top');
   STATE.kudosTop=kt||[];renderKudos();toggleKudosForm(false);
 }
 
-/* Bagi */
-function renderBagi(){const on=!!STATE.profile;$('treeGuest').classList.toggle('hidden',on);$('treeData').classList.toggle('hidden',!on);$('quoteBox').classList.toggle('hidden',STATE.config&&STATE.config.quote_status==='OFF');renderTreeData();renderToko();renderKudos();renderStudioGrid();renderKarya();renderLeadBadges();if(!STATE.leadLoaded)loadLeaderboard();icons();}
-async function loadLeaderboard(){STATE.leadLoaded=true;const {data}=await sb.rpc('creative_leaderboard');STATE.lead=(data||[]).slice(0,3);renderLeadBadges();icons();}
+/* ============================================================
+   Halaman Berbagi
+   ============================================================ */
+function renderBagi(){
+  const on=!!STATE.profile;
+  $('treeGuest').classList.toggle('hidden',on);
+  $('treeData').classList.toggle('hidden',!on);
+  $('quoteBox').classList.toggle('hidden',STATE.config&&STATE.config.quote_status==='OFF');
+  renderTreeData();
+  renderToko();
+  renderKudos();
+  renderStudioGrid();
+  renderKarya();
+  renderLeadBadges();
+  if(!STATE.leadLoaded)loadLeaderboard();
+  icons();
+}
+async function loadLeaderboard(){
+  STATE.leadLoaded=true;
+  const {data}=await sb.rpc('creative_leaderboard');
+  STATE.lead=(data||[]).slice(0,3);
+  renderLeadBadges();
+  icons();
+}
 
-/* Pohon Ilmu */
-function renderTreeData(){if(!STATE.profile)return;const g=STATE.gam||{total_poin:0,streak_days:0,level:'Biji',total_login:0,badges:[]};const badges=Array.isArray(g.badges)?g.badges:[];const lv=[...LEVELS].reverse().find(l=>(g.total_poin||0)>=l.min)||LEVELS[0];const next=LEVELS[LEVELS.indexOf(lv)+1];$('treeIco').setAttribute('data-lucide',lv.i);$('treeLevel').textContent=lv.n;$('treeStreak').textContent=g.streak_days||0;$('treePoin').textContent=g.total_poin||0;if(next){$('treeNext').textContent=next.n;$('treeBar').style.width=Math.min(100,Math.round(((g.total_poin||0)-lv.min)/(next.min-lv.min)*100))+'%';}else{$('treeNext').textContent='Maksimal';$('treeBar').style.width='100%';}$('stPoin').textContent=g.total_poin||0;$('stStreak').textContent=g.streak_days||0;$('stLogin').textContent=g.total_login||0;$('stBadge').textContent=badges.length;}
+/* ============================================================
+   Pohon Ilmu
+   ============================================================ */
+function renderTreeData(){
+  if(!STATE.profile)return;
+  const g=STATE.gam||{total_poin:0,streak_days:0,level:'Biji',total_login:0,badges:[]};
+  const badges=Array.isArray(g.badges)?g.badges:[];
+  const lv=[...LEVELS].reverse().find(l=>(g.total_poin||0)>=l.min)||LEVELS[0];
+  const next=LEVELS[LEVELS.indexOf(lv)+1];
+  $('treeIco').setAttribute('data-lucide',lv.i);
+  $('treeLevel').textContent=lv.n;
+  $('treeStreak').textContent=g.streak_days||0;
+  $('treePoin').textContent=g.total_poin||0;
+  if(next){
+    $('treeNext').textContent=next.n;
+    $('treeBar').style.width=Math.min(100,Math.round(((g.total_poin||0)-lv.min)/(next.min-lv.min)*100))+'%';
+  }else{
+    $('treeNext').textContent='Maksimal';
+    $('treeBar').style.width='100%';
+  }
+  $('stPoin').textContent=g.total_poin||0;
+  $('stStreak').textContent=g.streak_days||0;
+  $('stLogin').textContent=g.total_login||0;
+  $('stBadge').textContent=badges.length;
+}
 
-/* Leaderboard */
-function renderLeadBadges(){const me=(STATE.profile||{}).nama||'';const RANK=[['trophy','text-amber-500'],['medal','text-slate-400'],['medal','text-orange-400']];$('leadList').innerHTML=(STATE.lead||[]).map((r,i)=>{const isMe=(r.nama_lengkap||'').trim()===(me||'').trim();const rk=i<3?RANK[i]:['sprout','acc-text'];return `<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ${isMe?'acc-soft':'bg-slate-50'}"><span class="w-8 h-8 rounded-full ${isMe?'acc-bg text-white':'bg-white'} flex items-center justify-center shrink-0"><i data-lucide="${rk[0]}" class="w-4 h-4 ${isMe?'text-white':rk[1]}"></i></span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 truncate">${esc(r.nama_lengkap)}${isMe?' <span class="acc-text">(Anda)</span>':''}</span><span class="block text-[10px] text-slate-400 truncate">${esc(r.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-current"></i>${r.total_poin}</span></div>`;}).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';icons();}
+/* ============================================================
+   Leaderboard Badges
+   ============================================================ */
+function renderLeadBadges(){
+  const me=(STATE.profile||{}).nama||'';
+  const RANK=[['trophy','text-amber-500'],['medal','text-slate-400'],['medal','text-orange-400']];
+  $('leadList').innerHTML=(STATE.lead||[]).map((r,i)=>{
+    const isMe=(r.nama_lengkap||'').trim()===(me||'').trim();
+    const rk=i<3?RANK[i]:['sprout','acc-text'];
+    return `<div class="flex items-center gap-3 rounded-xl px-3 py-2.5 ${isMe?'acc-soft':'bg-slate-50'}"><span class="w-8 h-8 rounded-full ${isMe?'acc-bg text-white':'bg-white'} flex items-center justify-center shrink-0"><i data-lucide="${rk[0]}" class="w-4 h-4 ${isMe?'text-white':rk[1]}"></i></span><span class="flex-1 min-w-0"><span class="block text-xs font-bold text-slate-700 truncate">${esc(r.nama_lengkap)}${isMe?' <span class="acc-text">(Anda)</span>':''}</span><span class="block text-[10px] text-slate-400 truncate">${esc(r.satuan_pendidikan||'')}</span></span><span class="text-[10px] font-black text-amber-500 flex items-center gap-1"><i data-lucide="star" class="w-3 h-3 fill-current"></i>${r.total_poin}</span></div>`;
+  }).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
+  icons();
+}
 
-/* Studio Grid */
-function renderStudioGrid(){$('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<a href="${dl('?studio='+k)}" onclick="event.preventDefault();openStudio('${k}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight">${t.n}</span></a>`).join('');icons();}
-/* Inspirasi */
-function toggleInspForm(show){const f=$('inspForm');if(show===undefined)show=f.classList.contains('hidden');f.classList.toggle('hidden',!show);$('inspOpenBtn').classList.toggle('hidden',show);if(show)$('inspIsi').focus();}
-function setInspMode(m){STATE.inspiMode=m;STATE.inspiLimit=10;$('inspBaru').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='baru'?'acc-bg text-white':'card text-slate-500');$('inspPop').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='populer'?'acc-bg text-white':'card text-slate-500');fetchInspirasi();}
-async function fetchInspirasi(){const order=STATE.inspiMode==='populer'?'likes':'created_at';const {data}=await sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order(order,{ascending:false}).limit(STATE.inspiLimit);STATE.inspi=data||[];
-  if(STATE.profile&&STATE.inspi.length){const gid=guruId();const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',gid).in('inspirasi_id',STATE.inspi.map(i=>i.id));STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));}else STATE.myLikes=new Set();
-  renderInspirasi();}
+/* ============================================================
+   Studio Grid
+   ============================================================ */
+function renderStudioGrid(){
+  $('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<a href="${dl('?studio='+k)}" onclick="event.preventDefault();openStudio('${k}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight">${t.n}</span></a>`).join('');
+  icons();
+}
+/* ============================================================
+   Inspirasi
+   ============================================================ */
+function toggleInspForm(show){
+  const f=$('inspForm');
+  if(show===undefined)show=f.classList.contains('hidden');
+  f.classList.toggle('hidden',!show);
+  $('inspOpenBtn').classList.toggle('hidden',show);
+  if(show)$('inspIsi').focus();
+}
+function setInspMode(m){
+  STATE.inspiMode=m;STATE.inspiLimit=10;
+  $('inspBaru').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='baru'?'acc-bg text-white':'card text-slate-500');
+  $('inspPop').className='px-2.5 py-1 rounded-lg text-[10px] font-bold transition '+(m==='populer'?'acc-bg text-white':'card text-slate-500');
+  fetchInspirasi();
+}
+async function fetchInspirasi(){
+  const order=STATE.inspiMode==='populer'?'likes':'created_at';
+  const {data}=await sb.from('creative_inspirasi').select('id,guru_id,nama,sekolah,kategori,isi,likes,created_at').eq('status','aktif').order(order,{ascending:false}).limit(STATE.inspiLimit);
+  STATE.inspi=data||[];
+  if(STATE.profile&&STATE.inspi.length){
+    const gid=guruId();
+    const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',gid).in('inspirasi_id',STATE.inspi.map(i=>i.id));
+    STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));
+  }else STATE.myLikes=new Set();
+  renderInspirasi();
+}
 function moreInspirasi(){STATE.inspiLimit+=10;fetchInspirasi();}
-function renderInspirasi(){const myId=guruId();
-  $('inspList').innerHTML=STATE.inspi.map(n=>{const liked=STATE.myLikes.has(n.id);const own=myId&&n.guru_id===myId;
-    return `<div class="card p-4 space-y-2"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase tracking-wider acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-500">${waktuRelatif(n.created_at)}</span>${own?`<button onclick="hapusInspSendiri(${n.id})" class="ml-auto text-[10px] font-bold text-rose-500">Hapus</button>`:''}</div><p class="text-[13px] text-slate-700 leading-relaxed">${esc(n.isi)}</p><div class="flex items-center justify-between"><p class="text-[10px] font-bold text-slate-500 truncate">${esc(n.nama)} · ${esc(n.sekolah||'')}</p><button onclick="apresiasi(${n.id})" aria-label="Apresiasi" class="shrink-0 flex items-center gap-1 text-[10px] font-black ${liked?'acc-text':'text-slate-400'} active:scale-90 transition"><i data-lucide="heart" class="w-3.5 h-3.5 ${liked?'fill-current acc-text':''}"></i>${n.likes||0}</button></div></div>`;}).join('')||emptyState('sparkles','Belum ada inspirasi','Jadilah yang pertama berbagi praktik baik.');
-  $('inspMore').classList.toggle('hidden',STATE.inspi.length<STATE.inspiLimit);icons();}
-function hapusInspSendiri(id){confirmDialog('Hapus inspirasi ini? Tindakan tidak dapat dibatalkan.',async()=>{const gid=guruId();await sb.rpc('creative_delete_inspirasi',{p_id:id,p_guru_id:gid});toast('Inspirasi dihapus');fetchInspirasi();},'Hapus Inspirasi?','Hapus');}
+function renderInspirasi(){
+  const myId=guruId();
+  $('inspList').innerHTML=STATE.inspi.map(n=>{
+    const liked=STATE.myLikes.has(n.id);
+    const own=myId&&n.guru_id===myId;
+    return `<div class="card p-4 space-y-2"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase tracking-wider acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-500">${waktuRelatif(n.created_at)}</span>${own?`<button onclick="hapusInspSendiri(${n.id})" class="ml-auto text-[10px] font-bold text-rose-500">Hapus</button>`:''}</div><p class="text-[13px] text-slate-700 leading-relaxed">${esc(n.isi)}</p><div class="flex items-center justify-between"><p class="text-[10px] font-bold text-slate-500 truncate">${esc(n.nama)} · ${esc(n.sekolah||'')}</p><button onclick="apresiasi(${n.id})" aria-label="Apresiasi" class="shrink-0 flex items-center gap-1 text-[10px] font-black ${liked?'acc-text':'text-slate-400'} active:scale-90 transition"><i data-lucide="heart" class="w-3.5 h-3.5 ${liked?'fill-current acc-text':''}"></i>${n.likes||0}</button></div></div>`;
+  }).join('')||emptyState('sparkles','Belum ada inspirasi','Jadilah yang pertama berbagi praktik baik.');
+  $('inspMore').classList.toggle('hidden',STATE.inspi.length<STATE.inspiLimit);
+  icons();
+}
+function hapusInspSendiri(id){
+  confirmDialog('Hapus inspirasi ini? Tindakan tidak dapat dibatalkan.',async()=>{
+    const gid=guruId();
+    await sb.rpc('creative_delete_inspirasi',{p_id:id,p_guru_id:gid});
+    toast('Inspirasi dihapus');
+    fetchInspirasi();
+  },'Hapus Inspirasi?','Hapus');
+}
 async function postInspirasi(){
   const gid=guruId();
   if(!gid){toast('Login untuk berbagi inspirasi','info');openPanel('pLogin');return;}
@@ -935,68 +1226,329 @@ async function apresiasi(id){
   STATE.myLikes.add(id);fetchInspirasi();
   if(data&&data.added)toast('Terima kasih terkirim! Penulis +1 poin 🙏');
 }
-function waktuRelatif(ts){const d=new Date(ts),diff=Math.floor((Date.now()-d)/1000);if(diff<60)return 'Baru saja';if(diff<3600)return Math.floor(diff/60)+' mnt lalu';if(diff<86400)return Math.floor(diff/3600)+' jam lalu';if(diff<172800)return 'Kemarin';return d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});}
+function waktuRelatif(ts){
+  const d=new Date(ts),diff=Math.floor((Date.now()-d)/1000);
+  if(diff<60)return 'Baru saja';
+  if(diff<3600)return Math.floor(diff/60)+' mnt lalu';
+  if(diff<86400)return Math.floor(diff/3600)+' jam lalu';
+  if(diff<172800)return 'Kemarin';
+  return d.toLocaleDateString('id-ID',{day:'numeric',month:'short'});
+}
 
-/* Studio Kreatif */
-let logoImg=null;loadImg(LOGO).then(i=>logoImg=i).catch(()=>{});
+/* ============================================================
+   Studio Kreatif
+   ============================================================ */
+let logoImg=null;
+loadImg(LOGO).then(i=>logoImg=i).catch(()=>{});
 function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
 let fontsExtra=false;
-function loadExtraFonts(){if(fontsExtra)return;fontsExtra=true;const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Caveat:wght@600;700&display=swap';document.head.appendChild(l);}
-function openStudio(tpl,pre){loadExtraFonts();STATE.studio={tpl,fmt:'story',font:'modern',fields:Object.assign({},pre||{}),photo:null,photoSmall:null,showFoot:true,showTag:true,tagText:'#GuruBerbagiSelogiri #GTKSelogiri'};$('stTitle').textContent=TPL[tpl].n;buildControls();openModal('mStudio');renderStudio();}
+function loadExtraFonts(){
+  if(fontsExtra)return;
+  fontsExtra=true;
+  const l=document.createElement('link');
+  l.rel='stylesheet';
+  l.href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Caveat:wght@600;700&display=swap';
+  document.head.appendChild(l);
+}
+function openStudio(tpl,pre){
+  loadExtraFonts();
+  STATE.studio={tpl,fmt:'story',font:'modern',fields:Object.assign({},pre||{}),photo:null,photoSmall:null,showFoot:true,showTag:true,tagText:'#GuruBerbagiSelogiri #GTKSelogiri'};
+  $('stTitle').textContent=TPL[tpl].n;
+  buildControls();
+  openModal('mStudio');
+  renderStudio();
+}
 function setSFmt(k){STATE.studio.fmt=k;buildControls();renderStudio();}
 function setSFont(k){STATE.studio.font=k;buildControls();renderStudio();}
-let studioTimer=null;function queueStudio(){clearTimeout(studioTimer);studioTimer=setTimeout(()=>renderStudio(),200);}
+let studioTimer=null;
+function queueStudio(){clearTimeout(studioTimer);studioTimer=setTimeout(()=>renderStudio(),200);}
 function setField(k,v){STATE.studio.fields[k]=v;queueStudio();}
 function stTog(k){if(!STATE.studio)return;STATE.studio[k]=!STATE.studio[k];buildControls();renderStudio();}
-function setStudioPhoto(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{STATE.studio.photo=img;const c=document.createElement('canvas');const s=Math.min(1,720/Math.max(img.width,img.height));c.width=img.width*s;c.height=img.height*s;c.getContext('2d').drawImage(img,0,0,c.width,c.height);STATE.studio.photoSmall=c.toDataURL('image/jpeg',.8);buildControls();renderStudio();};img.src=rd.result;};rd.readAsDataURL(f);ev.target.value='';}
+function setStudioPhoto(ev){
+  const f=ev.target.files[0];
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      STATE.studio.photo=img;
+      const c=document.createElement('canvas');
+      const s=Math.min(1,720/Math.max(img.width,img.height));
+      c.width=img.width*s;c.height=img.height*s;
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      STATE.studio.photoSmall=c.toDataURL('image/jpeg',.8);
+      buildControls();
+      renderStudio();
+    };
+    img.src=rd.result;
+  };
+  rd.readAsDataURL(f);
+  ev.target.value='';
+}
 function clearStudioPhoto(){STATE.studio.photo=null;STATE.studio.photoSmall=null;buildControls();renderStudio();}
 const sw=(k,on)=>`<button onclick="stTog('${k}')" class="w-12 h-7 rounded-full relative transition ${on?'acc-bg':'bg-slate-200'}"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition ${on?'left-6':'left-1'}"></span></button>`;
-function buildControls(){const st=STATE.studio,t=TPL[st.tpl];let h='';
+function buildControls(){
+  const st=STATE.studio,t=TPL[st.tpl];let h='';
   h+='<p class="lbl">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
   h+='<p class="lbl mt-3">Font</p><div class="flex gap-1.5">'+Object.entries(FONTS).map(([k,v])=>`<button onclick="setSFont('${k}')" class="flex-1 py-2 rounded-lg text-[11px] font-bold transition ${k===st.font?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
   h+=t.f.map(([k,ph])=>`<input value="${esc(st.fields[k]||'')}" oninput="setField('${k}',this.value)" placeholder="${ph}" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">`).join('');
   h+=`<button onclick="$('stFoto').click()" class="mt-2 w-full py-2.5 rounded-xl acc-soft acc-text text-[11px] font-bold flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="image" class="w-4 h-4"></i> ${t.ph?'Foto utama':'Foto latar (opsional)'}</button><input type="file" id="stFoto" accept="image/*" class="hidden" onchange="setStudioPhoto(event)">`;
   if(st.photo)h+=`<button onclick="clearStudioPhoto()" class="w-full text-[10px] font-bold text-slate-400">Hapus foto</button>`;
   h+=`<div class="mt-3 space-y-3"><div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Footnote aplikasi ${sw('showFoot',st.showFoot)}</div><div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Hashtag ${sw('showTag',st.showTag)}</div><input value="${esc(st.tagText)}" oninput="STATE.studio.tagText=this.value;queueStudio()" placeholder="Hashtag kustom" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring"></div>`;
-  $('stControls').innerHTML=h;icons();}
-function roundRect(ctx,x,y,w,h,r){if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,y,w,h,r);return;}ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
-function wrapText(ctx,text,maxW){const words=text.split(/\s+/);const lines=[];let cur='';for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;}if(cur)lines.push(cur);return lines;}
-function drawCover(ctx,img,W,H){const ir=img.width/img.height,cr=W/H;let dw,dh,dx,dy;if(ir>cr){dh=H;dw=H*ir;dx=(W-dw)/2;dy=0;}else{dw=W;dh=W/ir;dx=0;dy=(H-dh)/2;}ctx.drawImage(img,dx,dy,dw,dh);}
-function handlesStr(){const s=STATE.sosmed||{};const parts=[];if(s.ig)parts.push('@'+s.ig);if(s.tiktok)parts.push('@'+s.tiktok);if(s.fb)parts.push(s.fb);if(s.yt)parts.push(s.yt);return parts.slice(0,2).join(' • ');}
-async function renderStudio(){const st=STATE.studio;if(!st)return;const F=FMT[st.fmt],W=F.w,H=F.h,s=H>=W?H/1920:H/720;const cv=$('stCanvas');cv.width=W;cv.height=H;cv.style.aspectRatio=W+'/'+H;const ctx=cv.getContext('2d');
-  try{await document.fonts.load('700 64px Inter');await document.fonts.load('800 64px "Playfair Display"');await document.fonts.load('700 64px Caveat');}catch(e){}
+  $('stControls').innerHTML=h;
+  icons();
+}
+function roundRect(ctx,x,y,w,h,r){
+  if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,y,w,h,r);return;}
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+function wrapText(ctx,text,maxW){
+  const words=text.split(/\s+/);const lines=[];let cur='';
+  for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;}
+  if(cur)lines.push(cur);return lines;
+}
+function drawCover(ctx,img,W,H){
+  const ir=img.width/img.height,cr=W/H;let dw,dh,dx,dy;
+  if(ir>cr){dh=H;dw=H*ir;dx=(W-dw)/2;dy=0;}else{dw=W;dh=W/ir;dx=0;dy=(H-dh)/2;}
+  ctx.drawImage(img,dx,dy,dw,dh);
+}
+function handlesStr(){
+  const s=STATE.sosmed||{};const parts=[];
+  if(s.ig)parts.push('@'+s.ig);
+  if(s.tiktok)parts.push('@'+s.tiktok);
+  if(s.fb)parts.push(s.fb);
+  if(s.yt)parts.push(s.yt);
+  return parts.slice(0,2).join(' • ');
+}
+async function renderStudio(){
+  const st=STATE.studio;if(!st)return;
+  const F=FMT[st.fmt],W=F.w,H=F.h,s=H>=W?H/1920:H/720;
+  const cv=$('stCanvas');
+  cv.width=W;cv.height=H;cv.style.aspectRatio=W+'/'+H;
+  const ctx=cv.getContext('2d');
+  try{
+    await document.fonts.load('700 64px Inter');
+    await document.fonts.load('800 64px "Playfair Display"');
+    await document.fonts.load('700 64px Caveat');
+  }catch(e){}
   const ff=FONTS[st.font];const f=st.fields;
-  if(st.photo){drawCover(ctx,st.photo,W,H);const og=ctx.createLinearGradient(0,0,0,H);og.addColorStop(0,'rgba(19,78,74,.55)');og.addColorStop(.5,'rgba(19,78,74,.25)');og.addColorStop(1,'rgba(19,78,74,.85)');ctx.fillStyle=og;ctx.fillRect(0,0,W,H);}
-  else{const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#0D9488';const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#14B8A6';const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#134E4A');g.addColorStop(.55,acc);g.addColorStop(1,acc2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();}
-  ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3*s;roundRect(ctx,42*s,42*s,W-84*s,H-84*s,40*s);ctx.stroke();
+  if(st.photo){
+    drawCover(ctx,st.photo,W,H);
+    const og=ctx.createLinearGradient(0,0,0,H);
+    og.addColorStop(0,'rgba(19,78,74,.55)');
+    og.addColorStop(.5,'rgba(19,78,74,.25)');
+    og.addColorStop(1,'rgba(19,78,74,.85)');
+    ctx.fillStyle=og;ctx.fillRect(0,0,W,H);
+  }else{
+    const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#0D9488';
+    const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#14B8A6';
+    const g=ctx.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,'#134E4A');g.addColorStop(.55,acc);g.addColorStop(1,acc2);
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';
+    ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();
+  }
+  ctx.strokeStyle='rgba(255,255,255,.22)';ctx.lineWidth=3*s;
+  roundRect(ctx,42*s,42*s,W-84*s,H-84*s,40*s);ctx.stroke();
   ctx.textAlign='center';
   const kick=t=>{ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`800 ${24*s}px Inter, sans-serif`;ctx.fillText(t.toUpperCase(),W/2,140*s);};
   const wrapped=(text,fs,maxLines)=>{let lines;for(;;){ctx.font=`${ff.w} ${fs}px ${ff.f}`;lines=wrapText(ctx,text,W-220*s);if(lines.length<=maxLines||fs<=28*s)break;fs-=4*s;}return {lines,lh:fs*1.4};};
   const cy=st.photo?H*0.62:H*0.45;
   switch(st.tpl){
-    case 'quote':{const r=wrapped('"'+(f.text||'')+'"',58*s,7);const bh=r.lines.length*r.lh;const y0=cy-bh/2+32*s;ctx.fillStyle='#fff';r.lines.forEach((ln,i)=>ctx.fillText(ln,W/2,y0+i*r.lh));ctx.fillStyle='#fcd34d';ctx.font=`800 ${36*s}px ${ff.f}`;ctx.fillText('— '+(f.author||'Anonim'),W/2,y0+bh+70*s);break;}
-    case 'ucapan':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${72*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.85)';const r=wrapped(f.msg||'',36*s,5);r.lines.forEach((ln,i)=>ctx.fillText(ln,W/2,cy+80*s+i*r.lh));break;}
-    case 'undangan':{kick('Undangan');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${60*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy-40*s);ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${32*s}px Inter, sans-serif`;[f.date,f.time,f.place].filter(Boolean).forEach((ln,i)=>ctx.fillText(ln,W/2,cy+40*s+i*50*s));break;}
-    case 'prestasi':{kick('Prestasi');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${56*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='#fcd34d';ctx.font=`800 ${38*s}px ${ff.f}`;ctx.fillText(f.name||'',W/2,cy+76*s);break;}
-    case 'cover':{kick('Materi Pembelajaran');ctx.fillStyle='#fff';ctx.font=`${ff.w} ${62*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${32*s}px Inter, sans-serif`;ctx.fillText((f.kelas||'')+(f.guru?' · '+f.guru:''),W/2,cy+66*s);break;}
-    case 'dokumentasi':{ctx.fillStyle='#fff';ctx.font=`${ff.w} ${50*s}px ${ff.f}`;ctx.fillText(f.title||'',W/2,cy);ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(f.date||'',W/2,cy+60*s);break;}}
-  if(st.showTag&&st.tagText){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.6)';ctx.font=`600 ${26*s}px Inter, sans-serif`;ctx.fillText(st.tagText,W-60*s,H-200*s);}
-  if(st.showFoot){const ls=120*s,lx=70*s,ly=H-190*s;ctx.save();roundRect(ctx,lx,ly,ls,ls,28*s);ctx.clip();ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);if(logoImg){const z=ls*1.18;ctx.drawImage(logoImg,lx+(ls-z)/2,ly+(ls-z)/2,z,z);}ctx.restore();ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.95)';ctx.font=`800 ${42*s}px Inter, sans-serif`;ctx.fillText('Guru Berbagi',lx+ls+26*s,ly+ls/2-8*s);ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText('Creative App',lx+ls+26*s,ly+ls/2+34*s);const hd=handlesStr();if(hd&&STATE.profile){ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;ctx.fillText(hd,W-70*s,ly+ls/2+10*s);}}}
-function simpanKarya(){if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}const st=STATE.studio;const cv=$('stCanvas');const t=document.createElement('canvas');const tw=216,th=Math.round(tw*cv.height/cv.width);t.width=tw;t.height=th;t.getContext('2d').drawImage(cv,0,0,tw,th);let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');arr.unshift({tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});arr=arr.slice(0,6);localStorage.setItem('gb_karya',JSON.stringify(arr));renderKarya();}
-function renderKarya(){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');$('karyaWrap').classList.toggle('hidden',!arr.length||!STATE.profile);$('karyaList').innerHTML=arr.map((k,i)=>`<button onclick="openKarya(${i})" class="shrink-0 w-24 rounded-xl overflow-hidden border border-slate-100 active:scale-95 transition"><img src="${k.thumb}" class="w-24 h-32 object-cover" loading="lazy" decoding="async" alt="Karya"></button>`).join('');}
-function openKarya(i){const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');const k=arr[i];if(!k)return;STATE.studio={tpl:k.tpl,fmt:k.fmt,font:k.font,fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,showFoot:k.showFoot,showTag:k.showTag,tagText:k.tagText};if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}$('stTitle').textContent=TPL[k.tpl].n;buildControls();openModal('mStudio');renderStudio();}
-function unduhStudio(){$('stCanvas').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='karya-guru-berbagi.png';a.click();URL.revokeObjectURL(a.href);simpanKarya();poinAksi('bagi_kartu');toast('Karya diunduh!');},'image/png');}
-async function bagiStudio(){const cv=$('stCanvas');try{const blob=await new Promise(r=>cv.toBlob(r,'image/png'));const file=new File([blob],'karya-guru-berbagi.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Guru Berbagi Selogiri'});simpanKarya();poinAksi('bagi_kartu');toast('Terima kasih sudah berbagi!');}else{unduhStudio();toast('Perangkat tidak mendukung share — file diunduh','info');}}catch(e){}}
-function poinAksi(aksi){const gid=guruId();if(!gid)return;sb.rpc('creative_add_poin',{p_guru_id:gid,p_poin:1,p_aksi:aksi}).then(r=>{if(r.data){STATE.gam=r.data;renderTreeData();}});}
+    case 'quote':{
+      const r=wrapped('"'+(f.text||'')+'"',58*s,7);
+      const bh=r.lines.length*r.lh;
+      const y0=cy-bh/2+32*s;
+      ctx.fillStyle='#fff';
+      r.lines.forEach((ln,i)=>ctx.fillText(ln,W/2,y0+i*r.lh));
+      ctx.fillStyle='#fcd34d';ctx.font=`800 ${36*s}px ${ff.f}`;
+      ctx.fillText('— '+(f.author||'Anonim'),W/2,y0+bh+70*s);
+      break;
+    }
+    case 'ucapan':{
+      ctx.fillStyle='#fff';ctx.font=`${ff.w} ${72*s}px ${ff.f}`;
+      ctx.fillText(f.title||'',W/2,cy);
+      ctx.fillStyle='rgba(255,255,255,.85)';
+      const r=wrapped(f.msg||'',36*s,5);
+      r.lines.forEach((ln,i)=>ctx.fillText(ln,W/2,cy+80*s+i*r.lh));
+      break;
+    }
+    case 'undangan':{
+      kick('Undangan');
+      ctx.fillStyle='#fff';ctx.font=`${ff.w} ${60*s}px ${ff.f}`;
+      ctx.fillText(f.title||'',W/2,cy-40*s);
+      ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${32*s}px Inter, sans-serif`;
+      [f.date,f.time,f.place].filter(Boolean).forEach((ln,i)=>ctx.fillText(ln,W/2,cy+40*s+i*50*s));
+      break;
+    }
+    case 'prestasi':{
+      kick('Prestasi');
+      ctx.fillStyle='#fff';ctx.font=`${ff.w} ${56*s}px ${ff.f}`;
+      ctx.fillText(f.title||'',W/2,cy);
+      ctx.fillStyle='#fcd34d';ctx.font=`800 ${38*s}px ${ff.f}`;
+      ctx.fillText(f.name||'',W/2,cy+76*s);
+      break;
+    }
+    case 'cover':{
+      kick('Materi Pembelajaran');
+      ctx.fillStyle='#fff';ctx.font=`${ff.w} ${62*s}px ${ff.f}`;
+      ctx.fillText(f.title||'',W/2,cy);
+      ctx.fillStyle='rgba(255,255,255,.85)';ctx.font=`600 ${32*s}px Inter, sans-serif`;
+      ctx.fillText((f.kelas||'')+(f.guru?' · '+f.guru:''),W/2,cy+66*s);
+      break;
+    }
+    case 'dokumentasi':{
+      ctx.fillStyle='#fff';ctx.font=`${ff.w} ${50*s}px ${ff.f}`;
+      ctx.fillText(f.title||'',W/2,cy);
+      ctx.fillStyle='rgba(255,255,255,.8)';ctx.font=`600 ${30*s}px Inter, sans-serif`;
+      ctx.fillText(f.date||'',W/2,cy+60*s);
+      break;
+    }
+  }
+  if(st.showTag&&st.tagText){
+    ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.6)';
+    ctx.font=`600 ${26*s}px Inter, sans-serif`;
+    ctx.fillText(st.tagText,W-60*s,H-200*s);
+  }
+  if(st.showFoot){
+    const ls=120*s,lx=70*s,ly=H-190*s;
+    ctx.save();roundRect(ctx,lx,ly,ls,ls,28*s);ctx.clip();
+    ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);
+    if(logoImg){const z=ls*1.18;ctx.drawImage(logoImg,lx+(ls-z)/2,ly+(ls-z)/2,z,z);}
+    ctx.restore();
+    ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.95)';
+    ctx.font=`800 ${42*s}px Inter, sans-serif`;
+    ctx.fillText('Guru Berbagi',lx+ls+26*s,ly+ls/2-8*s);
+    ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${30*s}px Inter, sans-serif`;
+    ctx.fillText('Creative App',lx+ls+26*s,ly+ls/2+34*s);
+    const hd=handlesStr();
+    if(hd&&STATE.profile){
+      ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.8)';
+      ctx.font=`600 ${30*s}px Inter, sans-serif`;
+      ctx.fillText(hd,W-70*s,ly+ls/2+10*s);
+    }
+  }
+}
+function simpanKarya(){
+  if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}
+  const st=STATE.studio;const cv=$('stCanvas');
+  const t=document.createElement('canvas');
+  const tw=216,th=Math.round(tw*cv.height/cv.width);
+  t.width=tw;t.height=th;
+  t.getContext('2d').drawImage(cv,0,0,tw,th);
+  let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
+  arr.unshift({tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});
+  arr=arr.slice(0,6);
+  localStorage.setItem('gb_karya',JSON.stringify(arr));
+  renderKarya();
+}
+function renderKarya(){
+  const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
+  $('karyaWrap').classList.toggle('hidden',!arr.length||!STATE.profile);
+  $('karyaList').innerHTML=arr.map((k,i)=>`<button onclick="openKarya(${i})" class="shrink-0 w-24 rounded-xl overflow-hidden border border-slate-100 active:scale-95 transition"><img src="${k.thumb}" class="w-24 h-32 object-cover" loading="lazy" decoding="async" alt="Karya"></button>`).join('');
+}
+function openKarya(i){
+  const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
+  const k=arr[i];if(!k)return;
+  STATE.studio={tpl:k.tpl,fmt:k.fmt,font:k.font,fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,showFoot:k.showFoot,showTag:k.showTag,tagText:k.tagText};
+  if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}
+  $('stTitle').textContent=TPL[k.tpl].n;
+  buildControls();
+  openModal('mStudio');
+  renderStudio();
+}
+function unduhStudio(){
+  $('stCanvas').toBlob(b=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download='karya-guru-berbagi.png';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    simpanKarya();
+    poinAksi('bagi_kartu');
+    toast('Karya diunduh!');
+  },'image/png');
+}
+async function bagiStudio(){
+  const cv=$('stCanvas');
+  try{
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    const file=new File([blob],'karya-guru-berbagi.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'Guru Berbagi Selogiri'});
+      simpanKarya();poinAksi('bagi_kartu');
+      toast('Terima kasih sudah berbagi!');
+    }else{
+      unduhStudio();
+      toast('Perangkat tidak mendukung share — file diunduh','info');
+    }
+  }catch(e){}
+}
+function poinAksi(aksi){
+  const gid=guruId();if(!gid)return;
+  sb.rpc('creative_add_poin',{p_guru_id:gid,p_poin:1,p_aksi:aksi}).then(r=>{
+    if(r.data){STATE.gam=r.data;renderTreeData();}
+  });
+}
 
-/* SSO Login */
-async function ssoLogin(email,pin){const r=await fetch(SB_URL+'/functions/v1/login-guru',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_ANON},body:JSON.stringify({email,pin})});if(!r.ok)throw new Error('Gagal');return await r.json();}
-async function ssoVerify(token){const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});return await r.json();}
-$('formLogin').addEventListener('submit',async e=>{e.preventDefault();$('btnLogin').disabled=true;$('btnLogin').textContent='Memverifikasi…';try{const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());localStorage.setItem('gb_token',res.token);localStorage.setItem('gb_profile',JSON.stringify(res.profile));STATE.profile=res.profile;STATE.token=res.token;tutupPanel('pLogin');const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}renderAuthUI();setSapaan();resetRenderSig();await muatSemuaData(true);recordLastSync();toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');}catch(err){toast('Email/PIN salah atau akun nonaktif','error');}$('btnLogin').disabled=false;$('btnLogin').textContent='Masuk';});
-function doLogout(){localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');location.reload();}
-/* Auth UI */
-function renderAuthUI(){const on=!!STATE.profile;const bm=$('btnMasuk');if(bm)bm.classList.toggle('hidden',on);const ac=$('authCard');if(ac)ac.classList.toggle('hidden',on);['quickBox','bellHdr','sideNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
-  if(on){const p=STATE.profile;const s=STATE.sosmed||{};
+/* ============================================================
+   SSO Login + Logout
+   ============================================================ */
+async function ssoLogin(email,pin){
+  const r=await fetch(SB_URL+'/functions/v1/login-guru',{
+    method:'POST',
+    headers:{'Content-Type':'application/json',apikey:SB_ANON},
+    body:JSON.stringify({email,pin})
+  });
+  if(!r.ok)throw new Error('Gagal');
+  return await r.json();
+}
+async function ssoVerify(token){
+  const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});
+  return await r.json();
+}
+$('formLogin').addEventListener('submit',async e=>{
+  e.preventDefault();
+  $('btnLogin').disabled=true;
+  $('btnLogin').textContent='Memverifikasi…';
+  try{
+    const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());
+    localStorage.setItem('gb_token',res.token);
+    localStorage.setItem('gb_profile',JSON.stringify(res.profile));
+    STATE.profile=res.profile;STATE.token=res.token;
+    tutupPanel('pLogin');
+    const gid=guruId();
+    if(gid){
+      const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();
+      if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}
+    }
+    renderAuthUI();
+    setSapaan();
+    resetRenderSig();
+    await muatSemuaData(true);
+    recordLastSync();
+    toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');
+  }catch(err){
+    toast('Email/PIN salah atau akun nonaktif','error');
+  }
+  $('btnLogin').disabled=false;
+  $('btnLogin').textContent='Masuk';
+});
+function doLogout(){
+  localStorage.removeItem('gb_token');
+  localStorage.removeItem('gb_profile');
+  location.reload();
+}
+/* ============================================================
+   Auth UI
+   ============================================================ */
+function renderAuthUI(){
+  const on=!!STATE.profile;
+  const bm=$('btnMasuk');if(bm)bm.classList.toggle('hidden',on);
+  const ac=$('authCard');if(ac)ac.classList.toggle('hidden',on);
+  ['quickBox','bellHdr','sideNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
+  if(on){
+    const p=STATE.profile;const s=STATE.sosmed||{};
     const gid=guruId();
     const setAv=(el)=>{
       if(!el)return;
@@ -1006,43 +1558,102 @@ function renderAuthUI(){const on=!!STATE.profile;const bm=$('btnMasuk');if(bm)bm
     };
     setAv($('hdrAvatar'));setAv($('pfAvatarImg'));
     fotoCacheFresh(gid).then(fresh=>{if(!fresh)cacheFotoFromNet(gid);});
-    const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};set('pfNama',p.nama||'—');set('pfJabatan',p.jabatan||'—');set('dJabatan',p.jabatan||'—');set('dSekolah',p.sekolah||'—');set('dNpsn',p.npsn||'—');set('dEmail',p.email||'—');
+    const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
+    set('pfNama',p.nama||'—');set('pfJabatan',p.jabatan||'—');
+    set('dJabatan',p.jabatan||'—');set('dSekolah',p.sekolah||'—');
+    set('dNpsn',p.npsn||'—');set('dEmail',p.email||'—');
     $('hdrName').textContent='Hi, '+namaPanggil(p.nama);
-    $('smIg').value=s.ig||'';$('smTiktok').value=s.tiktok||'';$('smFb').value=s.fb||'';$('smYt').value=s.yt||'';
-    const chips=[s.ig&&'IG @'+s.ig,s.tiktok&&'TT @'+s.tiktok,s.fb&&'FB '+s.fb,s.yt&&'YT '+s.yt].filter(Boolean);const cw=$('smChips');if(chips.length){cw.classList.remove('hidden');cw.classList.add('flex');cw.innerHTML=chips.map(c=>`<span class="text-[9px] font-black acc-soft acc-text px-2 py-0.5 rounded-full">${esc(c)}</span>`).join('');}else{cw.classList.add('hidden');}}
-  else{$('hdrName').textContent='Guru Berbagi';const a=$('hdrAvatar');if(a)a.src=LOGO;const pi=$('pfAvatarImg');if(pi)pi.src=LOGO;}
-  renderProfile();}
-function setSapaan(){const j=new Date().getHours();const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
+    $('smIg').value=s.ig||'';$('smTiktok').value=s.tiktok||'';
+    $('smFb').value=s.fb||'';$('smYt').value=s.yt||'';
+    const chips=[s.ig&&'IG @'+s.ig,s.tiktok&&'TT @'+s.tiktok,s.fb&&'FB '+s.fb,s.yt&&'YT '+s.yt].filter(Boolean);
+    const cw=$('smChips');
+    if(chips.length){cw.classList.remove('hidden');cw.classList.add('flex');cw.innerHTML=chips.map(c=>`<span class="text-[9px] font-black acc-soft acc-text px-2 py-0.5 rounded-full">${esc(c)}</span>`).join('');}
+    else{cw.classList.add('hidden');}
+  }else{
+    $('hdrName').textContent='Guru Berbagi';
+    const a=$('hdrAvatar');if(a)a.src=LOGO;
+    const pi=$('pfAvatarImg');if(pi)pi.src=LOGO;
+  }
+  renderProfile();
+}
+function setSapaan(){
+  const j=new Date().getHours();
+  const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
   const el=$('hdrSub');if(el)el.textContent=s;
-  const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];const d=new Date();
-  const t=$('txtTanggal');if(t)t.textContent=`${H[d.getDay()].slice(0,3)}, ${d.getDate()} ${B[d.getMonth()].slice(0,3)} ${d.getFullYear()}`;}
-async function simpanSosmed(){const gid=guruId();if(!gid)return;const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});STATE.sosmed=clean;localStorage.setItem('gb_sosmed',JSON.stringify(clean));await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media tersimpan untuk watermark');}
-async function hapusSosmed(){const gid=guruId();if(!gid)return;STATE.sosmed={};localStorage.setItem('gb_sosmed','{}');await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});renderAuthUI();toast('Sosial media dihapus');}
+  const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const d=new Date();
+  const t=$('txtTanggal');
+  if(t)t.textContent=`${H[d.getDay()].slice(0,3)}, ${d.getDate()} ${B[d.getMonth()].slice(0,3)} ${d.getFullYear()}`;
+}
+async function simpanSosmed(){
+  const gid=guruId();if(!gid)return;
+  const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};
+  const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});
+  STATE.sosmed=clean;
+  localStorage.setItem('gb_sosmed',JSON.stringify(clean));
+  await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});
+  renderAuthUI();
+  toast('Sosial media tersimpan untuk watermark');
+}
+async function hapusSosmed(){
+  const gid=guruId();if(!gid)return;
+  STATE.sosmed={};
+  localStorage.setItem('gb_sosmed','{}');
+  await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});
+  renderAuthUI();
+  toast('Sosial media dihapus');
+}
 
-/* Cache & Silent Refresh */
+/* ============================================================
+   Cache & Silent Refresh
+   ============================================================ */
 let _cacheMemo=null,_cacheMemoAt=0;
-function readCache(){const now=Date.now();if(_cacheMemo&&now-_cacheMemoAt<2000)return _cacheMemo;try{_cacheMemo=JSON.parse(localStorage.getItem('gb_cache')||'null');_cacheMemoAt=now;return _cacheMemo;}catch(e){return null;}}
+function readCache(){
+  const now=Date.now();
+  if(_cacheMemo&&now-_cacheMemoAt<2000)return _cacheMemo;
+  try{_cacheMemo=JSON.parse(localStorage.getItem('gb_cache')||'null');_cacheMemoAt=now;return _cacheMemo;}
+  catch(e){return null;}
+}
 function writeCache(o){_cacheMemo=null;try{localStorage.setItem('gb_cache',JSON.stringify(o));}catch(e){}}
-function renderFromCache(){const cache=readCache();if(!cache||!cache.d)return false;
+function renderFromCache(){
+  const cache=readCache();
+  if(!cache||!cache.d)return false;
   applyPortal(cache.d);
-  if(cache.dyn){STATE.gam=cache.dyn.gam||null;STATE.notifs=(cache.dyn.notifs||[]).filter(scopeOk);STATE.inspi=cache.dyn.inspi||[];STATE.agenda=cache.dyn.agenda||[];STATE.docs=cache.dyn.docs||[];STATE.rewards=cache.dyn.rewards||[];STATE.kudosTop=cache.dyn.kudosTop||[];STATE.guruList=cache.dyn.guruList||[];
+  if(cache.dyn){
+    STATE.gam=cache.dyn.gam||null;
+    STATE.notifs=(cache.dyn.notifs||[]).filter(scopeOk);
+    STATE.inspi=cache.dyn.inspi||[];
+    STATE.agenda=cache.dyn.agenda||[];
+    STATE.docs=cache.dyn.docs||[];
+    STATE.rewards=cache.dyn.rewards||[];
+    STATE.kudosTop=cache.dyn.kudosTop||[];
+    STATE.guruList=cache.dyn.guruList||[];
     if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
     if(sigChanged('notifs',STATE.notifs))renderNotif();
     if(sigChanged('inspi',STATE.inspi))renderInspirasi();
     if(sigChanged('agenda',STATE.agenda))renderAgenda();
     if(sigChanged('docs',STATE.docs)){renderDokumen();renderDokWidget();}
     if(CUR.view==='bagi')renderBagi();
-    icons();}
-  return true;}
-async function silentRefresh(force){const now=Date.now();const cache=readCache();const cacheAge=cache?(now-cache.t):Infinity;
-  let serverVersi=null;try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
+    icons();
+  }
+  return true;
+}
+async function silentRefresh(force){
+  const now=Date.now();
+  const cache=readCache();
+  const cacheAge=cache?(now-cache.t):Infinity;
+  let serverVersi=null;
+  try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
   const cacheVersi=(cache&&cache.d&&cache.d.config)?cache.d.config.versi:null;
   if(!cache||!cache.d||cacheAge>=86400000||(serverVersi&&serverVersi!==cacheVersi)){
     const {data:pd}=await sb.rpc('creative_get_portal');
     if(pd){writeCache({t:now,d:pd,dyn:cache?cache.dyn:null,dynTs:cache?cache.dynTs:null});applyPortal(pd);}
   }
   const TTL={gam:300000,notifs:900000,inspi:900000,agenda:21600000,docs:21600000,rewards:21600000,kudosTop:7200000,guruList:86400000};
-  const ts=(cache&&cache.dynTs)||{}; const dyn=(cache&&cache.dyn)||{}; const gid=guruId();
+  const ts=(cache&&cache.dynTs)||{};
+  const dyn=(cache&&cache.dyn)||{};
+  const gid=guruId();
   const stale=k=> force||!(k in dyn)||((now-(ts[k]||0))>(TTL[k]||300000));
   const jobs={};
   if(stale('gam'))jobs.gam=gid?sb.from('creative_gamification').select('total_poin,streak_days,total_login,level,badges').eq('guru_id',gid).maybeSingle():Promise.resolve({data:null});
@@ -1056,7 +1667,8 @@ async function silentRefresh(force){const now=Date.now();const cache=readCache()
   const keys=Object.keys(jobs);
   if(!keys.length)return;
   const res=await Promise.allSettled(keys.map(k=>jobs[k]));
-  const newDyn=Object.assign({},dyn); const newTs=Object.assign({},ts);
+  const newDyn=Object.assign({},dyn);
+  const newTs=Object.assign({},ts);
   res.forEach((r,i)=>{const k=keys[i];if(r.status==='fulfilled'&&r.value){newDyn[k]=(k==='gam')?(r.value.data||null):(r.value.data||[]);newTs[k]=now;}});
   STATE.gam=('gam' in newDyn)?newDyn.gam:STATE.gam;
   STATE.notifs=((newDyn.notifs)||[]).filter(scopeOk);
@@ -1066,8 +1678,13 @@ async function silentRefresh(force){const now=Date.now();const cache=readCache()
   STATE.rewards=newDyn.rewards||STATE.rewards;
   STATE.kudosTop=newDyn.kudosTop||STATE.kudosTop;
   STATE.guruList=newDyn.guruList||STATE.guruList;
-  if(STATE.profile&&STATE.inspi&&STATE.inspi.length){const g2=guruId();const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',g2).in('inspirasi_id',STATE.inspi.map(x=>x.id));STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));}
-  const c2=readCache();const d=(c2&&c2.d)?c2.d:null;
+  if(STATE.profile&&STATE.inspi&&STATE.inspi.length){
+    const g2=guruId();
+    const {data:lk}=await sb.from('creative_inspirasi_likes').select('inspirasi_id').eq('guru_id',g2).in('inspirasi_id',STATE.inspi.map(x=>x.id));
+    STATE.myLikes=new Set((lk||[]).map(l=>l.inspirasi_id));
+  }
+  const c2=readCache();
+  const d=(c2&&c2.d)?c2.d:null;
   writeCache({t:now,d:d,dyn:newDyn,dynTs:newTs});
   if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
   if(sigChanged('notifs',STATE.notifs))renderNotif();
@@ -1075,7 +1692,8 @@ async function silentRefresh(force){const now=Date.now();const cache=readCache()
   if(sigChanged('agenda',STATE.agenda))renderAgenda();
   if(sigChanged('docs',STATE.docs)){renderDokumen();renderDokWidget();}
   if(CUR.view==='bagi'&&sigChanged('bagi',{g:STATE.gam,k:STATE.kudosTop}))renderBagi();
-  icons();}
+  icons();
+}
 async function muatSemuaData(force){
   const had=renderFromCache();
   if(!had){
@@ -1087,7 +1705,9 @@ async function muatSemuaData(force){
   handleDeepLink();
 }
 function forceSync(){confirmDialog('Hapus cache lokal dan tarik data terbaru dari server? Pastikan koneksi internet stabil.',doForceSync,'Force Sync?','Sync Sekarang');}
-async function doForceSync(){const ov=$('syncOverlay');if(ov){ov.classList.remove('hidden');ov.classList.add('flex');}
+async function doForceSync(){
+  const ov=$('syncOverlay');
+  if(ov){ov.classList.remove('hidden');ov.classList.add('flex');}
   resetRenderSig();
   _cacheMemo=null;
   ['gb_cache','gb_wx','gb_recent'].forEach(k=>localStorage.removeItem(k));
@@ -1097,11 +1717,14 @@ async function doForceSync(){const ov=$('syncOverlay');if(ov){ov.classList.remov
   await new Promise(r=>setTimeout(r,500));
   try{await muatSemuaData(true);renderAuthUI();recordLastSync();}catch(e){}
   if(ov){ov.classList.add('hidden');ov.classList.remove('flex');}
-  toast('Update terbaru diterapkan ✓');}
+  toast('Update terbaru diterapkan ✓');
+}
 function recordLastSync(){try{localStorage.setItem('gb_last_sync',String(Date.now()));}catch(e){}}
 function showLastSync(){const t=localStorage.getItem('gb_last_sync');const el=$('lastSyncLbl');if(el)el.textContent=t?('· terakhir '+waktuRelatif(parseInt(t,10))):'';}
 
-/* Sheet swipe-to-close */
+/* ============================================================
+   Sheet swipe-to-close
+   ============================================================ */
 function initSheetSwipe(){
   document.querySelectorAll('.sheet').forEach(sheet=>{
     const handle=sheet.querySelector('.sheet-drag')||sheet.querySelector('[data-sheet-handle]');
@@ -1109,7 +1732,11 @@ function initSheetSwipe(){
     let startY=0,curY=0,dragging=false;
     const panelId=sheet.id.replace('Sheet','');
     const isDesktop=()=>window.matchMedia('(min-width:768px)').matches;
-    const onStart=e=>{const pt=e.touches?e.touches[0]:e;startY=pt.clientY;curY=startY;dragging=true;sheet.classList.add('sheet-dragging');};
+    const onStart=e=>{
+      const pt=e.touches?e.touches[0]:e;
+      startY=pt.clientY;curY=startY;dragging=true;
+      sheet.classList.add('sheet-dragging');
+    };
     const onMove=e=>{
       if(!dragging)return;
       const pt=e.touches?e.touches[0]:e;
@@ -1140,7 +1767,9 @@ function initSheetSwipe(){
   });
 }
 
-/* Long-press quick menu */
+/* ============================================================
+   Long-press quick menu
+   ============================================================ */
 function initQuickLongPress(){
   document.addEventListener('contextmenu',e=>{
     const el=e.target.closest('#quickList a, #layananBody a[data-judul]');
@@ -1195,7 +1824,9 @@ function showCtxMenu(x,y,m){
 }
 function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
 
-/* Onboarding */
+/* ============================================================
+   Onboarding
+   ============================================================ */
 const ONBOARD_STEPS=[
   {i:'sparkles',t:'Selamat datang 👋',d:'Guru Berbagi Selogiri — portal untuk berkarya & tumbuh bersama.'},
   {i:'star',t:'Tandai favoritmu',d:'Tekan ⭐ pada layanan untuk akses cepat di Beranda.'},
@@ -1226,30 +1857,110 @@ function closeOnboard(save){
   if(save)localStorage.setItem('gb_onboarded','1');
 }
 
-/* Apply Portal */
-function applyPortal(p){STATE.config=p.config||null;STATE.menus=p.menus||[];STATE.quotes=p.quotes||[];STATE.footer=p.footer||[];if(STATE.config){$('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;$('sideVersi2').textContent='v'+STATE.config.versi;$('setVersi').textContent='v'+STATE.config.versi;$('aboutVer').textContent='v'+STATE.config.versi;renderPopup();}
-  const c=STATE.config||{};$('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
-  renderCarousel();renderLayanan($('inSearch').value);renderQuick();renderFoot();gantiQuote();}
+/* ============================================================
+   Apply Portal
+   ============================================================ */
+function applyPortal(p){
+  STATE.config=p.config||null;
+  STATE.menus=p.menus||[];
+  STATE.quotes=p.quotes||[];
+  STATE.footer=p.footer||[];
+  if(STATE.config){
+    $('sideVersi').textContent='Portal Selogiri · v'+STATE.config.versi;
+    $('sideVersi2').textContent='v'+STATE.config.versi;
+    $('setVersi').textContent='v'+STATE.config.versi;
+    $('aboutVer').textContent='v'+STATE.config.versi;
+    renderPopup();
+  }
+  const c=STATE.config||{};
+  $('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
+  renderCarousel();renderLayanan($('inSearch').value);
+  renderQuick();renderFoot();gantiQuote();
+}
 
-/* Popup */
-function renderPopup(){const c=STATE.config;if(!c||c.pop_status!=='ON'||popDismissed)return;let html;if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=sanitizeHtml(c.pop_pesan);}else{const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100" style="max-height:260px;object-fit:contain" loading="lazy" decoding="async"></div>`:'';html=`<div class="bg-white"><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;}$('popContent').innerHTML=html;openModal('mPop');}
+/* ============================================================
+   Popup
+   ============================================================ */
+function renderPopup(){
+  const c=STATE.config;
+  if(!c||c.pop_status!=='ON'||popDismissed)return;
+  let html;
+  if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=sanitizeHtml(c.pop_pesan);}
+  else{
+    const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100" style="max-height:260px;object-fit:contain" loading="lazy" decoding="async"></div>`:'';
+    html=`<div class="bg-white"><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;
+  }
+  $('popContent').innerHTML=html;
+  openModal('mPop');
+}
 
-/* Quotes */
-function gantiQuote(){if(!STATE.quotes.length)return;const b=$('btnQuote');if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];STATE.quoteNow=q;$('quoteText').textContent='"'+q.kutipan+'"';$('quoteAuthor').textContent='— '+q.tokoh;}
+/* ============================================================
+   Quotes
+   ============================================================ */
+function gantiQuote(){
+  if(!STATE.quotes.length)return;
+  const b=$('btnQuote');
+  if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}
+  const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];
+  STATE.quoteNow=q;
+  $('quoteText').textContent='"'+q.kutipan+'"';
+  $('quoteAuthor').textContent='— '+q.tokoh;
+}
 
-/* Notifikasi */
-function setBadge(n){['badgeNotif','badgeNotifD'].forEach(id=>{const b=$(id);if(!b)return;if(n>0){b.classList.remove('hidden');b.textContent=n;}else b.classList.add('hidden');});}
-async function renderNotif(){let readIds=new Set();if(STATE.profile){const gid=guruId();if(gid){const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);readIds=new Set((reads||[]).map(r=>r.notification_id));}setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);}else setBadge(0);
-  $('notifList').innerHTML=STATE.notifs.map(n=>{const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});const scope=(n.scope_type&&n.scope_type!=='all')?`<span class="text-[9px] font-black acc-soft acc-text px-1.5 py-0.5 rounded">KHUSUS</span>`:'';return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}"><span class="text-xl">${em}</span><div><p class="text-[13px] font-bold text-slate-800">${n.judul} ${scope}</p><p class="text-xs text-slate-500 mt-0.5">${n.pesan}</p>${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener" class="text-[10px] font-bold acc-text">Buka lampiran →</a>`:''}<p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;}).join('')||emptyState('bell-off','Belum ada notifikasi','Kami akan kabari kamu kalau ada info baru.');
-  icons();}
+/* ============================================================
+   Notifikasi
+   ============================================================ */
+function setBadge(n){
+  ['badgeNotif','badgeNotifD'].forEach(id=>{
+    const b=$(id);if(!b)return;
+    if(n>0){b.classList.remove('hidden');b.textContent=n;}
+    else b.classList.add('hidden');
+  });
+}
+async function renderNotif(){
+  let readIds=new Set();
+  if(STATE.profile){
+    const gid=guruId();
+    if(gid){
+      const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
+      readIds=new Set((reads||[]).map(r=>r.notification_id));
+    }
+    setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
+  }else setBadge(0);
+  $('notifList').innerHTML=STATE.notifs.map(n=>{
+    const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';
+    const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    const scope=(n.scope_type&&n.scope_type!=='all')?`<span class="text-[9px] font-black acc-soft acc-text px-1.5 py-0.5 rounded">KHUSUS</span>`:'';
+    return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}"><span class="text-xl">${em}</span><div><p class="text-[13px] font-bold text-slate-800">${n.judul} ${scope}</p><p class="text-xs text-slate-500 mt-0.5">${n.pesan}</p>${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener" class="text-[10px] font-bold acc-text">Buka lampiran →</a>`:''}<p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;
+  }).join('')||emptyState('bell-off','Belum ada notifikasi','Kami akan kabari kamu kalau ada info baru.');
+  icons();
+}
 
-/* Feedback */
-function setTipeFb(t,btn){STATE.tipeFb=t;document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('acc-bg','text-white');b.classList.add('bg-slate-100','text-slate-600');});btn.classList.add('acc-bg','text-white');}
-function renderStars(){$('starRow').innerHTML=[1,2,3,4,5].map(i=>`<button onclick="STATE.rating=${i};renderStars()" aria-label="Beri ${i} bintang">${i<=STATE.rating?'⭐':'☆'}</button>`).join('');}
+/* ============================================================
+   Feedback
+   ============================================================ */
+function setTipeFb(t,btn){
+  STATE.tipeFb=t;
+  document.querySelectorAll('.tipe-fb').forEach(b=>{b.classList.remove('acc-bg','text-white');b.classList.add('bg-slate-100','text-slate-600');});
+  btn.classList.add('acc-bg','text-white');
+}
+function renderStars(){
+  $('starRow').innerHTML=[1,2,3,4,5].map(i=>`<button onclick="STATE.rating=${i};renderStars()" aria-label="Beri ${i} bintang">${i<=STATE.rating?'⭐':'☆'}</button>`).join('');
+}
 renderStars();
-async function submitFb(){const pesan=$('fbPesan').value.trim();if(!pesan)return toast('Isi pesan dulu ya','info');$('btnFb').disabled=true;$('btnFb').textContent='Mengirim…';const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});$('btnFb').disabled=false;$('btnFb').textContent='Kirim';if(error)toast('Gagal mengirim, coba lagi','error');else{$('fbPesan').value='';poinAksi('saran');tutupPanel('pFb');toast('Terkirim! Admin mendapat notifikasi Telegram. +1 poin');}}
+async function submitFb(){
+  const pesan=$('fbPesan').value.trim();
+  if(!pesan)return toast('Isi pesan dulu ya','info');
+  $('btnFb').disabled=true;$('btnFb').textContent='Mengirim…';
+  const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});
+  $('btnFb').disabled=false;$('btnFb').textContent='Kirim';
+  if(error)toast('Gagal mengirim, coba lagi','error');
+  else{$('fbPesan').value='';poinAksi('saran');tutupPanel('pFb');toast('Terkirim! Admin mendapat notifikasi Telegram. +1 poin');}
+}
 
-/* BOOT */
+/* ============================================================
+   BOOT
+   ============================================================ */
 (async function boot(){
   initPrefs();
   setSapaan();
@@ -1288,18 +1999,39 @@ async function submitFb(){const pesan=$('fbPesan').value.trim();if(!pesan)return
   if(token&&saved){
     try{
       let need=true;
-      try{const p=JSON.parse(b64decode(token.split('.')[0]));const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;}catch(e){}
+      try{
+        const p=JSON.parse(b64decode(token.split('.')[0]));
+        const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);
+        if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;
+      }catch(e){}
       if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}
-      else{const v=await ssoVerify(token);localStorage.setItem('gb_last_verify',String(Date.now()));if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}}
+      else{
+        const v=await ssoVerify(token);
+        localStorage.setItem('gb_last_verify',String(Date.now()));
+        if(v.valid){STATE.profile=v.profile||JSON.parse(saved);STATE.token=token;}
+        else{localStorage.removeItem('gb_token');localStorage.removeItem('gb_profile');}
+      }
       if(STATE.token){
         const _lastOpenLog=parseInt(localStorage.getItem('gb_last_open_log')||'0',10);
         if(Date.now()-_lastOpenLog>5*60*1000){localStorage.setItem('gb_last_open_log',String(Date.now()));logAktivitas('buka_aplikasi');}
-        const gid=guruId();if(gid){const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}}
+        const gid=guruId();
+        if(gid){
+          const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();
+          if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}
+        }
       }
     }catch(e){}
   }
   try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
+
   renderAuthUI();
+
+  // Bersihkan inline style lama dari patch sebelumnya (kalau ada)
+  ['hdrAvatarBtn','hdrName','hdrSub','hdrMetaRow','hdrTitle'].forEach(id=>{
+    const e=$(id); if(e) e.style.removeProperty('display');
+  });
+
+  setPageInstant('home');
   muatSemuaData(false);
 
   setTimeout(showOnboard,800);
