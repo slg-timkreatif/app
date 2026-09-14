@@ -632,7 +632,15 @@ const isTWA=(document.referrer||'').startsWith('android-app://');
 function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
-
+/* ============================================================
+   PRESETS TEMA — didefinisikan di atas agar aman
+   ============================================================ */
+const PRESETS = {
+  profesional: { navbar: 'floating', navcolor: 'dark', accent: 'hijau', density: 'normal' },
+  hangat: { navbar: 'floating', navcolor: 'dark', accent: 'amber', density: 'normal' },
+  fresh: { navbar: 'floating', navcolor: 'light', accent: 'biru', density: 'normal' },
+  elegan: { navbar: 'classic', navcolor: 'dark', accent: 'violet', density: 'normal' }
+};
 /* ============================================================
    IndexedDB mini wrapper
    ============================================================ */
