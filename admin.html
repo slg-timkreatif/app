@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F6F5F9">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <script>
 (function(){try{
   var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
@@ -53,19 +52,10 @@
 
   @keyframes spin{to{transform:rotate(360deg)}}
   .spin{animation:spin .8s linear infinite}
-
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   .anim-in{animation:fadeUp .3s ease both}
 
-  /* TOGGLE */
-  .tgl{width:44px;height:26px;border-radius:9999px;position:relative;transition:background .2s;cursor:pointer;border:0}
-  .tgl.on{background:var(--acc)}
-  .tgl:not(.on){background:#CBD5E1}
-  .tgl span{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:9999px;transition:left .2s}
-  .tgl.on span{left:21px}
-
-  /* SEG BUTTON */
   .seg-btn{padding:10px 12px;border-radius:12px;font-size:11px;font-weight:800;background:#F1F5F9;color:#64748B;border:1px solid var(--border);cursor:pointer;transition:all .15s}
   .seg-btn:active{transform:scale(.97)}
   .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
@@ -92,7 +82,8 @@
   html.dark .text-slate-300{color:#64748B!important}
   html.dark .bg-rose-50{background:rgba(244,63,94,.12)!important}
   html.dark .bg-amber-50{background:rgba(245,158,11,.12)!important}
-  html.dark .bg-sky-100{background:rgba(14,165,233,.15)!important}
+  html.dark .bg-emerald-50{background:rgba(16,185,129,.12)!important}
+  html.dark .bg-blue-50{background:rgba(59,130,246,.12)!important}
   html.dark .bg-teal-100{background:rgba(13,148,136,.15)!important}
   html.dark .bg-orange-100{background:rgba(249,115,22,.15)!important}
   html.dark .bg-emerald-100{background:rgba(16,185,129,.15)!important}
@@ -104,28 +95,67 @@
   html.dark .bg-fuchsia-100{background:rgba(217,70,239,.15)!important}
   html.dark .bg-cyan-100{background:rgba(6,182,212,.15)!important}
   html.dark .bg-yellow-100{background:rgba(234,179,8,.15)!important}
+  html.dark .bg-sky-100{background:rgba(14,165,233,.15)!important}
   html.dark .bg-black\/50{background:rgba(0,0,0,.7)!important}
-  html.dark .divide-slate-100 > * + *{border-color:#252A33!important}
+  html.dark .divide-slate-100>*+*{border-color:#252A33!important}
 
-  /* Modal */
-  .modal-back{position:fixed;inset:0;background:rgba(15,17,21,.6);backdrop-filter:blur(2px);z-index:100;display:none}
-  .modal-back.show{display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn .15s}
-  .modal-card{background:var(--card);border-radius:1.5rem;max-width:32rem;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .25s ease both}
-  .modal-card.no-scroll{overflow-y:auto;scrollbar-width:none}
-  .modal-card.no-scroll::-webkit-scrollbar{display:none}
+  /* TOAST */
+  .toast-item{padding:12px 14px;border-radius:12px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 10px 30px -5px rgba(0,0,0,.15);animation:fadeUp .3s ease both;border:1px solid;pointer-events:auto}
+  .toast-success{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+  .toast-error{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+  .toast-warning{background:#fffbeb;color:#92400e;border-color:#fde68a}
+  .toast-info{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+  html.dark .toast-success{background:rgba(16,185,129,.2);color:#86efac;border-color:rgba(16,185,129,.4)}
+  html.dark .toast-error{background:rgba(239,68,68,.2);color:#fca5a5;border-color:rgba(239,68,68,.4)}
+  html.dark .toast-warning{background:rgba(245,158,11,.2);color:#fcd34d;border-color:rgba(245,158,11,.4)}
+  html.dark .toast-info{background:rgba(59,130,246,.2);color:#93c5fd;border-color:rgba(59,130,246,.4)}
 
-  /* Toast */
-  #toast{position:fixed;left:50%;transform:translateX(-50%) translateY(-12px);top:calc(env(safe-area-inset-top) + 1rem);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;width:max-content;max-width:92vw}
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* SYNC */
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0}
+  .sync-dot.syncing{background:#3b82f6;animation:syncPulse 1.2s ease-in-out infinite}
+  .sync-dot.pending{background:#f59e0b;animation:syncPulse 1.5s ease-in-out infinite}
+  .sync-dot.error{background:#ef4444}
+  .sync-dot.offline{background:#94A3B8}
+  @keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-  /* Safe area */
-  .safe-top{padding-top:calc(env(safe-area-inset-top) + 0.75rem)}
+  /* MODAL */
+  .modal{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(15,17,21,.6);backdrop-filter:blur(2px)}
+  .modal.show{display:flex;animation:fadeIn .15s}
+  .modal-box{background:var(--card);border-radius:1.5rem;max-width:32rem;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .25s ease both}
+  .modal-box.no-scroll{scrollbar-width:none}
+  .modal-box.no-scroll::-webkit-scrollbar{display:none}
 
-  /* Tab buttons */
+  /* SAFE AREA */
+  .safe-top{padding-top:calc(env(safe-area-inset-top) + 0.5rem)}
+
+  /* TABS */
   .tab-btn{padding:.65rem 1rem;border-radius:.75rem;font-size:.8rem;font-weight:800;transition:all .15s;border:0;cursor:pointer;white-space:nowrap;background:transparent;color:#64748B;display:inline-flex;align-items:center;gap:.5rem}
   .tab-btn:hover{background:#F1F5F9}
   .tab-btn.active{background:var(--acc-soft);color:var(--acc-text)}
   html.dark .tab-btn:hover{background:#252A33}
+
+  /* OPTIMISTIC */
+  .pending-badge{background:#FBBF24;color:#78350F;font-weight:800;font-size:9px;padding:2px 6px;border-radius:9999px}
+
+  /* ICON PICKER */
+  .icon-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .15s;color:#64748B}
+  .icon-cell:hover{background:#F1F5F9;color:var(--acc)}
+  .icon-cell.on{background:var(--acc);color:#fff}
+  html.dark .icon-cell:hover{background:#252A33}
+  html.dark .icon-cell.on{background:var(--acc)}
+
+  /* COLOR PICKER */
+  .color-dot{width:28px;height:28px;border-radius:9999px;cursor:pointer;transition:all .15s;border:2px solid transparent}
+  .color-dot:hover{transform:scale(1.15)}
+  .color-dot.on{border-color:#fff;box-shadow:0 0 0 2px var(--acc)}
+
+  /* DEBUG */
+  #debug-panel{position:fixed;bottom:0;left:0;right:0;max-height:40vh;background:#0a0b10;border-top:2px solid var(--acc);color:#5EEAD4;font-family:ui-monospace,Consolas,monospace;font-size:10px;padding:8px 10px;overflow-y:auto;z-index:200;transform:translateY(100%);transition:transform .25s ease}
+  #debug-panel.show{transform:translateY(0)}
+  #debug-panel .log-line{padding:2px 0;border-bottom:1px solid #1e2230;word-break:break-all}
+  #debug-panel .log-error{color:#fca5a5}
+  #debug-panel .log-success{color:#86efac}
+  #debug-panel .log-info{color:#5EEAD4}
 </style>
 </head>
 <body>
@@ -163,12 +193,12 @@
 <div id="scrApp" class="hidden min-h-screen flex flex-col md:flex-row">
 <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white sticky top-0 h-screen">
   <div class="flex items-center gap-3 p-5 border-b border-slate-100">
-    <div class="w-11 h-11 rounded-xl brand-grad overflow-hidden">
+    <div class="w-11 h-11 rounded-xl brand-grad overflow-hidden shrink-0">
       <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
     </div>
     <div class="min-w-0">
       <p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p>
-      <p class="text-[10px] text-slate-400">v4.55</p>
+      <p class="text-[10px] text-slate-400">v5.0</p>
     </div>
   </div>
   <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto no-scroll" id="navDesktop"></nav>
@@ -177,11 +207,14 @@
       <button id="btnDark" onclick="toggleDark()" aria-label="Dark mode" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="moon" class="w-4 h-4 text-slate-600"></i>
       </button>
-      <button onclick="openAksenPicker()" aria-label="Ganti warna" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+      <button onclick="openAksenPicker()" aria-label="Warna aksen" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="palette" class="w-4 h-4 text-slate-600"></i>
       </button>
-      <div class="flex-1 min-w-0">
-        <p id="adminEmail" class="text-[11px] font-bold text-slate-500 truncate">—</p>
+      <button onclick="toggleDebug()" aria-label="Debug" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="bug" class="w-4 h-4 text-slate-600"></i>
+      </button>
+      <div class="flex-1 min-w-0 text-right">
+        <p id="adminEmail" class="text-[10px] font-bold text-slate-500 truncate">—</p>
       </div>
     </div>
     <button onclick="konfirmasiLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 active:scale-[.98] transition">
@@ -192,20 +225,39 @@
 
 <div class="flex-1 flex flex-col min-w-0">
   <!-- TOP BAR MOBILE -->
-  <div class="md:hidden sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 safe-top pb-3 px-4 flex items-center gap-3">
-    <button onclick="openDrawer()" aria-label="Menu" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+  <div class="md:hidden sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 safe-top pb-3 px-4 flex items-center gap-2">
+    <button onclick="openDrawer()" aria-label="Menu" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition shrink-0">
       <i data-lucide="menu" class="w-5 h-5"></i>
     </button>
     <div class="flex-1 min-w-0">
-      <p class="text-sm font-extrabold text-slate-800 leading-tight">Admin Panel</p>
+      <p class="text-sm font-extrabold text-slate-800 leading-tight truncate">Admin Panel</p>
       <p id="adminEmailMobile" class="text-[10px] text-slate-400 truncate">—</p>
     </div>
-    <button id="btnDarkMobile" onclick="toggleDark()" aria-label="Dark mode" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+    <!-- Sync indicator -->
+    <div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0">
+      <span id="syncDot" class="sync-dot"></span>
+      <span id="syncText" class="text-[9px] font-mono font-semibold text-slate-500">Synced</span>
+    </div>
+    <button id="btnDarkMobile" onclick="toggleDark()" aria-label="Dark" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition shrink-0">
       <i data-lucide="moon" class="w-4 h-4"></i>
     </button>
-    <button onclick="konfirmasiLogout()" aria-label="Logout" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center active:scale-90 transition">
-      <i data-lucide="log-out" class="w-4 h-4"></i>
+  </div>
+  
+  <!-- TOP BAR DESKTOP (mini) -->
+  <div class="hidden md:flex sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 px-6 py-3 items-center gap-3">
+    <p id="pageTitleDesktop" class="text-sm font-extrabold text-slate-800 truncate flex-1">Dashboard</p>
+    <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
+      <span id="syncDotDesktop" class="sync-dot"></span>
+      <span id="syncTextDesktop" class="text-[10px] font-mono font-semibold text-slate-500">Synced</span>
+      <span id="pendingBadgeDesktop" class="hidden pending-badge">0</span>
+    </div>
+    <button onclick="exportData()" aria-label="Export" title="Export JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+      <i data-lucide="download" class="w-4 h-4"></i>
     </button>
+    <label aria-label="Import" title="Import JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition cursor-pointer">
+      <i data-lucide="upload" class="w-4 h-4"></i>
+      <input type="file" accept=".json" class="hidden" onchange="importData(event)">
+    </label>
   </div>
   
   <!-- DRAWER MOBILE -->
@@ -213,12 +265,28 @@
     <div class="absolute inset-0 bg-black/50" onclick="closeDrawer()"></div>
     <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-900 -translate-x-full transition-transform flex flex-col overflow-hidden">
       <div class="flex items-center justify-between p-5 border-b border-slate-100">
-        <p class="font-extrabold text-slate-800">Menu</p>
-        <button onclick="closeDrawer()" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-xl brand-grad overflow-hidden shrink-0">
+            <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+          </div>
+          <div class="min-w-0">
+            <p class="font-extrabold text-slate-800 text-sm leading-tight">Admin</p>
+            <p id="drawerEmail" class="text-[10px] text-slate-400 truncate">—</p>
+          </div>
+        </div>
+        <button onclick="closeDrawer()" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
       <nav class="flex-1 overflow-y-auto no-scroll p-3" id="navMobile"></nav>
+      <div class="p-4 border-t border-slate-100 space-y-2">
+        <button onclick="toggleDebug()" class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center gap-2 active:scale-[.98]">
+          <i data-lucide="bug" class="w-3.5 h-3.5"></i> Debug Panel
+        </button>
+        <button onclick="konfirmasiLogout()" class="w-full py-2.5 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-2 active:scale-[.98]">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
+        </button>
+      </div>
     </div>
   </div>
   
@@ -312,70 +380,71 @@
         <div id="leadBoard" class="grid md:grid-cols-2 gap-2"></div>
       </div>
     </section>
-  <!-- ============ MENU ============ -->
-<section id="sec-menu" class="hidden space-y-4">
-  <div class="flex gap-2">
-    <input id="mSearch" oninput="renderMenusDebounced()" class="inp acc-ring flex-1" placeholder="Cari menu…">
-    <button onclick="openMenuEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
-      <i data-lucide="plus" class="w-4 h-4"></i> Menu
-    </button>
-  </div>
-  <div id="menuList" class="space-y-2"></div>
-</section>
+      <!-- ============ MENU ============ -->
+      <section id="sec-menu" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <input id="mSearch" oninput="renderMenusDebounced()" class="inp acc-ring flex-1" placeholder="Cari menu…">
+          <button onclick="openMenuEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Menu
+          </button>
+        </div>
+        <div id="menuList" class="space-y-2"></div>
+      </section>
 
-<!-- ============ AGENDA ============ -->
-<section id="sec-agenda" class="hidden space-y-4">
-  <div class="flex gap-2">
-    <button onclick="openAgendaEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
-      <i data-lucide="plus" class="w-4 h-4"></i> Agenda
-    </button>
-  </div>
-  <div id="agendaList" class="space-y-2"></div>
-</section>
+      <!-- ============ AGENDA ============ -->
+      <section id="sec-agenda" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <button onclick="openAgendaEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Agenda
+          </button>
+        </div>
+        <div id="agendaList" class="space-y-2"></div>
+      </section>
 
-<!-- ============ DOKUMEN ============ -->
-<section id="sec-dokumen" class="hidden space-y-4">
-  <div class="flex gap-2">
-    <input id="docSearch" oninput="renderDocsAdminDebounced()" class="inp acc-ring flex-1" placeholder="Cari dokumen…">
-    <button onclick="openDocEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
-      <i data-lucide="plus" class="w-4 h-4"></i> Dokumen
-    </button>
-  </div>
-  <div id="docListAdmin" class="space-y-2"></div>
-</section>
+      <!-- ============ DOKUMEN ============ -->
+      <section id="sec-dokumen" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <input id="docSearch" oninput="renderDocsAdminDebounced()" class="inp acc-ring flex-1" placeholder="Cari dokumen…">
+          <button onclick="openDocEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Dokumen
+          </button>
+        </div>
+        <div id="docListAdmin" class="space-y-2"></div>
+      </section>
 
-<!-- ============ REWARDS ============ -->
-<section id="sec-rewards" class="hidden space-y-4">
-  <div class="flex gap-2">
-    <button onclick="openRewardEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
-      <i data-lucide="plus" class="w-4 h-4"></i> Reward
-    </button>
-  </div>
-  <div id="rewardListAdmin" class="space-y-2"></div>
-  <div class="card p-5">
-    <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-      <i data-lucide="shopping-bag" class="w-4 h-4 acc-text"></i> Daftar Penukaran
-    </p>
-    <div id="redemList" class="space-y-2"></div>
-  </div>
-</section>
+      <!-- ============ REWARDS ============ -->
+      <section id="sec-rewards" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <button onclick="openRewardEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Reward
+          </button>
+        </div>
+        <div id="rewardListAdmin" class="space-y-2"></div>
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="shopping-bag" class="w-4 h-4 acc-text"></i> Daftar Penukaran
+          </p>
+          <div id="redemList" class="space-y-2"></div>
+        </div>
+      </section>
 
-<!-- ============ KUDOS ============ -->
-<section id="sec-kudos" class="hidden space-y-4">
-  <div class="card p-5">
-    <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-      <i data-lucide="heart" class="w-4 h-4 text-rose-500"></i> Top Penerima Apresiasi
-    </p>
-    <div id="kudosTopAdmin" class="space-y-2"></div>
-  </div>
-  <div class="card p-5">
-    <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-      <i data-lucide="history" class="w-4 h-4 acc-text"></i> Riwayat Apresiasi
-    </p>
-    <div id="kudosList" class="space-y-2"></div>
-  </div>
-</section>
-      <!-- ============ INFO / BANNER / POPUP ============ -->
+      <!-- ============ KUDOS ============ -->
+      <section id="sec-kudos" class="hidden space-y-4">
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="heart" class="w-4 h-4 text-rose-500"></i> Top Penerima Apresiasi
+          </p>
+          <div id="kudosTopAdmin" class="space-y-2"></div>
+        </div>
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="history" class="w-4 h-4 acc-text"></i> Riwayat Apresiasi
+          </p>
+          <div id="kudosList" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- ============ INFO / BANNER ============ -->
       <section id="sec-info" class="hidden space-y-4">
         <div class="card p-5 space-y-4">
           <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
@@ -457,7 +526,8 @@
 
         <div class="card p-5">
           <label class="lbl">Versi Aplikasi</label>
-          <input id="iVersi" class="inp acc-ring" placeholder="4.55">
+          <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.55" autocomplete="off">
+          <p class="text-[10px] text-slate-400 mt-2">Versi ini muncul di seluruh aplikasi (sidebar, profil, pengaturan, footer).</p>
         </div>
 
         <button onclick="saveInfo()" class="acc-bg text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
@@ -495,7 +565,7 @@
             <input id="iNotGambar" class="inp acc-ring" placeholder="https://…">
           </div>
           <div>
-            <label class="lbl">URL Lampiran (Google Drive / eksternal)</label>
+            <label class="lbl">URL Lampiran (opsional)</label>
             <input id="iNotLink" class="inp acc-ring" placeholder="https://drive.google.com/…">
           </div>
           <div class="rounded-xl p-3 bg-amber-50/60 border border-amber-200 dark:border-amber-500/30">
@@ -541,6 +611,23 @@
             <div>
               <label class="lbl">Icon</label>
               <input id="iFootIcon" class="inp acc-ring" placeholder="globe">
+            </div>
+          </div>
+          <div class="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2">💡 Kategori otomatis dari Icon</p>
+            <div class="grid grid-cols-3 gap-2 text-[10px]">
+              <div>
+                <p class="font-bold text-teal-600 mb-1">Sumber Daya</p>
+                <p class="text-slate-500 leading-relaxed">globe, link, external-link, book, school, folder</p>
+              </div>
+              <div>
+                <p class="font-bold text-rose-600 mb-1">Sosial Media</p>
+                <p class="text-slate-500 leading-relaxed">instagram, facebook, youtube, send, whatsapp</p>
+              </div>
+              <div>
+                <p class="font-bold text-sky-600 mb-1">Informasi</p>
+                <p class="text-slate-500 leading-relaxed">info, bell, megaphone, help-circle</p>
+              </div>
             </div>
           </div>
           <button onclick="addFooter()" class="mt-3 w-full acc-bg text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition shadow-sm">+ Tambah Footer</button>
@@ -611,7 +698,7 @@
   </div>
 </div>
 <!-- ============ MODAL: MENU EDITOR ============ -->
-<div id="mMenu" class="modal-back"><div class="modal-card no-scroll p-6 space-y-3">
+<div id="mMenu" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p>
     <button onclick="closeModal('mMenu')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
@@ -619,7 +706,7 @@
     </button>
   </div>
 
-  <div class="flex gap-1.5 bg-slate-100 rounded-xl p-1">
+  <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
     <button onclick="switchMenuTab(1)" id="menuTab1" class="flex-1 tab-btn active justify-center text-[11px]">Info Dasar</button>
     <button onclick="switchMenuTab(2)" id="menuTab2" class="flex-1 tab-btn justify-center text-[11px]">Klasifikasi</button>
     <button onclick="switchMenuTab(3)" id="menuTab3" class="flex-1 tab-btn justify-center text-[11px]">Akses</button>
@@ -628,30 +715,30 @@
   <div id="menuTabContent1" class="space-y-3">
     <div>
       <label class="lbl">Judul</label>
-      <input id="eJudul" class="inp acc-ring" oninput="markDirty()">
+      <input id="eJudul" class="inp acc-ring">
     </div>
     <div>
       <label class="lbl">Deskripsi</label>
-      <input id="eDesk" class="inp acc-ring" oninput="markDirty()">
+      <input id="eDesk" class="inp acc-ring">
     </div>
     <div>
       <label class="lbl">URL</label>
-      <input id="eUrl" class="inp acc-ring" placeholder="https://…" oninput="markDirty()">
+      <input id="eUrl" class="inp acc-ring" placeholder="https://…">
     </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label class="lbl">Icon (Lucide)</label>
-        <input id="eIcon" class="inp acc-ring" placeholder="app-window" oninput="markDirty()">
+    <div>
+      <label class="lbl">Icon (Lucide) — ketik atau pilih dari grid</label>
+      <div class="relative mb-2">
+        <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input id="eIconSearch" type="text" placeholder="Cari icon…" oninput="filterMenuIcons(this.value)" class="inp pl-9 py-2 text-xs">
       </div>
-      <div>
-        <label class="lbl">Warna</label>
-        <select id="eWarna" class="inp acc-ring" onchange="markDirty()">
-          <option>blue</option><option>teal</option><option>rose</option>
-          <option>orange</option><option>green</option><option>emerald</option>
-          <option>violet</option><option>fuchsia</option><option>cyan</option>
-          <option>red</option><option>yellow</option>
-        </select>
-      </div>
+      <div id="eIconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-32 overflow-y-auto p-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-800"></div>
+      <input type="hidden" id="eIcon" value="app-window">
+      <p class="text-[10px] text-slate-400 mt-1">Terpilih: <span id="eIconLabel" class="font-mono font-bold text-slate-600 dark:text-slate-300">app-window</span></p>
+    </div>
+    <div>
+      <label class="lbl">Warna</label>
+      <div class="flex flex-wrap gap-1.5" id="eWarnaPicker"></div>
+      <input type="hidden" id="eWarna" value="blue">
     </div>
   </div>
 
@@ -659,7 +746,7 @@
     <div class="grid grid-cols-2 gap-3">
       <div>
         <label class="lbl">Kategori</label>
-        <select id="eKategori" class="inp acc-ring" onchange="markDirty()">
+        <select id="eKategori" class="inp acc-ring">
           <option>AI & Perangkat Ajar</option>
           <option>Jurnal & Administrasi</option>
           <option>Karya & Inspirasi</option>
@@ -672,17 +759,17 @@
       </div>
       <div>
         <label class="lbl">Parent (submenu)</label>
-        <select id="eParent" class="inp acc-ring" onchange="markDirty()"><option value="">—</option></select>
+        <select id="eParent" class="inp acc-ring"><option value="">—</option></select>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-3">
       <div>
         <label class="lbl">Label Badge</label>
-        <input id="eLabel" class="inp acc-ring" placeholder="BARU / HOT" oninput="markDirty()">
+        <input id="eLabel" class="inp acc-ring" placeholder="BARU / HOT">
       </div>
       <div>
         <label class="lbl">Urutan</label>
-        <input id="eSort" type="number" class="inp acc-ring" value="0" oninput="markDirty()">
+        <input id="eSort" type="number" class="inp acc-ring" value="0">
       </div>
     </div>
   </div>
@@ -691,7 +778,7 @@
     <div class="grid grid-cols-3 gap-3">
       <div>
         <label class="lbl">Tampil Di</label>
-        <select id="eTampil" class="inp acc-ring" onchange="markDirty()">
+        <select id="eTampil" class="inp acc-ring">
           <option value="all">Semua</option>
           <option value="mobile">HP</option>
           <option value="desktop">PC</option>
@@ -700,7 +787,7 @@
       </div>
       <div>
         <label class="lbl">Akses</label>
-        <select id="eRole" class="inp acc-ring" onchange="markDirty()">
+        <select id="eRole" class="inp acc-ring">
           <option value="all">Publik</option>
           <option value="tamu">Tamu</option>
           <option value="Guru">Guru</option>
@@ -709,14 +796,14 @@
       </div>
       <div>
         <label class="lbl">Cara Buka</label>
-        <select id="eBuka" class="inp acc-ring" onchange="markDirty()">
+        <select id="eBuka" class="inp acc-ring">
           <option value="">Luar</option>
           <option value="app">Dalam</option>
         </select>
       </div>
     </div>
     <label class="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
-      <input id="eActive" type="checkbox" checked class="w-4 h-4 accent-teal-600" onchange="markDirty()"> Menu Aktif
+      <input id="eActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Menu Aktif
     </label>
   </div>
 
@@ -728,7 +815,7 @@
 </div></div>
 
 <!-- ============ MODAL: AGENDA ============ -->
-<div id="mAgenda" class="modal-back"><div class="modal-card no-scroll p-6 space-y-3">
+<div id="mAgenda" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="aTitle">Editor Agenda</p>
     <button onclick="closeModal('mAgenda')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -776,7 +863,7 @@
 </div></div>
 
 <!-- ============ MODAL: DOKUMEN ============ -->
-<div id="mDoc" class="modal-back"><div class="modal-card no-scroll p-6 space-y-3">
+<div id="mDoc" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="docTitle">Editor Dokumen</p>
     <button onclick="closeModal('mDoc')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -805,12 +892,8 @@
   </div>
   <div>
     <label class="lbl">Warna</label>
-    <select id="docWarna" class="inp acc-ring">
-      <option>blue</option><option>teal</option><option>rose</option>
-      <option>orange</option><option>green</option><option>emerald</option>
-      <option>violet</option><option>fuchsia</option><option>cyan</option>
-      <option>red</option><option>yellow</option>
-    </select>
+    <div class="flex flex-wrap gap-1.5" id="docWarnaPicker"></div>
+    <input type="hidden" id="docWarna" value="blue">
   </div>
   <label class="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
     <input id="docActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
@@ -823,7 +906,7 @@
 </div></div>
 
 <!-- ============ MODAL: REWARD ============ -->
-<div id="mReward" class="modal-back"><div class="modal-card no-scroll p-6 space-y-3">
+<div id="mReward" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="rTitle">Editor Reward</p>
     <button onclick="closeModal('mReward')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -860,8 +943,8 @@
   </div>
 </div></div>
 
-<!-- ============ CONFIRM DIALOG ============ -->
-<div id="mConfirm" class="modal-back"><div class="modal-card p-6 text-center" style="max-width:20rem">
+<!-- ============ MODAL: CONFIRM ============ -->
+<div id="mConfirm" class="modal"><div class="modal-box p-6 text-center" style="max-width:20rem">
   <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3">
     <i data-lucide="alert-triangle" class="w-7 h-7"></i>
   </div>
@@ -873,8 +956,8 @@
   </div>
 </div></div>
 
-<!-- ============ AKSEN PICKER ============ -->
-<div id="mAksen" class="modal-back"><div class="modal-card p-6 space-y-4" style="max-width:22rem">
+<!-- ============ MODAL: AKSEN ============ -->
+<div id="mAksen" class="modal"><div class="modal-box p-6 space-y-4" style="max-width:22rem">
   <p class="text-base font-extrabold text-slate-800">Warna Aksen</p>
   <div class="flex justify-around gap-3">
     <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
@@ -886,18 +969,24 @@
   <button onclick="closeModal('mAksen')" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl text-sm active:scale-95 transition">Tutup</button>
 </div></div>
 
-<!-- ============ TOAST ============ -->
-<div id="toast">
-  <div class="flex items-center gap-3 bg-slate-900/95 backdrop-blur-md border border-white/10 shadow-2xl rounded-2xl pl-3 pr-5 py-3">
-    <span class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center shrink-0">
-      <i id="toastIcon" data-lucide="check" class="w-4 h-4"></i>
-    </span>
-    <p id="toastMsg" class="text-[13px] font-bold text-white leading-snug">…</p>
+<!-- ============ TOAST CONTAINER ============ -->
+<div id="toast-container" class="fixed z-[190] flex flex-col gap-2" style="top:calc(env(safe-area-inset-top) + 3.5rem);right:14px;max-width:320px;pointer-events:none"></div>
+
+<!-- ============ DEBUG PANEL ============ -->
+<div id="debug-panel">
+  <div style="display:flex;justify-content:space-between;margin-bottom:6px;color:#5EEAD4">
+    <strong>🐛 DEBUG LOG</strong>
+    <div style="display:flex;gap:6px">
+      <button onclick="document.getElementById('debug-content').innerHTML=''" style="background:#1e2230;color:#5EEAD4;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer">Clear</button>
+      <button onclick="toggleDebug()" style="background:#1e2230;color:#5EEAD4;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer">Tutup</button>
+    </div>
   </div>
+  <div id="debug-content"></div>
 </div>
+
 <script>
 /* ============================================================
-   KONSTANTA & STATE
+   KONSTANTA DASAR
    ============================================================ */
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
@@ -911,17 +1000,26 @@ const COLOR={
   rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],
   fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],
   red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],
-  yellow:['bg-yellow-100','text-yellow-600']
+  yellow:['bg-yellow-100','text-yellow-600'],sky:['bg-sky-100','text-sky-600']
 };
 
-const STATE={
-  menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,
-  gam:[],lead:[],inspi:[],config:null,agenda:[],docs:[],rewards:[],redem:[],
-  kudos:[],kudosTop:[],
-  editMenu:null,editAgenda:null,editDoc:null,editReward:null,
-  // Lazy load flags
-  loaded:{}
-};
+const COLOR_PICKER_LIST=[
+  {id:'teal',label:'Teal',hex:'#0D9488'},
+  {id:'blue',label:'Blue',hex:'#2563eb'},
+  {id:'violet',label:'Violet',hex:'#7c3aed'},
+  {id:'rose',label:'Rose',hex:'#e11d48'},
+  {id:'amber',label:'Amber',hex:'#d97706'},
+  {id:'emerald',label:'Emerald',hex:'#059669'},
+  {id:'sky',label:'Sky',hex:'#0284c7'},
+  {id:'orange',label:'Orange',hex:'#ea580c'},
+  {id:'fuchsia',label:'Fuchsia',hex:'#c026d3'},
+  {id:'cyan',label:'Cyan',hex:'#0891b2'},
+  {id:'red',label:'Red',hex:'#dc2626'},
+  {id:'green',label:'Green',hex:'#16a34a'},
+  {id:'yellow',label:'Yellow',hex:'#ca8a04'}
+];
+
+const ICON_LIST=['link','link-2','home','settings','user','users','folder','folder-open','folder-cog','file','file-text','image','video','music','download','upload','cloud','database','server','globe','map-pin','calendar','calendar-days','clock','mail','message-circle','phone','bell','book','book-open','graduation-cap','clipboard','clipboard-check','award','star','heart','bookmark','tag','shopping-cart','shopping-bag','credit-card','dollar-sign','trending-up','bar-chart','pie-chart','activity','zap','shield','shield-check','lock','unlock','key','eye','search','filter','edit','trash-2','plus','minus','check','x','arrow-right','arrow-up-right','external-link','play','pause','power','wifi','monitor','smartphone','tablet','cpu','hard-drive','code','terminal','inbox','send','log-out','log-in','layout-dashboard','layout-grid','layout-list','package','compass','sparkles','rocket','flame','crown','gem','palette','brush','camera','headphones','mic','trophy','target','flag','info','help-circle','alert-circle','alert-triangle','save','pencil','refresh-cw','menu','megaphone','github','youtube','instagram','facebook','twitter','linkedin','newspaper','briefcase','school','wrench','bot','hand','hand-heart','heart-handshake','sprout','leaf','nut','apple','tree-deciduous','tree-pine','footprints','medal','badge-check','id-card','at-sign','hash','quote','party-popper','rows-3','undo-2'];
 
 const TABS=[
   ['dash','layout-dashboard','Dashboard'],
@@ -932,39 +1030,109 @@ const TABS=[
   ['kudos','heart-handshake','Apresiasi'],
   ['info','megaphone','Banner'],
   ['notif','bell','Notifikasi'],
-  ['footer','link','Footer'],
+  ['footer','link-2','Footer'],
   ['quotes','quote','Quotes'],
   ['fb','lightbulb','Saran'],
   ['guru','users','Guru'],
   ['inspirasi','share-2','Inspirasi']
 ];
 
-let CUR={tab:'dash'};
-let dirty=false;
-let cfCb=null;
+const KEYS={
+  CACHE:'gb_admin_cache',
+  PENDING:'gb_admin_pending',
+  LAST_SYNC:'gb_admin_lastsync',
+  PREFS:'gb_admin_prefs',
+  DEBUG:'gb_admin_debug'
+};
 
 /* ============================================================
-   HELPER FUNCTIONS
+   STATE
+   ============================================================ */
+const STATE={
+  profile:null,user:null,
+  menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,
+  gam:[],lead:[],inspi:[],config:null,agenda:[],docs:[],rewards:[],redem:[],
+  kudos:[],kudosTop:[],
+  editMenu:null,editAgenda:null,editDoc:null,editReward:null,
+  currentTab:'dash',
+  pending:[],
+  prefs:{
+    debug:false,
+    lastSyncAt:null
+  }
+};
+
+let CUR={tab:'dash'};
+let cfCb=null;
+let _notifTimer=null;
+
+/* ============================================================
+   DEBUG PANEL — Console interceptor
+   ============================================================ */
+const _origLog=console.log,_origErr=console.error,_origWarn=console.warn;
+function dbg(msg,type){
+  type=type||'info';
+  const content=$('debug-content');
+  if(!content)return;
+  const time=new Date().toLocaleTimeString();
+  const line=document.createElement('div');
+  line.className='log-line log-'+type;
+  line.textContent='['+time+'] '+(typeof msg==='object'?JSON.stringify(msg).slice(0,300):msg);
+  content.appendChild(line);
+  const panel=$('debug-panel');
+  if(panel)panel.scrollTop=panel.scrollHeight;
+  while(content.children.length>100)content.removeChild(content.firstChild);
+}
+console.log=function(){_origLog.apply(console,arguments);dbg(Array.from(arguments).join(' '),'info');};
+console.error=function(){_origErr.apply(console,arguments);dbg(Array.from(arguments).join(' '),'error');};
+console.warn=function(){_origWarn.apply(console,arguments);dbg(Array.from(arguments).join(' '),'error');};
+window.addEventListener('error',e=>dbg('JS ERROR: '+e.message,'error'));
+
+function toggleDebug(){
+  const panel=$('debug-panel');
+  if(!panel)return;
+  panel.classList.toggle('show');
+  STATE.prefs.debug=panel.classList.contains('show');
+  try{localStorage.setItem(KEYS.DEBUG,STATE.prefs.debug?'1':'0');}catch(_){}
+}
+
+/* ============================================================
+   HELPER
    ============================================================ */
 function icons(){lucide.createIcons();}
-function esc(s){return (s||'').replace(/</g,'&lt;');}
-
+function esc(s){return (s||'').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
 function debounce(fn,delay){
   let t;
   return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),delay);};
 }
+function isOnline(){return navigator.onLine;}
 
-function toast(m,type){
+/* ============================================================
+   TOAST
+   ============================================================ */
+function toast(msg,type){
   type=type||'success';
-  const ic={success:'check',error:'triangle-alert',info:'info'}[type]||'check';
-  $('toastMsg').textContent=m;
-  $('toastIcon').setAttribute('data-lucide',ic);
+  const ic={success:'check-circle',error:'alert-circle',warning:'alert-triangle',info:'info'}[type]||'info';
+  const el=document.createElement('div');
+  el.className='toast-item toast-'+type;
+  el.style.pointerEvents='auto';
+  el.innerHTML=`<i data-lucide="${ic}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${esc(msg)}</span>`;
+  const c=$('toast-container');
+  if(c)c.appendChild(el);
   icons();
-  const t=$('toast');
-  t.classList.add('show');
-  clearTimeout(t._h);
-  t._h=setTimeout(()=>t.classList.remove('show'),2400);
+  setTimeout(()=>{
+    el.style.transition='all .3s';
+    el.style.opacity='0';
+    el.style.transform='translateX(120%)';
+    setTimeout(()=>el.remove(),300);
+  },3000);
 }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openModal(id){const m=$(id);if(m)m.classList.add('show');icons();}
+function closeModal(id){const m=$(id);if(m)m.classList.remove('show');}
 
 function confirmDialog(msg,onOk,title,okLabel){
   $('cfMsg').textContent=msg;
@@ -976,54 +1144,8 @@ function confirmDialog(msg,onOk,title,okLabel){
 function cfCancel(){closeModal('mConfirm');cfCb=null;}
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 
-function openModal(id){
-  const el=$(id);
-  el.classList.add('show');
-  icons();
-}
-function closeModal(id){
-  const el=$(id);
-  el.classList.remove('show');
-}
-
-function markDirty(){dirty=true;}
-
-function sanitizeHtml(html){
-  if(!html)return '';
-  const allowedTags=new Set(['B','I','U','EM','STRONG','BR','P','SPAN','DIV','A','UL','OL','LI','H1','H2','H3','H4','IMG','HR','SMALL','CODE']);
-  const allowedAttrs={'A':new Set(['href','target','rel']),'IMG':new Set(['src','alt']),'SPAN':new Set(['class']),'DIV':new Set(['class']),'P':new Set(['class'])};
-  const tpl=document.createElement('template');
-  tpl.innerHTML=html;
-  const walk=(node)=>{
-    [...node.childNodes].forEach(child=>{
-      if(child.nodeType===1){
-        const tag=child.tagName;
-        if(!allowedTags.has(tag)){child.replaceWith(document.createTextNode(child.textContent||''));return;}
-        [...child.attributes].forEach(attr=>{
-          const allowed=allowedAttrs[tag];
-          if(!allowed||!allowed.has(attr.name.toLowerCase()))child.removeAttribute(attr.name);
-        });
-        if(tag==='A'){
-          const h=child.getAttribute('href')||'';
-          if(!/^https?:\/\//i.test(h))child.removeAttribute('href');
-          else{child.setAttribute('rel','noopener noreferrer');child.setAttribute('target','_blank');}
-        }
-        if(tag==='IMG'){
-          const s=child.getAttribute('src')||'';
-          if(!/^(https?:\/\/|\/)/i.test(s))child.removeAttribute('src');
-        }
-        walk(child);
-      }else if(child.nodeType!==3){
-        child.remove();
-      }
-    });
-  };
-  walk(tpl.content);
-  return tpl.innerHTML;
-}
-
 /* ============================================================
-   TEMA: Dark Mode + Aksen
+   TEMA: Dark mode + Aksen
    ============================================================ */
 function toggleDark(){
   const on=document.documentElement.classList.toggle('dark');
@@ -1061,6 +1183,184 @@ function initTheme(){
   if(a)document.documentElement.dataset.acc=a;
   updateDarkIcons();
   paintAksen();
+}
+
+/* ============================================================
+   SYNC INDICATOR
+   ============================================================ */
+function setSyncState(state){
+  const dots=['syncDot','syncDotDesktop'];
+  const texts=['syncText','syncTextDesktop'];
+  const map={
+    synced:{cls:'',text:'Synced'},
+    syncing:{cls:'syncing',text:'Syncing…'},
+    pending:{cls:'pending',text:'Pending '+STATE.pending.length},
+    error:{cls:'error',text:'Error'},
+    offline:{cls:'offline',text:'Offline'}
+  };
+  const m=map[state]||map.synced;
+  dots.forEach(id=>{
+    const d=$(id);if(!d)return;
+    d.className='sync-dot'+(m.cls?' '+m.cls:'');
+  });
+  texts.forEach(id=>{
+    const t=$(id);if(!t)return;
+    t.textContent=m.text;
+  });
+  // Badge desktop
+  const pb=$('pendingBadgeDesktop');
+  if(pb){
+    if(STATE.pending.length>0){pb.textContent=STATE.pending.length;pb.classList.remove('hidden');}
+    else pb.classList.add('hidden');
+  }
+}
+
+/* ============================================================
+   OFFLINE QUEUE (localStorage)
+   ============================================================ */
+function loadPending(){
+  try{STATE.pending=JSON.parse(localStorage.getItem(KEYS.PENDING)||'[]');}
+  catch(_){STATE.pending=[];}
+}
+function savePending(){
+  try{localStorage.setItem(KEYS.PENDING,JSON.stringify(STATE.pending));}catch(_){}
+}
+function queuePending(op){
+  STATE.pending.push({...op,t:Date.now()});
+  savePending();
+  setSyncState(isOnline()?'pending':'offline');
+  dbg('Queued: '+op.action,'info');
+  if(isOnline())syncPending();
+}
+async function syncPending(){
+  if(!isOnline()){setSyncState('offline');return;}
+  if(!STATE.pending.length){setSyncState('synced');return;}
+  setSyncState('syncing');
+  const queue=[...STATE.pending];
+  const remaining=[];
+  for(const op of queue){
+    try{
+      await executePendingOp(op);
+      dbg('✓ '+op.action,'success');
+    }catch(e){
+      dbg('✗ '+op.action+': '+e.message,'error');
+      remaining.push(op);
+    }
+  }
+  STATE.pending=remaining;
+  savePending();
+  setSyncState(remaining.length?'error':'synced');
+  if(remaining.length===0){
+    toast('Semua perubahan tersinkron','success');
+    recordLastSync();
+  }
+}
+async function executePendingOp(op){
+  // Placeholder — akan diimplementasikan sesuai jenis op
+  // Misal untuk add/update/delete menu:
+  switch(op.action){
+    case 'add_menu':
+      return sb.from('creative_menus').insert(op.data);
+    case 'update_menu':
+      return sb.from('creative_menus').update(op.data).eq('id',op.id);
+    case 'delete_menu':
+      return sb.from('creative_menus').delete().eq('id',op.id);
+    case 'add_agenda':
+      return sb.from('creative_agenda').insert(op.data);
+    case 'update_agenda':
+      return sb.from('creative_agenda').update(op.data).eq('id',op.id);
+    case 'delete_agenda':
+      return sb.from('creative_agenda').delete().eq('id',op.id);
+    case 'add_doc':
+      return sb.from('creative_documents').insert(op.data);
+    case 'update_doc':
+      return sb.from('creative_documents').update(op.data).eq('id',op.id);
+    case 'delete_doc':
+      return sb.from('creative_documents').delete().eq('id',op.id);
+    case 'add_reward':
+      return sb.from('creative_rewards').insert(op.data);
+    case 'update_reward':
+      return sb.from('creative_rewards').update(op.data).eq('id',op.id);
+    case 'delete_reward':
+      return sb.from('creative_rewards').delete().eq('id',op.id);
+    case 'add_footer':
+      return sb.from('creative_footers').insert(op.data);
+    case 'delete_footer':
+      return sb.from('creative_footers').delete().eq('id',op.id);
+    case 'add_quote':
+      return sb.from('creative_quotes').insert(op.data);
+    case 'delete_quote':
+      return sb.from('creative_quotes').delete().eq('id',op.id);
+    case 'add_notif':
+      return sb.from('creative_notifications').insert(op.data);
+    case 'toggle_notif':
+      return sb.from('creative_notifications').update({is_active:op.data.is_active}).eq('id',op.id);
+    case 'delete_notif':
+      return sb.from('creative_notifications').delete().eq('id',op.id);
+    case 'save_info':
+      return sb.from('creative_app_config').update(op.data).eq('id',op.id);
+    case 'update_feedback':
+      return sb.from('creative_feedback').update({status:op.data.status}).eq('id',op.id);
+    case 'update_redem':
+      return sb.from('creative_redemptions').update({status:op.data.status}).eq('id',op.id);
+    case 'update_insp':
+      return sb.from('creative_inspirasi').update({status:op.data.status}).eq('id',op.id);
+    case 'delete_insp':
+      return sb.from('creative_inspirasi').delete().eq('id',op.id);
+    default:
+      throw new Error('Action tidak dikenal: '+op.action);
+  }
+}
+
+/* ============================================================
+   LAST SYNC
+   ============================================================ */
+function recordLastSync(){
+  STATE.prefs.lastSyncAt=Date.now();
+  try{localStorage.setItem(KEYS.LAST_SYNC,String(Date.now()));}catch(_){}
+}
+function timeAgo(ts){
+  if(!ts)return 'Belum sync';
+  const diff=Math.floor((Date.now()-ts)/1000);
+  if(diff<60)return 'Baru saja';
+  if(diff<3600)return Math.floor(diff/60)+'m';
+  if(diff<86400)return Math.floor(diff/3600)+'j';
+  return Math.floor(diff/86400)+'h';
+}
+
+/* ============================================================
+   CACHE
+   ============================================================ */
+function loadFromCache(){
+  try{
+    const c=JSON.parse(localStorage.getItem(KEYS.CACHE)||'{}');
+    STATE.menus=c.menus||[];
+    STATE.footer=c.footer||[];
+    STATE.quotes=c.quotes||[];
+    STATE.notifs=c.notifs||[];
+    STATE.fb=c.fb||[];
+    STATE.guru=c.guru||[];
+    STATE.config=c.config||null;
+    STATE.agenda=c.agenda||[];
+    STATE.docs=c.docs||[];
+    STATE.rewards=c.rewards||[];
+    STATE.redem=c.redem||[];
+    STATE.kudos=c.kudos||[];
+    STATE.kudosTop=c.kudosTop||[];
+    STATE.inspi=c.inspi||[];
+    if(c.lastSyncAt){STATE.prefs.lastSyncAt=c.lastSyncAt;}
+  }catch(e){dbg('Cache error: '+e.message,'error');}
+}
+function saveCache(){
+  try{
+    localStorage.setItem(KEYS.CACHE,JSON.stringify({
+      menus:STATE.menus,footer:STATE.footer,quotes:STATE.quotes,
+      notifs:STATE.notifs,fb:STATE.fb,guru:STATE.guru,config:STATE.config,
+      agenda:STATE.agenda,docs:STATE.docs,rewards:STATE.rewards,
+      redem:STATE.redem,kudos:STATE.kudos,kudosTop:STATE.kudosTop,
+      inspi:STATE.inspi,lastSyncAt:STATE.prefs.lastSyncAt
+    }));
+  }catch(_){}
 }
 
 /* ============================================================
@@ -1107,6 +1407,7 @@ async function init(){
   const email=user?.email||'admin';
   $('adminEmail').textContent=email;
   $('adminEmailMobile').textContent=email;
+  $('drawerEmail').textContent=email;
   $('scrLogin').classList.add('hidden');
   $('scrApp').classList.remove('hidden');
   buildNav();
@@ -1123,7 +1424,21 @@ sb.auth.onAuthStateChange((ev)=>{
 
 (async function boot(){
   initTheme();
+  loadPending();
+  try{
+    const c=JSON.parse(localStorage.getItem(KEYS.CACHE)||'{}');
+    if(c.lastSyncAt)STATE.prefs.lastSyncAt=c.lastSyncAt;
+  }catch(_){}
+  loadFromCache();
+  if(localStorage.getItem(KEYS.DEBUG)==='1'){
+    const panel=$('debug-panel');if(panel)panel.classList.add('show');
+  }
+  if(new URLSearchParams(location.search).get('debug')==='1'){
+    const panel=$('debug-panel');if(panel)panel.classList.add('show');
+  }
+  setSyncState(isOnline()?'synced':'offline');
   icons();
+
   const {data:{session}}=await sb.auth.getSession();
   if(session){
     const {data:isAdmin}=await sb.rpc('creative_is_admin');
@@ -1131,12 +1446,14 @@ sb.auth.onAuthStateChange((ev)=>{
       const email=session?.user?.email||'admin';
       $('adminEmail').textContent=email;
       $('adminEmailMobile').textContent=email;
+      $('drawerEmail').textContent=email;
       $('scrLogin').classList.add('hidden');
       $('scrApp').classList.remove('hidden');
       buildNav();
       loadAll();
     }
   }
+  dbg('Boot complete','success');
 })();
 
 function konfirmasiLogout(){
@@ -1150,34 +1467,42 @@ function konfirmasiLogout(){
    NAVIGASI
    ============================================================ */
 function buildNav(){
-  const h=TABS.map(([t,i,l],x)=>`<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full justify-start ${x===0?'active':''}"><i data-lucide="${i}" class="w-4 h-4"></i>${l}</button>`).join('');
+  const h=TABS.map(([t,i,l],x)=>{
+    const badge=(t==='fb')?`<span id="navBadgeFb" class="hidden ml-auto text-[10px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded-full">0</span>`:'';
+    return `<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full justify-start ${x===0?'active':''}"><i data-lucide="${i}" class="w-4 h-4"></i><span class="flex-1 text-left">${l}</span>${badge}</button>`;
+  }).join('');
   $('navDesktop').innerHTML=h;
   $('navMobile').innerHTML=h;
   icons();
 }
 function setTab(t){
   closeDrawer();
-  CUR.tab=t;
-  document.querySelectorAll('.tab-btn').forEach(b=>{
-    b.classList.toggle('active',b.dataset.tab===t);
-  });
+  CUR.tab=t;STATE.currentTab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
   TABS.forEach(([k])=>$('sec-'+k).classList.toggle('hidden',k!==t));
-  // Lazy load data per tab
-  lazyLoadTab(t);
+  const titles={
+    dash:'Dashboard',menu:'Menu',agenda:'Agenda',dokumen:'Dokumen',
+    rewards:'Toko Poin',kudos:'Apresiasi',info:'Banner',notif:'Notifikasi',
+    footer:'Footer',quotes:'Quotes',fb:'Saran',guru:'Guru',inspirasi:'Inspirasi'
+  };
+  const td=$('pageTitleDesktop');if(td)td.textContent=titles[t]||'Dashboard';
+  // Update nav badge
+  updateNavBadge();
 }
-function lazyLoadTab(t){
-  if(STATE.loaded['all'])return;
-  if(STATE.loaded[t])return;
-  STATE.loaded[t]=true;
-  // Load data yang belum ada untuk tab spesifik
-  // (semua sudah di loadAll, jadi tidak perlu fetch lagi)
+function updateNavBadge(){
+  const badge=$('navBadgeFb');
+  if(!badge)return;
+  const n=STATE.fb.filter(x=>x.status==='baru').length;
+  if(n>0){badge.textContent=n;badge.classList.remove('hidden');}
+  else badge.classList.add('hidden');
 }
 function openDrawer(){
   $('drawer').classList.remove('hidden');
   requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));
 }
 function closeDrawer(){
-  $('drawerSheet').classList.add('-translate-x-full');
+  const ds=$('drawerSheet');if(!ds)return;
+  ds.classList.add('-translate-x-full');
   setTimeout(()=>$('drawer').classList.add('hidden'),300);
 }
 
@@ -1192,22 +1517,61 @@ function exportCSV(name,rows){
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download=name+'.csv';
   a.click();
-  toast('CSV diunduh');
+  toast('CSV diunduh','success');
+}
+
+/* ============================================================
+   EXPORT / IMPORT JSON
+   ============================================================ */
+function exportData(){
+  const data={
+    version:'5.0',
+    exportedAt:new Date().toISOString(),
+    menus:STATE.menus,footer:STATE.footer,quotes:STATE.quotes,
+    notifs:STATE.notifs,config:STATE.config,agenda:STATE.agenda,
+    docs:STATE.docs,rewards:STATE.rewards
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`gb-admin-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup diunduh','success');
+  dbg('Export JSON','success');
+}
+function importData(ev){
+  const file=ev.target.files[0];
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.menus&&!data.config)throw new Error('Format tidak valid');
+      toast(`File berisi ${(data.menus||[]).length} menu. Import belum diaktifkan.`,'warning');
+      dbg('Import file valid','success');
+    }catch(err){
+      toast('File tidak valid','error');
+      dbg('Import error: '+err.message,'error');
+    }
+    ev.target.value='';
+  };
+  rd.readAsText(file);
 }
 
 /* ============================================================
    PURGE LOG dengan konfirmasi jumlah
    ============================================================ */
 async function purgeLog(){
-  const d=new Date();
-  d.setDate(d.getDate()-90);
+  const d=new Date();d.setDate(d.getDate()-90);
   const iso=d.toISOString();
   const {count}=await sb.from('creative_activity_log').select('*',{count:'exact',head:true}).lt('created_at',iso);
   const n=count||0;
   if(!n)return toast('Tidak ada log >90 hari','info');
-  confirmDialog(`Hapus ${n} log yang lebih tua dari 90 hari? Tindakan tidak bisa dibatalkan.`,async()=>{
+  confirmDialog(`Hapus ${n} log yang lebih tua dari 90 hari?`,async()=>{
     const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});
-    toast((data||0)+' log dipurge');
+    toast((data||0)+' log dipurge','success');
     loadAll();
   },'Purge Log?','Hapus '+n);
 }
@@ -1215,66 +1579,76 @@ async function purgeLog(){
    LOAD ALL DATA
    ============================================================ */
 async function loadAll(){
-  const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,inspi,agenda,docs,rewards,redem,kudos,kudosTop]=await Promise.all([
-    sb.from('creative_menus').select('*').order('sort_order'),
-    sb.from('creative_footers').select('*').order('sort_order'),
-    sb.from('creative_quotes').select('*').order('id'),
-    sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false}),
-    sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),
-    sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
-    sb.from('creative_gamification').select('*').order('total_poin',{ascending:false}),
-    sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).limit(50),
-    sb.rpc('creative_admin_list_guru'),
-    sb.rpc('creative_leaderboard'),
-    sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
-    sb.from('creative_agenda').select('*').order('tanggal',{ascending:false}),
-    sb.from('creative_documents').select('*').order('kategori'),
-    sb.from('creative_rewards').select('*').order('biaya_poin'),
-    sb.from('creative_redemptions').select('*').order('created_at',{ascending:false}),
-    sb.from('creative_kudos').select('*').order('created_at',{ascending:false}),
-    sb.rpc('creative_kudos_top')
-  ]);
+  setSyncState('syncing');
+  try{
+    const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,inspi,agenda,docs,rewards,redem,kudos,kudosTop]=await Promise.all([
+      sb.from('creative_menus').select('*').order('sort_order'),
+      sb.from('creative_footers').select('*').order('sort_order'),
+      sb.from('creative_quotes').select('*').order('id'),
+      sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false}),
+      sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),
+      sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
+      sb.from('creative_gamification').select('*').order('total_poin',{ascending:false}),
+      sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).limit(50),
+      sb.rpc('creative_admin_list_guru'),
+      sb.rpc('creative_leaderboard'),
+      sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
+      sb.from('creative_agenda').select('*').order('tanggal',{ascending:false}),
+      sb.from('creative_documents').select('*').order('kategori'),
+      sb.from('creative_rewards').select('*').order('biaya_poin'),
+      sb.from('creative_redemptions').select('*').order('created_at',{ascending:false}),
+      sb.from('creative_kudos').select('*').order('created_at',{ascending:false}),
+      sb.rpc('creative_kudos_top')
+    ]);
 
-  STATE.menus=menus.data||[];
-  STATE.footer=footer.data||[];
-  STATE.quotes=quotes.data||[];
-  STATE.notifs=notifs.data||[];
-  STATE.fb=fb.data||[];
-  STATE.config=cfg.data;
-  STATE.gam=gam.data||[];
-  STATE.log=log.data||[];
-  STATE.guru=guru.data||[];
-  STATE.lead=lead.data||[];
-  STATE.inspi=inspi.data||[];
-  STATE.agenda=agenda.data||[];
-  STATE.docs=docs.data||[];
-  STATE.rewards=rewards.data||[];
-  STATE.redem=redem.data||[];
-  STATE.kudos=kudos.data||[];
-  STATE.kudosTop=kudosTop.data||[];
+    STATE.menus=menus.data||[];
+    STATE.footer=footer.data||[];
+    STATE.quotes=quotes.data||[];
+    STATE.notifs=notifs.data||[];
+    STATE.fb=fb.data||[];
+    STATE.config=cfg.data;
+    STATE.gam=gam.data||[];
+    STATE.log=log.data||[];
+    STATE.guru=guru.data||[];
+    STATE.lead=lead.data||[];
+    STATE.inspi=inspi.data||[];
+    STATE.agenda=agenda.data||[];
+    STATE.docs=docs.data||[];
+    STATE.rewards=rewards.data||[];
+    STATE.redem=redem.data||[];
+    STATE.kudos=kudos.data||[];
+    STATE.kudosTop=kudosTop.data||[];
 
-  sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{
-    STATE.logTotal=r.count||0;
-    renderActCount();
-  });
+    sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{
+      STATE.logTotal=r.count||0;
+      renderActCount();
+    });
 
-  renderDash();
-  renderMenus();
-  renderAgendaAdmin();
-  renderDocsAdmin();
-  renderRewardsAdmin();
-  renderKudosAdmin();
-  renderFooter();
-  renderQuotes();
-  renderNotif();
-  renderFb();
-  renderGuru();
-  renderInspirasi();
-  fillInfo();
-  scopeHint();
-  icons();
-
-  STATE.loaded.all=true;
+    renderDash();
+    renderMenus();
+    renderAgendaAdmin();
+    renderDocsAdmin();
+    renderRewardsAdmin();
+    renderKudosAdmin();
+    renderFooter();
+    renderQuotes();
+    renderNotif();
+    renderFb();
+    renderGuru();
+    renderInspirasi();
+    fillInfo();
+    scopeHint();
+    updateNavBadge();
+    saveCache();
+    recordLastSync();
+    setSyncState('synced');
+    icons();
+    dbg('loadAll OK: '+STATE.menus.length+' menu, '+STATE.footer.length+' footer','success');
+  }catch(e){
+    dbg('loadAll error: '+e.message,'error');
+    setSyncState('error');
+    toast('Gagal memuat data','error');
+  }
 }
 
 function renderActCount(){
@@ -1293,10 +1667,8 @@ async function loadMoreLog(){
    DASHBOARD
    ============================================================ */
 function renderDash(){
-  const today=new Date();
-  today.setHours(0,0,0,0);
-  const week=new Date();
-  week.setDate(week.getDate()-7);
+  const today=new Date();today.setHours(0,0,0,0);
+  const week=new Date();week.setDate(week.getDate()-7);
 
   $('stGuru').textContent=STATE.guru.length;
   $('stAktif').textContent=new Set(STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=week).map(l=>l.guru_id)).size;
@@ -1304,7 +1676,6 @@ function renderDash(){
   $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
   $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
 
-  // Top menus
   const cnt={};
   STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{
     const j=(l.detail||{}).judul;
@@ -1317,7 +1688,6 @@ function renderDash(){
       <span class="text-xs font-black text-slate-400">${c}×</span>
     </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
 
-  // Liga sekolah
   const lg={};
   STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{
     const g=STATE.guru.find(x=>x.id===l.guru_id);
@@ -1330,7 +1700,6 @@ function renderDash(){
       <span class="text-xs font-black text-slate-400">${c}</span>
     </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
 
-  // Aktivitas
   $('actList').innerHTML=STATE.log.map(l=>{
     const g=STATE.guru.find(x=>x.id===l.guru_id);
     const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu',error:'Error'}[l.aksi]||l.aksi;
@@ -1342,7 +1711,6 @@ function renderDash(){
   }).join('');
   renderActCount();
 
-  // Leaderboard
   $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`
     <div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5">
       <span class="text-lg">${['🥇','🥈','🥉'][i]||''}</span>
@@ -1359,10 +1727,11 @@ function renderMenus(){
   const f=($('mSearch').value||'').toLowerCase();
   $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map((m,idx)=>{
     const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-    return `<div class="card p-4 flex items-center gap-3">
+    const isPending=m.id&&String(m.id).startsWith('tmp-');
+    return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
       <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span>
       <div class="flex-1 min-w-0">
-        <p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${esc(m.label)}</span>`:''} ${!m.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
+        <p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${esc(m.label)}</span>`:''} ${!m.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''} ${isPending?'<span class="pending-badge ml-1">⏳ PENDING</span>':''}</p>
         <p class="text-[10px] text-slate-400 truncate">${idx+1} · ${esc(m.kategori||'Umum')} · ${esc(m.akses_role||'all')}${m.sub_menu_dari?' · ↳ '+esc(m.sub_menu_dari):''}</p>
       </div>
       <div class="flex flex-col gap-1">
@@ -1381,14 +1750,13 @@ async function moveMenu(id,dir){
   const i=full.findIndex(m=>m.id===id);
   const j=i+dir;
   if(i<0||j<0||j>=full.length)return;
-  const old={};
-  full.forEach(m=>old[m.id]=m.sort_order);
+  const old={};full.forEach(m=>old[m.id]=m.sort_order);
   [full[i],full[j]]=[full[j],full[i]];
   full.forEach((m,idx)=>m.sort_order=idx+1);
   renderMenus();
-  const ch=full.filter(m=>old[m.id]!==m.sort_order);
+  const ch=full.filter(m=>old[m.id]!==m.sort_order&&!String(m.id).startsWith('tmp-'));
   await Promise.all(ch.map(m=>sb.from('creative_menus').update({sort_order:m.sort_order}).eq('id',m.id)));
-  toast('Urutan disimpan');
+  toast('Urutan disimpan','success');
 }
 
 function fillParentSelect(){
@@ -1400,9 +1768,38 @@ function switchMenuTab(n){
     $('menuTabContent'+i).classList.toggle('hidden',i!==n);
   });
 }
+
+/* Icon Picker untuk editor menu */
+function renderMenuIconGrid(filter){
+  filter=(filter||'').toLowerCase();
+  const list=filter?ICON_LIST.filter(i=>i.includes(filter)):ICON_LIST;
+  const grid=$('eIconGrid');
+  if(!grid)return;
+  const current=$('eIcon').value;
+  grid.innerHTML=list.map(ic=>`<div class="icon-cell ${ic===current?'on':''}" data-icon="${ic}" onclick="selectMenuIcon('${ic}')" title="${ic}"><i data-lucide="${ic}" class="w-4 h-4"></i></div>`).join('')||'<div class="col-span-full text-center text-xs text-slate-400 py-4">Tidak ditemukan</div>';
+  icons();
+}
+function filterMenuIcons(v){renderMenuIconGrid(v);}
+function selectMenuIcon(ic){
+  $('eIcon').value=ic;
+  $('eIconLabel').textContent=ic;
+  document.querySelectorAll('#eIconGrid .icon-cell').forEach(el=>el.classList.toggle('on',el.dataset.icon===ic));
+}
+
+/* Color Picker untuk editor menu */
+function renderMenuColorPicker(){
+  const picker=$('eWarnaPicker');
+  if(!picker)return;
+  const current=$('eWarna').value;
+  picker.innerHTML=COLOR_PICKER_LIST.map(c=>`<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectMenuColor('${c.id}')" title="${c.label}"></div>`).join('');
+}
+function selectMenuColor(c){
+  $('eWarna').value=c;
+  document.querySelectorAll('#eWarnaPicker .color-dot').forEach(el=>el.classList.toggle('on',el.dataset.color===c));
+}
+
 function openMenuEditor(id){
   STATE.editMenu=id||null;
-  dirty=false;
   $('eTitle').textContent=id?'Edit Menu':'Menu Baru';
   $('eDelete').classList.toggle('hidden',!id);
   const m=id?STATE.menus.find(x=>x.id===id):null;
@@ -1410,8 +1807,9 @@ function openMenuEditor(id){
   $('eJudul').value=m?m.judul:'';
   $('eDesk').value=m?m.deskripsi:'';
   $('eUrl').value=m?m.url:'';
-  $('eIcon').value=m?m.icon:'';
-  $('eWarna').value=m?m.warna:'blue';
+  $('eIcon').value=m?(m.icon||'app-window'):'app-window';
+  $('eIconLabel').textContent=$('eIcon').value;
+  $('eWarna').value=m?(m.warna||'blue'):'blue';
   $('eKategori').value=m?(m.kategori||'Umum'):'Umum';
   $('eParent').value=m?(m.sub_menu_dari||''):'';
   $('eTampil').value=m?m.tampil_di:'all';
@@ -1421,6 +1819,8 @@ function openMenuEditor(id){
   $('eSort').value=m?m.sort_order:0;
   $('eActive').checked=m?m.is_active:true;
   switchMenuTab(1);
+  renderMenuIconGrid('');
+  renderMenuColorPicker();
   openModal('mMenu');
 }
 
@@ -1441,18 +1841,48 @@ async function saveMenu(){
     is_active:$('eActive').checked
   };
   if(!row.judul)return toast('Judul wajib','error');
-  const q=STATE.editMenu?sb.from('creative_menus').update(row).eq('id',STATE.editMenu):sb.from('creative_menus').insert(row);
+  
+  if(!isOnline()){
+    // Optimistic UI: tambah dengan temp ID
+    const tempId='tmp-'+Date.now();
+    const isEdit=!!STATE.editMenu;
+    if(isEdit){
+      const idx=STATE.menus.findIndex(m=>m.id===STATE.editMenu);
+      if(idx>=0)STATE.menus[idx]={...STATE.menus[idx],...row};
+      queuePending({action:'update_menu',id:STATE.editMenu,data:row});
+    }else{
+      STATE.menus.push({...row,id:tempId});
+      queuePending({action:'add_menu',data:row,tempId});
+    }
+    saveCache();
+    renderMenus();
+    closeModal('mMenu');
+    toast('Disimpan offline — akan sync otomatis','warning');
+    return;
+  }
+  
+  closeModal('mMenu');
+  const q=STATE.editMenu
+    ?sb.from('creative_menus').update(row).eq('id',STATE.editMenu)
+    :sb.from('creative_menus').insert(row);
   const {error}=await q;
   if(error)return toast(error.message,'error');
-  dirty=false;
-  toast('Menu tersimpan');
-  closeModal('mMenu');
+  toast('Menu tersimpan','success');
   loadAll();
 }
 function delMenu(){
   confirmDialog('Hapus menu ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_menu',id:STATE.editMenu});
+      STATE.menus=STATE.menus.filter(m=>m.id!==STATE.editMenu);
+      saveCache();
+      renderMenus();
+      closeModal('mMenu');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_menus').delete().eq('id',STATE.editMenu);
-    toast('Menu dihapus');
+    toast('Menu dihapus','success');
     closeModal('mMenu');
     loadAll();
   },'Hapus Menu?');
@@ -1503,17 +1933,44 @@ async function saveAgenda(){
     is_active:$('aActive').checked
   };
   if(!row.judul||!row.tanggal)return toast('Judul & tanggal wajib','error');
-  const q=STATE.editAgenda?sb.from('creative_agenda').update(row).eq('id',STATE.editAgenda):sb.from('creative_agenda').insert(row);
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editAgenda){
+      const idx=STATE.agenda.findIndex(m=>m.id===STATE.editAgenda);
+      if(idx>=0)STATE.agenda[idx]={...STATE.agenda[idx],...row};
+      queuePending({action:'update_agenda',id:STATE.editAgenda,data:row});
+    }else{
+      STATE.agenda.push({...row,id:tempId});
+      queuePending({action:'add_agenda',data:row,tempId});
+    }
+    saveCache();
+    renderAgendaAdmin();
+    closeModal('mAgenda');
+    toast('Disimpan offline','warning');
+    return;
+  }
+  closeModal('mAgenda');
+  const q=STATE.editAgenda
+    ?sb.from('creative_agenda').update(row).eq('id',STATE.editAgenda)
+    :sb.from('creative_agenda').insert(row);
   const {error}=await q;
   if(error)return toast(error.message,'error');
-  toast('Agenda tersimpan');
-  closeModal('mAgenda');
+  toast('Agenda tersimpan','success');
   loadAll();
 }
 function delAgenda(){
   confirmDialog('Hapus agenda ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_agenda',id:STATE.editAgenda});
+      STATE.agenda=STATE.agenda.filter(a=>a.id!==STATE.editAgenda);
+      saveCache();
+      renderAgendaAdmin();
+      closeModal('mAgenda');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_agenda').delete().eq('id',STATE.editAgenda);
-    toast('Agenda dihapus');
+    toast('Agenda dihapus','success');
     closeModal('mAgenda');
     loadAll();
   },'Hapus Agenda?');
@@ -1532,13 +1989,24 @@ function renderDocsAdmin(){
         <p class="text-xs font-extrabold text-slate-800 truncate">${esc(d.judul)} ${!d.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(d.kategori||'Umum')}</p>
       </div>
-      <a href="${esc(d.link)}" target="_blank" rel="noopener" aria-label="Buka link" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+      <a href="${esc(d.link)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
       <button onclick="openDocEditor(${d.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
     </div>`;
   }).join('')||'<p class="text-xs text-slate-400">Belum ada dokumen.</p>';
   icons();
 }
 const renderDocsAdminDebounced=debounce(renderDocsAdmin,200);
+
+function renderDocColorPicker(){
+  const picker=$('docWarnaPicker');
+  if(!picker)return;
+  const current=$('docWarna').value;
+  picker.innerHTML=COLOR_PICKER_LIST.map(c=>`<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectDocColor('${c.id}')" title="${c.label}"></div>`).join('');
+}
+function selectDocColor(c){
+  $('docWarna').value=c;
+  document.querySelectorAll('#docWarnaPicker .color-dot').forEach(el=>el.classList.toggle('on',el.dataset.color===c));
+}
 
 function openDocEditor(id){
   STATE.editDoc=id||null;
@@ -1552,6 +2020,7 @@ function openDocEditor(id){
   $('docIcon').value=d?d.icon||'file-text':'file-text';
   $('docWarna').value=d?d.warna||'blue':'blue';
   $('docActive').checked=d?d.is_active:true;
+  renderDocColorPicker();
   openModal('mDoc');
 }
 async function saveDoc(){
@@ -1565,24 +2034,51 @@ async function saveDoc(){
     is_active:$('docActive').checked
   };
   if(!row.judul||!row.link)return toast('Judul & link wajib','error');
-  const q=STATE.editDoc?sb.from('creative_documents').update(row).eq('id',STATE.editDoc):sb.from('creative_documents').insert(row);
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editDoc){
+      const idx=STATE.docs.findIndex(m=>m.id===STATE.editDoc);
+      if(idx>=0)STATE.docs[idx]={...STATE.docs[idx],...row};
+      queuePending({action:'update_doc',id:STATE.editDoc,data:row});
+    }else{
+      STATE.docs.push({...row,id:tempId});
+      queuePending({action:'add_doc',data:row,tempId});
+    }
+    saveCache();
+    renderDocsAdmin();
+    closeModal('mDoc');
+    toast('Disimpan offline','warning');
+    return;
+  }
+  closeModal('mDoc');
+  const q=STATE.editDoc
+    ?sb.from('creative_documents').update(row).eq('id',STATE.editDoc)
+    :sb.from('creative_documents').insert(row);
   const {error}=await q;
   if(error)return toast(error.message,'error');
-  toast('Dokumen tersimpan');
-  closeModal('mDoc');
+  toast('Dokumen tersimpan','success');
   loadAll();
 }
 function delDoc(){
   confirmDialog('Hapus dokumen ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_doc',id:STATE.editDoc});
+      STATE.docs=STATE.docs.filter(d=>d.id!==STATE.editDoc);
+      saveCache();
+      renderDocsAdmin();
+      closeModal('mDoc');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_documents').delete().eq('id',STATE.editDoc);
-    toast('Dokumen dihapus');
+    toast('Dokumen dihapus','success');
     closeModal('mDoc');
     loadAll();
   },'Hapus Dokumen?');
 }
 
 /* ============================================================
-   REWARDS & REDEMPTIONS
+   REWARDS
    ============================================================ */
 function renderRewardsAdmin(){
   $('rewardListAdmin').innerHTML=STATE.rewards.map(r=>`
@@ -1600,9 +2096,9 @@ function renderRewardsAdmin(){
     return `<div class="card p-4 flex items-center gap-3">
       <div class="flex-1 min-w-0">
         <p class="text-xs font-extrabold text-slate-800 truncate">${esc(rw?rw.judul:'Reward')}</p>
-        <p class="text-[10px] text-slate-500 truncate">ID guru: …${String(x.guru_id).slice(-6)} · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</p>
+        <p class="text-[10px] text-slate-500 truncate">ID: …${String(x.guru_id).slice(-6)} · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</p>
       </div>
-      <select onchange="setRedemStatus(${x.id},this.value)" class="text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
+      <select onchange="setRedemStatus(${x.id},this.value)" class="text-[10px] font-black border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
         <option value="menunggu" ${x.status==='menunggu'?'selected':''}>Menunggu</option>
         <option value="selesai" ${x.status==='selesai'?'selected':''}>Selesai</option>
         <option value="ditolak" ${x.status==='ditolak'?'selected':''}>Ditolak</option>
@@ -1634,24 +2130,58 @@ async function saveReward(){
     is_active:$('rActive').checked
   };
   if(!row.judul)return toast('Judul wajib','error');
-  const q=STATE.editReward?sb.from('creative_rewards').update(row).eq('id',STATE.editReward):sb.from('creative_rewards').insert(row);
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editReward){
+      const idx=STATE.rewards.findIndex(m=>m.id===STATE.editReward);
+      if(idx>=0)STATE.rewards[idx]={...STATE.rewards[idx],...row};
+      queuePending({action:'update_reward',id:STATE.editReward,data:row});
+    }else{
+      STATE.rewards.push({...row,id:tempId});
+      queuePending({action:'add_reward',data:row,tempId});
+    }
+    saveCache();
+    renderRewardsAdmin();
+    closeModal('mReward');
+    toast('Disimpan offline','warning');
+    return;
+  }
+  closeModal('mReward');
+  const q=STATE.editReward
+    ?sb.from('creative_rewards').update(row).eq('id',STATE.editReward)
+    :sb.from('creative_rewards').insert(row);
   const {error}=await q;
   if(error)return toast(error.message,'error');
-  toast('Reward tersimpan');
-  closeModal('mReward');
+  toast('Reward tersimpan','success');
   loadAll();
 }
 function delReward(){
   confirmDialog('Hapus reward ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_reward',id:STATE.editReward});
+      STATE.rewards=STATE.rewards.filter(r=>r.id!==STATE.editReward);
+      saveCache();
+      renderRewardsAdmin();
+      closeModal('mReward');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_rewards').delete().eq('id',STATE.editReward);
-    toast('Reward dihapus');
+    toast('Reward dihapus','success');
     closeModal('mReward');
     loadAll();
   },'Hapus Reward?');
 }
 async function setRedemStatus(id,st){
+  if(!isOnline()){
+    queuePending({action:'update_redem',id,data:{status:st}});
+    const r=STATE.redem.find(x=>x.id===id);if(r)r.status=st;
+    saveCache();
+    toast('Update akan disinkronkan','warning');
+    return;
+  }
   await sb.from('creative_redemptions').update({status:st}).eq('id',id);
-  toast('Status diperbarui');
+  toast('Status diperbarui','success');
   loadAll();
 }
 
@@ -1680,23 +2210,56 @@ function renderKudosAdmin(){
 function fillInfo(){
   const c=STATE.config;
   if(!c)return;
-  $('iBanStatus').value=c.banner_status;
+  $('iBanStatus').value=c.banner_status||'OFF';
   $('iInfoStatus').value=c.info_status||'ON';
   $('iQuoteStatus').value=c.quote_status||'ON';
-  $('iBanWarna').value=c.banner_warna;
+  $('iBanWarna').value=c.banner_warna||'green';
   $('iBanPesan').value=c.banner_pesan||'';
   $('iBanLink').value=c.banner_link||'';
   $('iBanLabel').value=c.banner_label||'';
   $('iBanGambar').value=c.banner_gambar||'';
-  $('iPopStatus').value=c.pop_status;
+  $('iPopStatus').value=c.pop_status||'OFF';
   $('iPopJudul').value=c.pop_judul||'';
   $('iPopPesan').value=c.pop_pesan||'';
   $('iPopGambar').value=c.pop_gambar||'';
   $('iVersi').value=c.versi||'';
 }
+function sanitizeHtml(html){
+  if(!html)return '';
+  const allowedTags=new Set(['B','I','U','EM','STRONG','BR','P','SPAN','DIV','A','UL','OL','LI','H1','H2','H3','H4','IMG','HR','SMALL','CODE']);
+  const allowedAttrs={'A':new Set(['href','target','rel']),'IMG':new Set(['src','alt']),'SPAN':new Set(['class']),'DIV':new Set(['class']),'P':new Set(['class'])};
+  const tpl=document.createElement('template');
+  tpl.innerHTML=html;
+  const walk=(node)=>{
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType===1){
+        const tag=child.tagName;
+        if(!allowedTags.has(tag)){child.replaceWith(document.createTextNode(child.textContent||''));return;}
+        [...child.attributes].forEach(attr=>{
+          const allowed=allowedAttrs[tag];
+          if(!allowed||!allowed.has(attr.name.toLowerCase()))child.removeAttribute(attr.name);
+        });
+        if(tag==='A'){
+          const h=child.getAttribute('href')||'';
+          if(!/^https?:\/\//i.test(h))child.removeAttribute('href');
+          else{child.setAttribute('rel','noopener noreferrer');child.setAttribute('target','_blank');}
+        }
+        if(tag==='IMG'){
+          const s=child.getAttribute('src')||'';
+          if(!/^(https?:\/\/|\/)/i.test(s))child.removeAttribute('src');
+        }
+        walk(child);
+      }else if(child.nodeType!==3){
+        child.remove();
+      }
+    });
+  };
+  walk(tpl.content);
+  return tpl.innerHTML;
+}
+
 async function saveInfo(){
   const popPesanRaw=$('iPopPesan').value;
-  // Sanitize HTML pop_pesan sebelum simpan
   const popPesanSafe=popPesanRaw.trim().startsWith('<')?sanitizeHtml(popPesanRaw):popPesanRaw;
   const row={
     banner_status:$('iBanStatus').value,
@@ -1714,9 +2277,16 @@ async function saveInfo(){
     versi:$('iVersi').value,
     updated_at:new Date().toISOString()
   };
+  if(!isOnline()){
+    queuePending({action:'save_info',id:STATE.config.id,data:row});
+    STATE.config={...STATE.config,...row};
+    saveCache();
+    toast('Disimpan offline — akan sync otomatis','warning');
+    return;
+  }
   const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);
   if(error)return toast(error.message,'error');
-  toast('Tersimpan & live');
+  toast('Tersimpan & live','success');
   loadAll();
 }
 
@@ -1736,6 +2306,7 @@ function scopeHint(){
   $('iNotScopeVal').value='';
   $('iNotScopeVal').placeholder=t==='all'?'—':h[t].replace(/<[^>]+>/g,'').replace('Contoh: ','');
 }
+
 async function addNotif(){
   const row={
     judul:$('iNotJudul').value.trim(),
@@ -1745,9 +2316,28 @@ async function addNotif(){
     gambar:$('iNotGambar').value.trim(),
     link:$('iNotLink').value.trim(),
     scope_type:$('iNotScopeType').value,
-    scope_value:$('iNotScopeVal').value.trim()
+    scope_value:$('iNotScopeVal').value.trim(),
+    is_active:true
   };
   if(!row.judul)return toast('Judul wajib','error');
+  
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    STATE.notifs.unshift({...row,id:tempId,scheduled_at:new Date().toISOString()});
+    queuePending({action:'add_notif',data:row,tempId});
+    saveCache();
+    renderNotif();
+    $('iNotJudul').value='';
+    $('iNotPesan').value='';
+    $('iNotGambar').value='';
+    $('iNotLink').value='';
+    $('iNotScopeType').value='all';
+    $('iNotScopeVal').value='';
+    scopeHint();
+    toast('Disimpan offline','warning');
+    return;
+  }
+  
   const {error}=await sb.from('creative_notifications').insert(row);
   if(error)return toast(error.message,'error');
   $('iNotJudul').value='';
@@ -1757,18 +2347,20 @@ async function addNotif(){
   $('iNotScopeType').value='all';
   $('iNotScopeVal').value='';
   scopeHint();
-  toast('Terkirim');
+  toast('Terkirim','success');
   loadAll();
 }
+
 function renderNotif(){
   $('notList').innerHTML=STATE.notifs.map(n=>{
+    const isPending=n.id&&String(n.id).startsWith('tmp-');
     const scopeBadge=(n.scope_type&&n.scope_type!=='all')
-      ?`<span class="text-[8px] font-black bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded uppercase ml-1">KHUSUS: ${esc(n.scope_type)}${n.scope_value?' · '+esc(String(n.scope_value).slice(0,30)+(String(n.scope_value).length>30?'…':'')):''}</span>`
+      ?`<span class="text-[8px] font-black bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded uppercase ml-1">KHUSUS: ${esc(n.scope_type)}</span>`
       :'';
-    return `<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-60'}">
+    return `<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-60'} ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
       ${n.gambar?`<img src="${esc(n.gambar)}" class="w-10 h-10 rounded-lg object-cover shrink-0" alt="">`:''}
       <div class="flex-1 min-w-0">
-        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(n.judul)} ${!n.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">OFF</span>':''}${scopeBadge}</p>
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(n.judul)} ${!n.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">OFF</span>':''}${scopeBadge} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(n.pesan)}${n.link?' · 🔗':''}</p>
       </div>
       <button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100'} active:scale-95 transition">
@@ -1781,14 +2373,30 @@ function renderNotif(){
   }).join('')||'<p class="text-xs text-slate-400">Belum ada notifikasi.</p>';
   icons();
 }
+
 async function toggleNotif(id,act){
+  if(!isOnline()||String(id).startsWith('tmp-')){
+    queuePending({action:'toggle_notif',id,data:{is_active:act}});
+    const n=STATE.notifs.find(x=>x.id===id);if(n)n.is_active=act;
+    saveCache();renderNotif();
+    toast('Update akan disinkronkan','warning');
+    return;
+  }
   await sb.from('creative_notifications').update({is_active:act}).eq('id',id);
   loadAll();
 }
+
 function delNotif(id){
   confirmDialog('Hapus notifikasi ini?',async()=>{
+    if(!isOnline()||String(id).startsWith('tmp-')){
+      queuePending({action:'delete_notif',id});
+      STATE.notifs=STATE.notifs.filter(n=>n.id!==id);
+      saveCache();renderNotif();
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_notifications').delete().eq('id',id);
-    toast('Notifikasi dihapus');
+    toast('Notifikasi dihapus','success');
     loadAll();
   },'Hapus Notifikasi?');
 }
@@ -1796,6 +2404,22 @@ function delNotif(id){
 /* ============================================================
    FOOTER
    ============================================================ */
+const FOOTER_CAT_MAP={
+  instagram:'Sosial Media',facebook:'Sosial Media',youtube:'Sosial Media',
+  twitter:'Sosial Media','message-circle':'Sosial Media',send:'Sosial Media',
+  whatsapp:'Sosial Media',linkedin:'Sosial Media',tiktok:'Sosial Media',
+  globe:'Sumber Daya',link:'Sumber Daya','external-link':'Sumber Daya',
+  'link-2':'Sumber Daya',book:'Sumber Daya','book-open':'Sumber Daya',
+  school:'Sumber Daya','file-text':'Sumber Daya',folder:'Sumber Daya',
+  download:'Sumber Daya',cloud:'Sumber Daya',
+  info:'Informasi','help-circle':'Informasi',bell:'Informasi',
+  megaphone:'Informasi','alert-circle':'Informasi','newspaper':'Informasi'
+};
+function footerKategori(f){
+  const icon=(f.icon||'').toLowerCase();
+  return FOOTER_CAT_MAP[icon]||'Umum';
+}
+
 async function addFooter(){
   const row={
     judul:$('iFootJudul').value.trim(),
@@ -1803,33 +2427,76 @@ async function addFooter(){
     icon:$('iFootIcon').value.trim()||'globe',
     sort_order:STATE.footer.length+1
   };
-  if(!row.judul)return toast('Judul wajib','error');
+  if(!row.judul||!row.url)return toast('Judul & URL wajib','error');
+  if(!row.url.startsWith('http'))return toast('URL harus diawali http/https','error');
+  
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    STATE.footer.push({...row,id:tempId});
+    queuePending({action:'add_footer',data:row,tempId});
+    saveCache();
+    renderFooter();
+    $('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';
+    toast('Disimpan offline','warning');
+    return;
+  }
+  
   const {error}=await sb.from('creative_footers').insert(row);
   if(error)return toast(error.message,'error');
   $('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';
-  toast('Footer ditambah');
+  toast('Footer ditambah','success');
   loadAll();
 }
+
 function renderFooter(){
-  $('footList').innerHTML=STATE.footer.map(f=>`
-    <div class="card p-4 flex items-center gap-3">
-      <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
-        <i data-lucide="${f.icon||'globe'}" class="w-4 h-4"></i>
-      </span>
-      <div class="flex-1 min-w-0">
-        <p class="text-xs font-extrabold text-slate-800">${esc(f.judul)}</p>
-        <p class="text-[10px] text-slate-500 truncate">${esc(f.url)}</p>
-      </div>
-      <button onclick="delFooter(${f.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90">
-        <i data-lucide="trash-2" class="w-4 h-4"></i>
-      </button>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada footer.</p>';
+  // Group by kategori (auto dari icon)
+  const grouped={};
+  STATE.footer.forEach(f=>{
+    const k=footerKategori(f);
+    if(!grouped[k])grouped[k]=[];
+    grouped[k].push(f);
+  });
+  const catOrder=['Sumber Daya','Sosial Media','Informasi','Umum'];
+  const sortedCats=Object.keys(grouped).sort((a,b)=>catOrder.indexOf(a)-catOrder.indexOf(b));
+  
+  let html='';
+  sortedCats.forEach(kat=>{
+    const list=grouped[kat];
+    html+=`<p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2 mt-3">${esc(kat)} · ${list.length}</p>`;
+    html+=list.map(f=>{
+      const isPending=f.id&&String(f.id).startsWith('tmp-');
+      return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
+        <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
+          <i data-lucide="${f.icon||'globe'}" class="w-4 h-4"></i>
+        </span>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs font-extrabold text-slate-800 truncate">${esc(f.judul)} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
+          <p class="text-[10px] text-slate-500 truncate">${esc(f.url)}</p>
+        </div>
+        <a href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+          <i data-lucide="external-link" class="w-4 h-4"></i>
+        </a>
+        <button onclick="delFooter(${f.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+      </div>`;
+    }).join('');
+  });
+  $('footList').innerHTML=html||'<p class="text-xs text-slate-400">Belum ada footer.</p>';
   icons();
 }
+
 function delFooter(id){
   confirmDialog('Hapus footer ini?',async()=>{
+    if(!isOnline()||String(id).startsWith('tmp-')){
+      queuePending({action:'delete_footer',id});
+      STATE.footer=STATE.footer.filter(f=>f.id!==id);
+      saveCache();renderFooter();
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_footers').delete().eq('id',id);
-    toast('Footer dihapus');
+    toast('Footer dihapus','success');
     loadAll();
   },'Hapus Footer?');
 }
@@ -1863,39 +2530,66 @@ function bacaFileQuotes(ev){
 async function imporQuotes(){
   const b=parseQuotesText($('qPaste').value);
   if(!b.length)return toast('Tidak ada data valid','error');
+  if(!isOnline()){
+    b.forEach(q=>queuePending({action:'add_quote',data:q}));
+    STATE.quotes=STATE.quotes.concat(b.map((q,i)=>({...q,id:'tmp-'+Date.now()+'-'+i})));
+    saveCache();
+    renderQuotes();
+    $('qPaste').value='';
+    toast(b.length+' quote di-queue','warning');
+    return;
+  }
   const {error}=await sb.from('creative_quotes').insert(b);
   if(error)return toast(error.message,'error');
-  toast(b.length+' quote diimpor');
+  toast(b.length+' quote diimpor','success');
   $('qPaste').value='';
   loadAll();
 }
 async function addQuote(){
   const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};
   if(!row.kutipan)return toast('Kutipan wajib','error');
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    STATE.quotes.push({...row,id:tempId});
+    queuePending({action:'add_quote',data:row,tempId});
+    saveCache();renderQuotes();
+    $('iQuoteText').value='';$('iQuoteAuthor').value='';
+    toast('Disimpan offline','warning');
+    return;
+  }
   const {error}=await sb.from('creative_quotes').insert(row);
   if(error)return toast(error.message,'error');
   $('iQuoteText').value='';$('iQuoteAuthor').value='';
-  toast('Quote ditambah');
+  toast('Quote ditambah','success');
   loadAll();
 }
 function renderQuotes(){
   $('qCount').textContent=STATE.quotes.length;
-  $('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`
-    <div class="card p-4 flex items-center gap-3">
+  $('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>{
+    const isPending=q.id&&String(q.id).startsWith('tmp-');
+    return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
       <div class="flex-1 min-w-0">
         <p class="text-xs italic text-slate-600">"${esc(q.kutipan)}"</p>
-        <p class="text-[10px] text-slate-400">— ${esc(q.tokoh)}</p>
+        <p class="text-[10px] text-slate-400">— ${esc(q.tokoh)} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
       </div>
       <button onclick="delQuote(${q.id})" aria-label="Hapus" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90">
         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
       </button>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada quotes.</p>';
+    </div>`;
+  }).join('')||'<p class="text-xs text-slate-400">Belum ada quotes.</p>';
   icons();
 }
 function delQuote(id){
   confirmDialog('Hapus quote ini?',async()=>{
+    if(!isOnline()||String(id).startsWith('tmp-')){
+      queuePending({action:'delete_quote',id});
+      STATE.quotes=STATE.quotes.filter(q=>q.id!==id);
+      saveCache();renderQuotes();
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_quotes').delete().eq('id',id);
-    toast('Quote dihapus');
+    toast('Quote dihapus','success');
     loadAll();
   },'Hapus Quote?');
 }
@@ -1904,8 +2598,15 @@ function delQuote(id){
    FEEDBACK
    ============================================================ */
 async function setFbStatus(id,st){
+  if(!isOnline()){
+    queuePending({action:'update_feedback',id,data:{status:st}});
+    const f=STATE.fb.find(x=>x.id===id);if(f)f.status=st;
+    saveCache();updateNavBadge();
+    toast('Update akan disinkronkan','warning');
+    return;
+  }
   await sb.from('creative_feedback').update({status:st}).eq('id',id);
-  toast('Status diperbarui');
+  toast('Status diperbarui','success');
   loadAll();
 }
 function renderFb(){
@@ -1915,7 +2616,7 @@ function renderFb(){
       <div class="flex items-center gap-2 flex-wrap">
         <span class="text-[10px] font-black px-2 py-1 rounded-lg acc-soft acc-text">${esc(x.tipe)}</span>
         <span class="text-[10px] text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span>
-        <select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
+        <select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
           <option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option>
           <option value="diproses" ${x.status==='diproses'?'selected':''}>🟡 Diproses</option>
           <option value="selesai" ${x.status==='selesai'?'selected':''}>🟢 Selesai</option>
@@ -1924,6 +2625,7 @@ function renderFb(){
       <p class="text-[13px] text-slate-600 mt-2">${esc(x.pesan)}</p>
     </div>`).join('')||'<p class="text-xs text-slate-400">Tidak ada.</p>';
   icons();
+  updateNavBadge();
 }
 
 /* ============================================================
@@ -1965,20 +2667,34 @@ const renderGuruDebounced=debounce(renderGuru,200);
    INSPIRASI
    ============================================================ */
 async function toggleInsp(id,st){
+  if(!isOnline()){
+    queuePending({action:'update_insp',id,data:{status:st}});
+    const n=STATE.inspi.find(x=>x.id===id);if(n)n.status=st;
+    saveCache();renderInspirasi();
+    toast('Update akan disinkronkan','warning');
+    return;
+  }
   await sb.from('creative_inspirasi').update({status:st}).eq('id',id);
   loadAll();
 }
 function delInsp(id){
   confirmDialog('Hapus inspirasi ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_insp',id});
+      STATE.inspi=STATE.inspi.filter(n=>n.id!==id);
+      saveCache();renderInspirasi();
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
     await sb.from('creative_inspirasi').delete().eq('id',id);
-    toast('Inspirasi dihapus');
+    toast('Inspirasi dihapus','success');
     loadAll();
   },'Hapus Inspirasi?');
 }
 function purgeInspirasi(){
   confirmDialog('Purge inspirasi yang lebih tua dari 30 hari?',async()=>{
     const {data}=await sb.rpc('creative_admin_purge_inspirasi',{p_hari:30});
-    toast((data||0)+' dipurge');
+    toast((data||0)+' dipurge','success');
     loadAll();
   },'Purge Inspirasi?');
 }
@@ -2000,18 +2716,53 @@ function renderInspirasi(){
 }
 
 /* ============================================================
+   ONLINE / OFFLINE
+   ============================================================ */
+window.addEventListener('online',()=>{
+  setSyncState('synced');
+  toast('Kembali online — sync antrian…','info');
+  syncPending();
+});
+window.addEventListener('offline',()=>{
+  setSyncState('offline');
+  toast('Anda offline. Perubahan akan disimpan lokal.','warning');
+});
+
+/* ============================================================
    KEYBOARD SHORTCUTS
    ============================================================ */
 document.addEventListener('keydown',e=>{
+  // Ctrl+K → focus search
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){
+    e.preventDefault();
+    const s=$('mSearch');
+    if(s&&!$('sec-menu').classList.contains('hidden')){s.focus();return;}
+    const d=$('docSearch');
+    if(d&&!$('sec-dokumen').classList.contains('hidden')){d.focus();return;}
+    const g=$('gSearch');
+    if(g&&!$('sec-guru').classList.contains('hidden')){g.focus();return;}
+    dbg('Ctrl+K: tidak ada search aktif','info');
+  }
+  // Ctrl+Shift+D → toggle debug
+  if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==='d'){
+    e.preventDefault();
+    toggleDebug();
+  }
+  // Escape → close modal / drawer
   if(e.key==='Escape'){
-    document.querySelectorAll('.modal-back.show').forEach(m=>m.classList.remove('show'));
+    document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'));
+    closeDrawer();
   }
 });
 
 /* ============================================================
-   INIT
+   INIT ONCE (setelah DOM ready)
    ============================================================ */
-icons();
+document.addEventListener('DOMContentLoaded',()=>{
+  // Guard: cegah double-init dari boot()
+});
+
+dbg('admin.html v5.0 loaded','success');
 </script>
 </body>
 </html>
