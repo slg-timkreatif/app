@@ -693,12 +693,17 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
 </div>
   <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
-    <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0">
-      <p id="mAppTitle" class="text-sm font-bold text-white truncate">Aplikasi</p>
-      <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-white"></i></button>
-    </div>
-    <iframe id="mAppFrame" class="w-full flex-1 bg-white"></iframe>
+  <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
+    <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1">Aplikasi</p>
+    <button onclick="bukaExternal()" aria-label="Buka di browser" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+      <i data-lucide="external-link" class="w-4 h-4 text-white"></i>
+    </button>
+    <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+      <i data-lucide="x" class="w-4 h-4 text-white"></i>
+    </button>
   </div>
+  <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer"></iframe>
+</div>
 
   <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
     <div class="px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
@@ -1666,12 +1671,14 @@ function bukaUrl(m){
 function bukaFoot(f) {
   const u = (f && f.url) || '';
   if (!u) return;
-  // Semua link http/https → tab baru
+  // Link eksternal → buka di iframe modal (tetap dalam app)
   if (u.startsWith('http://') || u.startsWith('https://')) {
-    window.open(u, '_blank', 'noopener');
+    $('mAppTitle').textContent = f.judul || 'Tautan';
+    $('mAppFrame').src = u;
+    openModal('mApp');
     return;
   }
-  // Link internal (relatif) → navigasi
+  // Link internal (relatif) → navigasi normal
   if (isSafeUrl(u)) {
     location.href = u;
   }
