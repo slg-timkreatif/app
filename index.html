@@ -381,21 +381,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
     </div>
 
-    <div id="footList" class="space-y-2 animate-fade-up md:hidden"></div>
+    <div id="footList" class="animate-fade-up md:hidden"></div>
 
-<!-- Footer bar copyright -->
-<div class="card p-4 mt-2 flex items-center justify-between gap-3 flex-wrap">
-  <div class="flex items-center gap-2 min-w-0">
-    <div class="w-8 h-8 rounded-lg overflow-hidden border border-slate-200 shrink-0">
-      <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
-    </div>
-    <div class="min-w-0">
-      <p class="text-[11px] font-extrabold text-slate-700 truncate">Tim Kreatif Selogiri</p>
-      <p class="text-[9px] text-slate-400">© 2026 · Guru Berbagi · <span id="footVer"></span></p>
-    </div>
-  </div>
-  <span class="text-[9px] font-black px-2 py-1 rounded-md acc-soft acc-text shrink-0">12 KONTRIBUTOR</span>
-</div>
   </section>
 
   <section id="pageApps" class="hidden space-y-3 min-w-0">
@@ -1669,16 +1656,15 @@ function bukaUrl(m){
   }
 }
 function bukaFoot(f) {
-  const u = (f && f.url) || '';
-  if (!u) return;
-  // Link eksternal → buka di iframe modal (tetap dalam app)
+  if (!f) return;
+  const u = f.url || '';
+  if (!u || u === '#') return;
+  // Semua footer link → buka di tab baru (tanpa iframe modal)
   if (u.startsWith('http://') || u.startsWith('https://')) {
-    $('mAppTitle').textContent = f.judul || 'Tautan';
-    $('mAppFrame').src = u;
-    openModal('mApp');
+    window.open(u, '_blank', 'noopener');
     return;
   }
-  // Link internal (relatif) → navigasi normal
+  // Link relatif (internal) → navigasi normal
   if (isSafeUrl(u)) {
     location.href = u;
   }
@@ -1816,93 +1802,56 @@ return {
 }[kat]||['bg-slate-100','text-slate-600'];
 }
 
-function renderFoot(){
-if(!STATE.footer.length){$('footSide').classList.add('hidden');return;}
-$('footSide').classList.remove('hidden');
-
-// Group by kategori (auto dari icon)
-const grouped={};
-STATE.footer.forEach(f=>{
-const k=footerKategori(f);
-if(!grouped[k])grouped[k]=[];
-grouped[k].push(f);
-});
-
-// Urutan preferensi kategori
-const catOrder=['Sumber Daya','Sosial Media','Informasi','Umum'];
-const sortedCats=Object.keys(grouped).sort((a,b)=>catOrder.indexOf(a)-catOrder.indexOf(b));
-
-// === MOBILE: Accordion per kategori ===
-$('footList').innerHTML=sortedCats.map((kat,idx)=>{
-const list=grouped[kat];
-const [bg,tx]=footerCatColor(kat);
-const isSocial=kat==='Sosial Media';
-
-// Sosial Media → grid ikon
-if(isSocial){
-return `<div class="card p-4 w-full mb-2">
-  <div class="flex items-center gap-2 mb-3">
-    <span class="w-8 h-8 rounded-lg ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${footerCatIcon(kat)}" class="w-4 h-4"></i></span>
-    <p class="text-[12px] font-extrabold text-slate-800">${esc(kat)}</p>
-  </div>
-  <div class="grid grid-cols-4 gap-2">
-    ${list.map(f=>{
-    const socialColor={
-    instagram:'linear-gradient(135deg,#F58529,#DD2A7B,#8134AF)',
-    facebook:'#1877F2',
-    youtube:'#FF0000',
-    twitter:'#1DA1F2',
-    whatsapp:'#25D366',
-    send:'#0088CC',
-    linkedin:'#0A66C2',
-    tiktok:'#000'
-    }[f.icon]||'#64748B';
-    return `<button onclick='bukaFoot(${JSON.stringify(f).replace(/' /g,"&#39;")})' class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
-      <span class="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0" style="background:${socialColor}"><i data-lucide="${f.icon}" class="w-4 h-4"></i></span>
-      <span class="text-[9px] font-bold text-slate-600 text-center leading-tight line-clamp-1 max-w-full px-1">${esc(f.judul)}</span>
-    </button>`;
-    }).join('')}
-  </div>
-</div>`;
-}
-
-// Kategori lain → accordion
-return `<div class="card overflow-hidden w-full mb-2">
-  <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full flex items-center gap-3 p-3.5 text-left active:bg-slate-50 dark:active:bg-slate-800 transition">
-    <span class="w-9 h-9 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${footerCatIcon(kat)}" class="w-4 h-4"></i></span>
-    <div class="flex-1 min-w-0">
-      <p class="text-[13px] font-extrabold text-slate-800">${esc(kat)}</p>
-      <p class="text-[10px] text-slate-500">${list.length} tautan</p>
-    </div>
-    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
-  </button>
-  <div class="border-t border-slate-100 dark:border-slate-800 p-2 space-y-0.5 bg-slate-50/50 dark:bg-slate-800/30 ${idx>0?'hidden':''}">
-    ${list.map(f=>`
-    <a href="${esc(f.url)}" target="_blank" rel="noopener" class="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition active:scale-[.99]">
-      <i data-lucide="${f.icon||'globe'}" class="w-4 h-4 text-slate-400 shrink-0"></i>
-      <span class="flex-1 min-w-0 text-[12px] font-semibold text-slate-700 truncate">${esc(f.judul)}</span>
-      <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-300 shrink-0"></i>
-    </a>
-    `).join('')}
-  </div>
-</div>`;
-}).join('');
-
-// === SIDEBAR DESKTOP: Grouped vertical ===
-$('footSideList').innerHTML=sortedCats.map(kat=>{
-const list=grouped[kat];
-return `<div class="mb-3">
-  <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.15em] text-slate-400">${esc(kat)}</p>
-  ${list.map(f=>`
-  <a href="${esc(f.url)}" target="_blank" rel="noopener" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-    <i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60 shrink-0"></i>
-    <span class="truncate">${esc(f.judul)}</span>
-    <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-300 opacity-0 ml-auto shrink-0"></i>
-  </a>`).join('')}
-</div>`;
-}).join('');
-
-icons();
+function renderFoot() {
+  const wrap = $('footList');
+  const side = $('footSide');
+  const sideList = $('footSideList');
+  
+  if (!STATE.footer.length) {
+    if (side) side.classList.add('hidden');
+    if (wrap) wrap.innerHTML = '';
+    return;
+  }
+  if (side) side.classList.remove('hidden');
+  
+  // Versi dinamis dari config admin
+  const rawV = (STATE.config && STATE.config.versi) ? String(STATE.config.versi).trim() : '';
+  const V = rawV ? ('v' + rawV.replace(/^v/i, '')) : '';
+  const copyright = '© 2026' + (V ? ' · ' + V : '');
+  
+  // === MOBILE: Split copyright + link bar ===
+  if (wrap) {
+    const links = STATE.footer.map(f => `
+      <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:acc-text active:scale-95 transition">${esc(f.judul)}</button>
+    `).join('');
+    wrap.innerHTML = `<div class="card overflow-hidden">
+      <div class="px-5 py-4 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shrink-0">
+          <img src="${LOGO}" class="w-full h-full object-cover" alt="Logo">
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[12px] font-extrabold text-slate-800 truncate">Tim Kreatif Selogiri</p>
+          <p class="text-[10px] text-slate-400 truncate">Portal Berbagi & Berkarya GTK</p>
+        </div>
+      </div>
+      <div class="border-t border-slate-100 dark:border-slate-800 px-5 py-3 flex items-center justify-between gap-3 flex-wrap">
+        <p class="text-[10px] font-semibold text-slate-400 shrink-0">${copyright}</p>
+        <div class="flex items-center gap-3 flex-wrap">${links}</div>
+      </div>
+    </div>`;
+  }
+  
+  // === DESKTOP: Simple vertical list ===
+  if (sideList) {
+    sideList.innerHTML = STATE.footer.map(f => `
+      <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left">
+        <i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60 shrink-0"></i>
+        <span class="truncate">${esc(f.judul)}</span>
+      </button>
+    `).join('');
+  }
+  
+  icons();
 }
 
 /* ============================================================
