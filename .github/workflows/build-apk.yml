@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version_name:
-        description: 'Version name (mis. 1.0.0)'
+        description: 'Version name'
         required: true
         default: '1.0.0'
       version_code:
@@ -80,7 +80,7 @@ jobs:
             "appVersionCode": 1,
             "signingKey": {
               "path": "/tmp/release.keystore",
-              "alias": "gurubersbagi"
+              "alias": "my-key"
             },
             "generatorApp": "bubblewrap-cli",
             "webManifestUrl": "https://slg-timkreatif.github.io/app/manifest.json",
@@ -95,15 +95,18 @@ jobs:
           }
           TWA_EOF
 
-      - name: Fill passwords + version
+      - name: Fill passwords + alias + version
         working-directory: ./twa-build
         run: |
           jq --arg store "${{ secrets.KEYSTORE_PASSWORD }}" \
              --arg key "${{ secrets.KEY_PASSWORD }}" \
+             --arg alias "${{ secrets.KEY_ALIAS }}" \
              --arg vn "${{ github.event.inputs.version_name }}" \
              --argjson vc ${{ github.event.inputs.version_code }} \
-             '.keyPassword = $key | .storePassword = $store | .appVersionName = $vn | .appVersionCode = $vc' \
+             '.keyPassword = $key | .storePassword = $store | .signingKey.alias = $alias | .appVersionName = $vn | .appVersionCode = $vc' \
              twa-manifest.json > tmp.json && mv tmp.json twa-manifest.json
+          echo "=== Verifikasi ==="
+          echo "Alias: $(jq -r .signingKey.alias twa-manifest.json)"
 
       - name: Generate Android project
         working-directory: ./twa-build
