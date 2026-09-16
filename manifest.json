@@ -6,14 +6,55 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "lang": "id",
+  "dir": "ltr",
   "categories": ["education", "productivity"],
   "background_color": "#F6F5F9",
   "theme_color": "#F6F5F9",
+  "prefer_related_applications": false,
   "icons": [
-    { "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Layanan",
+      "short_name": "Layanan",
+      "description": "Akses semua layanan GTK",
+      "url": "./index.html?page=apps",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Agenda",
+      "short_name": "Agenda",
+      "description": "Kalender kegiatan KKG & kecamatan",
+      "url": "./index.html?page=agenda",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berbagi",
+      "short_name": "Berbagi",
+      "description": "Buat karya, kirim apresiasi",
+      "url": "./index.html?page=bagi",
+      "icons": [{ "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png", "sizes": "192x192" }]
+    }
   ]
 }
