@@ -726,15 +726,46 @@
       <input id="eUrl" class="inp acc-ring" placeholder="https://…">
     </div>
     <div>
-      <label class="lbl">Icon (Lucide) — ketik atau pilih dari grid</label>
-      <div class="relative mb-2">
-        <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-        <input id="eIconSearch" type="text" placeholder="Cari icon…" oninput="filterMenuIcons(this.value)" class="inp pl-9 py-2 text-xs">
-      </div>
-      <div id="eIconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-32 overflow-y-auto p-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-800"></div>
-      <input type="hidden" id="eIcon" value="app-window">
-      <p class="text-[10px] text-slate-400 mt-1">Terpilih: <span id="eIconLabel" class="font-mono font-bold text-slate-600 dark:text-slate-300">app-window</span></p>
+      <div>
+  <label class="lbl">Icon</label>
+  <!-- Preview icon -->
+  <div class="flex items-center gap-3 mb-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
+    <div id="eIconPreview" class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200 dark:border-slate-800 shrink-0">
+      <i data-lucide="app-window" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>
     </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Preview Icon</p>
+      <p class="text-xs font-mono text-slate-700 dark:text-slate-300 truncate" id="eIconLabel">app-window</p>
+    </div>
+  </div>
+
+  <!-- Tab: Lucide / Custom URL -->
+  <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-2">
+    <button type="button" onclick="switchIconMode('lucide')" id="iconModeLucide" class="flex-1 tab-btn active justify-center text-[11px]">Lucide</button>
+    <button type="button" onclick="switchIconMode('url')" id="iconModeUrl" class="flex-1 tab-btn justify-center text-[11px]">URL Gambar</button>
+  </div>
+
+  <!-- Mode Lucide -->
+  <div id="iconModeContentLucide">
+    <div class="relative mb-2">
+      <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input id="eIconSearch" type="text" placeholder="Cari icon…" oninput="filterMenuIcons(this.value)" class="inp pl-9 py-2 text-xs">
+    </div>
+    <div id="eIconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-32 overflow-y-auto p-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-800"></div>
+  </div>
+
+  <!-- Mode URL -->
+  <div id="iconModeContentUrl" class="hidden">
+    <input id="eIconCustomUrl" type="url" placeholder="https://contoh.com/icon.png" oninput="onCustomUrlInput(this.value)" class="inp acc-ring text-xs font-mono">
+    <p class="text-[10px] text-slate-400 mt-1">Masukkan URL gambar (PNG/JPG/SVG). Ukuran ideal: 64×64px atau persegi.</p>
+    <div class="mt-2 grid grid-cols-3 gap-2">
+      <button type="button" onclick="testCustomUrl()" class="py-2 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95">Test Load</button>
+      <button type="button" onclick="clearCustomUrl()" class="py-2 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95">Clear</button>
+    </div>
+  </div>
+
+  <input type="hidden" id="eIcon" value="app-window">
+</div>
     <div>
       <label class="lbl">Warna</label>
       <div class="flex flex-wrap gap-1.5" id="eWarnaPicker"></div>
@@ -745,18 +776,11 @@
   <div id="menuTabContent2" class="space-y-3 hidden">
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="lbl">Kategori</label>
-        <select id="eKategori" class="inp acc-ring">
-          <option>AI & Perangkat Ajar</option>
-          <option>Jurnal & Administrasi</option>
-          <option>Karya & Inspirasi</option>
-          <option>Komunitas & KKG</option>
-          <option>Kepala Sekolah</option>
-          <option>Tools & Arsip</option>
-          <option>Informasi</option>
-          <option>Umum</option>
-        </select>
-      </div>
+  <label class="lbl">Kategori</label>
+  <input id="eKategori" list="katOptions" class="inp acc-ring" placeholder="Pilih atau ketik baru…" autocomplete="off">
+  <datalist id="katOptions"></datalist>
+  <p class="text-[10px] text-slate-400 mt-1">Ketik kategori baru untuk membuatnya, atau pilih dari daftar yang ada.</p>
+</div>
       <div>
         <label class="lbl">Parent (submenu)</label>
         <select id="eParent" class="inp acc-ring"><option value="">—</option></select>
@@ -1782,7 +1806,8 @@ function renderMenuIconGrid(filter){
 function filterMenuIcons(v){renderMenuIconGrid(v);}
 function selectMenuIcon(ic){
   $('eIcon').value=ic;
-  $('eIconLabel').textContent=ic;
+  $('eIconCustomUrl').value='';  // clear URL kalau pilih Lucide
+  updateIconPreview(ic);
   document.querySelectorAll('#eIconGrid .icon-cell').forEach(el=>el.classList.toggle('on',el.dataset.icon===ic));
 }
 
@@ -1804,11 +1829,19 @@ function openMenuEditor(id){
   $('eDelete').classList.toggle('hidden',!id);
   const m=id?STATE.menus.find(x=>x.id===id):null;
   fillParentSelect();
+  populateKatOptions();          // ← baru
   $('eJudul').value=m?m.judul:'';
   $('eDesk').value=m?m.deskripsi:'';
   $('eUrl').value=m?m.url:'';
-  $('eIcon').value=m?(m.icon||'app-window'):'app-window';
-  $('eIconLabel').textContent=$('eIcon').value;
+  
+  // Icon handling
+  const iconVal=m?(m.icon||'app-window'):'app-window';
+  const isUrlIcon=/^https?:\/\//i.test(iconVal)||iconVal.startsWith('data:image');
+  $('eIcon').value=iconVal;
+  $('eIconCustomUrl').value=isUrlIcon?iconVal:'';
+  switchIconMode(isUrlIcon?'url':'lucide');
+  updateIconPreview(iconVal);
+  
   $('eWarna').value=m?(m.warna||'blue'):'blue';
   $('eKategori').value=m?(m.kategori||'Umum'):'Umum';
   $('eParent').value=m?(m.sub_menu_dari||''):'';
@@ -1822,6 +1855,70 @@ function openMenuEditor(id){
   renderMenuIconGrid('');
   renderMenuColorPicker();
   openModal('mMenu');
+}
+
+/* ============================================================
+   Dynamic Kategori Dropdown
+   ============================================================ */
+const DEFAULT_KATS=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspirasi','Komunitas & KKG','Kepala Sekolah','Tools & Arsip','Informasi','Umum'];
+function populateKatOptions(){
+  const existing=[...new Set(STATE.menus.map(m=>m.kategori).filter(Boolean))];
+  const all=[...new Set([...DEFAULT_KATS,...existing])].sort((a,b)=>{
+    // DEFAULT dulu, lalu sisanya
+    const ia=DEFAULT_KATS.indexOf(a),ib=DEFAULT_KATS.indexOf(b);
+    if(ia!==-1&&ib!==-1)return ia-ib;
+    if(ia!==-1)return -1;
+    if(ib!==-1)return 1;
+    return a.localeCompare(b);
+  });
+  const dl=$('katOptions');
+  if(dl)dl.innerHTML=all.map(k=>`<option value="${esc(k)}">`).join('');
+}
+
+/* ============================================================
+   Icon Mode: Lucide vs Custom URL
+   ============================================================ */
+function switchIconMode(mode){
+  ['lucide','url'].forEach(m=>{
+    $('iconMode'+m.charAt(0).toUpperCase()+m.slice(1))?.classList.toggle('active',m===mode);
+  });
+  $('iconModeContentLucide')?.classList.toggle('hidden',mode!=='lucide');
+  $('iconModeContentUrl')?.classList.toggle('hidden',mode!=='url');
+}
+function onCustomUrlInput(url){
+  url=url.trim();
+  if(!url){updateIconPreview('app-window');return;}
+  if(!/^https?:\/\//i.test(url))return;
+  $('eIcon').value=url;
+  updateIconPreview(url);
+}
+function testCustomUrl(){
+  const url=$('eIconCustomUrl').value.trim();
+  if(!url)return toast('Isi URL dulu','info');
+  const img=new Image();
+  img.onload=()=>toast('URL gambar valid ✓','success');
+  img.onerror=()=>toast('URL tidak dapat dimuat','error');
+  img.src=url;
+}
+function clearCustomUrl(){
+  $('eIconCustomUrl').value='';
+  switchIconMode('lucide');
+  const cur=$('eIcon').value;
+  if(/^https?:\/\//i.test(cur)){ $('eIcon').value='app-window'; updateIconPreview('app-window'); }
+}
+function updateIconPreview(iconVal){
+  const box=$('eIconPreview');
+  const lbl=$('eIconLabel');
+  if(!box||!lbl)return;
+  const isUrl=/^https?:\/\//i.test(iconVal)||iconVal.startsWith('data:image');
+  if(isUrl){
+    box.innerHTML=`<img src="${esc(iconVal)}" class="w-full h-full object-cover rounded-xl" alt="" onerror="this.style.opacity='0.3'">`;
+    lbl.textContent=iconVal.slice(0,60)+(iconVal.length>60?'…':'');
+  }else{
+    box.innerHTML=`<i data-lucide="${iconVal||'app-window'}" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>`;
+    lbl.textContent=iconVal||'app-window';
+    icons();
+  }
 }
 
 async function saveMenu(){
