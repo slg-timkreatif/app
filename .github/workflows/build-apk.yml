@@ -27,11 +27,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set Android SDK path
+        run: |
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+
       - name: Accept Android SDK licenses
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          ls -la $ANDROID_HOME/ 2>/dev/null || true
 
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
@@ -41,37 +44,74 @@ jobs:
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/release.keystore
           ls -la /tmp/release.keystore
 
-      - name: Generate TWA project
+      - name: Configure Bubblewrap paths
+        run: |
+          mkdir -p ~/.bubblewrap
+          cat > ~/.bubblewrap/config.json << EOF
+          {
+            "jdkPath": "$JAVA_HOME",
+            "androidSdkPath": "/usr/local/lib/android/sdk"
+          }
+          EOF
+          cat ~/.bubblewrap/config.json
+
+      - name: Write twa-manifest.json
         run: |
           mkdir -p twa-build
           cd twa-build
-          printf 'y\ny\ny\ny\ny\n' | bubblewrap init \
-            --manifest https://slg-timkreatif.github.io/app/manifest.json \
-            --directory . \
-            --skipPwaValidation || true
-          echo "=== Files ==="
-          ls -la
-          if [ ! -f twa-manifest.json ]; then
-            echo "❌ twa-manifest.json tidak ada"
-            exit 1
-          fi
+          cat > twa-manifest.json << 'TWA_EOF'
+          {
+            "packageId": "io.github.slg_timkreatif.twa",
+            "host": "slg-timkreatif.github.io",
+            "name": "Guru Berbagi",
+            "launcherName": "GuruBerbagi",
+            "display": "standalone",
+            "themeColor": "#F6F5F9",
+            "themeColorDark": "#0F1115",
+            "navigationColor": "#FFFFFF",
+            "navigationColorDark": "#0F1115",
+            "navigationDividerColor": "#FFFFFF",
+            "navigationDividerColorDark": "#1F2937",
+            "backgroundColor": "#F6F5F9",
+            "enableNotifications": true,
+            "startUrl": "/app/",
+            "iconUrl": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+            "maskableIconUrl": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",
+            "appVersionName": "1.0.0",
+            "appVersionCode": 1,
+            "signingKey": {
+              "path": "/tmp/release.keystore",
+              "alias": "gurubersbagi"
+            },
+            "generatorApp": "bubblewrap-cli",
+            "webManifestUrl": "https://slg-timkreatif.github.io/app/manifest.json",
+            "fallbackType": "customtabs",
+            "features": {},
+            "enableSiteSettingsShortcut": true,
+            "isChromeOSOnly": false,
+            "isMetaQuest": false,
+            "fullScopeUrl": "https://slg-timkreatif.github.io/app/",
+            "minSdkVersion": 21,
+            "orientation": "portrait"
+          }
+          TWA_EOF
 
-      - name: Configure signing
+      - name: Fill passwords + version
         working-directory: ./twa-build
         run: |
           jq --arg store "${{ secrets.KEYSTORE_PASSWORD }}" \
              --arg key "${{ secrets.KEY_PASSWORD }}" \
-             --arg alias "${{ secrets.KEY_ALIAS }}" \
-             '. + {signingKey: {path: "/tmp/release.keystore", alias: $alias}} | .keyPassword = $key | .storePassword = $store' \
+             --arg vn "${{ github.event.inputs.version_name }}" \
+             --argjson vc ${{ github.event.inputs.version_code }} \
+             '.keyPassword = $key | .storePassword = $store | .appVersionName = $vn | .appVersionCode = $vc' \
              twa-manifest.json > tmp.json && mv tmp.json twa-manifest.json
+          echo "=== twa-manifest.json ==="
+          cat twa-manifest.json
 
-      - name: Update version
+      - name: Generate Android project
         working-directory: ./twa-build
         run: |
-          jq --arg vn "${{ github.event.inputs.version_name }}" \
-             --argjson vc ${{ github.event.inputs.version_code }} \
-             '.appVersionName = $vn | .appVersionCode = $vc' \
-             twa-manifest.json > tmp.json && mv tmp.json twa-manifest.json
+          bubblewrap update --skipPwaValidation || bubblewrap update
 
       - name: Build APK
         working-directory: ./twa-build
