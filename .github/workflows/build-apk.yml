@@ -27,54 +27,52 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set env paths
-        run: |
-          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-
-      - name: Fix cmdline-tools and accept licenses
+      - name: Download cmdline-tools fresh from Google
         run: |
           SDK="/usr/local/lib/android/sdk"
-          echo "=== Struktur awal ==="
-          ls -la $SDK/
-          echo "=== cmdline-tools ==="
-          ls -la $SDK/cmdline-tools/ || true
-          
-          if [ ! -e "$SDK/cmdline-tools/latest" ]; then
-            VER=$(ls -d $SDK/cmdline-tools/*/ 2>/dev/null | grep -v latest | head -1)
-            if [ -n "$VER" ]; then
-              cd $SDK/cmdline-tools && ln -s "$(basename $VER)" latest
-              echo "Symlink dibuat: latest → $(basename $VER)"
-            fi
-          fi
-          
-          echo "=== cmdline-tools setelah fix ==="
-          ls -la $SDK/cmdline-tools/
-          echo "=== Verifikasi sdkmanager ==="
+          sudo mkdir -p $SDK
+          sudo chown -R $USER $SDK
+          rm -rf $SDK/cmdline-tools
+          cd /tmp
+          curl -sSL -o cmdline.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q cmdline.zip
+          mkdir -p $SDK/cmdline-tools
+          mv cmdline-tools $SDK/cmdline-tools/latest
+          echo "=== Struktur cmdline-tools ==="
+          ls -la $SDK/cmdline-tools/latest/bin/
+          echo "=== Test sdkmanager ==="
           $SDK/cmdline-tools/latest/bin/sdkmanager --version
-          
+
+      - name: Install SDK packages
+        run: |
+          SDK="/usr/local/lib/android/sdk"
           yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          
-          $SDK/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" 2>&1 | tail -3
+          $SDK/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" 2>&1 | tail -5
+          echo "=== SDK structure ==="
+          ls -la $SDK/
 
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
 
-      - name: Prepare keystore
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/release.keystore
-
-      - name: Configure Bubblewrap
+      - name: Setup env + config
         run: |
           mkdir -p ~/.bubblewrap
           cat > ~/.bubblewrap/config.json <<EOF
           {
             "jdkPath": "$JAVA_HOME",
-            "androidSdkPath": "$ANDROID_HOME"
+            "androidSdkPath": "/usr/local/lib/android/sdk"
           }
           EOF
           echo "=== Config ==="
           cat ~/.bubblewrap/config.json
+          echo "BUBBLEWRAP_ANDROID_SDK_PATH=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "BUBBLEWRAP_JDK_PATH=$JAVA_HOME" >> $GITHUB_ENV
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+
+      - name: Prepare keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/release.keystore
 
       - name: Write twa-manifest.json
         run: |
@@ -117,7 +115,7 @@ jobs:
           }
           TWAEOF
 
-      - name: Fill passwords + alias
+      - name: Fill secrets
         working-directory: twa-build
         run: |
           jq --arg s "${{ secrets.KEYSTORE_PASSWORD }}" \
@@ -141,9 +139,8 @@ jobs:
         run: |
           bubblewrap build --skipPwaValidation
 
-      - name: Upload artifacts
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
           name: apk-output
           path: |
