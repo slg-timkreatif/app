@@ -29,10 +29,12 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://qamqqwfzhyiihqyzliwq.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://api.open-meteo.com">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
@@ -54,7 +56,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
   .skeleton{background:linear-gradient(90deg,#ECEAF2 25%,#F6F5F9 50%,#ECEAF2 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:.75rem}
   @keyframes shim{0%{background-position:-400px 0}100%{background-position:400px 0}}
-
   .acc-bg{background-color:var(--acc)}
   .acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
   .acc-soft{background-color:var(--acc-soft)}
@@ -79,12 +80,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .sync-bar{width:0;animation:syncprog 1.4s ease-in-out infinite}
   @keyframes syncprog{0%{width:0}60%{width:80%}100%{width:100%}}
 
-  /* A11Y */
   .skip-link{position:fixed;left:-9999px;top:8px;z-index:200;background:var(--acc);color:#fff;padding:.65rem 1rem;border-radius:.75rem;font-weight:800;font-size:.8rem;text-decoration:none}
   .skip-link:focus{left:8px}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-  /* DARK MODE */
   html.dark{--bg:#0F1115;--card:#1A1D24;--border:#2A2D35;color-scheme:dark}
   html.dark body{background:var(--bg);color:#E5E7EB}
   html.dark .card{background:var(--card);border-color:var(--border)}
@@ -95,8 +93,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .bg-slate-200{background:#2A2D35!important}
   html.dark .border-slate-200{border-color:#2A2D35!important}
   html.dark .border-slate-100{border-color:#252A33!important}
-  html.dark .divide-slate-100 > * + *{border-color:#252A33!important}
-  html.dark .divide-slate-100{border-color:#252A33!important}
   html.dark .text-slate-800{color:#F1F5F9!important}
   html.dark .text-slate-700{color:#E2E8F0!important}
   html.dark .text-slate-600{color:#CBD5E1!important}
@@ -111,15 +107,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .bg-rose-50\/60{background:rgba(244,63,94,.08)!important}
   html.dark .bg-amber-50\/60{background:rgba(245,158,11,.08)!important}
   html.dark .bg-black\/40{background:rgba(0,0,0,.65)!important}
-  html.dark .active\:bg-slate-50:active{background:#252A33!important}
 
-  /* SHEET DRAG */
   .sheet-drag{width:40px;height:4px;background:#CBD5E1;border-radius:9999px;margin:.75rem auto .5rem;cursor:grab;touch-action:none}
   html.dark .sheet-drag{background:#3A3D45}
   .sheet.sheet-dragging{transition:none!important}
   .sheet.sheet-closing{transition:transform .22s cubic-bezier(.4,0,.6,1)!important}
 
-  /* SEARCH HISTORY */
   .search-history{position:absolute;top:calc(100% + .35rem);left:0;right:0;z-index:30;background:var(--card);border:1px solid var(--border);border-radius:1rem;box-shadow:0 8px 24px rgba(20,18,26,.12);overflow:hidden;display:none}
   .search-history.show{display:block}
   .search-history-item{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;font-size:.8rem;font-weight:600;color:#475569;cursor:pointer;border-bottom:1px solid var(--border)}
@@ -130,7 +123,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .search-history-clear{margin-left:auto;font-size:.65rem;font-weight:800;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;background:none;border:0;cursor:pointer;padding:.2rem .4rem;border-radius:.4rem;display:block;width:100%;text-align:right}
   .search-history-clear:hover{background:#FEE2E2;color:#DC2626}
 
-  /* EMPTY STATE */
   .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;text-align:center}
   .empty-state .es-icon{width:56px;height:56px;border-radius:1rem;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;background:var(--acc-soft);color:var(--acc-text)}
   .empty-state .es-title{font-size:.85rem;font-weight:800;color:#1E293B}
@@ -138,12 +130,10 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .empty-state .es-title{color:#F1F5F9}
   html.dark .empty-state .es-desc{color:#94A3B8}
 
-  /* TRANSITION */
   .side-btn,.nav-btn{transition:background-color .15s ease,color .15s ease}
   main section{animation:fadeIn .2s ease both}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  /* ONBOARDING */
   .onboard-backdrop{position:fixed;inset:0;z-index:150;background:rgba(15,17,21,.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:1.5rem}
   .onboard-backdrop.show{display:flex;animation:fadeIn .25s ease both}
   .onboard-card{background:var(--card);border:1px solid var(--border);border-radius:1.5rem;padding:1.5rem;max-width:24rem;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUp .3s cubic-bezier(.4,0,.2,1) both}
@@ -152,7 +142,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .onboard-dot{width:6px;height:6px;border-radius:9999px;background:#CBD5E1;transition:all .2s}
   .onboard-dot.active{width:20px;background:var(--acc)}
 
-  /* CONTEXT MENU */
   .ctx-menu{position:fixed;z-index:120;background:var(--card);border:1px solid var(--border);border-radius:1rem;box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden;padding:.35rem;min-width:170px;display:none}
   .ctx-menu.show{display:block;animation:fadeIn .15s ease both}
   .ctx-menu button{display:flex;align-items:center;gap:.6rem;width:100%;padding:.65rem .85rem;font-size:.78rem;font-weight:700;color:#334155;background:none;border:0;text-align:left;border-radius:.6rem;cursor:pointer}
@@ -160,13 +149,11 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .ctx-menu button{color:#E2E8F0}
   html.dark .ctx-menu button:hover{background:#252A33}
 
-  /* HEADER VISIBILITY — CSS-based */
   body:not([data-page="home"]) #hdrAvatarBtn,
   body:not([data-page="home"]) #hdrInfoBlock,
   body:not([data-page="home"]) #hdrMetaRow{display:none!important}
   body[data-page="home"] #hdrTitle{display:none!important}
 
-  /* NAVBAR STATE */
   .nav-btn.nav-active{background-color:var(--acc)!important;color:#fff!important}
   .nav-btn.nav-active i,.nav-btn.nav-active span{color:#fff!important}
   .nav-btn.nav-inactive{background-color:transparent!important;color:rgba(255,255,255,.65)!important}
@@ -174,7 +161,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .side-btn.nav-active{background-color:var(--acc-soft)!important;color:var(--acc-text)!important}
   .side-btn.nav-inactive{background-color:transparent!important;color:#64748b!important}
 
-  /* KUSTOMISASI NAVBAR */
   .app-navbar{transition:left .2s,bottom .2s,border-radius .2s,box-shadow .2s}
   body[data-navbar="floating"] .app-navbar{left:12px!important;right:12px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem)!important;border-radius:1rem!important;border:0;box-shadow:0 8px 32px rgba(0,0,0,.25)}
   body[data-navbar="classic"] .app-navbar{left:0!important;right:0!important;bottom:0!important;border-radius:0!important;border:0;border-top:1px solid var(--border);box-shadow:0 -2px 12px rgba(0,0,0,.08);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem)}
@@ -209,25 +195,25 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   body[data-navbar="classic"][data-navbar-color="light"] .app-navbar{border:0;border-top:1px solid #E8E6EE}
   html.dark body[data-navbar="classic"][data-navbar-color="light"] .app-navbar{border-top:1px solid #334155}
 
-  /* DENSITY */
   body[data-density="compact"] main > section > * + *{margin-top:.5rem!important}
   body[data-density="compact"] .card{padding:.75rem!important}
   body[data-density="lega"] main > section > * + *{margin-top:1.5rem!important}
   body[data-density="lega"] .card{padding:1.25rem!important}
 
-  /* SEGMENTED BUTTON */
   .seg-btn{padding:10px 12px;border-radius:12px;font-size:11px;font-weight:800;background:#F6F5F9;color:#64748B;border:1px solid #E8E6EE;cursor:pointer;transition:all .15s}
   .seg-btn:active{transform:scale(.97)}
   .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
   html.dark .seg-btn{background:#1F232B;color:#94A3B8;border-color:#2A2D35}
   html.dark .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 
-  /* FILTER CHIP */
   .filter-chip{flex-shrink:0;padding:6px 12px;border-radius:9999px;font-size:11px;font-weight:700;background:var(--card);border:1px solid var(--border);color:#64748B;transition:all .15s;white-space:nowrap}
   .filter-chip:active{transform:scale(.95)}
   .filter-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
   html.dark .filter-chip{background:#1A1D24;color:#94A3B8;border-color:#2A2D35}
   html.dark .filter-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+  .menu-icon-img{border-radius:.75rem;object-fit:cover;background:#F1F5F9}
+  html.dark .menu-icon-img{background:#252A33}
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
@@ -266,7 +252,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300">Tautan</p>
       <div id="footSideList" class="space-y-0.5 opacity-80"></div>
     </div>
-    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2"></span></p>
+    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.56</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative min-w-0">
@@ -302,395 +288,413 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         </div>
       </div>
     </header>
-<main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
+    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
 
-  <section id="pageHome" class="space-y-4 min-w-0">
-    <div class="relative animate-fade-up">
-      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-      <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
-      <div id="searchHistory" class="search-history"></div>
-    </div>
-
-    <div id="searchResults" class="hidden space-y-4 animate-fade-up"></div>
-
-    <div id="authCard" class="hidden card p-5 text-center animate-fade-up">
-      <p class="text-sm font-extrabold text-slate-800">Guru Selogiri?</p>
-      <p class="text-[11px] text-slate-500 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p>
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button>
-        <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a>
-      </div>
-    </div>
-
-    <div id="caroBox" class="hidden animate-fade-up min-w-0">
-      <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div>
-      <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
-    </div>
-
-    <div id="infoPanel" class="card overflow-hidden animate-fade-up">
-      <button onclick="navPage('agenda')" class="w-full p-3.5 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-      <div class="border-t border-slate-200/70"></div>
-      <button onclick="navPage('dokumen')" class="w-full p-3.5 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-    </div>
-
-    <div id="recentBox" class="hidden animate-fade-up">
-      <div class="flex items-center justify-between mb-2">
-        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Terakhir Dibuka</p>
-        <button onclick="clearRecentActivity()" class="text-[10px] font-bold text-slate-400 active:scale-95 transition">Bersihkan</button>
-      </div>
-      <div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-    </div>
-
-    <div id="quickBox" class="animate-fade-up">
-      <div class="flex items-center justify-between mb-2">
-        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
-        <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
-      </div>
-      <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
-    </div>
-
-    <div class="animate-fade-up">
-      <div class="flex items-center justify-between mb-2">
-        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p>
-        <div class="flex gap-1.5">
-          <button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button>
-          <button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 transition">Terpopuler</button>
+      <section id="pageHome" class="space-y-4 min-w-0">
+        <div class="relative animate-fade-up">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
+          <div id="searchHistory" class="search-history"></div>
         </div>
-      </div>
-      <button id="inspOpenBtn" onclick="toggleInspForm(true)" class="w-full card insp-accent-card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition">
-        <span class="w-9 h-9 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
-        <span class="flex-1 text-xs font-extrabold text-slate-700">Bagikan Praktik Baik</span>
-        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-      </button>
-      <div id="inspForm" class="hidden card p-4 space-y-2 mt-2">
-        <div class="flex items-center justify-between">
-          <p class="text-[11px] font-bold text-slate-500">Tulis inspirasimu…</p>
-          <button onclick="toggleInspForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+
+        <div id="searchResults" class="hidden space-y-4 animate-fade-up"></div>
+
+        <div id="authCard" class="hidden card p-5 text-center animate-fade-up">
+          <p class="text-sm font-extrabold text-slate-800">Guru Selogiri?</p>
+          <p class="text-[11px] text-slate-500 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button>
+            <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a>
+          </div>
         </div>
-        <textarea id="inspIsi" rows="2" placeholder="Bagikan ide / praktik baikmu…" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></textarea>
-        <div class="flex gap-2">
-          <select id="inspKat" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
-            <option>Praktik Baik</option>
-            <option>Ide Kegiatan</option>
-            <option>Teladan</option>
-          </select>
-          <button onclick="postInspirasi()" class="shrink-0 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">+ Bagikan</button>
+
+        <div id="caroBox" class="hidden animate-fade-up min-w-0">
+          <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div>
+          <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
         </div>
-      </div>
-      <div id="inspList" class="space-y-2 mt-2"></div>
-      <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
-    </div>
 
-    <div id="footList" class="animate-fade-up md:hidden"></div>
-
-  </section>
-
-  <section id="pageApps" class="hidden space-y-3 min-w-0">
-    <div class="relative">
-      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
-      <input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring">
-      <button id="viewToggle" onclick="toggleView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" title="Ganti tampilan" aria-label="Ganti tampilan"><i id="viewToggleIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
-    </div>
-    <div id="filterBar" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-    <div id="layananBody"></div>
-  </section>
-
-  <section id="pageAgenda" class="hidden space-y-4 min-w-0">
-    <div id="calChips" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-    <div id="agendaTimeline" class="space-y-4"></div>
-  </section>
-
-  <section id="pageDokumen" class="hidden space-y-2 min-w-0">
-    <div class="relative mb-3">
-      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-      <input id="inSearchDok" type="text" placeholder="Cari dokumen…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="renderDokumen(this.value)">
-      <button id="dokViewToggle" onclick="toggleDokView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan"><i id="dokViewIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
-    </div>
-    <div id="dokList"></div>
-  </section>
-
-  <section id="pageProfile" class="hidden space-y-4 min-w-0">
-    <div id="profGuest" class="card p-6 text-center">
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div>
-      <p class="text-base font-extrabold text-slate-800">Mode Tamu</p>
-      <p class="text-xs text-slate-500 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p>
-      <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button>
-    </div>
-    <div id="profData" class="hidden space-y-4">
-      <div class="card p-5 flex items-center gap-4">
-        <div class="relative shrink-0 w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md" id="pfAvatar">
-          <img id="pfAvatarImg" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
+        <div id="infoPanel" class="card overflow-hidden animate-fade-up">
+          <button onclick="navPage('agenda')" class="w-full p-3.5 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+          <div class="border-t border-slate-200/70"></div>
+          <button onclick="navPage('dokumen')" class="w-full p-3.5 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
         </div>
-        <div class="min-w-0">
-          <p id="pfNama" class="text-base font-extrabold text-slate-800 leading-tight truncate">—</p>
-          <p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p>
-          <span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span>
+
+        <div id="recentBox" class="hidden animate-fade-up">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Terakhir Dibuka</p>
+            <button onclick="clearRecentActivity()" class="text-[10px] font-bold text-slate-400 active:scale-95 transition">Bersihkan</button>
+          </div>
+          <div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
         </div>
-      </div>
-      <div class="card p-4 space-y-2.5">
-        <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
-        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
-        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
-        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
-        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="mail" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dEmail" class="truncate">—</span></p>
-      </div>
-      <div class="card p-4 space-y-2.5">
-        <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
-        <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
-        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-        <div class="flex gap-2">
-          <button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button>
-          <button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button>
+
+        <div id="quickBox" class="animate-fade-up">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
+            <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
+          </div>
+          <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
         </div>
-      </div>
-      <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500">
-        <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
-        <span id="aboutVer"></span>
-      </div>
-      <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
-    </div>
-  </section>
 
-  <section id="pageSetting" class="hidden space-y-4 min-w-0">
-
-    <div class="card p-4">
-      <p class="text-[13px] font-extrabold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 acc-text"></i> Tema Cepat</p>
-      <div class="grid grid-cols-2 gap-2">
-        <button data-preset="profesional" onclick="applyPreset('profesional')" class="seg-btn">Profesional</button>
-        <button data-preset="hangat" onclick="applyPreset('hangat')" class="seg-btn">Hangat</button>
-        <button data-preset="fresh" onclick="applyPreset('fresh')" class="seg-btn">Fresh</button>
-        <button data-preset="elegan" onclick="applyPreset('elegan')" class="seg-btn">Elegan</button>
-      </div>
-    </div>
-
-    <div class="card p-4 space-y-4">
-      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Tampilan</p>
-      <div>
-        <p class="text-[11px] font-bold text-slate-500 mb-2">Warna Aksen</p>
-        <div class="flex gap-2.5" id="accRow">
-          <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-          <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-          <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-          <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-          <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+        <div class="animate-fade-up">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p>
+            <div class="flex gap-1.5">
+              <button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button>
+              <button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 transition">Terpopuler</button>
+            </div>
+          </div>
+          <button id="inspOpenBtn" onclick="toggleInspForm(true)" class="w-full card insp-accent-card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition">
+            <span class="w-9 h-9 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+            <span class="flex-1 text-xs font-extrabold text-slate-700">Bagikan Praktik Baik</span>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+          </button>
+          <div id="inspForm" class="hidden card p-4 space-y-2 mt-2">
+            <div class="flex items-center justify-between">
+              <p class="text-[11px] font-bold text-slate-500">Tulis inspirasimu…</p>
+              <button onclick="toggleInspForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+            </div>
+            <textarea id="inspIsi" rows="2" placeholder="Bagikan ide / praktik baikmu…" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></textarea>
+            <div class="flex gap-2">
+              <select id="inspKat" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
+                <option>Praktik Baik</option>
+                <option>Ide Kegiatan</option>
+                <option>Teladan</option>
+              </select>
+              <button onclick="postInspirasi()" class="shrink-0 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">+ Bagikan</button>
+            </div>
+          </div>
+          <div id="inspList" class="space-y-2 mt-2"></div>
+          <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
         </div>
-      </div>
-      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Mode Gelap</p><button id="tglDark" onclick="setDark()" aria-label="Mode gelap" class="w-12 h-7 rounded-full relative transition bg-slate-200"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-    </div>
 
-    <div class="card p-4 space-y-4">
-      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4 acc-text"></i> Navbar</p>
-      <div>
-        <p class="text-[11px] font-bold text-slate-500 mb-2">Gaya</p>
-        <div class="grid grid-cols-2 gap-2">
-          <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
-          <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
+        <div id="footList" class="animate-fade-up md:hidden"></div>
+      </section>
+
+      <section id="pageApps" class="hidden space-y-3 min-w-0">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+          <input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring">
+          <button id="viewToggle" onclick="toggleView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" title="Ganti tampilan" aria-label="Ganti tampilan"><i id="viewToggleIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
         </div>
-      </div>
-      <div>
-        <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
-        <div class="grid grid-cols-2 gap-2">
-          <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
-          <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+        <div id="filterBar" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+        <div id="layananBody"></div>
+      </section>
+
+      <section id="pageAgenda" class="hidden space-y-4 min-w-0">
+        <div id="calChips" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+        <div id="agendaTimeline" class="space-y-4"></div>
+      </section>
+
+      <section id="pageDokumen" class="hidden space-y-2 min-w-0">
+        <div class="relative mb-3">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input id="inSearchDok" type="text" placeholder="Cari dokumen…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="renderDokumen(this.value)">
+          <button id="dokViewToggle" onclick="toggleDokView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan"><i id="dokViewIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
         </div>
-      </div>
-    </div>
+        <div id="dokList"></div>
+      </section>
 
-    <div class="card p-4">
-      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="rows-3" class="w-4 h-4 acc-text"></i> Kepadatan Konten</p>
-      <div class="grid grid-cols-3 gap-2">
-        <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
-        <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
-        <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
-      </div>
-    </div>
+      <section id="pageProfile" class="hidden space-y-4 min-w-0">
+        <div id="profGuest" class="card p-6 text-center">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div>
+          <p class="text-base font-extrabold text-slate-800">Mode Tamu</p>
+          <p class="text-xs text-slate-500 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p>
+          <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button>
+        </div>
+        <div id="profData" class="hidden space-y-4">
+          <div class="card p-5 flex items-center gap-4">
+            <div class="relative shrink-0 w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md" id="pfAvatar">
+              <img id="pfAvatarImg" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
+            </div>
+            <div class="min-w-0">
+              <p id="pfNama" class="text-base font-extrabold text-slate-800 leading-tight truncate">—</p>
+              <p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p>
+              <span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span>
+            </div>
+          </div>
+          <div class="card p-4 space-y-2.5">
+            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
+            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="mail" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dEmail" class="truncate">—</span></p>
+          </div>
+          <div class="card p-4 space-y-2.5">
+            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
+            <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+            <div class="flex gap-2">
+              <button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button>
+              <button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+            <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
+            <span id="aboutVer">v4.56</span>
+          </div>
+          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+        </div>
+      </section>
 
-    <div class="card p-4">
-      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="settings" class="w-4 h-4 acc-text"></i> Aplikasi</p>
-      <div class="divide-y divide-slate-100">
-        <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+      <section id="pageSetting" class="hidden space-y-4 min-w-0">
+
+        <div class="card p-4">
+          <p class="text-[13px] font-extrabold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 acc-text"></i> Tema Cepat</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button data-preset="profesional" onclick="applyPreset('profesional')" class="seg-btn">Profesional</button>
+            <button data-preset="hangat" onclick="applyPreset('hangat')" class="seg-btn">Hangat</button>
+            <button data-preset="fresh" onclick="applyPreset('fresh')" class="seg-btn">Fresh</button>
+            <button data-preset="elegan" onclick="applyPreset('elegan')" class="seg-btn">Elegan</button>
+          </div>
+        </div>
+
+        <div class="card p-4 space-y-4">
+          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Tampilan</p>
+          <div>
+            <p class="text-[11px] font-bold text-slate-500 mb-2">Warna Aksen</p>
+            <div class="flex gap-2.5" id="accRow">
+              <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+              <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+              <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+              <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+              <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Mode Gelap</p><button id="tglDark" onclick="setDark()" aria-label="Mode gelap" class="w-12 h-7 rounded-full relative transition bg-slate-200"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+          <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+          <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+        </div>
+
+        <div class="card p-4 space-y-4">
+          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4 acc-text"></i> Navbar</p>
+          <div>
+            <p class="text-[11px] font-bold text-slate-500 mb-2">Gaya</p>
+            <div class="grid grid-cols-2 gap-2">
+              <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
+              <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
+            </div>
+          </div>
+          <div>
+            <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
+            <div class="grid grid-cols-2 gap-2">
+              <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
+              <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-4">
+          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="rows-3" class="w-4 h-4 acc-text"></i> Kepadatan Konten</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
+            <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
+            <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
+          </div>
+        </div>
+
+        <div class="card p-4">
+          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="settings" class="w-4 h-4 acc-text"></i> Aplikasi</p>
+          <div class="divide-y divide-slate-100">
+            <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+              <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
+              <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+            </button>
+            <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+              <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
+              <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+            </button>
+            <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+              <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
+              <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+            </button>
+          </div>
+        </div>
+
+        <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
         </button>
-        <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-          <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-        </button>
-        <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-        </button>
-      </div>
-    </div>
 
-    <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
-      <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
-    </button>
-
-    <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi"></span></p>
-  </section>
+        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.56</span></p>
+      </section>
       <section id="pageBagi" class="hidden space-y-4 min-w-0">
-      <div id="quoteBox" class="card p-4 relative overflow-hidden min-w-0">
-        <i data-lucide="quote" class="w-7 h-7 text-slate-100 absolute top-3 right-3"></i>
-        <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
-        <div class="flex items-center justify-between mt-2 gap-2">
-          <p id="quoteAuthor" class="text-[11px] font-bold text-slate-500 truncate">— …</p>
-          <div class="flex items-center gap-2 shrink-0">
-            <button id="btnQuote" onclick="gantiQuote()" aria-label="Ganti kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-            <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
+        <div id="quoteBox" class="card p-4 relative overflow-hidden min-w-0">
+          <i data-lucide="quote" class="w-7 h-7 text-slate-100 absolute top-3 right-3"></i>
+          <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
+          <div class="flex items-center justify-between mt-2 gap-2">
+            <p id="quoteAuthor" class="text-[11px] font-bold text-slate-500 truncate">— …</p>
+            <div class="flex items-center gap-2 shrink-0">
+              <button id="btnQuote" onclick="gantiQuote()" aria-label="Ganti kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="treeGuest" class="hidden card p-6 text-center">
-        <div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div>
-        <p class="text-sm font-extrabold text-slate-800">Pohon Ilmu menantimu</p>
-        <p class="text-xs text-slate-500 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p>
-        <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Masuk Sekarang</button>
-      </div>
+        <div id="treeGuest" class="hidden card p-6 text-center">
+          <div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div>
+          <p class="text-sm font-extrabold text-slate-800">Pohon Ilmu menantimu</p>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p>
+          <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Masuk Sekarang</button>
+        </div>
 
-      <div id="treeData" class="space-y-4">
-        <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden">
-          <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div>
-          <div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div>
-          <div class="flex-1 min-w-0">
-            <p class="text-[10px] font-black uppercase tracking-widest text-white/80 grad-text">Pohon Ilmu</p>
-            <p id="treeLevel" class="text-lg font-black leading-tight grad-text">Biji</p>
-            <div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div>
-            <p class="text-[10px] font-semibold text-white/90 mt-1 grad-text"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
+        <div id="treeData" class="space-y-4">
+          <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden">
+            <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div>
+            <div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div>
+            <div class="flex-1 min-w-0">
+              <p class="text-[10px] font-black uppercase tracking-widest text-white/80 grad-text">Pohon Ilmu</p>
+              <p id="treeLevel" class="text-lg font-black leading-tight grad-text">Biji</p>
+              <div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div>
+              <p class="text-[10px] font-semibold text-white/90 mt-1 grad-text"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
+            </div>
+            <div class="text-right shrink-0">
+              <p class="text-[10px] font-bold text-white/80 flex items-center gap-1 justify-end grad-text"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p>
+            </div>
           </div>
-          <div class="text-right shrink-0">
-            <p class="text-[10px] font-bold text-white/80 flex items-center gap-1 justify-end grad-text"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p>
+          <div class="grid grid-cols-4 gap-2 text-center">
+            <div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Poin</p></div>
+            <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Streak</p></div>
+            <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-700">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Login</p></div>
+            <div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Lencana</p></div>
           </div>
         </div>
-        <div class="grid grid-cols-4 gap-2 text-center">
-          <div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Poin</p></div>
-          <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Streak</p></div>
-          <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-700">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Login</p></div>
-          <div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Lencana</p></div>
+
+        <div id="tokoWrap" class="card p-4 hidden">
+          <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 acc-text"></i> Toko Poin</p>
+          <div id="rewardList" class="space-y-2"></div>
         </div>
-      </div>
 
-      <div id="tokoWrap" class="card p-4 hidden">
-        <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 acc-text"></i> Toko Poin</p>
-        <div id="rewardList" class="space-y-2"></div>
-      </div>
+        <div class="animate-fade-up">
+          <button id="kudosOpenBtn" onclick="toggleKudosForm(true)" class="w-full card kudos-accent-card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition">
+            <span class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0"><i data-lucide="heart-handshake" class="w-4 h-4"></i></span>
+            <span class="flex-1 min-w-0">
+              <span class="block text-xs font-extrabold text-slate-700">Apresiasi Rekanmu</span>
+              <span id="kudosTeaser" class="block text-[10px] text-slate-500 truncate">Kirim bintang untuk rekanmu</span>
+            </span>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+          </button>
+          <div id="kudosForm" class="hidden card p-4 space-y-2 mt-2">
+            <div class="flex items-center justify-between">
+              <p class="text-[11px] font-bold text-slate-500">Pilih rekan & tulis apresiasi…</p>
+              <button onclick="toggleKudosForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+            </div>
+            <select id="kudosTo" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></select>
+            <input id="kudosPesan" placeholder="Tulis apresiasi (opsional)" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">
+            <button onclick="sendKudos()" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Kirim Apresiasi 🙏</button>
+            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider pt-2">Paling Diapresiasi</p>
+            <div id="kudosTop" class="space-y-2"></div>
+          </div>
+        </div>
 
-      <div class="animate-fade-up">
-        <button id="kudosOpenBtn" onclick="toggleKudosForm(true)" class="w-full card kudos-accent-card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition">
-          <span class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0"><i data-lucide="heart-handshake" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0">
-            <span class="block text-xs font-extrabold text-slate-700">Apresiasi Rekanmu</span>
-            <span id="kudosTeaser" class="block text-[10px] text-slate-500 truncate">Kirim bintang untuk rekanmu</span>
+        <div>
+          <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p>
+          <div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
+        </div>
+
+        <div id="karyaWrap" class="hidden">
+          <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p>
+          <div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+        </div>
+
+        <div class="card p-4">
+          <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Guru Paling Aktif</p>
+          <div id="leadList" class="space-y-2"></div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
+      <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
+      <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
+      <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
+      <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
+    </nav>
+  </div>
+
+  <div id="pLogin" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+    <div id="pLoginSheet" class="sheet p-6 overflow-y-auto no-scroll">
+      <div class="sheet-drag" data-sheet-handle></div>
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3 border border-slate-200">
+          <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+        </div>
+        <p class="text-base font-extrabold text-slate-800">Masuk Portal</p>
+        <p class="text-[11px] text-slate-500 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
+      </div>
+      <form id="formLogin" class="space-y-3">
+        <input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
+        <input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
+        <button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk</button>
+      </form>
+      <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 flex-1"></div></div>
+      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
+    </div>
+  </div>
+
+  <div id="pNotif" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
+    <div id="pNotifSheet" class="sheet bg-slate-50">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
+        <p class="text-base font-extrabold text-slate-800">Notifikasi</p>
+        <button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+      </div>
+      <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
+    </div>
+  </div>
+
+  <div id="pParent" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pParent')"></div>
+    <div id="pParentSheet" class="sheet bg-slate-50">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0">
+        <div class="flex items-center gap-3 min-w-0">
+          <span id="pParentIcon" class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0 overflow-hidden">
+            <i data-lucide="folder" class="w-5 h-5"></i>
           </span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-        </button>
-        <div id="kudosForm" class="hidden card p-4 space-y-2 mt-2">
-          <div class="flex items-center justify-between">
-            <p class="text-[11px] font-bold text-slate-500">Pilih rekan & tulis apresiasi…</p>
-            <button onclick="toggleKudosForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+          <div class="min-w-0">
+            <p id="pParentTitle" class="text-base font-extrabold text-slate-800 truncate">Menu</p>
+            <p id="pParentSub" class="text-[10px] text-slate-500 truncate">—</p>
           </div>
-          <select id="kudosTo" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></select>
-          <input id="kudosPesan" placeholder="Tulis apresiasi (opsional)" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">
-          <button onclick="sendKudos()" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Kirim Apresiasi 🙏</button>
-          <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider pt-2">Paling Diapresiasi</p>
-          <div id="kudosTop" class="space-y-2"></div>
         </div>
+        <button onclick="tutupPanel('pParent')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
       </div>
-
-      <div>
-        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p>
-        <div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
-      </div>
-
-      <div id="karyaWrap" class="hidden">
-        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p>
-        <div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-      </div>
-
-      <div class="card p-4">
-        <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Guru Paling Aktif</p>
-        <div id="leadList" class="space-y-2"></div>
-      </div>
-    </section>
-  </main>
-
-  <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
-    <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
-    <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
-    <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
-    <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
-  </nav>
-</div>
-
-<div id="pLogin" class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
-  <div id="pLoginSheet" class="sheet p-6 overflow-y-auto no-scroll">
-    <div class="sheet-drag" data-sheet-handle></div>
-    <div class="text-center mb-5">
-      <div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3 border border-slate-200">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
-      </div>
-      <p class="text-base font-extrabold text-slate-800">Masuk Portal</p>
-      <p class="text-[11px] text-slate-500 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
+      <div id="pParentList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-2"></div>
     </div>
-    <form id="formLogin" class="space-y-3">
-      <input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
-      <input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
-      <button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk</button>
-    </form>
-    <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 flex-1"></div></div>
-    <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
   </div>
-</div>
 
-<div id="pNotif" class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
-  <div id="pNotifSheet" class="sheet bg-slate-50">
-    <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
-      <p class="text-base font-extrabold text-slate-800">Notifikasi</p>
-      <button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+  <div id="pFb" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
+    <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll">
+      <div class="sheet-drag" data-sheet-handle></div>
+      <p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p>
+      <p class="text-[11px] text-slate-500 mb-4">Masukanmu kami baca & langsung diteruskan ke admin. (+1 poin)</p>
+      <div class="flex gap-2">
+        <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold acc-bg text-white">💡 Saran</button>
+        <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">🐞 Bug</button>
+        <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">⭐ Pujian</button>
+      </div>
+      <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
+      <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 acc-ring"></textarea>
+      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Kirim</button>
     </div>
-    <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
   </div>
-</div>
-
-<div id="pFb" class="fixed inset-0 z-50 hidden">
-  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
-  <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll">
-    <div class="sheet-drag" data-sheet-handle></div>
-    <p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p>
-    <p class="text-[11px] text-slate-500 mb-4">Masukanmu kami baca & langsung diteruskan ke admin. (+1 poin)</p>
-    <div class="flex gap-2">
-      <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold acc-bg text-white">💡 Saran</button>
-      <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">🐞 Bug</button>
-      <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">⭐ Pujian</button>
-    </div>
-    <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
-    <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 acc-ring"></textarea>
-    <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Kirim</button>
-  </div>
-</div>
   <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
-  <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
-    <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1">Aplikasi</p>
-    <button onclick="bukaExternal()" aria-label="Buka di browser" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
-      <i data-lucide="external-link" class="w-4 h-4 text-white"></i>
-    </button>
-    <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
-      <i data-lucide="x" class="w-4 h-4 text-white"></i>
-    </button>
+    <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0">
+      <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1">Aplikasi</p>
+      <button onclick="bukaExternal()" aria-label="Buka di browser" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="external-link" class="w-4 h-4 text-white"></i>
+      </button>
+      <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition ml-2">
+        <i data-lucide="x" class="w-4 h-4 text-white"></i>
+      </button>
+    </div>
+    <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer"></iframe>
   </div>
-  <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer"></iframe>
-</div>
 
   <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
     <div class="px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
@@ -821,6 +825,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded',function(){
+'use strict';
+
 /* ============================================================
    KONSTANTA DASAR
    ============================================================ */
@@ -830,6 +837,7 @@ const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main
 const FOTO_BASE=SB_URL+'/storage/v1/object/public/foto-gtk/';
 const isTWA=(document.referrer||'').startsWith('android-app://');
 function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
+
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
 
@@ -892,7 +900,7 @@ const idb=(()=>{
 })();
 
 /* ============================================================
-   Error boundary global
+   Error boundary
    ============================================================ */
 const _errBuf=[];
 function logLocalError(aksi,meta){
@@ -967,25 +975,35 @@ const COLOR={
   rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],
   fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],
   red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],
-  yellow:['bg-yellow-100','text-yellow-600']
+  yellow:['bg-yellow-100','text-yellow-600'],sky:['bg-sky-100','text-sky-600']
 };
 const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
-const BADGES=[{id:'first',n:'Langkah Pertama',d:'Login pertama',i:'footprints'},{id:'rajin7',n:'Rajin 7',d:'Streak 7 hari',i:'flame'},{id:'inspirasi',n:'Penyebar Inspirasi',d:'5× bagikan karya',i:'share-2'},{id:'suara',n:'Suara Guru',d:'Kirim saran',i:'lightbulb'},{id:'veteran',n:'Veteran',d:'50 login',i:'medal'},{id:'rindang',n:'Rindang',d:'Capai Pohon Rindang',i:'tree-pine'}];
-const KAT_ORDER=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspirasi','Komunitas & KKG','Kepala Sekolah','Tools & Arsip','Informasi','Umum'];
 const TPL={quote:{n:'Quote',i:'quote',f:[['text','Tulis quote…'],['author','Nama tokoh']]},ucapan:{n:'Ucapan',i:'party-popper',f:[['title','Judul ucapan'],['msg','Pesan']]},undangan:{n:'Undangan',i:'mail',f:[['title','Nama acara'],['date','Tanggal'],['time','Waktu'],['place','Tempat']]},prestasi:{n:'Prestasi',i:'trophy',ph:1,f:[['title','Judul prestasi'],['name','Nama peraih']]},cover:{n:'Cover Materi',i:'book-open',f:[['title','Judul materi'],['kelas','Kelas'],['guru','Nama guru']]},dokumentasi:{n:'Dokumentasi',i:'camera',ph:1,f:[['title','Caption kegiatan'],['date','Tanggal']]}};
 const FMT={story:{n:'Story 9:16',w:1080,h:1920},feed:{n:'Feed 1:1',w:1080,h:1080},potret:{n:'Potret 4:5',w:1080,h:1350},lanskap:{n:'Lanskap',w:1200,h:630},thumb:{n:'Thumb 16:9',w:1280,h:720}};
 const FONTS={modern:{n:'Modern',f:'Inter, Arial, sans-serif',w:'700'},elegan:{n:'Elegan',f:'"Playfair Display", Georgia, serif',w:'800'},hangat:{n:'Hangat',f:'Caveat, cursive',w:'700'}};
-const PANELS=['pNotif','pFb','pLogin'];
+const PANELS=['pNotif','pFb','pLogin','pParent'];
 const MODALS=['mApp','mPop','mIos','mStudio','mShare'];
 const isMobile=matchMedia('(max-width:768px)').matches;
 const RENDER_SIG={};
 function sigChanged(key,val){let s;try{s=JSON.stringify(val);}catch(e){s=String(val);}if(RENDER_SIG[key]===s)return false;RENDER_SIG[key]=s;return true;}
 function resetRenderSig(){for(const k in RENDER_SIG)delete RENDER_SIG[k];}
-function icons(){lucide.createIcons();}
-function esc(s){return (s||'').replace(/</g,'&lt;');}
 
 /* ============================================================
-   Sanitizer HTML mini
+   BATCHED icons() — Quick Win #4
+   ============================================================ */
+let _iconsTimer=null;
+function icons(){
+  if(_iconsTimer)return;
+  _iconsTimer=requestAnimationFrame(()=>{
+    _iconsTimer=null;
+    lucide.createIcons();
+  });
+}
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);}
+
+/* ============================================================
+   Sanitizer HTML
    ============================================================ */
 function sanitizeHtml(html){
   if(!html)return '';
@@ -1059,8 +1077,7 @@ function handleDeepLink(){
     if(!q.toString())return;
     const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel');
     if(page)navPage(page);
-    if(panel==='notif')openPanel('pNotif');
-    else if(panel==='login')openPanel('pLogin');
+    if(panel==='notif')openPanel('pNotif');else if(panel==='login')openPanel('pLogin');
     if(menu){const m=STATE.menus.find(x=>x.judul===menu);if(m)klikMenu(m.judul);else toast('Menu tidak ditemukan: '+menu,'info');}
     if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
     history.replaceState(CUR,'',location.pathname);
@@ -1253,12 +1270,12 @@ window.addEventListener('online',updateOnlineStatus);
 window.addEventListener('offline',updateOnlineStatus);
 
 /* ============================================================
-   Cuaca
+   Cuaca — cache 3 jam (Quick Win #3)
    ============================================================ */
 async function muatCuaca(){
   try{
     const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');
-    if(cache&&Date.now()-cache.t<3600000){showWx(cache.d);return;}
+    if(cache&&Date.now()-cache.t<3*3600000){showWx(cache.d);return;}
     const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');
     const j=await r.json();
     if(j&&j.current_weather){
@@ -1371,9 +1388,13 @@ function openModal(id){if(CUR.modal===id)return;showModalInstant(id);CUR.modal=i
 function tutupModal(id){if(CUR.modal===id){try{history.back()}catch(e){closeModalInstant(id);CUR.modal=null;}}else closeModalInstant(id);}
 function tutupApp(){tutupModal('mApp');$('mAppFrame').src='';}
 function tutupPop(){popDismissed=true;tutupModal('mPop');}
+function bukaExternal(){
+  const u=$('mAppFrame').src;
+  if(u&&u!=='about:blank')window.open(u,'_blank','noopener');
+}
 
 /* ============================================================
-   Search & Universal Search
+   Search Universal
    ============================================================ */
 const SEARCH_HIST_KEY='gb_search_history';
 let _homeSearchTimer=null;
@@ -1522,6 +1543,35 @@ function renderCarousel(){
 }
 
 /* ============================================================
+   Icon Renderer — Lucide atau URL gambar
+   ============================================================ */
+function isUrlIcon(icon){
+  if(!icon)return false;
+  return /^https?:\/\//i.test(icon)||icon.startsWith('data:image');
+}
+function renderMenuIcon(icon,cls){
+  cls=cls||'w-5 h-5';
+  if(!icon)return `<i data-lucide="app-window" class="${cls}"></i>`;
+  if(isUrlIcon(icon)){
+    return `<img src="${esc(icon)}" class="${cls} menu-icon-img" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
+  }
+  return `<i data-lucide="${esc(icon)}" class="${cls}"></i>`;
+}
+
+/* ============================================================
+   Dynamic Kategori Order
+   ============================================================ */
+const DEFAULT_KAT_ORDER=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspirasi','Komunitas & KKG','Kepala Sekolah','Tools & Arsip','Informasi','Umum'];
+function getKatOrder(){
+  const existing=[...new Set((STATE.menus||[]).map(m=>m.kategori||'Umum'))];
+  const result=[];
+  DEFAULT_KAT_ORDER.forEach(k=>{if(existing.includes(k))result.push(k);});
+  const extra=existing.filter(k=>!DEFAULT_KAT_ORDER.includes(k)).sort();
+  extra.forEach(k=>result.push(k));
+  return result;
+}
+
+/* ============================================================
    Layanan + Filter + Favorit
    ============================================================ */
 function setView(v){localStorage.setItem('gb_view',v);paintView();renderLayanan($('inSearch').value);}
@@ -1574,19 +1624,19 @@ function boxItem(m){
   const isFav=STATE.favs.has(m.judul);
   const badge=m.label?`<span class="text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded align-middle ml-1">${m.label}</span>`:'';
   const star=`<button onclick="toggleFav('${m.judul.replace(/'/g,"\\'")}',event)" aria-label="Favorit" class="w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="star" class="w-3.5 h-3.5 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0"><span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><div class="flex items-start gap-2"><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${m.judul}${badge}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span>${star}</div></a>`;
+  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0"><span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><div class="flex items-start gap-2"><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${m.judul}${badge}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span>${star}</div></a>`;
 }
 function rowItem(m){
   const [bg,tx]=COLOR[m.warna]||COLOR.blue;
   const isFav=STATE.favs.has(m.judul);
   const star=`<button onclick="toggleFav('${m.judul.replace(/'/g,"\\'")}',event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center active:scale-90 transition shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span>${star}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
+  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span>${star}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
 }
 
 function renderFilterBar(){
   const bar=$('filterBar');
   if(!bar)return;
-  const cats=KAT_ORDER.filter(k=>STATE.menus.some(m=>visible(m)&&!m.sub_menu_dari&&(m.kategori||'Umum')===k));
+  const cats=getKatOrder().filter(k=>STATE.menus.some(m=>visible(m)&&!m.sub_menu_dari&&(m.kategori||'Umum')===k));
   const cur=STATE.filterLayanan||'all';
   const chips=[
     `<button class="filter-chip ${cur==='all'?'on':''}" onclick="setFilterLayanan('all')">Semua</button>`,
@@ -1621,7 +1671,7 @@ function renderLayanan(filter=''){
       ?`<div class="mb-5"><p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p><div class="space-y-2">${favs.map(rowItem).join('')}</div></div>`
       :`<div class="mb-5"><p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p><div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${favs.map(boxItem).join('')}</div></div>`;
   }
-  const cats=KAT_ORDER.filter(k=>rest.some(m=>(m.kategori||'Umum')===k));
+  const cats=getKatOrder().filter(k=>rest.some(m=>(m.kategori||'Umum')===k));
   html+=cats.map(k=>{
     const list=rest.filter(m=>(m.kategori||'Umum')===k);
     const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">${k}</p>`;
@@ -1636,7 +1686,13 @@ $('inSearch').addEventListener('input',e=>{$('inSearchHome').value=e.target.valu
 
 function klikMenu(judul){
   const m=STATE.menus.find(x=>x.judul===judul);
-  if(m&&needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}
+  if(!m)return;
+  if(needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}
+  const children=STATE.menus.filter(x=>visible(x)&&x.sub_menu_dari===judul);
+  if(children.length>0){
+    openParentMenu(m,children);
+    return;
+  }
   bukaUrl(m);
 }
 function isSafeUrl(u){if(!u)return false;return u.startsWith('http://')||u.startsWith('https://')||u.startsWith('/')||u.startsWith('?');}
@@ -1655,19 +1711,64 @@ function bukaUrl(m){
     location.href=u;
   }
 }
-function bukaFoot(f) {
-  if (!f) return;
-  const u = f.url || '';
-  if (!u || u === '#') return;
-  // Semua footer link → buka di tab baru (tanpa iframe modal)
-  if (u.startsWith('http://') || u.startsWith('https://')) {
-    window.open(u, '_blank', 'noopener');
+function bukaFoot(f){
+  if(!f)return;
+  const u=f.url||'';
+  if(!u||u==='#')return;
+  if(u.startsWith('http://')||u.startsWith('https://')){
+    window.open(u,'_blank','noopener');
     return;
   }
-  // Link relatif (internal) → navigasi normal
-  if (isSafeUrl(u)) {
-    location.href = u;
+  if(isSafeUrl(u)){
+    location.href=u;
   }
+}
+
+/* ============================================================
+   Parent Drilldown
+   ============================================================ */
+function openParentMenu(m,children){
+  $('pParentTitle').textContent=m.judul||'Menu';
+  $('pParentSub').textContent=`${children.length} sub-menu`;
+  const iconBox=$('pParentIcon');
+  if(iconBox){
+    if(isUrlIcon(m.icon)){
+      iconBox.innerHTML=`<img src="${esc(m.icon)}" class="w-full h-full object-cover" alt="">`;
+    }else{
+      iconBox.innerHTML=`<i data-lucide="${esc(m.icon||'folder')}" class="w-5 h-5"></i>`;
+    }
+  }
+  $('pParentList').innerHTML=children.map(c=>{
+    const [bg,tx]=COLOR[c.warna]||COLOR.blue;
+    return `<button onclick='parentBukaChild(${JSON.stringify(c).replace(/'/g,"&#39;")})' class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition">
+      <span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(c.icon,'w-5 h-5')}</span>
+      <span class="flex-1 min-w-0">
+        <span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${esc(c.judul)}</span>
+        <span class="block text-[10px] text-slate-400 truncate mt-0.5">${esc(c.deskripsi||'')}</span>
+      </span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+    </button>`;
+  }).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada sub-menu.</p>';
+  icons();
+  openPanel('pParent');
+}
+function parentBukaChild(c){
+  tutupPanel('pParent');
+  setTimeout(()=>{
+    const m=STATE.menus.find(x=>x.id===c.id)||c;
+    logAktivitas('buka_menu',{judul:m.judul});
+    trackRecentActivity('menu',{id:m.judul,icon:m.icon});
+    const u=m.url||'#';
+    if(m.cara_buka==='app'&&u.startsWith('http')){
+      $('mAppTitle').textContent=m.judul;
+      $('mAppFrame').src=u;
+      openModal('mApp');
+    }else if(u.startsWith('http')){
+      window.open(u,'_blank','noopener');
+    }else if(u&&u!=='#'&&isSafeUrl(u)){
+      location.href=u;
+    }
+  },200);
 }
 
 /* ============================================================
@@ -1697,7 +1798,7 @@ function renderRecentActivity(){
     const safe=String(item.id).replace(/'/g,"\\'");
     if(item.type==='menu'){
       return `<button onclick="klikMenu('${safe}')" class="shrink-0 card p-3 flex items-center gap-2.5 active:scale-95 transition min-w-[150px] max-w-[200px]">
-        <span class="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center shrink-0"><i data-lucide="${item.icon}" class="w-4 h-4"></i></span>
+        <span class="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(item.icon,'w-4 h-4')}</span>
         <span class="min-w-0 text-left"><span class="block text-[11px] font-extrabold text-slate-700 truncate">${esc(item.id)}</span><span class="block text-[9px] text-slate-400">${waktuRelatif(item.t)}</span></span>
       </button>`;
     }
@@ -1735,7 +1836,7 @@ function renderQuick(){
   $('quickList').innerHTML=list.map(m=>{
     const [bg,tx]=COLOR[m.warna]||COLOR.blue;
     const isFav=STATE.favs.has(m.judul);
-    return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3.5 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${m.icon||'app-window'}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
+    return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3.5 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
   }).join('');
   icons();
 }
@@ -1747,7 +1848,7 @@ function emptyState(icon,title,desc,cta){
   return `<div class="empty-state"><div class="es-icon"><i data-lucide="${icon}" class="w-6 h-6"></i></div><p class="es-title">${esc(title)}</p><p class="es-desc">${esc(desc)}</p>${cta?`<button onclick="${cta.action}" class="mt-4 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-95 transition">${esc(cta.label)}</button>`:''}</div>`;
 }
 /* ============================================================
-   Widget Beranda: Agenda + Dokumen
+   Widget Beranda
    ============================================================ */
 function renderDokWidget(){
   const docs=(STATE.docs||[]);
@@ -1763,68 +1864,27 @@ function renderDokWidget(){
   icons();
 }
 
-/* ============================================================
-Footer — Auto-Kategorisasi dari Icon
-============================================================ */
-const FOOTER_CAT_MAP={
-// Sosial Media
-instagram:'Sosial Media',facebook:'Sosial Media',youtube:'Sosial Media',
-twitter:'Sosial Media','message-circle':'Sosial Media',send:'Sosial Media',
-whatsapp:'Sosial Media',linkedin:'Sosial Media',tiktok:'Sosial Media',
-// Sumber Daya
-globe:'Sumber Daya',link:'Sumber Daya','external-link':'Sumber Daya',
-'link-2':'Sumber Daya',book:'Sumber Daya','book-open':'Sumber Daya',
-school:'Sumber Daya','file-text':'Sumber Daya',folder:'Sumber Daya',
-download:'Sumber Daya',cloud:'Sumber Daya',
-// Informasi
-info:'Informasi','help-circle':'Informasi',bell:'Informasi',
-megaphone:'Informasi','alert-circle':'Informasi','newspaper':'Informasi',
-// Umum: default
-};
-function footerKategori(f){
-const icon=(f.icon||'').toLowerCase();
-return FOOTER_CAT_MAP[icon]||'Umum';
-}
-function footerCatIcon(kat){
-return {
-'Sosial Media':'message-circle',
-'Sumber Daya':'link-2',
-'Informasi':'info',
-'Umum':'link'
-}[kat]||'link';
-}
-function footerCatColor(kat){
-return {
-'Sosial Media':['bg-rose-50','text-rose-600'],
-'Sumber Daya':['bg-teal-50','text-teal-600'],
-'Informasi':['bg-sky-50','text-sky-600'],
-'Umum':['bg-slate-100','text-slate-600']
-}[kat]||['bg-slate-100','text-slate-600'];
-}
+function renderFoot(){
+  const wrap=$('footList');
+  const side=$('footSide');
+  const sideList=$('footSideList');
 
-function renderFoot() {
-  const wrap = $('footList');
-  const side = $('footSide');
-  const sideList = $('footSideList');
-  
-  if (!STATE.footer.length) {
-    if (side) side.classList.add('hidden');
-    if (wrap) wrap.innerHTML = '';
+  if(!STATE.footer.length){
+    if(side) side.classList.add('hidden');
+    if(wrap) wrap.innerHTML='';
     return;
   }
-  if (side) side.classList.remove('hidden');
-  
-  // Versi dinamis dari config admin
-  const rawV = (STATE.config && STATE.config.versi) ? String(STATE.config.versi).trim() : '';
-  const V = rawV ? ('v' + rawV.replace(/^v/i, '')) : '';
-  const copyright = '© 2026' + (V ? ' · ' + V : '');
-  
-  // === MOBILE: Split copyright + link bar ===
-  if (wrap) {
-    const links = STATE.footer.map(f => `
+  if(side) side.classList.remove('hidden');
+
+  const rawV=(STATE.config&&STATE.config.versi)?String(STATE.config.versi).trim():'';
+  const V=rawV ? ('v'+rawV.replace(/^v/i,'')) : '';
+  const copyright='© 2026'+(V?' · '+V:'');
+
+  if(wrap){
+    const links=STATE.footer.map(f=>`
       <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:acc-text active:scale-95 transition">${esc(f.judul)}</button>
     `).join('');
-    wrap.innerHTML = `<div class="card overflow-hidden">
+    wrap.innerHTML=`<div class="card overflow-hidden">
       <div class="px-5 py-4 flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shrink-0">
           <img src="${LOGO}" class="w-full h-full object-cover" alt="Logo">
@@ -1840,17 +1900,16 @@ function renderFoot() {
       </div>
     </div>`;
   }
-  
-  // === DESKTOP: Simple vertical list ===
-  if (sideList) {
-    sideList.innerHTML = STATE.footer.map(f => `
+
+  if(sideList){
+    sideList.innerHTML=STATE.footer.map(f=>`
       <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition text-left">
         <i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60 shrink-0"></i>
         <span class="truncate">${esc(f.judul)}</span>
       </button>
     `).join('');
   }
-  
+
   icons();
 }
 
@@ -1884,7 +1943,6 @@ function renderAgenda(){
 
   let html='';
 
-  // Agenda favorit
   const favAgenda=list.filter(a=>STATE.favsAgenda.has(String(a.id)));
   if(favAgenda.length){
     html+=`<div class="space-y-2 mb-4"><p class="text-[10px] font-black uppercase tracking-widest text-amber-500 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Agenda Favorit</p>${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div>`;
@@ -1902,12 +1960,7 @@ function renderAgenda(){
   $('agendaTimeline').innerHTML=html||emptyState('calendar-plus','Belum ada agenda','Kegiatan KKG & kecamatan akan tampil di sini.');
   icons();
 }
-
-function jumpMonth(mk){
-  const el=document.getElementById('m-'+mk);
-  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
+function jumpMonth(mk){const el=document.getElementById('m-'+mk);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function agendaRow(a,isPast,tstr){
   const dd=new Date(a.tanggal);
   const diff=Math.ceil((dd-new Date(tstr))/86400000);
@@ -1920,7 +1973,6 @@ function agendaRow(a,isPast,tstr){
   const star=`<button onclick="toggleFavAgenda(${a.id},event)" aria-label="Favorit" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
   return `<div class="card p-3.5 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${star}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
 }
-
 function monthSection(mk,items,isPast,tstr){
   const d=new Date(mk+'-01T00:00:00');
   return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p>${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div>`;
@@ -1934,7 +1986,7 @@ function dokGridItem(d){
   const isFav=STATE.favsDok.has(String(d.id));
   return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex flex-col gap-2 active:scale-[.96] transition relative">
     <button onclick="toggleFavDok(${d.id},event)" aria-label="Favorit" class="absolute top-2 right-2 w-7 h-7 rounded-lg flex items-center justify-center z-10"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>
-    <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center"><i data-lucide="${d.icon||'file-text'}" class="w-5 h-5"></i></span>
+    <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
     <span class="text-[12px] font-extrabold text-slate-800 leading-tight pr-6">${esc(d.judul)}</span>
     <span class="text-[10px] text-slate-400 line-clamp-2">${esc(d.deskripsi||'')}</span>
   </a>`;
@@ -1943,7 +1995,7 @@ function dokRowItem(d){
   const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   const isFav=STATE.favsDok.has(String(d.id));
   return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-3.5 flex items-center gap-3 active:scale-[.99] transition">
-    <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0"><i data-lucide="${d.icon||'file-text'}" class="w-5 h-5"></i></span>
+    <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
     <span class="flex-1 min-w-0">
       <span class="block text-[13px] font-extrabold text-slate-800 truncate">${esc(d.judul)}</span>
       <span class="block text-[10px] text-slate-400 truncate mt-0.5">${esc(d.deskripsi||'')}</span>
@@ -2102,7 +2154,7 @@ function renderTreeData(){
 }
 
 /* ============================================================
-   Leaderboard Badges
+   Leaderboard
    ============================================================ */
 function renderLeadBadges(){
   const me=(STATE.profile||{}).nama||'';
@@ -2520,6 +2572,7 @@ function doLogout(){
   localStorage.removeItem('gb_profile');
   location.reload();
 }
+
 /* ============================================================
    Auth UI
    ============================================================ */
@@ -2668,7 +2721,7 @@ async function silentRefresh(force){
   const d=(c2&&c2.d)?c2.d:null;
   writeCache({t:now,d:d,dyn:newDyn,dynTs:newTs});
   if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
-  if(sigChanged('notifs',STATE.notifs)){renderNotif();checkInAppNotif();}
+  if(sigChanged('notifs',STATE.notifs))renderNotif();
   if(sigChanged('inspi',STATE.inspi))renderInspirasi();
   if(sigChanged('agenda',STATE.agenda))renderAgenda();
   if(sigChanged('docs',STATE.docs)){renderDokumen();renderDokWidget();}
@@ -2751,7 +2804,7 @@ function initSheetSwipe(){
 }
 
 /* ============================================================
-   Dialog auto-dismiss — Popup Flyer
+   Dialog auto-dismiss
    ============================================================ */
 function initDialogScrollDismiss(){
   const popup=$('mPop');
@@ -2759,14 +2812,12 @@ function initDialogScrollDismiss(){
   let touchStartY=0;
   let wheelAccum=0;
   let timer=null;
-
   const dismiss=()=>{
     if(CUR.modal!=='mPop')return;
     if(timer)clearTimeout(timer);
     popDismissed=true;
     tutupPop();
   };
-
   popup.addEventListener('wheel',e=>{
     if(CUR.modal!=='mPop')return;
     wheelAccum+=Math.abs(e.deltaY);
@@ -2776,7 +2827,6 @@ function initDialogScrollDismiss(){
       timer=setTimeout(()=>{wheelAccum=0;},200);
     }
   },{passive:true});
-
   popup.addEventListener('touchstart',e=>{
     if(CUR.modal!=='mPop')return;
     touchStartY=e.touches[0].clientY;
@@ -2786,27 +2836,19 @@ function initDialogScrollDismiss(){
     const dy=Math.abs(e.touches[0].clientY-touchStartY);
     if(dy>40) dismiss();
   },{passive:true});
-
   popup.addEventListener('click',e=>{
     if(e.target===popup && CUR.modal==='mPop'){dismiss();}
   });
 }
-
-/* ============================================================
-   Context Menu auto-dismiss saat scroll
-   ============================================================ */
 function initCtxMenuScrollDismiss(){
   const main=document.querySelector('main');
   const ctx=$('ctxMenu');
   if(!main||!ctx)return;
   let touchStartY=0;
   let touchStartX=0;
-
   const hide=()=>{if(ctx.classList.contains('show')) hideCtxMenu();};
-
   main.addEventListener('scroll',hide,{passive:true});
   window.addEventListener('wheel',hide,{passive:true});
-
   main.addEventListener('touchstart',e=>{
     touchStartY=e.touches[0].clientY;
     touchStartX=e.touches[0].clientX;
@@ -2881,7 +2923,7 @@ function showCtxMenu(x,y,m){
 function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
 
 /* ============================================================
-   Deep Link & Share Layanan
+   Deep Link & Share
    ============================================================ */
 function menuDeepLink(judul){
   const path=location.pathname.replace(/\/[^\/]*$/,'/');
@@ -2914,7 +2956,6 @@ function copyMenuLink(judul){
     else toast('Salin manual: '+url,'info');
   });
 }
-
 let _shareData={title:'',text:'',url:''};
 function openShareDialog(judul){
   const m=STATE.menus.find(x=>x.judul===judul);
@@ -3032,17 +3073,16 @@ function applyPortal(p){
   STATE.quotes=p.quotes||[];
   STATE.footer=p.footer||[];
   if(STATE.config){
-  const rawV=(STATE.config.versi||'').trim();
-  const V=rawV ? ('v'+rawV.replace(/^v/i,'')) : '';
-  $('sideVersi').textContent = V ? ('Portal Selogiri · '+V) : 'Portal Selogiri';
-  $('sideVersi2').textContent=V;
-  $('setVersi').textContent=V;
-  $('aboutVer').textContent=V;
-  const fv=$('footVer'); if(fv) fv.textContent=V;
-  renderPopup();
-}
+    const rawV=(STATE.config.versi||'').trim();
+    const V=rawV ? ('v'+rawV.replace(/^v/i,'')) : '';
+    const sv=$('sideVersi');if(sv)sv.textContent=V?('Portal Selogiri · '+V):'Portal Selogiri';
+    const sv2=$('sideVersi2');if(sv2)sv2.textContent=V;
+    const stv=$('setVersi');if(stv)stv.textContent=V;
+    const abv=$('aboutVer');if(abv)abv.textContent=V;
+    renderPopup();
+  }
   const c=STATE.config||{};
-  $('quoteBox').classList.toggle('hidden',c.quote_status==='OFF');
+  const qb=$('quoteBox');if(qb)qb.classList.toggle('hidden',c.quote_status==='OFF');
   renderCarousel();
   renderFilterBar();
   renderLayanan($('inSearch').value);
@@ -3153,7 +3193,7 @@ async function submitFb(){
   icons();
   paintToggles();
   paintDokView();
-  $('caroTrack').addEventListener('scroll',caroUpdate);
+  const ct=$('caroTrack');if(ct)ct.addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault());
 
@@ -3178,7 +3218,8 @@ async function submitFb(){
       try{
         const p=JSON.parse(b64decode(token.split('.')[0]));
         const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);
-        if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<6*3600*1000))need=false;
+        // Quick Win #2: verify hanya kalau sudah lewat 7 hari
+        if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<7*24*3600*1000))need=false;
       }catch(e){}
       if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}
       else{
@@ -3211,6 +3252,8 @@ async function submitFb(){
 
   setTimeout(showOnboard,800);
 })();
+
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
