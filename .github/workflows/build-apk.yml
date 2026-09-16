@@ -27,20 +27,43 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set Android SDK path
+      - name: Setup and fix Android SDK
         run: |
-          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
-
-      - name: Accept licenses and install SDK components
-        run: |
-          SDK="/usr/local/lib/android/sdk"
-          yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          $SDK/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-          echo "=== SDK contents ==="
+          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          echo "ANDROID_HOME=$SDK"
+          echo "SDK=$SDK" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$SDK" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$SDK" >> $GITHUB_ENV
+          
+          echo "=== Struktur SDK ==="
           ls -la $SDK/
-          echo "=== Platforms ==="
-          ls -la $SDK/platforms/
+          echo "=== cmdline-tools ==="
+          ls -la $SDK/cmdline-tools/ || true
+          
+          # Buat symlink latest kalau tidak ada
+          if [ ! -e "$SDK/cmdline-tools/latest" ]; then
+            CMDTOOLS_VER=$(ls -d $SDK/cmdline-tools/*/ 2>/dev/null | grep -v latest | head -1 | xargs -n1 basename 2>/dev/null)
+            if [ -n "$CMDTOOLS_VER" ]; then
+              echo "Membuat symlink latest → $CMDTOOLS_VER"
+              cd $SDK/cmdline-tools && ln -s "$CMDTOOLS_VER" latest
+            fi
+          fi
+          
+          echo "=== cmdline-tools setelah fix ==="
+          ls -la $SDK/cmdline-tools/
+          
+          # Verify sdkmanager
+          $SDK/cmdline-tools/latest/bin/sdkmanager --version || echo "sdkmanager tidak bisa jalan"
+
+      - name: Accept licenses and install SDK packages
+        run: |
+          SDK="$ANDROID_HOME"
+          yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $SDK/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" 2>&1 | tail -5
+          
+          echo "=== Verifikasi ==="
+          ls -la $SDK/platforms/ || true
+          ls -la $SDK/build-tools/ || true
 
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
@@ -48,22 +71,16 @@ jobs:
       - name: Prepare keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/release.keystore
-          ls -la /tmp/release.keystore
 
-      - name: Configure Bubblewrap
+      - name: Configure Bubblewrap (tanpa config file)
         run: |
-          mkdir -p ~/.bubblewrap
-          cat > ~/.bubblewrap/config.json <<EOF
-          {
-            "jdkPath": "$JAVA_HOME",
-            "androidSdkPath": "/usr/local/lib/android/sdk"
-          }
-          EOF
-          echo "=== Config ==="
-          cat ~/.bubblewrap/config.json
-          echo "=== Verify paths exist ==="
+          # Jangan pakai config file — biarkan bubblewrap fallback ke env var
+          rm -rf ~/.bubblewrap
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "JAVA_HOME=$JAVA_HOME"
+          test -d "$ANDROID_HOME" && echo "SDK OK" || echo "SDK MISSING"
           test -d "$JAVA_HOME" && echo "JDK OK" || echo "JDK MISSING"
-          test -d "/usr/local/lib/android/sdk" && echo "SDK OK" || echo "SDK MISSING"
+          test -e "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" && echo "sdkmanager OK" || echo "sdkmanager MISSING"
 
       - name: Write twa-manifest.json
         run: |
@@ -105,8 +122,6 @@ jobs:
             "orientation": "portrait"
           }
           TWAEOF
-          echo "=== twa-manifest.json written ==="
-          cat twa-manifest.json
 
       - name: Fill passwords + alias
         working-directory: twa-build
@@ -118,15 +133,11 @@ jobs:
              --argjson vc ${{ github.event.inputs.version_code }} \
              '.storePassword=$s | .keyPassword=$k | .signingKey.alias=$a | .appVersionName=$vn | .appVersionCode=$vc' \
              twa-manifest.json > tmp.json && mv tmp.json twa-manifest.json
-          echo "=== Verify signingKey ==="
-          jq '.signingKey' twa-manifest.json
 
       - name: Generate Android project
         working-directory: twa-build
         run: |
           printf '1.0.0\n' | bubblewrap update --skipPwaValidation
-          echo "=== Project files ==="
-          ls -la
 
       - name: Build APK
         working-directory: twa-build
@@ -135,7 +146,7 @@ jobs:
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           echo "ANDROID_HOME=$ANDROID_HOME"
-          ls -la $ANDROID_HOME/
+          ls -la $ANDROID_HOME/cmdline-tools/latest/bin/ || true
           bubblewrap build --skipPwaValidation
 
       - name: Upload artifacts
@@ -146,7 +157,6 @@ jobs:
           path: |
             twa-build/*.apk
             twa-build/*.aab
-            twa-build/app/build/outputs/apk/**/*.apk
-            twa-build/app/build/outputs/bundle/**/*.aab
+            twa-build/app/build/outputs/**/*.apk
+            twa-build/app/build/outputs/**/*.aab
           if-no-files-found: warn
-          retention-days: 30
