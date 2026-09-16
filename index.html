@@ -215,12 +215,35 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .menu-icon-img{border-radius:.75rem;object-fit:cover;background:#F1F5F9}
   html.dark .menu-icon-img{background:#252A33}
 
+/* ============================================
+   GAYA IKON — Colored (No BG)
+   ============================================ */
+html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored {
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored svg {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+}
+html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored img {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  border-radius: .5rem;
+}
+/* Quick list view */
+#quickList.quick-list-view .menu-icon-wrap.menu-icon-colored svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   }
 </style>
 </head>
-<body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-density="normal">
+<body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
 <div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
 
@@ -328,12 +351,17 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         </div>
 
         <div id="quickBox" class="animate-fade-up">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
-            <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
-          </div>
-          <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
-        </div>
+  <div class="flex items-center justify-between mb-2">
+    <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
+    <div class="flex items-center gap-2">
+      <button onclick="toggleQuickView()" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan">
+        <i id="quickViewIcon" data-lucide="layout-grid" class="w-3 h-3 text-slate-500"></i>
+      </button>
+      <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
+    </div>
+  </div>
+  <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
+</div>
 
         <div class="animate-fade-up">
           <div class="flex items-center justify-between mb-2">
@@ -477,14 +505,38 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
               <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
             </div>
           </div>
-          <div>
-            <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
-            <div class="grid grid-cols-2 gap-2">
-              <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
-              <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
-            </div>
-          </div>
-        </div>
+            <div>
+    <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
+    <div class="grid grid-cols-2 gap-2">
+      <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
+      <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+    </div>
+  </div>
+  </div>
+  
+  <div class="card p-4 space-y-4">
+    <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="shapes" class="w-4 h-4 acc-text"></i> Gaya Ikon Menu</p>
+    <div class="grid grid-cols-3 gap-2">
+      <button data-iconstyle="default" onclick="setIconStyle('default')" class="seg-btn flex-col !py-2.5">
+        <span class="block w-8 h-8 mx-auto mb-1 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center">
+          <i data-lucide="grid" class="w-4 h-4"></i>
+        </span>
+        <span class="text-[10px]">Ringan</span>
+      </button>
+      <button data-iconstyle="solid" onclick="setIconStyle('solid')" class="seg-btn flex-col !py-2.5">
+        <span class="block w-8 h-8 mx-auto mb-1 rounded-lg bg-teal-500 text-white flex items-center justify-center">
+          <i data-lucide="grid" class="w-4 h-4"></i>
+        </span>
+        <span class="text-[10px]">Solid</span>
+      </button>
+      <button data-iconstyle="colored" onclick="setIconStyle('colored')" class="seg-btn flex-col !py-2.5">
+        <span class="block w-8 h-8 mx-auto mb-1 flex items-center justify-center text-teal-600">
+          <i data-lucide="grid" class="w-5 h-5"></i>
+        </span>
+        <span class="text-[10px]">Warna</span>
+      </button>
+    </div>
+  </div>
 
         <div class="card p-4">
           <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="rows-3" class="w-4 h-4 acc-text"></i> Kepadatan Konten</p>
@@ -976,6 +1028,21 @@ const COLOR={
   red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],
   yellow:['bg-yellow-100','text-yellow-600'],sky:['bg-sky-100','text-sky-600']
 };
+const COLOR_SOLID={
+  teal:'bg-teal-500',orange:'bg-orange-500',blue:'bg-blue-500',green:'bg-green-500',
+  rose:'bg-rose-500',violet:'bg-violet-500',fuchsia:'bg-fuchsia-500',cyan:'bg-cyan-500',
+  red:'bg-red-500',emerald:'bg-emerald-500',yellow:'bg-yellow-500',sky:'bg-sky-500'
+};
+function menuIconWrapClass(warna){
+  const [bg,tx]=COLOR[warna]||COLOR.blue;
+  const style=document.body.dataset.iconstyle||'default';
+  if(style==='colored')return 'menu-icon-wrap menu-icon-colored '+tx;
+  if(style==='solid'){
+    const sbg=COLOR_SOLID[warna]||COLOR_SOLID.blue;
+    return 'menu-icon-wrap '+sbg+' text-white';
+  }
+  return 'menu-icon-wrap '+bg+' '+tx;
+}
 const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
 const TPL={quote:{n:'Quote',i:'quote',f:[['text','Tulis quote…'],['author','Nama tokoh']]},ucapan:{n:'Ucapan',i:'party-popper',f:[['title','Judul ucapan'],['msg','Pesan']]},undangan:{n:'Undangan',i:'mail',f:[['title','Nama acara'],['date','Tanggal'],['time','Waktu'],['place','Tempat']]},prestasi:{n:'Prestasi',i:'trophy',ph:1,f:[['title','Judul prestasi'],['name','Nama peraih']]},cover:{n:'Cover Materi',i:'book-open',f:[['title','Judul materi'],['kelas','Kelas'],['guru','Nama guru']]},dokumentasi:{n:'Dokumentasi',i:'camera',ph:1,f:[['title','Caption kegiatan'],['date','Tanggal']]}};
 const FMT={story:{n:'Story 9:16',w:1080,h:1920},feed:{n:'Feed 1:1',w:1080,h:1080},potret:{n:'Potret 4:5',w:1080,h:1350},lanskap:{n:'Lanskap',w:1200,h:630},thumb:{n:'Thumb 16:9',w:1280,h:720}};
@@ -1157,38 +1224,66 @@ function setDensity(v){
 }
 function resetTheme(){
   confirmDialog('Kembalikan semua pengaturan tampilan ke default?',()=>{
-    ['gb_preset','gb_navbar_style','gb_navbar_color','gb_density','gb_acc'].forEach(k=>localStorage.removeItem(k));
-    document.documentElement.dataset.acc='hijau';
-    document.body.dataset.navbar='floating';
-    document.body.dataset.navbarColor='dark';
-    document.body.dataset.density='normal';
-    markAcc();
-    paintToggles();
-    paintCustomizeUI();
+    ['gb_preset', 'gb_navbar_style', 'gb_navbar_color', 'gb_density', 'gb_acc', 'gb_icon_style'].forEach(k => localStorage.removeItem(k));
+document.documentElement.dataset.acc = 'hijau';
+document.body.dataset.navbar = 'floating';
+document.body.dataset.navbarColor = 'dark';
+document.body.dataset.density = 'normal';
+document.body.dataset.iconstyle = 'default';
+markAcc();
+paintToggles();
+paintCustomizeUI();
+renderLayanan($('inSearch').value || '');
+renderQuick();
+renderRecentActivity();
     toast('Tema direset ke default');
   },'Reset Tema?','Reset');
 }
-function paintCustomizeUI(){
-  document.querySelectorAll('[data-navstyle]').forEach(b=>b.classList.toggle('on',b.dataset.navstyle===document.body.dataset.navbar));
-  document.querySelectorAll('[data-navcolor]').forEach(b=>b.classList.toggle('on',b.dataset.navcolor===document.body.dataset.navbarColor));
-  document.querySelectorAll('[data-density]').forEach(b=>b.classList.toggle('on',b.dataset.density===document.body.dataset.density));
-  const ap=localStorage.getItem('gb_preset');
-  document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('on',b.dataset.preset===ap));
+function paintCustomizeUI() {
+  document.querySelectorAll('[data-navstyle]').forEach(b => b.classList.toggle('on', b.dataset.navstyle === document.body.dataset.navbar));
+  document.querySelectorAll('[data-navcolor]').forEach(b => b.classList.toggle('on', b.dataset.navcolor === document.body.dataset.navbarColor));
+  document.querySelectorAll('[data-density]').forEach(b => b.classList.toggle('on', b.dataset.density === document.body.dataset.density));
+  document.querySelectorAll('[data-iconstyle]').forEach(b => b.classList.toggle('on', b.dataset.iconstyle === (document.body.dataset.iconstyle || 'default')));
+  const ap = localStorage.getItem('gb_preset');
+  document.querySelectorAll('[data-preset]').forEach(b => b.classList.toggle('on', b.dataset.preset === ap));
+}
+function setIconStyle(v){
+  if(!['default','solid','colored'].includes(v))return;
+  document.body.dataset.iconstyle=v;
+  localStorage.setItem('gb_icon_style',v);
+  localStorage.removeItem('gb_preset');
+  paintCustomizeUI();
+  renderLayanan($('inSearch').value||'');
+  renderQuick();
+  renderRecentActivity();
+}
+function toggleQuickView(){
+  const cur=localStorage.getItem('gb_quick_view')||'grid';
+  localStorage.setItem('gb_quick_view', cur==='grid'?'list':'grid');
+  paintQuickView();
+  renderQuick();
+}
+function paintQuickView(){
+  const v=localStorage.getItem('gb_quick_view')||'grid';
+  const ic=$('quickViewIcon');
+  if(ic){ic.setAttribute('data-lucide', v==='grid'?'layout-grid':'list');icons();}
 }
 
-function initPrefs(){
-  const a=localStorage.getItem('gb_acc')||'hijau';
-  document.documentElement.dataset.acc=a;
-  if(localStorage.getItem('gb_fs')==='besar')document.documentElement.classList.add('fs-besar');
-  if(localStorage.getItem('gb_anim')==='off')document.documentElement.classList.add('no-anim');
-  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
-  document.body.dataset.navbar=localStorage.getItem('gb_navbar_style')||'floating';
-  document.body.dataset.navbarColor=localStorage.getItem('gb_navbar_color')||'dark';
-  document.body.dataset.density=localStorage.getItem('gb_density')||'normal';
-  STATE.sosmed=JSON.parse(localStorage.getItem('gb_sosmed')||'{}');
+function initPrefs() {
+  const a = localStorage.getItem('gb_acc') || 'hijau';
+  document.documentElement.dataset.acc = a;
+  if (localStorage.getItem('gb_fs') === 'besar') document.documentElement.classList.add('fs-besar');
+  if (localStorage.getItem('gb_anim') === 'off') document.documentElement.classList.add('no-anim');
+  if (localStorage.getItem('gb_dark') === '1') document.documentElement.classList.add('dark');
+  document.body.dataset.navbar = localStorage.getItem('gb_navbar_style') || 'floating';
+  document.body.dataset.navbarColor = localStorage.getItem('gb_navbar_color') || 'dark';
+  document.body.dataset.density = localStorage.getItem('gb_density') || 'normal';
+  document.body.dataset.iconstyle = localStorage.getItem('gb_icon_style') || 'default';
+  STATE.sosmed = JSON.parse(localStorage.getItem('gb_sosmed') || '{}');
   markAcc();
   paintToggles();
   paintCustomizeUI();
+  paintQuickView();
 }
 
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
@@ -1619,17 +1714,17 @@ function toggleFavAgenda(id,e){
 }
 
 function boxItem(m){
-  const [bg,tx]=COLOR[m.warna]||COLOR.blue;
+  const wrap=menuIconWrapClass(m.warna);
   const isFav=STATE.favs.has(m.judul);
   const badge=m.label?`<span class="text-[8px] font-black uppercase bg-amber-400 text-amber-900 px-1.5 py-0.5 rounded align-middle ml-1">${m.label}</span>`:'';
   const star=`<button onclick="toggleFav('${m.judul.replace(/'/g,"\\'")}',event)" aria-label="Favorit" class="w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5"><i data-lucide="star" class="w-3.5 h-3.5 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0"><span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><div class="flex items-start gap-2"><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${m.judul}${badge}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span>${star}</div></a>`;
+  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0"><span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><div class="flex items-start gap-2"><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${m.judul}${badge}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span>${star}</div></a>`;
 }
 function rowItem(m){
-  const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-  const isFav=STATE.favs.has(m.judul);
-  const star=`<button onclick="toggleFav('${m.judul.replace(/'/g,"\\'")}',event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center active:scale-90 transition shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span>${star}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
+const wrap=menuIconWrapClass(m.warna);
+const isFav=STATE.favs.has(m.judul);
+const star=`<button onclick="toggleFav('${m.judul.replace(/'/g," \\'")}',event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center active:scale-90 transition shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
+return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="${wrap} w-10 h-10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span>${star}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
 }
 
 function renderFilterBar(){
@@ -1738,9 +1833,9 @@ function openParentMenu(m,children){
     }
   }
   $('pParentList').innerHTML=children.map(c=>{
-    const [bg,tx]=COLOR[c.warna]||COLOR.blue;
-    return `<button onclick='parentBukaChild(${JSON.stringify(c).replace(/'/g,"&#39;")})' class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition">
-      <span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(c.icon,'w-5 h-5')}</span>
+const wrap=menuIconWrapClass(c.warna);
+return `<button onclick='parentBukaChild(${JSON.stringify(c).replace(/' /g,"&#39;")})' class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition">
+  <span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(c.icon,'w-5 h-5')}</span>
       <span class="flex-1 min-w-0">
         <span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${esc(c.judul)}</span>
         <span class="block text-[10px] text-slate-400 truncate mt-0.5">${esc(c.deskripsi||'')}</span>
@@ -1795,9 +1890,11 @@ function renderRecentActivity(){
   box.classList.remove('hidden');
   $('recentList').innerHTML=arr.map(item=>{
     const safe=String(item.id).replace(/'/g,"\\'");
-    if(item.type==='menu'){
-      return `<button onclick="klikMenu('${safe}')" class="shrink-0 card p-3 flex items-center gap-2.5 active:scale-95 transition min-w-[150px] max-w-[200px]">
-        <span class="w-8 h-8 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(item.icon,'w-4 h-4')}</span>
+    if (item.type === 'menu') {
+  const m = STATE.menus.find(x => x.judul === item.id);
+  const wrap = m ? menuIconWrapClass(m.warna) : 'menu-icon-wrap bg-teal-100 text-teal-600';
+  return `<button onclick="klikMenu('${safe}')" class="shrink-0 card p-3 flex items-center gap-2.5 active:scale-95 transition min-w-[150px] max-w-[200px]">
+    <span class="${wrap} w-8 h-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(item.icon,'w-4 h-4')}</span>
         <span class="min-w-0 text-left"><span class="block text-[11px] font-extrabold text-slate-700 truncate">${esc(item.id)}</span><span class="block text-[9px] text-slate-400">${waktuRelatif(item.t)}</span></span>
       </button>`;
     }
@@ -1827,17 +1924,34 @@ function clearRecentActivity(){
    Quick List
    ============================================================ */
 function renderQuick(){
-  if(!STATE.profile)return;
-  const all=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari);
-  const favs=all.filter(m=>STATE.favs.has(m.judul));
-  const others=all.filter(m=>!STATE.favs.has(m.judul));
-  const list=[...favs,...others].slice(0,6);
-  $('quickList').innerHTML=list.map(m=>{
-    const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-    const isFav=STATE.favs.has(m.judul);
-    return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-3.5 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="w-11 h-11 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
-  }).join('');
-  icons();
+if(!STATE.profile)return;
+const all=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari);
+const favs=all.filter(m=>STATE.favs.has(m.judul));
+const others=all.filter(m=>!STATE.favs.has(m.judul));
+const list=[...favs,...others].slice(0,6);
+const view=localStorage.getItem('gb_quick_view')||'grid';
+
+if(view==='list'){
+$('quickList').className='space-y-1.5 quick-list-view';
+$('quickList').innerHTML=list.map(m=>{
+const wrap=menuIconWrapClass(m.warna);
+const isFav=STATE.favs.has(m.judul);
+return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card px-3.5 py-2.5 flex items-center gap-3 active:scale-[.98] transition">
+  <span class="${wrap} w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-4 h-4')}</span>
+  <span class="flex-1 min-w-0 text-[12px] font-bold text-slate-700 truncate">${m.judul}</span>
+  ${isFav?'<i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-current shrink-0"></i>':''}
+  <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+</a>`;
+}).join('');
+} else {
+$('quickList').className='grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full';
+$('quickList').innerHTML=list.map(m=>{
+const wrap=menuIconWrapClass(m.warna);
+const isFav=STATE.favs.has(m.judul);
+return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card p-3.5 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
+}).join('');
+}
+icons();
 }
 
 /* ============================================================
@@ -3191,7 +3305,8 @@ async function submitFb(){
   muatCuaca();
   icons();
   paintToggles();
-  paintDokView();
+paintDokView();
+paintQuickView();
   const ct=$('caroTrack');if(ct)ct.addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault());
