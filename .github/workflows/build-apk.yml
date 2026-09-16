@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir -p twa-build
           cd twa-build
-          yes "" | bubblewrap init \
+          printf 'y\ny\ny\ny\ny\n' | bubblewrap init \
             --manifest https://slg-timkreatif.github.io/app/manifest.json \
             --directory . \
             --skipPwaValidation || true
