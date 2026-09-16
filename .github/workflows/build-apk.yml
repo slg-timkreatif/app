@@ -27,43 +27,35 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup and fix Android SDK
+      - name: Set env paths
         run: |
-          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
-          echo "ANDROID_HOME=$SDK"
-          echo "SDK=$SDK" >> $GITHUB_ENV
-          echo "ANDROID_HOME=$SDK" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$SDK" >> $GITHUB_ENV
-          
-          echo "=== Struktur SDK ==="
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+
+      - name: Fix cmdline-tools and accept licenses
+        run: |
+          SDK="/usr/local/lib/android/sdk"
+          echo "=== Struktur awal ==="
           ls -la $SDK/
           echo "=== cmdline-tools ==="
           ls -la $SDK/cmdline-tools/ || true
           
-          # Buat symlink latest kalau tidak ada
           if [ ! -e "$SDK/cmdline-tools/latest" ]; then
-            CMDTOOLS_VER=$(ls -d $SDK/cmdline-tools/*/ 2>/dev/null | grep -v latest | head -1 | xargs -n1 basename 2>/dev/null)
-            if [ -n "$CMDTOOLS_VER" ]; then
-              echo "Membuat symlink latest → $CMDTOOLS_VER"
-              cd $SDK/cmdline-tools && ln -s "$CMDTOOLS_VER" latest
+            VER=$(ls -d $SDK/cmdline-tools/*/ 2>/dev/null | grep -v latest | head -1)
+            if [ -n "$VER" ]; then
+              cd $SDK/cmdline-tools && ln -s "$(basename $VER)" latest
+              echo "Symlink dibuat: latest → $(basename $VER)"
             fi
           fi
           
           echo "=== cmdline-tools setelah fix ==="
           ls -la $SDK/cmdline-tools/
+          echo "=== Verifikasi sdkmanager ==="
+          $SDK/cmdline-tools/latest/bin/sdkmanager --version
           
-          # Verify sdkmanager
-          $SDK/cmdline-tools/latest/bin/sdkmanager --version || echo "sdkmanager tidak bisa jalan"
-
-      - name: Accept licenses and install SDK packages
-        run: |
-          SDK="$ANDROID_HOME"
           yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          $SDK/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" 2>&1 | tail -5
           
-          echo "=== Verifikasi ==="
-          ls -la $SDK/platforms/ || true
-          ls -la $SDK/build-tools/ || true
+          $SDK/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" 2>&1 | tail -3
 
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
@@ -72,15 +64,17 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/release.keystore
 
-      - name: Configure Bubblewrap (tanpa config file)
+      - name: Configure Bubblewrap
         run: |
-          # Jangan pakai config file — biarkan bubblewrap fallback ke env var
-          rm -rf ~/.bubblewrap
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "JAVA_HOME=$JAVA_HOME"
-          test -d "$ANDROID_HOME" && echo "SDK OK" || echo "SDK MISSING"
-          test -d "$JAVA_HOME" && echo "JDK OK" || echo "JDK MISSING"
-          test -e "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" && echo "sdkmanager OK" || echo "sdkmanager MISSING"
+          mkdir -p ~/.bubblewrap
+          cat > ~/.bubblewrap/config.json <<EOF
+          {
+            "jdkPath": "$JAVA_HOME",
+            "androidSdkPath": "$ANDROID_HOME"
+          }
+          EOF
+          echo "=== Config ==="
+          cat ~/.bubblewrap/config.json
 
       - name: Write twa-manifest.json
         run: |
@@ -145,8 +139,6 @@ jobs:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          ls -la $ANDROID_HOME/cmdline-tools/latest/bin/ || true
           bubblewrap build --skipPwaValidation
 
       - name: Upload artifacts
