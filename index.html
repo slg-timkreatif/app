@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F6F5F9">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+
+<!-- PWA / TWA -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="GuruBerbagi">
+<meta name="application-name" content="GuruBerbagi">
+
 <script>
 (function(){try{
   var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
@@ -14,17 +21,36 @@
   var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#F6F5F9');
 }catch(e){}})();
 </script>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+
+<!-- Icons -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+
+<!-- Open Graph (share ke WA/FB/TG) -->
 <meta property="og:site_name" content="Guru Berbagi Selogiri">
 <meta property="og:title" content="Guru Berbagi Selogiri">
 <meta property="og:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
 <meta property="og:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <meta property="og:url" content="https://slg-timkreatif.github.io/app/">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="id_ID">
+
+<!-- Twitter Card (opsional, bagus untuk share) -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Guru Berbagi Selogiri">
+<meta name="twitter:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+
+<!-- PWA Manifest -->
 <link rel="manifest" href="manifest.json">
+
 <title>Guru Berbagi Selogiri</title>
+
+<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Performance hints -->
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,9 +58,13 @@
 <link rel="preconnect" href="https://qamqqwfzhyiihqyzliwq.supabase.co" crossorigin>
 <link rel="dns-prefetch" href="https://api.open-meteo.com">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+
+<!-- Library -->
 <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Tailwind config -->
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
