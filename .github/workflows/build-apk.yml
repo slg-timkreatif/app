@@ -32,18 +32,15 @@ jobs:
           echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
 
-      - name: Accept Android SDK licenses
+      - name: Accept licenses and install SDK components
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-
-      - name: Install Android SDK components
-        run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-33" \
-            "platforms;android-34" \
-            "build-tools;33.0.2" \
-            "build-tools;34.0.0" 2>&1 | tail -15
+          SDK="/usr/local/lib/android/sdk"
+          yes | $SDK/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $SDK/cmdline-tools/latest/bin/sdkmanager --install "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          echo "=== SDK contents ==="
+          ls -la $SDK/
+          echo "=== Platforms ==="
+          ls -la $SDK/platforms/
 
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
@@ -53,23 +50,26 @@ jobs:
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > /tmp/release.keystore
           ls -la /tmp/release.keystore
 
-      - name: Configure Bubblewrap paths
+      - name: Configure Bubblewrap
         run: |
           mkdir -p ~/.bubblewrap
-          cat > ~/.bubblewrap/config.json << EOF
+          cat > ~/.bubblewrap/config.json <<EOF
           {
             "jdkPath": "$JAVA_HOME",
-            "androidSdkPath": "$ANDROID_HOME"
+            "androidSdkPath": "/usr/local/lib/android/sdk"
           }
           EOF
           echo "=== Config ==="
           cat ~/.bubblewrap/config.json
+          echo "=== Verify paths exist ==="
+          test -d "$JAVA_HOME" && echo "JDK OK" || echo "JDK MISSING"
+          test -d "/usr/local/lib/android/sdk" && echo "SDK OK" || echo "SDK MISSING"
 
       - name: Write twa-manifest.json
         run: |
           mkdir -p twa-build
           cd twa-build
-          cat > twa-manifest.json << 'TWA_EOF'
+          cat > twa-manifest.json <<'TWAEOF'
           {
             "packageId": "io.github.slg_timkreatif.twa",
             "host": "slg-timkreatif.github.io",
@@ -104,38 +104,49 @@ jobs:
             "minSdkVersion": 21,
             "orientation": "portrait"
           }
-          TWA_EOF
+          TWAEOF
+          echo "=== twa-manifest.json written ==="
+          cat twa-manifest.json
 
-      - name: Fill passwords + alias + version
-        working-directory: ./twa-build
+      - name: Fill passwords + alias
+        working-directory: twa-build
         run: |
-          jq --arg store "${{ secrets.KEYSTORE_PASSWORD }}" \
-             --arg key "${{ secrets.KEY_PASSWORD }}" \
-             --arg alias "${{ secrets.KEY_ALIAS }}" \
+          jq --arg s "${{ secrets.KEYSTORE_PASSWORD }}" \
+             --arg k "${{ secrets.KEY_PASSWORD }}" \
+             --arg a "${{ secrets.KEY_ALIAS }}" \
              --arg vn "${{ github.event.inputs.version_name }}" \
              --argjson vc ${{ github.event.inputs.version_code }} \
-             '.keyPassword = $key | .storePassword = $store | .signingKey.alias = $alias | .appVersionName = $vn | .appVersionCode = $vc' \
+             '.storePassword=$s | .keyPassword=$k | .signingKey.alias=$a | .appVersionName=$vn | .appVersionCode=$vc' \
              twa-manifest.json > tmp.json && mv tmp.json twa-manifest.json
-          echo "Alias: $(jq -r .signingKey.alias twa-manifest.json)"
+          echo "=== Verify signingKey ==="
+          jq '.signingKey' twa-manifest.json
 
       - name: Generate Android project
-        working-directory: ./twa-build
+        working-directory: twa-build
         run: |
           printf '1.0.0\n' | bubblewrap update --skipPwaValidation
+          echo "=== Project files ==="
+          ls -la
 
       - name: Build APK
-        working-directory: ./twa-build
+        working-directory: twa-build
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls -la $ANDROID_HOME/
           bubblewrap build --skipPwaValidation
 
       - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gurubersbagi-v${{ github.event.inputs.version_name }}
+          name: apk-output
           path: |
             twa-build/*.apk
             twa-build/*.aab
+            twa-build/app/build/outputs/apk/**/*.apk
+            twa-build/app/build/outputs/bundle/**/*.aab
+          if-no-files-found: warn
           retention-days: 30
