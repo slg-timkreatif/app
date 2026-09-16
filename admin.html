@@ -1,3 +1,2278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#F6F5F9">
+<meta name="mobile-web-app-capable" content="yes">
+<script>
+(function(){try{
+  var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
+  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
+}catch(e){}})();
+</script>
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<title>Admin · Guru Berbagi Selogiri</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+<style>
+  *{-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',sans-serif}
+  html,body{overflow-x:hidden}
+  a{-webkit-touch-callout:default}
+
+  :root{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-text:#0B7C72;--acc-ring:rgba(13,148,136,.35);--bg:#F1F5F9;--card:#fff;--border:#E2E8F0}
+  html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-text:#2563eb;--acc-ring:rgba(37,99,235,.35)}
+  html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-text:#7c3aed;--acc-ring:rgba(124,58,237,.35)}
+  html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-text:#d97706;--acc-ring:rgba(217,119,6,.35)}
+  html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-text:#e11d48;--acc-ring:rgba(225,29,72,.35)}
+
+  .no-scroll::-webkit-scrollbar{display:none}
+  .no-scroll{scrollbar-width:none}
+
+  .card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
+  .acc-bg{background-color:var(--acc)}
+  .acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
+  .acc-soft{background-color:var(--acc-soft)}
+  .acc-text{color:var(--acc-text)}
+  .acc-ring:focus{outline:none;box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
+
+  body{background:var(--bg)}
+  .brand-grad{background-image:linear-gradient(135deg,#0D9488,#0F766E 55%,#134E4A)}
+
+  .inp{width:100%;border:1px solid var(--border);border-radius:.75rem;background:#F8FAFC;padding:.65rem .9rem;font-size:.85rem;font-weight:500;color:#1E293B;outline:none;transition:border-color .15s,background .15s}
+  .inp:focus{background:#fff;box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
+  .lbl{display:block;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#64748B;margin-bottom:.35rem}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spin{animation:spin .8s linear infinite}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .anim-in{animation:fadeUp .3s ease both}
+
+  .seg-btn{padding:10px 12px;border-radius:12px;font-size:11px;font-weight:800;background:#F1F5F9;color:#64748B;border:1px solid var(--border);cursor:pointer;transition:all .15s}
+  .seg-btn:active{transform:scale(.97)}
+  .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+  /* DARK MODE */
+  html.dark{--bg:#0F1115;--card:#1A1D24;--border:#2A2D35;color-scheme:dark}
+  html.dark body{background:var(--bg);color:#E5E7EB}
+  html.dark .card{background:var(--card);border-color:var(--border)}
+  html.dark .inp{background:#1F232B;border-color:#2A2D35;color:#E5E7EB}
+  html.dark .inp:focus{background:#252A33}
+  html.dark .lbl{color:#94A3B8}
+  html.dark aside{background:#141821!important;border-color:#252A33!important}
+  html.dark .bg-white{background:var(--card)!important}
+  html.dark .bg-slate-100{background:#252A33!important}
+  html.dark .bg-slate-50{background:#1F232B!important}
+  html.dark .bg-slate-200{background:#2A2D35!important}
+  html.dark .border-slate-200{border-color:#2A2D35!important}
+  html.dark .border-slate-100{border-color:#252A33!important}
+  html.dark .text-slate-800{color:#F1F5F9!important}
+  html.dark .text-slate-700{color:#E2E8F0!important}
+  html.dark .text-slate-600{color:#CBD5E1!important}
+  html.dark .text-slate-500{color:#94A3B8!important}
+  html.dark .text-slate-400{color:#94A3B8!important}
+  html.dark .text-slate-300{color:#64748B!important}
+  html.dark .bg-rose-50{background:rgba(244,63,94,.12)!important}
+  html.dark .bg-amber-50{background:rgba(245,158,11,.12)!important}
+  html.dark .bg-emerald-50{background:rgba(16,185,129,.12)!important}
+  html.dark .bg-blue-50{background:rgba(59,130,246,.12)!important}
+  html.dark .bg-teal-100{background:rgba(13,148,136,.15)!important}
+  html.dark .bg-orange-100{background:rgba(249,115,22,.15)!important}
+  html.dark .bg-emerald-100{background:rgba(16,185,129,.15)!important}
+  html.dark .bg-violet-100{background:rgba(139,92,246,.15)!important}
+  html.dark .bg-blue-100{background:rgba(59,130,246,.15)!important}
+  html.dark .bg-green-100{background:rgba(34,197,94,.15)!important}
+  html.dark .bg-red-100{background:rgba(239,68,68,.15)!important}
+  html.dark .bg-rose-100{background:rgba(244,63,94,.15)!important}
+  html.dark .bg-fuchsia-100{background:rgba(217,70,239,.15)!important}
+  html.dark .bg-cyan-100{background:rgba(6,182,212,.15)!important}
+  html.dark .bg-yellow-100{background:rgba(234,179,8,.15)!important}
+  html.dark .bg-sky-100{background:rgba(14,165,233,.15)!important}
+  html.dark .bg-black\/50{background:rgba(0,0,0,.7)!important}
+  html.dark .divide-slate-100>*+*{border-color:#252A33!important}
+
+  /* TOAST */
+  .toast-item{padding:12px 14px;border-radius:12px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:0 10px 30px -5px rgba(0,0,0,.15);animation:fadeUp .3s ease both;border:1px solid;pointer-events:auto}
+  .toast-success{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+  .toast-error{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+  .toast-warning{background:#fffbeb;color:#92400e;border-color:#fde68a}
+  .toast-info{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+  html.dark .toast-success{background:rgba(16,185,129,.2);color:#86efac;border-color:rgba(16,185,129,.4)}
+  html.dark .toast-error{background:rgba(239,68,68,.2);color:#fca5a5;border-color:rgba(239,68,68,.4)}
+  html.dark .toast-warning{background:rgba(245,158,11,.2);color:#fcd34d;border-color:rgba(245,158,11,.4)}
+  html.dark .toast-info{background:rgba(59,130,246,.2);color:#93c5fd;border-color:rgba(59,130,246,.4)}
+
+  /* SYNC */
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:#10b981;flex-shrink:0}
+  .sync-dot.syncing{background:#3b82f6;animation:syncPulse 1.2s ease-in-out infinite}
+  .sync-dot.pending{background:#f59e0b;animation:syncPulse 1.5s ease-in-out infinite}
+  .sync-dot.error{background:#ef4444}
+  .sync-dot.offline{background:#94A3B8}
+  @keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* MODAL */
+  .modal{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(15,17,21,.6);backdrop-filter:blur(2px)}
+  .modal.show{display:flex;animation:fadeIn .15s}
+  .modal-box{background:var(--card);border-radius:1.5rem;max-width:32rem;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .25s ease both}
+  .modal-box.no-scroll{scrollbar-width:none}
+  .modal-box.no-scroll::-webkit-scrollbar{display:none}
+
+  .safe-top{padding-top:calc(env(safe-area-inset-top) + 0.5rem)}
+
+  .tab-btn{padding:.65rem 1rem;border-radius:.75rem;font-size:.8rem;font-weight:800;transition:all .15s;border:0;cursor:pointer;white-space:nowrap;background:transparent;color:#64748B;display:inline-flex;align-items:center;gap:.5rem;justify-content:center}
+  .tab-btn:hover{background:#F1F5F9}
+  .tab-btn.active{background:var(--acc-soft);color:var(--acc-text)}
+  html.dark .tab-btn:hover{background:#252A33}
+
+  .pending-badge{background:#FBBF24;color:#78350F;font-weight:800;font-size:9px;padding:2px 6px;border-radius:9999px}
+
+  .icon-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .15s;color:#64748B}
+  .icon-cell:hover{background:#F1F5F9;color:var(--acc)}
+  .icon-cell.on{background:var(--acc);color:#fff}
+  html.dark .icon-cell:hover{background:#252A33}
+  html.dark .icon-cell.on{background:var(--acc)}
+
+  .color-dot{width:28px;height:28px;border-radius:9999px;cursor:pointer;transition:all .15s;border:2px solid transparent}
+  .color-dot:hover{transform:scale(1.15)}
+  .color-dot.on{border-color:#fff;box-shadow:0 0 0 2px var(--acc)}
+
+  #debug-panel{position:fixed;bottom:0;left:0;right:0;max-height:40vh;background:#0a0b10;border-top:2px solid var(--acc);color:#5EEAD4;font-family:ui-monospace,Consolas,monospace;font-size:10px;padding:8px 10px;overflow-y:auto;z-index:200;transform:translateY(100%);transition:transform .25s ease}
+  #debug-panel.show{transform:translateY(0)}
+  #debug-panel .log-line{padding:2px 0;border-bottom:1px solid #1e2230;word-break:break-all}
+  #debug-panel .log-error{color:#fca5a5}
+  #debug-panel .log-success{color:#86efac}
+  #debug-panel .log-info{color:#5EEAD4}
+
+  .menu-icon-img{border-radius:.75rem;object-fit:cover;background:#F1F5F9}
+  html.dark .menu-icon-img{background:#252A33}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="scrLogin" class="min-h-screen flex items-center justify-center p-5 brand-grad">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-8">
+      <div class="w-20 h-20 mx-auto rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 overflow-hidden">
+        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-14 h-14 object-contain scale-[1.3]" alt="Logo">
+      </div>
+      <h1 class="text-2xl font-black text-white">Admin Panel</h1>
+      <p class="text-teal-200 text-sm mt-1">Guru Berbagi Selogiri · Command Center</p>
+    </div>
+    <form id="formLogin" class="bg-white dark:bg-slate-800 rounded-3xl p-6 space-y-4 shadow-xl">
+      <div>
+        <label class="lbl">Email Admin</label>
+        <input id="inEmail" type="email" required class="inp acc-ring" placeholder="admin@example.com" autocomplete="email">
+      </div>
+      <div>
+        <label class="lbl">Password</label>
+        <input id="inPass" type="password" required class="inp acc-ring" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition flex items-center justify-center gap-2 shadow-sm">
+        <span class="btn-login-text">Masuk Dashboard</span>
+        <span class="btn-login-load hidden items-center gap-2"><span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full spin inline-block"></span> Memverifikasi…</span>
+      </button>
+      <p id="loginErr" class="hidden text-xs font-bold text-rose-500 text-center"></p>
+    </form>
+    <p class="text-center text-[11px] text-white/60 mt-6">Tim Kreatif © 2026</p>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="scrApp" class="hidden min-h-screen flex flex-col md:flex-row">
+  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white sticky top-0 h-screen">
+    <div class="flex items-center gap-3 p-5 border-b border-slate-100">
+      <div class="w-11 h-11 rounded-xl brand-grad overflow-hidden shrink-0">
+        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+      </div>
+      <div class="min-w-0">
+        <p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p>
+        <p class="text-[10px] text-slate-400">v5.1</p>
+      </div>
+    </div>
+    <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto no-scroll" id="navDesktop"></nav>
+    <div class="p-5 border-t border-slate-100 space-y-3">
+      <div class="flex items-center gap-2">
+        <button id="btnDark" onclick="toggleDark()" aria-label="Dark mode" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+          <i data-lucide="moon" class="w-4 h-4 text-slate-600"></i>
+        </button>
+        <button onclick="openAksenPicker()" aria-label="Warna aksen" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+          <i data-lucide="palette" class="w-4 h-4 text-slate-600"></i>
+        </button>
+        <button onclick="toggleDebug()" aria-label="Debug" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+          <i data-lucide="bug" class="w-4 h-4 text-slate-600"></i>
+        </button>
+        <div class="flex-1 min-w-0 text-right">
+          <p id="adminEmail" class="text-[10px] font-bold text-slate-500 truncate">—</p>
+        </div>
+      </div>
+      <button onclick="konfirmasiLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 active:scale-[.98] transition">
+        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
+      </button>
+    </div>
+  </aside>
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- TOP BAR MOBILE -->
+    <div class="md:hidden sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 safe-top pb-3 px-4 flex items-center gap-2">
+      <button onclick="openDrawer()" aria-label="Menu" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition shrink-0">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-extrabold text-slate-800 leading-tight truncate">Admin Panel</p>
+        <p id="adminEmailMobile" class="text-[10px] text-slate-400 truncate">—</p>
+      </div>
+      <div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0">
+        <span id="syncDot" class="sync-dot"></span>
+        <span id="syncText" class="text-[9px] font-mono font-semibold text-slate-500">Synced</span>
+      </div>
+      <button id="btnDarkMobile" onclick="toggleDark()" aria-label="Dark" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition shrink-0">
+        <i data-lucide="moon" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- TOP BAR DESKTOP -->
+    <div class="hidden md:flex sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 px-6 py-3 items-center gap-3">
+      <p id="pageTitleDesktop" class="text-sm font-extrabold text-slate-800 truncate flex-1">Dashboard</p>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
+        <span id="syncDotDesktop" class="sync-dot"></span>
+        <span id="syncTextDesktop" class="text-[10px] font-mono font-semibold text-slate-500">Synced</span>
+        <span id="pendingBadgeDesktop" class="hidden pending-badge">0</span>
+      </div>
+      <button onclick="exportData()" aria-label="Export" title="Export JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="download" class="w-4 h-4"></i>
+      </button>
+      <label aria-label="Import" title="Import JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition cursor-pointer">
+        <i data-lucide="upload" class="w-4 h-4"></i>
+        <input type="file" accept=".json" class="hidden" onchange="importData(event)">
+      </label>
+    </div>
+
+    <!-- DRAWER MOBILE -->
+    <div id="drawer" class="fixed inset-0 z-50 hidden md:hidden">
+      <div class="absolute inset-0 bg-black/50" onclick="closeDrawer()"></div>
+      <div id="drawerSheet" class="absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-900 -translate-x-full transition-transform flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between p-5 border-b border-slate-100">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-xl brand-grad overflow-hidden shrink-0">
+              <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+            </div>
+            <div class="min-w-0">
+              <p class="font-extrabold text-slate-800 text-sm leading-tight">Admin</p>
+              <p id="drawerEmail" class="text-[10px] text-slate-400 truncate">—</p>
+            </div>
+          </div>
+          <button onclick="closeDrawer()" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+        <nav class="flex-1 overflow-y-auto no-scroll p-3" id="navMobile"></nav>
+        <div class="p-4 border-t border-slate-100 space-y-2">
+          <button onclick="toggleDebug()" class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center gap-2 active:scale-[.98]">
+            <i data-lucide="bug" class="w-3.5 h-3.5"></i> Debug Panel
+          </button>
+          <button onclick="konfirmasiLogout()" class="w-full py-2.5 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-2 active:scale-[.98]">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="flex-1 p-4 md:p-8 space-y-5 min-w-0">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section id="sec-dash" class="space-y-4">
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="users" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Total Guru</p>
+              <p id="stGuru" class="text-xl font-black text-slate-800">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Aktif 7 Hari</p>
+              <p id="stAktif" class="text-xl font-black text-teal-600">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0"><i data-lucide="log-in" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Login Hari Ini</p>
+              <p id="stLogin" class="text-xl font-black text-sky-600">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="star" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Poin Tersebar</p>
+              <p id="stPoin" class="text-xl font-black text-amber-500">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3 col-span-2 lg:col-span-1">
+            <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Saran Baru</p>
+              <p id="stFb" class="text-xl font-black text-rose-500">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button onclick="exportCSV('aktivitas',STATE.log)" class="card px-3.5 py-2.5 text-[11px] font-bold text-slate-600 flex items-center gap-1.5 active:scale-95 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>Export Aktivitas
+          </button>
+          <button onclick="exportCSV('guru',STATE.guru)" class="card px-3.5 py-2.5 text-[11px] font-bold text-slate-600 flex items-center gap-1.5 active:scale-95 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>Export Guru
+          </button>
+          <button onclick="exportCSV('penukaran',STATE.redem)" class="card px-3.5 py-2.5 text-[11px] font-bold text-slate-600 flex items-center gap-1.5 active:scale-95 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>Export Penukaran
+          </button>
+          <button onclick="purgeLog()" class="card px-3.5 py-2.5 text-[11px] font-bold text-rose-500 flex items-center gap-1.5 active:scale-95 transition">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Purge Log &gt;90 hari
+          </button>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="card p-5">
+            <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+              <i data-lucide="mouse-pointer-click" class="w-4 h-4 acc-text"></i> Menu Terpopuler
+            </p>
+            <div id="topMenus" class="space-y-2"></div>
+          </div>
+          <div class="card p-5">
+            <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+              <i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah
+            </p>
+            <div id="leagueList" class="space-y-2"></div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+              <i data-lucide="history" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru
+              <span id="logCount" class="text-[10px] text-slate-400 font-normal"></span>
+            </p>
+          </div>
+          <div id="actList"></div>
+          <button id="logMore" onclick="loadMoreLog()" class="mt-2 w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-98 transition">Muat Lebih Banyak</button>
+        </div>
+
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Leaderboard
+          </p>
+          <div id="leadBoard" class="grid md:grid-cols-2 gap-2"></div>
+        </div>
+      </section>
+      <!-- ============ MENU ============ -->
+      <section id="sec-menu" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <input id="mSearch" oninput="renderMenusDebounced()" class="inp acc-ring flex-1" placeholder="Cari menu…">
+          <button onclick="openMenuEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Menu
+          </button>
+        </div>
+        <div id="menuList" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ AGENDA ============ -->
+      <section id="sec-agenda" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <button onclick="openAgendaEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Agenda
+          </button>
+        </div>
+        <div id="agendaList" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ DOKUMEN ============ -->
+      <section id="sec-dokumen" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <input id="docSearch" oninput="renderDocsAdminDebounced()" class="inp acc-ring flex-1" placeholder="Cari dokumen…">
+          <button onclick="openDocEditor()" class="acc-bg text-white font-bold px-4 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Dokumen
+          </button>
+        </div>
+        <div id="docListAdmin" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ REWARDS ============ -->
+      <section id="sec-rewards" class="hidden space-y-4">
+        <div class="flex gap-2">
+          <button onclick="openRewardEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> Reward
+          </button>
+        </div>
+        <div id="rewardListAdmin" class="space-y-2"></div>
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="shopping-bag" class="w-4 h-4 acc-text"></i> Daftar Penukaran
+          </p>
+          <div id="redemList" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- ============ KUDOS ============ -->
+      <section id="sec-kudos" class="hidden space-y-4">
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="heart" class="w-4 h-4 text-rose-500"></i> Top Penerima Apresiasi
+          </p>
+          <div id="kudosTopAdmin" class="space-y-2"></div>
+        </div>
+        <div class="card p-5">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
+            <i data-lucide="history" class="w-4 h-4 acc-text"></i> Riwayat Apresiasi
+          </p>
+          <div id="kudosList" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- ============ INFO / BANNER ============ -->
+      <section id="sec-info" class="hidden space-y-4">
+        <div class="card p-5 space-y-4">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+            <i data-lucide="monitor-smartphone" class="w-4 h-4 acc-text"></i> Tampilan Beranda
+          </p>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="lbl">Banner</label>
+              <select id="iBanStatus" class="inp acc-ring"><option>ON</option><option>OFF</option></select>
+            </div>
+            <div>
+              <label class="lbl">Informasi</label>
+              <select id="iInfoStatus" class="inp acc-ring"><option>ON</option><option>OFF</option></select>
+            </div>
+            <div>
+              <label class="lbl">Quotes</label>
+              <select id="iQuoteStatus" class="inp acc-ring"><option>ON</option><option>OFF</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="card p-5 space-y-3">
+            <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+              <i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner
+            </p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="lbl">Warna</label>
+                <select id="iBanWarna" class="inp acc-ring">
+                  <option value="blue">Biru</option>
+                  <option value="green">Teal</option>
+                  <option value="red">Merah</option>
+                </select>
+              </div>
+              <div>
+                <label class="lbl">Label Tombol</label>
+                <input id="iBanLabel" class="inp acc-ring" placeholder="Cek Sekarang">
+              </div>
+            </div>
+            <div>
+              <label class="lbl">Pesan</label>
+              <textarea id="iBanPesan" rows="3" class="inp acc-ring"></textarea>
+            </div>
+            <div>
+              <label class="lbl">Link (awali ext: untuk luar)</label>
+              <input id="iBanLink" class="inp acc-ring" placeholder="ext:https://…">
+            </div>
+            <div>
+              <label class="lbl">URL Gambar</label>
+              <input id="iBanGambar" class="inp acc-ring" placeholder="https://…">
+            </div>
+          </div>
+
+          <div class="card p-5 space-y-3">
+            <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i> Pop-up / Flyer
+            </p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="lbl">Status</label>
+                <select id="iPopStatus" class="inp acc-ring"><option>ON</option><option>OFF</option></select>
+              </div>
+              <div>
+                <label class="lbl">Judul</label>
+                <input id="iPopJudul" class="inp acc-ring">
+              </div>
+            </div>
+            <div>
+              <label class="lbl">Pesan (bisa HTML terbatas)</label>
+              <textarea id="iPopPesan" rows="4" class="inp acc-ring"></textarea>
+            </div>
+            <div>
+              <label class="lbl">URL Gambar</label>
+              <input id="iPopGambar" class="inp acc-ring" placeholder="https://…">
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-5">
+          <label class="lbl">Versi Aplikasi</label>
+          <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.55" autocomplete="off">
+          <p class="text-[10px] text-slate-400 mt-2">Versi ini muncul di seluruh aplikasi (sidebar, profil, pengaturan, footer).</p>
+        </div>
+
+        <button onclick="saveInfo()" class="acc-bg text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+          <i data-lucide="save" class="w-4 h-4"></i> Simpan Pengaturan
+        </button>
+      </section>
+
+      <!-- ============ NOTIFIKASI ============ -->
+      <section id="sec-notif" class="hidden space-y-4">
+        <div class="card p-5 space-y-3">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+            <i data-lucide="send" class="w-4 h-4 acc-text"></i> Kirim Pengumuman / Pesan Khusus
+          </p>
+          <div class="grid md:grid-cols-2 gap-3">
+            <div>
+              <label class="lbl">Judul</label>
+              <input id="iNotJudul" class="inp acc-ring">
+            </div>
+            <div>
+              <label class="lbl">Tipe</label>
+              <select id="iNotTipe" class="inp acc-ring">
+                <option value="pengumuman">📣 Pengumuman</option>
+                <option value="info">📢 Info</option>
+                <option value="gamifikasi">🏆 Gamifikasi</option>
+                <option value="sistem">✨ Sistem</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="lbl">Pesan</label>
+            <textarea id="iNotPesan" rows="2" class="inp acc-ring"></textarea>
+          </div>
+          <div>
+            <label class="lbl">URL Gambar (opsional)</label>
+            <input id="iNotGambar" class="inp acc-ring" placeholder="https://…">
+          </div>
+          <div>
+            <label class="lbl">URL Lampiran (opsional)</label>
+            <input id="iNotLink" class="inp acc-ring" placeholder="https://drive.google.com/…">
+          </div>
+          <div class="rounded-xl p-3 bg-amber-50/60 border border-amber-200 dark:border-amber-500/30">
+            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-2">
+              <i data-lucide="target" class="w-4 h-4 text-amber-600"></i> Penerima (Scope)
+            </p>
+            <div class="grid md:grid-cols-2 gap-3">
+              <div>
+                <label class="lbl">Jenis</label>
+                <select id="iNotScopeType" class="inp acc-ring" onchange="scopeHint()">
+                  <option value="all">Semua guru</option>
+                  <option value="role">Per Role (Guru / Kepala Sekolah)</option>
+                  <option value="school">Per Sekolah (nama sekolah)</option>
+                  <option value="user">Per Guru (guru_id)</option>
+                </select>
+              </div>
+              <div>
+                <label class="lbl" id="scopeLbl">—</label>
+                <input id="iNotScopeVal" class="inp acc-ring" placeholder="—">
+              </div>
+            </div>
+            <p id="scopeHint" class="text-[10px] text-slate-500 dark:text-slate-400 mt-2"></p>
+          </div>
+          <button onclick="addNotif()" class="acc-bg text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
+            <i data-lucide="send" class="w-4 h-4"></i> Kirim
+          </button>
+        </div>
+        <div id="notList" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ FOOTER ============ -->
+      <section id="sec-footer" class="hidden space-y-4">
+        <div class="card p-5">
+          <div class="grid md:grid-cols-4 gap-3">
+            <div>
+              <label class="lbl">Judul</label>
+              <input id="iFootJudul" class="inp acc-ring">
+            </div>
+            <div class="md:col-span-2">
+              <label class="lbl">URL</label>
+              <input id="iFootUrl" class="inp acc-ring" placeholder="https://…">
+            </div>
+            <div>
+              <label class="lbl">Icon</label>
+              <input id="iFootIcon" class="inp acc-ring" placeholder="globe">
+            </div>
+          </div>
+          <div class="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2">💡 Kategori otomatis dari Icon</p>
+            <div class="grid grid-cols-3 gap-2 text-[10px]">
+              <div>
+                <p class="font-bold text-teal-600 mb-1">Sumber Daya</p>
+                <p class="text-slate-500 leading-relaxed">globe, link, external-link, book, school, folder</p>
+              </div>
+              <div>
+                <p class="font-bold text-rose-600 mb-1">Sosial Media</p>
+                <p class="text-slate-500 leading-relaxed">instagram, facebook, youtube, send, whatsapp</p>
+              </div>
+              <div>
+                <p class="font-bold text-sky-600 mb-1">Informasi</p>
+                <p class="text-slate-500 leading-relaxed">info, bell, megaphone, help-circle</p>
+              </div>
+            </div>
+          </div>
+          <button onclick="addFooter()" class="mt-3 w-full acc-bg text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition shadow-sm">+ Tambah Footer</button>
+        </div>
+        <div id="footList" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ QUOTES ============ -->
+      <section id="sec-quotes" class="hidden space-y-4">
+        <div class="card p-5 space-y-3">
+          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+            <i data-lucide="upload" class="w-4 h-4 acc-text"></i> Impor Massal Quotes
+          </p>
+          <div class="flex gap-2 flex-wrap">
+            <label class="cursor-pointer bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 active:scale-95 transition">
+              <i data-lucide="file-up" class="w-4 h-4"></i> File CSV
+              <input type="file" id="qFile" accept=".csv,.txt" class="hidden" onchange="bacaFileQuotes(event)">
+            </label>
+            <button onclick="$('qPaste').classList.toggle('hidden')" class="bg-slate-100 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 active:scale-95 transition">
+              <i data-lucide="clipboard-paste" class="w-4 h-4"></i> Tempel
+            </button>
+          </div>
+          <textarea id="qPaste" rows="3" class="inp acc-ring hidden" placeholder="kutipan	tokoh"></textarea>
+          <button onclick="imporQuotes()" class="acc-bg text-white font-bold px-4 py-2 rounded-xl text-xs active:scale-95 transition shadow-sm">Impor</button>
+        </div>
+        <div class="card p-5 space-y-3">
+          <p class="text-sm font-extrabold text-slate-700">Tambah Satu · <span id="qCount" class="acc-text">0</span></p>
+          <div>
+            <label class="lbl">Kutipan</label>
+            <textarea id="iQuoteText" rows="2" class="inp acc-ring"></textarea>
+          </div>
+          <div class="flex gap-2">
+            <input id="iQuoteAuthor" class="inp acc-ring flex-1" placeholder="Tokoh">
+            <button onclick="addQuote()" class="acc-bg text-white font-bold px-5 rounded-xl text-sm active:scale-95 transition shadow-sm">+ Tambah</button>
+          </div>
+        </div>
+        <div id="quoteList" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ FEEDBACK ============ -->
+      <section id="sec-fb" class="hidden space-y-4">
+        <select id="fbFilter" onchange="renderFb()" class="inp acc-ring w-full md:w-44">
+          <option value="all">Semua</option>
+          <option value="baru">🔴 Baru</option>
+          <option value="diproses">🟡 Diproses</option>
+          <option value="selesai">🟢 Selesai</option>
+        </select>
+        <div id="fbList" class="space-y-2"></div>
+      </section>
+
+      <!-- ============ GURU ============ -->
+      <section id="sec-guru" class="hidden space-y-4">
+        <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-3.5 h-3.5"></i> Akun terpusat di SSO — tabel hanya baca.
+        </p>
+        <input id="gSearch" oninput="renderGuruDebounced()" class="inp acc-ring" placeholder="Cari nama / sekolah…">
+        <div id="guruTable" class="card overflow-hidden"></div>
+      </section>
+
+      <!-- ============ INSPIRASI ============ -->
+      <section id="sec-inspirasi" class="hidden space-y-4">
+        <button onclick="purgeInspirasi()" class="card px-3.5 py-2.5 text-[11px] font-bold text-rose-500 flex items-center gap-1.5 active:scale-95 transition">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge kadaluarsa
+        </button>
+        <div id="inspList" class="space-y-2"></div>
+      </section>
+    </main>
+  </div>
+</div>
+<!-- ============ MODAL: MENU EDITOR ============ -->
+<div id="mMenu" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+  <div class="flex items-center justify-between">
+    <p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p>
+    <button onclick="closeModal('mMenu')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- TABS SWITCHER -->
+  <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
+    <button type="button" onclick="switchMenuTab(1)" id="menuTab1" class="flex-1 tab-btn active text-[11px]">Info Dasar</button>
+    <button type="button" onclick="switchMenuTab(2)" id="menuTab2" class="flex-1 tab-btn text-[11px]">Klasifikasi</button>
+    <button type="button" onclick="switchMenuTab(3)" id="menuTab3" class="flex-1 tab-btn text-[11px]">Akses</button>
+  </div>
+
+  <!-- TAB 1: INFO DASAR -->
+  <div id="menuTabContent1" class="space-y-3">
+    <div>
+      <label class="lbl">Judul</label>
+      <input id="eJudul" class="inp acc-ring">
+    </div>
+    <div>
+      <label class="lbl">Deskripsi</label>
+      <input id="eDesk" class="inp acc-ring">
+    </div>
+    <div>
+      <label class="lbl">URL</label>
+      <input id="eUrl" class="inp acc-ring" placeholder="https://…">
+    </div>
+    <div>
+      <label class="lbl">Icon</label>
+      <div class="flex items-center gap-3 mb-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
+        <div id="eIconPreview" class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200 dark:border-slate-800 shrink-0 overflow-hidden">
+          <i data-lucide="app-window" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Preview Icon</p>
+          <p class="text-xs font-mono text-slate-700 dark:text-slate-300 truncate" id="eIconLabel">app-window</p>
+        </div>
+      </div>
+      <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-2">
+        <button type="button" onclick="switchIconMode('lucide')" id="iconModeLucide" class="flex-1 tab-btn active text-[11px]">Lucide</button>
+        <button type="button" onclick="switchIconMode('url')" id="iconModeUrl" class="flex-1 tab-btn text-[11px]">URL Gambar</button>
+      </div>
+      <div id="iconModeContentLucide">
+        <div class="relative mb-2">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input id="eIconSearch" type="text" placeholder="Cari icon…" oninput="filterMenuIcons(this.value)" class="inp pl-9 py-2 text-xs">
+        </div>
+        <div id="eIconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-32 overflow-y-auto p-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-800"></div>
+      </div>
+      <div id="iconModeContentUrl" class="hidden">
+        <input id="eIconCustomUrl" type="url" placeholder="https://contoh.com/icon.png" oninput="onCustomUrlInput(this.value)" class="inp acc-ring text-xs font-mono">
+        <p class="text-[10px] text-slate-400 mt-1">Masukkan URL gambar (PNG/JPG/SVG). Ukuran ideal: 64×64px atau persegi.</p>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          <button type="button" onclick="testCustomUrl()" class="py-2 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95">Test Load</button>
+          <button type="button" onclick="clearCustomUrl()" class="py-2 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95">Clear</button>
+        </div>
+      </div>
+      <input type="hidden" id="eIcon" value="app-window">
+    </div>
+    <div>
+      <label class="lbl">Warna</label>
+      <div class="flex flex-wrap gap-1.5" id="eWarnaPicker"></div>
+      <input type="hidden" id="eWarna" value="blue">
+    </div>
+  </div>
+
+  <!-- TAB 2: KLASIFIKASI -->
+  <div id="menuTabContent2" class="space-y-3 hidden">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="lbl">Kategori</label>
+        <input id="eKategori" list="katOptions" class="inp acc-ring" placeholder="Pilih atau ketik baru…" autocomplete="off">
+        <datalist id="katOptions"></datalist>
+        <p class="text-[10px] text-slate-400 mt-1">Ketik kategori baru untuk membuatnya.</p>
+      </div>
+      <div>
+        <label class="lbl">Parent (submenu)</label>
+        <select id="eParent" class="inp acc-ring"><option value="">—</option></select>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="lbl">Label Badge</label>
+        <input id="eLabel" class="inp acc-ring" placeholder="BARU / HOT">
+      </div>
+      <div>
+        <label class="lbl">Urutan</label>
+        <input id="eSort" type="number" class="inp acc-ring" value="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: AKSES -->
+  <div id="menuTabContent3" class="space-y-3 hidden">
+    <div class="grid grid-cols-3 gap-3">
+      <div>
+        <label class="lbl">Tampil Di</label>
+        <select id="eTampil" class="inp acc-ring">
+          <option value="all">Semua</option>
+          <option value="mobile">HP</option>
+          <option value="desktop">PC</option>
+          <option value="off">Off</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">Akses</label>
+        <select id="eRole" class="inp acc-ring">
+          <option value="all">Publik</option>
+          <option value="tamu">Tamu</option>
+          <option value="Guru">Guru</option>
+          <option value="Kepala Sekolah">Kepsek</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">Cara Buka</label>
+        <select id="eBuka" class="inp acc-ring">
+          <option value="">Luar</option>
+          <option value="app">Dalam</option>
+        </select>
+      </div>
+    </div>
+    <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+      <input id="eActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Menu Aktif
+    </label>
+  </div>
+
+  <!-- FOOTER ACTIONS -->
+  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+    <button onclick="saveMenu()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
+    <button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button onclick="closeModal('mMenu')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
+  </div>
+</div></div>
+
+<!-- ============ MODAL: AGENDA ============ -->
+<div id="mAgenda" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+  <div class="flex items-center justify-between">
+    <p class="text-base font-extrabold text-slate-800" id="aTitle">Editor Agenda</p>
+    <button onclick="closeModal('mAgenda')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+  </div>
+  <div>
+    <label class="lbl">Judul</label>
+    <input id="aJudul" class="inp acc-ring">
+  </div>
+  <div>
+    <label class="lbl">Deskripsi</label>
+    <textarea id="aDesk" rows="2" class="inp acc-ring"></textarea>
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Tanggal</label>
+      <input id="aTanggal" type="date" class="inp acc-ring">
+    </div>
+    <div>
+      <label class="lbl">Waktu</label>
+      <input id="aWaktu" class="inp acc-ring" placeholder="08.00">
+    </div>
+  </div>
+  <div>
+    <label class="lbl">Tempat</label>
+    <input id="aTempat" class="inp acc-ring">
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Kategori</label>
+      <input id="aKategori" class="inp acc-ring" value="Kegiatan">
+    </div>
+    <div>
+      <label class="lbl">Link (opsional)</label>
+      <input id="aLink" class="inp acc-ring">
+    </div>
+  </div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+    <input id="aActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
+  </label>
+  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+    <button onclick="saveAgenda()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
+    <button id="aDelete" onclick="delAgenda()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button onclick="closeModal('mAgenda')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
+  </div>
+</div></div>
+
+<!-- ============ MODAL: DOKUMEN ============ -->
+<div id="mDoc" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+  <div class="flex items-center justify-between">
+    <p class="text-base font-extrabold text-slate-800" id="docTitle">Editor Dokumen</p>
+    <button onclick="closeModal('mDoc')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+  </div>
+  <div>
+    <label class="lbl">Judul</label>
+    <input id="docJudul" class="inp acc-ring">
+  </div>
+  <div>
+    <label class="lbl">Deskripsi</label>
+    <input id="docDesk" class="inp acc-ring">
+  </div>
+  <div>
+    <label class="lbl">Link (Drive / eksternal)</label>
+    <input id="docLink" class="inp acc-ring" placeholder="https://drive.google.com/…">
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Kategori</label>
+      <input id="docKat" class="inp acc-ring" value="Umum">
+    </div>
+    <div>
+      <label class="lbl">Icon</label>
+      <input id="docIcon" class="inp acc-ring" value="file-text">
+    </div>
+  </div>
+  <div>
+    <label class="lbl">Warna</label>
+    <div class="flex flex-wrap gap-1.5" id="docWarnaPicker"></div>
+    <input type="hidden" id="docWarna" value="blue">
+  </div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+    <input id="docActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
+  </label>
+  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+    <button onclick="saveDoc()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
+    <button id="docDelete" onclick="delDoc()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button onclick="closeModal('mDoc')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
+  </div>
+</div></div>
+
+<!-- ============ MODAL: REWARD ============ -->
+<div id="mReward" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+  <div class="flex items-center justify-between">
+    <p class="text-base font-extrabold text-slate-800" id="rTitle">Editor Reward</p>
+    <button onclick="closeModal('mReward')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+  </div>
+  <div>
+    <label class="lbl">Judul</label>
+    <input id="rJudul" class="inp acc-ring">
+  </div>
+  <div>
+    <label class="lbl">Deskripsi</label>
+    <input id="rDesk" class="inp acc-ring">
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Biaya Poin</label>
+      <input id="rBiaya" type="number" class="inp acc-ring" value="50">
+    </div>
+    <div>
+      <label class="lbl">Stok (-1 = ∞)</label>
+      <input id="rStok" type="number" class="inp acc-ring" value="-1">
+    </div>
+  </div>
+  <div>
+    <label class="lbl">Link (opsional)</label>
+    <input id="rLink" class="inp acc-ring">
+  </div>
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+    <input id="rActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
+  </label>
+  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+    <button onclick="saveReward()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
+    <button id="rDelete" onclick="delReward()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button onclick="closeModal('mReward')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
+  </div>
+</div></div>
+
+<!-- ============ MODAL: CONFIRM ============ -->
+<div id="mConfirm" class="modal"><div class="modal-box p-6 text-center" style="max-width:20rem">
+  <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3">
+    <i data-lucide="alert-triangle" class="w-7 h-7"></i>
+  </div>
+  <p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin lanjut?</p>
+  <p id="cfMsg" class="text-xs text-slate-500 mt-1 leading-relaxed">…</p>
+  <div class="grid grid-cols-2 gap-2 mt-5">
+    <button onclick="cfCancel()" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button>
+    <button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+  </div>
+</div></div>
+
+<!-- ============ MODAL: AKSEN ============ -->
+<div id="mAksen" class="modal"><div class="modal-box p-6 space-y-4" style="max-width:22rem">
+  <p class="text-base font-extrabold text-slate-800">Warna Aksen</p>
+  <div class="flex justify-around gap-3">
+    <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
+    <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
+    <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
+    <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
+    <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
+  </div>
+  <button onclick="closeModal('mAksen')" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl text-sm active:scale-95 transition">Tutup</button>
+</div></div>
+
+<!-- ============ TOAST CONTAINER ============ -->
+<div id="toast-container" class="fixed z-[190] flex flex-col gap-2" style="top:calc(env(safe-area-inset-top) + 3.5rem);right:14px;max-width:320px;pointer-events:none"></div>
+
+<!-- ============ DEBUG PANEL ============ -->
+<div id="debug-panel">
+  <div style="display:flex;justify-content:space-between;margin-bottom:6px;color:#5EEAD4">
+    <strong>🐛 DEBUG LOG</strong>
+    <div style="display:flex;gap:6px">
+      <button onclick="document.getElementById('debug-content').innerHTML=''" style="background:#1e2230;color:#5EEAD4;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer">Clear</button>
+      <button onclick="toggleDebug()" style="background:#1e2230;color:#5EEAD4;border:none;padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer">Tutup</button>
+    </div>
+  </div>
+  <div id="debug-content"></div>
+</div>
+
+<script>
+/* ============================================================
+   KONSTANTA DASAR
+   ============================================================ */
+const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
+const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
+const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
+const sb=window.supabase.createClient(SB_URL,SB_ANON,{auth:{persistSession:true,storage:window.localStorage}});
+const $=id=>document.getElementById(id);
+
+const COLOR={
+  teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],
+  blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],
+  rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],
+  fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],
+  red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],
+  yellow:['bg-yellow-100','text-yellow-600'],sky:['bg-sky-100','text-sky-600']
+};
+
+const COLOR_PICKER_LIST=[
+  {id:'teal',label:'Teal',hex:'#0D9488'},
+  {id:'blue',label:'Blue',hex:'#2563eb'},
+  {id:'violet',label:'Violet',hex:'#7c3aed'},
+  {id:'rose',label:'Rose',hex:'#e11d48'},
+  {id:'amber',label:'Amber',hex:'#d97706'},
+  {id:'emerald',label:'Emerald',hex:'#059669'},
+  {id:'sky',label:'Sky',hex:'#0284c7'},
+  {id:'orange',label:'Orange',hex:'#ea580c'},
+  {id:'fuchsia',label:'Fuchsia',hex:'#c026d3'},
+  {id:'cyan',label:'Cyan',hex:'#0891b2'},
+  {id:'red',label:'Red',hex:'#dc2626'},
+  {id:'green',label:'Green',hex:'#16a34a'},
+  {id:'yellow',label:'Yellow',hex:'#ca8a04'}
+];
+
+const ICON_LIST=['link','link-2','home','settings','user','users','folder','folder-open','folder-cog','file','file-text','image','video','music','download','upload','cloud','database','server','globe','map-pin','calendar','calendar-days','clock','mail','message-circle','phone','bell','book','book-open','graduation-cap','clipboard','clipboard-check','award','star','heart','bookmark','tag','shopping-cart','shopping-bag','credit-card','dollar-sign','trending-up','bar-chart','pie-chart','activity','zap','shield','shield-check','lock','unlock','key','eye','search','filter','edit','trash-2','plus','minus','check','x','arrow-right','arrow-up-right','external-link','play','pause','power','wifi','monitor','smartphone','tablet','cpu','hard-drive','code','terminal','inbox','send','log-out','log-in','layout-dashboard','layout-grid','layout-list','package','compass','sparkles','rocket','flame','crown','gem','palette','brush','camera','headphones','mic','trophy','target','flag','info','help-circle','alert-circle','alert-triangle','save','pencil','refresh-cw','menu','megaphone','github','youtube','instagram','facebook','twitter','linkedin','newspaper','briefcase','school','wrench','bot','hand','hand-heart','heart-handshake','sprout','leaf','nut','apple','tree-deciduous','tree-pine','footprints','medal','badge-check','id-card','at-sign','hash','quote','party-popper','rows-3','undo-2','app-window','activity','monitor-smartphone','shopping-bag'];
+
+const TABS=[
+  ['dash','layout-dashboard','Dashboard'],
+  ['menu','layout-grid','Menu'],
+  ['agenda','calendar-days','Agenda'],
+  ['dokumen','folder-open','Dokumen'],
+  ['rewards','gift','Toko Poin'],
+  ['kudos','heart-handshake','Apresiasi'],
+  ['info','megaphone','Banner'],
+  ['notif','bell','Notifikasi'],
+  ['footer','link-2','Footer'],
+  ['quotes','quote','Quotes'],
+  ['fb','lightbulb','Saran'],
+  ['guru','users','Guru'],
+  ['inspirasi','share-2','Inspirasi']
+];
+
+const KEYS={
+  CACHE:'gb_admin_cache',
+  PENDING:'gb_admin_pending',
+  LAST_SYNC:'gb_admin_lastsync',
+  PREFS:'gb_admin_prefs',
+  DEBUG:'gb_admin_debug'
+};
+
+const DEFAULT_KATS=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspirasi','Komunitas & KKG','Kepala Sekolah','Tools & Arsip','Informasi','Umum'];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STATE={
+  profile:null,user:null,
+  menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,
+  gam:[],lead:[],inspi:[],config:null,agenda:[],docs:[],rewards:[],redem:[],
+  kudos:[],kudosTop:[],
+  editMenu:null,editAgenda:null,editDoc:null,editReward:null,
+  currentTab:'dash',
+  pending:[],
+  prefs:{debug:false,lastSyncAt:null}
+};
+
+let CUR={tab:'dash'};
+let cfCb=null;
+
+/* ============================================================
+   DEBUG PANEL
+   ============================================================ */
+const _origLog=console.log,_origErr=console.error,_origWarn=console.warn;
+function dbg(msg,type){
+  type=type||'info';
+  const content=$('debug-content');
+  if(!content)return;
+  const time=new Date().toLocaleTimeString();
+  const line=document.createElement('div');
+  line.className='log-line log-'+type;
+  line.textContent='['+time+'] '+(typeof msg==='object'?JSON.stringify(msg).slice(0,300):msg);
+  content.appendChild(line);
+  const panel=$('debug-panel');
+  if(panel)panel.scrollTop=panel.scrollHeight;
+  while(content.children.length>100)content.removeChild(content.firstChild);
+}
+console.log=function(){_origLog.apply(console,arguments);dbg(Array.from(arguments).join(' '),'info');};
+console.error=function(){_origErr.apply(console,arguments);dbg(Array.from(arguments).join(' '),'error');};
+console.warn=function(){_origWarn.apply(console,arguments);dbg(Array.from(arguments).join(' '),'error');};
+window.addEventListener('error',e=>dbg('JS ERROR: '+e.message,'error'));
+
+function toggleDebug(){
+  const panel=$('debug-panel');
+  if(!panel)return;
+  panel.classList.toggle('show');
+  STATE.prefs.debug=panel.classList.contains('show');
+  try{localStorage.setItem(KEYS.DEBUG,STATE.prefs.debug?'1':'0');}catch(_){}
+}
+
+/* ============================================================
+   HELPER
+   ============================================================ */
+function icons(){lucide.createIcons();}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);}
+function debounce(fn,delay){
+  let t;
+  return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),delay);};
+}
+function isOnline(){return navigator.onLine;}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function toast(msg,type){
+  type=type||'success';
+  const ic={success:'check-circle',error:'alert-circle',warning:'alert-triangle',info:'info'}[type]||'info';
+  const el=document.createElement('div');
+  el.className='toast-item toast-'+type;
+  el.style.pointerEvents='auto';
+  el.innerHTML=`<i data-lucide="${ic}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${esc(msg)}</span>`;
+  const c=$('toast-container');
+  if(c)c.appendChild(el);
+  icons();
+  setTimeout(()=>{
+    el.style.transition='all .3s';
+    el.style.opacity='0';
+    el.style.transform='translateX(120%)';
+    setTimeout(()=>el.remove(),300);
+  },3000);
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openModal(id){const m=$(id);if(m)m.classList.add('show');icons();}
+function closeModal(id){const m=$(id);if(m)m.classList.remove('show');}
+
+function confirmDialog(msg,onOk,title,okLabel){
+  $('cfMsg').textContent=msg;
+  $('cfTitle').textContent=title||'Yakin lanjut?';
+  $('cfOk').textContent=okLabel||'Hapus';
+  cfCb=onOk;
+  openModal('mConfirm');
+}
+function cfCancel(){closeModal('mConfirm');cfCb=null;}
+$('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
+
+/* ============================================================
+   TEMA
+   ============================================================ */
+function toggleDark(){
+  const on=document.documentElement.classList.toggle('dark');
+  localStorage.setItem('gb_dark',on?'1':'0');
+  document.querySelector('meta[name=theme-color]')?.setAttribute('content',on?'#0F1115':'#F6F5F9');
+  updateDarkIcons();
+}
+function updateDarkIcons(){
+  const on=document.documentElement.classList.contains('dark');
+  ['btnDark','btnDarkMobile'].forEach(id=>{
+    const b=$(id);if(!b)return;
+    const ic=b.querySelector('svg,i');
+    if(ic)ic.setAttribute('data-lucide',on?'sun':'moon');
+  });
+  icons();
+}
+function setAccent(a){
+  document.documentElement.dataset.acc=a;
+  localStorage.setItem('gb_acc',a);
+  paintAksen();
+}
+function openAksenPicker(){openModal('mAksen');paintAksen();}
+function paintAksen(){
+  const cur=localStorage.getItem('gb_acc')||'hijau';
+  document.querySelectorAll('.acc-choice').forEach(b=>{
+    const on=b.dataset.acc===cur;
+    b.classList.toggle('ring-2',on);
+    b.classList.toggle('ring-white',on);
+    b.classList.toggle('scale-110',on);
+  });
+}
+function initTheme(){
+  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
+  const a=localStorage.getItem('gb_acc');
+  if(a)document.documentElement.dataset.acc=a;
+  updateDarkIcons();
+  paintAksen();
+}
+
+/* ============================================================
+   SYNC INDICATOR
+   ============================================================ */
+function setSyncState(state){
+  const dots=['syncDot','syncDotDesktop'];
+  const texts=['syncText','syncTextDesktop'];
+  const map={
+    synced:{cls:'',text:'Synced'},
+    syncing:{cls:'syncing',text:'Syncing…'},
+    pending:{cls:'pending',text:'Pending '+STATE.pending.length},
+    error:{cls:'error',text:'Error'},
+    offline:{cls:'offline',text:'Offline'}
+  };
+  const m=map[state]||map.synced;
+  dots.forEach(id=>{
+    const d=$(id);if(!d)return;
+    d.className='sync-dot'+(m.cls?' '+m.cls:'');
+  });
+  texts.forEach(id=>{
+    const t=$(id);if(!t)return;
+    t.textContent=m.text;
+  });
+  const pb=$('pendingBadgeDesktop');
+  if(pb){
+    if(STATE.pending.length>0){pb.textContent=STATE.pending.length;pb.classList.remove('hidden');}
+    else pb.classList.add('hidden');
+  }
+}
+
+/* ============================================================
+   OFFLINE QUEUE
+   ============================================================ */
+function loadPending(){
+  try{STATE.pending=JSON.parse(localStorage.getItem(KEYS.PENDING)||'[]');}
+  catch(_){STATE.pending=[];}
+}
+function savePending(){
+  try{localStorage.setItem(KEYS.PENDING,JSON.stringify(STATE.pending));}catch(_){}
+}
+function queuePending(op){
+  STATE.pending.push({...op,t:Date.now()});
+  savePending();
+  setSyncState(isOnline()?'pending':'offline');
+  dbg('Queued: '+op.action,'info');
+  if(isOnline())syncPending();
+}
+async function syncPending(){
+  if(!isOnline()){setSyncState('offline');return;}
+  if(!STATE.pending.length){setSyncState('synced');return;}
+  setSyncState('syncing');
+  const queue=[...STATE.pending];
+  const remaining=[];
+  for(const op of queue){
+    try{
+      await executePendingOp(op);
+      dbg('✓ '+op.action,'success');
+    }catch(e){
+      dbg('✗ '+op.action+': '+e.message,'error');
+      remaining.push(op);
+    }
+  }
+  STATE.pending=remaining;
+  savePending();
+  setSyncState(remaining.length?'error':'synced');
+  if(remaining.length===0){
+    toast('Semua perubahan tersinkron','success');
+    recordLastSync();
+  }
+}
+async function executePendingOp(op){
+  const ops={
+    add_menu:()=>sb.from('creative_menus').insert(op.data),
+    update_menu:()=>sb.from('creative_menus').update(op.data).eq('id',op.id),
+    delete_menu:()=>sb.from('creative_menus').delete().eq('id',op.id),
+    add_agenda:()=>sb.from('creative_agenda').insert(op.data),
+    update_agenda:()=>sb.from('creative_agenda').update(op.data).eq('id',op.id),
+    delete_agenda:()=>sb.from('creative_agenda').delete().eq('id',op.id),
+    add_doc:()=>sb.from('creative_documents').insert(op.data),
+    update_doc:()=>sb.from('creative_documents').update(op.data).eq('id',op.id),
+    delete_doc:()=>sb.from('creative_documents').delete().eq('id',op.id),
+    add_reward:()=>sb.from('creative_rewards').insert(op.data),
+    update_reward:()=>sb.from('creative_rewards').update(op.data).eq('id',op.id),
+    delete_reward:()=>sb.from('creative_rewards').delete().eq('id',op.id),
+    add_footer:()=>sb.from('creative_footers').insert(op.data),
+    delete_footer:()=>sb.from('creative_footers').delete().eq('id',op.id),
+    add_quote:()=>sb.from('creative_quotes').insert(op.data),
+    delete_quote:()=>sb.from('creative_quotes').delete().eq('id',op.id),
+    add_notif:()=>sb.from('creative_notifications').insert(op.data),
+    toggle_notif:()=>sb.from('creative_notifications').update({is_active:op.data.is_active}).eq('id',op.id),
+    delete_notif:()=>sb.from('creative_notifications').delete().eq('id',op.id),
+    save_info:()=>sb.from('creative_app_config').update(op.data).eq('id',op.id),
+    update_feedback:()=>sb.from('creative_feedback').update({status:op.data.status}).eq('id',op.id),
+    update_redem:()=>sb.from('creative_redemptions').update({status:op.data.status}).eq('id',op.id),
+    update_insp:()=>sb.from('creative_inspirasi').update({status:op.data.status}).eq('id',op.id),
+    delete_insp:()=>sb.from('creative_inspirasi').delete().eq('id',op.id)
+  };
+  const fn=ops[op.action];
+  if(!fn)throw new Error('Action tidak dikenal: '+op.action);
+  const res=await fn();
+  if(res&&res.error)throw new Error(res.error.message||'Error');
+  return res;
+}
+
+/* ============================================================
+   LAST SYNC
+   ============================================================ */
+function recordLastSync(){
+  STATE.prefs.lastSyncAt=Date.now();
+  try{localStorage.setItem(KEYS.LAST_SYNC,String(Date.now()));}catch(_){}
+}
+
+/* ============================================================
+   CACHE
+   ============================================================ */
+function loadFromCache(){
+  try{
+    const c=JSON.parse(localStorage.getItem(KEYS.CACHE)||'{}');
+    STATE.menus=c.menus||[];
+    STATE.footer=c.footer||[];
+    STATE.quotes=c.quotes||[];
+    STATE.notifs=c.notifs||[];
+    STATE.fb=c.fb||[];
+    STATE.guru=c.guru||[];
+    STATE.config=c.config||null;
+    STATE.agenda=c.agenda||[];
+    STATE.docs=c.docs||[];
+    STATE.rewards=c.rewards||[];
+    STATE.redem=c.redem||[];
+    STATE.kudos=c.kudos||[];
+    STATE.kudosTop=c.kudosTop||[];
+    STATE.inspi=c.inspi||[];
+    if(c.lastSyncAt){STATE.prefs.lastSyncAt=c.lastSyncAt;}
+  }catch(e){dbg('Cache error: '+e.message,'error');}
+}
+function saveCache(){
+  try{
+    localStorage.setItem(KEYS.CACHE,JSON.stringify({
+      menus:STATE.menus,footer:STATE.footer,quotes:STATE.quotes,
+      notifs:STATE.notifs,fb:STATE.fb,guru:STATE.guru,config:STATE.config,
+      agenda:STATE.agenda,docs:STATE.docs,rewards:STATE.rewards,
+      redem:STATE.redem,kudos:STATE.kudos,kudosTop:STATE.kudosTop,
+      inspi:STATE.inspi,lastSyncAt:STATE.prefs.lastSyncAt
+    }));
+  }catch(_){}
+}
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+$('formLogin').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const btn=$('btnLogin');
+  const txt=btn.querySelector('.btn-login-text');
+  const load=btn.querySelector('.btn-login-load');
+  btn.disabled=true;
+  txt.classList.add('hidden');
+  load.classList.remove('hidden');
+  load.classList.add('flex');
+  $('loginErr').classList.add('hidden');
+  try{
+    const {error}=await sb.auth.signInWithPassword({email:$('inEmail').value.trim(),password:$('inPass').value});
+    if(error){
+      $('loginErr').textContent='❌ '+error.message;
+      $('loginErr').classList.remove('hidden');
+      return;
+    }
+    const ok=await init();
+    if(!ok)return;
+  }catch(err){
+    $('loginErr').textContent='❌ Terjadi kesalahan jaringan';
+    $('loginErr').classList.remove('hidden');
+  }finally{
+    btn.disabled=false;
+    txt.classList.remove('hidden');
+    load.classList.add('hidden');
+    load.classList.remove('flex');
+  }
+});
+
+async function init(){
+  const {data:isAdmin}=await sb.rpc('creative_is_admin');
+  if(!isAdmin){
+    toast('Bukan admin','error');
+    await sb.auth.signOut();
+    return false;
+  }
+  const {data:{user}}=await sb.auth.getUser();
+  const email=user?.email||'admin';
+  $('adminEmail').textContent=email;
+  $('adminEmailMobile').textContent=email;
+  $('drawerEmail').textContent=email;
+  $('scrLogin').classList.add('hidden');
+  $('scrApp').classList.remove('hidden');
+  buildNav();
+  loadAll();
+  return true;
+}
+
+sb.auth.onAuthStateChange((ev)=>{
+  if(ev==='SIGNED_OUT'){
+    $('scrApp').classList.add('hidden');
+    $('scrLogin').classList.remove('hidden');
+  }
+});
+
+(async function boot(){
+  initTheme();
+  loadPending();
+  loadFromCache();
+  if(localStorage.getItem(KEYS.DEBUG)==='1'){
+    const panel=$('debug-panel');if(panel)panel.classList.add('show');
+  }
+  if(new URLSearchParams(location.search).get('debug')==='1'){
+    const panel=$('debug-panel');if(panel)panel.classList.add('show');
+  }
+  setSyncState(isOnline()?'synced':'offline');
+  icons();
+
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    const {data:isAdmin}=await sb.rpc('creative_is_admin');
+    if(isAdmin){
+      const email=session?.user?.email||'admin';
+      $('adminEmail').textContent=email;
+      $('adminEmailMobile').textContent=email;
+      $('drawerEmail').textContent=email;
+      $('scrLogin').classList.add('hidden');
+      $('scrApp').classList.remove('hidden');
+      buildNav();
+      loadAll();
+    }
+  }
+  dbg('Boot complete','success');
+})();
+
+function konfirmasiLogout(){
+  confirmDialog('Keluar dari panel admin?',async()=>{
+    await sb.auth.signOut();
+    location.reload();
+  },'Logout?','Keluar');
+}
+
+/* ============================================================
+   NAVIGASI
+   ============================================================ */
+function buildNav(){
+  const h=TABS.map(([t,i,l],x)=>{
+    const badge=(t==='fb')?`<span id="navBadgeFb" class="hidden ml-auto text-[10px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded-full">0</span>`:'';
+    return `<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full justify-start ${x===0?'active':''}"><i data-lucide="${i}" class="w-4 h-4"></i><span class="flex-1 text-left">${l}</span>${badge}</button>`;
+  }).join('');
+  $('navDesktop').innerHTML=h;
+  $('navMobile').innerHTML=h;
+  icons();
+}
+function setTab(t){
+  closeDrawer();
+  CUR.tab=t;STATE.currentTab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  TABS.forEach(([k])=>{
+    const sec=$('sec-'+k);
+    if(sec)sec.classList.toggle('hidden',k!==t);
+  });
+  const titles={
+    dash:'Dashboard',menu:'Menu',agenda:'Agenda',dokumen:'Dokumen',
+    rewards:'Toko Poin',kudos:'Apresiasi',info:'Banner',notif:'Notifikasi',
+    footer:'Footer',quotes:'Quotes',fb:'Saran',guru:'Guru',inspirasi:'Inspirasi'
+  };
+  const td=$('pageTitleDesktop');if(td)td.textContent=titles[t]||'Dashboard';
+  updateNavBadge();
+}
+function updateNavBadge(){
+  const badge=$('navBadgeFb');
+  if(!badge)return;
+  const n=STATE.fb.filter(x=>x.status==='baru').length;
+  if(n>0){badge.textContent=n>9?'9+':n;badge.classList.remove('hidden');}
+  else badge.classList.add('hidden');
+}
+function openDrawer(){
+  $('drawer').classList.remove('hidden');
+  requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));
+}
+function closeDrawer(){
+  const ds=$('drawerSheet');if(!ds)return;
+  ds.classList.add('-translate-x-full');
+  setTimeout(()=>$('drawer').classList.add('hidden'),300);
+}
+
+/* ============================================================
+   EXPORT CSV
+   ============================================================ */
+function exportCSV(name,rows){
+  if(!rows||!rows.length)return toast('Tidak ada data','info');
+  const keys=Object.keys(rows[0]);
+  const csv=[keys.join(',')].concat(rows.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"').join(','))).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=name+'.csv';
+  a.click();
+  toast('CSV diunduh','success');
+}
+
+/* ============================================================
+   EXPORT / IMPORT JSON
+   ============================================================ */
+function exportData(){
+  const data={
+    version:'5.1',
+    exportedAt:new Date().toISOString(),
+    menus:STATE.menus,footer:STATE.footer,quotes:STATE.quotes,
+    notifs:STATE.notifs,config:STATE.config,agenda:STATE.agenda,
+    docs:STATE.docs,rewards:STATE.rewards
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`gb-admin-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup diunduh','success');
+  dbg('Export JSON','success');
+}
+function importData(ev){
+  const file=ev.target.files[0];
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.menus&&!data.config)throw new Error('Format tidak valid');
+      toast(`File berisi ${(data.menus||[]).length} menu`,'info');
+      dbg('Import file valid','success');
+    }catch(err){
+      toast('File tidak valid','error');
+      dbg('Import error: '+err.message,'error');
+    }
+    ev.target.value='';
+  };
+  rd.readAsText(file);
+}
+
+/* ============================================================
+   PURGE LOG
+   ============================================================ */
+async function purgeLog(){
+  const d=new Date();d.setDate(d.getDate()-90);
+  const iso=d.toISOString();
+  const {count}=await sb.from('creative_activity_log').select('*',{count:'exact',head:true}).lt('created_at',iso);
+  const n=count||0;
+  if(!n)return toast('Tidak ada log >90 hari','info');
+  confirmDialog(`Hapus ${n} log yang lebih tua dari 90 hari?`,async()=>{
+    const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});
+    toast((data||0)+' log dipurge','success');
+    loadAll();
+  },'Purge Log?','Hapus '+n);
+}
+/* ============================================================
+   LOAD ALL DATA
+   ============================================================ */
+async function loadAll(){
+  setSyncState('syncing');
+  try{
+    const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,inspi,agenda,docs,rewards,redem,kudos,kudosTop]=await Promise.all([
+      sb.from('creative_menus').select('*').order('sort_order'),
+      sb.from('creative_footers').select('*').order('sort_order'),
+      sb.from('creative_quotes').select('*').order('id'),
+      sb.from('creative_notifications').select('*').order('scheduled_at',{ascending:false}),
+      sb.from('creative_feedback').select('*').order('created_at',{ascending:false}),
+      sb.from('creative_app_config').select('*').limit(1).maybeSingle(),
+      sb.from('creative_gamification').select('*').order('total_poin',{ascending:false}),
+      sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).limit(50),
+      sb.rpc('creative_admin_list_guru'),
+      sb.rpc('creative_leaderboard'),
+      sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
+      sb.from('creative_agenda').select('*').order('tanggal',{ascending:false}),
+      sb.from('creative_documents').select('*').order('kategori'),
+      sb.from('creative_rewards').select('*').order('biaya_poin'),
+      sb.from('creative_redemptions').select('*').order('created_at',{ascending:false}),
+      sb.from('creative_kudos').select('*').order('created_at',{ascending:false}),
+      sb.rpc('creative_kudos_top')
+    ]);
+
+    STATE.menus=menus.data||[];
+    STATE.footer=footer.data||[];
+    STATE.quotes=quotes.data||[];
+    STATE.notifs=notifs.data||[];
+    STATE.fb=fb.data||[];
+    STATE.config=cfg.data;
+    STATE.gam=gam.data||[];
+    STATE.log=log.data||[];
+    STATE.guru=guru.data||[];
+    STATE.lead=lead.data||[];
+    STATE.inspi=inspi.data||[];
+    STATE.agenda=agenda.data||[];
+    STATE.docs=docs.data||[];
+    STATE.rewards=rewards.data||[];
+    STATE.redem=redem.data||[];
+    STATE.kudos=kudos.data||[];
+    STATE.kudosTop=kudosTop.data||[];
+
+    sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{
+      STATE.logTotal=r.count||0;
+      renderActCount();
+    });
+
+    renderDash();
+    renderMenus();
+    renderAgendaAdmin();
+    renderDocsAdmin();
+    renderRewardsAdmin();
+    renderKudosAdmin();
+    renderFooter();
+    renderQuotes();
+    renderNotif();
+    renderFb();
+    renderGuru();
+    renderInspirasi();
+    fillInfo();
+    scopeHint();
+    updateNavBadge();
+    saveCache();
+    recordLastSync();
+    setSyncState('synced');
+    icons();
+    dbg('loadAll OK: '+STATE.menus.length+' menu, '+STATE.footer.length+' footer','success');
+  }catch(e){
+    dbg('loadAll error: '+e.message,'error');
+    setSyncState('error');
+    toast('Gagal memuat data','error');
+  }
+}
+
+function renderActCount(){
+  const el=$('logCount');
+  if(el)el.textContent=`(${STATE.log.length}/${STATE.logTotal||0})`;
+}
+async function loadMoreLog(){
+  const from=STATE.log.length;
+  const {data}=await sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).range(from,from+49);
+  if(data&&data.length){STATE.log=STATE.log.concat(data);renderDash();}
+  renderActCount();
+  if(STATE.log.length>=(STATE.logTotal||0))$('logMore').style.display='none';
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function renderDash(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const week=new Date();week.setDate(week.getDate()-7);
+
+  $('stGuru').textContent=STATE.guru.length;
+  $('stAktif').textContent=new Set(STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=week).map(l=>l.guru_id)).size;
+  $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
+  $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
+  $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
+
+  const cnt={};
+  STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{
+    const j=(l.detail||{}).judul;
+    if(j)cnt[j]=(cnt[j]||0)+1;
+  });
+  $('topMenus').innerHTML=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([j,c],i)=>`
+    <div class="flex items-center gap-3">
+      <span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span>
+      <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(j)}</span>
+      <span class="text-xs font-black text-slate-400">${c}×</span>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+
+  const lg={};
+  STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{
+    const g=STATE.guru.find(x=>x.id===l.guru_id);
+    if(g)lg[g.satuan_pendidikan||'-']=(lg[g.satuan_pendidikan||'-']||0)+1;
+  });
+  $('leagueList').innerHTML=Object.entries(lg).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([s,c],i)=>`
+    <div class="flex items-center gap-3">
+      <span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span>
+      <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s)}</span>
+      <span class="text-xs font-black text-slate-400">${c}</span>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+
+  $('actList').innerHTML=STATE.log.map(l=>{
+    const g=STATE.guru.find(x=>x.id===l.guru_id);
+    const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu',error:'Error'}[l.aksi]||l.aksi;
+    const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';
+    return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
+      <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span>
+      <span class="text-[10px] text-slate-400 shrink-0">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
+    </div>`;
+  }).join('');
+  renderActCount();
+
+  $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`
+    <div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5">
+      <span class="text-lg">${['🥇','🥈','🥉'][i]||''}</span>
+      <span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span>
+      <span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span>
+      <span class="text-[10px] font-bold text-slate-400">${esc(g.level||'')}</span>
+    </div>`).join('');
+}
+
+/* ============================================================
+   MENU LIST
+   ============================================================ */
+function renderMenus(){
+  const f=($('mSearch').value||'').toLowerCase();
+  $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map((m,idx)=>{
+    const [bg,tx]=COLOR[m.warna]||COLOR.blue;
+    const isPending=m.id&&String(m.id).startsWith('tmp-');
+    return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
+      <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${esc(m.label)}</span>`:''} ${!m.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
+        <p class="text-[10px] text-slate-400 truncate">${idx+1} · ${esc(m.kategori||'Umum')} · ${esc(m.akses_role||'all')}${m.sub_menu_dari?' · ↳ '+esc(m.sub_menu_dari):''}</p>
+      </div>
+      <div class="flex flex-col gap-1">
+        <button onclick="moveMenu(${m.id},-1)" aria-label="Naik" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center active:scale-90"><i data-lucide="arrow-up" class="w-3 h-3"></i></button>
+        <button onclick="moveMenu(${m.id},1)" aria-label="Turun" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center active:scale-90"><i data-lucide="arrow-down" class="w-3 h-3"></i></button>
+      </div>
+      <button onclick="openMenuEditor(${m.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+    </div>`;
+  }).join('')||'<p class="text-xs text-slate-400">Belum ada menu.</p>';
+  icons();
+}
+const renderMenusDebounced=debounce(renderMenus,200);
+
+async function moveMenu(id,dir){
+  const full=STATE.menus;
+  const i=full.findIndex(m=>m.id===id);
+  const j=i+dir;
+  if(i<0||j<0||j>=full.length)return;
+  const old={};full.forEach(m=>old[m.id]=m.sort_order);
+  [full[i],full[j]]=[full[j],full[i]];
+  full.forEach((m,idx)=>m.sort_order=idx+1);
+  renderMenus();
+  const ch=full.filter(m=>old[m.id]!==m.sort_order&&!String(m.id).startsWith('tmp-'));
+  await Promise.all(ch.map(m=>sb.from('creative_menus').update({sort_order:m.sort_order}).eq('id',m.id)));
+  toast('Urutan disimpan','success');
+}
+
+/* ============================================================
+   ICON RENDERER (Lucide atau URL gambar)
+   ============================================================ */
+function isUrlIcon(icon){
+  if(!icon)return false;
+  return /^https?:\/\//i.test(icon)||icon.startsWith('data:image');
+}
+function renderMenuIcon(icon,cls){
+  cls=cls||'w-5 h-5';
+  if(!icon)return `<i data-lucide="app-window" class="${cls}"></i>`;
+  if(isUrlIcon(icon)){
+    return `<img src="${esc(icon)}" class="${cls} menu-icon-img" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
+  }
+  return `<i data-lucide="${esc(icon)}" class="${cls}"></i>`;
+}
+
+/* ============================================================
+   DYNAMIC KATEGORI
+   ============================================================ */
+function populateKatOptions(){
+  const existing=[...new Set(STATE.menus.map(m=>m.kategori).filter(Boolean))];
+  const all=[...new Set([...DEFAULT_KATS,...existing])].sort((a,b)=>{
+    const ia=DEFAULT_KATS.indexOf(a),ib=DEFAULT_KATS.indexOf(b);
+    if(ia!==-1&&ib!==-1)return ia-ib;
+    if(ia!==-1)return -1;
+    if(ib!==-1)return 1;
+    return a.localeCompare(b);
+  });
+  const dl=$('katOptions');
+  if(dl)dl.innerHTML=all.map(k=>`<option value="${esc(k)}">`).join('');
+}
+
+/* ============================================================
+   MENU EDITOR — Tab & Icon Mode
+   ============================================================ */
+function switchMenuTab(n){
+  [1,2,3].forEach(i=>{
+    try{
+      const btn=$('menuTab'+i);
+      if(btn)btn.classList.toggle('active',i===n);
+      const content=$('menuTabContent'+i);
+      if(content)content.classList.toggle('hidden',i!==n);
+      else dbg('menuTabContent'+i+' NOT FOUND','error');
+    }catch(e){dbg('switchMenuTab err i='+i+': '+e.message,'error');}
+  });
+}
+
+function switchIconMode(mode){
+  ['lucide','url'].forEach(m=>{
+    const btn=$('iconMode'+(m.charAt(0).toUpperCase()+m.slice(1)));
+    if(btn)btn.classList.toggle('active',m===mode);
+  });
+  const lc=$('iconModeContentLucide');
+  const uc=$('iconModeContentUrl');
+  if(lc)lc.classList.toggle('hidden',mode!=='lucide');
+  if(uc)uc.classList.toggle('hidden',mode!=='url');
+}
+
+function onCustomUrlInput(url){
+  url=(url||'').trim();
+  if(!url){updateIconPreview('app-window');return;}
+  if(!/^https?:\/\//i.test(url))return;
+  $('eIcon').value=url;
+  updateIconPreview(url);
+}
+
+function testCustomUrl(){
+  const url=$('eIconCustomUrl').value.trim();
+  if(!url)return toast('Isi URL dulu','info');
+  const img=new Image();
+  img.onload=()=>toast('URL gambar valid ✓','success');
+  img.onerror=()=>toast('URL tidak dapat dimuat','error');
+  img.src=url;
+}
+
+function clearCustomUrl(){
+  $('eIconCustomUrl').value='';
+  switchIconMode('lucide');
+  const cur=$('eIcon').value;
+  if(isUrlIcon(cur)){$('eIcon').value='app-window';updateIconPreview('app-window');}
+}
+
+function updateIconPreview(iconVal){
+  const box=$('eIconPreview');
+  const lbl=$('eIconLabel');
+  if(!box||!lbl)return;
+  if(isUrlIcon(iconVal)){
+    box.innerHTML=`<img src="${esc(iconVal)}" class="w-full h-full object-cover" alt="" onerror="this.style.opacity='0.3'">`;
+    lbl.textContent=iconVal.slice(0,60)+(iconVal.length>60?'…':'');
+  }else{
+    box.innerHTML=`<i data-lucide="${esc(iconVal||'app-window')}" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>`;
+    lbl.textContent=iconVal||'app-window';
+    icons();
+  }
+}
+
+/* ============================================================
+   MENU EDITOR — Icon Grid
+   ============================================================ */
+function renderMenuIconGrid(filter){
+  filter=(filter||'').toLowerCase();
+  const list=filter?ICON_LIST.filter(i=>i.includes(filter)):ICON_LIST;
+  const grid=$('eIconGrid');
+  if(!grid)return;
+  const current=$('eIcon').value;
+  grid.innerHTML=list.map(ic=>`<div class="icon-cell ${ic===current?'on':''}" data-icon="${ic}" onclick="selectMenuIcon('${ic}')" title="${ic}"><i data-lucide="${ic}" class="w-4 h-4"></i></div>`).join('')||'<div class="col-span-full text-center text-xs text-slate-400 py-4">Tidak ditemukan</div>';
+  icons();
+}
+function filterMenuIcons(v){renderMenuIconGrid(v);}
+function selectMenuIcon(ic){
+  $('eIcon').value=ic;
+  $('eIconCustomUrl').value='';
+  updateIconPreview(ic);
+  document.querySelectorAll('#eIconGrid .icon-cell').forEach(el=>el.classList.toggle('on',el.dataset.icon===ic));
+}
+
+/* ============================================================
+   MENU EDITOR — Color Picker
+   ============================================================ */
+function renderMenuColorPicker(){
+  const picker=$('eWarnaPicker');
+  if(!picker)return;
+  const current=$('eWarna').value;
+  picker.innerHTML=COLOR_PICKER_LIST.map(c=>`<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectMenuColor('${c.id}')" title="${c.label}"></div>`).join('');
+}
+function selectMenuColor(c){
+  $('eWarna').value=c;
+  document.querySelectorAll('#eWarnaPicker .color-dot').forEach(el=>el.classList.toggle('on',el.dataset.color===c));
+}
+
+/* ============================================================
+   MENU EDITOR — Open & Save
+   ============================================================ */
+function fillParentSelect(){
+  $('eParent').innerHTML='<option value="">—</option>'+STATE.menus.filter(m=>!m.sub_menu_dari&&!String(m.id).startsWith('tmp-')).map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');
+}
+
+function openMenuEditor(id){
+  STATE.editMenu=id||null;
+  $('eTitle').textContent=id?'Edit Menu':'Menu Baru';
+  $('eDelete').classList.toggle('hidden',!id);
+  const m=id?STATE.menus.find(x=>x.id===id):null;
+  fillParentSelect();
+  populateKatOptions();
+  $('eJudul').value=m?m.judul:'';
+  $('eDesk').value=m?m.deskripsi:'';
+  $('eUrl').value=m?m.url:'';
+  
+  const iconVal=m?(m.icon||'app-window'):'app-window';
+  const isUrl=isUrlIcon(iconVal);
+  $('eIcon').value=iconVal;
+  $('eIconCustomUrl').value=isUrl?iconVal:'';
+  switchIconMode(isUrl?'url':'lucide');
+  updateIconPreview(iconVal);
+  
+  $('eWarna').value=m?(m.warna||'blue'):'blue';
+  $('eKategori').value=m?(m.kategori||'Umum'):'Umum';
+  $('eParent').value=m?(m.sub_menu_dari||''):'';
+  $('eTampil').value=m?m.tampil_di:'all';
+  $('eRole').value=m?m.akses_role:'all';
+  $('eBuka').value=m?m.cara_buka:'';
+  $('eLabel').value=m?m.label||'':'';
+  $('eSort').value=m?m.sort_order:0;
+  $('eActive').checked=m?m.is_active:true;
+  switchMenuTab(1);
+  renderMenuIconGrid('');
+  renderMenuColorPicker();
+  openModal('mMenu');
+}
+
+async function saveMenu(){
+  const row={
+    judul:$('eJudul').value.trim(),
+    deskripsi:$('eDesk').value.trim(),
+    url:$('eUrl').value.trim(),
+    icon:$('eIcon').value.trim()||'app-window',
+    warna:$('eWarna').value,
+    kategori:$('eKategori').value.trim()||'Umum',
+    sub_menu_dari:$('eParent').value,
+    tampil_di:$('eTampil').value,
+    akses_role:$('eRole').value,
+    cara_buka:$('eBuka').value,
+    label:$('eLabel').value.trim(),
+    sort_order:parseInt($('eSort').value)||0,
+    is_active:$('eActive').checked
+  };
+  if(!row.judul)return toast('Judul wajib','error');
+  
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editMenu){
+      const idx=STATE.menus.findIndex(m=>m.id===STATE.editMenu);
+      if(idx>=0)STATE.menus[idx]={...STATE.menus[idx],...row};
+      queuePending({action:'update_menu',id:STATE.editMenu,data:row});
+    }else{
+      STATE.menus.push({...row,id:tempId});
+      queuePending({action:'add_menu',data:row,tempId});
+    }
+    saveCache();
+    renderMenus();
+    closeModal('mMenu');
+    toast('Disimpan offline — akan sync otomatis','warning');
+    return;
+  }
+  
+  closeModal('mMenu');
+  const q=STATE.editMenu
+    ?sb.from('creative_menus').update(row).eq('id',STATE.editMenu)
+    :sb.from('creative_menus').insert(row);
+  const {error}=await q;
+  if(error)return toast(error.message,'error');
+  toast('Menu tersimpan','success');
+  loadAll();
+}
+
+function delMenu(){
+  confirmDialog('Hapus menu ini?',async()=>{
+    if(!isOnline()||String(STATE.editMenu).startsWith('tmp-')){
+      queuePending({action:'delete_menu',id:STATE.editMenu});
+      STATE.menus=STATE.menus.filter(m=>m.id!==STATE.editMenu);
+      saveCache();
+      renderMenus();
+      closeModal('mMenu');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
+    await sb.from('creative_menus').delete().eq('id',STATE.editMenu);
+    toast('Menu dihapus','success');
+    closeModal('mMenu');
+    loadAll();
+  },'Hapus Menu?');
+}
+
+/* ============================================================
+   AGENDA
+   ============================================================ */
+function renderAgendaAdmin(){
+  $('agendaList').innerHTML=STATE.agenda.map(a=>`
+    <div class="card p-4 flex items-center gap-3">
+      <div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0">
+        <span class="text-sm font-black leading-none">${new Date(a.tanggal).getDate()}</span>
+        <span class="text-[8px] font-bold uppercase">${new Date(a.tanggal).toLocaleDateString('id-ID',{month:'short'})}</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(a.judul)} ${!a.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
+        <p class="text-[10px] text-slate-500 truncate">${esc(a.kategori||'')} · ${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p>
+      </div>
+      <button onclick="openAgendaEditor(${a.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada agenda.</p>';
+  icons();
+}
+function openAgendaEditor(id){
+  STATE.editAgenda=id||null;
+  $('aTitle').textContent=id?'Edit Agenda':'Agenda Baru';
+  $('aDelete').classList.toggle('hidden',!id);
+  const a=id?STATE.agenda.find(x=>x.id===id):null;
+  $('aJudul').value=a?a.judul:'';
+  $('aDesk').value=a?a.deskripsi||'':'';
+  $('aTanggal').value=a?a.tanggal:'';
+  $('aWaktu').value=a?a.waktu||'':'';
+  $('aTempat').value=a?a.tempat||'':'';
+  $('aKategori').value=a?a.kategori||'Kegiatan':'Kegiatan';
+  $('aLink').value=a?a.link||'':'';
+  $('aActive').checked=a?a.is_active:true;
+  openModal('mAgenda');
+}
+async function saveAgenda(){
+  const row={
+    judul:$('aJudul').value.trim(),
+    deskripsi:$('aDesk').value.trim(),
+    tanggal:$('aTanggal').value,
+    waktu:$('aWaktu').value.trim(),
+    tempat:$('aTempat').value.trim(),
+    kategori:$('aKategori').value.trim(),
+    link:$('aLink').value.trim(),
+    is_active:$('aActive').checked
+  };
+  if(!row.judul||!row.tanggal)return toast('Judul & tanggal wajib','error');
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editAgenda){
+      const idx=STATE.agenda.findIndex(m=>m.id===STATE.editAgenda);
+      if(idx>=0)STATE.agenda[idx]={...STATE.agenda[idx],...row};
+      queuePending({action:'update_agenda',id:STATE.editAgenda,data:row});
+    }else{
+      STATE.agenda.push({...row,id:tempId});
+      queuePending({action:'add_agenda',data:row,tempId});
+    }
+    saveCache();renderAgendaAdmin();closeModal('mAgenda');
+    toast('Disimpan offline','warning');
+    return;
+  }
+  closeModal('mAgenda');
+  const q=STATE.editAgenda
+    ?sb.from('creative_agenda').update(row).eq('id',STATE.editAgenda)
+    :sb.from('creative_agenda').insert(row);
+  const {error}=await q;
+  if(error)return toast(error.message,'error');
+  toast('Agenda tersimpan','success');
+  loadAll();
+}
+function delAgenda(){
+  confirmDialog('Hapus agenda ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_agenda',id:STATE.editAgenda});
+      STATE.agenda=STATE.agenda.filter(a=>a.id!==STATE.editAgenda);
+      saveCache();renderAgendaAdmin();closeModal('mAgenda');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
+    await sb.from('creative_agenda').delete().eq('id',STATE.editAgenda);
+    toast('Agenda dihapus','success');
+    closeModal('mAgenda');
+    loadAll();
+  },'Hapus Agenda?');
+}
+
+/* ============================================================
+   DOKUMEN
+   ============================================================ */
+function renderDocsAdmin(){
+  const f=($('docSearch').value||'').toLowerCase();
+  $('docListAdmin').innerHTML=STATE.docs.filter(d=>d.judul.toLowerCase().includes(f)).map(d=>{
+    const [bg,tx]=COLOR[d.warna]||COLOR.blue;
+    return `<div class="card p-4 flex items-center gap-3">
+      <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(d.judul)} ${!d.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
+        <p class="text-[10px] text-slate-500 truncate">${esc(d.kategori||'Umum')}</p>
+      </div>
+      <a href="${esc(d.link)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+      <button onclick="openDocEditor(${d.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+    </div>`;
+  }).join('')||'<p class="text-xs text-slate-400">Belum ada dokumen.</p>';
+  icons();
+}
+const renderDocsAdminDebounced=debounce(renderDocsAdmin,200);
+
+function renderDocColorPicker(){
+  const picker=$('docWarnaPicker');
+  if(!picker)return;
+  const current=$('docWarna').value;
+  picker.innerHTML=COLOR_PICKER_LIST.map(c=>`<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectDocColor('${c.id}')" title="${c.label}"></div>`).join('');
+}
+function selectDocColor(c){
+  $('docWarna').value=c;
+  document.querySelectorAll('#docWarnaPicker .color-dot').forEach(el=>el.classList.toggle('on',el.dataset.color===c));
+}
+
+function openDocEditor(id){
+  STATE.editDoc=id||null;
+  $('docTitle').textContent=id?'Edit Dokumen':'Dokumen Baru';
+  $('docDelete').classList.toggle('hidden',!id);
+  const d=id?STATE.docs.find(x=>x.id===id):null;
+  $('docJudul').value=d?d.judul:'';
+  $('docDesk').value=d?d.deskripsi||'':'';
+  $('docLink').value=d?d.link:'';
+  $('docKat').value=d?d.kategori||'Umum':'Umum';
+  $('docIcon').value=d?d.icon||'file-text':'file-text';
+  $('docWarna').value=d?d.warna||'blue':'blue';
+  $('docActive').checked=d?d.is_active:true;
+  renderDocColorPicker();
+  openModal('mDoc');
+}
+async function saveDoc(){
+  const row={
+    judul:$('docJudul').value.trim(),
+    deskripsi:$('docDesk').value.trim(),
+    link:$('docLink').value.trim(),
+    kategori:$('docKat').value.trim(),
+    icon:$('docIcon').value.trim()||'file-text',
+    warna:$('docWarna').value,
+    is_active:$('docActive').checked
+  };
+  if(!row.judul||!row.link)return toast('Judul & link wajib','error');
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editDoc){
+      const idx=STATE.docs.findIndex(m=>m.id===STATE.editDoc);
+      if(idx>=0)STATE.docs[idx]={...STATE.docs[idx],...row};
+      queuePending({action:'update_doc',id:STATE.editDoc,data:row});
+    }else{
+      STATE.docs.push({...row,id:tempId});
+      queuePending({action:'add_doc',data:row,tempId});
+    }
+    saveCache();renderDocsAdmin();closeModal('mDoc');
+    toast('Disimpan offline','warning');
+    return;
+  }
+  closeModal('mDoc');
+  const q=STATE.editDoc
+    ?sb.from('creative_documents').update(row).eq('id',STATE.editDoc)
+    :sb.from('creative_documents').insert(row);
+  const {error}=await q;
+  if(error)return toast(error.message,'error');
+  toast('Dokumen tersimpan','success');
+  loadAll();
+}
+function delDoc(){
+  confirmDialog('Hapus dokumen ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_doc',id:STATE.editDoc});
+      STATE.docs=STATE.docs.filter(d=>d.id!==STATE.editDoc);
+      saveCache();renderDocsAdmin();closeModal('mDoc');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
+    await sb.from('creative_documents').delete().eq('id',STATE.editDoc);
+    toast('Dokumen dihapus','success');
+    closeModal('mDoc');
+    loadAll();
+  },'Hapus Dokumen?');
+}
+
+/* ============================================================
+   REWARDS
+   ============================================================ */
+function renderRewardsAdmin(){
+  $('rewardListAdmin').innerHTML=STATE.rewards.map(r=>`
+    <div class="card p-4 flex items-center gap-3">
+      <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="gift" class="w-5 h-5"></i></span>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(r.judul)} ${!r.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
+        <p class="text-[10px] text-slate-500">⭐ ${r.biaya_poin} poin · stok ${r.stok<0?'∞':r.stok}</p>
+      </div>
+      <button onclick="openRewardEditor(${r.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada reward.</p>';
+
+  $('redemList').innerHTML=STATE.redem.map(x=>{
+    const rw=STATE.rewards.find(r=>r.id===x.reward_id);
+    return `<div class="card p-4 flex items-center gap-3">
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(rw?rw.judul:'Reward')}</p>
+        <p class="text-[10px] text-slate-500 truncate">ID: …${String(x.guru_id).slice(-6)} · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</p>
+      </div>
+      <select onchange="setRedemStatus(${x.id},this.value)" class="text-[10px] font-black border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
+        <option value="menunggu" ${x.status==='menunggu'?'selected':''}>Menunggu</option>
+        <option value="selesai" ${x.status==='selesai'?'selected':''}>Selesai</option>
+        <option value="ditolak" ${x.status==='ditolak'?'selected':''}>Ditolak</option>
+      </select>
+    </div>`;
+  }).join('')||'<p class="text-xs text-slate-400">Belum ada penukaran.</p>';
+  icons();
+}
+function openRewardEditor(id){
+  STATE.editReward=id||null;
+  $('rTitle').textContent=id?'Edit Reward':'Reward Baru';
+  $('rDelete').classList.toggle('hidden',!id);
+  const r=id?STATE.rewards.find(x=>x.id===id):null;
+  $('rJudul').value=r?r.judul:'';
+  $('rDesk').value=r?r.deskripsi||'':'';
+  $('rBiaya').value=r?r.biaya_poin:50;
+  $('rStok').value=r?r.stok:-1;
+  $('rLink').value=r?r.link||'':'';
+  $('rActive').checked=r?r.is_active:true;
+  openModal('mReward');
+}
+async function saveReward(){
+  const row={
+    judul:$('rJudul').value.trim(),
+    deskripsi:$('rDesk').value.trim(),
+    biaya_poin:parseInt($('rBiaya').value)||50,
+    stok:parseInt($('rStok').value),
+    link:$('rLink').value.trim(),
+    is_active:$('rActive').checked
+  };
+  if(!row.judul)return toast('Judul wajib','error');
+  if(!isOnline()){
+    const tempId='tmp-'+Date.now();
+    if(STATE.editReward){
+      const idx=STATE.rewards.findIndex(m=>m.id===STATE.editReward);
+      if(idx>=0)STATE.rewards[idx]={...STATE.rewards[idx],...row};
+      queuePending({action:'update_reward',id:STATE.editReward,data:row});
+    }else{
+      STATE.rewards.push({...row,id:tempId});
+      queuePending({action:'add_reward',data:row,tempId});
+    }
+    saveCache();renderRewardsAdmin();closeModal('mReward');
+    toast('Disimpan offline','warning');
+    return;
+  }
+  closeModal('mReward');
+  const q=STATE.editReward
+    ?sb.from('creative_rewards').update(row).eq('id',STATE.editReward)
+    :sb.from('creative_rewards').insert(row);
+  const {error}=await q;
+  if(error)return toast(error.message,'error');
+  toast('Reward tersimpan','success');
+  loadAll();
+}
+function delReward(){
+  confirmDialog('Hapus reward ini?',async()=>{
+    if(!isOnline()){
+      queuePending({action:'delete_reward',id:STATE.editReward});
+      STATE.rewards=STATE.rewards.filter(r=>r.id!==STATE.editReward);
+      saveCache();renderRewardsAdmin();closeModal('mReward');
+      toast('Akan dihapus saat online','warning');
+      return;
+    }
+    await sb.from('creative_rewards').delete().eq('id',STATE.editReward);
+    toast('Reward dihapus','success');
+    closeModal('mReward');
+    loadAll();
+  },'Hapus Reward?');
+}
+async function setRedemStatus(id,st){
+  if(!isOnline()){
+    queuePending({action:'update_redem',id,data:{status:st}});
+    const r=STATE.redem.find(x=>x.id===id);if(r)r.status=st;
+    saveCache();
+    toast('Update akan disinkronkan','warning');
+    return;
+  }
+  await sb.from('creative_redemptions').update({status:st}).eq('id',id);
+  toast('Status diperbarui','success');
+  loadAll();
+}
+
+/* ============================================================
+   KUDOS
+   ============================================================ */
+function renderKudosAdmin(){
+  $('kudosTopAdmin').innerHTML=(STATE.kudosTop||[]).map((k,i)=>`
+    <div class="flex items-center gap-3">
+      <span class="w-7 h-7 rounded-full acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span>
+      <span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(k.nama_lengkap)}</span>
+      <span class="text-[10px] font-black text-rose-500">❤ ${k.jumlah}</span>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+
+  $('kudosList').innerHTML=STATE.kudos.map(k=>`
+    <div class="card p-4">
+      <p class="text-xs font-bold text-slate-700">→ ${esc(k.to_nama||'')}</p>
+      <p class="text-[11px] text-slate-500 mt-1">${esc(k.pesan||'—')}</p>
+      <p class="text-[10px] text-slate-400 mt-1">${new Date(k.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</p>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+  icons();
+}
 /* ============================================================
    INFO / BANNER / POPUP
    ============================================================ */
