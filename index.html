@@ -4,30 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F6F5F9">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light only">
 <meta name="format-detection" content="telephone=no,email=no,address=no">
-
-<!-- PWA / TWA -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="GuruBerbagi">
 <meta name="application-name" content="GuruBerbagi">
-
 <script>
 (function(){try{
   var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
-  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
+  localStorage.removeItem('gb_dark');
   var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#F6F5F9');
 }catch(e){}})();
 </script>
-
-<!-- Icons -->
 <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
 <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-
-<!-- Open Graph (share ke WA/FB/TG) -->
 <meta property="og:site_name" content="Guru Berbagi Selogiri">
 <meta property="og:title" content="Guru Berbagi Selogiri">
 <meta property="og:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
@@ -35,22 +28,13 @@
 <meta property="og:url" content="https://slg-timkreatif.github.io/app/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="id_ID">
-
-<!-- Twitter Card (opsional, bagus untuk share) -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Guru Berbagi Selogiri">
 <meta name="twitter:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-
-<!-- PWA Manifest -->
 <link rel="manifest" href="manifest.json">
-
 <title>Guru Berbagi Selogiri</title>
-
-<!-- Tailwind CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Performance hints -->
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,34 +42,52 @@
 <link rel="preconnect" href="https://qamqqwfzhyiihqyzliwq.supabase.co" crossorigin>
 <link rel="dns-prefetch" href="https://api.open-meteo.com">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-
-<!-- Library -->
 <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Tailwind config -->
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
 <style>
-  *{-webkit-tap-highlight-color:transparent}
-  body{font-family:'Inter',sans-serif}
-  html,body{overflow-x:hidden;touch-action:manipulation}
-  a{-webkit-touch-callout:default}
+  /* ============================================
+     DESIGN TOKEN — Skala Konsisten
+     ============================================ */
+  :root{
+    /* Colors */
+    --acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-text:#0B7C72;
+    --acc-ring:rgba(13,148,136,.35);--bg:#F6F5F9;--card:#fff;--border:#E8E6EE;
 
-  :root{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-text:#0B7C72;--acc-ring:rgba(13,148,136,.35);--bg:#F6F5F9;--card:#fff;--border:#E8E6EE}
+    /* Radius skala */
+    --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;--r-2xl:24px;
+
+    /* Padding skala */
+    --p-sm:12px;--p-md:16px;--p-lg:20px;--p-xl:24px;
+
+    /* Elevation 2 level */
+    --shadow-1:0 1px 3px rgba(20,18,26,.05);
+    --shadow-2:0 4px 12px rgba(20,18,26,.08);
+  }
   html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-text:#2563eb;--acc-ring:rgba(37,99,235,.35)}
   html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-text:#7c3aed;--acc-ring:rgba(124,58,237,.35)}
   html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-text:#d97706;--acc-ring:rgba(217,119,6,.35)}
   html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-text:#e11d48;--acc-ring:rgba(225,29,72,.35)}
 
+  *{-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',sans-serif}
+  html,body{overflow-x:hidden;touch-action:manipulation}
+  a{-webkit-touch-callout:default}
+
   .no-scroll::-webkit-scrollbar{display:none}
   .no-scroll{scrollbar-width:none}
 
-  .card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
-  .skeleton{background:linear-gradient(90deg,#ECEAF2 25%,#F6F5F9 50%,#ECEAF2 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:.75rem}
+  /* ============================================
+     CARD — Radius & Shadow Standar
+     ============================================ */
+.card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
+
+  .skeleton{background:linear-gradient(90deg,#ECEAF2 25%,#F6F5F9 50%,#ECEAF2 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:var(--r-md)}
   @keyframes shim{0%{background-position:-400px 0}100%{background-position:400px 0}}
+
   .acc-bg{background-color:var(--acc)}
   .acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
   .acc-soft{background-color:var(--acc-soft)}
@@ -102,9 +104,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .insp-accent-card{border:1px solid var(--acc-soft)}
   .kudos-accent-card{border:1px solid rgba(244,63,94,.25)}
 
-  .sheet{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:28rem;max-height:92vh;border-radius:1.5rem 1.5rem 0 0;transform:translateY(100%);transition:transform .3s ease;display:flex;flex-direction:column;background:var(--card)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:28rem;max-height:92vh;border-radius:var(--r-2xl) var(--r-2xl) 0 0;transform:translateY(100%);transition:transform .3s ease;display:flex;flex-direction:column;background:var(--card)}
   .sheet.sheet-open{transform:translateY(0)}
-  @media (min-width:768px){.sheet{top:50%;left:50%;right:auto;bottom:auto;width:100%;border-radius:1.5rem;transform:translate(-50%,-50%) translateY(28px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease}.sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}}
+  @media (min-width:768px){.sheet{top:50%;left:50%;right:auto;bottom:auto;width:100%;border-radius:var(--r-2xl);transform:translate(-50%,-50%) translateY(28px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease}.sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}}
 
   body{background:var(--bg)}
   .sync-bar{width:0;animation:syncprog 1.4s ease-in-out infinite}
@@ -112,38 +114,13 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
   .skip-link{position:fixed;left:-9999px;top:8px;z-index:200;background:var(--acc);color:#fff;padding:.65rem 1rem;border-radius:.75rem;font-weight:800;font-size:.8rem;text-decoration:none}
   .skip-link:focus{left:8px}
-
-  html.dark{--bg:#0F1115;--card:#1A1D24;--border:#2A2D35;color-scheme:dark}
-  html.dark body{background:var(--bg);color:#E5E7EB}
-  html.dark .card{background:var(--card);border-color:var(--border)}
-  html.dark aside{background:#141821!important;border-color:#252A33!important}
-  html.dark .bg-white{background:var(--card)!important}
-  html.dark .bg-slate-100{background:#252A33!important}
-  html.dark .bg-slate-50{background:#1F232B!important}
-  html.dark .bg-slate-200{background:#2A2D35!important}
-  html.dark .border-slate-200{border-color:#2A2D35!important}
-  html.dark .border-slate-100{border-color:#252A33!important}
-  html.dark .text-slate-800{color:#F1F5F9!important}
-  html.dark .text-slate-700{color:#E2E8F0!important}
-  html.dark .text-slate-600{color:#CBD5E1!important}
-  html.dark .text-slate-500{color:#94A3B8!important}
-  html.dark .text-slate-400{color:#94A3B8!important}
-  html.dark .text-slate-300{color:#64748B!important}
-  html.dark input,html.dark textarea,html.dark select{background:#1F232B!important;border-color:#2A2D35!important;color:#E5E7EB!important}
-  html.dark input::placeholder,html.dark textarea::placeholder{color:#64748B}
-  html.dark .bg-rose-50{background:rgba(244,63,94,.12)!important}
-  html.dark .bg-amber-50{background:rgba(245,158,11,.12)!important}
-  html.dark .bg-teal-50{background:rgba(13,148,136,.12)!important}
-  html.dark .bg-rose-50\/60{background:rgba(244,63,94,.08)!important}
-  html.dark .bg-amber-50\/60{background:rgba(245,158,11,.08)!important}
-  html.dark .bg-black\/40{background:rgba(0,0,0,.65)!important}
-
+  
   .sheet-drag{width:40px;height:4px;background:#CBD5E1;border-radius:9999px;margin:.75rem auto .5rem;cursor:grab;touch-action:none}
   html.dark .sheet-drag{background:#3A3D45}
   .sheet.sheet-dragging{transition:none!important}
   .sheet.sheet-closing{transition:transform .22s cubic-bezier(.4,0,.6,1)!important}
 
-  .search-history{position:absolute;top:calc(100% + .35rem);left:0;right:0;z-index:30;background:var(--card);border:1px solid var(--border);border-radius:1rem;box-shadow:0 8px 24px rgba(20,18,26,.12);overflow:hidden;display:none}
+  .search-history{position:absolute;top:calc(100% + .35rem);left:0;right:0;z-index:30;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:0 8px 24px rgba(20,18,26,.12);overflow:hidden;display:none}
   .search-history.show{display:block}
   .search-history-item{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;font-size:.8rem;font-weight:600;color:#475569;cursor:pointer;border-bottom:1px solid var(--border)}
   .search-history-item:last-of-type{border-bottom:0}
@@ -154,25 +131,34 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .search-history-clear:hover{background:#FEE2E2;color:#DC2626}
 
   .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;text-align:center}
-  .empty-state .es-icon{width:56px;height:56px;border-radius:1rem;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;background:var(--acc-soft);color:var(--acc-text)}
+  .empty-state .es-icon{width:56px;height:56px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;background:var(--acc-soft);color:var(--acc-text)}
   .empty-state .es-title{font-size:.85rem;font-weight:800;color:#1E293B}
   .empty-state .es-desc{font-size:.75rem;color:#64748B;margin-top:.3rem;max-width:22rem}
   html.dark .empty-state .es-title{color:#F1F5F9}
   html.dark .empty-state .es-desc{color:#94A3B8}
 
   .side-btn,.nav-btn{transition:background-color .15s ease,color .15s ease}
-  main section{animation:fadeIn .2s ease both}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  /* ============================================
+     PAGE TRANSITION — Fade + Slide
+     ============================================ */
+  main section:not(.hidden){
+    animation:pageIn .25s ease both;
+  }
+  @keyframes pageIn{
+    from{opacity:0;transform:translateY(8px)}
+    to{opacity:1;transform:translateY(0)}
+  }
 
   .onboard-backdrop{position:fixed;inset:0;z-index:150;background:rgba(15,17,21,.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:1.5rem}
   .onboard-backdrop.show{display:flex;animation:fadeIn .25s ease both}
-  .onboard-card{background:var(--card);border:1px solid var(--border);border-radius:1.5rem;padding:1.5rem;max-width:24rem;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUp .3s cubic-bezier(.4,0,.2,1) both}
+  .onboard-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-2xl);padding:var(--p-xl);max-width:24rem;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUp .3s cubic-bezier(.4,0,.2,1) both}
   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   .onboard-dots{display:flex;gap:.35rem;justify-content:center;margin-top:1rem}
   .onboard-dot{width:6px;height:6px;border-radius:9999px;background:#CBD5E1;transition:all .2s}
   .onboard-dot.active{width:20px;background:var(--acc)}
 
-  .ctx-menu{position:fixed;z-index:120;background:var(--card);border:1px solid var(--border);border-radius:1rem;box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden;padding:.35rem;min-width:170px;display:none}
+  .ctx-menu{position:fixed;z-index:120;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:0 10px 30px rgba(0,0,0,.18);overflow:hidden;padding:.35rem;min-width:170px;display:none}
   .ctx-menu.show{display:block;animation:fadeIn .15s ease both}
   .ctx-menu button{display:flex;align-items:center;gap:.6rem;width:100%;padding:.65rem .85rem;font-size:.78rem;font-weight:700;color:#334155;background:none;border:0;text-align:left;border-radius:.6rem;cursor:pointer}
   .ctx-menu button:hover{background:#F1F5F9}
@@ -192,7 +178,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .side-btn.nav-inactive{background-color:transparent!important;color:#64748b!important}
 
   .app-navbar{transition:left .2s,bottom .2s,border-radius .2s,box-shadow .2s}
-  body[data-navbar="floating"] .app-navbar{left:12px!important;right:12px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem)!important;border-radius:1rem!important;border:0;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+  body[data-navbar="floating"] .app-navbar{left:12px!important;right:12px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem)!important;border-radius:var(--r-lg)!important;border:0;box-shadow:0 8px 32px rgba(0,0,0,.25)}
   body[data-navbar="classic"] .app-navbar{left:0!important;right:0!important;bottom:0!important;border-radius:0!important;border:0;border-top:1px solid var(--border);box-shadow:0 -2px 12px rgba(0,0,0,.08);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem)}
 
   body[data-navbar-color="dark"] .app-navbar{background:#0F0F12;color:#fff}
@@ -230,7 +216,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   body[data-density="lega"] main > section > * + *{margin-top:1.5rem!important}
   body[data-density="lega"] .card{padding:1.25rem!important}
 
-  .seg-btn{padding:10px 12px;border-radius:12px;font-size:11px;font-weight:800;background:#F6F5F9;color:#64748B;border:1px solid #E8E6EE;cursor:pointer;transition:all .15s}
+  .seg-btn{padding:10px 12px;border-radius:var(--r-md);font-size:11px;font-weight:800;background:#F6F5F9;color:#64748B;border:1px solid #E8E6EE;cursor:pointer;transition:all .15s}
   .seg-btn:active{transform:scale(.97)}
   .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
   html.dark .seg-btn{background:#1F232B;color:#94A3B8;border-color:#2A2D35}
@@ -242,31 +228,59 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark .filter-chip{background:#1A1D24;color:#94A3B8;border-color:#2A2D35}
   html.dark .filter-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 
-  .menu-icon-img{border-radius:.75rem;object-fit:cover;background:#F1F5F9}
+  .menu-icon-img{border-radius:var(--r-md);object-fit:cover;background:#F1F5F9}
   html.dark .menu-icon-img{background:#252A33}
 
-/* ============================================
-   GAYA IKON — Colored (No BG)
-   ============================================ */
-html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored {
-  background-color: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored svg {
-  width: 1.75rem !important;
-  height: 1.75rem !important;
-}
-html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored img {
-  width: 1.75rem !important;
-  height: 1.75rem !important;
-  border-radius: .5rem;
-}
-/* Quick list view */
-#quickList.quick-list-view .menu-icon-wrap.menu-icon-colored svg {
-  width: 1.25rem !important;
-  height: 1.25rem !important;
-}
+  /* ============================================
+     TOAST — Hybrid Style
+     ============================================ */
+  #toastContainer{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    top:calc(env(safe-area-inset-top) + 1rem);
+    z-index:90;
+    width:max-content;
+    max-width:92vw;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:center;
+    pointer-events:none;
+  }
+  .toast-item{
+    padding:12px 16px 12px 12px;
+    border-radius:var(--r-lg);
+    font-size:13px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(15,23,42,.95);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 10px 30px -5px rgba(0,0,0,.4);
+    color:#fff;
+    animation:toastIn .3s cubic-bezier(.16,1,.3,1) both;
+    pointer-events:auto;
+  }
+  @keyframes toastIn{
+    from{transform:translateY(-16px) scale(.95);opacity:0}
+    to{transform:translateY(0) scale(1);opacity:1}
+  }
+  .toast-item.out{animation:toastOut .25s ease both}
+  @keyframes toastOut{to{transform:translateY(-12px);opacity:0}}
+  .toast-icon{
+    width:32px;height:32px;border-radius:9999px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;background:rgba(255,255,255,.15);
+  }
+  .toast-item.t-success .toast-icon{background:#10b981}
+  .toast-item.t-error .toast-icon{background:#ef4444}
+  .toast-item.t-warning .toast-icon{background:#f59e0b}
+  .toast-item.t-info .toast-icon{background:#3b82f6}
+  .toast-item .toast-msg{line-height:1.4;max-width:280px}
 
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
@@ -305,7 +319,7 @@ html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored img {
       <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300">Tautan</p>
       <div id="footSideList" class="space-y-0.5 opacity-80"></div>
     </div>
-    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.56</span></p>
+    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.57</span></p>
   </aside>
 
   <div class="flex-1 flex flex-col relative min-w-0">
@@ -318,10 +332,10 @@ html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored img {
           <div class="flex items-start justify-between gap-3 pt-1.5">
             <div class="min-w-0 flex-1">
               <div id="hdrInfoBlock">
-                <p id="hdrName" class="text-xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
+                <p id="hdrName" class="text-2xl font-black text-slate-800 leading-tight truncate">Guru Berbagi</p>
                 <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
               </div>
-              <p id="hdrTitle" class="text-xl font-black text-slate-800 leading-tight truncate"></p>
+              <p id="hdrTitle" class="text-2xl font-black text-slate-800 leading-tight truncate"></p>
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
@@ -341,569 +355,563 @@ html body[data-iconstyle="colored"] .menu-icon-wrap.menu-icon-colored img {
         </div>
       </div>
     </header>
-    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
+  <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
 
-      <section id="pageHome" class="space-y-4 min-w-0">
-        <div class="relative animate-fade-up">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-          <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
-          <div id="searchHistory" class="search-history"></div>
-        </div>
-
-        <div id="searchResults" class="hidden space-y-4 animate-fade-up"></div>
-
-        <div id="authCard" class="hidden card p-5 text-center animate-fade-up">
-          <p class="text-sm font-extrabold text-slate-800">Guru Selogiri?</p>
-          <p class="text-[11px] text-slate-500 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button>
-            <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a>
-          </div>
-        </div>
-
-        <div id="caroBox" class="hidden animate-fade-up min-w-0">
-          <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div>
-          <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
-        </div>
-
-        <div id="infoPanel" class="card overflow-hidden animate-fade-up">
-          <button onclick="navPage('agenda')" class="w-full p-3.5 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-          <div class="border-t border-slate-200/70"></div>
-          <button onclick="navPage('dokumen')" class="w-full p-3.5 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-        </div>
-
-        <div id="recentBox" class="hidden animate-fade-up">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Terakhir Dibuka</p>
-            <button onclick="clearRecentActivity()" class="text-[10px] font-bold text-slate-400 active:scale-95 transition">Bersihkan</button>
-          </div>
-          <div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-        </div>
-
-        <div id="quickBox" class="animate-fade-up">
-  <div class="flex items-center justify-between mb-2">
-    <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
-    <div class="flex items-center gap-2">
-      <button onclick="toggleQuickView()" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan">
-        <i id="quickViewIcon" data-lucide="layout-grid" class="w-3 h-3 text-slate-500"></i>
-      </button>
-      <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
+  <section id="pageHome" class="space-y-4 min-w-0">
+    <div class="relative animate-fade-up">
+      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+      <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
+      <div id="searchHistory" class="search-history"></div>
     </div>
-  </div>
-  <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
+
+    <div id="searchResults" class="hidden space-y-4 animate-fade-up"></div>
+
+    <div id="authCard" class="hidden card p-5 text-center animate-fade-up">
+      <p class="text-sm font-extrabold text-slate-800">Guru Selogiri?</p>
+      <p class="text-[11px] text-slate-500 mt-1 mb-4">Masuk untuk akses penuh, Studio Kreatif, dan poin apresiasi.</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="openPanel('pLogin')" class="acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-[.98] transition">Masuk</button>
+        <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="acc-soft acc-text font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-1.5 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun</a>
+      </div>
+    </div>
+
+    <div id="caroBox" class="hidden animate-fade-up min-w-0">
+      <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div>
+      <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
+    </div>
+
+    <div id="infoPanel" class="card overflow-hidden animate-fade-up">
+      <button onclick="navPage('agenda')" class="w-full p-4 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+      <div class="border-t border-slate-200/70"></div>
+      <button onclick="navPage('dokumen')" class="w-full p-4 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+    </div>
+
+    <div id="recentBox" class="hidden animate-fade-up">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Terakhir Dibuka</p>
+        <button onclick="clearRecentActivity()" class="text-[10px] font-bold text-slate-400 active:scale-95 transition">Bersihkan</button>
+      </div>
+      <div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+    </div>
+
+    <div id="quickBox" class="animate-fade-up">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleQuickView()" class="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan">
+            <i id="quickViewIcon" data-lucide="layout-grid" class="w-3 h-3 text-slate-500"></i>
+          </button>
+          <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
+        </div>
+      </div>
+      <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
+    </div>
+
+    <div class="animate-fade-up">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p>
+        <div class="flex gap-1.5">
+          <button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button>
+          <button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 transition">Terpopuler</button>
+        </div>
+      </div>
+      <button id="inspOpenBtn" onclick="toggleInspForm(true)" class="w-full card p-4 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition insp-accent-card">
+        <span class="w-10 h-10 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></span>
+        <span class="flex-1 text-xs font-extrabold text-slate-700">Bagikan Praktik Baik</span>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+      </button>
+      <div id="inspForm" class="hidden card p-4 space-y-2 mt-2">
+        <div class="flex items-center justify-between">
+          <p class="text-[11px] font-bold text-slate-500">Tulis inspirasimu…</p>
+          <button onclick="toggleInspForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+        </div>
+        <textarea id="inspIsi" rows="2" placeholder="Bagikan ide / praktik baikmu…" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></textarea>
+        <div class="flex gap-2">
+          <select id="inspKat" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
+            <option>Praktik Baik</option>
+            <option>Ide Kegiatan</option>
+            <option>Teladan</option>
+          </select>
+          <button onclick="postInspirasi()" class="shrink-0 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">+ Bagikan</button>
+        </div>
+      </div>
+      <div id="inspList" class="space-y-2 mt-2"></div>
+      <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
+    </div>
+
+    <div id="footList" class="animate-fade-up md:hidden"></div>
+  </section>
+
+  <section id="pageApps" class="hidden space-y-3 min-w-0">
+    <div class="relative">
+      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+      <input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring">
+      <button id="viewToggle" onclick="toggleView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" title="Ganti tampilan" aria-label="Ganti tampilan"><i id="viewToggleIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
+    </div>
+    <div id="filterBar" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+    <div id="layananBody"></div>
+  </section>
+
+  <section id="pageAgenda" class="hidden space-y-4 min-w-0">
+    <div id="calChips" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+    <div id="agendaTimeline" class="space-y-4"></div>
+  </section>
+
+  <section id="pageDokumen" class="hidden space-y-2 min-w-0">
+    <div class="relative mb-3">
+      <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+      <input id="inSearchDok" type="text" placeholder="Cari dokumen…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="renderDokumen(this.value)">
+      <button id="dokViewToggle" onclick="toggleDokView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan"><i id="dokViewIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
+    </div>
+    <div id="dokList"></div>
+  </section>
+
+  <section id="pageProfile" class="hidden space-y-4 min-w-0">
+    <div id="profGuest" class="card p-6 text-center">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div>
+      <p class="text-base font-extrabold text-slate-800">Mode Tamu</p>
+      <p class="text-xs text-slate-500 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p>
+      <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button>
+    </div>
+    <div id="profData" class="hidden space-y-4">
+      <div class="card p-5 flex items-center gap-4">
+        <div class="relative shrink-0 w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md" id="pfAvatar">
+          <img id="pfAvatarImg" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
+        </div>
+        <div class="min-w-0">
+          <p id="pfNama" class="text-base font-extrabold text-slate-800 leading-tight truncate">—</p>
+          <p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p>
+          <span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span>
+        </div>
+      </div>
+      <div class="card p-4 space-y-2.5">
+        <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
+        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
+        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
+        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
+        <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="mail" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dEmail" class="truncate">—</span></p>
+      </div>
+      <div class="card p-4 space-y-2.5">
+        <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
+        <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
+        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+        <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
+        <div class="flex gap-2">
+          <button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button>
+          <button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button>
+        </div>
+      </div>
+      <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+        <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
+        <span id="aboutVer">v4.57</span>
+      </div>
+      <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+    </div>
+  </section>
+
+  <section id="pageSetting" class="hidden space-y-4 min-w-0">
+
+    <div class="card p-4">
+      <p class="text-[13px] font-extrabold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 acc-text"></i> Tema Cepat</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button data-preset="profesional" onclick="applyPreset('profesional')" class="seg-btn">Profesional</button>
+        <button data-preset="hangat" onclick="applyPreset('hangat')" class="seg-btn">Hangat</button>
+        <button data-preset="fresh" onclick="applyPreset('fresh')" class="seg-btn">Fresh</button>
+        <button data-preset="elegan" onclick="applyPreset('elegan')" class="seg-btn">Elegan</button>
+      </div>
+    </div>
+
+    <div class="card p-4 space-y-4">
+      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Tampilan</p>
+      <div>
+        <p class="text-[11px] font-bold text-slate-500 mb-2">Warna Aksen</p>
+        <div class="flex gap-2.5" id="accRow">
+          <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+          <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+          <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+          <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+          <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
+        </div>
+      </div>
+      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+      <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
+    </div>
+
+    <div class="card p-4 space-y-4">
+      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4 acc-text"></i> Navbar</p>
+      <div>
+        <p class="text-[11px] font-bold text-slate-500 mb-2">Gaya</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
+          <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
+        </div>
+      </div>
+      <div>
+        <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
+          <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-4 space-y-4">
+      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="shapes" class="w-4 h-4 acc-text"></i> Gaya Ikon Menu</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button data-iconstyle="default" onclick="setIconStyle('default')" class="seg-btn flex-col !py-2.5">
+          <span class="block w-8 h-8 mx-auto mb-1 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center">
+            <i data-lucide="grid" class="w-4 h-4"></i>
+          </span>
+          <span class="text-[10px]">Ringan</span>
+        </button>
+        <button data-iconstyle="solid" onclick="setIconStyle('solid')" class="seg-btn flex-col !py-2.5">
+          <span class="block w-8 h-8 mx-auto mb-1 rounded-lg bg-teal-500 text-white flex items-center justify-center">
+            <i data-lucide="grid" class="w-4 h-4"></i>
+          </span>
+          <span class="text-[10px]">Solid</span>
+        </button>
+        <button data-iconstyle="colored" onclick="setIconStyle('colored')" class="seg-btn flex-col !py-2.5">
+          <span class="block w-8 h-8 mx-auto mb-1 flex items-center justify-center text-teal-600">
+            <i data-lucide="grid" class="w-5 h-5"></i>
+          </span>
+          <span class="text-[10px]">Warna</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card p-4">
+      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="rows-3" class="w-4 h-4 acc-text"></i> Kepadatan Konten</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
+        <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
+        <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
+      </div>
+    </div>
+
+    <div class="card p-4">
+      <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="settings" class="w-4 h-4 acc-text"></i> Aplikasi</p>
+      <div class="divide-y divide-slate-100">
+        <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
+          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+        </button>
+        <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+          <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
+          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+        </button>
+        <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
+          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+        </button>
+      </div>
+    </div>
+
+    <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
+      <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
+    </button>
+
+    <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.57</span></p>
+  </section>
+      <section id="pageBagi" class="hidden space-y-4 min-w-0">
+      <div id="quoteBox" class="card p-4 relative overflow-hidden min-w-0">
+        <i data-lucide="quote" class="w-7 h-7 text-slate-100 absolute top-3 right-3"></i>
+        <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
+        <div class="flex items-center justify-between mt-2 gap-2">
+          <p id="quoteAuthor" class="text-[11px] font-bold text-slate-500 truncate">— …</p>
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="btnQuote" onclick="gantiQuote()" aria-label="Ganti kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
+            <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div id="treeGuest" class="hidden card p-6 text-center">
+        <div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div>
+        <p class="text-sm font-extrabold text-slate-800">Pohon Ilmu menantimu</p>
+        <p class="text-xs text-slate-500 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p>
+        <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Masuk Sekarang</button>
+      </div>
+
+      <div id="treeData" class="space-y-4">
+        <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden">
+          <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div>
+          <div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[10px] font-black uppercase tracking-widest text-white/80 grad-text">Pohon Ilmu</p>
+            <p id="treeLevel" class="text-2xl font-black leading-tight grad-text">Biji</p>
+            <div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div>
+            <p class="text-[10px] font-semibold text-white/90 mt-1 grad-text"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
+          </div>
+          <div class="text-right shrink-0">
+            <p class="text-[10px] font-bold text-white/80 flex items-center gap-1 justify-end grad-text"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Poin</p></div>
+          <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Streak</p></div>
+          <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-700">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Login</p></div>
+          <div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Lencana</p></div>
+        </div>
+      </div>
+
+      <div id="tokoWrap" class="card p-4 hidden">
+        <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 acc-text"></i> Toko Poin</p>
+        <div id="rewardList" class="space-y-2"></div>
+      </div>
+
+      <div class="animate-fade-up">
+        <button id="kudosOpenBtn" onclick="toggleKudosForm(true)" class="w-full card p-4 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition kudos-accent-card">
+          <span class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0"><i data-lucide="heart-handshake" class="w-5 h-5"></i></span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-xs font-extrabold text-slate-700">Apresiasi Rekanmu</span>
+            <span id="kudosTeaser" class="block text-[10px] text-slate-500 truncate">Kirim bintang untuk rekanmu</span>
+          </span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+        </button>
+        <div id="kudosForm" class="hidden card p-4 space-y-2 mt-2">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-bold text-slate-500">Pilih rekan & tulis apresiasi…</p>
+            <button onclick="toggleKudosForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+          </div>
+          <select id="kudosTo" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></select>
+          <input id="kudosPesan" placeholder="Tulis apresiasi (opsional)" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">
+          <button onclick="sendKudos()" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Kirim Apresiasi 🙏</button>
+          <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider pt-2">Paling Diapresiasi</p>
+          <div id="kudosTop" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p>
+        <div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
+      </div>
+
+      <div id="karyaWrap" class="hidden">
+        <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p>
+        <div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
+      </div>
+
+      <div class="card p-4">
+        <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Guru Paling Aktif</p>
+        <div id="leadList" class="space-y-2"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
+    <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
+    <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
+    <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
+    <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
+  </nav>
 </div>
 
-        <div class="animate-fade-up">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Inspirasi Guru</p>
-            <div class="flex gap-1.5">
-              <button id="inspBaru" onclick="setInspMode('baru')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold acc-bg text-white transition">Terbaru</button>
-              <button id="inspPop" onclick="setInspMode('populer')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold card text-slate-500 transition">Terpopuler</button>
-            </div>
-          </div>
-          <button id="inspOpenBtn" onclick="toggleInspForm(true)" class="w-full card insp-accent-card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition">
-            <span class="w-9 h-9 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
-            <span class="flex-1 text-xs font-extrabold text-slate-700">Bagikan Praktik Baik</span>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-          </button>
-          <div id="inspForm" class="hidden card p-4 space-y-2 mt-2">
-            <div class="flex items-center justify-between">
-              <p class="text-[11px] font-bold text-slate-500">Tulis inspirasimu…</p>
-              <button onclick="toggleInspForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
-            </div>
-            <textarea id="inspIsi" rows="2" placeholder="Bagikan ide / praktik baikmu…" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></textarea>
-            <div class="flex gap-2">
-              <select id="inspKat" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
-                <option>Praktik Baik</option>
-                <option>Ide Kegiatan</option>
-                <option>Teladan</option>
-              </select>
-              <button onclick="postInspirasi()" class="shrink-0 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">+ Bagikan</button>
-            </div>
-          </div>
-          <div id="inspList" class="space-y-2 mt-2"></div>
-          <button id="inspMore" onclick="moreInspirasi()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
-        </div>
-
-        <div id="footList" class="animate-fade-up md:hidden"></div>
-      </section>
-
-      <section id="pageApps" class="hidden space-y-3 min-w-0">
-        <div class="relative">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
-          <input id="inSearch" type="text" placeholder="Cari aplikasi atau layanan…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring">
-          <button id="viewToggle" onclick="toggleView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" title="Ganti tampilan" aria-label="Ganti tampilan"><i id="viewToggleIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
-        </div>
-        <div id="filterBar" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-        <div id="layananBody"></div>
-      </section>
-
-      <section id="pageAgenda" class="hidden space-y-4 min-w-0">
-        <div id="calChips" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-        <div id="agendaTimeline" class="space-y-4"></div>
-      </section>
-
-      <section id="pageDokumen" class="hidden space-y-2 min-w-0">
-        <div class="relative mb-3">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-          <input id="inSearchDok" type="text" placeholder="Cari dokumen…" class="w-full card pl-11 pr-12 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="renderDokumen(this.value)">
-          <button id="dokViewToggle" onclick="toggleDokView()" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan"><i id="dokViewIcon" data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i></button>
-        </div>
-        <div id="dokList"></div>
-      </section>
-
-      <section id="pageProfile" class="hidden space-y-4 min-w-0">
-        <div id="profGuest" class="card p-6 text-center">
-          <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-2xl font-black mb-3">T</div>
-          <p class="text-base font-extrabold text-slate-800">Mode Tamu</p>
-          <p class="text-xs text-slate-500 mt-1 mb-5">Masuk untuk akses penuh, Studio Kreatif, dan poin gamifikasi.</p>
-          <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button>
-        </div>
-        <div id="profData" class="hidden space-y-4">
-          <div class="card p-5 flex items-center gap-4">
-            <div class="relative shrink-0 w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md" id="pfAvatar">
-              <img id="pfAvatarImg" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
-            </div>
-            <div class="min-w-0">
-              <p id="pfNama" class="text-base font-extrabold text-slate-800 leading-tight truncate">—</p>
-              <p id="pfJabatan" class="text-xs font-bold acc-text mt-0.5">—</p>
-              <span class="inline-flex items-center gap-1 mt-1.5 text-[9px] font-black uppercase tracking-wider bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full"><i data-lucide="badge-check" class="w-3 h-3"></i> Akun Aktif</span>
-            </div>
-          </div>
-          <div class="card p-4 space-y-2.5">
-            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
-            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
-            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
-            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
-            <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="mail" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dEmail" class="truncate">—</span></p>
-          </div>
-          <div class="card p-4 space-y-2.5">
-            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
-            <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-slate-800 to-black text-white text-[9px] font-black flex items-center justify-center shrink-0">TT</span><input id="smTiktok" placeholder="username TikTok" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">FB</span><input id="smFb" placeholder="Facebook" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-            <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-red-500 to-red-700 text-white text-[9px] font-black flex items-center justify-center shrink-0">YT</span><input id="smYt" placeholder="YouTube" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
-            <div class="flex gap-2">
-              <button onclick="simpanSosmed()" class="flex-1 acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan</button>
-              <button onclick="hapusSosmed()" class="px-3 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold active:scale-[.98] transition">Hapus Semua</button>
-            </div>
-          </div>
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500">
-            <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
-            <span id="aboutVer">v4.56</span>
-          </div>
-          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
-        </div>
-      </section>
-
-      <section id="pageSetting" class="hidden space-y-4 min-w-0">
-
-        <div class="card p-4">
-          <p class="text-[13px] font-extrabold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4 acc-text"></i> Tema Cepat</p>
-          <div class="grid grid-cols-2 gap-2">
-            <button data-preset="profesional" onclick="applyPreset('profesional')" class="seg-btn">Profesional</button>
-            <button data-preset="hangat" onclick="applyPreset('hangat')" class="seg-btn">Hangat</button>
-            <button data-preset="fresh" onclick="applyPreset('fresh')" class="seg-btn">Fresh</button>
-            <button data-preset="elegan" onclick="applyPreset('elegan')" class="seg-btn">Elegan</button>
-          </div>
-        </div>
-
-        <div class="card p-4 space-y-4">
-          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="palette" class="w-4 h-4 acc-text"></i> Tampilan</p>
-          <div>
-            <p class="text-[11px] font-bold text-slate-500 mb-2">Warna Aksen</p>
-            <div class="flex gap-2.5" id="accRow">
-              <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-              <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-              <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-              <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-              <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
-            </div>
-          </div>
-          <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Mode Gelap</p><button id="tglDark" onclick="setDark()" aria-label="Mode gelap" class="w-12 h-7 rounded-full relative transition bg-slate-200"><span class="absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-          <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-          <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
-        </div>
-
-        <div class="card p-4 space-y-4">
-          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="layout-grid" class="w-4 h-4 acc-text"></i> Navbar</p>
-          <div>
-            <p class="text-[11px] font-bold text-slate-500 mb-2">Gaya</p>
-            <div class="grid grid-cols-2 gap-2">
-              <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
-              <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
-            </div>
-          </div>
-            <div>
-    <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
-    <div class="grid grid-cols-2 gap-2">
-      <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
-      <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+<div id="pLogin" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+  <div id="pLoginSheet" class="sheet p-6 overflow-y-auto no-scroll">
+    <div class="sheet-drag" data-sheet-handle></div>
+    <div class="text-center mb-5">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3 border border-slate-200">
+        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+      </div>
+      <p class="text-base font-extrabold text-slate-800">Masuk Portal</p>
+      <p class="text-[11px] text-slate-500 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
     </div>
+    <form id="formLogin" class="space-y-3">
+      <input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
+      <input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
+      <button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk</button>
+    </form>
+    <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 flex-1"></div></div>
+    <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
   </div>
-  </div>
-  
-  <div class="card p-4 space-y-4">
-    <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2"><i data-lucide="shapes" class="w-4 h-4 acc-text"></i> Gaya Ikon Menu</p>
-    <div class="grid grid-cols-3 gap-2">
-      <button data-iconstyle="default" onclick="setIconStyle('default')" class="seg-btn flex-col !py-2.5">
-        <span class="block w-8 h-8 mx-auto mb-1 rounded-lg bg-teal-100 text-teal-600 flex items-center justify-center">
-          <i data-lucide="grid" class="w-4 h-4"></i>
-        </span>
-        <span class="text-[10px]">Ringan</span>
-      </button>
-      <button data-iconstyle="solid" onclick="setIconStyle('solid')" class="seg-btn flex-col !py-2.5">
-        <span class="block w-8 h-8 mx-auto mb-1 rounded-lg bg-teal-500 text-white flex items-center justify-center">
-          <i data-lucide="grid" class="w-4 h-4"></i>
-        </span>
-        <span class="text-[10px]">Solid</span>
-      </button>
-      <button data-iconstyle="colored" onclick="setIconStyle('colored')" class="seg-btn flex-col !py-2.5">
-        <span class="block w-8 h-8 mx-auto mb-1 flex items-center justify-center text-teal-600">
-          <i data-lucide="grid" class="w-5 h-5"></i>
-        </span>
-        <span class="text-[10px]">Warna</span>
-      </button>
+</div>
+
+<div id="pNotif" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
+  <div id="pNotifSheet" class="sheet bg-slate-50">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
+      <p class="text-base font-extrabold text-slate-800">Notifikasi</p>
+      <button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
     </div>
+    <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
   </div>
+</div>
 
-        <div class="card p-4">
-          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="rows-3" class="w-4 h-4 acc-text"></i> Kepadatan Konten</p>
-          <div class="grid grid-cols-3 gap-2">
-            <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
-            <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
-            <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
-          </div>
+<div id="pParent" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pParent')"></div>
+  <div id="pParentSheet" class="sheet bg-slate-50">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0">
+      <div class="flex items-center gap-3 min-w-0">
+        <span id="pParentIcon" class="w-11 h-11 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0 overflow-hidden">
+          <i data-lucide="folder" class="w-5 h-5"></i>
+        </span>
+        <div class="min-w-0">
+          <p id="pParentTitle" class="text-base font-extrabold text-slate-800 truncate">Menu</p>
+          <p id="pParentSub" class="text-[10px] text-slate-500 truncate">—</p>
         </div>
+      </div>
+      <button onclick="tutupPanel('pParent')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+    </div>
+    <div id="pParentList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-2"></div>
+  </div>
+</div>
 
-        <div class="card p-4">
-          <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="settings" class="w-4 h-4 acc-text"></i> Aplikasi</p>
-          <div class="divide-y divide-slate-100">
-            <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-              <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
-              <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-            </button>
-            <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-              <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
-              <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-            </button>
-            <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-              <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
-              <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
-              <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-            </button>
-          </div>
-        </div>
+<div id="pFb" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
+  <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll">
+    <div class="sheet-drag" data-sheet-handle></div>
+    <p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p>
+    <p class="text-[11px] text-slate-500 mb-4">Masukanmu kami baca & langsung diteruskan ke admin. (+1 poin)</p>
+    <div class="flex gap-2">
+      <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold acc-bg text-white">💡 Saran</button>
+      <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">🐞 Bug</button>
+      <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">⭐ Pujian</button>
+    </div>
+    <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
+    <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 acc-ring"></textarea>
+    <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Kirim</button>
+  </div>
+</div>
+<div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
+  <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
+    <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1">Aplikasi</p>
+    <button onclick="bukaExternal()" aria-label="Buka di browser" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+      <i data-lucide="external-link" class="w-4 h-4 text-white"></i>
+    </button>
+    <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+      <i data-lucide="x" class="w-4 h-4 text-white"></i>
+    </button>
+  </div>
+  <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer"></iframe>
+</div>
 
-        <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
+<div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
+  <div class="px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
+    <button onclick="tutupModal('mStudio')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button>
+    <p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1">Studio</p>
+    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span>
+  </div>
+  <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4">
+    <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100" style="aspect-ratio:9/16"></canvas>
+    <div id="stControls" class="space-y-1"></div>
+  </div>
+  <div class="p-4 grid grid-cols-2 gap-2 bg-white border-t border-slate-100 shrink-0">
+    <button onclick="unduhStudio()" class="bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
+    <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
+  </div>
+</div>
+
+<div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
+  <div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll">
+    <div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div>
+    <button onclick="tutupPop()" class="mt-4 w-full acc-grad text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg">Mengerti</button>
+  </div>
+</div>
+
+<div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
+  <div class="w-full max-w-sm card p-6 animate-pop">
+    <p class="text-base font-extrabold text-slate-800 mb-3">Pasang di iPhone/iPad</p>
+    <ol class="text-sm text-slate-600 space-y-2 list-decimal list-inside">
+      <li>Ketuk tombol <b>Bagikan</b></li>
+      <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
+      <li>Ketuk <b>Tambahkan</b></li>
+    </ol>
+    <button onclick="tutupModal('mIos')" class="mt-5 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Mengerti</button>
+  </div>
+</div>
+
+<div id="mShare" class="fixed inset-0 z-[80] hidden">
+  <div class="absolute inset-0 bg-black/50" onclick="tutupModal('mShare')"></div>
+  <div class="absolute left-3 right-3 md:left-1/2 md:-translate-x-1/2 md:max-w-md md:top-1/2 md:-translate-y-1/2" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem)">
+    <div class="card p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <p class="text-base font-extrabold text-slate-800">Bagikan Layanan</p>
+        <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+      </div>
+      <div class="rounded-xl p-3.5" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
+        <p class="text-[10px] font-black uppercase tracking-widest text-white/80">Guru Berbagi Selogiri</p>
+        <p id="shareTitle" class="text-sm font-extrabold text-white mt-1 truncate">—</p>
+        <p id="shareUrl" class="text-[10px] text-white/85 truncate mt-0.5">—</p>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <button onclick="shareCopy()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
+          <span class="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center"><i data-lucide="link" class="w-5 h-5 text-slate-600"></i></span>
+          <span class="text-[9px] font-bold text-slate-600">Salin</span>
         </button>
-
-        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.56</span></p>
-      </section>
-      <section id="pageBagi" class="hidden space-y-4 min-w-0">
-        <div id="quoteBox" class="card p-4 relative overflow-hidden min-w-0">
-          <i data-lucide="quote" class="w-7 h-7 text-slate-100 absolute top-3 right-3"></i>
-          <p id="quoteText" class="text-[13px] font-medium italic text-slate-600 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
-          <div class="flex items-center justify-between mt-2 gap-2">
-            <p id="quoteAuthor" class="text-[11px] font-bold text-slate-500 truncate">— …</p>
-            <div class="flex items-center gap-2 shrink-0">
-              <button id="btnQuote" onclick="gantiQuote()" aria-label="Ganti kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
-            </div>
-          </div>
-        </div>
-
-        <div id="treeGuest" class="hidden card p-6 text-center">
-          <div class="w-16 h-16 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="sprout" class="w-8 h-8"></i></div>
-          <p class="text-sm font-extrabold text-slate-800">Pohon Ilmu menantimu</p>
-          <p class="text-xs text-slate-500 mt-1 mb-4">Masuk untuk menanam poin, merawat streak, dan mengumpulkan lencana.</p>
-          <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Masuk Sekarang</button>
-        </div>
-
-        <div id="treeData" class="space-y-4">
-          <div class="card p-5 flex items-center gap-4 acc-grad text-white relative overflow-hidden">
-            <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full"></div>
-            <div class="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center shrink-0 tree-pulse"><i id="treeIco" data-lucide="nut" class="w-8 h-8"></i></div>
-            <div class="flex-1 min-w-0">
-              <p class="text-[10px] font-black uppercase tracking-widest text-white/80 grad-text">Pohon Ilmu</p>
-              <p id="treeLevel" class="text-lg font-black leading-tight grad-text">Biji</p>
-              <div class="h-1.5 bg-white/20 rounded-full mt-2 overflow-hidden"><div id="treeBar" class="h-full bg-white rounded-full transition-all duration-700" style="width:0%"></div></div>
-              <p class="text-[10px] font-semibold text-white/90 mt-1 grad-text"><span id="treePoin">0</span> poin · berikutnya: <span id="treeNext">Tunas</span></p>
-            </div>
-            <div class="text-right shrink-0">
-              <p class="text-[10px] font-bold text-white/80 flex items-center gap-1 justify-end grad-text"><i data-lucide="flame" class="w-3.5 h-3.5 text-amber-300"></i><span id="treeStreak">0</span> hari</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-4 gap-2 text-center">
-            <div class="card p-3"><p id="stPoin" class="text-lg font-black acc-text">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Poin</p></div>
-            <div class="card p-3"><p id="stStreak" class="text-lg font-black text-amber-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Streak</p></div>
-            <div class="card p-3"><p id="stLogin" class="text-lg font-black text-slate-700">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Login</p></div>
-            <div class="card p-3"><p id="stBadge" class="text-lg font-black text-violet-500">0</p><p class="text-[9px] font-bold text-slate-500 uppercase">Lencana</p></div>
-          </div>
-        </div>
-
-        <div id="tokoWrap" class="card p-4 hidden">
-          <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4 acc-text"></i> Toko Poin</p>
-          <div id="rewardList" class="space-y-2"></div>
-        </div>
-
-        <div class="animate-fade-up">
-          <button id="kudosOpenBtn" onclick="toggleKudosForm(true)" class="w-full card kudos-accent-card p-3.5 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition">
-            <span class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0"><i data-lucide="heart-handshake" class="w-4 h-4"></i></span>
-            <span class="flex-1 min-w-0">
-              <span class="block text-xs font-extrabold text-slate-700">Apresiasi Rekanmu</span>
-              <span id="kudosTeaser" class="block text-[10px] text-slate-500 truncate">Kirim bintang untuk rekanmu</span>
-            </span>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-          </button>
-          <div id="kudosForm" class="hidden card p-4 space-y-2 mt-2">
-            <div class="flex items-center justify-between">
-              <p class="text-[11px] font-bold text-slate-500">Pilih rekan & tulis apresiasi…</p>
-              <button onclick="toggleKudosForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
-            </div>
-            <select id="kudosTo" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring"></select>
-            <input id="kudosPesan" placeholder="Tulis apresiasi (opsional)" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">
-            <button onclick="sendKudos()" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Kirim Apresiasi 🙏</button>
-            <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider pt-2">Paling Diapresiasi</p>
-            <div id="kudosTop" class="space-y-2"></div>
-          </div>
-        </div>
-
-        <div>
-          <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p>
-          <div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
-        </div>
-
-        <div id="karyaWrap" class="hidden">
-          <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p>
-          <div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
-        </div>
-
-        <div class="card p-4">
-          <p class="text-xs font-extrabold text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="trophy" class="w-4 h-4 text-amber-500"></i> Guru Paling Aktif</p>
-          <div id="leadList" class="space-y-2"></div>
-        </div>
-      </section>
-    </main>
-
-    <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
-      <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
-      <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
-      <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
-      <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
-    </nav>
-  </div>
-
-  <div id="pLogin" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
-    <div id="pLoginSheet" class="sheet p-6 overflow-y-auto no-scroll">
-      <div class="sheet-drag" data-sheet-handle></div>
-      <div class="text-center mb-5">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3 border border-slate-200">
-          <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
-        </div>
-        <p class="text-base font-extrabold text-slate-800">Masuk Portal</p>
-        <p class="text-[11px] text-slate-500 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
-      </div>
-      <form id="formLogin" class="space-y-3">
-        <input id="inEmail" type="email" required placeholder="Email terdaftar" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
-        <input id="inPin" type="password" required inputmode="numeric" placeholder="PIN" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm font-medium text-slate-800 acc-ring">
-        <button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk</button>
-      </form>
-      <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 flex-1"></div></div>
-      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
-    </div>
-  </div>
-
-  <div id="pNotif" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
-    <div id="pNotifSheet" class="sheet bg-slate-50">
-      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
-        <p class="text-base font-extrabold text-slate-800">Notifikasi</p>
-        <button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
-      </div>
-      <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
-    </div>
-  </div>
-
-  <div id="pParent" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pParent')"></div>
-    <div id="pParentSheet" class="sheet bg-slate-50">
-      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0">
-        <div class="flex items-center gap-3 min-w-0">
-          <span id="pParentIcon" class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0 overflow-hidden">
-            <i data-lucide="folder" class="w-5 h-5"></i>
-          </span>
-          <div class="min-w-0">
-            <p id="pParentTitle" class="text-base font-extrabold text-slate-800 truncate">Menu</p>
-            <p id="pParentSub" class="text-[10px] text-slate-500 truncate">—</p>
-          </div>
-        </div>
-        <button onclick="tutupPanel('pParent')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
-      </div>
-      <div id="pParentList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-2"></div>
-    </div>
-  </div>
-
-  <div id="pFb" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
-    <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll">
-      <div class="sheet-drag" data-sheet-handle></div>
-      <p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p>
-      <p class="text-[11px] text-slate-500 mb-4">Masukanmu kami baca & langsung diteruskan ke admin. (+1 poin)</p>
-      <div class="flex gap-2">
-        <button onclick="setTipeFb('Saran',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold acc-bg text-white">💡 Saran</button>
-        <button onclick="setTipeFb('Bug',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">🐞 Bug</button>
-        <button onclick="setTipeFb('Pujian',this)" class="tipe-fb flex-1 py-2 rounded-lg text-xs font-bold bg-slate-100 text-slate-600">⭐ Pujian</button>
-      </div>
-      <div id="starRow" class="flex gap-1 justify-center mt-3"></div>
-      <textarea id="fbPesan" rows="3" placeholder="Tulis pesan Anda…" class="mt-3 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 acc-ring"></textarea>
-      <button onclick="submitFb()" id="btnFb" class="mt-3 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Kirim</button>
-    </div>
-  </div>
-  <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
-    <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0">
-      <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1">Aplikasi</p>
-      <button onclick="bukaExternal()" aria-label="Buka di browser" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
-        <i data-lucide="external-link" class="w-4 h-4 text-white"></i>
-      </button>
-      <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition ml-2">
-        <i data-lucide="x" class="w-4 h-4 text-white"></i>
-      </button>
-    </div>
-    <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer"></iframe>
-  </div>
-
-  <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
-    <div class="px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
-      <button onclick="tutupModal('mStudio')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button>
-      <p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1">Studio</p>
-      <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span>
-    </div>
-    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4">
-      <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100" style="aspect-ratio:9/16"></canvas>
-      <div id="stControls" class="space-y-1"></div>
-    </div>
-    <div class="p-4 grid grid-cols-2 gap-2 bg-white border-t border-slate-100 shrink-0">
-      <button onclick="unduhStudio()" class="bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
-      <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
-    </div>
-  </div>
-
-  <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll">
-      <div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div>
-      <button onclick="tutupPop()" class="mt-4 w-full acc-grad text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg">Mengerti</button>
-    </div>
-  </div>
-
-  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm card p-6 animate-pop">
-      <p class="text-base font-extrabold text-slate-800 mb-3">Pasang di iPhone/iPad</p>
-      <ol class="text-sm text-slate-600 space-y-2 list-decimal list-inside">
-        <li>Ketuk tombol <b>Bagikan</b></li>
-        <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
-        <li>Ketuk <b>Tambahkan</b></li>
-      </ol>
-      <button onclick="tutupModal('mIos')" class="mt-5 w-full acc-bg text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-sm">Mengerti</button>
-    </div>
-  </div>
-
-  <div id="mShare" class="fixed inset-0 z-[80] hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="tutupModal('mShare')"></div>
-    <div class="absolute left-3 right-3 md:left-1/2 md:-translate-x-1/2 md:max-w-md md:top-1/2 md:-translate-y-1/2" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem)">
-      <div class="card p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <p class="text-base font-extrabold text-slate-800">Bagikan Layanan</p>
-          <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
-        </div>
-        <div class="rounded-xl p-3.5" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
-          <p class="text-[10px] font-black uppercase tracking-widest text-white/80">Guru Berbagi Selogiri</p>
-          <p id="shareTitle" class="text-sm font-extrabold text-white mt-1 truncate">—</p>
-          <p id="shareUrl" class="text-[10px] text-white/85 truncate mt-0.5">—</p>
-        </div>
-        <div class="grid grid-cols-4 gap-2">
-          <button onclick="shareCopy()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
-            <span class="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center"><i data-lucide="link" class="w-5 h-5 text-slate-600"></i></span>
-            <span class="text-[9px] font-bold text-slate-600">Salin</span>
-          </button>
-          <button onclick="shareWA()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
-            <span class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:#25D366"><i data-lucide="message-circle" class="w-5 h-5 text-white"></i></span>
-            <span class="text-[9px] font-bold text-slate-600">WhatsApp</span>
-          </button>
-          <button onclick="shareTG()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
-            <span class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:#0088CC"><i data-lucide="send" class="w-5 h-5 text-white"></i></span>
-            <span class="text-[9px] font-bold text-slate-600">Telegram</span>
-          </button>
-          <button onclick="shareNative()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
-            <span class="w-11 h-11 rounded-2xl acc-soft flex items-center justify-center"><i data-lucide="share-2" class="w-5 h-5 acc-text"></i></span>
-            <span class="text-[9px] font-bold text-slate-600">Lainnya</span>
-          </button>
-        </div>
+        <button onclick="shareWA()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
+          <span class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:#25D366"><i data-lucide="message-circle" class="w-5 h-5 text-white"></i></span>
+          <span class="text-[9px] font-bold text-slate-600">WhatsApp</span>
+        </button>
+        <button onclick="shareTG()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
+          <span class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:#0088CC"><i data-lucide="send" class="w-5 h-5 text-white"></i></span>
+          <span class="text-[9px] font-bold text-slate-600">Telegram</span>
+        </button>
+        <button onclick="shareNative()" class="flex flex-col items-center gap-1.5 py-2 active:scale-95 transition">
+          <span class="w-11 h-11 rounded-2xl acc-soft flex items-center justify-center"><i data-lucide="share-2" class="w-5 h-5 acc-text"></i></span>
+          <span class="text-[9px] font-bold text-slate-600">Lainnya</span>
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <div id="syncOverlay" class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
-    <div class="flex flex-col items-center gap-4">
-      <div class="relative w-16 h-16">
-        <div class="absolute inset-0 rounded-full border-4 border-white/20"></div>
-        <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
-      </div>
-      <p class="text-white text-sm font-bold">Mengunduh update terbaru…</p>
-      <div class="w-44 h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white rounded-full sync-bar"></div></div>
+<div id="syncOverlay" class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="flex flex-col items-center gap-4">
+    <div class="relative w-16 h-16">
+      <div class="absolute inset-0 rounded-full border-4 border-white/20"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+    </div>
+    <p class="text-white text-sm font-bold">Mengunduh update terbaru…</p>
+    <div class="w-44 h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white rounded-full sync-bar"></div></div>
+  </div>
+</div>
+
+<div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
+  <div class="w-full max-w-xs card p-6 text-center animate-pop">
+    <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
+    <p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin lanjut?</p>
+    <p id="cfMsg" class="text-xs text-slate-500 mt-1">…</p>
+    <div class="grid grid-cols-2 gap-2 mt-5">
+      <button onclick="cfCancel()" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button>
+      <button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button>
     </div>
   </div>
+</div>
 
-  <div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-xs card p-6 text-center animate-pop">
-      <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
-      <p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin lanjut?</p>
-      <p id="cfMsg" class="text-xs text-slate-500 mt-1">…</p>
-      <div class="grid grid-cols-2 gap-2 mt-5">
-        <button onclick="cfCancel()" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Batal</button>
-        <button id="cfOk" class="bg-rose-500 text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Hapus</button>
-      </div>
+<div id="toastContainer"></div>
+
+<div id="inAppNotif" class="fixed left-3 right-3 z-[85] hidden" style="top:calc(env(safe-area-inset-top) + 1rem)">
+  <div class="card p-4 flex items-start gap-3 shadow-2xl" style="background:var(--card);border-color:var(--acc);border-width:2px">
+    <span class="w-10 h-10 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="bell" class="w-5 h-5"></i></span>
+    <div class="flex-1 min-w-0">
+      <p class="text-[10px] font-black uppercase tracking-wider acc-text">Info Baru</p>
+      <p id="inAppNotifTitle" class="text-[13px] font-bold text-slate-800 truncate mt-0.5">—</p>
+      <p id="inAppNotifMsg" class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">—</p>
+    </div>
+    <button onclick="dismissInAppNotif()" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+  </div>
+</div>
+
+<div id="onboard" class="onboard-backdrop" role="dialog" aria-modal="true">
+  <div class="onboard-card">
+    <div id="onboardIcon" class="w-14 h-14 rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="hand" class="w-7 h-7"></i></div>
+    <p id="onboardTitle" class="text-base font-extrabold text-slate-800">Selamat datang 👋</p>
+    <p id="onboardDesc" class="text-sm text-slate-500 mt-1 leading-relaxed">Kenali fitur baru yang bikin kerja makin gampang.</p>
+    <div class="onboard-dots"><span class="onboard-dot active"></span><span class="onboard-dot"></span><span class="onboard-dot"></span></div>
+    <div class="grid grid-cols-2 gap-2 mt-4">
+      <button onclick="closeOnboard(true)" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Lewati</button>
+      <button id="onboardNext" onclick="nextOnboard()" class="acc-bg text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Lanjut</button>
     </div>
   </div>
+</div>
 
-  <div id="toast" class="fixed left-1/2 -translate-x-1/2 z-[90] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300 w-max max-w-[92vw]" style="top:calc(env(safe-area-inset-top) + 1rem)">
-    <div class="flex items-center gap-3 bg-slate-900/95 backdrop-blur-md border border-white/10 shadow-2xl shadow-black/40 rounded-2xl pl-3 pr-5 py-3">
-      <span class="w-8 h-8 rounded-full bg-white/15 text-white flex items-center justify-center shrink-0"><i id="toastIcon" data-lucide="check" class="w-4 h-4"></i></span>
-      <p id="toastMsg" class="text-[13px] font-bold text-white leading-snug">…</p>
-    </div>
-  </div>
-
-  <div id="inAppNotif" class="fixed left-3 right-3 z-[85] hidden" style="top:calc(env(safe-area-inset-top) + 1rem)">
-    <div class="card p-3.5 flex items-start gap-3 shadow-2xl" style="background:var(--card);border-color:var(--acc);border-width:2px">
-      <span class="w-9 h-9 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="bell" class="w-5 h-5"></i></span>
-      <div class="flex-1 min-w-0">
-        <p class="text-[10px] font-black uppercase tracking-wider acc-text">Info Baru</p>
-        <p id="inAppNotifTitle" class="text-[13px] font-bold text-slate-800 truncate mt-0.5">—</p>
-        <p id="inAppNotifMsg" class="text-[11px] text-slate-500 line-clamp-2 mt-0.5">—</p>
-      </div>
-      <button onclick="dismissInAppNotif()" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
-    </div>
-  </div>
-
-  <div id="onboard" class="onboard-backdrop" role="dialog" aria-modal="true">
-    <div class="onboard-card">
-      <div id="onboardIcon" class="w-14 h-14 rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="hand" class="w-7 h-7"></i></div>
-      <p id="onboardTitle" class="text-base font-extrabold text-slate-800">Selamat datang 👋</p>
-      <p id="onboardDesc" class="text-sm text-slate-500 mt-1 leading-relaxed">Kenali fitur baru yang bikin kerja makin gampang.</p>
-      <div class="onboard-dots"><span class="onboard-dot active"></span><span class="onboard-dot"></span><span class="onboard-dot"></span></div>
-      <div class="grid grid-cols-2 gap-2 mt-4">
-        <button onclick="closeOnboard(true)" class="bg-slate-100 text-slate-600 font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Lewati</button>
-        <button id="onboardNext" onclick="nextOnboard()" class="acc-bg text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition">Lanjut</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="ctxMenu" class="ctx-menu" role="menu"></div>
+<div id="ctxMenu" class="ctx-menu" role="menu"></div>
 </div>
 
 <script>
@@ -923,17 +931,17 @@ const sb=window.supabase.createClient(SB_URL,SB_ANON);
 const $=id=>document.getElementById(id);
 
 /* ============================================================
-   PRESETS TEMA
+   PRESETS TEMA (v4.57: tambah iconstyle)
    ============================================================ */
 const PRESETS={
-  profesional:{navbar:'floating',navcolor:'dark', accent:'hijau',  density:'normal'},
-  hangat:     {navbar:'floating',navcolor:'dark', accent:'amber',  density:'normal'},
-  fresh:      {navbar:'floating',navcolor:'light',accent:'biru',   density:'normal'},
-  elegan:     {navbar:'classic', navcolor:'dark', accent:'violet', density:'normal'}
+  profesional:{navbar:'floating',navcolor:'dark', accent:'hijau',  density:'normal', iconstyle:'default'},
+  hangat:     {navbar:'floating',navcolor:'dark', accent:'amber',  density:'normal', iconstyle:'default'},
+  fresh:      {navbar:'floating',navcolor:'light',accent:'biru',   density:'normal', iconstyle:'default'},
+  elegan:     {navbar:'classic', navcolor:'dark', accent:'violet', density:'normal', iconstyle:'colored'}
 };
 
 /* ============================================================
-   IndexedDB mini wrapper
+   IndexedDB wrapper
    ============================================================ */
 const idb=(()=>{
   let dbp=null;
@@ -1073,6 +1081,7 @@ function menuIconWrapClass(warna){
   }
   return 'menu-icon-wrap '+bg+' '+tx;
 }
+
 const LEVELS=[{n:'Biji',i:'nut',min:0},{n:'Tunas',i:'leaf',min:50},{n:'Pohon Muda',i:'tree-deciduous',min:150},{n:'Pohon Rindang',i:'tree-pine',min:300},{n:'Pohon Berbuah',i:'apple',min:500}];
 const TPL={quote:{n:'Quote',i:'quote',f:[['text','Tulis quote…'],['author','Nama tokoh']]},ucapan:{n:'Ucapan',i:'party-popper',f:[['title','Judul ucapan'],['msg','Pesan']]},undangan:{n:'Undangan',i:'mail',f:[['title','Nama acara'],['date','Tanggal'],['time','Waktu'],['place','Tempat']]},prestasi:{n:'Prestasi',i:'trophy',ph:1,f:[['title','Judul prestasi'],['name','Nama peraih']]},cover:{n:'Cover Materi',i:'book-open',f:[['title','Judul materi'],['kelas','Kelas'],['guru','Nama guru']]},dokumentasi:{n:'Dokumentasi',i:'camera',ph:1,f:[['title','Caption kegiatan'],['date','Tanggal']]}};
 const FMT={story:{n:'Story 9:16',w:1080,h:1920},feed:{n:'Feed 1:1',w:1080,h:1080},potret:{n:'Potret 4:5',w:1080,h:1350},lanskap:{n:'Lanskap',w:1200,h:630},thumb:{n:'Thumb 16:9',w:1280,h:720}};
@@ -1085,7 +1094,7 @@ function sigChanged(key,val){let s;try{s=JSON.stringify(val);}catch(e){s=String(
 function resetRenderSig(){for(const k in RENDER_SIG)delete RENDER_SIG[k];}
 
 /* ============================================================
-   BATCHED icons() — Quick Win #4
+   Batched icons()
    ============================================================ */
 let _iconsTimer=null;
 function icons(){
@@ -1095,7 +1104,6 @@ function icons(){
     lucide.createIcons();
   });
 }
-
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);}
 
 /* ============================================================
@@ -1138,16 +1146,24 @@ function sanitizeHtml(html){
 function namaPanggil(full){let n=(full||'').split(',')[0].trim();n=n.replace(/^(Dra?\.|Dr\.|H\.|Hj\.|Ir\.|Prof\.)\s*/i,'');const w=(n.split(/\s+/)[0]||'Guru');return w.charAt(0)+w.slice(1).toLowerCase();}
 const needsLogin=m=>['Guru','Kepala Sekolah'].includes(m.akses_role);
 
+/* ============================================================
+   TOAST — HYBRID (v4.57: 4 state + stack max 3)
+   ============================================================ */
 function toast(m,type){
   type=type||'success';
-  const ic={success:'check',error:'triangle-alert',info:'info'}[type]||'check';
-  $('toastMsg').textContent=m;
-  $('toastIcon').setAttribute('data-lucide',ic);
+  const ICONS={success:'check',error:'triangle-alert',warning:'alert-triangle',info:'info'};
+  const container=$('toastContainer');
+  if(!container)return;
+  const el=document.createElement('div');
+  el.className='toast-item t-'+type;
+  el.innerHTML=`<span class="toast-icon"><i data-lucide="${ICONS[type]||'check'}" class="w-4 h-4 text-white"></i></span><p class="toast-msg">${esc(m)}</p>`;
+  container.appendChild(el);
   icons();
-  const t=$('toast');
-  t.classList.remove('opacity-0','-translate-y-3');
-  clearTimeout(t._h);
-  t._h=setTimeout(()=>t.classList.add('opacity-0','-translate-y-3'),2400);
+  while(container.children.length>3){container.removeChild(container.firstChild);}
+  setTimeout(()=>{
+    el.classList.add('out');
+    setTimeout(()=>el.remove(),250);
+  },2400);
 }
 
 let cfCb=null;
@@ -1165,7 +1181,12 @@ function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classLis
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 
 function dl(path){return location.pathname+path;}
-function studioFieldsFromQuery(q){const reserved=['page','menu','studio','panel'];const pre={};q.forEach((v,k)=>{if(!reserved.includes(k))pre[k]=v;});return pre;}
+function studioFieldsFromQuery(q){
+  const reserved=['page','menu','studio','panel'];
+  const pre={};
+  q.forEach((v,k)=>{if(!reserved.includes(k))pre[k]=v;});
+  return pre;
+}
 
 function handleDeepLink(){
   try{
@@ -1173,8 +1194,13 @@ function handleDeepLink(){
     if(!q.toString())return;
     const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel');
     if(page)navPage(page);
-    if(panel==='notif')openPanel('pNotif');else if(panel==='login')openPanel('pLogin');
-    if(menu){const m=STATE.menus.find(x=>x.judul===menu);if(m)klikMenu(m.judul);else toast('Menu tidak ditemukan: '+menu,'info');}
+    if(panel==='notif')openPanel('pNotif');
+    else if(panel==='login')openPanel('pLogin');
+    if(menu){
+      const m=STATE.menus.find(x=>x.judul===menu);
+      if(m)klikMenu(m.judul);
+      else toast('Menu tidak ditemukan: '+menu,'info');
+    }
     if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
     history.replaceState(CUR,'',location.pathname);
   }catch(e){}
@@ -1197,14 +1223,21 @@ function markAcc(){
     b.classList.toggle('scale-110',on);
   });
 }
-function setFs(){document.documentElement.classList.toggle('fs-besar');localStorage.setItem('gb_fs',document.documentElement.classList.contains('fs-besar')?'besar':'normal');paintToggles();}
-function setAnim(){document.documentElement.classList.toggle('no-anim');localStorage.setItem('gb_anim',document.documentElement.classList.contains('no-anim')?'off':'on');paintToggles();}
-function setDark(){const on=document.documentElement.classList.toggle('dark');localStorage.setItem('gb_dark',on?'1':'0');document.querySelector('meta[name=theme-color]')?.setAttribute('content','#F6F5F9');paintToggles();}
+function setFs(){
+  document.documentElement.classList.toggle('fs-besar');
+  localStorage.setItem('gb_fs',document.documentElement.classList.contains('fs-besar')?'besar':'normal');
+  paintToggles();
+}
+function setAnim(){
+  document.documentElement.classList.toggle('no-anim');
+  localStorage.setItem('gb_anim',document.documentElement.classList.contains('no-anim')?'off':'on');
+  paintToggles();
+}
+
 function paintToggles(){
   const fs=document.documentElement.classList.contains('fs-besar');
   const an=document.documentElement.classList.contains('no-anim');
-  const dk=document.documentElement.classList.contains('dark');
-  [['tglFs',fs],['tglAnim',an],['tglDark',dk]].forEach(([id,on])=>{
+  [['tglFs',fs],['tglAnim',an]].forEach(([id,on])=>{
     const b=$(id);if(!b)return;
     b.className='w-12 h-7 rounded-full relative transition '+(on?'acc-bg':'bg-slate-200');
     b.firstElementChild.className='absolute top-1 w-5 h-5 bg-white rounded-full transition '+(on?'left-6':'left-1');
@@ -1221,14 +1254,19 @@ function applyPreset(name){
   document.body.dataset.navbarColor=p.navcolor;
   document.documentElement.dataset.acc=p.accent;
   document.body.dataset.density=p.density;
+  if(p.iconstyle)document.body.dataset.iconstyle=p.iconstyle;
   localStorage.setItem('gb_navbar_style',p.navbar);
   localStorage.setItem('gb_navbar_color',p.navcolor);
   localStorage.setItem('gb_acc',p.accent);
   localStorage.setItem('gb_density',p.density);
+  if(p.iconstyle)localStorage.setItem('gb_icon_style',p.iconstyle);
   localStorage.setItem('gb_preset',name);
   markAcc();
   paintToggles();
   paintCustomizeUI();
+  renderLayanan($('inSearch').value||'');
+  renderQuick();
+  renderRecentActivity();
   toast('Tema "'+name+'" diterapkan');
 }
 function setNavbarStyle(v){
@@ -1254,28 +1292,28 @@ function setDensity(v){
 }
 function resetTheme(){
   confirmDialog('Kembalikan semua pengaturan tampilan ke default?',()=>{
-    ['gb_preset', 'gb_navbar_style', 'gb_navbar_color', 'gb_density', 'gb_acc', 'gb_icon_style'].forEach(k => localStorage.removeItem(k));
-document.documentElement.dataset.acc = 'hijau';
-document.body.dataset.navbar = 'floating';
-document.body.dataset.navbarColor = 'dark';
-document.body.dataset.density = 'normal';
-document.body.dataset.iconstyle = 'default';
-markAcc();
-paintToggles();
-paintCustomizeUI();
-renderLayanan($('inSearch').value || '');
-renderQuick();
-renderRecentActivity();
+    ['gb_preset','gb_navbar_style','gb_navbar_color','gb_density','gb_acc','gb_icon_style'].forEach(k=>localStorage.removeItem(k));
+    document.documentElement.dataset.acc='hijau';
+    document.body.dataset.navbar='floating';
+    document.body.dataset.navbarColor='dark';
+    document.body.dataset.density='normal';
+    document.body.dataset.iconstyle='default';
+    markAcc();
+    paintToggles();
+    paintCustomizeUI();
+    renderLayanan($('inSearch').value||'');
+    renderQuick();
+    renderRecentActivity();
     toast('Tema direset ke default');
   },'Reset Tema?','Reset');
 }
-function paintCustomizeUI() {
-  document.querySelectorAll('[data-navstyle]').forEach(b => b.classList.toggle('on', b.dataset.navstyle === document.body.dataset.navbar));
-  document.querySelectorAll('[data-navcolor]').forEach(b => b.classList.toggle('on', b.dataset.navcolor === document.body.dataset.navbarColor));
-  document.querySelectorAll('[data-density]').forEach(b => b.classList.toggle('on', b.dataset.density === document.body.dataset.density));
-  document.querySelectorAll('[data-iconstyle]').forEach(b => b.classList.toggle('on', b.dataset.iconstyle === (document.body.dataset.iconstyle || 'default')));
-  const ap = localStorage.getItem('gb_preset');
-  document.querySelectorAll('[data-preset]').forEach(b => b.classList.toggle('on', b.dataset.preset === ap));
+function paintCustomizeUI(){
+  document.querySelectorAll('[data-navstyle]').forEach(b=>b.classList.toggle('on',b.dataset.navstyle===document.body.dataset.navbar));
+  document.querySelectorAll('[data-navcolor]').forEach(b=>b.classList.toggle('on',b.dataset.navcolor===document.body.dataset.navbarColor));
+  document.querySelectorAll('[data-density]').forEach(b=>b.classList.toggle('on',b.dataset.density===document.body.dataset.density));
+  document.querySelectorAll('[data-iconstyle]').forEach(b=>b.classList.toggle('on',b.dataset.iconstyle===(document.body.dataset.iconstyle||'default')));
+  const ap=localStorage.getItem('gb_preset');
+  document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('on',b.dataset.preset===ap));
 }
 function setIconStyle(v){
   if(!['default','solid','colored'].includes(v))return;
@@ -1289,14 +1327,14 @@ function setIconStyle(v){
 }
 function toggleQuickView(){
   const cur=localStorage.getItem('gb_quick_view')||'grid';
-  localStorage.setItem('gb_quick_view', cur==='grid'?'list':'grid');
+  localStorage.setItem('gb_quick_view',cur==='grid'?'list':'grid');
   paintQuickView();
   renderQuick();
 }
 function paintQuickView(){
   const v=localStorage.getItem('gb_quick_view')||'grid';
   const ic=$('quickViewIcon');
-  if(ic){ic.setAttribute('data-lucide', v==='grid'?'layout-grid':'list');icons();}
+  if(ic){ic.setAttribute('data-lucide',v==='grid'?'layout-grid':'list');icons();}
 }
 
 function initPrefs() {
@@ -1304,25 +1342,38 @@ function initPrefs() {
   document.documentElement.dataset.acc = a;
   if (localStorage.getItem('gb_fs') === 'besar') document.documentElement.classList.add('fs-besar');
   if (localStorage.getItem('gb_anim') === 'off') document.documentElement.classList.add('no-anim');
-  if (localStorage.getItem('gb_dark') === '1') document.documentElement.classList.add('dark');
+  
+  document.documentElement.classList.remove('dark');
+  
   document.body.dataset.navbar = localStorage.getItem('gb_navbar_style') || 'floating';
-  document.body.dataset.navbarColor = localStorage.getItem('gb_navbar_color') || 'dark';
-  document.body.dataset.density = localStorage.getItem('gb_density') || 'normal';
-  document.body.dataset.iconstyle = localStorage.getItem('gb_icon_style') || 'default';
-  STATE.sosmed = JSON.parse(localStorage.getItem('gb_sosmed') || '{}');
+  document.body.dataset.navbarColor=localStorage.getItem('gb_navbar_color')||'dark';
+  document.body.dataset.density=localStorage.getItem('gb_density')||'normal';
+  document.body.dataset.iconstyle=localStorage.getItem('gb_icon_style')||'default';
+  STATE.sosmed=JSON.parse(localStorage.getItem('gb_sosmed')||'{}');
   markAcc();
   paintToggles();
   paintCustomizeUI();
   paintQuickView();
 }
 
+/* ============================================================
+   Helper Auth
+   ============================================================ */
 function b64decode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return atob(s);}
 function guruId(){
   if(STATE.profile&&(STATE.profile.sub||STATE.profile.id))return STATE.profile.sub||STATE.profile.id;
   try{const t=localStorage.getItem('gb_token');if(!t)return null;const p=JSON.parse(b64decode(t.split('.')[0]));return p.sub||null;}catch(e){return null;}
 }
-function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
+function logAktivitas(aksi,detail){
+  const gid=guruId();if(!gid)return;
+  sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{
+    if(r.error)console.warn('log:',r.error.message);
+  });
+}
 
+/* ============================================================
+   PWA Install
+   ============================================================ */
 let deferredPrompt=null;
 function initPWA(){
   const sib=$('setInstallBtn');
@@ -1339,6 +1390,7 @@ function pasangApp(){
   else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}
   else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');
 }
+
 /* ============================================================
    Offline Queue
    ============================================================ */
@@ -1394,7 +1446,7 @@ window.addEventListener('online',updateOnlineStatus);
 window.addEventListener('offline',updateOnlineStatus);
 
 /* ============================================================
-   Cuaca — cache 3 jam (Quick Win #3)
+   Cuaca — cache 3 jam
    ============================================================ */
 async function muatCuaca(){
   try{
@@ -1430,9 +1482,7 @@ let CUR={view:'home',sub:null,panel:null,modal:null};
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
 
 function setPageInstant(pg){
-  const isHome=pg==='home';
   const validPages=['home','apps','bagi','agenda','dokumen','profile','setting'];
-
   document.body.dataset.page=pg;
 
   validPages.forEach(p=>{
@@ -1516,7 +1566,6 @@ function bukaExternal(){
   const u=$('mAppFrame').src;
   if(u&&u!=='about:blank')window.open(u,'_blank','noopener');
 }
-
 /* ============================================================
    Search Universal
    ============================================================ */
@@ -1578,7 +1627,7 @@ function renderSearchResults(q){
     html+=`<div><p class="text-[11px] font-extrabold text-rose-500 uppercase tracking-wider mb-2">Agenda</p><div class="space-y-2">${foundAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div></div>`;
   }
   if(foundInsp.length){
-    html+=`<div><p class="text-[11px] font-extrabold text-teal-500 uppercase tracking-wider mb-2">Inspirasi</p><div class="space-y-2">${foundInsp.map(i=>`<button onclick="hideSearchResults();navPage('home')" class="w-full card p-3.5 text-left active:scale-[.99] transition"><p class="text-[12px] font-bold text-slate-700 line-clamp-2">${esc(i.isi)}</p><p class="text-[10px] text-slate-400 mt-1">${esc(i.nama||'')} · ${esc(i.kategori||'')}</p></button>`).join('')}</div></div>`;
+    html+=`<div><p class="text-[11px] font-extrabold text-teal-500 uppercase tracking-wider mb-2">Inspirasi</p><div class="space-y-2">${foundInsp.map(i=>`<button onclick="hideSearchResults();navPage('home')" class="w-full card p-4 text-left active:scale-[.99] transition"><p class="text-[12px] font-bold text-slate-700 line-clamp-2">${esc(i.isi)}</p><p class="text-[10px] text-slate-400 mt-1">${esc(i.nama||'')} · ${esc(i.kategori||'')}</p></button>`).join('')}</div></div>`;
   }
 
   box.innerHTML=html;
@@ -1751,10 +1800,10 @@ function boxItem(m){
   return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g,"\\'")}')" class="card p-4 text-left active:scale-[.96] hover:shadow-md transition flex flex-col gap-3 min-w-0"><span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><div class="flex items-start gap-2"><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${m.judul}${badge}</span><span class="block text-[10px] text-slate-400 mt-1 leading-snug line-clamp-2">${m.deskripsi}</span></span>${star}</div></a>`;
 }
 function rowItem(m){
-const wrap=menuIconWrapClass(m.warna);
-const isFav=STATE.favs.has(m.judul);
-const star=`<button onclick="toggleFav('${m.judul.replace(/'/g," \\'")}',event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center active:scale-90 transition shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="${wrap} w-10 h-10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span>${star}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
+  const wrap=menuIconWrapClass(m.warna);
+  const isFav=STATE.favs.has(m.judul);
+  const star=`<button onclick="toggleFav('${m.judul.replace(/'/g," \\'")}',event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center active:scale-90 transition shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
+  return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="w-full card p-4 flex items-center gap-3 text-left active:scale-[.98] transition"><span class="${wrap} w-10 h-10 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 truncate">${m.judul}</span><span class="block text-[10px] text-slate-400 truncate">${m.deskripsi}</span></span>${star}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i></a>`;
 }
 
 function renderFilterBar(){
@@ -1863,9 +1912,9 @@ function openParentMenu(m,children){
     }
   }
   $('pParentList').innerHTML=children.map(c=>{
-const wrap=menuIconWrapClass(c.warna);
-return `<button onclick='parentBukaChild(${JSON.stringify(c).replace(/' /g,"&#39;")})' class="w-full card p-3.5 flex items-center gap-3 text-left active:scale-[.98] transition">
-  <span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(c.icon,'w-5 h-5')}</span>
+    const wrap=menuIconWrapClass(c.warna);
+    return `<button onclick='parentBukaChild(${JSON.stringify(c).replace(/' /g,"&#39;")})' class="w-full card p-4 flex items-center gap-3 text-left active:scale-[.98] transition">
+      <span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(c.icon,'w-5 h-5')}</span>
       <span class="flex-1 min-w-0">
         <span class="block text-[13px] font-extrabold text-slate-800 leading-tight">${esc(c.judul)}</span>
         <span class="block text-[10px] text-slate-400 truncate mt-0.5">${esc(c.deskripsi||'')}</span>
@@ -1921,10 +1970,10 @@ function renderRecentActivity(){
   $('recentList').innerHTML=arr.map(item=>{
     const safe=String(item.id).replace(/'/g,"\\'");
     if (item.type === 'menu') {
-  const m = STATE.menus.find(x => x.judul === item.id);
-  const wrap = m ? menuIconWrapClass(m.warna) : 'menu-icon-wrap bg-teal-100 text-teal-600';
-  return `<button onclick="klikMenu('${safe}')" class="shrink-0 card p-3 flex items-center gap-2.5 active:scale-95 transition min-w-[150px] max-w-[200px]">
-    <span class="${wrap} w-8 h-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(item.icon,'w-4 h-4')}</span>
+      const m = STATE.menus.find(x => x.judul === item.id);
+      const wrap = m ? menuIconWrapClass(m.warna) : 'menu-icon-wrap bg-teal-100 text-teal-600';
+      return `<button onclick="klikMenu('${safe}')" class="shrink-0 card p-3 flex items-center gap-2.5 active:scale-95 transition min-w-[150px] max-w-[200px]">
+        <span class="${wrap} w-8 h-8 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(item.icon,'w-4 h-4')}</span>
         <span class="min-w-0 text-left"><span class="block text-[11px] font-extrabold text-slate-700 truncate">${esc(item.id)}</span><span class="block text-[9px] text-slate-400">${waktuRelatif(item.t)}</span></span>
       </button>`;
     }
@@ -1954,34 +2003,34 @@ function clearRecentActivity(){
    Quick List
    ============================================================ */
 function renderQuick(){
-if(!STATE.profile)return;
-const all=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari);
-const favs=all.filter(m=>STATE.favs.has(m.judul));
-const others=all.filter(m=>!STATE.favs.has(m.judul));
-const list=[...favs,...others].slice(0,6);
-const view=localStorage.getItem('gb_quick_view')||'grid';
+  if(!STATE.profile)return;
+  const all=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari);
+  const favs=all.filter(m=>STATE.favs.has(m.judul));
+  const others=all.filter(m=>!STATE.favs.has(m.judul));
+  const list=[...favs,...others].slice(0,6);
+  const view=localStorage.getItem('gb_quick_view')||'grid';
 
-if(view==='list'){
-$('quickList').className='space-y-1.5 quick-list-view';
-$('quickList').innerHTML=list.map(m=>{
-const wrap=menuIconWrapClass(m.warna);
-const isFav=STATE.favs.has(m.judul);
-return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card px-3.5 py-2.5 flex items-center gap-3 active:scale-[.98] transition">
-  <span class="${wrap} w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-4 h-4')}</span>
-  <span class="flex-1 min-w-0 text-[12px] font-bold text-slate-700 truncate">${m.judul}</span>
-  ${isFav?'<i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-current shrink-0"></i>':''}
-  <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-</a>`;
-}).join('');
-} else {
-$('quickList').className='grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full';
-$('quickList').innerHTML=list.map(m=>{
-const wrap=menuIconWrapClass(m.warna);
-const isFav=STATE.favs.has(m.judul);
-return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card p-3.5 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="${wrap} w-11 h-11 rounded-xl flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
-}).join('');
-}
-icons();
+  if(view==='list'){
+    $('quickList').className='space-y-1.5 quick-list-view';
+    $('quickList').innerHTML=list.map(m=>{
+      const wrap=menuIconWrapClass(m.warna);
+      const isFav=STATE.favs.has(m.judul);
+      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card px-3.5 py-2.5 flex items-center gap-3 active:scale-[.98] transition">
+        <span class="${wrap} w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-4 h-4')}</span>
+        <span class="flex-1 min-w-0 text-[12px] font-bold text-slate-700 truncate">${m.judul}</span>
+        ${isFav?'<i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-current shrink-0"></i>':''}
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+      </a>`;
+    }).join('');
+  } else {
+    $('quickList').className='grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full';
+    $('quickList').innerHTML=list.map(m=>{
+      const wrap=menuIconWrapClass(m.warna);
+      const isFav=STATE.favs.has(m.judul);
+      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card p-4 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="${wrap} w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-6 h-6')}</span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
+    }).join('');
+  }
+  icons();
 }
 
 /* ============================================================
@@ -1990,6 +2039,7 @@ icons();
 function emptyState(icon,title,desc,cta){
   return `<div class="empty-state"><div class="es-icon"><i data-lucide="${icon}" class="w-6 h-6"></i></div><p class="es-title">${esc(title)}</p><p class="es-desc">${esc(desc)}</p>${cta?`<button onclick="${cta.action}" class="mt-4 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-95 transition">${esc(cta.label)}</button>`:''}</div>`;
 }
+
 /* ============================================================
    Widget Beranda
    ============================================================ */
@@ -2000,9 +2050,9 @@ function renderDokWidget(){
   if(!rc)return;
   if(total){
     const latest=docs.slice().sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''))[0];
-    rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center shadow-sm" style="background:linear-gradient(135deg,#FBBF24,#F59E0B)"><i data-lucide="folder" class="w-5 h-5 text-white" style="stroke-width:2.5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-snug line-clamp-1">Dokumen</span><span class="block text-[10px] text-slate-500 truncate mt-0.5">${esc(latest.judul)}</span></span><span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md bg-amber-100 text-amber-700">${total} file</span>`;
+    rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center shadow-sm" style="background:linear-gradient(135deg,#FBBF24,#F59E0B)"><i data-lucide="folder" class="w-6 h-6 text-white" style="stroke-width:2.5"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-snug line-clamp-1">Dokumen</span><span class="block text-[10px] text-slate-500 truncate mt-0.5">${esc(latest.judul)}</span></span><span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md bg-amber-100 text-amber-700">${total} file</span>`;
   }else{
-    rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="folder-open" class="w-5 h-5 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Dokumen</span><span class="block text-[10px] text-slate-500 mt-0.5">Belum ada dokumen</span></span>`;
+    rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="folder-open" class="w-6 h-6 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Dokumen</span><span class="block text-[10px] text-slate-500 mt-0.5">Belum ada dokumen</span></span>`;
   }
   icons();
 }
@@ -2076,7 +2126,7 @@ function renderAgenda(){
       const bl=dd<=0?'HARI INI':'H-'+dd;
       rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-white border border-rose-200 flex flex-col items-center justify-center shadow-sm relative overflow-hidden"><span class="absolute top-0 left-0 right-0 h-4 text-center text-[7px] font-black uppercase tracking-widest text-white leading-4" style="background:#DC2626">${d.toLocaleDateString('id-ID',{weekday:'short'})}</span><span class="text-lg font-black text-slate-800 leading-none mt-3">${d.getDate()}</span></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800 leading-snug line-clamp-1">${esc(a.judul)}</span><span class="block text-[10px] text-slate-500 truncate mt-0.5">${d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})}${a.tempat?' · '+esc(a.tempat):''}${a.waktu?' · '+esc(a.waktu):''}</span></span><span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:${bc}">${bl}</span>`;
     }else{
-      rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="calendar-x" class="w-5 h-5 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Agenda</span><span class="block text-[10px] text-slate-500 mt-0.5">${past.length?past.length+' arsip kegiatan':'Belum ada agenda'}</span></span>`;
+      rc.innerHTML=`<span class="w-12 h-12 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="calendar-x" class="w-6 h-6 text-slate-400"></i></span><span class="flex-1 min-w-0"><span class="block text-[13px] font-extrabold text-slate-800">Agenda</span><span class="block text-[10px] text-slate-500 mt-0.5">${past.length?past.length+' arsip kegiatan':'Belum ada agenda'}</span></span>`;
     }
   }
 
@@ -2114,7 +2164,7 @@ function agendaRow(a,isPast,tstr){
       :`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:${diff<=3?'#F59E0B':'#0D9488'}">H-${diff}</span>`);
   const isFav=STATE.favsAgenda.has(String(a.id));
   const star=`<button onclick="toggleFavAgenda(${a.id},event)" aria-label="Favorit" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-  return `<div class="card p-3.5 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${star}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
+  return `<div class="card p-4 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${star}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
 }
 function monthSection(mk,items,isPast,tstr){
   const d=new Date(mk+'-01T00:00:00');
@@ -2137,7 +2187,7 @@ function dokGridItem(d){
 function dokRowItem(d){
   const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   const isFav=STATE.favsDok.has(String(d.id));
-  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-3.5 flex items-center gap-3 active:scale-[.99] transition">
+  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex items-center gap-3 active:scale-[.99] transition">
     <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
     <span class="flex-1 min-w-0">
       <span class="block text-[13px] font-extrabold text-slate-800 truncate">${esc(d.judul)}</span>
@@ -2314,7 +2364,7 @@ function renderLeadBadges(){
    Studio Grid
    ============================================================ */
 function renderStudioGrid(){
-  $('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<a href="${dl('?studio='+k)}" onclick="event.preventDefault();openStudio('${k}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-5 h-5"></i></span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight">${t.n}</span></a>`).join('');
+  $('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<a href="${dl('?studio='+k)}" onclick="event.preventDefault();openStudio('${k}')" class="card p-4 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-12 h-12 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-6 h-6"></i></span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight">${t.n}</span></a>`).join('');
   icons();
 }
 
@@ -2870,13 +2920,14 @@ async function silentRefresh(force){
   if(sigChanged('docs',STATE.docs)){renderDokumen();renderDokWidget();}
   if(CUR.view==='bagi'&&sigChanged('bagi',{g:STATE.gam,k:STATE.kudosTop}))renderBagi();
   icons();
+  checkInAppNotif();
 }
 async function muatSemuaData(force){
   const had=renderFromCache();
   if(!had){
     $('layananBody').innerHTML='<div class="grid grid-cols-2 gap-3">'+Array(6).fill('<div class="skeleton h-32"></div>').join('')+'</div>';
     $('inspList').innerHTML='<div class="card p-4 space-y-2"><div class="skeleton h-3 w-20"></div><div class="skeleton h-3 w-full"></div><div class="skeleton h-3 w-3/4"></div></div><div class="card p-4 space-y-2"><div class="skeleton h-3 w-16"></div><div class="skeleton h-3 w-full"></div></div>';
-    $('agendaTimeline').innerHTML='<div class="card p-3.5 flex items-center gap-3"><div class="skeleton w-11 h-11 rounded-xl"></div><div class="flex-1 space-y-2"><div class="skeleton h-3 w-3/4"></div><div class="skeleton h-2 w-1/2"></div></div></div>';
+    $('agendaTimeline').innerHTML='<div class="card p-4 flex items-center gap-3"><div class="skeleton w-11 h-11 rounded-xl"></div><div class="flex-1 space-y-2"><div class="skeleton h-3 w-3/4"></div><div class="skeleton h-2 w-1/2"></div></div></div>';
   }
   await silentRefresh(force);
   handleDeepLink();
@@ -3054,7 +3105,7 @@ function showCtxMenu(x,y,m){
     <button onclick="toggleFav('${safe}');hideCtxMenu()"><i data-lucide="star" class="w-3.5 h-3.5"></i>${isFav?'Hapus favorit':'Tambah favorit'}</button>
     <button onclick="copyMenuLink('${safe}');hideCtxMenu()"><i data-lucide="link" class="w-3.5 h-3.5"></i>Salin Link</button>
     <button onclick="openShareDialog('${safe}');hideCtxMenu()"><i data-lucide="share-2" class="w-3.5 h-3.5"></i>Bagikan</button>
-    ${m.url?.startsWith('http')?`<button onclick="window.open('${m.url}','_blank','noopener');hideCtxMenu()"><i data-lucide="globe" class="w-3.5 h-3.5"></i>Buka di browser</button>`:''}
+    ${m.url&&m.url.startsWith('http')?`<button onclick="window.open('${m.url}','_blank','noopener');hideCtxMenu()"><i data-lucide="globe" class="w-3.5 h-3.5"></i>Buka di browser</button>`:''}
   `;
   box.classList.add('show');
   const rect=box.getBoundingClientRect();
@@ -3335,8 +3386,9 @@ async function submitFb(){
   muatCuaca();
   icons();
   paintToggles();
-paintDokView();
-paintQuickView();
+  paintDokView();
+  paintQuickView();
+
   const ct=$('caroTrack');if(ct)ct.addEventListener('scroll',caroUpdate);
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('dblclick',e=>e.preventDefault());
@@ -3362,7 +3414,6 @@ paintQuickView();
       try{
         const p=JSON.parse(b64decode(token.split('.')[0]));
         const last=parseInt(localStorage.getItem('gb_last_verify')||'0',10);
-        // Quick Win #2: verify hanya kalau sudah lewat 7 hari
         if(p.exp&&((p.exp*1000-Date.now())>24*3600*1000)&&(Date.now()-last<7*24*3600*1000))need=false;
       }catch(e){}
       if(!need){STATE.profile=JSON.parse(saved);STATE.token=token;}
