@@ -18,32 +18,34 @@
   var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content','#F6F5F9');
 }catch(e){}})();
 </script>
-<link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-<link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-<link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
 <meta property="og:site_name" content="Guru Berbagi Selogiri">
 <meta property="og:title" content="Guru Berbagi Selogiri">
 <meta property="og:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
-<meta property="og:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
 <meta property="og:url" content="https://slg-timkreatif.github.io/app/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="id_ID">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Guru Berbagi Selogiri">
 <meta name="twitter:description" content="Portal berbagi & berkarya GTK Kecamatan Selogiri.">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
 <link rel="manifest" href="manifest.json">
 <title>Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://qamqqwfzhyiihqyzliwq.supabase.co" crossorigin>
 <link rel="dns-prefetch" href="https://api.open-meteo.com">
-<link rel="preload" as="image" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
-<script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" crossorigin>
+<link rel="preload" as="image" fetchpriority="high" href="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
+<script defer src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
@@ -85,6 +87,25 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
      ============================================ */
 .card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
 
+/* ============================================
+   BUTTON LOADING STATE — v4.59
+   ============================================ */
+.btn-loading{position:relative;pointer-events:none;opacity:.9}
+.btn-loading > *{opacity:0;transition:opacity .15s}
+.btn-loading::after{
+  content:'';position:absolute;left:50%;top:50%;
+  width:18px;height:18px;margin:-9px 0 0 -9px;
+  border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;
+  border-radius:50%;animation:btnSpin .65s linear infinite;
+}
+.btn-loading.btn-loading-dark::after{
+  border-color:rgba(15,23,42,.2);border-top-color:#0F172A;
+}
+.btn-loading.btn-loading-acc::after{
+  border-color:rgba(13,148,136,.25);border-top-color:var(--acc);
+}
+@keyframes btnSpin{to{transform:rotate(360deg)}}
+
   .skeleton{background:linear-gradient(90deg,#ECEAF2 25%,#F6F5F9 50%,#ECEAF2 75%);background-size:800px 100%;animation:shim 1.3s linear infinite;border-radius:var(--r-md)}
   @keyframes shim{0%{background-position:-400px 0}100%{background-position:400px 0}}
 
@@ -121,6 +142,11 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .sheet.sheet-closing{transition:transform .22s cubic-bezier(.4,0,.6,1)!important}
 
   .search-history{position:absolute;top:calc(100% + .35rem);left:0;right:0;z-index:30;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:0 8px 24px rgba(20,18,26,.12);overflow:hidden;display:none}
+/* Search progress indicator — v4.59 */
+.search-prog{position:absolute;bottom:0;left:14px;right:14px;height:2px;overflow:hidden;border-radius:0 0 20px 20px;pointer-events:none;opacity:0;transition:opacity .15s}
+.search-prog.on{opacity:1}
+.search-prog::after{content:'';position:absolute;left:0;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,var(--acc),transparent);animation:searchSlide .75s linear infinite}
+@keyframes searchSlide{from{transform:translateX(-100%)}to{transform:translateX(350%)}}
   .search-history.show{display:block}
   .search-history-item{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;font-size:.8rem;font-weight:600;color:#475569;cursor:pointer;border-bottom:1px solid var(--border)}
   .search-history-item:last-of-type{border-bottom:0}
@@ -298,7 +324,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white p-5 sticky top-0 h-screen">
     <div class="flex items-center gap-3 mb-8">
       <div class="w-11 h-11 rounded-xl overflow-hidden border border-slate-200">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
       </div>
       <div>
         <p class="font-extrabold text-slate-800 leading-tight">Guru Berbagi</p>
@@ -326,7 +352,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2">
       <div class="flex items-start gap-4">
         <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil">
-          <img id="hdrAvatar" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
+          <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
         </button>
         <div class="flex-1 min-w-0">
           <div class="flex items-start justify-between gap-3 pt-1.5">
@@ -361,7 +387,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <div class="relative animate-fade-up">
       <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
       <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
-      <div id="searchHistory" class="search-history"></div>
+<div id="searchProg" class="search-prog"></div>
+<div id="searchHistory" class="search-history"></div>
     </div>
 
     <div id="searchResults" class="hidden space-y-4 animate-fade-up"></div>
@@ -476,7 +503,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <div id="profData" class="hidden space-y-4">
       <div class="card p-5 flex items-center gap-4">
         <div class="relative shrink-0 w-16 h-16 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md" id="pfAvatar">
-          <img id="pfAvatarImg" src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
+          <img id="pfAvatarImg" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
         </div>
         <div class="min-w-0">
           <p id="pfNama" class="text-base font-extrabold text-slate-800 leading-tight truncate">—</p>
@@ -717,7 +744,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <div class="sheet-drag" data-sheet-handle></div>
     <div class="text-center mb-5">
       <div class="w-14 h-14 mx-auto rounded-2xl bg-white shadow-md flex items-center justify-center overflow-hidden mb-3 border border-slate-200">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Logo" loading="lazy" decoding="async">
       </div>
       <p class="text-base font-extrabold text-slate-800">Masuk Portal</p>
       <p class="text-[11px] text-slate-500 mt-1">Gunakan email & PIN akun Guru Berbagi Anda</p>
@@ -922,7 +949,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
    ============================================================ */
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
-const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
+const LOGO='https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png';
 const FOTO_BASE=SB_URL+'/storage/v1/object/public/foto-gtk/';
 const isTWA=(document.referrer||'').startsWith('android-app://');
 function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
@@ -1097,7 +1124,21 @@ function resetRenderSig(){for(const k in RENDER_SIG)delete RENDER_SIG[k];}
    Batched icons()
    ============================================================ */
 let _iconsTimer=null;
+let _iconsRetryTimer=null;
+let _iconsRetryCount=0;
 function icons(){
+  if(!window.lucide){
+    if(_iconsRetryCount>50)return;
+    _iconsRetryCount++;
+    if(!_iconsRetryTimer){
+      _iconsRetryTimer=setTimeout(()=>{
+        _iconsRetryTimer=null;
+        icons();
+      },60);
+    }
+    return;
+  }
+  _iconsRetryCount=0;
   if(_iconsTimer)return;
   _iconsTimer=requestAnimationFrame(()=>{
     _iconsTimer=null;
@@ -1105,6 +1146,15 @@ function icons(){
   });
 }
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);}
+
+/* ============================================
+   Button Loading Helper — v4.59
+   ============================================ */
+function setBtnLoading(btn,on){
+  if(!btn)return;
+  if(on){btn.classList.add('btn-loading');btn.disabled=true;btn.setAttribute('aria-busy','true');}
+  else{btn.classList.remove('btn-loading');btn.disabled=false;btn.removeAttribute('aria-busy');}
+}
 
 /* ============================================================
    Sanitizer HTML
@@ -1543,11 +1593,14 @@ function renderState(s){
 }
 function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.add('sheet-open'));}
 function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.remove('sheet-open');}
-function openPanel(id){
+function openPanel(id) {
   showInstant(id);
-  CUR.panel=id;
-  safePush({...CUR});
-  if(id==='pNotif'&&STATE.profile)tandaiBaca();
+  CUR.panel = id;
+  safePush({ ...CUR });
+  if (id === 'pNotif') {
+    renderNotif();
+    if (STATE.profile) tandaiBaca();
+  }
 }
 function tutupPanel(id){try{history.back()}catch(e){closeInstant(id);CUR.panel=null;}}
 async function tandaiBaca(){
@@ -1572,20 +1625,29 @@ function bukaExternal(){
 const SEARCH_HIST_KEY='gb_search_history';
 let _homeSearchTimer=null;
 
-function homeSearch(v){
-  const q=(v||'').trim();
+function homeSearch(v) {
+  const q = (v || '').trim();
   clearTimeout(_homeSearchTimer);
-  if(q.length<2){hideSearchResults();return;}
-  _homeSearchTimer=setTimeout(()=>{
+  const prog = $('searchProg');
+  if (q.length < 2) {
+    if (prog) prog.classList.remove('on');
+    hideSearchResults();
+    return;
+  }
+  if (prog) prog.classList.add('on');
+  _homeSearchTimer = setTimeout(() => {
+    if (prog) prog.classList.remove('on');
     renderSearchResults(q);
     saveSearchQuery(q);
-  },250);
+  }, 150);
 }
-function hideSearchResults(){
-  const box=$('searchResults');
-  if(!box)return;
+function hideSearchResults() {
+  const box = $('searchResults');
+  const prog = $('searchProg');
+  if (prog) prog.classList.remove('on');
+  if (!box) return;
   box.classList.add('hidden');
-  box.innerHTML='';
+  box.innerHTML = '';
   ['authCard','caroBox','infoPanel','recentBox','quickBox','footList'].forEach(id=>{
     const el=$(id); if(el) el.style.display='';
   });
@@ -1852,9 +1914,34 @@ function renderLayanan(filter=''){
       ?`<div class="mb-5">${head}<div class="space-y-2">${list.map(rowItem).join('')}</div></div>`
       :`<div class="mb-5">${head}<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${list.map(boxItem).join('')}</div></div>`;
   }).join('');
-  $('layananBody').innerHTML=html||'<div class="empty-state"><div class="es-icon"><i data-lucide="search-x" class="w-6 h-6"></i></div><p class="es-title">Tidak ditemukan</p><p class="es-desc">Coba kata kunci lain, atau ubah filter.</p></div>';
+  if(html){
+  $('layananBody').innerHTML=html;
+  }else if(f||activeFilter!=='all'){
+  $('layananBody').innerHTML=emptyState(
+  'search-x',
+  'Tidak ditemukan',
+  f?('Tidak ada layanan cocok dengan "'+f+'"'):
+  ('Belum ada layanan di kategori ini'),
+  {action:"resetLayananFilter()",label:'Reset Filter'}
+  );
+  }else{
+  $('layananBody').innerHTML=emptyState(
+  'layout-grid',
+  'Belum ada layanan',
+  'Admin belum menambahkan menu. Coba muat ulang.',
+  {action:"forceSync()",label:'Muat Ulang'}
+  );
+  }
   icons();
-}
+  }
+  function resetLayananFilter(){
+  STATE.filterLayanan='all';
+  const s=$('inSearch'); if(s)s.value='';
+  const sh=$('inSearchHome'); if(sh)sh.value='';
+  renderFilterBar();
+  renderLayanan('');
+  toast('Filter direset','info');
+  }
 $('inSearch').addEventListener('input',e=>{$('inSearchHome').value=e.target.value;renderLayanan(e.target.value);});
 
 function klikMenu(judul){
@@ -2150,7 +2237,12 @@ function renderAgenda(){
     pastMonths.forEach(mk=>{html+=monthSection(mk,past.filter(a=>(a.tanggal||'').slice(0,7)===mk),true,tstr);});
   }
 
-  $('agendaTimeline').innerHTML=html||emptyState('calendar-plus','Belum ada agenda','Kegiatan KKG & kecamatan akan tampil di sini.');
+  $('agendaTimeline').innerHTML=html||emptyState(
+    'calendar-plus',
+    'Belum ada agenda',
+    'Kegiatan KKG & kecamatan akan tampil di sini.',
+    {action:"doForceSync()",label:'Muat Ulang'}
+  );
   icons();
 }
 function jumpMonth(mk){const el=document.getElementById('m-'+mk);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
@@ -2203,9 +2295,11 @@ function renderDokumen(filter=''){
   const view=localStorage.getItem('gb_dok_view')||'grid';
 
   if(!all.length){
-    $('dokList').innerHTML=emptyState('folder-open','Belum ada dokumen',f?'Coba kata kunci lain.':'Dokumen akan dikurasi admin di sini.');
-    icons();return;
-  }
+  $('dokList').innerHTML=f
+    ? emptyState('search-x','Tidak ditemukan','Tidak ada dokumen cocok dengan "'+f+'".',{action:"clearSearchDok()",label:'Hapus Pencarian'})
+    : emptyState('folder-open','Belum ada dokumen','Dokumen dari admin akan tampil di sini.',{action:"doForceSync()",label:'Muat Ulang'});
+  icons();return;
+}
 
   const favs=all.filter(d=>STATE.favsDok.has(String(d.id)));
   const rest=all.filter(d=>!STATE.favsDok.has(String(d.id)));
@@ -2232,6 +2326,10 @@ function renderDokumen(filter=''){
 }
 function paintDokView(){const v=localStorage.getItem('gb_dok_view')||'grid';const ic=$('dokViewIcon');if(ic){ic.setAttribute('data-lucide',v==='grid'?'layout-grid':'list');icons();}}
 function toggleDokView(){const v=localStorage.getItem('gb_dok_view')||'grid';localStorage.setItem('gb_dok_view',v==='grid'?'list':'grid');paintDokView();renderDokumen($('inSearchDok')?.value||'');}
+function clearSearchDok(){
+  const s=$('inSearchDok'); if(s)s.value='';
+  renderDokumen('');
+}
 
 /* ============================================================
    Profile
@@ -2413,7 +2511,12 @@ function renderInspirasi(){
     const liked=STATE.myLikes.has(n.id);
     const own=myId&&n.guru_id===myId;
     return `<div class="card p-4 space-y-2"><div class="flex items-center gap-2"><span class="text-[9px] font-black uppercase tracking-wider acc-soft acc-text px-2 py-0.5 rounded-full">${esc(n.kategori)}</span><span class="text-[10px] text-slate-500">${waktuRelatif(n.created_at)}</span>${own?`<button onclick="hapusInspSendiri(${n.id})" class="ml-auto text-[10px] font-bold text-rose-500">Hapus</button>`:''}</div><p class="text-[13px] text-slate-700 leading-relaxed">${esc(n.isi)}</p><div class="flex items-center justify-between"><p class="text-[10px] font-bold text-slate-500 truncate">${esc(n.nama)} · ${esc(n.sekolah||'')}</p><button onclick="apresiasi(${n.id})" aria-label="Apresiasi" class="shrink-0 flex items-center gap-1 text-[10px] font-black ${liked?'acc-text':'text-slate-400'} active:scale-90 transition"><i data-lucide="heart" class="w-3.5 h-3.5 ${liked?'fill-current acc-text':''}"></i>${n.likes||0}</button></div></div>`;
-  }).join('')||emptyState('sparkles','Belum ada inspirasi','Jadilah yang pertama berbagi praktik baik.');
+  }).join('')||emptyState(
+    'sparkles',
+    'Belum ada inspirasi',
+    'Bagikan praktik baik, ide kegiatan, atau teladan dari kelasmu.',
+    {action:"toggleInspForm(true)",label:'Tulis Pertamamu'}
+  );
   $('inspMore').classList.toggle('hidden',STATE.inspi.length<STATE.inspiLimit);
   icons();
 }
@@ -2733,12 +2836,12 @@ async function ssoVerify(token){
   const r=await fetch(SB_URL+'/functions/v1/verify-guru',{headers:{apikey:SB_ANON,Authorization:'Bearer '+token}});
   return await r.json();
 }
-$('formLogin').addEventListener('submit',async e=>{
-  e.preventDefault();
-  $('btnLogin').disabled=true;
-  $('btnLogin').textContent='Memverifikasi…';
-  try{
-    const res=await ssoLogin($('inEmail').value.trim(),$('inPin').value.trim());
+$('formLogin').addEventListener('submit', async e => {
+        e.preventDefault();
+        const _btn = $('btnLogin');
+        setBtnLoading(_btn, true);
+        try {
+          const res = await ssoLogin($('inEmail').value.trim(), $('inPin').value.trim());
     localStorage.setItem('gb_token',res.token);
     localStorage.setItem('gb_profile',JSON.stringify(res.profile));
     STATE.profile=res.profile;STATE.token=res.token;
@@ -2754,12 +2857,11 @@ $('formLogin').addEventListener('submit',async e=>{
     await muatSemuaData(true);
     recordLastSync();
     toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');
-  }catch(err){
-    toast('Email/PIN salah atau akun nonaktif','error');
+  } catch (err) {
+    toast('Email/PIN salah atau akun nonaktif', 'error');
   }
-  $('btnLogin').disabled=false;
-  $('btnLogin').textContent='Masuk';
-});
+  setBtnLoading(_btn, false);
+  });
 function doLogout(){
   localStorage.removeItem('gb_token');
   localStorage.removeItem('gb_profile');
@@ -2856,11 +2958,10 @@ function renderFromCache(){
     STATE.rewards=cache.dyn.rewards||[];
     STATE.kudosTop=cache.dyn.kudosTop||[];
     STATE.guruList=cache.dyn.guruList||[];
-    if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
-    if(sigChanged('notifs',STATE.notifs))renderNotif();
-    if(sigChanged('inspi',STATE.inspi))renderInspirasi();
-    if(sigChanged('agenda',STATE.agenda))renderAgenda();
-    if(sigChanged('docs',STATE.docs)){renderDokumen();renderDokWidget();}
+    if (sigChanged('carousel', { c: STATE.config, n: STATE.notifs.slice(0, 4) })) renderCarousel();
+    if (sigChanged('notifs', STATE.notifs)) updateNotifBadge();
+    if (sigChanged('inspi', STATE.inspi)) renderInspirasi();
+    if (sigChanged('docs', STATE.docs)) renderDokWidget();
     if(CUR.view==='bagi')renderBagi();
     icons();
   }
@@ -2913,12 +3014,14 @@ async function silentRefresh(force){
   const c2=readCache();
   const d=(c2&&c2.d)?c2.d:null;
   writeCache({t:now,d:d,dyn:newDyn,dynTs:newTs});
-  if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
-  if(sigChanged('notifs',STATE.notifs))renderNotif();
-  if(sigChanged('inspi',STATE.inspi))renderInspirasi();
-  if(sigChanged('agenda',STATE.agenda))renderAgenda();
-  if(sigChanged('docs',STATE.docs)){renderDokumen();renderDokWidget();}
-  if(CUR.view==='bagi'&&sigChanged('bagi',{g:STATE.gam,k:STATE.kudosTop}))renderBagi();
+  if (sigChanged('carousel', { c: STATE.config, n: STATE.notifs.slice(0, 4) })) renderCarousel();
+  if (sigChanged('inspi', STATE.inspi)) renderInspirasi();
+  if (sigChanged('docs', STATE.docs)) renderDokWidget();
+  if (sigChanged('notifs', STATE.notifs)) updateNotifBadge();
+  if (CUR.view === 'agenda') renderAgenda();
+  if (CUR.view === 'dokumen') renderDokumen();
+  if (CUR.panel === 'pNotif') renderNotif();
+  if (CUR.view === 'bagi' && sigChanged('bagi', { g: STATE.gam, k: STATE.kudosTop })) renderBagi();
   icons();
   checkInAppNotif();
 }
@@ -3325,16 +3428,26 @@ function setBadge(n){
     else b.classList.add('hidden');
   });
 }
-async function renderNotif(){
-  let readIds=new Set();
-  if(STATE.profile){
-    const gid=guruId();
-    if(gid){
-      const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
-      readIds=new Set((reads||[]).map(r=>r.notification_id));
-    }
-    setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
-  }else setBadge(0);
+async function updateNotifBadge() {
+  if (!STATE.profile) { setBadge(0); return; }
+  const gid = guruId();
+  if (!gid) { setBadge(0); return; }
+  try {
+    const { data: reads } = await sb.from('creative_notification_reads').select('notification_id').eq('guru_id', gid);
+    const readIds = new Set((reads || []).map(r => r.notification_id));
+    setBadge(STATE.notifs.filter(n => !readIds.has(n.id)).length);
+  } catch (e) {}
+}
+async function renderNotif() {
+    let readIds = new Set();
+    if (STATE.profile) {
+      const gid = guruId();
+      if (gid) {
+        const { data: reads } = await sb.from('creative_notification_reads').select('notification_id').eq('guru_id', gid);
+        readIds = new Set((reads || []).map(r => r.notification_id));
+      }
+      setBadge(STATE.notifs.filter(n => !readIds.has(n.id)).length);
+    } else setBadge(0);
   $('notifList').innerHTML=STATE.notifs.map(n=>{
     const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';
     const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -3356,14 +3469,25 @@ function renderStars(){
   $('starRow').innerHTML=[1,2,3,4,5].map(i=>`<button onclick="STATE.rating=${i};renderStars()" aria-label="Beri ${i} bintang">${i<=STATE.rating?'⭐':'☆'}</button>`).join('');
 }
 renderStars();
-async function submitFb(){
-  const pesan=$('fbPesan').value.trim();
-  if(!pesan)return toast('Isi pesan dulu ya','info');
-  $('btnFb').disabled=true;$('btnFb').textContent='Mengirim…';
-  const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});
-  $('btnFb').disabled=false;$('btnFb').textContent='Kirim';
-  if(error)toast('Gagal mengirim, coba lagi','error');
-  else{$('fbPesan').value='';poinAksi('saran');tutupPanel('pFb');toast('Terkirim! Admin mendapat notifikasi Telegram. +1 poin');}
+async function submitFb() {
+  const pesan = $('fbPesan').value.trim();
+  if (!pesan) return toast('Isi pesan dulu ya', 'info');
+  const _btn = $('btnFb');
+  setBtnLoading(_btn, true);
+  try {
+    const { error } = await sb.functions.invoke('creative-feedback', { body: { tipe: STATE.tipeFb, pesan, rating: STATE.rating, is_anonim: !STATE.profile, token_sso: STATE.token } });
+    if (error) toast('Gagal mengirim, coba lagi', 'error');
+    else {
+      $('fbPesan').value = '';
+      poinAksi('saran');
+      tutupPanel('pFb');
+      toast('Terkirim! Admin mendapat notifikasi Telegram. +1 poin');
+    }
+  } catch (e) {
+    toast('Gagal mengirim, coba lagi', 'error');
+  } finally {
+    setBtnLoading(_btn, false);
+  }
 }
 
 /* ============================================================
