@@ -402,6 +402,36 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   html.dark body[data-navbar-color="light"] .app-navbar .nav-btn svg{color:#181B21!important;stroke:#181B21!important}
   html.dark body[data-navbar-color="light"] .app-navbar .nav-btn span{color:#181B21!important}
   html.dark .toast-item{background:rgba(34,38,46,.96);border-color:rgba(255,255,255,.08)}
+
+  /* ============================================
+     NAVBAR COLOR — CHARCOAL (v4.62)
+     ============================================ */
+  body[data-navbar-color="charcoal"] .app-navbar{background:#22262E;color:#E8EBF0}
+  body[data-navbar-color="charcoal"] .app-navbar .nav-btn.nav-active{background:var(--acc);color:#fff}
+  body[data-navbar-color="charcoal"] .app-navbar .nav-btn.nav-active i,
+  body[data-navbar-color="charcoal"] .app-navbar .nav-btn.nav-active span{color:#fff!important}
+  body[data-navbar-color="charcoal"] .app-navbar .nav-btn.nav-inactive{background:transparent;color:rgba(232,235,240,.6)}
+  body[data-navbar-color="charcoal"] .app-navbar .nav-btn.nav-inactive i,
+  body[data-navbar-color="charcoal"] .app-navbar .nav-btn.nav-inactive span{color:rgba(232,235,240,.6)!important}
+  body[data-navbar="classic"][data-navbar-color="charcoal"] .app-navbar{border-top:1px solid #2F343D}
+  body[data-navbar="floating"][data-navbar-color="charcoal"] .app-navbar{box-shadow:0 8px 32px rgba(0,0,0,.35)}
+
+  /* ============================================
+     NAVBAR MODE — SIDEBAR/HAMBURGER (v4.62)
+     ============================================ */
+  body[data-navmode="hamburger"] .app-navbar{display:none!important}
+  body[data-navmode="hamburger"] main{padding-bottom:2rem!important}
+  body:not([data-navmode="hamburger"]) #hamburgerBtn{display:none!important}
+
+  @media(max-width:767px){
+    body[data-navmode="hamburger"] #hamburgerBtn{display:flex!important}
+    body[data-navmode="hamburger"] #hdrAvatarBtn{display:none!important}
+  }
+  #mDrawerSheet{will-change:transform}
+  html.dark .side-btn.nav-inactive{color:#94A0AE!important}
+  html.dark #mDrawerSheet{background:var(--card);border-right-color:#2F343D}
+  html.dark #drawerHeader{border-bottom-color:#252A33}
+  html.dark #drawerFooter{border-top-color:#252A33}
 </style>
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-density="normal" data-iconstyle="default">
@@ -441,7 +471,10 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
   <div class="flex-1 flex flex-col relative min-w-0">
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2">
-      <div class="flex items-start gap-4">
+      <div class="flex items-start gap-3">
+        <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-14 h-14 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
+          <i data-lucide="menu" class="w-6 h-6 text-slate-600"></i>
+        </button>
         <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil">
           <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
         </button>
@@ -638,6 +671,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <button data-preset="hangat" onclick="applyPreset('hangat')" class="seg-btn">Hangat</button>
         <button data-preset="fresh" onclick="applyPreset('fresh')" class="seg-btn">Fresh</button>
         <button data-preset="elegan" onclick="applyPreset('elegan')" class="seg-btn">Elegan</button>
+        <button data-preset="charcoal" onclick="applyPreset('charcoal')" class="seg-btn">Charcoal</button>
+        <button data-preset="minimal" onclick="applyPreset('minimal')" class="seg-btn">Minimal</button>
       </div>
     </div>
 
@@ -686,10 +721,26 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       </div>
       <div>
         <p class="text-[11px] font-bold text-slate-500 mb-2">Warna</p>
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-3 gap-2">
           <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
+          <button data-navcolor="charcoal" onclick="setNavbarColor('charcoal')" class="seg-btn">Charcoal</button>
           <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
         </div>
+        <p class="text-[10px] text-slate-400 mt-2"><b>Charcoal</b> = hitam hangat (#22262E), selaras dengan dark mode.</p>
+      </div>
+      <div>
+        <p class="text-[11px] font-bold text-slate-500 mb-2">Mode Navigasi</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button data-navmode="bottom" onclick="setNavMode('bottom')" class="seg-btn flex-col !py-2.5">
+            <i data-lucide="panel-bottom" class="w-4 h-4 mb-1"></i>
+            <span class="text-[10px]">Navbar Bawah</span>
+          </button>
+          <button data-navmode="hamburger" onclick="setNavMode('hamburger')" class="seg-btn flex-col !py-2.5">
+            <i data-lucide="menu" class="w-4 h-4 mb-1"></i>
+            <span class="text-[10px]">Sidebar</span>
+          </button>
+        </div>
+        <p class="text-[10px] text-slate-400 mt-2"><b>Sidebar</b> menyembunyikan navbar bawah, buka menu lewat tombol ☰ di kiri atas.</p>
       </div>
     </div>
 
@@ -1048,6 +1099,44 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 </div>
 
 <div id="ctxMenu" class="ctx-menu" role="menu"></div>
+
+<!-- ============================================
+     DRAWER — Sidebar Mode (v4.62)
+     ============================================ -->
+<div id="mDrawer" class="fixed inset-0 z-[55] hidden">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDrawer()"></div>
+  <div id="mDrawerSheet" class="absolute left-0 top-0 bottom-0 w-72 max-w-[80vw] bg-white -translate-x-full transition-transform duration-300 flex flex-col shadow-2xl border-r border-slate-200">
+
+    <div id="drawerHeader" class="flex items-center gap-3 p-5 border-b border-slate-100 shrink-0">
+      <div class="w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-white">
+        <img id="drawerAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
+      </div>
+      <div class="min-w-0 flex-1">
+        <p id="drawerName" class="text-sm font-extrabold text-slate-800 leading-tight truncate">Guru Berbagi</p>
+        <p id="drawerSub" class="text-[10px] text-slate-500 truncate">Portal Selogiri</p>
+      </div>
+      <button onclick="closeDrawer()" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0 active:scale-90 transition">
+        <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+      </button>
+    </div>
+
+    <nav id="drawerNav" class="flex-1 overflow-y-auto no-scroll p-3 space-y-1.5">
+      <button data-nav="home" onclick="navPage('home');closeDrawer()" class="side-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
+      <button data-nav="apps" onclick="navPage('apps');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="layout-grid" class="w-4 h-4"></i>Layanan</button>
+      <button data-nav="agenda" onclick="navPage('agenda');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="calendar-days" class="w-4 h-4"></i>Agenda</button>
+      <button data-nav="dokumen" onclick="navPage('dokumen');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="folder-open" class="w-4 h-4"></i>Dokumen</button>
+      <button onclick="closeDrawer();openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 active:bg-slate-50 transition text-left"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi<span id="badgeNotifDrawer" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
+      <button data-nav="bagi" onclick="navPage('bagi');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
+      <button data-nav="setting" onclick="navPage('setting');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="settings" class="w-4 h-4"></i>Pengaturan</button>
+      <button data-nav="profile" onclick="navPage('profile');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
+    </nav>
+
+    <div id="drawerFooter" class="border-t border-slate-100 p-4 shrink-0">
+      <p class="text-[10px] text-slate-400 text-center font-medium">Tim Kreatif © 2026 · <span id="drawerVersi">v4.62</span></p>
+    </div>
+
+  </div>
+</div>
 </div>
 
 <script>
@@ -1070,10 +1159,12 @@ const $=id=>document.getElementById(id);
    PRESETS TEMA (v4.57: tambah iconstyle)
    ============================================================ */
 const PRESETS={
-  profesional:{navbar:'floating',navcolor:'dark', accent:'hijau',  density:'normal', iconstyle:'default'},
-  hangat:     {navbar:'floating',navcolor:'dark', accent:'amber',  density:'normal', iconstyle:'default'},
-  fresh:      {navbar:'floating',navcolor:'light',accent:'biru',   density:'normal', iconstyle:'default'},
-  elegan:     {navbar:'classic', navcolor:'dark', accent:'violet', density:'normal', iconstyle:'colored'}
+  profesional:{navbar:'floating',navcolor:'dark',    accent:'hijau',  density:'normal', iconstyle:'default'},
+  hangat:     {navbar:'floating',navcolor:'dark',    accent:'amber',  density:'normal', iconstyle:'default'},
+  fresh:      {navbar:'floating',navcolor:'light',   accent:'biru',   density:'normal', iconstyle:'default'},
+  elegan:     {navbar:'classic', navcolor:'dark',    accent:'violet', density:'normal', iconstyle:'colored'},
+  charcoal:   {navbar:'floating',navcolor:'charcoal',accent:'hijau',  density:'normal', iconstyle:'default'},
+  minimal:    {navbar:'classic', navcolor:'charcoal',accent:'biru',   density:'normal', iconstyle:'default'}
 };
 
 /* ============================================================
@@ -1471,11 +1562,31 @@ function setNavbarStyle(v){
   paintCustomizeUI();
 }
 function setNavbarColor(v){
-  if(!['dark','light'].includes(v))return;
+  if(!['dark','light','charcoal'].includes(v))return;
   document.body.dataset.navbarColor=v;
   localStorage.setItem('gb_navbar_color',v);
   localStorage.removeItem('gb_preset');
   paintCustomizeUI();
+}
+function setNavMode(v){
+  if(!['bottom','hamburger'].includes(v))return;
+  document.body.dataset.navmode=v;
+  localStorage.setItem('gb_navmode',v);
+  localStorage.removeItem('gb_preset');
+  paintCustomizeUI();
+  toast(v==='hamburger'?'Sidebar aktif — buka menu via ☰':'Navbar bawah aktif','info');
+}
+function openDrawer(){
+  const d=$('mDrawer'),s=$('mDrawerSheet');
+  if(!d||!s)return;
+  d.classList.remove('hidden');
+  requestAnimationFrame(()=>s.classList.remove('-translate-x-full'));
+}
+function closeDrawer(){
+  const d=$('mDrawer'),s=$('mDrawerSheet');
+  if(!d||!s)return;
+  s.classList.add('-translate-x-full');
+  setTimeout(()=>d.classList.add('hidden'),300);
 }
 function setDensity(v){
   if(!['compact','normal','lega'].includes(v))return;
@@ -1486,10 +1597,11 @@ function setDensity(v){
 }
 function resetTheme(){
   confirmDialog('Kembalikan semua pengaturan tampilan ke default?',()=>{
-    ['gb_preset','gb_navbar_style','gb_navbar_color','gb_density','gb_acc','gb_icon_style','gb_theme_mode'].forEach(k=>localStorage.removeItem(k));
+    ['gb_preset','gb_navbar_style','gb_navbar_color','gb_navmode','gb_density','gb_acc','gb_icon_style','gb_theme_mode'].forEach(k=>localStorage.removeItem(k));
     document.documentElement.dataset.acc='hijau';
     document.body.dataset.navbar='floating';
     document.body.dataset.navbarColor='dark';
+    document.body.dataset.navmode='bottom';
     document.body.dataset.density='normal';
     document.body.dataset.iconstyle='default';
     setThemeMode('auto');
@@ -1505,6 +1617,7 @@ function resetTheme(){
 function paintCustomizeUI(){
   document.querySelectorAll('[data-navstyle]').forEach(b=>b.classList.toggle('on',b.dataset.navstyle===document.body.dataset.navbar));
   document.querySelectorAll('[data-navcolor]').forEach(b=>b.classList.toggle('on',b.dataset.navcolor===document.body.dataset.navbarColor));
+  document.querySelectorAll('[data-navmode]').forEach(b=>b.classList.toggle('on',b.dataset.navmode===(document.body.dataset.navmode||'bottom')));
   document.querySelectorAll('[data-density]').forEach(b=>b.classList.toggle('on',b.dataset.density===document.body.dataset.density));
   document.querySelectorAll('[data-iconstyle]').forEach(b=>b.classList.toggle('on',b.dataset.iconstyle===(document.body.dataset.iconstyle||'default')));
   const ap=localStorage.getItem('gb_preset');
@@ -3042,13 +3155,15 @@ function renderAuthUI(){
       el.src=LOGO;
       fotoCacheGet(gid).then(d=>{el.src=d||fotoUrl(gid,true);});
     };
-    setAv($('hdrAvatar'));setAv($('pfAvatarImg'));
+    setAv($('hdrAvatar'));setAv($('pfAvatarImg'));setAv($('drawerAvatar'));
     fotoCacheFresh(gid).then(fresh=>{if(!fresh)cacheFotoFromNet(gid);});
     const set=(id,v)=>{const el=$(id);if(el)el.textContent=v;};
     set('pfNama',p.nama||'—');set('pfJabatan',p.jabatan||'—');
     set('dJabatan',p.jabatan||'—');set('dSekolah',p.sekolah||'—');
     set('dNpsn',p.npsn||'—');set('dEmail',p.email||'—');
     $('hdrName').textContent='Hi, '+namaPanggil(p.nama);
+    const dn=$('drawerName');if(dn)dn.textContent=p.nama||'Guru Berbagi';
+    const ds=$('drawerSub');if(ds)ds.textContent=(p.jabatan||'Guru')+(p.sekolah?' · '+p.sekolah:'');
     $('smIg').value=s.ig||'';$('smTiktok').value=s.tiktok||'';
     $('smFb').value=s.fb||'';$('smYt').value=s.yt||'';
     const chips=[s.ig&&'IG @'+s.ig,s.tiktok&&'TT @'+s.tiktok,s.fb&&'FB '+s.fb,s.yt&&'YT '+s.yt].filter(Boolean);
@@ -3535,6 +3650,7 @@ function applyPortal(p){
     const sv2=$('sideVersi2');if(sv2)sv2.textContent=V;
     const stv=$('setVersi');if(stv)stv.textContent=V;
     const abv=$('aboutVer');if(abv)abv.textContent=V;
+    const dv=$('drawerVersi');if(dv)dv.textContent=V;
     renderPopup();
   }
   const c=STATE.config||{};
@@ -3581,7 +3697,7 @@ function gantiQuote(){
    Notifikasi
    ============================================================ */
 function setBadge(n){
-  ['badgeNotif','badgeNotifD'].forEach(id=>{
+  ['badgeNotif','badgeNotifD','badgeNotifDrawer'].forEach(id=>{
     const b=$(id);if(!b)return;
     if(n>0){b.classList.remove('hidden');b.textContent=n;}
     else b.classList.add('hidden');
