@@ -3,8 +3,8 @@
    Version: 3.5
    ============================================================ */
 
-const CACHE = 'gb-cache-v3.5';
-const RUNTIME = 'gb-runtime-v3.5';
+const CACHE = 'gb-cache-v3.6';
+const RUNTIME = 'gb-runtime-v3.6';
 
 /* File yang di-cache saat install */
 const SHELL = [
