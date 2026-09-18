@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#F6F5F9">
-<meta name="color-scheme" content="light only">
+<meta name="color-scheme" content="light dark">
 <meta name="format-detection" content="telephone=no,email=no,address=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -311,6 +311,97 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   }
+
+  /* ============================================
+     DARK MODE — Soft Charcoal (v4.61)
+     ============================================ */
+  html.dark{
+    --acc:#14B8A6;--acc2:#2DD4BF;--acc-soft:rgba(20,184,166,.15);--acc-text:#5EEAD4;--acc-ring:rgba(20,184,166,.4);
+    --bg:#181B21;--card:#22262E;--border:#2F343D;
+    color-scheme:dark;
+  }
+  html.dark[data-acc="biru"]{--acc:#60A5FA;--acc2:#93C5FD;--acc-soft:rgba(96,165,250,.15);--acc-text:#93C5FD;--acc-ring:rgba(96,165,250,.4)}
+  html.dark[data-acc="violet"]{--acc:#A78BFA;--acc2:#C4B5FD;--acc-soft:rgba(167,139,250,.15);--acc-text:#C4B5FD;--acc-ring:rgba(167,139,250,.4)}
+  html.dark[data-acc="amber"]{--acc:#FBBF24;--acc2:#FCD34D;--acc-soft:rgba(251,191,36,.15);--acc-text:#FCD34D;--acc-ring:rgba(251,191,36,.4)}
+  html.dark[data-acc="rose"]{--acc:#FB7185;--acc2:#FDA4AF;--acc-soft:rgba(251,113,133,.15);--acc-text:#FDA4AF;--acc-ring:rgba(251,113,133,.4)}
+
+  html.dark body{background:var(--bg);color:#E8EBF0}
+  html.dark .card{background:var(--card);border-color:var(--border);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  html.dark aside{background:#161A20!important;border-color:#2A2F38!important}
+  html.dark .bg-white{background:var(--card)!important}
+  html.dark .bg-slate-50{background:#1F232B!important}
+  html.dark .bg-slate-100{background:#282D36!important}
+  html.dark .bg-slate-200{background:#3A404A!important}
+  html.dark .bg-white\/95{background:rgba(24,27,33,.95)!important}
+  html.dark .bg-white\/15{background:rgba(255,255,255,.08)!important}
+  html.dark .bg-slate-900\/95{background:rgba(24,27,33,.95)!important}
+  html.dark .bg-black\/40{background:rgba(0,0,0,.6)!important}
+  html.dark .bg-black\/50{background:rgba(0,0,0,.65)!important}
+  html.dark .bg-black\/60{background:rgba(0,0,0,.7)!important}
+  html.dark .border-slate-100{border-color:#252A33!important}
+  html.dark .border-slate-200{border-color:#2F343D!important}
+  html.dark .border-slate-200\/70{border-color:rgba(47,52,61,.7)!important}
+  html.dark .border-white{border-color:#2F343D!important}
+  html.dark .text-slate-800{color:#E8EBF0!important}
+  html.dark .text-slate-700{color:#D5DAE3!important}
+  html.dark .text-slate-600{color:#B5BCC8!important}
+  html.dark .text-slate-500{color:#94A0AE!important}
+  html.dark .text-slate-400{color:#6E7681!important}
+  html.dark .text-slate-300{color:#525A66!important}
+  html.dark .text-slate-200{color:#3A404A!important}
+  html.dark .text-slate-100{color:#2A2F38!important}
+  html.dark input,html.dark textarea,html.dark select{background:#1F232B!important;border-color:#2F343D!important;color:#E8EBF0!important}
+  html.dark input::placeholder,html.dark textarea::placeholder{color:#525A66!important}
+  html.dark input:focus,html.dark textarea:focus,html.dark select:focus{background:#22262E!important;border-color:var(--acc)!important}
+  html.dark .bg-rose-50{background:rgba(251,113,133,.1)!important}
+  html.dark .bg-rose-50\/60{background:rgba(251,113,133,.06)!important}
+  html.dark .bg-amber-50{background:rgba(251,191,36,.1)!important}
+  html.dark .bg-amber-50\/60{background:rgba(251,191,36,.06)!important}
+  html.dark .bg-teal-50{background:rgba(20,184,166,.1)!important}
+  html.dark .bg-teal-100{background:rgba(20,184,166,.15)!important}
+  html.dark .bg-emerald-100{background:rgba(16,185,129,.15)!important}
+  html.dark .bg-blue-100{background:rgba(96,165,250,.15)!important}
+  html.dark .bg-violet-100{background:rgba(167,139,250,.15)!important}
+  html.dark .bg-fuchsia-100{background:rgba(232,121,249,.15)!important}
+  html.dark .bg-cyan-100{background:rgba(34,211,238,.15)!important}
+  html.dark .bg-sky-100{background:rgba(96,165,250,.15)!important}
+  html.dark .bg-green-100{background:rgba(52,211,153,.15)!important}
+  html.dark .bg-red-100{background:rgba(248,113,113,.15)!important}
+  html.dark .bg-yellow-100{background:rgba(251,191,36,.15)!important}
+  html.dark .bg-orange-100{background:rgba(251,146,60,.15)!important}
+  html.dark .text-teal-600,html.dark .text-teal-700{color:#5EEAD4!important}
+  html.dark .text-rose-500,html.dark .text-rose-600{color:#FDA4AF!important}
+  html.dark .text-amber-500,html.dark .text-amber-600{color:#FCD34D!important}
+  html.dark .text-emerald-600{color:#6EE7B7!important}
+  html.dark .text-blue-600{color:#93C5FD!important}
+  html.dark .text-violet-500,html.dark .text-violet-600{color:#C4B5FD!important}
+  html.dark .text-sky-600{color:#7DD3FC!important}
+  html.dark .text-indigo-500{color:#A5B4FC!important}
+  html.dark .skeleton{background:linear-gradient(90deg,#22262E 25%,#2A2F38 50%,#22262E 75%);background-size:800px 100%}
+  html.dark .sheet{background:var(--card)}
+  html.dark .sheet-drag{background:#3A404A}
+  html.dark .modal-box{background:var(--card)}
+  html.dark .search-history-item{color:#D5DAE3;border-color:#2A2F38}
+  html.dark .search-history-item:hover{background:#282D36}
+  html.dark .search-history-clear:hover{background:rgba(251,113,133,.15);color:#FDA4AF}
+  html.dark .empty-state .es-title{color:#E8EBF0}
+  html.dark .empty-state .es-desc{color:#94A0AE}
+  html.dark .ctx-menu{background:var(--card);border-color:var(--border)}
+  html.dark .ctx-menu button{color:#D5DAE3}
+  html.dark .ctx-menu button:hover{background:#282D36}
+  html.dark .seg-btn{background:#1F232B;color:#A0A8B5;border-color:#2F343D}
+  html.dark .seg-btn.on{background:var(--acc);color:#0F1115;border-color:var(--acc)}
+  html.dark .filter-chip{background:var(--card);color:#A0A8B5;border-color:var(--border)}
+  html.dark .filter-chip.on{background:var(--acc);color:#0F1115;border-color:var(--acc)}
+  html.dark .menu-icon-img{background:#282D36}
+  html.dark .divide-slate-100 > * + *{border-color:#252A33!important}
+  html.dark .shadow-md{box-shadow:0 4px 12px rgba(0,0,0,.35)!important}
+  html.dark .shadow-lg{box-shadow:0 8px 24px rgba(0,0,0,.4)!important}
+  html.dark .shadow-2xl{box-shadow:0 20px 40px rgba(0,0,0,.5)!important}
+  html.dark body[data-navbar-color="light"] .app-navbar{background:#E8EBF0;border-color:#3A404A}
+  html.dark body[data-navbar-color="light"] .app-navbar .nav-btn svg{color:#181B21!important;stroke:#181B21!important}
+  html.dark body[data-navbar-color="light"] .app-navbar .nav-btn span{color:#181B21!important}
+  html.dark .toast-item{background:rgba(34,38,46,.96);border-color:rgba(255,255,255,.08)}
 </style>
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-density="normal" data-iconstyle="default">
@@ -561,6 +652,24 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
           <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-8 h-8 rounded-full ring-offset-2 transition active:scale-90"></button>
         </div>
+      </div>
+      <div>
+        <p class="text-[11px] font-bold text-slate-500 mb-2">Tema Warna</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button id="themeModeAuto" onclick="setThemeMode('auto')" class="seg-btn flex-col !py-2.5">
+            <i data-lucide="smartphone" class="w-4 h-4 mb-1"></i>
+            <span class="text-[10px]">Auto</span>
+          </button>
+          <button id="themeModeLight" onclick="setThemeMode('light')" class="seg-btn flex-col !py-2.5">
+            <i data-lucide="sun" class="w-4 h-4 mb-1"></i>
+            <span class="text-[10px]">Terang</span>
+          </button>
+          <button id="themeModeDark" onclick="setThemeMode('dark')" class="seg-btn flex-col !py-2.5">
+            <i data-lucide="moon" class="w-4 h-4 mb-1"></i>
+            <span class="text-[10px]">Gelap</span>
+          </button>
+        </div>
+        <p class="text-[10px] text-slate-400 mt-2">Mode <b>Auto</b> mengikuti pengaturan sistem HP.</p>
       </div>
       <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Teks Besar</p><button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
       <div class="flex items-center justify-between"><p class="text-sm font-bold text-slate-700">Hemat Animasi</p><button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button></div>
@@ -1284,6 +1393,41 @@ function setAnim(){
   paintToggles();
 }
 
+/* ============================================
+   DARK MODE CONTROLLER — v4.61 (Soft Charcoal)
+   ============================================ */
+function getThemeMode(){return localStorage.getItem('gb_theme_mode')||'auto';}
+function updateThemeMeta(){
+  const isDark=document.documentElement.classList.contains('dark');
+  const m=document.querySelector('meta[name=theme-color]');
+  if(m)m.setAttribute('content',isDark?'#181B21':'#F6F5F9');
+}
+function paintThemeMode(){
+  const cur=getThemeMode();
+  ['auto','light','dark'].forEach(v=>{
+    const b=$('themeMode'+v.charAt(0).toUpperCase()+v.slice(1));
+    if(b)b.classList.toggle('on',v===cur);
+  });
+}
+function setThemeMode(mode){
+  localStorage.setItem('gb_theme_mode',mode);
+  const isDark=mode==='dark'||(mode==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.classList.toggle('dark',isDark);
+  updateThemeMeta();
+  paintThemeMode();
+  toast(mode==='auto'?'Mode Auto — ikut sistem':(mode==='dark'?'Mode Gelap aktif':'Mode Terang aktif'),'info');
+}
+function initThemeModeListener(){
+  const mq=window.matchMedia('(prefers-color-scheme: dark)');
+  const handler=()=>{
+    if(getThemeMode()!=='auto')return;
+    document.documentElement.classList.toggle('dark',mq.matches);
+    updateThemeMeta();
+  };
+  try{mq.addEventListener('change',handler);}
+  catch(_){try{mq.addListener(handler);}catch(__){}}
+}
+
 function paintToggles(){
   const fs=document.documentElement.classList.contains('fs-besar');
   const an=document.documentElement.classList.contains('no-anim');
@@ -1342,12 +1486,13 @@ function setDensity(v){
 }
 function resetTheme(){
   confirmDialog('Kembalikan semua pengaturan tampilan ke default?',()=>{
-    ['gb_preset','gb_navbar_style','gb_navbar_color','gb_density','gb_acc','gb_icon_style'].forEach(k=>localStorage.removeItem(k));
+    ['gb_preset','gb_navbar_style','gb_navbar_color','gb_density','gb_acc','gb_icon_style','gb_theme_mode'].forEach(k=>localStorage.removeItem(k));
     document.documentElement.dataset.acc='hijau';
     document.body.dataset.navbar='floating';
     document.body.dataset.navbarColor='dark';
     document.body.dataset.density='normal';
     document.body.dataset.iconstyle='default';
+    setThemeMode('auto');
     markAcc();
     paintToggles();
     paintCustomizeUI();
@@ -1393,7 +1538,11 @@ function initPrefs() {
   if (localStorage.getItem('gb_fs') === 'besar') document.documentElement.classList.add('fs-besar');
   if (localStorage.getItem('gb_anim') === 'off') document.documentElement.classList.add('no-anim');
   
-  document.documentElement.classList.remove('dark');
+  const mode = getThemeMode();
+  const isDark = mode==='dark'||(mode==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.classList.toggle('dark', isDark);
+  updateThemeMeta();
+  initThemeModeListener();
   
   document.body.dataset.navbar = localStorage.getItem('gb_navbar_style') || 'floating';
   document.body.dataset.navbarColor=localStorage.getItem('gb_navbar_color')||'dark';
