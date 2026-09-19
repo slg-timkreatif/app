@@ -1,0 +1,3189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sertiva — Generator Sertifikat & Piagam</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { primary:'#0D9488', primaryDark:'#0F766E', primarySoft:'#CCFBF1' },
+  fontFamily: { sans: ['Inter','system-ui','sans-serif'], serif: ['"Playfair Display"','serif'] }
+}}};
+</script>
+<style>
+  body { font-family:'Inter',sans-serif; }
+  .page-canvas { position:relative; overflow:hidden; background:#fff; box-shadow:0 4px 24px rgba(0,0,0,.1); }
+  .el { position:absolute; cursor:move; user-select:none; }
+  .el.selected { outline:2px dashed #0D9488; outline-offset:3px; }
+  .el.selected::after { content:''; position:absolute; inset:0; pointer-events:none; outline:1px solid rgba(13,148,136,.4); }
+  .el.multi-sel { outline:2px dashed #0891b2; outline-offset:3px; }
+  .el.locked { cursor:not-allowed !important; }
+  .el.rotated { will-change:transform; }
+  .el.grouped { outline:1px solid rgba(139,92,246,.35); outline-offset:2px; }
+  .el img { pointer-events:none; width:100%; height:100%; object-fit:contain; display:block; }
+  .el table { width:100%; border-collapse:collapse; }
+  .el table th, .el table td { border:1px solid #94a3b8; padding:2px 4px; }
+
+  /* Resize handles */
+  .handle { position:absolute; width:10px; height:10px; background:#fff; border:2px solid #0D9488; border-radius:3px; transform:translate(-50%,-50%); z-index:100; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  .handle:hover { background:#CCFBF1; }
+  .handle-nw, .handle-se { cursor:nwse-resize; }
+  .handle-ne, .handle-sw { cursor:nesw-resize; }
+  .handle-n, .handle-s { cursor:ns-resize; }
+  .handle-e, .handle-w { cursor:ew-resize; }
+
+  /* Rotate handle */
+  .rotate-handle { position:absolute; width:14px; height:14px; background:#ec4899; border:2px solid #fff; border-radius:50%; cursor:grab; z-index:100; transform:translate(-50%,-50%); box-shadow:0 1px 4px rgba(236,72,153,.4); }
+  .rotate-handle:active { cursor:grabbing; background:#db2777; }
+  .rotate-stem { position:absolute; width:1.5px; background:#ec4899; z-index:99; transform:translateX(-50%); }
+
+  /* Badges */
+  .lock-badge { position:absolute; top:-8px; right:-8px; width:16px; height:16px; background:#f59e0b; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; z-index:90; }
+  .lock-badge svg { width:10px; height:10px; }
+  .group-badge { position:absolute; top:-10px; left:-10px; background:#8b5cf6; color:#fff; font-size:8px; font-weight:700; padding:1px 5px; border-radius:4px; z-index:91; letter-spacing:.3px; }
+
+  /* Grid overlay */
+  .grid-overlay { position:absolute; inset:0; pointer-events:none; z-index:5; background-image: linear-gradient(to right,rgba(13,148,136,.10) 1px,transparent 1px), linear-gradient(to bottom,rgba(13,148,136,.10) 1px,transparent 1px); }
+  .grid-overlay.grid-5 { background-size:18.9px 18.9px; }
+  .grid-overlay.grid-10 { background-size:37.8px 37.8px; }
+
+  /* Safe area warning */
+  .el.out-of-safe { outline:2px solid #f97316 !important; outline-offset:2px; }
+  .el.out-of-safe::before {
+    content:'⚠'; position:absolute; top:-14px; left:-14px;
+    background:#f97316; color:#fff; width:14px; height:14px;
+    border-radius:50%; font-size:9px; display:flex;
+    align-items:center; justify-content:center; z-index:92;
+  }
+
+  /* Print preview */
+  body.print-preview-mode .page-canvas { background:#fff !important; }
+  body.print-preview-mode .el-bg { display:none !important; }
+
+  /* Toolbar */
+  .align-btn { display:flex; align-items:center; justify-content:center; padding:6px 0; border:1px solid #e2e8f0; border-radius:6px; background:#fff; cursor:pointer; color:#475569; }
+  .align-btn:hover:not(:disabled) { background:#f0fdfa; border-color:#5eead4; color:#0f766e; }
+  .align-btn:disabled { opacity:.35; cursor:not-allowed; }
+
+  /* Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar { width:6px; height:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+
+  /* Tab active */
+  .tab-active { background:#CCFBF1 !important; color:#0F766E !important; font-weight:600; }
+
+  /* Chip */
+  .chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; }
+
+  input, select, textarea { font-family:inherit; }
+
+  /* Template card */
+  .tpl-card { border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; cursor:pointer; transition:all .15s; background:#fff; }
+  .tpl-card:hover { border-color:#5eead4; transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,148,136,.12); }
+  .tpl-card .thumb { background:#f8fafc; position:relative; overflow:hidden; border-bottom:1px solid #e2e8f0; margin:0 auto; }
+  .tpl-card .thumb-el { position:absolute; overflow:hidden; }
+  .tpl-card .info { padding:12px 14px; }
+
+  /* ===== GAMBAR SLOT (Upload / URL) ===== */
+  .gambar-slot { position:relative; }
+  .gambar-slot .slot-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .gambar-slot .slot-head > span:first-child { font-size:11px; font-weight:600; color:#475569; }
+  .gambar-slot .slot-tabs { display:flex; gap:3px; background:#f1f5f9; padding:2px; border-radius:7px; }
+  .slot-tab { padding:2px 8px; font-size:10px; font-weight:600; border:none; background:transparent; color:#64748b; cursor:pointer; border-radius:5px; }
+  .slot-tab.active { background:#fff; color:#0F766E; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+  .slot-tab:hover:not(.active) { color:#0F766E; }
+  .slot-drop { display:flex; align-items:center; justify-content:center; gap:6px; border:2px dashed #e2e8f0; border-radius:8px; padding:10px; font-size:11px; color:#64748b; cursor:pointer; transition:all .15s; background:#fff; }
+  .slot-drop:hover { border-color:#5eead4; background:#f0fdfa; color:#0F766E; }
+  .slot-url { font-size:11px; }
+  .slot-preview { margin-top:6px; }
+  .slot-preview-wrap { display:flex; align-items:center; gap:8px; padding:4px 6px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; }
+  .slot-preview-wrap img { height:40px; width:auto; max-width:60px; object-fit:contain; border-radius:4px; background:#fff; border:1px solid #e2e8f0; flex-shrink:0; }
+  .slot-fallback { display:none; height:40px; padding:0 10px; align-items:center; gap:4px; background:#fef3c7; border:1px solid #fcd34d; border-radius:4px; font-size:10px; color:#92400e; font-weight:600; flex-shrink:0; }
+  .slot-preview-meta { font-size:9px; color:#64748b; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .slot-remove { color:#ef4444; padding:3px; border-radius:4px; flex-shrink:0; }
+  .slot-remove:hover { background:#fee2e2; }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+<!-- ============ HEADER ============ -->
+<header class="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-600 to-cyan-600 flex items-center justify-center text-white font-black text-lg">S</div>
+    <div>
+      <h1 class="font-extrabold text-lg leading-tight">Sertiva</h1>
+      <p class="text-[11px] text-slate-500 leading-tight">Sertifikat & Piagam Digital</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-2">
+    <button onclick="openTplModal()" class="text-xs font-semibold px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 flex items-center gap-1.5">
+      <i data-lucide="layout-grid"></i> Template Bawaan
+    </button>
+    <button onclick="saveTemplateFile()" class="text-xs font-semibold px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 flex items-center gap-1.5">
+      <i data-lucide="save"></i> Simpan Template
+    </button>
+    <label class="text-xs font-semibold px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 flex items-center gap-1.5 cursor-pointer">
+      <i data-lucide="upload"></i> Muat Template
+      <input type="file" accept=".json" onchange="loadTemplateFile(event)" class="hidden">
+    </label>
+  </div>
+</header>
+
+<!-- ============ TABS ============ -->
+<nav class="bg-white border-b border-slate-200 px-4 flex gap-1 overflow-x-auto">
+  <button data-tab="event" class="tab-btn tab-active px-4 py-3 text-sm rounded-t-lg">1. Event</button>
+  <button data-tab="data" class="tab-btn px-4 py-3 text-sm rounded-t-lg">2. Data</button>
+  <button data-tab="desain" class="tab-btn px-4 py-3 text-sm rounded-t-lg">3. Desain</button>
+  <button data-tab="generate" class="tab-btn px-4 py-3 text-sm rounded-t-lg">4. Generate</button>
+</nav>
+
+<main class="flex-1 overflow-hidden">
+
+<!-- ============ TAB 1: EVENT ============ -->
+<section data-panel="event" class="panel h-full overflow-auto p-4 md:p-6 scrollbar-thin">
+  <div class="max-w-5xl mx-auto space-y-6">
+
+    <!-- Informasi Kegiatan -->
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h2 class="font-bold text-base mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-teal-600"></i> Informasi Kegiatan</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="block md:col-span-2"><span class="text-xs font-semibold text-slate-600">Nama Kegiatan</span>
+          <input id="m_nama" type="text" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-teal-500 outline-none" placeholder="Pelatihan Kurikulum Merdeka"></label>
+        <label class="block"><span class="text-xs font-semibold text-slate-600">Tanggal</span>
+          <input id="m_tanggal" type="text" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="15–17 September 2025"></label>
+        <label class="block"><span class="text-xs font-semibold text-slate-600">Tempat</span>
+          <input id="m_tempat" type="text" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Aula Dinas Pendidikan"></label>
+        <label class="block"><span class="text-xs font-semibold text-slate-600">Penyelenggara</span>
+          <input id="m_penyelenggara" type="text" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Dinas Pendidikan Kab. X"></label>
+        <label class="block"><span class="text-xs font-semibold text-slate-600">Nomor Sertifikat (opsional)</span>
+          <input id="m_nomor" type="text" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="SRT/2025/001"></label>
+      </div>
+    </div>
+
+    <!-- Kop Surat -->
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h2 class="font-bold text-base mb-4 flex items-center gap-2"><i data-lucide="layout-template" class="text-teal-600"></i> Kop Surat</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Logo Kiri -->
+        <div class="gambar-slot" data-path="kop.logo_kiri">
+          <div class="slot-head">
+            <span>Logo Kiri</span>
+            <div class="slot-tabs">
+              <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+              <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+            </div>
+          </div>
+          <div class="slot-panel" data-panel="upload">
+            <label class="slot-drop">
+              <i data-lucide="image-plus" class="w-4 h-4"></i> <span>Pilih file gambar</span>
+              <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)">
+            </label>
+          </div>
+          <div class="slot-panel hidden" data-panel="url">
+            <div class="flex gap-1">
+              <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://contoh.com/logo.png">
+              <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50 flex items-center gap-1">
+                <i data-lucide="check" class="w-3 h-3"></i> Test
+              </button>
+            </div>
+          </div>
+          <div class="slot-preview"></div>
+        </div>
+
+        <!-- Logo Kanan -->
+        <div class="gambar-slot" data-path="kop.logo_kanan">
+          <div class="slot-head">
+            <span>Logo Kanan</span>
+            <div class="slot-tabs">
+              <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+              <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+            </div>
+          </div>
+          <div class="slot-panel" data-panel="upload">
+            <label class="slot-drop">
+              <i data-lucide="image-plus" class="w-4 h-4"></i> <span>Pilih file gambar</span>
+              <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)">
+            </label>
+          </div>
+          <div class="slot-panel hidden" data-panel="url">
+            <div class="flex gap-1">
+              <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://contoh.com/logo.png">
+              <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50 flex items-center gap-1">
+                <i data-lucide="check" class="w-3 h-3"></i> Test
+              </button>
+            </div>
+          </div>
+          <div class="slot-preview"></div>
+        </div>
+
+        <!-- Teks Kop -->
+        <label class="block md:col-span-2">
+          <span class="text-xs font-semibold text-slate-600">Baris Teks Kop (maks 4 baris)</span>
+          <input id="m_kop1" type="text" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="DINAS PENDIDIKAN">
+          <input id="m_kop2" type="text" class="mt-2 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="KABUPATEN X">
+          <input id="m_kop3" type="text" class="mt-2 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Jl. Pendidikan No. 1, Telp. (021) 123456">
+          <input id="m_kop4" type="text" class="mt-2 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Email: dinas@example.id">
+        </label>
+      </div>
+    </div>
+
+    <!-- Pejabat -->
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h2 class="font-bold text-base mb-4 flex items-center gap-2"><i data-lucide="user-check" class="text-teal-600"></i> Pejabat Penandatangan (maks 2)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Pejabat 0 -->
+        <div class="border border-slate-200 rounded-xl p-4 space-y-3">
+          <p class="text-xs font-bold text-teal-700">Penandatangan Kiri</p>
+          <input id="p0_nama" type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Nama lengkap">
+          <input id="p0_jabatan" type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Jabatan">
+          <input id="p0_nip" type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="NIP">
+          <div class="gambar-slot" data-path="pejabat.0.ttd">
+            <div class="slot-head"><span>Tanda Tangan</span>
+              <div class="slot-tabs">
+                <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+                <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+              </div>
+            </div>
+            <div class="slot-panel" data-panel="upload">
+              <label class="slot-drop"><i data-lucide="signature" class="w-4 h-4"></i> <span>Pilih file TTD</span>
+                <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)"></label>
+            </div>
+            <div class="slot-panel hidden" data-panel="url">
+              <div class="flex gap-1">
+                <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://...">
+                <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50"><i data-lucide="check" class="w-3 h-3"></i></button>
+              </div>
+            </div>
+            <div class="slot-preview"></div>
+          </div>
+          <div class="gambar-slot" data-path="pejabat.0.stempel">
+            <div class="slot-head"><span>Stempel</span>
+              <div class="slot-tabs">
+                <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+                <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+              </div>
+            </div>
+            <div class="slot-panel" data-panel="upload">
+              <label class="slot-drop"><i data-lucide="stamp" class="w-4 h-4"></i> <span>Pilih file stempel</span>
+                <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)"></label>
+            </div>
+            <div class="slot-panel hidden" data-panel="url">
+              <div class="flex gap-1">
+                <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://...">
+                <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50"><i data-lucide="check" class="w-3 h-3"></i></button>
+              </div>
+            </div>
+            <div class="slot-preview"></div>
+          </div>
+        </div>
+
+        <!-- Pejabat 1 -->
+        <div class="border border-slate-200 rounded-xl p-4 space-y-3">
+          <p class="text-xs font-bold text-teal-700">Penandatangan Kanan</p>
+          <input id="p1_nama" type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Nama lengkap">
+          <input id="p1_jabatan" type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="Jabatan">
+          <input id="p1_nip" type="text" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" placeholder="NIP">
+          <div class="gambar-slot" data-path="pejabat.1.ttd">
+            <div class="slot-head"><span>Tanda Tangan</span>
+              <div class="slot-tabs">
+                <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+                <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+              </div>
+            </div>
+            <div class="slot-panel" data-panel="upload">
+              <label class="slot-drop"><i data-lucide="signature" class="w-4 h-4"></i> <span>Pilih file TTD</span>
+                <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)"></label>
+            </div>
+            <div class="slot-panel hidden" data-panel="url">
+              <div class="flex gap-1">
+                <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://...">
+                <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50"><i data-lucide="check" class="w-3 h-3"></i></button>
+              </div>
+            </div>
+            <div class="slot-preview"></div>
+          </div>
+          <div class="gambar-slot" data-path="pejabat.1.stempel">
+            <div class="slot-head"><span>Stempel</span>
+              <div class="slot-tabs">
+                <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+                <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+              </div>
+            </div>
+            <div class="slot-panel" data-panel="upload">
+              <label class="slot-drop"><i data-lucide="stamp" class="w-4 h-4"></i> <span>Pilih file stempel</span>
+                <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)"></label>
+            </div>
+            <div class="slot-panel hidden" data-panel="url">
+              <div class="flex gap-1">
+                <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://...">
+                <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50"><i data-lucide="check" class="w-3 h-3"></i></button>
+              </div>
+            </div>
+            <div class="slot-preview"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ TAB 2: DATA ============ -->
+<section data-panel="data" class="panel h-full overflow-auto p-4 md:p-6 scrollbar-thin hidden">
+  <div class="max-w-5xl mx-auto space-y-6">
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h2 class="font-bold text-base mb-4 flex items-center gap-2"><i data-lucide="file-spreadsheet" class="text-teal-600"></i> Upload Excel</h2>
+      <label class="slot-drop flex-col !py-10">
+        <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+        <span class="font-semibold text-sm">Klik untuk pilih file .xlsx / .xls</span>
+        <span class="text-xs">Sheet <b>Penerima</b> (wajib) dan sheet <b>Materi</b> (opsional)</span>
+        <input type="file" accept=".xlsx,.xls" hidden onchange="handleExcel(event)">
+      </label>
+      <div id="excelStatus" class="mt-4"></div>
+    </div>
+
+    <div id="penerimaPanel" class="hidden bg-white rounded-2xl p-5 shadow-sm">
+      <h3 class="font-bold text-sm mb-3">Data Penerima <span id="penerimaCount" class="chip bg-teal-100 text-teal-700"></span></h3>
+      <div class="overflow-auto max-h-80 scrollbar-thin border border-slate-100 rounded-lg">
+        <table id="penerimaTable" class="w-full text-xs"></table>
+      </div>
+    </div>
+
+    <div id="materiPanel" class="hidden bg-white rounded-2xl p-5 shadow-sm">
+      <h3 class="font-bold text-sm mb-3">Data Materi <span id="materiCount" class="chip bg-cyan-100 text-cyan-700"></span></h3>
+      <div class="overflow-auto max-h-60 scrollbar-thin border border-slate-100 rounded-lg">
+        <table id="materiTable" class="w-full text-xs"></table>
+      </div>
+      <p class="text-[11px] text-slate-500 mt-2">Halaman Lampiran akan otomatis muncul di PDF jika data materi ada.</p>
+    </div>
+
+    <div id="penilaianPanel" class="hidden bg-white rounded-2xl p-5 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-base flex items-center gap-2">
+          <i data-lucide="trophy" class="text-amber-500"></i> Penilaian Lomba
+          <span class="chip bg-amber-100 text-amber-700">Terdeteksi</span>
+        </h2>
+        <button onclick="resetPenilaian()" class="text-[11px] text-slate-500 hover:text-red-500">Reset</button>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+        <label class="block"><span class="text-[11px] font-semibold text-slate-600">Kolom Nama</span>
+          <select id="pk_nama" class="mt-1 w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></select></label>
+        <label class="block"><span class="text-[11px] font-semibold text-slate-600">Kolom Sekolah</span>
+          <select id="pk_sekolah" class="mt-1 w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></select></label>
+        <label class="block"><span class="text-[11px] font-semibold text-slate-600">Kolom Kategori</span>
+          <select id="pk_kategori" class="mt-1 w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></select></label>
+        <label class="block"><span class="text-[11px] font-semibold text-slate-600">Kolom Skor</span>
+          <select id="pk_skor" class="mt-1 w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></select></label>
+        <label class="block"><span class="text-[11px] font-semibold text-slate-600">Kolom Peringkat (opsional)</span>
+          <select id="pk_peringkat" class="mt-1 w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></select></label>
+        <label class="block"><span class="text-[11px] font-semibold text-slate-600">Kolom NIP/NIS (opsional)</span>
+          <select id="pk_nip" class="mt-1 w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"></select></label>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 mb-4 p-3 bg-slate-50 rounded-xl text-xs">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="pk_autorank" checked class="rounded accent-teal-600">
+          <span class="font-semibold text-slate-700">Auto-rank dari skor</span></label>
+        <label class="flex items-center gap-2"><span class="text-slate-600">Juara diambil:</span>
+          <select id="pk_juara" class="border border-slate-200 rounded px-2 py-1 text-xs">
+            <option value="3">1 – 3</option>
+            <option value="5">1 – 5</option>
+            <option value="6">1 – 6</option>
+            <option value="99">Semua</option>
+          </select></label>
+        <button onclick="previewJuara()" class="px-3 py-1.5 rounded-lg border border-teal-300 text-teal-700 font-semibold hover:bg-teal-50 flex items-center gap-1.5">
+          <i data-lucide="eye" class="w-3 h-3"></i> Preview Juara</button>
+        <button onclick="applyPenilaian()" class="ml-auto px-4 py-1.5 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold flex items-center gap-1.5">
+          <i data-lucide="check" class="w-3 h-3"></i> Terapkan</button>
+      </div>
+
+      <div id="penilaianPreview" class="hidden"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 3: DESAIN ============ -->
+<section data-panel="desain" class="panel h-full hidden">
+  <div class="h-full flex flex-col">
+    <div class="bg-white border-b border-slate-200 px-4 py-3 flex flex-wrap items-center gap-3">
+      <div class="flex items-center gap-2 text-xs">
+        <span class="font-semibold text-slate-600">Ukuran:</span>
+        <input id="u_lebar" type="number" class="w-16 border border-slate-200 rounded px-2 py-1 text-xs" onchange="updateUkuran()" placeholder="297"> ×
+        <input id="u_tinggi" type="number" class="w-16 border border-slate-200 rounded px-2 py-1 text-xs" onchange="updateUkuran()" placeholder="210"> mm
+        <select id="u_orientasi" onchange="updateUkuran()" class="border border-slate-200 rounded px-2 py-1 text-xs">
+          <option value="landscape">Landscape</option>
+          <option value="portrait">Portrait</option>
+        </select>
+        <select id="u_preset" onchange="applyPresetUkuran()" class="border border-slate-200 rounded px-2 py-1 text-xs">
+          <option value="">Preset…</option>
+          <option value="297x210">A4</option>
+          <option value="330x210">F4</option>
+          <option value="215x330">F4 Portrait</option>
+          <option value="210x297">A4 Portrait</option>
+        </select>
+        <label class="flex items-center gap-1.5 text-xs cursor-pointer select-none ml-2 pl-3 border-l border-slate-200">
+          <input type="checkbox" id="gridToggle" onchange="toggleGrid()" class="rounded accent-teal-600">
+          <span class="font-semibold text-slate-600">Grid</span>
+          <select id="gridSize" onchange="toggleGrid()" class="border border-slate-200 rounded px-1.5 py-0.5 text-[11px]">
+            <option value="5">5mm</option><option value="10">10mm</option>
+          </select>
+        </label>
+        <button onclick="toggleSafeAreaPanel()" class="text-xs font-semibold px-3 py-1.5 rounded border border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 flex items-center gap-1.5 ml-2">
+          <i data-lucide="crop" class="w-3.5 h-3.5"></i> Safe Area
+        </button>
+      </div>
+      <div class="ml-auto flex items-center gap-2 text-xs">
+        <span class="font-semibold text-slate-600">Halaman:</span>
+        <div id="halamanTabs" class="flex gap-1"></div>
+        <button onclick="addHalaman()" class="px-2 py-1 rounded border border-slate-200 hover:bg-slate-50"><i data-lucide="plus" class="w-3 h-3"></i></button>
+      </div>
+    </div>
+
+    <!-- Panel Safe Area -->
+    <div id="safeAreaPanel" class="hidden bg-orange-50 border-b border-orange-200 px-4 py-3">
+      <div class="flex flex-wrap items-center gap-3 text-xs">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="sa_aktif" onchange="updateSafeArea()" class="rounded accent-orange-600">
+          <span class="font-bold text-orange-700">Aktifkan Safe Area</span>
+        </label>
+        <span class="text-orange-400">|</span>
+        <span class="text-slate-600 font-semibold">Margin (mm):</span>
+        <label class="flex items-center gap-1"><span class="text-[10px] text-slate-500 w-10">Atas</span>
+          <input id="sa_atas" type="number" min="0" max="80" value="20" onchange="updateSafeArea()" class="w-14 border border-slate-200 rounded px-2 py-1 text-xs"></label>
+        <label class="flex items-center gap-1"><span class="text-[10px] text-slate-500 w-10">Kanan</span>
+          <input id="sa_kanan" type="number" min="0" max="80" value="20" onchange="updateSafeArea()" class="w-14 border border-slate-200 rounded px-2 py-1 text-xs"></label>
+        <label class="flex items-center gap-1"><span class="text-[10px] text-slate-500 w-10">Bawah</span>
+          <input id="sa_bawah" type="number" min="0" max="80" value="20" onchange="updateSafeArea()" class="w-14 border border-slate-200 rounded px-2 py-1 text-xs"></label>
+        <label class="flex items-center gap-1"><span class="text-[10px] text-slate-500 w-10">Kiri</span>
+          <input id="sa_kiri" type="number" min="0" max="80" value="20" onchange="updateSafeArea()" class="w-14 border border-slate-200 rounded px-2 py-1 text-xs"></label>
+        <span class="text-orange-400">|</span>
+        <span class="text-slate-500 font-semibold text-[11px]">Preset:</span>
+        <button onclick="setSafePreset(10)" class="px-2 py-1 rounded border border-orange-200 text-orange-700 hover:bg-orange-100 text-[11px]">Ketat 10mm</button>
+        <button onclick="setSafePreset(20)" class="px-2 py-1 rounded border border-orange-200 text-orange-700 hover:bg-orange-100 text-[11px]">Standar 20mm</button>
+        <button onclick="setSafePreset(30)" class="px-2 py-1 rounded border border-orange-200 text-orange-700 hover:bg-orange-100 text-[11px]">Lebar 30mm</button>
+        <button onclick="setSafePreset(0)" class="px-2 py-1 rounded border border-orange-200 text-orange-700 hover:bg-orange-100 text-[11px]">Reset</button>
+        <label class="flex items-center gap-1 ml-auto cursor-pointer">
+          <input type="checkbox" id="sa_tampil" onchange="updateSafeArea()" checked class="rounded accent-orange-600">
+          <span class="text-slate-600 text-[11px]">Tampilkan garis bantu</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex-1 flex overflow-hidden">
+      <!-- Sidebar kiri -->
+      <aside class="w-56 border-r border-slate-200 bg-white p-3 overflow-auto scrollbar-thin">
+        <p class="text-[11px] font-bold uppercase text-slate-400 mb-2">Pilih: <span id="selCount" class="text-teal-600">0</span> elemen</p>
+        <div class="grid grid-cols-3 gap-1 mb-2">
+          <button class="align-btn" onclick="alignSelected('left')" title="Rata kiri"><i data-lucide="align-start-vertical" class="w-3.5 h-3.5"></i></button>
+          <button class="align-btn" onclick="alignSelected('center-h')" title="Tengah horizontal"><i data-lucide="align-center-horizontal" class="w-3.5 h-3.5"></i></button>
+          <button class="align-btn" onclick="alignSelected('right')" title="Rata kanan"><i data-lucide="align-end-vertical" class="w-3.5 h-3.5"></i></button>
+          <button class="align-btn" onclick="alignSelected('top')" title="Rata atas"><i data-lucide="align-start-horizontal" class="w-3.5 h-3.5"></i></button>
+          <button class="align-btn" onclick="alignSelected('center-v')" title="Tengah vertikal"><i data-lucide="align-center-vertical" class="w-3.5 h-3.5"></i></button>
+          <button class="align-btn" onclick="alignSelected('bottom')" title="Rata bawah"><i data-lucide="align-end-horizontal" class="w-3.5 h-3.5"></i></button>
+        </div>
+        <div class="grid grid-cols-2 gap-1 mb-4">
+          <button class="align-btn" onclick="distributeSelected('h')" title="Sebar horizontal (3+)"><i data-lucide="align-horizontal-distribute-center" class="w-3.5 h-3.5"></i></button>
+          <button class="align-btn" onclick="distributeSelected('v')" title="Sebar vertikal (3+)"><i data-lucide="align-vertical-distribute-center" class="w-3.5 h-3.5"></i></button>
+        </div>
+
+        <p class="text-[11px] font-bold uppercase text-slate-400 mb-2">Tambah Elemen</p>
+        <div class="space-y-1.5">
+          <button onclick="addElement('teks')" class="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg border border-slate-200 hover:bg-teal-50 hover:border-teal-300"><i data-lucide="type" class="w-4 h-4 text-teal-600"></i> Teks</button>
+          <button onclick="addElement('gambar')" class="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg border border-slate-200 hover:bg-teal-50 hover:border-teal-300"><i data-lucide="image" class="w-4 h-4 text-teal-600"></i> Gambar</button>
+          <button onclick="addElement('tabel')" class="w-full flex items-center gap-2 px-3 py-2 text-xs rounded-lg border border-slate-200 hover:bg-teal-50 hover:border-teal-300"><i data-lucide="table" class="w-4 h-4 text-teal-600"></i> Tabel Materi</button>
+        </div>
+
+        <p class="text-[11px] font-bold uppercase text-slate-400 mt-5 mb-2">Halaman</p>
+        <div class="gambar-slot" data-path="__pageBackground__">
+          <div class="slot-head"><span>Background</span>
+            <div class="slot-tabs">
+              <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+              <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+            </div>
+          </div>
+          <div class="slot-panel" data-panel="upload">
+            <label class="slot-drop"><i data-lucide="image-plus" class="w-4 h-4"></i> <span>Pilih file</span>
+              <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)"></label>
+          </div>
+          <div class="slot-panel hidden" data-panel="url">
+            <div class="flex gap-1">
+              <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://...">
+              <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50"><i data-lucide="check" class="w-3 h-3"></i></button>
+            </div>
+          </div>
+          <div class="slot-preview"></div>
+        </div>
+
+        <p class="text-[11px] font-bold uppercase text-slate-400 mt-5 mb-2">Kondisi Halaman</p>
+        <select id="halamanKondisi" onchange="updateHalamanKondisi()" class="w-full border border-slate-200 rounded px-2 py-1.5 text-xs">
+          <option value="">Selalu tampil</option>
+          <option value="materi.length > 0">Hanya jika ada data materi</option>
+        </select>
+
+        <button onclick="deleteHalaman()" class="mt-4 w-full text-xs text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg border border-red-100 flex items-center justify-center gap-1.5">
+          <i data-lucide="trash-2" class="w-3 h-3"></i> Hapus Halaman</button>
+
+        <p class="text-[11px] font-bold uppercase text-slate-400 mt-5 mb-2">Elemen di Halaman</p>
+        <div id="elemenList" class="space-y-1"></div>
+      </aside>
+
+      <!-- Kanvas -->
+      <div class="flex-1 bg-slate-200 overflow-auto p-6 scrollbar-thin flex items-start justify-center">
+        <div id="canvasWrap" class="relative">
+          <div id="gridOverlay" class="grid-overlay grid-5 hidden"></div>
+          <div id="pageCanvas" class="page-canvas"></div>
+          <div id="guidesLayer" class="absolute inset-0 pointer-events-none" style="z-index:60"></div>
+        </div>
+      </div>
+
+      <!-- Panel properti -->
+      <aside class="w-72 border-l border-slate-200 bg-white p-3 overflow-auto scrollbar-thin">
+        <div id="propsEmpty" class="text-xs text-slate-400 text-center py-8">Pilih elemen di kanvas untuk melihat properti.</div>
+        <div id="propsPanel" class="hidden space-y-3">
+          <div class="flex items-center justify-between">
+            <p class="text-[11px] font-bold uppercase text-slate-400">Properti Elemen</p>
+            <div class="flex items-center gap-1">
+              <button onclick="groupSelected()" class="text-violet-600 hover:bg-violet-50 p-1 rounded" title="Group (Ctrl+G)"><i data-lucide="group" class="w-3.5 h-3.5"></i></button>
+              <button onclick="ungroupSelected()" class="text-violet-600 hover:bg-violet-50 p-1 rounded" title="Ungroup (Ctrl+Shift+G)"><i data-lucide="ungroup" class="w-3.5 h-3.5"></i></button>
+              <button id="btnLock" onclick="toggleLock()" class="text-slate-400 hover:bg-slate-50 p-1 rounded" title="Kunci/Buka (Ctrl+L)"><i data-lucide="unlock" class="w-3.5 h-3.5"></i></button>
+              <button onclick="duplicateSelected()" class="text-teal-600 hover:bg-teal-50 p-1 rounded" title="Duplikat (Ctrl+D)"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              <button onclick="deleteSelected()" class="text-red-500 hover:bg-red-50 p-1 rounded" title="Hapus (Del)"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">X (mm)</span>
+              <input id="pr_x" type="number" step="0.5" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" oninput="propUpdate('x',this.value)"></label>
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Y (mm)</span>
+              <input id="pr_y" type="number" step="0.5" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" oninput="propUpdate('y',this.value)"></label>
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Lebar (mm)</span>
+              <input id="pr_w" type="number" step="0.5" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" oninput="propUpdate('w',this.value)"></label>
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Tinggi (mm)</span>
+              <input id="pr_h" type="number" step="0.5" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" oninput="propUpdate('h',this.value)"></label>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Rotasi (°)</span>
+              <input id="pr_rotation" type="number" step="1" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" oninput="propUpdate('rotation',this.value)"></label>
+            <div class="flex items-end gap-1 pb-0.5">
+              <button onclick="propUpdate('rotation',0)" class="text-[10px] px-2 py-1 rounded border border-slate-200 hover:bg-slate-50">0°</button>
+              <button onclick="propUpdate('rotation',(state.template.halaman[state.activeHalaman].elemen[state.selectedIdx].rotation||0)-90)" class="text-[10px] px-2 py-1 rounded border border-slate-200 hover:bg-slate-50">−90°</button>
+              <button onclick="propUpdate('rotation',(state.template.halaman[state.activeHalaman].elemen[state.selectedIdx].rotation||0)+90)" class="text-[10px] px-2 py-1 rounded border border-slate-200 hover:bg-slate-50">+90°</button>
+            </div>
+          </div>
+
+          <label class="block"><span class="text-[10px] font-semibold text-slate-500">Sumber Data</span>
+            <select id="pr_sumber" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" onchange="propUpdate('sumber',this.value)"></select></label>
+          <label class="block"><span class="text-[10px] font-semibold text-slate-500">atau teks manual</span>
+            <input id="pr_teks" type="text" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" placeholder="Teks statis" oninput="propUpdate('teksManual',this.value)"></label>
+
+          <!-- Sumber gambar untuk elemen gambar -->
+          <div id="pr_gambar_wrap" class="hidden">
+            <div class="gambar-slot" data-path="__elementImage__">
+              <div class="slot-head"><span>Sumber Gambar</span>
+                <div class="slot-tabs">
+                  <button type="button" class="slot-tab active" data-tab="upload" onclick="slotTab(this,'upload')">Upload</button>
+                  <button type="button" class="slot-tab" data-tab="url" onclick="slotTab(this,'url')">URL</button>
+                </div>
+              </div>
+              <div class="slot-panel" data-panel="upload">
+                <label class="slot-drop"><i data-lucide="image-plus" class="w-4 h-4"></i> <span>Pilih file</span>
+                  <input type="file" accept="image/*" hidden onchange="slotUpload(event, this)"></label>
+              </div>
+              <div class="slot-panel hidden" data-panel="url">
+                <div class="flex gap-1">
+                  <input type="url" class="slot-url flex-1 border border-slate-200 rounded-lg px-2 py-1.5" placeholder="https://...">
+                  <button type="button" onclick="slotTestUrl(this)" class="px-2 py-1.5 rounded border border-teal-300 text-teal-700 text-xs font-semibold hover:bg-teal-50"><i data-lucide="check" class="w-3 h-3"></i></button>
+                </div>
+              </div>
+              <div class="slot-preview"></div>
+            </div>
+          </div>
+
+          <hr class="border-slate-100">
+          <p class="text-[11px] font-bold uppercase text-slate-400">Tipografi</p>
+          <label class="block"><span class="text-[10px] font-semibold text-slate-500">Font Family</span>
+            <select id="pr_font" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" onchange="propUpdate('font',this.value)">
+              <option value="Inter">Inter (default)</option>
+              <option value="Playfair Display">Playfair Display (formal)</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
+            </select></label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Ukuran (pt)</span>
+              <input id="pr_size" type="number" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" oninput="propUpdate('size',this.value)"></label>
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Warna</span>
+              <input id="pr_warna" type="color" class="w-full h-7 border border-slate-200 rounded px-1" oninput="propUpdate('warna',this.value)"></label>
+          </div>
+          <label class="block"><span class="text-[10px] font-semibold text-slate-500">Ketebalan (Weight)</span>
+            <select id="pr_weight" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" onchange="propUpdate('weight',this.value)">
+              <option value="400">Regular (400)</option><option value="500">Medium (500)</option>
+              <option value="600">Semi Bold (600)</option><option value="700">Bold (700)</option>
+              <option value="800">Extra Bold (800)</option><option value="900">Black (900)</option>
+            </select></label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="block"><span class="text-[10px] font-semibold text-slate-500">Align</span>
+              <select id="pr_align" class="w-full border border-slate-200 rounded px-2 py-1 text-xs" onchange="propUpdate('align',this.value)">
+                <option value="left">Kiri</option><option value="center">Tengah</option><option value="right">Kanan</option>
+              </select></label>
+            <label class="flex items-end gap-2 pb-1">
+              <input id="pr_italic" type="checkbox" onchange="propUpdate('italic',this.checked)" class="rounded">
+              <span class="text-[11px] text-slate-600">Italic</span></label>
+          </div>
+
+          <hr class="border-slate-100">
+          <p class="text-[11px] font-bold uppercase text-slate-400">Preset Cepat</p>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button onclick="quickPreset('kop')" class="text-[11px] py-1.5 rounded border border-slate-200 hover:bg-teal-50">Kop</button>
+            <button onclick="quickPreset('nama')" class="text-[11px] py-1.5 rounded border border-slate-200 hover:bg-teal-50">Nama Besar</button>
+            <button onclick="quickPreset('judul')" class="text-[11px] py-1.5 rounded border border-slate-200 hover:bg-teal-50">Judul</button>
+            <button onclick="quickPreset('isi')" class="text-[11px] py-1.5 rounded border border-slate-200 hover:bg-teal-50">Isi</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 4: GENERATE ============ -->
+<section data-panel="generate" class="panel h-full overflow-auto p-4 md:p-6 scrollbar-thin hidden">
+  <div class="max-w-3xl mx-auto space-y-4">
+
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h3 class="font-bold text-sm mb-3 flex items-center gap-2"><i data-lucide="filter" class="text-teal-600 w-4 h-4"></i> Filter Penerima</h3>
+      <div id="filterGenerate"></div>
+    </div>
+
+    <!-- Mode Cetak -->
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h3 class="font-bold text-sm mb-3 flex items-center gap-2"><i data-lucide="eye" class="text-teal-600 w-4 h-4"></i> Mode Cetak</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <label class="flex items-start gap-3 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+          <input type="radio" name="printmode" value="normal" checked onchange="setPrintPreview(false)" class="mt-1">
+          <div>
+            <p class="font-semibold text-sm">Normal</p>
+            <p class="text-xs text-slate-500">Background tampil. Untuk sertifikat full-desain.</p>
+          </div>
+        </label>
+        <label class="flex items-start gap-3 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+          <input type="radio" name="printmode" value="blank" onchange="setPrintPreview(true)" class="mt-1">
+          <div>
+            <p class="font-semibold text-sm">Kertas Ber-border</p>
+            <p class="text-xs text-slate-500">Background disembunyikan. Cocok untuk cetak di kertas piagam yang sudah ada bordernya.</p>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Kalibrasi -->
+    <div class="bg-white rounded-2xl p-5 shadow-sm">
+      <h3 class="font-bold text-sm mb-3 flex items-center gap-2"><i data-lucide="crosshair" class="text-red-600 w-4 h-4"></i> Kalibrasi Cetak</h3>
+      <p class="text-xs text-slate-500 mb-3">Cetak halaman uji untuk memastikan posisi sudah pas dengan kertas ber-border Anda.</p>
+      <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+        <label class="flex items-center gap-2">
+          <span class="font-semibold text-slate-600">Margin kalibrasi (mm):</span>
+          <input id="kalib_margin" type="number" min="5" max="60" value="20" class="w-16 border border-slate-200 rounded px-2 py-1 text-xs">
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" id="kalib_grid" checked class="rounded accent-red-600">
+          <span class="text-slate-600">Tampilkan grid 10mm</span>
+        </label>
+      </div>
+      <button onclick="generateKalibrasi()" class="w-full bg-red-50 border-2 border-red-300 text-red-700 hover:bg-red-100 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2">
+        <i data-lucide="printer" class="w-4 h-4"></i> Cetak Halaman Uji Kalibrasi
+      </button>
+    </div>
+
+    <!-- Generate -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm">
+      <h2 class="font-bold text-base mb-4 flex items-center gap-2"><i data-lucide="printer" class="text-teal-600"></i> Generate & Cetak</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+        <label class="flex items-start gap-3 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+          <input type="radio" name="mode" value="gabung" checked class="mt-1">
+          <div><p class="font-semibold text-sm">1 PDF Gabungan</p><p class="text-xs text-slate-500">Semua halaman jadi satu file PDF. Cocok untuk cetak massal.</p></div>
+        </label>
+        <label class="flex items-start gap-3 border border-slate-200 rounded-xl p-3 cursor-pointer hover:border-teal-400 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+          <input type="radio" name="mode" value="zip" class="mt-1">
+          <div><p class="font-semibold text-sm">ZIP per Penerima</p><p class="text-xs text-slate-500">1 PDF per orang, dibungkus ZIP. Cocok untuk distribusi digital.</p></div>
+        </label>
+      </div>
+      <div id="genSummary" class="bg-slate-50 rounded-xl p-4 text-xs space-y-1 mb-4"></div>
+      <button id="btnGenerate" onclick="generatePDF()" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+        <i data-lucide="play-circle"></i> Mulai Generate</button>
+      <div id="genProgress" class="hidden mt-4">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span id="genProgressLabel">Memproses…</span><span id="genProgressPct">0%</span></div>
+        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+          <div id="genProgressBar" class="h-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="genResult" class="hidden mt-4"></div>
+    </div>
+
+    <!-- Checklist Printer -->
+    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-800">
+      <p class="font-bold mb-2 flex items-center gap-1.5">
+        <i data-lucide="check-square" class="w-4 h-4"></i> Checklist Sebelum Cetak
+      </p>
+      <ul class="space-y-1.5">
+        <li class="flex items-start gap-2"><input type="checkbox" class="mt-0.5 accent-amber-600"><span>Skala cetak: <b>100% / Actual Size</b> (bukan "Fit to page")</span></li>
+        <li class="flex items-start gap-2"><input type="checkbox" class="mt-0.5 accent-amber-600"><span>Matikan opsi <b>"Hemat Tinta"</b> atau <b>"Grayscale"</b></span></li>
+        <li class="flex items-start gap-2"><input type="checkbox" class="mt-0.5 accent-amber-600"><span>Jika mencetak dari browser: <b>Background graphics → OFF</b> untuk mode Kertas Ber-border</span></li>
+        <li class="flex items-start gap-2"><input type="checkbox" class="mt-0.5 accent-amber-600"><span>Ukuran kertas sesuai template (<span id="chkUkuran">A4</span>)</span></li>
+        <li class="flex items-start gap-2"><input type="checkbox" class="mt-0.5 accent-amber-600"><span>Gunakan <b>Concorde 100gsm</b> atau lebih untuk piagam</span></li>
+        <li class="flex items-start gap-2"><input type="checkbox" class="mt-0.5 accent-amber-600"><span>Sudah cetak <b>halaman uji kalibrasi</b> & posisi pas</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ MODAL TEMPLATE ============ -->
+<div id="tplModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-6xl w-full max-h-[92vh] flex flex-col shadow-2xl">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+      <div><h2 class="font-bold text-lg">Template Bawaan</h2><p class="text-xs text-slate-500">Pilih desain, langsung bisa dikustomisasi.</p></div>
+      <button onclick="closeTplModal()" class="p-2 hover:bg-slate-100 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <div id="tplGrid" class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto scrollbar-thin"></div>
+  </div>
+</div>
+<script>
+/* ============================================================
+   SERTIVA — Generator Sertifikat & Piagam (FASE 1 + URL Support)
+   ============================================================ */
+
+const MM2PX = 3.7795275591;
+const PT2PX = 96 / 72;
+const FOTO_BASE = "https://qamqqwfzhyiihqyzliwq.supabase.co/storage/v1/object/public/foto-gtk";
+const MAX_IMG_SIZE = 512;      // px — resize maksimum
+const IMG_QUALITY  = 0.85;     // kompresi webp/jpeg
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  meta: {
+    nama_kegiatan: '', tanggal: '', tempat: '', penyelenggara: '', nomor: '',
+    kop: { logo_kiri: null, logo_kanan: null, teks: ['','','',''], garis: true },
+    pejabat: [
+      { nama:'', jabatan:'', nip:'', ttd:null, stempel:null },
+      { nama:'', jabatan:'', nip:'', ttd:null, stempel:null }
+    ]
+  },
+  penerima: [],
+  penerimaColumns: [],
+  materi: [],
+  materiColumns: [],
+  template: {
+    ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' },
+    safeArea: { aktif: false, atas: 20, kanan: 20, bawah: 20, kiri: 20, tampil: true },
+    halaman: [{ id: 'utama', nama: 'Halaman Utama', background: null, kondisi: '', elemen: [] }]
+  },
+  activeHalaman: 0,
+  selectedIdx: -1,
+  multiIdxs: [],
+  guides: [],
+  gridOn: false,
+  gridSize: 5,
+  zoom: 1,
+  printPreview: false,
+  penilaian: {
+    aktif: false,
+    kolom: { nama: null, sekolah: null, kategori: null, skor: null, peringkat: null, nip: null },
+    autoRank: true, juaraLimit: 3, kategoriList: [], dataAwal: null
+  },
+  filterGenerate: { kategori: '', juara: '' }
+};
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => document.querySelectorAll(sel);
+const uid = () => Math.random().toString(36).slice(2,9);
+const mm2px = mm => mm * MM2PX;
+const pt2px = pt => pt * PT2PX;
+
+function getPath(obj, path) {
+  return path.split('.').reduce((o,k) => {
+    if (o == null) return '';
+    const m = k.match(/^(.+)\[(\d+)\]$/);
+    if (m) return (o[m[1]] || [])[+m[2]];
+    return o[k];
+  }, obj);
+}
+function setPath(obj, path, val) {
+  const keys = path.split('.'); let cur = obj;
+  for (let i=0; i<keys.length-1; i++) {
+    const k = keys[i]; if (cur[k] == null) cur[k] = {}; cur = cur[k];
+  }
+  cur[keys[keys.length-1]] = val;
+}
+function fileToDataURL(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file);
+  });
+}
+function toast(msg, jenis='info') {
+  const colors = { info:'bg-slate-800', ok:'bg-emerald-600', err:'bg-red-600' };
+  const el = document.createElement('div');
+  el.className = `fixed bottom-6 right-6 ${colors[jenis]} text-white px-4 py-3 rounded-xl shadow-lg text-sm font-semibold z-[200]`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+/* Deteksi jenis sumber gambar */
+function isUrl(s) { return typeof s === 'string' && /^https?:\/\//i.test(s.trim()); }
+function isDataUrl(s) { return typeof s === 'string' && s.startsWith('data:image/'); }
+function isImageSource(s) { return isUrl(s) || isDataUrl(s); }
+
+/* ============================================================
+   KOMPRESI GAMBAR (upload file)
+   ============================================================ */
+async function compressImage(file, maxSize = MAX_IMG_SIZE, quality = IMG_QUALITY) {
+  const dataUrl = await fileToDataURL(file);
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width: w, height: h } = img;
+      if (w > maxSize || h > maxSize) {
+        const ratio = Math.min(maxSize / w, maxSize / h);
+        w = Math.round(w * ratio);
+        h = Math.round(h * ratio);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      // Coba webp dulu, fallback jpeg
+      let out = canvas.toDataURL('image/webp', quality);
+      if (!out.startsWith('data:image/webp')) {
+        out = canvas.toDataURL('image/jpeg', quality);
+      }
+      resolve(out);
+    };
+    img.onerror = () => resolve(dataUrl);   // fallback: pakai asli
+    img.src = dataUrl;
+  });
+}
+
+/* Estimasi ukuran base64 (KB) */
+function sizeOfBase64(b64) {
+  if (!b64) return 0;
+  const i = b64.indexOf(',');
+  const raw = i >= 0 ? b64.length - i - 1 : b64.length;
+  return Math.round(raw * 0.75 / 1024);
+}
+
+/* ============================================================
+   GAMBAR SLOT SYSTEM (Upload / URL)
+   ============================================================ */
+
+/* Ambil slot element dari child manapun */
+function slotFromChild(el) {
+  return el.closest('.gambar-slot');
+}
+
+/* Switch tab Upload/URL */
+function slotTab(btn, tabName) {
+  const slot = slotFromChild(btn);
+  if (!slot) return;
+  slot.querySelectorAll('.slot-tab').forEach(b => b.classList.toggle('active', b === btn));
+  slot.querySelectorAll('.slot-panel').forEach(p => {
+    p.classList.toggle('hidden', p.dataset.panel !== tabName);
+  });
+}
+
+/* Baca nilai dari state berdasarkan data-path */
+function getSlotValue(path) {
+  if (path === '__pageBackground__') {
+    return state.template.halaman[state.activeHalaman]?.background || null;
+  }
+  if (path === '__elementImage__') {
+    const el = state.template.halaman[state.activeHalaman]?.elemen[state.selectedIdx];
+    return el && el.jenis === 'gambar' ? (el.sumber || null) : null;
+  }
+  return getPath(state.meta, path) || null;
+}
+
+/* Tulis nilai ke state */
+function setSlotValue(path, value) {
+  if (path === '__pageBackground__') {
+    if (state.template.halaman[state.activeHalaman]) {
+      state.template.halaman[state.activeHalaman].background = value;
+    }
+  } else if (path === '__elementImage__') {
+    const el = state.template.halaman[state.activeHalaman]?.elemen[state.selectedIdx];
+    if (el && el.jenis === 'gambar') {
+      el.sumber = value || '';
+      el.teksManual = '';
+    }
+  } else {
+    setPath(state.meta, path, value);
+  }
+}
+
+/* Render preview slot */
+function slotRenderPreview(slot) {
+  const path = slot.dataset.path;
+  const val = getSlotValue(path);
+  const pv = slot.querySelector('.slot-preview');
+  if (!pv) return;
+
+  // Isi input URL kalau ada
+  const urlInput = slot.querySelector('.slot-url');
+  if (urlInput) {
+    if (isUrl(val)) {
+      urlInput.value = val;
+      // Auto switch ke tab URL kalau value berupa URL
+      const urlTab = slot.querySelector('.slot-tab[data-tab="url"]');
+      if (urlTab && !urlTab.classList.contains('active')) {
+        slot.querySelectorAll('.slot-tab').forEach(b => b.classList.toggle('active', b === urlTab));
+        slot.querySelectorAll('.slot-panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== 'url'));
+      }
+    } else if (!val) {
+      urlInput.value = '';
+    }
+  }
+
+  if (!val) {
+    pv.innerHTML = '';
+    return;
+  }
+
+  const tipe = isUrl(val) ? 'URL' : 'Upload';
+  const size = isDataUrl(val) ? ` • ${sizeOfBase64(val)} KB` : '';
+  const label = isUrl(val)
+    ? val.replace(/^https?:\/\//, '').slice(0, 40)
+    : `File terkompresi${size}`;
+
+  pv.innerHTML = `
+    <div class="slot-preview-wrap">
+      <img src="${val}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+      <span class="slot-fallback"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Gagal muat</span>
+      <div class="slot-preview-meta">
+        <div class="font-semibold text-slate-700">${tipe}</div>
+        <div class="truncate" title="${val.slice(0, 200)}">${label}</div>
+      </div>
+      <button type="button" class="slot-remove" title="Hapus">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>`;
+
+  pv.querySelector('.slot-remove').onclick = (e) => {
+    e.preventDefault();
+    setSlotValue(path, null);
+    slotRenderPreview(slot);
+    onSlotValueChanged(path);
+    autoSave();
+    toast('Gambar dihapus', 'info');
+  };
+
+  lucide.createIcons();
+}
+
+/* Handle upload file */
+async function slotUpload(ev, input) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    toast('File harus berupa gambar', 'err');
+    input.value = '';
+    return;
+  }
+
+  const slot = input.closest('.gambar-slot');
+  if (!slot) return;
+  const path = slot.dataset.path;
+
+  toast('Mengompres gambar…', 'info');
+  try {
+    const compressed = await compressImage(file);
+    setSlotValue(path, compressed);
+    slotRenderPreview(slot);
+    onSlotValueChanged(path);
+    autoSave();
+    const kb = sizeOfBase64(compressed);
+    toast(`Gambar terpasang (${kb} KB)`, 'ok');
+  } catch (e) {
+    console.error(e);
+    toast('Gagal memproses gambar', 'err');
+  }
+  input.value = '';
+}
+
+/* Test URL & apply */
+async function slotTestUrl(btn) {
+  const slot = slotFromChild(btn);
+  if (!slot) return;
+  const path = slot.dataset.path;
+  const input = slot.querySelector('.slot-url');
+  const url = (input?.value || '').trim();
+  if (!url) return toast('Masukkan URL dulu', 'err');
+  if (!isUrl(url)) return toast('URL harus dimulai http:// atau https://', 'err');
+
+  btn.disabled = true;
+  const origHtml = btn.innerHTML;
+  btn.innerHTML = '<i data-lucide="loader" class="w-3 h-3 animate-spin"></i>';
+  lucide.createIcons();
+
+  try {
+    await testImageUrl(url);
+    setSlotValue(path, url);
+    slotRenderPreview(slot);
+    onSlotValueChanged(path);
+    autoSave();
+    toast('URL valid & terpasang', 'ok');
+  } catch (e) {
+    toast('Gagal memuat URL: ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = origHtml;
+    lucide.createIcons();
+  }
+}
+
+/* Test apakah URL gambar bisa dimuat + cek CORS */
+function testImageUrl(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const timeout = setTimeout(() => {
+      img.src = '';
+      reject(new Error('timeout'));
+    }, 10000);
+
+    img.onload = () => {
+      clearTimeout(timeout);
+      if (img.naturalWidth === 0) return reject(new Error('gambar kosong'));
+      // Coba fetch HEAD untuk cek CORS (html2canvas butuh CORS)
+      fetch(url, { method: 'GET', mode: 'cors', cache: 'no-cache' })
+        .then(r => {
+          if (!r.ok) return reject(new Error('HTTP ' + r.status));
+          resolve();
+        })
+        .catch(() => {
+          // Gambar bisa dimuat tapi CORS diblok — beri warning tapi tetap izinkan
+          resolve();
+          toast('Catatan: server gambar tidak mengizinkan CORS, PDF mungkin gagal render', 'info');
+        });
+    };
+    img.onerror = () => {
+      clearTimeout(timeout);
+      reject(new Error('tidak bisa dimuat'));
+    };
+    img.src = url;
+  });
+}
+
+/* Callback setelah nilai slot berubah */
+function onSlotValueChanged(path) {
+  // Kalau background halaman berubah, refresh canvas
+  if (path === '__pageBackground__') {
+    renderCanvas();
+  }
+  // Kalau gambar elemen berubah, refresh canvas
+  if (path === '__elementImage__') {
+    renderCanvas();
+  }
+  // Kalau di tab desain dan slot element image berubah, refresh properti
+  if (path === '__elementImage__' && state.selectedIdx >= 0) {
+    renderProps();
+  }
+  // Kalau preview image (logo/ttd) berubah di tab event, tidak perlu render canvas
+}
+
+/* Sync semua slot dari state (dipanggil saat load/switch tab) */
+function syncAllSlots() {
+  document.querySelectorAll('.gambar-slot').forEach(slot => slotRenderPreview(slot));
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+    btn.classList.add('tab-active');
+    document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+    document.querySelector(`[data-panel="${btn.dataset.tab}"]`).classList.remove('hidden');
+    if (btn.dataset.tab === 'desain') renderCanvas();
+    if (btn.dataset.tab === 'generate') renderSummary();
+    if (btn.dataset.tab === 'event') syncAllSlots();
+    if (btn.dataset.tab === 'desain') syncAllSlots();
+    lucide.createIcons();
+  });
+});
+
+/* ============================================================
+   TAB 1 — EVENT
+   ============================================================ */
+function bindMetaInput(id, path) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', () => { setPath(state.meta, path, el.value); autoSave(); });
+}
+bindMetaInput('m_nama', 'nama_kegiatan');
+bindMetaInput('m_tanggal', 'tanggal');
+bindMetaInput('m_tempat', 'tempat');
+bindMetaInput('m_penyelenggara', 'penyelenggara');
+bindMetaInput('m_nomor', 'nomor');
+bindMetaInput('m_kop1', 'kop.teks.0');
+bindMetaInput('m_kop2', 'kop.teks.1');
+bindMetaInput('m_kop3', 'kop.teks.2');
+bindMetaInput('m_kop4', 'kop.teks.3');
+for (let i=0; i<2; i++) {
+  bindMetaInput(`p${i}_nama`, `pejabat.${i}.nama`);
+  bindMetaInput(`p${i}_jabatan`, `pejabat.${i}.jabatan`);
+  bindMetaInput(`p${i}_nip`, `pejabat.${i}.nip`);
+}
+
+/* ============================================================
+   TAB 2 — DATA (EXCEL)
+   ============================================================ */
+async function handleExcel(ev) {
+  const file = ev.target.files[0]; if (!file) return;
+  const buf = await file.arrayBuffer();
+  const wb = XLSX.read(buf, { type: 'array' });
+
+  const findSheet = (names) => {
+    const lower = wb.SheetNames.map(s => s.toLowerCase());
+    for (const n of names) {
+      const i = lower.indexOf(n.toLowerCase());
+      if (i >= 0) return wb.SheetNames[i];
+    }
+    return null;
+  };
+
+  const sheetPenerima = findSheet(['penerima','peserta','data']) || wb.SheetNames[0];
+  const sheetMateri = findSheet(['materi','lampiran','materi pelatihan']);
+
+  const jp = XLSX.utils.sheet_to_json(wb.Sheets[sheetPenerima], { defval: '' });
+  state.penerima = jp;
+  state.penerimaColumns = jp[0] ? Object.keys(jp[0]) : [];
+
+  if (sheetMateri) {
+    const jm = XLSX.utils.sheet_to_json(wb.Sheets[sheetMateri], { defval: '' });
+    state.materi = jm;
+    state.materiColumns = jm[0] ? Object.keys(jm[0]) : [];
+  } else {
+    state.materi = []; state.materiColumns = [];
+  }
+
+  state.penilaian.dataAwal = null;
+  state.penilaian.kategoriList = [];
+  state.filterGenerate = { kategori: '', juara: '' };
+
+  renderDataPreview();
+  showPenilaianPanel();
+  renderSumberOptions();
+  autoSave();
+
+  document.getElementById('excelStatus').innerHTML = `
+    <div class="text-xs bg-emerald-50 text-emerald-700 px-3 py-2 rounded-lg">
+      ✓ Sheet penerima: <b>${sheetPenerima}</b> (${jp.length} baris)
+      ${sheetMateri ? `• Sheet materi: <b>${sheetMateri}</b> (${state.materi.length} baris)` : '• Tidak ada sheet materi'}
+    </div>`;
+  toast('Excel berhasil dimuat', 'ok');
+}
+
+function renderDataPreview() {
+  if (state.penerima.length) {
+    document.getElementById('penerimaPanel').classList.remove('hidden');
+    document.getElementById('penerimaCount').textContent = state.penerima.length + ' baris';
+    const cols = state.penerimaColumns;
+    let html = '<thead class="bg-slate-50"><tr>' + cols.map(c => `<th class="text-left px-3 py-2 font-semibold text-slate-600 border-b">${c}</th>`).join('') + '</tr></thead><tbody>';
+    state.penerima.slice(0, 100).forEach(r => {
+      html += '<tr class="border-b border-slate-50">' + cols.map(c => `<td class="px-3 py-1.5 text-slate-700">${r[c] ?? ''}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody>';
+    if (state.penerima.length > 100) html += `<caption class="text-[10px] text-slate-400 py-2">Menampilkan 100 baris pertama dari ${state.penerima.length}</caption>`;
+    document.getElementById('penerimaTable').innerHTML = html;
+  }
+  if (state.materi.length) {
+    document.getElementById('materiPanel').classList.remove('hidden');
+    document.getElementById('materiCount').textContent = state.materi.length + ' baris';
+    const cols = state.materiColumns;
+    let html = '<thead class="bg-slate-50"><tr>' + cols.map(c => `<th class="text-left px-3 py-2 font-semibold text-slate-600 border-b">${c}</th>`).join('') + '</tr></thead><tbody>';
+    state.materi.forEach(r => {
+      html += '<tr class="border-b border-slate-50">' + cols.map(c => `<td class="px-3 py-1.5 text-slate-700">${r[c] ?? ''}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody>';
+    document.getElementById('materiTable').innerHTML = html;
+  } else {
+    document.getElementById('materiPanel').classList.add('hidden');
+  }
+}
+
+/* ============================================================
+   PENILAIAN LOMBA
+   ============================================================ */
+function parseSkor(v) {
+  if (v === null || v === undefined || v === '') return -Infinity;
+  const s = String(v).replace(',', '.').replace(/[^\d.-]/g, '');
+  const n = parseFloat(s);
+  return isNaN(n) ? -Infinity : n;
+}
+
+function detectPenilaianColumns() {
+  const cols = state.penerimaColumns;
+  const patterns = {
+    nama: ['nama','peserta','siswa','namalengkap','namapeserta','fullname'],
+    sekolah: ['sekolah','instansi','asal','satuan','unit','asalinstansi','asalsekolah'],
+    kategori: ['kategori','cabang','bidang','matalomba','jenislomba','mapel','lomba'],
+    skor: ['skor','nilai','total','score','point','poin','jumlah','totalnilai','nilaiakhir'],
+    peringkat: ['peringkat','juara','rank','posisi','ranking','rankings'],
+    nip: ['nip','nis','nisn','idpeserta','nopeserta','nomorpeserta']
+  };
+  const hasil = {};
+  cols.forEach(c => {
+    const lower = c.toLowerCase().replace(/[_\s-]/g, '');
+    Object.entries(patterns).forEach(([key, list]) => {
+      if (hasil[key]) return;
+      if (list.some(p => lower.includes(p))) hasil[key] = c;
+    });
+  });
+  return hasil;
+}
+
+function computeRanks(data, kategoriKey, skorKey) {
+  const groups = {};
+  data.forEach(r => {
+    const kat = kategoriKey ? String(r[kategoriKey] || '(tanpa kategori)').trim() : 'Semua';
+    if (!groups[kat]) groups[kat] = [];
+    groups[kat].push(r);
+  });
+  Object.values(groups).forEach(arr => {
+    arr.sort((a,b) => parseSkor(b[skorKey]) - parseSkor(a[skorKey]));
+    let lastSkor = null, lastRank = 0;
+    arr.forEach((r, i) => {
+      const skor = parseSkor(r[skorKey]);
+      if (lastSkor !== null && skor === lastSkor) { r.__rank = lastRank; }
+      else { r.__rank = i + 1; lastRank = r.__rank; lastSkor = skor; }
+    });
+  });
+  return data;
+}
+
+function normalizePeringkat(r, kolomPeringkat, autoRank) {
+  if (kolomPeringkat && r[kolomPeringkat] !== '' && r[kolomPeringkat] != null) {
+    const v = String(r[kolomPeringkat]).trim();
+    const lower = v.toLowerCase();
+    if (lower.includes('juara')) return v.charAt(0).toUpperCase() + v.slice(1);
+    const num = parseInt(v.match(/\d+/)?.[0]);
+    if (num) return `Juara ${num}`;
+    return v;
+  }
+  if (autoRank && r.__rank) return `Juara ${r.__rank}`;
+  return '';
+}
+
+function isPenilaianLike() {
+  const cols = state.penerimaColumns.map(c => c.toLowerCase().replace(/[_\s-]/g,''));
+  const adaSkor = cols.some(c => ['skor','nilai','total','score','point','poin'].some(p => c.includes(p)));
+  const adaKategori = cols.some(c => ['kategori','cabang','bidang','lomba','mapel'].some(p => c.includes(p)));
+  const adaNama = cols.some(c => ['nama','peserta','siswa'].some(p => c.includes(p)));
+  return adaNama && (adaSkor || adaKategori);
+}
+
+function showPenilaianPanel() {
+  if (!isPenilaianLike()) {
+    document.getElementById('penilaianPanel').classList.add('hidden');
+    state.penilaian.aktif = false;
+    return;
+  }
+  state.penilaian.aktif = true;
+  document.getElementById('penilaianPanel').classList.remove('hidden');
+  renderPenilaianDropdowns();
+  lucide.createIcons();
+}
+
+function renderPenilaianDropdowns() {
+  const cols = state.penerimaColumns;
+  const detected = detectPenilaianColumns();
+  const makeOpts = (selected, includeEmpty = true) => {
+    let html = includeEmpty ? '<option value="">— tidak dipakai —</option>' : '';
+    return html + cols.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c}</option>`).join('');
+  };
+  document.getElementById('pk_nama').innerHTML = makeOpts(detected.nama, false);
+  document.getElementById('pk_sekolah').innerHTML = makeOpts(detected.sekolah);
+  document.getElementById('pk_kategori').innerHTML = makeOpts(detected.kategori);
+  document.getElementById('pk_skor').innerHTML = makeOpts(detected.skor);
+  document.getElementById('pk_peringkat').innerHTML = makeOpts(detected.peringkat);
+  document.getElementById('pk_nip').innerHTML = makeOpts(detected.nip);
+  state.penilaian.kolom = { ...detected };
+
+  ['nama','sekolah','kategori','skor','peringkat','nip'].forEach(k => {
+    const el = document.getElementById('pk_' + k);
+    if (!el) return;
+    el.onchange = () => {
+      state.penilaian.kolom[k] = el.value || null;
+      document.getElementById('penilaianPreview').classList.add('hidden');
+    };
+  });
+  document.getElementById('pk_autorank').onchange = e => {
+    state.penilaian.autoRank = e.target.checked;
+    document.getElementById('penilaianPreview').classList.add('hidden');
+  };
+  document.getElementById('pk_juara').onchange = e => { state.penilaian.juaraLimit = +e.target.value; };
+}
+
+function previewJuara() {
+  const { nama, sekolah, kategori, skor, peringkat } = state.penilaian.kolom;
+  if (!nama) return toast('Kolom Nama wajib dipilih', 'err');
+  if (!skor && !peringkat) return toast('Pilih kolom Skor atau Peringkat', 'err');
+
+  const data = JSON.parse(JSON.stringify(state.penerima));
+  if (state.penilaian.autoRank && skor) computeRanks(data, kategori, skor);
+
+  const limit = state.penilaian.juaraLimit;
+  const grouped = {};
+  data.forEach(r => {
+    const kat = kategori ? String(r[kategori] || '(tanpa kategori)').trim() : 'Semua';
+    if (!grouped[kat]) grouped[kat] = [];
+    const pr = normalizePeringkat(r, peringkat, state.penilaian.autoRank);
+    const num = parseInt(String(pr).match(/\d+/)?.[0] || 0);
+    r.__peringkat = pr; r.__peringkatNum = num;
+    if (num && num <= limit) grouped[kat].push(r);
+  });
+  Object.values(grouped).forEach(arr => arr.sort((a,b) => a.__peringkatNum - b.__peringkatNum));
+
+  let html = '<div class="border border-slate-200 rounded-xl overflow-hidden">';
+  html += `<div class="bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 border-b border-slate-200">Preview Juara (maks ${limit === 99 ? 'semua' : limit} per kategori)</div>`;
+  html += '<div class="max-h-80 overflow-auto scrollbar-thin p-3 space-y-3">';
+  const katKeys = Object.keys(grouped);
+  if (!katKeys.length) {
+    html += '<p class="text-xs text-slate-400 text-center py-6">Tidak ada juara yang cocok. Cek kolom Skor/Peringkat.</p>';
+  } else {
+    katKeys.forEach(kat => {
+      const arr = grouped[kat];
+      html += `<div class="border border-slate-100 rounded-lg p-3">`;
+      html += `<p class="text-xs font-bold text-teal-700 mb-2 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5"></i> ${kat} <span class="chip bg-teal-100 text-teal-700">${arr.length} juara</span></p>`;
+      html += '<table class="w-full text-xs"><thead class="text-slate-500"><tr class="border-b border-slate-100">';
+      html += '<th class="text-left py-1 font-semibold">Peringkat</th>';
+      html += `<th class="text-left py-1 font-semibold">${nama}</th>`;
+      if (sekolah) html += `<th class="text-left py-1 font-semibold">${sekolah}</th>`;
+      if (skor) html += `<th class="text-right py-1 font-semibold">${skor}</th>`;
+      html += '</tr></thead><tbody>';
+      arr.forEach(r => {
+        html += '<tr class="border-b border-slate-50">';
+        html += `<td class="py-1"><span class="chip bg-amber-100 text-amber-800">${r.__peringkat}</span></td>`;
+        html += `<td class="py-1 font-semibold text-slate-700">${r[nama]}</td>`;
+        if (sekolah) html += `<td class="py-1 text-slate-600">${r[sekolah] ?? ''}</td>`;
+        if (skor) html += `<td class="py-1 text-right font-mono text-slate-600">${r[skor] ?? ''}</td>`;
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+    });
+  }
+  html += '</div></div>';
+  const pv = document.getElementById('penilaianPreview');
+  pv.innerHTML = html; pv.classList.remove('hidden');
+  lucide.createIcons();
+}
+
+function applyPenilaian() {
+  const { nama, sekolah, kategori, skor, peringkat } = state.penilaian.kolom;
+  if (!nama) return toast('Kolom Nama wajib dipilih', 'err');
+  if (!skor && !peringkat) return toast('Pilih kolom Skor atau Peringkat', 'err');
+  if (!state.penilaian.dataAwal) state.penilaian.dataAwal = JSON.parse(JSON.stringify(state.penerima));
+
+  const data = JSON.parse(JSON.stringify(state.penilaian.dataAwal));
+  if (state.penilaian.autoRank && skor) computeRanks(data, kategori, skor);
+
+  data.forEach(r => {
+    r['PERINGKAT'] = normalizePeringkat(r, peringkat, state.penilaian.autoRank);
+    if (kategori) r['KATEGORI'] = String(r[kategori] || '').trim();
+    if (nama && !r['NAMA']) r['NAMA'] = r[nama];
+    if (sekolah && !r['SEKOLAH']) r['SEKOLAH'] = r[sekolah];
+    if (skor && !r['SKOR']) r['SKOR'] = r[skor];
+  });
+
+  state.penerima = data;
+  ['PERINGKAT','KATEGORI','NAMA','SEKOLAH','SKOR'].forEach(k => {
+    if (!state.penerimaColumns.includes(k) && state.penerima[0]?.[k] !== undefined) state.penerimaColumns.push(k);
+  });
+  state.penilaian.kategoriList = [...new Set(data.map(r => r['KATEGORI']).filter(Boolean))].sort();
+
+  renderDataPreview();
+  renderSumberOptions();
+  renderSummary();
+  autoSave();
+  toast('Penilaian diterapkan • ' + state.penilaian.kategoriList.length + ' kategori', 'ok');
+}
+
+function resetPenilaian() {
+  if (!state.penilaian.dataAwal) return toast('Tidak ada backup', 'err');
+  state.penerima = JSON.parse(JSON.stringify(state.penilaian.dataAwal));
+  state.penilaian.dataAwal = null;
+  state.penilaian.kategoriList = [];
+  renderDataPreview();
+  renderSumberOptions();
+  autoSave();
+  toast('Direset ke data awal', 'ok');
+}
+
+/* ============================================================
+   FILTER GENERATE
+   ============================================================ */
+function renderFilterGenerate() {
+  const wrap = document.getElementById('filterGenerate');
+  if (!wrap) return;
+  const kats = state.penilaian.kategoriList;
+  if (!kats.length && !state.penerima.some(r => r['PERINGKAT'])) {
+    wrap.innerHTML = '<p class="text-xs text-slate-500">Tidak ada filter aktif. Semua penerima akan digenerate.</p>';
+    return;
+  }
+  let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-3">';
+  if (kats.length) {
+    html += '<label class="block"><span class="text-[11px] font-semibold text-slate-600">Kategori</span>';
+    html += '<select id="fg_kategori" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">';
+    html += '<option value="">Semua kategori</option>';
+    kats.forEach(k => { html += `<option value="${k}" ${state.filterGenerate.kategori === k ? 'selected' : ''}>${k}</option>`; });
+    html += '</select></label>';
+    html += '<label class="block"><span class="text-[11px] font-semibold text-slate-600">Hanya juara</span>';
+    html += '<select id="fg_juara" class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">';
+    html += '<option value="">Semua penerima</option>';
+    for (let i = 1; i <= 6; i++) html += `<option value="${i}" ${state.filterGenerate.juara == i ? 'selected' : ''}>Hanya Juara ${i}</option>`;
+    html += `<option value="juara" ${state.filterGenerate.juara === 'juara' ? 'selected' : ''}>Semua juara (1-6)</option>`;
+    html += '</select></label>';
+  }
+  html += '</div>';
+  const filtered = applyFilterToData();
+  html += `<p class="text-xs text-slate-500 mt-3">Hasil filter: <b class="text-teal-700">${filtered.length}</b> dari ${state.penerima.length} penerima.</p>`;
+  wrap.innerHTML = html;
+
+  const fk = document.getElementById('fg_kategori');
+  const fj = document.getElementById('fg_juara');
+  if (fk) fk.onchange = () => { state.filterGenerate.kategori = fk.value; renderFilterGenerate(); renderSummary(); };
+  if (fj) fj.onchange = () => { state.filterGenerate.juara = fj.value; renderFilterGenerate(); renderSummary(); };
+}
+
+function applyFilterToData() {
+  let data = state.penerima.slice();
+  const { kategori, juara } = state.filterGenerate;
+  if (kategori) data = data.filter(r => String(r['KATEGORI'] || '') === kategori);
+  if (juara) {
+    if (juara === 'juara') data = data.filter(r => /juara\s*[1-6]/i.test(String(r['PERINGKAT'] || '')));
+    else data = data.filter(r => {
+      const m = String(r['PERINGKAT'] || '').match(/juara\s*(\d+)/i);
+      return m && +m[1] === +juara;
+    });
+  }
+  return data;
+}
+/* ============================================================
+   TAB 3 — DESAIN: UKURAN & HALAMAN
+   ============================================================ */
+function updateUkuran() {
+  const l = +document.getElementById('u_lebar').value || 297;
+  const t = +document.getElementById('u_tinggi').value || 210;
+  const o = document.getElementById('u_orientasi').value;
+  state.template.ukuran = { lebar: l, tinggi: t, orientasi: o };
+  renderCanvas(); autoSave(); updateChkUkuran();
+}
+
+function applyPresetUkuran() {
+  const v = document.getElementById('u_preset').value; if (!v) return;
+  const [w, h] = v.split('x').map(Number);
+  document.getElementById('u_lebar').value = w;
+  document.getElementById('u_tinggi').value = h;
+  document.getElementById('u_orientasi').value = h > w ? 'portrait' : 'landscape';
+  updateUkuran();
+}
+
+function addHalaman() {
+  state.template.halaman.push({ id: uid(), nama: `Halaman ${state.template.halaman.length + 1}`, background: null, kondisi: '', elemen: [] });
+  state.activeHalaman = state.template.halaman.length - 1;
+  renderHalamanTabs(); renderCanvas(); syncAllSlots(); autoSave();
+}
+
+function deleteHalaman() {
+  if (state.template.halaman.length <= 1) return toast('Minimal 1 halaman', 'err');
+  if (!confirm('Hapus halaman ini?')) return;
+  state.template.halaman.splice(state.activeHalaman, 1);
+  state.activeHalaman = 0;
+  renderHalamanTabs(); renderCanvas(); syncAllSlots(); autoSave();
+}
+
+function renderHalamanTabs() {
+  const wrap = document.getElementById('halamanTabs');
+  wrap.innerHTML = state.template.halaman.map((h, i) =>
+    `<button onclick="switchHalaman(${i})" class="px-2.5 py-1 rounded border ${i===state.activeHalaman?'bg-teal-100 border-teal-300 text-teal-700 font-semibold':'border-slate-200 hover:bg-slate-50'}">${h.nama}</button>`
+  ).join('');
+}
+
+function switchHalaman(i) {
+  state.activeHalaman = i; state.selectedIdx = -1; state.multiIdxs = [];
+  renderHalamanTabs(); renderCanvas(); renderProps(); syncAllSlots();
+}
+
+function updateHalamanKondisi() {
+  state.template.halaman[state.activeHalaman].kondisi = document.getElementById('halamanKondisi').value;
+  autoSave();
+}
+
+/* ============================================================
+   SAFE AREA
+   ============================================================ */
+function toggleSafeAreaPanel() {
+  const p = document.getElementById('safeAreaPanel');
+  p.classList.toggle('hidden');
+  if (!p.classList.contains('hidden')) syncSafeAreaInputs();
+}
+
+function syncSafeAreaInputs() {
+  const sa = state.template.safeArea;
+  if (!sa) return;
+  document.getElementById('sa_aktif').checked = !!sa.aktif;
+  document.getElementById('sa_atas').value = sa.atas;
+  document.getElementById('sa_kanan').value = sa.kanan;
+  document.getElementById('sa_bawah').value = sa.bawah;
+  document.getElementById('sa_kiri').value = sa.kiri;
+  document.getElementById('sa_tampil').checked = sa.tampil !== false;
+}
+
+function updateSafeArea() {
+  state.template.safeArea = {
+    aktif: document.getElementById('sa_aktif').checked,
+    atas: +document.getElementById('sa_atas').value || 0,
+    kanan: +document.getElementById('sa_kanan').value || 0,
+    bawah: +document.getElementById('sa_bawah').value || 0,
+    kiri: +document.getElementById('sa_kiri').value || 0,
+    tampil: document.getElementById('sa_tampil').checked
+  };
+  renderCanvas();
+  autoSave();
+}
+
+function setSafePreset(mm) {
+  document.getElementById('sa_atas').value = mm;
+  document.getElementById('sa_kanan').value = mm;
+  document.getElementById('sa_bawah').value = mm;
+  document.getElementById('sa_kiri').value = mm;
+  document.getElementById('sa_aktif').checked = mm > 0;
+  updateSafeArea();
+}
+
+function isInsideSafeArea(el) {
+  const sa = state.template.safeArea;
+  if (!sa || !sa.aktif) return true;
+  const uk = state.template.ukuran;
+  return el.x >= sa.kiri - 0.01
+      && el.y >= sa.atas - 0.01
+      && (el.x + el.w) <= (uk.lebar - sa.kanan + 0.01)
+      && (el.y + el.h) <= (uk.tinggi - sa.bawah + 0.01);
+}
+
+function renderSafeArea(page) {
+  const sa = state.template.safeArea;
+  if (!sa || !sa.aktif || sa.tampil === false) return;
+  const uk = state.template.ukuran;
+
+  const lines = [
+    `left:${mm2px(sa.kiri)}px;top:0;width:0;height:100%;border-left:1px dashed #f97316;`,
+    `left:${mm2px(uk.lebar - sa.kanan)}px;top:0;width:0;height:100%;border-left:1px dashed #f97316;`,
+    `top:${mm2px(sa.atas)}px;left:0;height:0;width:100%;border-top:1px dashed #f97316;`,
+    `top:${mm2px(uk.tinggi - sa.bawah)}px;left:0;height:0;width:100%;border-top:1px dashed #f97316;`
+  ];
+  lines.forEach(css => {
+    const d = document.createElement('div');
+    d.style.cssText = `position:absolute;${css}pointer-events:none;z-index:55;`;
+    page.appendChild(d);
+  });
+
+  const label = document.createElement('div');
+  label.style.cssText = `position:absolute;left:${mm2px(sa.kiri) + 3}px;top:${mm2px(sa.atas) + 2}px;font-size:8px;color:#f97316;font-weight:700;background:rgba(255,255,255,.85);padding:0 3px;border-radius:2px;pointer-events:none;z-index:56;`;
+  label.textContent = 'SAFE AREA';
+  page.appendChild(label);
+}
+
+/* ============================================================
+   PRINT PREVIEW
+   ============================================================ */
+function setPrintPreview(on) {
+  state.printPreview = !!on;
+  document.body.classList.toggle('print-preview-mode', state.printPreview);
+  renderCanvas();
+}
+
+/* ============================================================
+   RENDER KANVAS
+   ============================================================ */
+function renderCanvas() {
+  const page = document.getElementById('pageCanvas');
+  const uk = state.template.ukuran;
+  page.style.width = mm2px(uk.lebar) + 'px';
+  page.style.height = mm2px(uk.tinggi) + 'px';
+  page.innerHTML = '';
+
+  const halaman = state.template.halaman[state.activeHalaman];
+
+  if (halaman.background && !state.printPreview) {
+    const bg = document.createElement('div');
+    bg.className = 'el el-bg';
+    bg.style.cssText = `left:0;top:0;width:100%;height:100%;background:url(${halaman.background}) center/100% 100% no-repeat;cursor:default;`;
+    bg.addEventListener('mousedown', e => e.stopPropagation());
+    page.appendChild(bg);
+  }
+
+  halaman.elemen.forEach((el, idx) => {
+    const div = document.createElement('div');
+    let cls = 'el';
+    if (idx === state.selectedIdx) cls += ' selected';
+    else if (state.multiIdxs.includes(idx)) cls += ' multi-sel';
+    if (el.locked) cls += ' locked';
+    if (el.rotation) cls += ' rotated';
+    if (el.groupId) cls += ' grouped';
+    div.className = cls;
+    div.style.left = mm2px(el.x) + 'px';
+    div.style.top = mm2px(el.y) + 'px';
+    div.style.width = mm2px(el.w) + 'px';
+    div.style.height = mm2px(el.h) + 'px';
+    if (el.rotation) { div.style.transform = `rotate(${el.rotation}deg)`; div.style.transformOrigin = 'center center'; }
+    div.dataset.idx = idx;
+
+    if (el.jenis === 'teks') {
+      div.style.fontFamily = el.font;
+      div.style.fontSize = pt2px(el.size) + 'px';
+      div.style.fontWeight = el.weight;
+      div.style.color = el.warna;
+      div.style.textAlign = el.align;
+      div.style.fontStyle = el.italic ? 'italic' : 'normal';
+      div.style.lineHeight = '1.15';
+      div.style.whiteSpace = 'pre-wrap';
+      div.style.overflow = 'hidden';
+      div.textContent = resolveSumber(el);
+    } else if (el.jenis === 'gambar') {
+      const src = resolveSumber(el);
+      if (src && isImageSource(src)) {
+        div.innerHTML = `<img src="${src}" onerror="this.style.opacity='0.2';this.alt='Gagal memuat gambar';">`;
+      } else {
+        div.innerHTML = `<div style="width:100%;height:100%;background:#f1f5f9;border:1px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:10px;color:#94a3b8;">Gambar</div>`;
+      }
+    } else if (el.jenis === 'tabel') {
+      div.innerHTML = renderTabel(el);
+    }
+
+    if (state.template.safeArea?.aktif && !isInsideSafeArea(el)) {
+      div.classList.add('out-of-safe');
+    }
+
+    if (el.locked) {
+      const badge = document.createElement('div');
+      badge.className = 'lock-badge';
+      badge.innerHTML = '<i data-lucide="lock"></i>';
+      div.appendChild(badge);
+    }
+    if (el.groupId) {
+      const gb = document.createElement('div');
+      gb.className = 'group-badge'; gb.textContent = 'G';
+      div.appendChild(gb);
+    }
+
+    div.addEventListener('mousedown', e => startDrag(e, idx));
+    div.addEventListener('click', e => { e.stopPropagation(); selectElement(idx, e.ctrlKey || e.metaKey); });
+    page.appendChild(div);
+  });
+
+  if (state.selectedIdx >= 0) {
+    const el = halaman.elemen[state.selectedIdx];
+    if (el && !el.locked) {
+      renderHandles(page, el, state.selectedIdx);
+      renderRotateHandle(page, el, state.selectedIdx);
+    }
+  }
+
+  renderSafeArea(page);
+
+  page.addEventListener('click', () => {
+    state.selectedIdx = -1; state.multiIdxs = [];
+    renderCanvas(); renderProps();
+  });
+
+  document.getElementById('guidesLayer').innerHTML = '';
+  syncGridOverlay();
+
+  renderElemenList(); renderBgPreview(); renderHalamanTabs(); updateSelCount();
+  lucide.createIcons();
+}
+
+function updateSelCount() {
+  const n = (state.selectedIdx >= 0 ? 1 : 0) + state.multiIdxs.length;
+  const el = document.getElementById('selCount');
+  if (el) el.textContent = n;
+}
+
+function renderBgPreview() {
+  const h = state.template.halaman[state.activeHalaman];
+  const preview = document.getElementById('bgPreview');
+  if (!preview) return;
+  preview.innerHTML = h.background
+    ? `<div class="slot-preview-wrap"><img src="${h.background}" style="height:32px;max-width:100%;"><div class="slot-preview-meta text-[9px]">${isUrl(h.background)?'URL':'Upload'}</div></div>`
+    : `<p class="text-[10px] text-slate-400">Belum ada background</p>`;
+  document.getElementById('halamanKondisi').value = h.kondisi || '';
+}
+
+/* ============================================================
+   RESOLVE SUMBER
+   ============================================================ */
+function evalExpr(s) {
+  return s.split(' + ').map(part => {
+    part = part.trim();
+    if ((part.startsWith("'") && part.endsWith("'")) || (part.startsWith('"') && part.endsWith('"'))) return part.slice(1, -1);
+    if (part.startsWith('meta:')) return getPath(state.meta, part.slice(5)) ?? '';
+    if (part.startsWith('kolom:')) return state.penerima[0]?.[part.slice(6)] ?? '';
+    if (part.startsWith('materi:')) return state.materi[0]?.[part.slice(7)] ?? '';
+    return part;
+  }).join('');
+}
+
+function resolveSumber(el) {
+  // Gambar: prioritas sumber, fallback teksManual
+  if (el.jenis === 'gambar') {
+    if (el.sumber && isImageSource(el.sumber)) return el.sumber;
+    if (el.sumber && el.sumber.startsWith('meta:')) {
+      const v = getPath(state.meta, el.sumber.slice(5));
+      return v || '';
+    }
+    if (el.teksManual && isImageSource(el.teksManual)) return el.teksManual;
+    return '';
+  }
+  // Teks & tabel
+  if (el.teksManual) return el.teksManual;
+  if (!el.sumber) return '';
+  const s = el.sumber;
+  if (s.includes(' + ')) return evalExpr(s);
+  if (s.startsWith('teks:')) return s.slice(5);
+  if (s.startsWith('meta:')) return getPath(state.meta, s.slice(5)) || '';
+  if (s.startsWith('kolom:')) return state.penerima[0]?.[s.slice(6)] ?? `[${s.slice(6)}]`;
+  if (s.startsWith('materi:')) return state.materi[0]?.[s.slice(7)] ?? '';
+  if (s === 'foto:gtk') {
+    const id = state.penerima[0]?.guru_id;
+    return id ? `${FOTO_BASE}/${id}.webp` : '';
+  }
+  return s;
+}
+
+function renderTabel(el) {
+  if (!state.materi.length) return '<div style="font-size:10px;color:#94a3b8;text-align:center;padding:8px;">[Belum ada data materi]</div>';
+  const cols = el.kolom || state.materiColumns.map(k => ({ key: k, label: k, w: 0 }));
+  const totalW = cols.reduce((s,c) => s + (c.w||0), 0);
+  let html = `<table style="font-size:${pt2px(el.size||11)}px;font-family:${el.font||'Inter'}">`;
+  html += '<thead><tr>';
+  cols.forEach(c => {
+    const w = totalW ? `width:${(c.w/totalW*100)}%` : '';
+    html += `<th style="${w};background:#f1f5f9;font-weight:700;">${c.label}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+  state.materi.forEach(r => { html += '<tr>'; cols.forEach(c => { html += `<td>${r[c.key] ?? ''}</td>`; }); html += '</tr>'; });
+  html += '</tbody></table>';
+  return html;
+}
+
+/* ============================================================
+   ELEMEN LIST
+   ============================================================ */
+function renderElemenList() {
+  const wrap = document.getElementById('elemenList');
+  const halaman = state.template.halaman[state.activeHalaman];
+  if (!halaman.elemen.length) {
+    wrap.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-3">Belum ada elemen</p>';
+    return;
+  }
+  wrap.innerHTML = halaman.elemen.map((el, i) => {
+    const isPrimary = i === state.selectedIdx;
+    const isMulti = state.multiIdxs.includes(i);
+    let cls = 'border-slate-100 hover:bg-slate-50';
+    if (isPrimary) cls = 'bg-teal-50 border-teal-300 text-teal-700';
+    else if (isMulti) cls = 'bg-cyan-50 border-cyan-300 text-cyan-700';
+    const lockIcon = el.locked ? '<i data-lucide="lock" class="w-3 h-3 text-amber-500"></i>' : '';
+    return `
+      <button onclick="selectElement(${i}, event.ctrlKey || event.metaKey)"
+        class="w-full text-left text-[11px] px-2 py-1.5 rounded border ${cls} flex items-center gap-1.5">
+        <i data-lucide="${el.jenis==='teks'?'type':el.jenis==='gambar'?'image':'table'}" class="w-3 h-3"></i>
+        <span class="truncate flex-1">${el.jenis==='teks'?(el.teksManual || el.sumber || 'Teks kosong'):el.jenis}</span>
+        ${lockIcon}
+      </button>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+/* ============================================================
+   TAMBAH / PILIH / HAPUS / DUPLIKAT ELEMEN
+   ============================================================ */
+function addElement(jenis) {
+  const halaman = state.template.halaman[state.activeHalaman];
+  const uk = state.template.ukuran;
+  const base = {
+    id: uid(), jenis,
+    x: uk.lebar/2 - 50, y: uk.tinggi/2 - 5, w: 100, h: 10,
+    font: 'Inter', size: 14, weight: 400, warna: '#0f172a', align: 'center', italic: false,
+    sumber: '', teksManual: '', rotation: 0, locked: false, groupId: null
+  };
+  if (jenis === 'gambar') { base.w = 30; base.h = 30; }
+  if (jenis === 'tabel') { base.w = uk.lebar - 40; base.h = 60; base.size = 11; base.kolom = null; }
+  halaman.elemen.push(base);
+  state.selectedIdx = halaman.elemen.length - 1;
+  renderCanvas(); renderProps(); syncAllSlots(); autoSave();
+}
+
+function selectElement(idx, addToMulti = false) {
+  const halaman = state.template.halaman[state.activeHalaman];
+  const el = halaman.elemen[idx];
+  if (!el) return;
+  if (addToMulti) {
+    if (state.selectedIdx === idx) {}
+    else if (state.multiIdxs.includes(idx)) state.multiIdxs = state.multiIdxs.filter(i => i !== idx);
+    else {
+      if (state.selectedIdx < 0) state.selectedIdx = idx;
+      else state.multiIdxs.push(idx);
+    }
+  } else {
+    state.selectedIdx = idx; state.multiIdxs = [];
+  }
+  renderCanvas(); renderProps(); syncAllSlots();
+}
+
+function deleteSelected() {
+  const all = [state.selectedIdx, ...state.multiIdxs].filter(i => i >= 0);
+  if (!all.length) return;
+  const halaman = state.template.halaman[state.activeHalaman];
+  all.sort((a,b) => b - a).forEach(i => halaman.elemen.splice(i, 1));
+  state.selectedIdx = -1; state.multiIdxs = [];
+  renderCanvas(); renderProps(); autoSave();
+}
+
+function duplicateSelected() {
+  const idxs = getSelectedIdxs();
+  if (!idxs.length) return;
+  const halaman = state.template.halaman[state.activeHalaman];
+  const newIdxs = [];
+  idxs.forEach(i => {
+    const src = halaman.elemen[i];
+    const clone = JSON.parse(JSON.stringify(src));
+    clone.id = uid();
+    clone.x = Math.min(clone.x + 3, state.template.ukuran.lebar - clone.w);
+    clone.y = Math.min(clone.y + 3, state.template.ukuran.tinggi - clone.h);
+    clone.locked = false;
+    halaman.elemen.push(clone);
+    newIdxs.push(halaman.elemen.length - 1);
+  });
+  state.selectedIdx = newIdxs[newIdxs.length - 1];
+  state.multiIdxs = newIdxs.slice(0, -1);
+  renderCanvas(); renderProps(); autoSave();
+  toast(newIdxs.length + ' elemen diduplikat', 'ok');
+}
+
+function getSelectedIdxs() {
+  return [state.selectedIdx, ...state.multiIdxs].filter(i => i >= 0);
+}
+
+/* ============================================================
+   PROPERTI ELEMEN
+   ============================================================ */
+function renderProps() {
+  const idx = state.selectedIdx;
+  const el = idx >= 0 ? state.template.halaman[state.activeHalaman].elemen[idx] : null;
+  if (!el) {
+    document.getElementById('propsEmpty').classList.remove('hidden');
+    document.getElementById('propsPanel').classList.add('hidden');
+    return;
+  }
+  document.getElementById('propsEmpty').classList.add('hidden');
+  document.getElementById('propsPanel').classList.remove('hidden');
+  document.getElementById('pr_x').value = el.x;
+  document.getElementById('pr_y').value = el.y;
+  document.getElementById('pr_w').value = el.w;
+  document.getElementById('pr_h').value = el.h;
+  document.getElementById('pr_sumber').value = el.sumber || '';
+  document.getElementById('pr_teks').value = el.teksManual || '';
+  document.getElementById('pr_font').value = el.font;
+  document.getElementById('pr_size').value = el.size;
+  document.getElementById('pr_warna').value = el.warna;
+  document.getElementById('pr_weight').value = el.weight;
+  document.getElementById('pr_align').value = el.align;
+  document.getElementById('pr_italic').checked = !!el.italic;
+  const prRot = document.getElementById('pr_rotation');
+  if (prRot) prRot.value = el.rotation || 0;
+
+  // Tampilkan/sembunyikan panel sumber gambar khusus elemen gambar
+  const gWrap = document.getElementById('pr_gambar_wrap');
+  if (gWrap) {
+    gWrap.classList.toggle('hidden', el.jenis !== 'gambar');
+  }
+
+  const lockBtn = document.getElementById('btnLock');
+  if (lockBtn) {
+    lockBtn.innerHTML = `<i data-lucide="${el.locked ? 'lock' : 'unlock'}" class="w-3.5 h-3.5"></i>`;
+    lockBtn.classList.toggle('text-amber-600', el.locked);
+    lockBtn.classList.toggle('text-slate-400', !el.locked);
+  }
+  renderSumberOptions();
+  lucide.createIcons();
+}
+
+function renderSumberOptions() {
+  const sel = document.getElementById('pr_sumber'); if (!sel) return;
+  const el = state.template.halaman[state.activeHalaman]?.elemen[state.selectedIdx];
+  const isTabel = el && el.jenis === 'tabel';
+  const isGambar = el && el.jenis === 'gambar';
+  let opts = '<option value="">— pilih —</option>';
+
+  if (isTabel) {
+    opts += '<option value="materi:auto">Tabel Materi Otomatis</option>';
+  } else if (isGambar) {
+    opts += '<optgroup label="Dari Meta Event">';
+    opts += '<option value="meta:kop.logo_kiri">logo kiri</option>';
+    opts += '<option value="meta:kop.logo_kanan">logo kanan</option>';
+    for (let i = 0; i < 2; i++) {
+      ['ttd','stempel'].forEach(k => {
+        opts += `<option value="meta:pejabat.${i}.${k}">pejabat ${i+1} ${k}</option>`;
+      });
+    }
+    opts += '</optgroup>';
+    opts += '<optgroup label="Dinamis">';
+    opts += '<option value="foto:gtk">Foto GTK (dari SSO)</option>';
+    opts += '</optgroup>';
+  } else {
+    opts += '<optgroup label="Meta Event">';
+    ['nama_kegiatan','tanggal','tempat','penyelenggara','nomor'].forEach(k => { opts += `<option value="meta:${k}">${k}</option>`; });
+    opts += '<option value="meta:kop.teks.0">kop baris 1</option>';
+    opts += '<option value="meta:kop.teks.1">kop baris 2</option>';
+    opts += '<option value="meta:kop.teks.2">kop baris 3</option>';
+    opts += '<option value="meta:kop.teks.3">kop baris 4</option>';
+    for (let i = 0; i < 2; i++) {
+      ['nama','jabatan','nip'].forEach(k => {
+        opts += `<option value="meta:pejabat.${i}.${k}">pejabat ${i+1} ${k}</option>`;
+      });
+    }
+    opts += '</optgroup>';
+    if (state.penerimaColumns.length) {
+      opts += '<optgroup label="Kolom Penerima">';
+      state.penerimaColumns.forEach(k => { opts += `<option value="kolom:${k}">${k}</option>`; });
+      opts += '</optgroup>';
+    }
+    if (state.materiColumns.length) {
+      opts += '<optgroup label="Kolom Materi (baris 1)">';
+      state.materiColumns.forEach(k => { opts += `<option value="materi:${k}">${k}</option>`; });
+      opts += '</optgroup>';
+    }
+  }
+  sel.innerHTML = opts;
+}
+
+function propUpdate(key, val) {
+  const el = state.template.halaman[state.activeHalaman].elemen[state.selectedIdx];
+  if (!el) return;
+  if (key === 'italic') el[key] = val;
+  else if (['x','y','w','h','size','rotation'].includes(key)) el[key] = +val;
+  else el[key] = val;
+  renderCanvas(); autoSave();
+  if (key === 'sumber') syncAllSlots();
+}
+
+function quickPreset(jenis) {
+  const el = state.template.halaman[state.activeHalaman].elemen[state.selectedIdx];
+  if (!el) return;
+  const presets = {
+    kop:   { font:'Inter', size:16, weight:700, warna:'#0f172a', align:'left', italic:false },
+    nama:  { font:'Playfair Display', size:36, weight:700, warna:'#0F766E', align:'center', italic:false },
+    judul: { font:'Inter', size:22, weight:800, warna:'#0D9488', align:'center', italic:false },
+    isi:   { font:'Inter', size:12, weight:400, warna:'#334155', align:'center', italic:false }
+  };
+  Object.assign(el, presets[jenis]);
+  renderCanvas(); renderProps(); autoSave();
+}
+
+/* ============================================================
+   DRAG
+   ============================================================ */
+let drag = null;
+function startDrag(e, idx) {
+  e.preventDefault(); e.stopPropagation();
+  const halaman = state.template.halaman[state.activeHalaman];
+  const el = halaman.elemen[idx];
+  if (el.locked) return;
+
+  const addMulti = e.ctrlKey || e.metaKey;
+  if (!addMulti && state.selectedIdx !== idx && !state.multiIdxs.includes(idx)) {
+    state.selectedIdx = idx; state.multiIdxs = [];
+  } else if (addMulti) {
+    selectElement(idx, true); return;
+  }
+
+  let movingIdxs = [state.selectedIdx, ...state.multiIdxs].filter(i => i >= 0);
+  if (!movingIdxs.includes(idx)) movingIdxs.push(idx);
+  movingIdxs = expandToGroup(movingIdxs);
+
+  drag = {
+    idx, movingIdxs,
+    startX: e.clientX, startY: e.clientY,
+    origins: movingIdxs.map(i => {
+      const el2 = halaman.elemen[i];
+      return { i, ox: el2.x, oy: el2.y };
+    })
+  };
+  renderProps();
+  document.addEventListener('mousemove', onDrag);
+  document.addEventListener('mouseup', endDrag);
+}
+
+function computeSnap(el, newX, newY, skipIdxs) {
+  const halaman = state.template.halaman[state.activeHalaman];
+  const uk = state.template.ukuran;
+  const THRESHOLD_MM = 6 / MM2PX;
+  const w = el.w, h = el.h;
+  const candX = [{ v: newX, off: 0 }, { v: newX + w/2, off: -w/2 }, { v: newX + w, off: -w }];
+  const candY = [{ v: newY, off: 0 }, { v: newY + h/2, off: -h/2 }, { v: newY + h, off: -h }];
+  const targetsX = [
+    { v: 0, guide: 0 }, { v: uk.lebar/2, guide: mm2px(uk.lebar/2) }, { v: uk.lebar, guide: mm2px(uk.lebar) }
+  ];
+  const targetsY = [
+    { v: 0, guide: 0 }, { v: uk.tinggi/2, guide: mm2px(uk.tinggi/2) }, { v: uk.tinggi, guide: mm2px(uk.tinggi) }
+  ];
+  halaman.elemen.forEach((other, i) => {
+    if (skipIdxs.includes(i)) return;
+    targetsX.push({ v: other.x, guide: mm2px(other.x) });
+    targetsX.push({ v: other.x + other.w/2, guide: mm2px(other.x + other.w/2) });
+    targetsX.push({ v: other.x + other.w, guide: mm2px(other.x + other.w) });
+    targetsY.push({ v: other.y, guide: mm2px(other.y) });
+    targetsY.push({ v: other.y + other.h/2, guide: mm2px(other.y + other.h/2) });
+    targetsY.push({ v: other.y + other.h, guide: mm2px(other.y + other.h) });
+  });
+
+  const guides = [];
+  let snappedX = newX, snappedY = newY;
+  let bestX = null, bestY = null;
+
+  candX.forEach(c => { targetsX.forEach(t => {
+    const d = Math.abs(c.v - t.v);
+    if (d < THRESHOLD_MM && (!bestX || d < bestX.d)) bestX = { d, off: t.v - c.v, guide: t.guide };
+  }); });
+  if (bestX) { snappedX = newX + bestX.off; guides.push({ type: 'v', pos: bestX.guide }); }
+
+  candY.forEach(c => { targetsY.forEach(t => {
+    const d = Math.abs(c.v - t.v);
+    if (d < THRESHOLD_MM && (!bestY || d < bestY.d)) bestY = { d, off: t.v - c.v, guide: t.guide };
+  }); });
+  if (bestY) { snappedY = newY + bestY.off; guides.push({ type: 'h', pos: bestY.guide }); }
+
+  return { x: snappedX, y: snappedY, guides };
+}
+
+function renderGuides(guides) {
+  const layer = document.getElementById('guidesLayer');
+  layer.innerHTML = '';
+  guides.forEach(g => {
+    const d = document.createElement('div');
+    if (g.type === 'v') d.style.cssText = `position:absolute;left:${g.pos}px;top:0;width:1px;height:100%;background:#ec4899;opacity:.85;box-shadow:0 0 2px rgba(236,72,153,.6);`;
+    else d.style.cssText = `position:absolute;top:${g.pos}px;left:0;height:1px;width:100%;background:#ec4899;opacity:.85;box-shadow:0 0 2px rgba(236,72,153,.6);`;
+    layer.appendChild(d);
+  });
+}
+
+function onDrag(e) {
+  if (!drag) return;
+  const halaman = state.template.halaman[state.activeHalaman];
+  const primary = halaman.elemen[drag.idx];
+  const dx = (e.clientX - drag.startX) / MM2PX;
+  const dy = (e.clientY - drag.startY) / MM2PX;
+  const originPrimary = drag.origins.find(o => o.i === drag.idx);
+  let rawX = originPrimary.ox + dx;
+  let rawY = originPrimary.oy + dy;
+  rawX = snapToGrid(rawX);
+  rawY = snapToGrid(rawY);
+
+  let snap = { x: rawX, y: rawY, guides: [] };
+  if (!state.gridOn) snap = computeSnap(primary, rawX, rawY, drag.movingIdxs);
+
+  const finalDx = snap.x - originPrimary.ox;
+  const finalDy = snap.y - originPrimary.oy;
+
+  drag.origins.forEach(o => {
+    const el = halaman.elemen[o.i];
+    el.x = Math.max(0, Math.round((o.ox + finalDx) * 2) / 2);
+    el.y = Math.max(0, Math.round((o.oy + finalDy) * 2) / 2);
+  });
+
+  renderCanvas();
+  renderGuides(snap.guides);
+  document.getElementById('pr_x').value = primary.x;
+  document.getElementById('pr_y').value = primary.y;
+}
+
+function endDrag() {
+  drag = null;
+  document.getElementById('guidesLayer').innerHTML = '';
+  document.removeEventListener('mousemove', onDrag);
+  document.removeEventListener('mouseup', endDrag);
+  renderProps(); autoSave();
+}
+
+/* ============================================================
+   RESIZE HANDLE
+   ============================================================ */
+const HANDLE_POS = ['nw','n','ne','e','se','s','sw','w'];
+
+function renderHandles(page, el, idx) {
+  const px = mm2px(el.x), py = mm2px(el.y);
+  const pw = mm2px(el.w), ph = mm2px(el.h);
+  HANDLE_POS.forEach(pos => {
+    let cx, cy;
+    switch (pos) {
+      case 'nw': cx = px; cy = py; break;
+      case 'n': cx = px + pw/2; cy = py; break;
+      case 'ne': cx = px + pw; cy = py; break;
+      case 'e': cx = px + pw; cy = py + ph/2; break;
+      case 'se': cx = px + pw; cy = py + ph; break;
+      case 's': cx = px + pw/2; cy = py + ph; break;
+      case 'sw': cx = px; cy = py + ph; break;
+      case 'w': cx = px; cy = py + ph/2; break;
+    }
+    const h = document.createElement('div');
+    h.className = 'handle handle-' + pos;
+    h.style.left = cx + 'px'; h.style.top = cy + 'px';
+    h.addEventListener('mousedown', e => startResize(e, idx, pos));
+    h.addEventListener('click', e => e.stopPropagation());
+    page.appendChild(h);
+  });
+}
+
+let resize = null;
+function startResize(e, idx, pos) {
+  e.preventDefault(); e.stopPropagation();
+  const el = state.template.halaman[state.activeHalaman].elemen[idx];
+  if (el.locked) return;
+  resize = { idx, pos, startX: e.clientX, startY: e.clientY, ox: el.x, oy: el.y, ow: el.w, oh: el.h };
+  if (state.selectedIdx !== idx) selectElement(idx);
+  document.body.style.cursor = getComputedStyle(e.target).cursor;
+  document.addEventListener('mousemove', onResize);
+  document.addEventListener('mouseup', endResize);
+}
+
+function onResize(e) {
+  if (!resize) return;
+  const el = state.template.halaman[state.activeHalaman].elemen[resize.idx];
+  const dx = (e.clientX - resize.startX) / MM2PX;
+  const dy = (e.clientY - resize.startY) / MM2PX;
+  const { ox, oy, ow, oh, pos } = resize;
+  const MIN_W = 8, MIN_H = 4;
+  const shift = e.shiftKey;
+  let x = ox, y = oy, w = ow, h = oh;
+
+  if (pos.includes('e')) w = ow + dx;
+  if (pos.includes('s')) h = oh + dy;
+  if (pos.includes('w')) { w = ow - dx; x = ox + dx; }
+  if (pos.includes('n')) { h = oh - dy; y = oy + dy; }
+
+  if (shift && (pos === 'nw' || pos === 'ne' || pos === 'sw' || pos === 'se')) {
+    const ratio = ow / oh;
+    if (Math.abs(w - ow) > Math.abs(h - oh)) h = w / ratio;
+    else w = h * ratio;
+    if (pos.includes('w')) x = ox + (ow - w);
+    if (pos.includes('n')) y = oy + (oh - h);
+  }
+
+  if (w < MIN_W) { if (pos.includes('w')) x = ox + (ow - MIN_W); w = MIN_W; }
+  if (h < MIN_H) { if (pos.includes('n')) y = oy + (oh - MIN_H); h = MIN_H; }
+
+  if (state.gridOn) {
+    el.x = snapToGrid(x); el.y = snapToGrid(y);
+    el.w = Math.max(MIN_W, snapToGrid(w)); el.h = Math.max(MIN_H, snapToGrid(h));
+  } else {
+    el.x = Math.round(x * 2) / 2; el.y = Math.round(y * 2) / 2;
+    el.w = Math.round(w * 2) / 2; el.h = Math.round(h * 2) / 2;
+  }
+
+  renderCanvas();
+  document.getElementById('pr_x').value = el.x;
+  document.getElementById('pr_y').value = el.y;
+  document.getElementById('pr_w').value = el.w;
+  document.getElementById('pr_h').value = el.h;
+}
+
+function endResize() {
+  resize = null;
+  document.body.style.cursor = '';
+  document.removeEventListener('mousemove', onResize);
+  document.removeEventListener('mouseup', endResize);
+  renderProps(); autoSave();
+}
+
+/* ============================================================
+   ROTASI
+   ============================================================ */
+function renderRotateHandle(page, el, idx) {
+  const cx = mm2px(el.x + el.w/2);
+  const cy = mm2px(el.y);
+  const stem = document.createElement('div');
+  stem.className = 'rotate-stem';
+  stem.style.left = cx + 'px';
+  stem.style.top = (cy - 28) + 'px';
+  stem.style.height = '28px';
+  page.appendChild(stem);
+
+  const h = document.createElement('div');
+  h.className = 'rotate-handle';
+  h.style.left = cx + 'px';
+  h.style.top = (cy - 28) + 'px';
+  h.title = 'Drag untuk rotasi • Shift = 15°';
+  h.addEventListener('mousedown', e => startRotate(e, idx));
+  h.addEventListener('click', e => e.stopPropagation());
+  page.appendChild(h);
+}
+
+let rotate = null;
+function startRotate(e, idx) {
+  e.preventDefault(); e.stopPropagation();
+  const el = state.template.halaman[state.activeHalaman].elemen[idx];
+  const page = document.getElementById('pageCanvas');
+  const rect = page.getBoundingClientRect();
+  const cx = rect.left + mm2px(el.x + el.w/2);
+  const cy = rect.top + mm2px(el.y + el.h/2);
+  rotate = { idx, cx, cy, startAngle: Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI, orig: el.rotation || 0 };
+  selectElement(idx);
+  document.body.style.cursor = 'grabbing';
+  document.addEventListener('mousemove', onRotate);
+  document.addEventListener('mouseup', endRotate);
+}
+
+function onRotate(e) {
+  if (!rotate) return;
+  const el = state.template.halaman[state.activeHalaman].elemen[rotate.idx];
+  const angle = Math.atan2(e.clientY - rotate.cy, e.clientX - rotate.cx) * 180 / Math.PI;
+  let deg = rotate.orig + (angle - rotate.startAngle);
+  if (e.shiftKey) deg = Math.round(deg / 15) * 15;
+  deg = Math.round(deg * 10) / 10;
+  if (deg > 180) deg -= 360;
+  if (deg < -180) deg += 360;
+  el.rotation = deg;
+  renderCanvas();
+  const pr = document.getElementById('pr_rotation');
+  if (pr) pr.value = deg;
+}
+
+function endRotate() {
+  rotate = null;
+  document.body.style.cursor = '';
+  document.removeEventListener('mousemove', onRotate);
+  document.removeEventListener('mouseup', endRotate);
+  renderProps(); autoSave();
+}
+
+/* ============================================================
+   GROUP / UNGROUP
+   ============================================================ */
+function groupSelected() {
+  const idxs = getSelectedIdxs();
+  if (idxs.length < 2) return toast('Butuh minimal 2 elemen', 'err');
+  const halaman = state.template.halaman[state.activeHalaman];
+  const existing = halaman.elemen[idxs[0]].groupId;
+  const gid = existing || ('g' + uid());
+  idxs.forEach(i => { halaman.elemen[i].groupId = gid; });
+  renderCanvas(); renderProps(); autoSave();
+  toast(idxs.length + ' elemen di-group', 'ok');
+}
+
+function ungroupSelected() {
+  const idxs = getSelectedIdxs();
+  if (!idxs.length) return;
+  const halaman = state.template.halaman[state.activeHalaman];
+  let n = 0;
+  idxs.forEach(i => { if (halaman.elemen[i].groupId) { halaman.elemen[i].groupId = null; n++; } });
+  if (!n) return toast('Tidak ada group di selection', 'err');
+  renderCanvas(); renderProps(); autoSave();
+  toast(n + ' elemen di-ungroup', 'ok');
+}
+
+function expandToGroup(idxs) {
+  const halaman = state.template.halaman[state.activeHalaman];
+  const groups = new Set(idxs.map(i => halaman.elemen[i].groupId).filter(Boolean));
+  if (!groups.size) return idxs;
+  const result = new Set(idxs);
+  halaman.elemen.forEach((el, i) => { if (el.groupId && groups.has(el.groupId)) result.add(i); });
+  return [...result];
+}
+
+/* ============================================================
+   GRID SNAP
+   ============================================================ */
+function toggleGrid() {
+  state.gridOn = document.getElementById('gridToggle').checked;
+  state.gridSize = +document.getElementById('gridSize').value || 5;
+  syncGridOverlay();
+}
+
+function syncGridOverlay() {
+  const ov = document.getElementById('gridOverlay');
+  if (!ov) return;
+  ov.classList.toggle('hidden', !state.gridOn);
+  ov.classList.remove('grid-5','grid-10');
+  ov.classList.add(state.gridSize === 10 ? 'grid-10' : 'grid-5');
+}
+
+function snapToGrid(v) {
+  if (!state.gridOn) return v;
+  const g = state.gridSize;
+  return Math.round(v / g) * g;
+}
+
+/* ============================================================
+   LOCK
+   ============================================================ */
+function toggleLock() {
+  const idxs = getSelectedIdxs();
+  if (!idxs.length) return;
+  const halaman = state.template.halaman[state.activeHalaman];
+  const allLocked = idxs.every(i => halaman.elemen[i].locked);
+  idxs.forEach(i => halaman.elemen[i].locked = !allLocked);
+  renderCanvas(); renderProps(); autoSave();
+  toast(allLocked ? 'Elemen dibuka' : 'Elemen dikunci', 'ok');
+}
+
+/* ============================================================
+   ALIGN / DISTRIBUTE
+   ============================================================ */
+function alignSelected(mode) {
+  const idxs = getSelectedIdxs();
+  if (!idxs.length) return toast('Pilih elemen dulu', 'err');
+  const halaman = state.template.halaman[state.activeHalaman];
+  const uk = state.template.ukuran;
+  const els = idxs.map(i => halaman.elemen[i]);
+
+  if (idxs.length === 1) {
+    const el = els[0];
+    switch (mode) {
+      case 'left': el.x = 0; break;
+      case 'center-h': el.x = Math.round((uk.lebar - el.w) / 2 * 2) / 2; break;
+      case 'right': el.x = uk.lebar - el.w; break;
+      case 'top': el.y = 0; break;
+      case 'center-v': el.y = Math.round((uk.tinggi - el.h) / 2 * 2) / 2; break;
+      case 'bottom': el.y = uk.tinggi - el.h; break;
+    }
+  } else {
+    const minX = Math.min(...els.map(e => e.x));
+    const maxX = Math.max(...els.map(e => e.x + e.w));
+    const minY = Math.min(...els.map(e => e.y));
+    const maxY = Math.max(...els.map(e => e.y + e.h));
+    const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+    els.forEach(el => {
+      switch (mode) {
+        case 'left': el.x = minX; break;
+        case 'center-h': el.x = Math.round((cx - el.w/2) * 2) / 2; break;
+        case 'right': el.x = maxX - el.w; break;
+        case 'top': el.y = minY; break;
+        case 'center-v': el.y = Math.round((cy - el.h/2) * 2) / 2; break;
+        case 'bottom': el.y = maxY - el.h; break;
+      }
+    });
+  }
+  renderCanvas(); renderProps(); autoSave();
+}
+
+function distributeSelected(mode) {
+  const idxs = getSelectedIdxs();
+  if (idxs.length < 3) return toast('Butuh minimal 3 elemen', 'err');
+  const halaman = state.template.halaman[state.activeHalaman];
+  const els = idxs.map(i => ({ el: halaman.elemen[i], i }));
+
+  if (mode === 'h') {
+    els.sort((a,b) => (a.el.x + a.el.w/2) - (b.el.x + b.el.w/2));
+    const first = els[0].el, last = els[els.length-1].el;
+    const startC = first.x + first.w/2, endC = last.x + last.w/2;
+    const step = (endC - startC) / (els.length - 1);
+    els.forEach((item, i) => {
+      if (i === 0 || i === els.length-1) return;
+      item.el.x = Math.round((startC + step * i - item.el.w/2) * 2) / 2;
+    });
+  } else {
+    els.sort((a,b) => (a.el.y + a.el.h/2) - (b.el.y + b.el.h/2));
+    const first = els[0].el, last = els[els.length-1].el;
+    const startC = first.y + first.h/2, endC = last.y + last.h/2;
+    const step = (endC - startC) / (els.length - 1);
+    els.forEach((item, i) => {
+      if (i === 0 || i === els.length-1) return;
+      item.el.y = Math.round((startC + step * i - item.el.h/2) * 2) / 2;
+    });
+  }
+  renderCanvas(); renderProps(); autoSave();
+}
+/* ============================================================
+   TEMPLATE BAWAAN
+   ============================================================ */
+const bwUid = () => 'bw' + Math.random().toString(36).slice(2,9);
+function E(jenis, x, y, w, h, sumber, opts = {}) {
+  return Object.assign({
+    id: bwUid(), jenis, x, y, w, h,
+    font: 'Inter', size: 12, weight: 400, warna: '#0f172a',
+    align: 'center', italic: false, rotation: 0,
+    sumber: sumber || '', teksManual: '', locked: false, groupId: null
+  }, opts);
+}
+const T = (x,y,w,h,s,o={}) => E('teks', x,y,w,h,s,o);
+const G = (x,y,w,h,s) => E('gambar', x,y,w,h,s);
+const TB = (x,y,w,h,s,o={}) => E('tabel', x,y,w,h,s,o);
+
+/* Background SVG inline (data URL) — ringan & tidak butuh hosting */
+const bgFormal = () => 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 210" preserveAspectRatio="none">
+<rect width="297" height="210" fill="#FDFDF7"/>
+<rect x="8" y="8" width="281" height="194" fill="none" stroke="#0F766E" stroke-width="1.5"/>
+<rect x="12" y="12" width="273" height="186" fill="none" stroke="#0D9488" stroke-width="0.5"/>
+<circle cx="8" cy="8" r="3.5" fill="#0F766E"/><circle cx="289" cy="8" r="3.5" fill="#0F766E"/>
+<circle cx="8" cy="202" r="3.5" fill="#0F766E"/><circle cx="289" cy="202" r="3.5" fill="#0F766E"/>
+</svg>`);
+
+const bgPiagam = () => 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 210" preserveAspectRatio="none">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#FEF3C7"/><stop offset="1" stop-color="#FFFBEB"/>
+</linearGradient></defs>
+<rect width="297" height="210" fill="url(#g)"/>
+<rect x="6" y="6" width="285" height="198" fill="none" stroke="#B45309" stroke-width="3"/>
+<rect x="12" y="12" width="273" height="186" fill="none" stroke="#D97706" stroke-width="0.8"/>
+<rect x="16" y="16" width="265" height="178" fill="none" stroke="#B45309" stroke-width="0.3"/>
+<path d="M6,6 L36,6 L6,36 Z" fill="#B45309" opacity="0.18"/>
+<path d="M291,6 L261,6 L291,36 Z" fill="#B45309" opacity="0.18"/>
+<path d="M6,204 L36,204 L6,174 Z" fill="#B45309" opacity="0.18"/>
+<path d="M291,204 L261,204 L291,174 Z" fill="#B45309" opacity="0.18"/>
+</svg>`);
+
+const bgMinimalis = () => 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 210" preserveAspectRatio="none">
+<rect width="297" height="210" fill="#FFFFFF"/>
+<rect x="0" y="0" width="297" height="5" fill="#0D9488"/>
+<rect x="0" y="205" width="297" height="5" fill="#0891B2"/>
+<path d="M0,0 L80,0 L0,60 Z" fill="#CCFBF1"/>
+<path d="M297,210 L217,210 L297,150 Z" fill="#CFFAFE"/>
+<circle cx="297" cy="0" r="45" fill="#0D9488" opacity="0.06"/>
+<circle cx="0" cy="210" r="55" fill="#0891B2" opacity="0.06"/>
+</svg>`);
+
+const bgNarasumber = () => 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 210" preserveAspectRatio="none">
+<rect width="297" height="210" fill="#FFFFFF"/>
+<rect x="0" y="0" width="297" height="4" fill="#1E3A8A"/>
+<rect x="0" y="206" width="297" height="4" fill="#1E3A8A"/>
+<rect x="10" y="10" width="277" height="190" fill="none" stroke="#1E3A8A" stroke-width="0.5"/>
+<line x1="20" y1="28" x2="277" y2="28" stroke="#1E3A8A" stroke-width="0.3"/>
+<line x1="20" y1="182" x2="277" y2="182" stroke="#1E3A8A" stroke-width="0.3"/>
+</svg>`);
+
+const bgLampiran = () => 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297 210" preserveAspectRatio="none">
+<rect width="297" height="210" fill="#FFFFFF"/>
+<rect x="8" y="8" width="281" height="194" fill="none" stroke="#0F766E" stroke-width="1"/>
+<rect x="0" y="0" width="297" height="38" fill="#F0FDFA"/>
+<line x1="0" y1="38" x2="297" y2="38" stroke="#0D9488" stroke-width="1"/>
+</svg>`);
+
+const TEMPLATE_BAWAAN = [
+/* ===== BLANK / KERTAS BER-BORDER ===== */
+...(function() {
+  function makeBlank(id, nama, margin, deskripsi) {
+    return {
+      id, nama, deskripsi,
+      warna: '#64748b',
+      isBlank: true,
+      ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' },
+      meta: {
+        kop: { logo_kiri: null, logo_kanan: null, teks: ['','','',''], garis: false },
+        pejabat: [
+          { nama:'', jabatan:'', nip:'', ttd:null, stempel:null },
+          { nama:'', jabatan:'', nip:'', ttd:null, stempel:null }
+        ]
+      },
+      safeArea: { aktif: true, atas: margin, kanan: margin, bawah: margin, kiri: margin, tampil: true },
+      halaman: [{ id: 'utama', nama: 'Halaman Utama', background: null, kondisi: '', elemen: [] }]
+    };
+  }
+  return [
+    makeBlank('kosong-ketat', 'Kosong — Margin Ketat', 10, 'Kertas ber-border tipis (10mm). Isi saja area tengah.'),
+    makeBlank('kosong-standar', 'Kosong — Margin Standar', 20, 'Kertas piagam umum (20mm). Aman untuk sebagian besar border.'),
+    makeBlank('kosong-lebar', 'Kosong — Margin Lebar', 30, 'Kertas piagam mewah (30mm). Border tebal tetap utuh.')
+  ];
+})(),
+
+/* ===== TEMPLATE 1: FORMAL ===== */
+{
+  id: 'formal', nama: 'Sertifikat Pelatihan Formal',
+  deskripsi: 'Kop dinas, A4 landscape, 2 pejabat', warna: '#0D9488',
+  ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' },
+  meta: { kop: { logo_kiri: null, logo_kanan: null, teks: ['DINAS PENDIDIKAN','KABUPATEN X','Jl. Pendidikan No. 1, Telp. 021-123456','Email: dinas@example.id'], garis: true } },
+  halaman: [{
+    id: 'utama', nama: 'Halaman Utama', background: bgFormal(), kondisi: '',
+    elemen: [
+      G(28, 18, 22, 22, 'meta:kop.logo_kiri'), G(247, 18, 22, 22, 'meta:kop.logo_kanan'),
+      T(55, 19, 187, 6, 'meta:kop.teks.0', { size: 13, weight: 700 }),
+      T(55, 26, 187, 7, 'meta:kop.teks.1', { size: 16, weight: 800 }),
+      T(55, 35, 187, 5, 'meta:kop.teks.2', { size: 9, warna: '#475569' }),
+      T(55, 40, 187, 5, 'meta:kop.teks.3', { size: 9, warna: '#475569' }),
+      T(148.5, 60, 250, 18, 'teks:SERTIFIKAT', { font: 'Playfair Display', size: 44, weight: 900, warna: '#0F766E' }),
+      T(148.5, 80, 250, 5, 'teks:Nomor: ......', { size: 9, warna: '#64748b' }),
+      T(148.5, 94, 250, 6, 'teks:Diberikan kepada:', { size: 11, warna: '#64748b' }),
+      T(148.5, 108, 270, 16, 'kolom:NAMA', { font: 'Playfair Display', size: 34, weight: 700, warna: '#0F766E' }),
+      T(148.5, 128, 270, 6, 'kolom:SEKOLAH', { size: 11, warna: '#334155' }),
+      T(148.5, 142, 250, 5, 'teks:Sebagai PESERTA dalam kegiatan:', { size: 10, warna: '#64748b' }),
+      T(148.5, 150, 270, 8, 'meta:nama_kegiatan', { size: 14, weight: 700 }),
+      T(148.5, 162, 270, 5, "meta:tempat + ', ' + meta:tanggal", { size: 10, warna: '#475569' }),
+      G(55, 170, 32, 16, 'meta:pejabat.0.ttd'),
+      T(71, 188, 60, 5, 'meta:pejabat.0.nama', { size: 10, weight: 700 }),
+      T(71, 194, 60, 4, 'meta:pejabat.0.nip', { size: 8, warna: '#64748b' }),
+      G(210, 170, 32, 16, 'meta:pejabat.1.ttd'),
+      T(226, 188, 60, 5, 'meta:pejabat.1.nama', { size: 10, weight: 700 }),
+      T(226, 194, 60, 4, 'meta:pejabat.1.nip', { size: 8, warna: '#64748b' })
+    ]
+  }]
+},
+
+/* ===== TEMPLATE 2: PIAGAM ===== */
+{
+  id: 'piagam', nama: 'Piagam Juara Lomba',
+  deskripsi: 'Warna emas mewah, A4 landscape', warna: '#B45309',
+  ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' }, meta: {},
+  halaman: [{
+    id: 'utama', nama: 'Halaman Utama', background: bgPiagam(), kondisi: '',
+    elemen: [
+      T(148.5, 22, 250, 12, 'teks:PIAGAM PENGHARGAAN', { font: 'Playfair Display', size: 34, weight: 900, warna: '#B45309' }),
+      T(148.5, 40, 250, 4, 'teks:Nomor: ......', { size: 9, warna: '#92400e' }),
+      T(148.5, 58, 250, 6, 'teks:Diberikan kepada:', { size: 11, warna: '#78350f' }),
+      T(148.5, 70, 270, 16, 'kolom:NAMA', { font: 'Playfair Display', size: 36, weight: 700, warna: '#B45309' }),
+      T(148.5, 92, 270, 6, 'kolom:SEKOLAH', { size: 11, warna: '#78350f' }),
+      T(148.5, 106, 250, 5, 'teks:Sebagai:', { size: 11, warna: '#78350f' }),
+      T(148.5, 114, 270, 12, 'kolom:PERINGKAT', { font: 'Playfair Display', size: 28, weight: 900, warna: '#B45309' }),
+      T(148.5, 132, 250, 5, 'teks:dalam kegiatan:', { size: 11, warna: '#78350f' }),
+      T(148.5, 140, 270, 8, 'meta:nama_kegiatan', { size: 14, weight: 700, warna: '#78350f' }),
+      T(148.5, 152, 270, 5, "meta:tempat + ', ' + meta:tanggal", { size: 10, warna: '#78350f' }),
+      G(55, 168, 32, 16, 'meta:pejabat.0.ttd'),
+      T(71, 186, 60, 5, 'meta:pejabat.0.nama', { size: 10, weight: 700, warna: '#78350f' }),
+      T(71, 192, 60, 4, 'meta:pejabat.0.nip', { size: 8, warna: '#92400e' }),
+      G(210, 168, 32, 16, 'meta:pejabat.1.ttd'),
+      T(226, 186, 60, 5, 'meta:pejabat.1.nama', { size: 10, weight: 700, warna: '#78350f' }),
+      T(226, 192, 60, 4, 'meta:pejabat.1.nip', { size: 8, warna: '#92400e' })
+    ]
+  }]
+},
+
+/* ===== TEMPLATE 3: WEBINAR ===== */
+{
+  id: 'webinar', nama: 'Sertifikat Webinar Minimalis',
+  deskripsi: 'Modern, aksen geometri teal', warna: '#0D9488',
+  ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' }, meta: {},
+  halaman: [{
+    id: 'utama', nama: 'Halaman Utama', background: bgMinimalis(), kondisi: '',
+    elemen: [
+      T(40, 40, 200, 6, 'teks:SERTIFIKAT', { size: 11, weight: 700, warna: '#0D9488', align: 'left' }),
+      T(40, 48, 200, 4, 'teks:PARTISIPASI', { size: 9, warna: '#64748b', align: 'left' }),
+      T(148.5, 78, 250, 6, 'teks:Diberikan kepada:', { size: 11, warna: '#64748b' }),
+      T(148.5, 92, 270, 16, 'kolom:NAMA', { font: 'Inter', size: 40, weight: 800, warna: '#0f172a' }),
+      T(148.5, 114, 270, 6, 'kolom:SEKOLAH', { size: 11, warna: '#475569' }),
+      T(148.5, 128, 250, 5, 'teks:atas partisipasinya sebagai peserta dalam:', { size: 10, warna: '#64748b' }),
+      T(148.5, 137, 270, 8, 'meta:nama_kegiatan', { size: 14, weight: 700, warna: '#0F766E' }),
+      T(148.5, 150, 270, 5, "meta:tempat + ' • ' + meta:tanggal", { size: 10, warna: '#475569' }),
+      G(120, 168, 57, 15, 'meta:pejabat.0.ttd'),
+      T(148.5, 188, 150, 5, 'meta:pejabat.0.nama', { size: 10, weight: 700 }),
+      T(148.5, 194, 150, 4, 'meta:pejabat.0.nip', { size: 8, warna: '#64748b' })
+    ]
+  }]
+},
+
+/* ===== TEMPLATE 4: NARASUMBER ===== */
+{
+  id: 'narasumber', nama: 'Apresiasi Narasumber',
+  deskripsi: 'Elegan navy, single pejabat', warna: '#1E3A8A',
+  ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' }, meta: {},
+  halaman: [{
+    id: 'utama', nama: 'Halaman Utama', background: bgNarasumber(), kondisi: '',
+    elemen: [
+      T(148.5, 32, 250, 8, 'teks:SERTIFIKAT', { font: 'Playfair Display', size: 26, weight: 700, warna: '#1E3A8A' }),
+      T(148.5, 44, 250, 4, 'teks:A P R E S I A S I', { size: 10, weight: 600, warna: '#475569' }),
+      T(148.5, 62, 250, 5, 'teks:Diberikan kepada:', { size: 10, warna: '#64748b' }),
+      T(148.5, 74, 270, 14, 'kolom:NAMA', { font: 'Playfair Display', size: 32, weight: 700, warna: '#1E3A8A' }),
+      T(148.5, 92, 270, 5, 'kolom:JABATAN', { size: 11, warna: '#475569' }),
+      T(148.5, 106, 250, 5, 'teks:Sebagai NARASUMBER pada kegiatan:', { size: 10, warna: '#64748b' }),
+      T(148.5, 115, 270, 8, 'meta:nama_kegiatan', { size: 13, weight: 700, warna: '#1E3A8A' }),
+      T(148.5, 128, 270, 5, "meta:tempat + ', ' + meta:tanggal", { size: 10, warna: '#475569' }),
+      G(120, 158, 57, 18, 'meta:pejabat.0.ttd'),
+      T(148.5, 180, 150, 5, 'meta:pejabat.0.nama', { size: 10, weight: 700, warna: '#1E3A8A' }),
+      T(148.5, 186, 150, 4, 'meta:pejabat.0.nip', { size: 8, warna: '#64748b' })
+    ]
+  }]
+},
+
+/* ===== TEMPLATE 5: PELATIHAN 2 HALAMAN ===== */
+{
+  id: 'pelatihan2', nama: 'Pelatihan 2 Halaman',
+  deskripsi: 'Halaman utama + lampiran materi', warna: '#0D9488',
+  ukuran: { lebar: 297, tinggi: 210, orientasi: 'landscape' },
+  meta: { kop: { logo_kiri: null, logo_kanan: null, teks: ['DINAS PENDIDIKAN','KABUPATEN X','Jl. Pendidikan No. 1, Telp. 021-123456','Email: dinas@example.id'], garis: true } },
+  halaman: [
+    {
+      id: 'utama', nama: 'Halaman Utama', background: bgFormal(), kondisi: '',
+      elemen: [
+        G(28, 18, 22, 22, 'meta:kop.logo_kiri'), G(247, 18, 22, 22, 'meta:kop.logo_kanan'),
+        T(55, 19, 187, 6, 'meta:kop.teks.0', { size: 13, weight: 700 }),
+        T(55, 26, 187, 7, 'meta:kop.teks.1', { size: 16, weight: 800 }),
+        T(55, 35, 187, 5, 'meta:kop.teks.2', { size: 9, warna: '#475569' }),
+        T(55, 40, 187, 5, 'meta:kop.teks.3', { size: 9, warna: '#475569' }),
+        T(148.5, 60, 250, 18, 'teks:SERTIFIKAT', { font: 'Playfair Display', size: 44, weight: 900, warna: '#0F766E' }),
+        T(148.5, 80, 250, 5, 'teks:Nomor: ......', { size: 9, warna: '#64748b' }),
+        T(148.5, 94, 250, 6, 'teks:Diberikan kepada:', { size: 11, warna: '#64748b' }),
+        T(148.5, 108, 270, 16, 'kolom:NAMA', { font: 'Playfair Display', size: 34, weight: 700, warna: '#0F766E' }),
+        T(148.5, 128, 270, 6, 'kolom:SEKOLAH', { size: 11, warna: '#334155' }),
+        T(148.5, 142, 250, 5, 'teks:Sebagai PESERTA dalam kegiatan:', { size: 10, warna: '#64748b' }),
+        T(148.5, 150, 270, 8, 'meta:nama_kegiatan', { size: 14, weight: 700 }),
+        T(148.5, 162, 270, 5, "meta:tempat + ', ' + meta:tanggal", { size: 10, warna: '#475569' }),
+        G(55, 170, 32, 16, 'meta:pejabat.0.ttd'),
+        T(71, 188, 60, 5, 'meta:pejabat.0.nama', { size: 10, weight: 700 }),
+        T(71, 194, 60, 4, 'meta:pejabat.0.nip', { size: 8, warna: '#64748b' }),
+        G(210, 170, 32, 16, 'meta:pejabat.1.ttd'),
+        T(226, 188, 60, 5, 'meta:pejabat.1.nama', { size: 10, weight: 700 }),
+        T(226, 194, 60, 4, 'meta:pejabat.1.nip', { size: 8, warna: '#64748b' })
+      ]
+    },
+    {
+      id: 'lampiran', nama: 'Lampiran Materi', background: bgLampiran(), kondisi: 'materi.length > 0',
+      elemen: [
+        T(148.5, 12, 250, 8, 'teks:LAMPIRAN', { font: 'Playfair Display', size: 22, weight: 700, warna: '#0F766E' }),
+        T(148.5, 24, 250, 5, 'teks:DAFTAR MATERI PELATIHAN', { size: 10, weight: 600, warna: '#64748b' }),
+        T(148.5, 46, 270, 6, 'meta:nama_kegiatan', { size: 13, weight: 700 }),
+        T(148.5, 54, 270, 4, "meta:tempat + ' • ' + meta:tanggal", { size: 9, warna: '#64748b' }),
+        TB(20, 68, 257, 118, 'materi:auto', { size: 10 })
+      ]
+    }
+  ]
+}
+];
+
+/* ============================================================
+   MODAL TEMPLATE
+   ============================================================ */
+function openTplModal() {
+  const grid = document.getElementById('tplGrid');
+  grid.innerHTML = TEMPLATE_BAWAAN.map(t => renderTplCard(t)).join('');
+  document.getElementById('tplModal').classList.remove('hidden');
+  document.getElementById('tplModal').classList.add('flex');
+  lucide.createIcons();
+}
+
+function closeTplModal() {
+  document.getElementById('tplModal').classList.add('hidden');
+  document.getElementById('tplModal').classList.remove('flex');
+}
+
+function renderTplCard(tpl) {
+  const uk = tpl.ukuran;
+  const scale = 260 / uk.lebar;
+  const W = uk.lebar * scale, H = uk.tinggi * scale;
+  const h = tpl.halaman[0];
+  let inner = '';
+  if (h.background) inner += `<div style="position:absolute;inset:0;background:url(${h.background}) center/100% 100%"></div>`;
+  h.elemen.slice(0, 30).forEach(el => {
+    const style = `left:${el.x*scale}px;top:${el.y*scale}px;width:${el.w*scale}px;height:${el.h*scale}px;`;
+    if (el.jenis === 'teks') {
+      let txt = el.teksManual;
+      if (!txt && el.sumber.startsWith('teks:')) txt = el.sumber.slice(5);
+      if (!txt && el.sumber.startsWith('kolom:')) txt = el.sumber.slice(6);
+      if (!txt && el.sumber.startsWith('meta:')) txt = '·';
+      if (!txt) txt = '';
+      inner += `<div class="thumb-el" style="${style}font-family:${el.font};font-size:${Math.max(4, el.size*scale*1.333)}px;font-weight:${el.weight};color:${el.warna};text-align:${el.align};line-height:1.05">${txt}</div>`;
+    }
+  });
+  if (tpl.isBlank && tpl.safeArea) {
+    const sa = tpl.safeArea;
+    const ml = sa.kiri * scale, mt = sa.atas * scale;
+    const mw = (uk.lebar - sa.kiri - sa.kanan) * scale;
+    const mh = (uk.tinggi - sa.atas - sa.bawah) * scale;
+    inner += `<div style="position:absolute;left:${ml}px;top:${mt}px;width:${mw}px;height:${mh}px;border:1px dashed #f97316;border-radius:3px;"></div>`;
+    inner += `<div style="position:absolute;left:${ml+3}px;top:${mt+2}px;font-size:7px;color:#f97316;font-weight:700;">SAFE AREA</div>`;
+  }
+
+  const blankBadge = tpl.isBlank
+    ? `<span style="position:absolute;top:6px;right:6px;background:#f97316;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;z-index:2;">KOSONG</span>`
+    : '';
+
+  return `
+    <div class="tpl-card" onclick="applyBawaan('${tpl.id}')">
+      <div class="thumb" style="width:${W}px;height:${H}px;position:relative;">
+        ${inner}
+        ${blankBadge}
+      </div>
+      <div class="info">
+        <p class="font-bold text-sm">${tpl.nama}</p>
+        <p class="text-xs text-slate-500 mt-0.5">${tpl.deskripsi}</p>
+        <div class="mt-3 flex items-center justify-between">
+          <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full" style="background:${tpl.warna}15;color:${tpl.warna}">${tpl.ukuran.lebar} × ${tpl.ukuran.tinggi} mm</span>
+          <span class="text-xs font-bold" style="color:${tpl.warna}">Pakai →</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function applyBawaan(id) {
+  const tpl = TEMPLATE_BAWAAN.find(t => t.id === id);
+  if (!tpl) return;
+  if (!confirm(`Ganti template dengan "${tpl.nama}"?\nData penerima & materi tetap aman.`)) return;
+
+  if (tpl.meta?.kop?.teks) {
+    state.meta.kop = state.meta.kop || {};
+    state.meta.kop.teks = [...tpl.meta.kop.teks];
+    if (tpl.meta.kop.garis !== undefined) state.meta.kop.garis = tpl.meta.kop.garis;
+  }
+  state.template.ukuran = { ...tpl.ukuran };
+  state.template.halaman = JSON.parse(JSON.stringify(tpl.halaman));
+  if (tpl.safeArea) {
+    state.template.safeArea = { ...tpl.safeArea };
+  } else {
+    state.template.safeArea = { aktif: false, atas: 20, kanan: 20, bawah: 20, kiri: 20, tampil: true };
+  }
+  state.activeHalaman = 0; state.selectedIdx = -1; state.multiIdxs = [];
+
+  renderAllFromState();
+  renderSummary();
+  syncSafeAreaInputs();
+  closeTplModal();
+
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+  document.querySelector('[data-tab="desain"]').classList.add('tab-active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+  document.querySelector('[data-panel="desain"]').classList.remove('hidden');
+  renderCanvas();
+  syncAllSlots();
+  autoSave();
+  toast(`Template "${tpl.nama}" dimuat`, 'ok');
+}
+
+/* ============================================================
+   TAB 4 — GENERATE
+   ============================================================ */
+function renderSummary() {
+  renderFilterGenerate();
+  const filtered = applyFilterToData();
+  const total = filtered.length;
+  const totalHalaman = state.template.halaman.length;
+  const adaMateri = state.materi.length > 0;
+  const halamanAktif = state.template.halaman.filter(h => {
+    if (!h.kondisi) return true;
+    if (h.kondisi === 'materi.length > 0') return adaMateri;
+    return true;
+  }).length;
+  const totalSemua = state.penerima.length;
+  const filterAktif = total !== totalSemua;
+
+  document.getElementById('genSummary').innerHTML = `
+    <div class="flex justify-between"><span>Total penerima</span><b>${totalSemua}</b></div>
+    ${filterAktif ? `<div class="flex justify-between text-teal-700"><span>Setelah filter</span><b>${total}</b></div>` : ''}
+    <div class="flex justify-between"><span>Halaman template</span><b>${totalHalaman}</b></div>
+    <div class="flex justify-between"><span>Halaman aktif (kondisi terpenuhi)</span><b>${halamanAktif}</b></div>
+    <div class="flex justify-between"><span>Data materi</span><b>${adaMateri ? state.materi.length + ' baris' : 'tidak ada'}</b></div>
+    <div class="flex justify-between"><span>Mode cetak</span><b>${state.printPreview ? 'Kertas Ber-border' : 'Normal'}</b></div>
+    <div class="flex justify-between border-t border-slate-200 pt-1 mt-1"><span>Perkiraan output</span><b>${total * halamanAktif} halaman</b></div>
+  `;
+}
+
+async function generatePDF() {
+  if (!state.penerima.length) return toast('Belum ada data penerima', 'err');
+  const dataFiltered = applyFilterToData();
+  if (!dataFiltered.length) return toast('Tidak ada penerima yang cocok filter', 'err');
+
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = true;
+  document.getElementById('genProgress').classList.remove('hidden');
+  document.getElementById('genResult').classList.add('hidden');
+
+  const uk = state.template.ukuran;
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit: 'mm', format: [uk.lebar, uk.tinggi], orientation: uk.orientasi });
+  const zip = mode === 'zip' ? new JSZip() : null;
+  const total = dataFiltered.length;
+  const originalPenerima = dataFiltered;
+  let pageCount = 0;
+
+  try {
+    for (let i = 0; i < total; i++) {
+      state.penerima = [originalPenerima[i]];
+      const pagesPDF = new jsPDF({ unit: 'mm', format: [uk.lebar, uk.tinggi], orientation: uk.orientasi });
+
+      for (let h = 0; h < state.template.halaman.length; h++) {
+        const halaman = state.template.halaman[h];
+        if (halaman.kondisi === 'materi.length > 0' && state.materi.length === 0) continue;
+
+        const container = document.createElement('div');
+        container.style.cssText = `width:${mm2px(uk.lebar)}px;height:${mm2px(uk.tinggi)}px;position:fixed;left:-99999px;top:0;background:#fff;`;
+        document.body.appendChild(container);
+
+        if (halaman.background && !state.printPreview) {
+          const bg = document.createElement('div');
+          bg.style.cssText = `position:absolute;inset:0;background:url(${halaman.background}) center/100% 100% no-repeat;`;
+          container.appendChild(bg);
+        }
+
+        // Render elemen + tunggu gambar selesai load
+        const imgPromises = [];
+        halaman.elemen.forEach(el => {
+          const div = document.createElement('div');
+          div.style.cssText = `position:absolute;left:${mm2px(el.x)}px;top:${mm2px(el.y)}px;width:${mm2px(el.w)}px;height:${mm2px(el.h)}px;overflow:hidden;`;
+          if (el.rotation) {
+            div.style.transform = `rotate(${el.rotation}deg)`;
+            div.style.transformOrigin = 'center center';
+          }
+          if (el.jenis === 'teks') {
+            div.style.fontFamily = el.font;
+            div.style.fontSize = pt2px(el.size) + 'px';
+            div.style.fontWeight = el.weight;
+            div.style.color = el.warna;
+            div.style.textAlign = el.align;
+            div.style.fontStyle = el.italic ? 'italic' : 'normal';
+            div.style.lineHeight = '1.15';
+            div.style.whiteSpace = 'pre-wrap';
+            div.textContent = resolveSumber(el);
+          } else if (el.jenis === 'gambar') {
+            const src = resolveSumber(el);
+            if (src && isImageSource(src)) {
+              const img = new Image();
+              img.crossOrigin = 'anonymous';
+              img.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+              const p = new Promise(res => {
+                img.onload = res;
+                img.onerror = res;
+              });
+              img.src = src;
+              div.appendChild(img);
+              imgPromises.push(p);
+            }
+          } else if (el.jenis === 'tabel') {
+            div.innerHTML = renderTabel(el);
+          }
+          container.appendChild(div);
+        });
+
+        // Tunggu semua gambar selesai load
+        await Promise.all(imgPromises);
+        await new Promise(r => setTimeout(r, 30));
+
+        const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+        const imgData = canvas.toDataURL('image/jpeg', 0.92);
+        if (pageCount > 0) pagesPDF.addPage([uk.lebar, uk.tinggi], uk.orientasi);
+        pagesPDF.addImage(imgData, 'JPEG', 0, 0, uk.lebar, uk.tinggi);
+        pageCount++;
+        container.remove();
+      }
+
+      if (mode === 'zip') {
+        const blob = pagesPDF.output('blob');
+        const nama = (originalPenerima[i].NAMA || originalPenerima[i].nama || `penerima_${i+1}`).toString().replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_');
+        zip.file(`${nama}.pdf`, blob);
+      } else {
+        if (i > 0) pdf.addPage([uk.lebar, uk.tinggi], uk.orientasi);
+        const pages = pagesPDF.internal.pages;
+        pdf.internal.pages = pdf.internal.pages.concat(pages.slice(1));
+        pdf.internal.pageSize = pagesPDF.internal.pageSize;
+      }
+
+      const pct = Math.round((i+1) / total * 100);
+      document.getElementById('genProgressBar').style.width = pct + '%';
+      document.getElementById('genProgressPct').textContent = pct + '%';
+      document.getElementById('genProgressLabel').textContent = `Memproses ${i+1} / ${total}`;
+      await new Promise(r => setTimeout(r, 0));
+    }
+
+    const waktu = new Date().toISOString().slice(0,10);
+    if (mode === 'zip') {
+      const blob = await zip.generateAsync({ type: 'blob' });
+      downloadBlob(blob, `sertiva_${waktu}.zip`);
+    } else {
+      pdf.save(`sertiva_${waktu}.pdf`);
+    }
+
+    document.getElementById('genResult').classList.remove('hidden');
+    document.getElementById('genResult').innerHTML = `
+      <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl p-3 flex items-center gap-2">
+        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+        Selesai! ${total} penerima × ${pageCount/total} halaman = ${pageCount} halaman.
+      </div>`;
+    lucide.createIcons();
+    toast('PDF berhasil dibuat', 'ok');
+  } catch (err) {
+    console.error(err);
+    toast('Gagal generate: ' + err.message, 'err');
+  } finally {
+    state.penerima = originalPenerima;
+    btn.disabled = false;
+  }
+}
+
+/* ============================================================
+   KALIBRASI
+   ============================================================ */
+async function generateKalibrasi() {
+  const uk = state.template.ukuran;
+  const margin = +document.getElementById('kalib_margin').value || 20;
+  const showGrid = document.getElementById('kalib_grid').checked;
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit: 'mm', format: [uk.lebar, uk.tinggi], orientation: uk.orientasi });
+
+  pdf.setDrawColor(200, 200, 200);
+  pdf.setLineWidth(0.1);
+  pdf.rect(2, 2, uk.lebar - 4, uk.tinggi - 4);
+
+  if (showGrid) {
+    pdf.setDrawColor(240, 240, 240);
+    pdf.setLineWidth(0.05);
+    for (let x = 10; x < uk.lebar; x += 10) pdf.line(x, 0, x, uk.tinggi);
+    for (let y = 10; y < uk.tinggi; y += 10) pdf.line(0, y, uk.lebar, y);
+  }
+
+  pdf.setDrawColor(249, 115, 22);
+  pdf.setLineWidth(0.3);
+  pdf.setLineDashPattern([1, 1], 0);
+  pdf.rect(margin, margin, uk.lebar - margin*2, uk.tinggi - margin*2);
+  pdf.setLineDashPattern([], 0);
+
+  pdf.setDrawColor(220, 38, 38);
+  pdf.setLineWidth(0.2);
+  pdf.line(uk.lebar/2, 0, uk.lebar/2, uk.tinggi);
+  pdf.line(0, uk.tinggi/2, uk.lebar, uk.tinggi/2);
+
+  pdf.setLineWidth(0.5);
+  const crossSize = 4;
+  const corners = [
+    { x: margin, y: margin, label: 'Kiri Atas' },
+    { x: uk.lebar - margin, y: margin, label: 'Kanan Atas' },
+    { x: margin, y: uk.tinggi - margin, label: 'Kiri Bawah' },
+    { x: uk.lebar - margin, y: uk.tinggi - margin, label: 'Kanan Bawah' }
+  ];
+  corners.forEach(c => {
+    pdf.line(c.x - crossSize, c.y, c.x + crossSize, c.y);
+    pdf.line(c.x, c.y - crossSize, c.x, c.y + crossSize);
+    pdf.setFontSize(6);
+    pdf.setTextColor(220, 38, 38);
+    pdf.text(c.label, c.x + 2, c.y - 2);
+  });
+
+  pdf.setDrawColor(30, 58, 138);
+  pdf.setLineWidth(0.3);
+  const rulerY = uk.tinggi/2 + 10;
+  const rulerX0 = uk.lebar/2 - 50;
+  pdf.line(rulerX0, rulerY, rulerX0 + 100, rulerY);
+  for (let i = 0; i <= 100; i += 10) {
+    pdf.line(rulerX0 + i, rulerY - 1, rulerX0 + i, rulerY + 1);
+  }
+  pdf.setFontSize(6);
+  pdf.setTextColor(30, 58, 138);
+  pdf.text('0', rulerX0 - 1, rulerY + 4);
+  pdf.text('100 mm', rulerX0 + 100 - 5, rulerY + 4);
+
+  pdf.setFontSize(8);
+  pdf.setTextColor(100, 100, 100);
+  pdf.text(`Ukuran: ${uk.lebar} × ${uk.tinggi} mm`, 10, 10);
+  pdf.text(`Margin kalibrasi: ${margin} mm`, 10, 14);
+  pdf.text(`Tanggal: ${new Date().toLocaleString('id-ID')}`, 10, 18);
+
+  pdf.setFontSize(7);
+  pdf.setTextColor(120, 120, 120);
+  const instr = [
+    'Cara pakai:',
+    '1. Cetak halaman ini dengan skala 100% (Actual Size).',
+    '2. Taruh hasil cetak di atas kertas ber-border Anda.',
+    '3. Periksa apakah tanda silang di 4 sudut berada di posisi yang tepat.',
+    '4. Jika meleset, sesuaikan margin di aplikasi hingga pas.',
+    '5. Simpan template setelah kalibrasi berhasil.'
+  ];
+  instr.forEach((line, i) => pdf.text(line, 10, uk.tinggi - 20 + i * 3));
+
+  pdf.save(`kalibrasi_${uk.lebar}x${uk.tinggi}_${Date.now()}.pdf`);
+  toast('Halaman uji kalibrasi berhasil dibuat', 'ok');
+}
+
+/* ============================================================
+   DOWNLOAD HELPER
+   ============================================================ */
+function downloadBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+/* ============================================================
+   SAVE / LOAD
+   ============================================================ */
+function autoSave() {
+  try {
+    localStorage.setItem('sertiva_state', JSON.stringify({
+      meta: state.meta, penerima: state.penerima, penerimaColumns: state.penerimaColumns,
+      materi: state.materi, materiColumns: state.materiColumns, template: state.template,
+      printPreview: state.printPreview,
+      penilaian: { kategoriList: state.penilaian.kategoriList, kolom: state.penilaian.kolom, autoRank: state.penilaian.autoRank, juaraLimit: state.penilaian.juaraLimit }
+    }));
+  } catch(e) {
+    console.warn('Auto-save gagal:', e);
+    if (e.name === 'QuotaExceededError' || e.message?.includes('quota')) {
+      toast('Penyimpanan penuh — gunakan URL untuk gambar besar', 'err');
+    }
+  }
+}
+
+function loadAutoSave() {
+  try {
+    const raw = localStorage.getItem('sertiva_state');
+    if (!raw) return false;
+    const s = JSON.parse(raw);
+    Object.assign(state.meta, s.meta || {});
+    state.penerima = s.penerima || [];
+    state.penerimaColumns = s.penerimaColumns || [];
+    state.materi = s.materi || [];
+    state.materiColumns = s.materiColumns || [];
+    if (s.template) state.template = s.template;
+    if (s.penilaian) Object.assign(state.penilaian, s.penilaian);
+    state.printPreview = !!s.printPreview;
+    return true;
+  } catch(e) { return false; }
+}
+
+function saveTemplateFile() {
+  const data = { versi: 1, meta: state.meta, template: state.template };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  downloadBlob(blob, `sertiva_template_${Date.now()}.json`);
+  toast('Template disimpan', 'ok');
+}
+
+async function loadTemplateFile(ev) {
+  const file = ev.target.files[0]; if (!file) return;
+  const text = await file.text();
+  try {
+    const d = JSON.parse(text);
+    if (d.meta) Object.assign(state.meta, d.meta);
+    if (d.template) state.template = d.template;
+    if (!state.template.safeArea) {
+      state.template.safeArea = { aktif: false, atas: 20, kanan: 20, bawah: 20, kiri: 20, tampil: true };
+    }
+    state.activeHalaman = 0; state.selectedIdx = -1; state.multiIdxs = [];
+    renderAllFromState();
+    syncSafeAreaInputs();
+    syncAllSlots();
+    toast('Template dimuat', 'ok');
+  } catch (e) {
+    toast('File tidak valid', 'err');
+  }
+}
+
+function renderAllFromState() {
+  document.getElementById('m_nama').value = state.meta.nama_kegiatan || '';
+  document.getElementById('m_tanggal').value = state.meta.tanggal || '';
+  document.getElementById('m_tempat').value = state.meta.tempat || '';
+  document.getElementById('m_penyelenggara').value = state.meta.penyelenggara || '';
+  document.getElementById('m_nomor').value = state.meta.nomor || '';
+  (state.meta.kop?.teks || []).forEach((t, i) => {
+    const el = document.getElementById('m_kop' + (i+1));
+    if (el) el.value = t || '';
+  });
+  for (let i = 0; i < 2; i++) {
+    document.getElementById('p'+i+'_nama').value = state.meta.pejabat?.[i]?.nama || '';
+    document.getElementById('p'+i+'_jabatan').value = state.meta.pejabat?.[i]?.jabatan || '';
+    document.getElementById('p'+i+'_nip').value = state.meta.pejabat?.[i]?.nip || '';
+  }
+  document.getElementById('u_lebar').value = state.template.ukuran.lebar;
+  document.getElementById('u_tinggi').value = state.template.ukuran.tinggi;
+  document.getElementById('u_orientasi').value = state.template.ukuran.orientasi;
+  renderDataPreview();
+  if (state.penerima.length) showPenilaianPanel();
+  renderHalamanTabs();
+  renderCanvas();
+  renderSummary();
+  updateChkUkuran();
+}
+
+function updateChkUkuran() {
+  const el = document.getElementById('chkUkuran');
+  if (el) el.textContent = `${state.template.ukuran.lebar} × ${state.template.ukuran.tinggi} mm`;
+}
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (['input','textarea','select'].includes(tag)) return;
+  if (document.querySelector('[data-panel="desain"]').classList.contains('hidden')) return;
+
+  const idxs = getSelectedIdxs();
+  if (!idxs.length && e.key !== 'Escape') return;
+  const halaman = state.template.halaman[state.activeHalaman];
+
+  switch (e.key) {
+    case 'Delete': case 'Backspace':
+      e.preventDefault(); deleteSelected(); break;
+    case 'Escape':
+      state.selectedIdx = -1; state.multiIdxs = [];
+      renderCanvas(); renderProps(); syncAllSlots(); break;
+    case 'ArrowLeft': case 'ArrowRight': case 'ArrowUp': case 'ArrowDown': {
+      e.preventDefault();
+      const step = e.shiftKey ? 2 : 0.5;
+      const dx = e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0;
+      const dy = e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0;
+      idxs.forEach(i => {
+        const el = halaman.elemen[i];
+        if (el.locked) return;
+        el.x = Math.max(0, Math.round((el.x + dx) * 2) / 2);
+        el.y = Math.max(0, Math.round((el.y + dy) * 2) / 2);
+      });
+      renderCanvas(); autoSave(); break;
+    }
+    case 'd': case 'D':
+      if (e.ctrlKey || e.metaKey) { e.preventDefault(); duplicateSelected(); }
+      break;
+    case 'l': case 'L':
+      if (e.ctrlKey || e.metaKey) { e.preventDefault(); toggleLock(); }
+      break;
+    case 'g': case 'G':
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        if (e.shiftKey) ungroupSelected();
+        else groupSelected();
+      }
+      break;
+  }
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  loadAutoSave();
+  if (!state.template.safeArea) {
+    state.template.safeArea = { aktif: false, atas: 20, kanan: 20, bawah: 20, kiri: 20, tampil: true };
+  }
+  if (state.printPreview) {
+    document.body.classList.add('print-preview-mode');
+    const r = document.querySelector('input[name="printmode"][value="blank"]');
+    if (r) r.checked = true;
+  }
+  renderAllFromState();
+  syncSafeAreaInputs();
+  syncAllSlots();
+  renderSummary();
+  updateChkUkuran();
+  lucide.createIcons();
+});
+</script>
+
+</body>
+</html>
