@@ -818,9 +818,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
               <button onclick="clearPostFoto()" aria-label="Hapus foto" class="absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/60 text-white flex items-center justify-center active:scale-90"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
             </div>
             <select id="postKat" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
-              <option value="refleksi">📝 Refleksi</option>
-              <option value="belajar">📚 Momen Belajar</option>
-              <option value="info">📢 Info</option>
+              <option value="refleksi">Refleksi</option>
+              <option value="belajar">Momen Belajar</option>
+              <option value="info">Info</option>
             </select>
             <button onclick="submitPost()" id="postSubmitBtn" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Bagikan Catatan</button>
           </div>
@@ -1248,11 +1248,12 @@ const idb=(()=>{
   function open(){
     if(dbp)return dbp;
     dbp=new Promise((res,rej)=>{
-      const req=indexedDB.open('gb_cache_v1',1);
+      const req=indexedDB.open('gb_cache_v1',2);
       req.onupgradeneeded=()=>{
         const db=req.result;
         if(!db.objectStoreNames.contains('foto'))db.createObjectStore('foto');
         if(!db.objectStoreNames.contains('misc'))db.createObjectStore('misc');
+        if(!db.objectStoreNames.contains('posts'))db.createObjectStore('posts',{keyPath:'id'});
       };
       req.onsuccess=()=>res(req.result);
       req.onerror=()=>rej(req.error);
@@ -1276,6 +1277,15 @@ const idb=(()=>{
       });
     }catch(e){return false;}
   };
+  const put=async(store,val)=>{
+    try{const db=await open();
+      return await new Promise(res=>{
+        const tx=db.transaction(store,'readwrite');
+        tx.objectStore(store).put(val);
+        tx.oncomplete=()=>res(true); tx.onerror=()=>res(false);
+      });
+    }catch(e){return false;}
+  };
   const clear=async(store)=>{
     try{const db=await open();
       return await new Promise(res=>{
@@ -1285,7 +1295,24 @@ const idb=(()=>{
       });
     }catch(e){return false;}
   };
-  return {get,set,clear};
+  const getAll=async(store)=>{
+    try{const db=await open();
+      return await new Promise(res=>{
+        const r=db.transaction(store,'readonly').objectStore(store).getAll();
+        r.onsuccess=()=>res(r.result||[]); r.onerror=()=>res([]);
+      });
+    }catch(e){return [];}
+  };
+  const del=async(store,key)=>{
+    try{const db=await open();
+      return await new Promise(res=>{
+        const tx=db.transaction(store,'readwrite');
+        tx.objectStore(store).delete(key);
+        tx.oncomplete=()=>res(true); tx.onerror=()=>res(false);
+      });
+    }catch(e){return false;}
+  };
+  return {get,set,put,clear,getAll,del};
 })();
 
 /* ============================================================
@@ -1350,9 +1377,9 @@ const STATE={
   profile:null,token:null,menus:[],config:null,quotes:[],footer:[],
   notifs:[],tipeFb:'Saran',rating:5,quoteNow:null,sosmed:{},studio:null,
   agenda:[],docs:[],schools:[],
-  posts:[],postsLimit:10,
-  editingPost:null,postFotoFile:null,_existingPostFoto:null,
-  postImg:{post:null,format:'story',color:'teal'},
+  posts: [], postsLimit: 10,
+  editingPost: null, postFotoData: null, _existingPostFoto: null,
+  postImg: { post: null, format: 'story', color: 'teal' },
   favs:new Set(JSON.parse(localStorage.getItem('gb_favs')||'[]')),
   favsDok:new Set(JSON.parse(localStorage.getItem('gb_favs_dok')||'[]')),
   favsAgenda:new Set(JSON.parse(localStorage.getItem('gb_favs_agenda')||'[]')),
@@ -1831,12 +1858,7 @@ async function flushOfflineQueue(){
   const remaining=[];
   for(const item of queue){
     try{
-      if(item.aksi==='post_catatan'){
-        const r=await sb.from('creative_user_posts').insert(item.payload);
-        if(r.error)throw r.error;
-      }else{
-        remaining.push(item);
-      }
+      remaining.push(item); // semua item lama di-drop
     }catch(_){remaining.push(item);}
   }
   await idb.set('misc','offline_queue',remaining);
@@ -2171,17 +2193,18 @@ function renderCarousel(){
       slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);
     }
   }
-  if(c.info_status!=='OFF'){
-    const NC={pengumuman:'from-teal-600 to-teal-500',info:'from-sky-600 to-blue-600',gamifikasi:'from-amber-500 to-orange-600',sistem:'from-slate-600 to-slate-800'};
-    const EM={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'};
-    STATE.notifs.slice(0,4).forEach(n=>{
-      if(n.gambar){
-        slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
-      }else{
-        slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="text-xl shrink-0">${EM[n.tipe]||'📢'}</span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);
-      }
-    });
-  }
+  if (c.info_status !== 'OFF') {
+  const NC = { pengumuman: 'from-teal-600 to-teal-500', info: 'from-sky-600 to-blue-600', gamifikasi: 'from-amber-500 to-orange-600', sistem: 'from-slate-600 to-slate-800' };
+  const EI = { info: 'info', gamifikasi: 'trophy', pengumuman: 'megaphone', sistem: 'sparkles' };
+  STATE.notifs.slice(0, 4).forEach(n => {
+    if (n.gambar) {
+      slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
+    } else {
+      const ic = EI[n.tipe] || 'info';
+      slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0"><i data-lucide="${ic}" class="w-5 h-5 text-white"></i></span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);
+    }
+  });
+}
   box.classList.toggle('hidden',!slides.length);
   $('caroTrack').innerHTML=slides.join('');
   $('caroDots').innerHTML=slides.length>1?slides.map((_,i)=>`<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300'}"></button>`).join(''):'';
@@ -3055,12 +3078,14 @@ async function showSchoolDetail(npsn){
 }
 
 /* ============================================================
-   CATATAN GURU — Personal page
+   CATATAN GURU — Local Storage (IndexedDB)
+   Personal page. Data & foto tersimpan di HP user.
+   Foto dikompres (WebP 1000px, quality 0.78) sebelum disimpan.
    ============================================================ */
 function updateMyPostCount(){
   const el = $('myPostCount');
   if(!el) return;
-  const n = STATE.posts?.length || 0;
+  const n = (STATE.posts || []).filter(p => p.is_active !== false).length;
   el.textContent = n > 0 ? n + ' catatan' : '';
 }
 
@@ -3079,15 +3104,10 @@ async function fetchPosts(){
   }
 
   try {
-    const { data, error } = await sb.from('creative_user_posts')
-      .select('id,guru_id,nama,sekolah,npsn,judul,isi,foto_url,kategori,created_at')
-      .eq('is_active', true)
-      .eq('guru_id', gid)
-      .order('created_at', { ascending: false })
-      .limit(STATE.postsLimit);
-
-    if(error) throw error;
-    STATE.posts = data || [];
+    const all = await idb.getAll('posts');
+    const mine = (all || []).filter(p => p.guru_id === gid);
+    mine.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    STATE.posts = mine;
     renderPosts();
     updateMyPostCount();
   } catch(e){
@@ -3098,7 +3118,7 @@ async function fetchPosts(){
 
 function morePost(){
   STATE.postsLimit += 10;
-  fetchPosts();
+  renderPosts();
 }
 
 function renderPosts(){
@@ -3125,7 +3145,8 @@ function renderPosts(){
     return;
   }
 
-  if(!STATE.posts.length){
+  const activePosts = (STATE.posts || []).filter(p => p.is_active !== false);
+  if(!activePosts.length){
     list.innerHTML = `
       <div class="card p-8 text-center">
         <div class="w-16 h-16 mx-auto rounded-3xl acc-soft flex items-center justify-center mb-4">
@@ -3133,7 +3154,7 @@ function renderPosts(){
         </div>
         <p class="text-base font-extrabold text-slate-800 mb-1">Belum ada catatan</p>
         <p class="text-xs text-slate-500 max-w-[260px] mx-auto leading-relaxed mb-5">
-          Tulis momen belajar, refleksi, atau info menarik. Bisa langsung kamu bagikan ke WA.
+          Tulis momen belajar, refleksi, atau info menarik. Semua tersimpan aman di HP-mu.
         </p>
         <button onclick="togglePostForm(true)" class="acc-bg text-white font-bold px-6 py-2.5 rounded-xl text-xs active:scale-95 transition shadow-sm inline-flex items-center gap-2">
           <i data-lucide="pencil-line" class="w-4 h-4"></i>Tulis Pertama
@@ -3151,7 +3172,9 @@ function renderPosts(){
     info:     { ico:'megaphone', label:'Info', cls:'bg-amber-100 text-amber-600' }
   };
 
-  list.innerHTML = STATE.posts.map(p => {
+  const shown = activePosts.slice(0, STATE.postsLimit);
+
+  list.innerHTML = shown.map(p => {
     const k = KAT[p.kategori] || KAT.refleksi;
     const tgl = waktuRelatif(p.created_at);
     const isiFull = esc(p.isi);
@@ -3164,6 +3187,9 @@ function renderPosts(){
             <i data-lucide="${k.ico}" class="w-3 h-3"></i>${k.label}
           </span>
           <span class="text-[10px] text-slate-400">${tgl}</span>
+<span class="ml-auto inline-flex items-center gap-1 text-[9px] font-bold text-slate-300 uppercase tracking-wider">
+  <i data-lucide="smartphone" class="w-2.5 h-2.5"></i>Lokal
+</span>
         </div>
 
         <div class="px-4 pt-2 pb-3">
@@ -3171,10 +3197,10 @@ function renderPosts(){
           <p class="text-[12.5px] text-slate-600 leading-relaxed whitespace-pre-line">${isi}</p>
         </div>
 
-        ${p.foto_url ? `
+        ${p.foto ? `
           <div class="px-4 pb-3">
             <div class="rounded-xl overflow-hidden bg-slate-100">
-              <img src="${esc(p.foto_url)}" class="w-full max-h-72 object-cover" alt="" loading="lazy" decoding="async">
+              <img src="${p.foto}" class="w-full max-h-72 object-cover" alt="" loading="lazy" decoding="async">
             </div>
           </div>` : ''}
 
@@ -3190,7 +3216,7 @@ function renderPosts(){
   }).join('');
 
   const more = $('postMore');
-  if(more) more.classList.toggle('hidden', STATE.posts.length < STATE.postsLimit);
+  if(more) more.classList.toggle('hidden', activePosts.length <= STATE.postsLimit);
   icons();
 }
 
@@ -3250,9 +3276,9 @@ function paintPostFormMode(){
   const btn = $('postSubmitBtn');
   const label = $('postFotoLabel');
   if(title) title.textContent = edit ? 'Edit catatan…' : 'Tulis catatanmu…';
-  if(btn) btn.textContent = edit ? 'Simpan Perubahan' : 'Bagikan Catatan';
+  if(btn) btn.textContent = edit ? 'Simpan Perubahan' : 'Simpan Catatan';
   if(label){
-    if(!STATE.postFotoFile && !STATE._existingPostFoto){
+    if(!STATE.postFotoData && !STATE._existingPostFoto){
       label.textContent = 'Foto (opsional)';
     }
   }
@@ -3263,7 +3289,7 @@ function resetPostForm(){
   $('postIsi').value = '';
   $('postCounter').textContent = '0/500';
   $('postKat').value = 'refleksi';
-  STATE.postFotoFile = null;
+  STATE.postFotoData = null;
   STATE.editingPost = null;
   STATE._existingPostFoto = null;
   clearPostFoto();
@@ -3277,8 +3303,8 @@ function editPost(id){
   if(!gid || p.guru_id !== gid) return toast('Bukan catatan Anda','error');
 
   STATE.editingPost = p;
-  STATE._existingPostFoto = p.foto_url || null;
-  STATE.postFotoFile = null;
+  STATE._existingPostFoto = p.foto || null;
+  STATE.postFotoData = null;
 
   $('postJudul').value = p.judul || '';
   $('postIsi').value = p.isi || '';
@@ -3286,8 +3312,8 @@ function editPost(id){
   $('postKat').value = p.kategori || 'refleksi';
 
   clearPostFoto();
-  if(p.foto_url){
-    $('postFotoImg').src = p.foto_url;
+  if(p.foto){
+    $('postFotoImg').src = p.foto;
     $('postFotoPreview').classList.remove('hidden');
     $('postFotoLabel').textContent = 'Ganti Foto';
   }
@@ -3301,19 +3327,32 @@ function onPostFotoSelected(ev){
   if(!f) return;
   if(!f.type.startsWith('image/')) return toast('File harus gambar','error');
   if(f.size > 8*1024*1024) return toast('Maksimal 8 MB','error');
-  STATE.postFotoFile = f;
-  const rd = new FileReader();
-  rd.onload = () => {
-    $('postFotoImg').src = rd.result;
+
+  loadImageFromFile(f).then(img => {
+    const maxSide = 1000;
+    const scale = Math.min(maxSide/img.width, maxSide/img.height, 1);
+    const w = Math.round(img.width * scale);
+    const h = Math.round(img.height * scale);
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    cv.getContext('2d').drawImage(img, 0, 0, w, h);
+    let dataURL;
+    try { dataURL = cv.toDataURL('image/webp', 0.78); }
+    catch(e){ dataURL = cv.toDataURL('image/jpeg', 0.8); }
+
+    STATE.postFotoData = dataURL;
+    $('postFotoImg').src = dataURL;
     $('postFotoPreview').classList.remove('hidden');
     $('postFotoLabel').textContent = 'Ganti Foto';
-  };
-  rd.readAsDataURL(f);
+  }).catch(e => {
+    console.warn('[onPostFotoSelected]', e);
+    toast('Gagal memproses foto','error');
+  });
   ev.target.value = '';
 }
 
 function clearPostFoto(){
-  STATE.postFotoFile = null;
+  STATE.postFotoData = null;
   const pv = $('postFotoPreview'); if(pv) pv.classList.add('hidden');
   const img = $('postFotoImg'); if(img) img.src = '';
   const lbl = $('postFotoLabel'); if(lbl) lbl.textContent = 'Foto (opsional)';
@@ -3327,85 +3366,69 @@ async function submitPost(){
   const isi = $('postIsi').value.trim();
   if(!judul) return toast('Judul wajib diisi','info');
   if(!isi) return toast('Isi catatan wajib diisi','info');
-  if(!navigator.onLine) return toast('Butuh internet untuk posting','warning');
 
   const isEdit = !!STATE.editingPost;
   const btn = $('postSubmitBtn');
   setBtnLoading(btn, true);
 
   try {
-    let fotoUrl = STATE._existingPostFoto || null;
+    const now = new Date().toISOString();
+    const foto = STATE.postFotoData || STATE._existingPostFoto || null;
 
-    if(STATE.postFotoFile){
-      const img = await loadImageFromFile(STATE.postFotoFile);
-      const maxSide = 1000;
-      const scale = Math.min(maxSide/img.width, maxSide/img.height, 1);
-      const w = Math.round(img.width * scale);
-      const h = Math.round(img.height * scale);
-      const cv = document.createElement('canvas');
-      cv.width = w; cv.height = h;
-      cv.getContext('2d').drawImage(img, 0, 0, w, h);
-      const blob = await new Promise(r => cv.toBlob(r, 'image/webp', 0.78));
-      if(!blob) throw new Error('compress_failed');
-
-      const path = gid + '/' + Date.now() + '.webp';
-      const up = await sb.storage.from('post-photos').upload(path, blob, {
-        upsert: false, contentType: 'image/webp', cacheControl: '604800'
-      });
-      if(up.error) throw up.error;
-      const { data: pub } = sb.storage.from('post-photos').getPublicUrl(path);
-      fotoUrl = pub.publicUrl;
-    }
-
-    const row = {
-      judul: judul,
-      isi: isi,
-      foto_url: fotoUrl,
-      kategori: $('postKat').value
-    };
-
+    let row;
     if(isEdit){
-      row.updated_at = new Date().toISOString();
-      const { error } = await sb.from('creative_user_posts')
-        .update(row)
-        .eq('id', STATE.editingPost.id)
-        .eq('guru_id', gid);
-      if(error) throw error;
-      toast('Catatan diperbarui ✓','success');
+      row = {
+        ...STATE.editingPost,
+        judul, isi,
+        foto,
+        kategori: $('postKat').value,
+        updated_at: now
+      };
     } else {
-      row.guru_id = gid;
-      row.nama = STATE.profile?.nama || '';
-      row.sekolah = STATE.profile?.sekolah || '';
-      row.npsn = STATE.profile?.npsn || '';
-      row.is_public = false;
-      const { error } = await sb.from('creative_user_posts').insert(row);
-      if(error) throw error;
-      toast('Catatan tayang ✓','success');
+      row = {
+        id: Date.now(),
+        guru_id: gid,
+        nama: STATE.profile?.nama || '',
+        sekolah: STATE.profile?.sekolah || '',
+        npsn: STATE.profile?.npsn || '',
+        judul, isi,
+        foto,
+        kategori: $('postKat').value,
+        created_at: now,
+        updated_at: now,
+        is_active: true
+      };
     }
 
+    const ok = await idb.put('posts', row);
+    if(!ok) throw new Error('idb_put_failed');
+
+    toast(isEdit ? 'Catatan diperbarui ✓' : 'Catatan tersimpan di HP ✓', 'success');
     togglePostForm(false);
     STATE.postsLimit = 10;
-    fetchPosts();
+    await fetchPosts();
   } catch(e){
     console.error('[submitPost]', e);
-    toast(isEdit ? 'Gagal memperbarui' : 'Gagal menyimpan catatan','error');
+    const msg = String(e?.message || e).slice(0, 120);
+    toast((isEdit ? 'Gagal memperbarui: ' : 'Gagal menyimpan: ') + msg, 'error');
   } finally {
     setBtnLoading(btn, false);
   }
 }
 
 function hapusPost(id){
-  confirmDialog('Hapus catatan ini?', async () => {
+  confirmDialog('Hapus catatan ini? Tindakan ini tidak bisa dibatalkan.', async () => {
     const gid = guruId();
-    const { error } = await sb.from('creative_user_posts')
-      .update({ is_active: false })
-      .eq('id', id)
-      .eq('guru_id', gid);
-    if(error) return toast('Gagal menghapus','error');
-    toast('Catatan dihapus');
-    STATE.posts = STATE.posts.filter(p => p.id !== id);
+    const p = STATE.posts.find(x => x.id === id);
+    if(!p || p.guru_id !== gid) return toast('Bukan catatan Anda','error');
+
+    const ok = await idb.del('posts', id);
+    if(!ok) return toast('Gagal menghapus','error');
+
+    STATE.posts = STATE.posts.filter(x => x.id !== id);
     renderPosts();
     updateMyPostCount();
+    toast('Catatan dihapus');
   }, 'Hapus Catatan?', 'Hapus');
 }
 
@@ -3424,16 +3447,10 @@ const POST_IMG_FMT = {
   potret: { w:1080, h:1350, n:'Feed' }
 };
 
-async function openPostImage(id){
+async function openPostImage(id) {
   const p = STATE.posts.find(x => x.id === id);
-  if(!p){
-    const { data } = await sb.from('creative_user_posts')
-      .select('*').eq('id', id).maybeSingle();
-    if(!data) return toast('Catatan tidak ditemukan','error');
-    STATE.postImg.post = data;
-  } else {
-    STATE.postImg.post = p;
-  }
+  if (!p) return toast('Catatan tidak ditemukan', 'error');
+  STATE.postImg.post = p;
   STATE.postImg.format = STATE.postImg.format || 'story';
   STATE.postImg.color = STATE.postImg.color || 'teal';
   openModal('mPostImage');
@@ -3543,9 +3560,9 @@ async function renderPostImage(){
   ctx.textBaseline = 'alphabetic';
   curY += 60*s;
 
-  if(p.foto_url){
-    try {
-      const pimg = await loadImg(p.foto_url);
+  if (p.foto) {
+  try {
+    const pimg = await loadImg(p.foto);
       const photoH = Math.min(innerW * 0.75, H * 0.42);
       const scale = Math.max(innerW / pimg.width, photoH / pimg.height);
       const dw = pimg.width * scale;
@@ -4720,14 +4737,30 @@ async function renderNotif(){
     }
     setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
   }else setBadge(0);
-  $('notifList').innerHTML=STATE.notifs.map(n=>{
-    const em={info:'📢',gamifikasi:'🏆',pengumuman:'📣',sistem:'✨'}[n.tipe]||'📢';
-    const tgl=new Date(n.scheduled_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-    const scope=(n.scope_type&&n.scope_type!=='all')?`<span class="text-[9px] font-black acc-soft acc-text px-1.5 py-0.5 rounded">KHUSUS</span>`:'';
-    return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}"><span class="text-xl">${em}</span><div><p class="text-[13px] font-bold text-slate-800">${n.judul} ${scope}</p><p class="text-xs text-slate-500 mt-0.5">${n.pesan}</p>${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener" class="text-[10px] font-bold acc-text">Buka lampiran →</a>`:''}<p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p></div></div>`;
-  }).join('')||emptyState('bell-off','Belum ada notifikasi','Kami akan kabari kamu kalau ada info baru.');
+    const NOTIF_META = {
+    info: { ico: 'info', cls: 'bg-sky-100 text-sky-600' },
+    gamifikasi: { ico: 'trophy', cls: 'bg-amber-100 text-amber-600' },
+    pengumuman: { ico: 'megaphone', cls: 'bg-teal-100 text-teal-600' },
+    sistem: { ico: 'sparkles', cls: 'bg-violet-100 text-violet-600' }
+  };
+  $('notifList').innerHTML = STATE.notifs.map(n => {
+    const m = NOTIF_META[n.tipe] || NOTIF_META.info;
+    const tgl = new Date(n.scheduled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const scope = (n.scope_type && n.scope_type !== 'all') ? `<span class="text-[9px] font-black acc-soft acc-text px-1.5 py-0.5 rounded">KHUSUS</span>` : '';
+    return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}">
+      <span class="w-10 h-10 rounded-xl ${m.cls} flex items-center justify-center shrink-0">
+        <i data-lucide="${m.ico}" class="w-5 h-5"></i>
+      </span>
+      <div class="flex-1 min-w-0">
+        <p class="text-[13px] font-bold text-slate-800">${n.judul} ${scope}</p>
+        <p class="text-xs text-slate-500 mt-0.5">${n.pesan}</p>
+        ${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener" class="text-[10px] font-bold acc-text">Buka lampiran →</a>`:''}
+        <p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p>
+      </div>
+    </div>`;
+  }).join('') || emptyState('bell-off', 'Belum ada notifikasi', 'Kami akan kabari kamu kalau ada info baru.');
   icons();
-}
+  }
 
 /* ============================================================
    IN-APP NOTIF
@@ -4873,10 +4906,10 @@ async function submitFb(){
 /* ============================================================
    ONBOARDING
    ============================================================ */
-const ONBOARD_STEPS=[
-  {i:'sparkles',t:'Selamat datang 👋',d:'Guru Berbagi Selogiri — portal untuk berkarya & tumbuh bersama.'},
-  {i:'school',t:'Upload Logo Sekolah',d:'Buka Profil → Sekolah Saya → Upload. Logo otomatis muncul untuk semua guru sekolah Anda.'},
-  {i:'image',t:'Buat Status WA',d:'Buka Berbagi → Status WA. Pilih template, upload foto, dan bagikan ke WA dalam 30 detik.'}
+const ONBOARD_STEPS = [
+  { i: 'sparkles', t: 'Selamat datang', d: 'Guru Berbagi Selogiri — portal untuk berkarya & tumbuh bersama.' },
+  { i: 'school', t: 'Upload Logo Sekolah', d: 'Buka Profil → Sekolah Saya → Upload. Logo otomatis muncul untuk semua guru sekolah Anda.' },
+  { i: 'image', t: 'Buat Status WA', d: 'Buka Berbagi → Status WA. Pilih template, upload foto, dan bagikan ke WA dalam 30 detik.' }
 ];
 let _onboardIdx=0;
 function showOnboard(){
