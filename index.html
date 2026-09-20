@@ -2843,56 +2843,127 @@ async function renderSchoolCard(){
 }
 
 async function uploadSchoolLogo(file){
-  if(!file) return;
+  console.log('=== [uploadSchoolLogo] START ===');
+  if(!file){ console.warn('No file'); return; }
+  console.log('File:', file.name, file.type, (file.size/1024).toFixed(1)+' KB');
+
   if(!file.type.startsWith('image/')) return toast('File harus berupa gambar','error');
   if(file.size > 5*1024*1024) return toast('Ukuran maksimal 5 MB','error');
 
   const gid = guruId();
   const npsn = STATE.profile?.npsn;
-  if(!gid || !npsn) return toast('Data sekolah tidak lengkap','error');
+  console.log('gid:', gid);
+  console.log('npsn:', npsn);
+  console.log('profile:', STATE.profile);
+
+  if(!gid) return toast('Login dulu','error');
+  if(!npsn){
+    console.error('NPSN MISSING in profile. Available fields:', Object.keys(STATE.profile || {}));
+    return toast('NPSN sekolah tidak ditemukan di data login Anda','error');
+  }
   if(!navigator.onLine) return toast('Butuh koneksi internet untuk upload','warning');
 
   toast('Memproses logo…','info');
-  try {
-    const img = await loadImageFromFile(file);
-    const blobMain = await compressLogo(img, 512, 0.9);
-    const blobThumb = await compressLogo(img, 128, 0.85);
-    if(!blobMain || !blobThumb) throw new Error('compress_failed');
 
+  try {
+    // STEP 1: Compress
+    console.log('Step 1: Loading image...');
+    const img = await loadImageFromFile(file);
+    console.log('  Image loaded:', img.width, 'x', img.height);
+
+    console.log('Step 2: Compressing main (512px)...');
+    const blobMain = await compressLogo(img, 512, 0.9);
+    if(!blobMain) throw new Error('compress_main_failed');
+    console.log('  blobMain:', (blobMain.size/1024).toFixed(1)+' KB');
+
+    console.log('Step 3: Compressing thumb (128px)...');
+    const blobThumb = await compressLogo(img, 128, 0.85);
+    if(!blobThumb) throw new Error('compress_thumb_failed');
+    console.log('  blobThumb:', (blobThumb.size/1024).toFixed(1)+' KB');
+
+    // STEP 2: Upload main
+    console.log('Step 4: Uploading main to school-logos/'+npsn+'/logo.webp...');
     const up1 = await sb.storage.from('school-logos').upload(npsn+'/logo.webp', blobMain, {
       upsert: true, contentType: 'image/webp', cacheControl: '604800'
     });
-    if(up1.error) throw up1.error;
+    console.log('  upload main result:', up1);
+    if(up1.error){
+      console.error('  UPLOAD MAIN ERROR:', up1.error);
+      throw new Error('storage_main: ' + up1.error.message);
+    }
 
+    // STEP 3: Upload thumb
+    console.log('Step 5: Uploading thumb...');
     const up2 = await sb.storage.from('school-logos').upload(npsn+'/thumb.webp', blobThumb, {
       upsert: true, contentType: 'image/webp', cacheControl: '604800'
     });
-    if(up2.error) throw up2.error;
+    console.log('  upload thumb result:', up2);
+    if(up2.error){
+      console.error('  UPLOAD THUMB ERROR:', up2.error);
+      throw new Error('storage_thumb: ' + up2.error.message);
+    }
 
+    // STEP 4: Get public URLs
     const { data: pub1 } = sb.storage.from('school-logos').getPublicUrl(npsn+'/logo.webp');
     const { data: pub2 } = sb.storage.from('school-logos').getPublicUrl(npsn+'/thumb.webp');
     const ts = Date.now();
     const url1 = pub1.publicUrl + '?v=' + ts;
     const url2 = pub2.publicUrl + '?v=' + ts;
+    console.log('Public URLs:', url1, url2);
 
-    const { error: e2 } = await sb.from('creative_schools').update({
-      logo_url: url1,
-      logo_thumb_url: url2,
-      logo_uploaded_by: gid,
-      logo_uploaded_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }).eq('npsn', npsn);
-    if(e2) throw e2;
+    // STEP 5: Check if school row exists
+    console.log('Step 6: Checking school row in DB...');
+    const { data: existing, error: errCheck } = await sb.from('creative_schools')
+      .select('npsn, nama')
+      .eq('npsn', npsn)
+      .maybeSingle();
+    console.log('  existing row:', existing, 'check error:', errCheck);
 
+    let dbResult;
+    if(existing){
+      // UPDATE existing row
+      console.log('Step 7a: Updating existing row...');
+      dbResult = await sb.from('creative_schools').update({
+        logo_url: url1,
+        logo_thumb_url: url2,
+        logo_uploaded_by: gid,
+        logo_uploaded_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }).eq('npsn', npsn).select();
+    } else {
+      // INSERT new row (school belum ada di tabel)
+      console.warn('  School row not found! Creating new row...');
+      dbResult = await sb.from('creative_schools').insert({
+        npsn: npsn,
+        nama: STATE.profile?.sekolah || ('Sekolah ' + npsn),
+        nama_singkat: STATE.profile?.sekolah || '',
+        logo_url: url1,
+        logo_thumb_url: url2,
+        logo_uploaded_by: gid,
+        logo_uploaded_at: new Date().toISOString(),
+        is_active: true
+      }).select();
+    }
+    console.log('  DB result:', dbResult);
+    if(dbResult.error){
+      console.error('  DB ERROR:', dbResult.error);
+      throw new Error('db: ' + dbResult.error.message);
+    }
+
+    // STEP 6: Success
+    console.log('=== [uploadSchoolLogo] SUCCESS ===');
     STATE.schools = null;
     schoolLogoImg = null;
     schoolLogoNpsn = null;
 
     await renderSchoolCard();
     toast('Logo sekolah tersimpan ✓','success');
+
   } catch(e){
-    console.error('[uploadSchoolLogo]', e);
-    toast('Gagal upload, coba lagi','error');
+    console.error('=== [uploadSchoolLogo] FAILED ===');
+    console.error('Error:', e);
+    const msg = String(e.message || e).slice(0, 120);
+    toast('Gagal upload: ' + msg, 'error');
   }
 }
 
