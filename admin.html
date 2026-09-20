@@ -11,7 +11,7 @@
   if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
 }catch(e){}})();
 </script>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png">
+<link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
 <title>Admin · Guru Berbagi Selogiri</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
@@ -131,25 +131,12 @@
 
   .pending-badge{background:#FBBF24;color:#78350F;font-weight:800;font-size:9px;padding:2px 6px;border-radius:9999px}
 
-  .icon-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;transition:all .15s;color:#64748B}
-  .icon-cell:hover{background:#F1F5F9;color:var(--acc)}
-  .icon-cell.on{background:var(--acc);color:#fff}
-  html.dark .icon-cell:hover{background:#252A33}
-  html.dark .icon-cell.on{background:var(--acc)}
-
-  .color-dot{width:28px;height:28px;border-radius:9999px;cursor:pointer;transition:all .15s;border:2px solid transparent}
-  .color-dot:hover{transform:scale(1.15)}
-  .color-dot.on{border-color:#fff;box-shadow:0 0 0 2px var(--acc)}
-
   #debug-panel{position:fixed;bottom:0;left:0;right:0;max-height:40vh;background:#0a0b10;border-top:2px solid var(--acc);color:#5EEAD4;font-family:ui-monospace,Consolas,monospace;font-size:10px;padding:8px 10px;overflow-y:auto;z-index:200;transform:translateY(100%);transition:transform .25s ease}
   #debug-panel.show{transform:translateY(0)}
   #debug-panel .log-line{padding:2px 0;border-bottom:1px solid #1e2230;word-break:break-all}
   #debug-panel .log-error{color:#fca5a5}
   #debug-panel .log-success{color:#86efac}
   #debug-panel .log-info{color:#5EEAD4}
-
-  .menu-icon-img{border-radius:.75rem;object-fit:cover;background:#F1F5F9}
-  html.dark .menu-icon-img{background:#252A33}
 </style>
 </head>
 <body>
@@ -159,7 +146,7 @@
   <div class="w-full max-w-sm">
     <div class="text-center mb-8">
       <div class="w-20 h-20 mx-auto rounded-3xl bg-white/10 border border-white/20 flex items-center justify-center mb-4 overflow-hidden">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-14 h-14 object-contain scale-[1.3]" alt="Logo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-14 h-14 object-contain scale-[1.3]" alt="Logo">
       </div>
       <h1 class="text-2xl font-black text-white">Admin Panel</h1>
       <p class="text-teal-200 text-sm mt-1">Guru Berbagi Selogiri · Command Center</p>
@@ -188,11 +175,11 @@
   <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white sticky top-0 h-screen">
     <div class="flex items-center gap-3 p-5 border-b border-slate-100">
       <div class="w-11 h-11 rounded-xl brand-grad overflow-hidden shrink-0">
-        <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
       </div>
       <div class="min-w-0">
         <p class="font-extrabold text-slate-800 text-sm leading-tight">Admin Panel</p>
-        <p class="text-[10px] text-slate-400">v5.1</p>
+        <p class="text-[10px] text-slate-400">v5.3</p>
       </div>
     </div>
     <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto no-scroll" id="navDesktop"></nav>
@@ -242,15 +229,10 @@
       <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800">
         <span id="syncDotDesktop" class="sync-dot"></span>
         <span id="syncTextDesktop" class="text-[10px] font-mono font-semibold text-slate-500">Synced</span>
-        <span id="pendingBadgeDesktop" class="hidden pending-badge">0</span>
       </div>
       <button onclick="exportData()" aria-label="Export" title="Export JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="download" class="w-4 h-4"></i>
       </button>
-      <label aria-label="Import" title="Import JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition cursor-pointer">
-        <i data-lucide="upload" class="w-4 h-4"></i>
-        <input type="file" accept=".json" class="hidden" onchange="importData(event)">
-      </label>
     </div>
 
     <!-- DRAWER MOBILE -->
@@ -260,7 +242,7 @@
         <div class="flex items-center justify-between p-5 border-b border-slate-100">
           <div class="flex items-center gap-2.5 min-w-0">
             <div class="w-9 h-9 rounded-xl brand-grad overflow-hidden shrink-0">
-              <img src="https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+              <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
             </div>
             <div class="min-w-0">
               <p class="font-extrabold text-slate-800 text-sm leading-tight">Admin</p>
@@ -287,39 +269,46 @@
 
       <!-- ============ DASHBOARD ============ -->
       <section id="sec-dash" class="space-y-4">
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <div class="card p-4 flex items-center gap-3">
             <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="users" class="w-5 h-5"></i></span>
             <div class="min-w-0">
-              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Total Guru</p>
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Guru</p>
               <p id="stGuru" class="text-xl font-black text-slate-800">0</p>
             </div>
           </div>
           <div class="card p-4 flex items-center gap-3">
             <span class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center shrink-0"><i data-lucide="activity" class="w-5 h-5"></i></span>
             <div class="min-w-0">
-              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Aktif 7 Hari</p>
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Aktif 7hr</p>
               <p id="stAktif" class="text-xl font-black text-teal-600">0</p>
             </div>
           </div>
           <div class="card p-4 flex items-center gap-3">
             <span class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0"><i data-lucide="log-in" class="w-5 h-5"></i></span>
             <div class="min-w-0">
-              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Login Hari Ini</p>
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Login</p>
               <p id="stLogin" class="text-xl font-black text-sky-600">0</p>
             </div>
           </div>
           <div class="card p-4 flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="star" class="w-5 h-5"></i></span>
+            <span class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="school" class="w-5 h-5"></i></span>
             <div class="min-w-0">
-              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Poin Tersebar</p>
-              <p id="stPoin" class="text-xl font-black text-amber-500">0</p>
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Sekolah</p>
+              <p id="stSchools" class="text-xl font-black text-emerald-600">0</p>
             </div>
           </div>
-          <div class="card p-4 flex items-center gap-3 col-span-2 lg:col-span-1">
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center shrink-0"><i data-lucide="image" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Logo Sek</p>
+              <p id="stSchoolLogo" class="text-xl font-black text-violet-600">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
             <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-5 h-5"></i></span>
             <div class="min-w-0">
-              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Saran Baru</p>
+              <p class="text-[10px] font-black uppercase text-slate-500 truncate">Saran</p>
               <p id="stFb" class="text-xl font-black text-rose-500">0</p>
             </div>
           </div>
@@ -332,8 +321,8 @@
           <button onclick="exportCSV('guru',STATE.guru)" class="card px-3.5 py-2.5 text-[11px] font-bold text-slate-600 flex items-center gap-1.5 active:scale-95 transition">
             <i data-lucide="download" class="w-3.5 h-3.5"></i>Export Guru
           </button>
-          <button onclick="exportCSV('penukaran',STATE.redem)" class="card px-3.5 py-2.5 text-[11px] font-bold text-slate-600 flex items-center gap-1.5 active:scale-95 transition">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>Export Penukaran
+          <button onclick="exportCSV('sekolah',STATE.schoolsAdmin)" class="card px-3.5 py-2.5 text-[11px] font-bold text-slate-600 flex items-center gap-1.5 active:scale-95 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>Export Sekolah
           </button>
           <button onclick="purgeLog()" class="card px-3.5 py-2.5 text-[11px] font-bold text-rose-500 flex items-center gap-1.5 active:scale-95 transition">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Purge Log &gt;90 hari
@@ -349,7 +338,8 @@
           </div>
           <div class="card p-5">
             <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-              <i data-lucide="school" class="w-4 h-4 acc-text"></i> Liga Sekolah
+              <i data-lucide="school" class="w-4 h-4 acc-text"></i> Sekolah Paling Aktif
+              <span class="text-[10px] text-slate-400 font-normal ml-auto">by logo</span>
             </p>
             <div id="leagueList" class="space-y-2"></div>
           </div>
@@ -373,6 +363,47 @@
           <div id="leadBoard" class="grid md:grid-cols-2 gap-2"></div>
         </div>
       </section>
+
+      <!-- ============ SEKOLAH ============ -->
+      <section id="sec-schools" class="hidden space-y-4">
+        <div class="flex gap-2 flex-wrap">
+          <input id="schoolAdminSearch" oninput="renderSchoolsAdminDebounced()" class="inp acc-ring flex-1 min-w-[200px]" placeholder="Cari nama sekolah / NPSN…">
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="school" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500">Total Sekolah</p>
+              <p id="schoolStatTotal" class="text-xl font-black text-slate-800">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><i data-lucide="image" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500">Punya Logo</p>
+              <p id="schoolStatWithLogo" class="text-xl font-black text-emerald-600">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="image-off" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500">Belum Logo</p>
+              <p id="schoolStatNoLogo" class="text-xl font-black text-amber-600">0</p>
+            </div>
+          </div>
+          <div class="card p-4 flex items-center gap-3">
+            <span class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0"><i data-lucide="eye-off" class="w-5 h-5"></i></span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-black uppercase text-slate-500">Nonaktif</p>
+              <p id="schoolStatInactive" class="text-xl font-black text-rose-600">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="schoolsAdminList" class="space-y-2"></div>
+      </section>
+
       <!-- ============ MENU ============ -->
       <section id="sec-menu" class="hidden space-y-4">
         <div class="flex gap-2">
@@ -405,36 +436,13 @@
         <div id="docListAdmin" class="space-y-2"></div>
       </section>
 
-      <!-- ============ REWARDS ============ -->
-      <section id="sec-rewards" class="hidden space-y-4">
-        <div class="flex gap-2">
-          <button onclick="openRewardEditor()" class="acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
-            <i data-lucide="plus" class="w-4 h-4"></i> Reward
-          </button>
-        </div>
-        <div id="rewardListAdmin" class="space-y-2"></div>
-        <div class="card p-5">
-          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-            <i data-lucide="shopping-bag" class="w-4 h-4 acc-text"></i> Daftar Penukaran
-          </p>
-          <div id="redemList" class="space-y-2"></div>
-        </div>
-      </section>
-
-      <!-- ============ KUDOS ============ -->
-      <section id="sec-kudos" class="hidden space-y-4">
-        <div class="card p-5">
-          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-            <i data-lucide="heart" class="w-4 h-4 text-rose-500"></i> Top Penerima Apresiasi
-          </p>
-          <div id="kudosTopAdmin" class="space-y-2"></div>
-        </div>
-        <div class="card p-5">
-          <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2 mb-3">
-            <i data-lucide="history" class="w-4 h-4 acc-text"></i> Riwayat Apresiasi
-          </p>
-          <div id="kudosList" class="space-y-2"></div>
-        </div>
+      <!-- ============ GURU ============ -->
+      <section id="sec-guru" class="hidden space-y-4">
+        <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
+          <i data-lucide="info" class="w-3.5 h-3.5"></i> Akun terpusat di SSO — tabel hanya baca. Foto profil bisa di-reset kalau ada masalah.
+        </p>
+        <input id="gSearch" oninput="renderGuruDebounced()" class="inp acc-ring" placeholder="Cari nama / sekolah / email…">
+        <div id="guruTable" class="card overflow-hidden"></div>
       </section>
 
       <!-- ============ INFO / BANNER ============ -->
@@ -519,8 +527,8 @@
 
         <div class="card p-5">
           <label class="lbl">Versi Aplikasi</label>
-          <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.55" autocomplete="off">
-          <p class="text-[10px] text-slate-400 mt-2">Versi ini muncul di seluruh aplikasi (sidebar, profil, pengaturan, footer).</p>
+          <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.75" autocomplete="off">
+          <p class="text-[10px] text-slate-400 mt-2">Versi ini muncul di seluruh aplikasi. Ganti = trigger Force Sync ke semua user.</p>
         </div>
 
         <button onclick="saveInfo()" class="acc-bg text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
@@ -532,7 +540,7 @@
       <section id="sec-notif" class="hidden space-y-4">
         <div class="card p-5 space-y-3">
           <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
-            <i data-lucide="send" class="w-4 h-4 acc-text"></i> Kirim Pengumuman / Pesan Khusus
+            <i data-lucide="send" class="w-4 h-4 acc-text"></i> Kirim Pengumuman
           </p>
           <div class="grid md:grid-cols-2 gap-3">
             <div>
@@ -542,10 +550,9 @@
             <div>
               <label class="lbl">Tipe</label>
               <select id="iNotTipe" class="inp acc-ring">
-                <option value="pengumuman">📣 Pengumuman</option>
-                <option value="info">📢 Info</option>
-                <option value="gamifikasi">🏆 Gamifikasi</option>
-                <option value="sistem">✨ Sistem</option>
+                <option value="pengumuman">Pengumuman</option>
+                <option value="info">Info</option>
+                <option value="sistem">Sistem</option>
               </select>
             </div>
           </div>
@@ -570,9 +577,9 @@
                 <label class="lbl">Jenis</label>
                 <select id="iNotScopeType" class="inp acc-ring" onchange="scopeHint()">
                   <option value="all">Semua guru</option>
-                  <option value="role">Per Role (Guru / Kepala Sekolah)</option>
-                  <option value="school">Per Sekolah (nama sekolah)</option>
-                  <option value="user">Per Guru (guru_id)</option>
+                  <option value="role">Per Role</option>
+                  <option value="school">Per Sekolah</option>
+                  <option value="user">Per Guru</option>
                 </select>
               </div>
               <div>
@@ -580,7 +587,7 @@
                 <input id="iNotScopeVal" class="inp acc-ring" placeholder="—">
               </div>
             </div>
-            <p id="scopeHint" class="text-[10px] text-slate-500 dark:text-slate-400 mt-2"></p>
+            <p id="scopeHint" class="text-[10px] text-slate-500 mt-2"></p>
           </div>
           <button onclick="addNotif()" class="acc-bg text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
             <i data-lucide="send" class="w-4 h-4"></i> Kirim
@@ -604,23 +611,6 @@
             <div>
               <label class="lbl">Icon</label>
               <input id="iFootIcon" class="inp acc-ring" placeholder="globe">
-            </div>
-          </div>
-          <div class="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800">
-            <p class="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2">💡 Kategori otomatis dari Icon</p>
-            <div class="grid grid-cols-3 gap-2 text-[10px]">
-              <div>
-                <p class="font-bold text-teal-600 mb-1">Sumber Daya</p>
-                <p class="text-slate-500 leading-relaxed">globe, link, external-link, book, school, folder</p>
-              </div>
-              <div>
-                <p class="font-bold text-rose-600 mb-1">Sosial Media</p>
-                <p class="text-slate-500 leading-relaxed">instagram, facebook, youtube, send, whatsapp</p>
-              </div>
-              <div>
-                <p class="font-bold text-sky-600 mb-1">Informasi</p>
-                <p class="text-slate-500 leading-relaxed">info, bell, megaphone, help-circle</p>
-              </div>
             </div>
           </div>
           <button onclick="addFooter()" class="mt-3 w-full acc-bg text-white font-bold py-2.5 rounded-xl text-sm active:scale-95 transition shadow-sm">+ Tambah Footer</button>
@@ -664,32 +654,16 @@
       <section id="sec-fb" class="hidden space-y-4">
         <select id="fbFilter" onchange="renderFb()" class="inp acc-ring w-full md:w-44">
           <option value="all">Semua</option>
-          <option value="baru">🔴 Baru</option>
-          <option value="diproses">🟡 Diproses</option>
-          <option value="selesai">🟢 Selesai</option>
+          <option value="baru">Baru</option>
+          <option value="diproses">Diproses</option>
+          <option value="selesai">Selesai</option>
         </select>
         <div id="fbList" class="space-y-2"></div>
-      </section>
-
-      <!-- ============ GURU ============ -->
-      <section id="sec-guru" class="hidden space-y-4">
-        <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
-          <i data-lucide="info" class="w-3.5 h-3.5"></i> Akun terpusat di SSO — tabel hanya baca.
-        </p>
-        <input id="gSearch" oninput="renderGuruDebounced()" class="inp acc-ring" placeholder="Cari nama / sekolah…">
-        <div id="guruTable" class="card overflow-hidden"></div>
-      </section>
-
-      <!-- ============ INSPIRASI ============ -->
-      <section id="sec-inspirasi" class="hidden space-y-4">
-        <button onclick="purgeInspirasi()" class="card px-3.5 py-2.5 text-[11px] font-bold text-rose-500 flex items-center gap-1.5 active:scale-95 transition">
-          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Purge kadaluarsa
-        </button>
-        <div id="inspList" class="space-y-2"></div>
       </section>
     </main>
   </div>
 </div>
+
 <!-- ============ MODAL: MENU EDITOR ============ -->
 <div id="mMenu" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
@@ -698,129 +672,108 @@
       <i data-lucide="x" class="w-4 h-4"></i>
     </button>
   </div>
-
-  <!-- TABS SWITCHER -->
-  <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1">
-    <button type="button" onclick="switchMenuTab(1)" id="menuTab1" class="flex-1 tab-btn active text-[11px]">Info Dasar</button>
-    <button type="button" onclick="switchMenuTab(2)" id="menuTab2" class="flex-1 tab-btn text-[11px]">Klasifikasi</button>
-    <button type="button" onclick="switchMenuTab(3)" id="menuTab3" class="flex-1 tab-btn text-[11px]">Akses</button>
+  <div>
+    <label class="lbl">Judul</label>
+    <input id="eJudul" class="inp acc-ring">
   </div>
-
-  <!-- TAB 1: INFO DASAR -->
-  <div id="menuTabContent1" class="space-y-3">
-    <div>
-      <label class="lbl">Judul</label>
-      <input id="eJudul" class="inp acc-ring">
+  <div>
+    <label class="lbl">Deskripsi</label>
+    <input id="eDesk" class="inp acc-ring">
+  </div>
+  <div>
+    <label class="lbl">URL</label>
+    <input id="eUrl" class="inp acc-ring" placeholder="https://…">
+  </div>
+  <div>
+  <label class="lbl">Icon</label>
+  
+  <!-- Icon Preview -->
+  <div class="flex items-center gap-3 mb-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
+    <div id="eIconPreview" class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200 dark:border-slate-800 shrink-0 overflow-hidden">
+      <i data-lucide="app-window" class="w-6 h-6 text-slate-600"></i>
     </div>
-    <div>
-      <label class="lbl">Deskripsi</label>
-      <input id="eDesk" class="inp acc-ring">
-    </div>
-    <div>
-      <label class="lbl">URL</label>
-      <input id="eUrl" class="inp acc-ring" placeholder="https://…">
-    </div>
-    <div>
-      <label class="lbl">Icon</label>
-      <div class="flex items-center gap-3 mb-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800">
-        <div id="eIconPreview" class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200 dark:border-slate-800 shrink-0 overflow-hidden">
-          <i data-lucide="app-window" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Preview Icon</p>
-          <p class="text-xs font-mono text-slate-700 dark:text-slate-300 truncate" id="eIconLabel">app-window</p>
-        </div>
-      </div>
-      <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-2">
-        <button type="button" onclick="switchIconMode('lucide')" id="iconModeLucide" class="flex-1 tab-btn active text-[11px]">Lucide</button>
-        <button type="button" onclick="switchIconMode('url')" id="iconModeUrl" class="flex-1 tab-btn text-[11px]">URL Gambar</button>
-      </div>
-      <div id="iconModeContentLucide">
-        <div class="relative mb-2">
-          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input id="eIconSearch" type="text" placeholder="Cari icon…" oninput="filterMenuIcons(this.value)" class="inp pl-9 py-2 text-xs">
-        </div>
-        <div id="eIconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-32 overflow-y-auto p-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-800"></div>
-      </div>
-      <div id="iconModeContentUrl" class="hidden">
-        <input id="eIconCustomUrl" type="url" placeholder="https://contoh.com/icon.png" oninput="onCustomUrlInput(this.value)" class="inp acc-ring text-xs font-mono">
-        <p class="text-[10px] text-slate-400 mt-1">Masukkan URL gambar (PNG/JPG/SVG). Ukuran ideal: 64×64px atau persegi.</p>
-        <div class="mt-2 grid grid-cols-2 gap-2">
-          <button type="button" onclick="testCustomUrl()" class="py-2 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95">Test Load</button>
-          <button type="button" onclick="clearCustomUrl()" class="py-2 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95">Clear</button>
-        </div>
-      </div>
-      <input type="hidden" id="eIcon" value="app-window">
-    </div>
-    <div>
-      <label class="lbl">Warna</label>
-      <div class="flex flex-wrap gap-1.5" id="eWarnaPicker"></div>
-      <input type="hidden" id="eWarna" value="blue">
+    <div class="flex-1 min-w-0">
+      <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Preview</p>
+      <p class="text-xs font-mono text-slate-700 truncate" id="eIconLabel">app-window</p>
     </div>
   </div>
-
-  <!-- TAB 2: KLASIFIKASI -->
-  <div id="menuTabContent2" class="space-y-3 hidden">
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label class="lbl">Kategori</label>
-        <input id="eKategori" list="katOptions" class="inp acc-ring" placeholder="Pilih atau ketik baru…" autocomplete="off">
-        <datalist id="katOptions"></datalist>
-        <p class="text-[10px] text-slate-400 mt-1">Ketik kategori baru untuk membuatnya.</p>
-      </div>
-      <div>
-        <label class="lbl">Parent (submenu)</label>
-        <select id="eParent" class="inp acc-ring"><option value="">—</option></select>
-      </div>
+  
+  <!-- Mode Switcher -->
+  <div class="flex gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 mb-2">
+    <button type="button" onclick="switchIconMode('lucide')" id="iconModeLucide" class="flex-1 tab-btn active text-[11px]">Lucide</button>
+    <button type="button" onclick="switchIconMode('url')" id="iconModeUrl" class="flex-1 tab-btn text-[11px]">URL Gambar</button>
+  </div>
+  
+  <!-- Lucide Grid -->
+  <div id="iconModeContentLucide">
+    <div class="relative mb-2">
+      <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input id="eIconSearch" type="text" placeholder="Cari icon…" oninput="filterMenuIcons(this.value)" class="inp pl-9 py-2 text-xs">
     </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div>
-        <label class="lbl">Label Badge</label>
-        <input id="eLabel" class="inp acc-ring" placeholder="BARU / HOT">
-      </div>
-      <div>
-        <label class="lbl">Urutan</label>
-        <input id="eSort" type="number" class="inp acc-ring" value="0">
-      </div>
+    <div id="eIconGrid" class="grid grid-cols-8 sm:grid-cols-10 gap-1.5 max-h-32 overflow-y-auto p-2 border border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50 dark:bg-slate-800"></div>
+  </div>
+  
+  <!-- URL Mode -->
+  <div id="iconModeContentUrl" class="hidden">
+    <input id="eIconCustomUrl" type="url" placeholder="https://contoh.com/icon.png" oninput="onCustomUrlInput(this.value)" class="inp text-xs font-mono">
+    <p class="text-[10px] text-slate-400 mt-1">URL gambar PNG/JPG/SVG. Ukuran ideal: 64×64px.</p>
+  </div>
+  
+  <input type="hidden" id="eIcon" value="app-window">
+</div>
+
+<div class="grid grid-cols-2 gap-3">
+  <div>
+    <label class="lbl">Kategori</label>
+    <input id="eKategori" class="inp acc-ring" placeholder="Umum">
+  </div>
+  <div>
+    <label class="lbl">Warna</label>
+    <div class="flex flex-wrap gap-1.5 mt-2" id="eWarnaPicker"></div>
+    <input type="hidden" id="eWarna" value="blue">
+  </div>
+</div>
+  <div class="grid grid-cols-3 gap-3">
+    <div>
+      <label class="lbl">Tampil Di</label>
+      <select id="eTampil" class="inp acc-ring">
+        <option value="all">Semua</option>
+        <option value="mobile">HP</option>
+        <option value="desktop">PC</option>
+        <option value="off">Off</option>
+      </select>
+    </div>
+    <div>
+      <label class="lbl">Akses</label>
+      <select id="eRole" class="inp acc-ring">
+        <option value="all">Publik</option>
+        <option value="tamu">Tamu</option>
+        <option value="Guru">Guru</option>
+        <option value="Kepala Sekolah">Kepsek</option>
+      </select>
+    </div>
+    <div>
+      <label class="lbl">Cara Buka</label>
+      <select id="eBuka" class="inp acc-ring">
+        <option value="">Luar</option>
+        <option value="app">Dalam</option>
+      </select>
     </div>
   </div>
-
-  <!-- TAB 3: AKSES -->
-  <div id="menuTabContent3" class="space-y-3 hidden">
-    <div class="grid grid-cols-3 gap-3">
-      <div>
-        <label class="lbl">Tampil Di</label>
-        <select id="eTampil" class="inp acc-ring">
-          <option value="all">Semua</option>
-          <option value="mobile">HP</option>
-          <option value="desktop">PC</option>
-          <option value="off">Off</option>
-        </select>
-      </div>
-      <div>
-        <label class="lbl">Akses</label>
-        <select id="eRole" class="inp acc-ring">
-          <option value="all">Publik</option>
-          <option value="tamu">Tamu</option>
-          <option value="Guru">Guru</option>
-          <option value="Kepala Sekolah">Kepsek</option>
-        </select>
-      </div>
-      <div>
-        <label class="lbl">Cara Buka</label>
-        <select id="eBuka" class="inp acc-ring">
-          <option value="">Luar</option>
-          <option value="app">Dalam</option>
-        </select>
-      </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Parent</label>
+      <input id="eParent" class="inp acc-ring" placeholder="—">
     </div>
-    <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
-      <input id="eActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Menu Aktif
-    </label>
+    <div>
+      <label class="lbl">Label Badge</label>
+      <input id="eLabel" class="inp acc-ring" placeholder="BARU">
+    </div>
   </div>
-
-  <!-- FOOTER ACTIONS -->
-  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
+    <input id="eActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Menu Aktif
+  </label>
+  <div class="flex gap-2 pt-3 border-t border-slate-100">
     <button onclick="saveMenu()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
     <button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
     <button onclick="closeModal('mMenu')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
@@ -833,42 +786,21 @@
     <p class="text-base font-extrabold text-slate-800" id="aTitle">Editor Agenda</p>
     <button onclick="closeModal('mAgenda')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
   </div>
-  <div>
-    <label class="lbl">Judul</label>
-    <input id="aJudul" class="inp acc-ring">
-  </div>
-  <div>
-    <label class="lbl">Deskripsi</label>
-    <textarea id="aDesk" rows="2" class="inp acc-ring"></textarea>
-  </div>
+  <div><label class="lbl">Judul</label><input id="aJudul" class="inp acc-ring"></div>
+  <div><label class="lbl">Deskripsi</label><textarea id="aDesk" rows="2" class="inp acc-ring"></textarea></div>
   <div class="grid grid-cols-2 gap-3">
-    <div>
-      <label class="lbl">Tanggal</label>
-      <input id="aTanggal" type="date" class="inp acc-ring">
-    </div>
-    <div>
-      <label class="lbl">Waktu</label>
-      <input id="aWaktu" class="inp acc-ring" placeholder="08.00">
-    </div>
+    <div><label class="lbl">Tanggal</label><input id="aTanggal" type="date" class="inp acc-ring"></div>
+    <div><label class="lbl">Waktu</label><input id="aWaktu" class="inp acc-ring" placeholder="08.00"></div>
   </div>
-  <div>
-    <label class="lbl">Tempat</label>
-    <input id="aTempat" class="inp acc-ring">
-  </div>
+  <div><label class="lbl">Tempat</label><input id="aTempat" class="inp acc-ring"></div>
   <div class="grid grid-cols-2 gap-3">
-    <div>
-      <label class="lbl">Kategori</label>
-      <input id="aKategori" class="inp acc-ring" value="Kegiatan">
-    </div>
-    <div>
-      <label class="lbl">Link (opsional)</label>
-      <input id="aLink" class="inp acc-ring">
-    </div>
+    <div><label class="lbl">Kategori</label><input id="aKategori" class="inp acc-ring" value="Kegiatan"></div>
+    <div><label class="lbl">Link (opsional)</label><input id="aLink" class="inp acc-ring"></div>
   </div>
-  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
     <input id="aActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
   </label>
-  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+  <div class="flex gap-2 pt-3 border-t border-slate-100">
     <button onclick="saveAgenda()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
     <button id="aDelete" onclick="delAgenda()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
     <button onclick="closeModal('mAgenda')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
@@ -881,78 +813,33 @@
     <p class="text-base font-extrabold text-slate-800" id="docTitle">Editor Dokumen</p>
     <button onclick="closeModal('mDoc')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
   </div>
-  <div>
-    <label class="lbl">Judul</label>
-    <input id="docJudul" class="inp acc-ring">
-  </div>
-  <div>
-    <label class="lbl">Deskripsi</label>
-    <input id="docDesk" class="inp acc-ring">
-  </div>
-  <div>
-    <label class="lbl">Link (Drive / eksternal)</label>
-    <input id="docLink" class="inp acc-ring" placeholder="https://drive.google.com/…">
-  </div>
+  <div><label class="lbl">Judul</label><input id="docJudul" class="inp acc-ring"></div>
+  <div><label class="lbl">Deskripsi</label><input id="docDesk" class="inp acc-ring"></div>
+  <div><label class="lbl">Link (Drive / eksternal)</label><input id="docLink" class="inp acc-ring" placeholder="https://drive.google.com/…"></div>
   <div class="grid grid-cols-2 gap-3">
-    <div>
-      <label class="lbl">Kategori</label>
-      <input id="docKat" class="inp acc-ring" value="Umum">
-    </div>
-    <div>
-      <label class="lbl">Icon</label>
-      <input id="docIcon" class="inp acc-ring" value="file-text">
-    </div>
+    <div><label class="lbl">Kategori</label><input id="docKat" class="inp acc-ring" value="Umum"></div>
+    <div><label class="lbl">Icon</label><input id="docIcon" class="inp acc-ring" value="file-text"></div>
   </div>
   <div>
     <label class="lbl">Warna</label>
-    <div class="flex flex-wrap gap-1.5" id="docWarnaPicker"></div>
-    <input type="hidden" id="docWarna" value="blue">
+    <select id="docWarna" class="inp acc-ring">
+      <option value="teal">Teal</option>
+      <option value="blue">Biru</option>
+      <option value="violet">Violet</option>
+      <option value="rose">Rose</option>
+      <option value="amber">Amber</option>
+      <option value="green">Hijau</option>
+      <option value="sky">Sky</option>
+      <option value="orange">Orange</option>
+    </select>
   </div>
-  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 cursor-pointer">
     <input id="docActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
   </label>
-  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+  <div class="flex gap-2 pt-3 border-t border-slate-100">
     <button onclick="saveDoc()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
     <button id="docDelete" onclick="delDoc()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
     <button onclick="closeModal('mDoc')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
-  </div>
-</div></div>
-
-<!-- ============ MODAL: REWARD ============ -->
-<div id="mReward" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
-  <div class="flex items-center justify-between">
-    <p class="text-base font-extrabold text-slate-800" id="rTitle">Editor Reward</p>
-    <button onclick="closeModal('mReward')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
-  </div>
-  <div>
-    <label class="lbl">Judul</label>
-    <input id="rJudul" class="inp acc-ring">
-  </div>
-  <div>
-    <label class="lbl">Deskripsi</label>
-    <input id="rDesk" class="inp acc-ring">
-  </div>
-  <div class="grid grid-cols-2 gap-3">
-    <div>
-      <label class="lbl">Biaya Poin</label>
-      <input id="rBiaya" type="number" class="inp acc-ring" value="50">
-    </div>
-    <div>
-      <label class="lbl">Stok (-1 = ∞)</label>
-      <input id="rStok" type="number" class="inp acc-ring" value="-1">
-    </div>
-  </div>
-  <div>
-    <label class="lbl">Link (opsional)</label>
-    <input id="rLink" class="inp acc-ring">
-  </div>
-  <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
-    <input id="rActive" type="checkbox" checked class="w-4 h-4 accent-teal-600"> Aktif
-  </label>
-  <div class="flex gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-    <button onclick="saveReward()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
-    <button id="rDelete" onclick="delReward()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
-    <button onclick="closeModal('mReward')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
   </div>
 </div></div>
 
@@ -982,7 +869,10 @@
   <button onclick="closeModal('mAksen')" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl text-sm active:scale-95 transition">Tutup</button>
 </div></div>
 
-<!-- ============ TOAST CONTAINER ============ -->
+<!-- ============ MODAL: POPUP INFO (untuk viewer detail sekolah/guru) ============ -->
+<div id="mPop" class="modal"><div class="modal-box p-6" id="popContent"></div></div>
+
+<!-- ============ TOAST ============ -->
 <div id="toast-container" class="fixed z-[190] flex flex-col gap-2" style="top:calc(env(safe-area-inset-top) + 3.5rem);right:14px;max-width:320px;pointer-events:none"></div>
 
 <!-- ============ DEBUG PANEL ============ -->
@@ -996,69 +886,80 @@
   </div>
   <div id="debug-content"></div>
 </div>
-
 <script>
+'use strict';
+
 /* ============================================================
    KONSTANTA DASAR
    ============================================================ */
 const SB_URL='https://qamqqwfzhyiihqyzliwq.supabase.co';
 const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
-const LOGO='https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png';
+const LOGO='https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png';
+const FOTO_BASE=SB_URL+'/storage/v1/object/public/foto-gtk/';
 const sb=window.supabase.createClient(SB_URL,SB_ANON,{auth:{persistSession:true,storage:window.localStorage}});
 const $=id=>document.getElementById(id);
 
-const COLOR={
-  teal:['bg-teal-100','text-teal-600'],orange:['bg-orange-100','text-orange-600'],
-  blue:['bg-blue-100','text-blue-600'],green:['bg-green-100','text-green-600'],
-  rose:['bg-rose-100','text-rose-600'],violet:['bg-violet-100','text-violet-600'],
-  fuchsia:['bg-fuchsia-100','text-fuchsia-600'],cyan:['bg-cyan-100','text-cyan-600'],
-  red:['bg-red-100','text-red-600'],emerald:['bg-emerald-100','text-emerald-600'],
-  yellow:['bg-yellow-100','text-yellow-600'],sky:['bg-sky-100','text-sky-600']
-};
+function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
 
-const COLOR_PICKER_LIST=[
-  {id:'teal',label:'Teal',hex:'#0D9488'},
-  {id:'blue',label:'Blue',hex:'#2563eb'},
-  {id:'violet',label:'Violet',hex:'#7c3aed'},
-  {id:'rose',label:'Rose',hex:'#e11d48'},
-  {id:'amber',label:'Amber',hex:'#d97706'},
-  {id:'emerald',label:'Emerald',hex:'#059669'},
-  {id:'sky',label:'Sky',hex:'#0284c7'},
-  {id:'orange',label:'Orange',hex:'#ea580c'},
-  {id:'fuchsia',label:'Fuchsia',hex:'#c026d3'},
-  {id:'cyan',label:'Cyan',hex:'#0891b2'},
-  {id:'red',label:'Red',hex:'#dc2626'},
-  {id:'green',label:'Green',hex:'#16a34a'},
-  {id:'yellow',label:'Yellow',hex:'#ca8a04'}
-];
-
-const ICON_LIST=['link','link-2','home','settings','user','users','folder','folder-open','folder-cog','file','file-text','image','video','music','download','upload','cloud','database','server','globe','map-pin','calendar','calendar-days','clock','mail','message-circle','phone','bell','book','book-open','graduation-cap','clipboard','clipboard-check','award','star','heart','bookmark','tag','shopping-cart','shopping-bag','credit-card','dollar-sign','trending-up','bar-chart','pie-chart','activity','zap','shield','shield-check','lock','unlock','key','eye','search','filter','edit','trash-2','plus','minus','check','x','arrow-right','arrow-up-right','external-link','play','pause','power','wifi','monitor','smartphone','tablet','cpu','hard-drive','code','terminal','inbox','send','log-out','log-in','layout-dashboard','layout-grid','layout-list','package','compass','sparkles','rocket','flame','crown','gem','palette','brush','camera','headphones','mic','trophy','target','flag','info','help-circle','alert-circle','alert-triangle','save','pencil','refresh-cw','menu','megaphone','github','youtube','instagram','facebook','twitter','linkedin','newspaper','briefcase','school','wrench','bot','hand','hand-heart','heart-handshake','sprout','leaf','nut','apple','tree-deciduous','tree-pine','footprints','medal','badge-check','id-card','at-sign','hash','quote','party-popper','rows-3','undo-2','app-window','activity','monitor-smartphone','shopping-bag'];
-
+/* ============================================================
+   NAVIGASI — TABS
+   ============================================================ */
 const TABS=[
   ['dash','layout-dashboard','Dashboard'],
+  ['schools','school','Sekolah'],
   ['menu','layout-grid','Menu'],
   ['agenda','calendar-days','Agenda'],
   ['dokumen','folder-open','Dokumen'],
-  ['rewards','gift','Toko Poin'],
-  ['kudos','heart-handshake','Apresiasi'],
+  ['guru','users','Guru'],
   ['info','megaphone','Banner'],
   ['notif','bell','Notifikasi'],
   ['footer','link-2','Footer'],
   ['quotes','quote','Quotes'],
-  ['fb','lightbulb','Saran'],
-  ['guru','users','Guru'],
-  ['inspirasi','share-2','Inspirasi']
+  ['fb','lightbulb','Saran']
 ];
 
-const KEYS={
-  CACHE:'gb_admin_cache',
-  PENDING:'gb_admin_pending',
-  LAST_SYNC:'gb_admin_lastsync',
-  PREFS:'gb_admin_prefs',
-  DEBUG:'gb_admin_debug'
-};
+const KEYS = { PENDING: 'gb_admin_pending', DEBUG: 'gb_admin_debug' };
 
-const DEFAULT_KATS=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspirasi','Komunitas & KKG','Kepala Sekolah','Tools & Arsip','Informasi','Umum'];
+/* ============================================================
+   ICON & COLOR PICKER CONSTANTS
+   ============================================================ */
+const ICON_LIST = [
+  'link', 'link-2', 'home', 'settings', 'user', 'users', 'folder', 'folder-open',
+  'folder-cog', 'file', 'file-text', 'image', 'video', 'music', 'download', 'upload',
+  'cloud', 'database', 'server', 'globe', 'map-pin', 'calendar', 'calendar-days',
+  'clock', 'mail', 'message-circle', 'phone', 'bell', 'book', 'book-open',
+  'graduation-cap', 'clipboard', 'clipboard-check', 'award', 'star', 'heart',
+  'bookmark', 'tag', 'shopping-cart', 'shopping-bag', 'credit-card', 'dollar-sign',
+  'trending-up', 'bar-chart', 'pie-chart', 'activity', 'zap', 'shield', 'shield-check',
+  'lock', 'unlock', 'key', 'eye', 'search', 'filter', 'edit', 'trash-2', 'plus', 'minus',
+  'check', 'x', 'arrow-right', 'arrow-up-right', 'external-link', 'play', 'pause',
+  'power', 'wifi', 'monitor', 'smartphone', 'tablet', 'cpu', 'hard-drive', 'code',
+  'terminal', 'inbox', 'send', 'log-out', 'log-in', 'layout-dashboard', 'layout-grid',
+  'layout-list', 'package', 'compass', 'sparkles', 'rocket', 'flame', 'crown', 'gem',
+  'palette', 'brush', 'camera', 'headphones', 'mic', 'trophy', 'target', 'flag',
+  'info', 'help-circle', 'alert-circle', 'alert-triangle', 'save', 'pencil',
+  'refresh-cw', 'menu', 'megaphone', 'github', 'youtube', 'instagram', 'facebook',
+  'twitter', 'linkedin', 'newspaper', 'briefcase', 'school', 'wrench', 'bot', 'hand',
+  'hand-heart', 'heart-handshake', 'sprout', 'leaf', 'nut', 'apple', 'tree-deciduous',
+  'tree-pine', 'footprints', 'medal', 'badge-check', 'id-card', 'at-sign', 'hash',
+  'quote', 'party-popper', 'rows-3', 'undo-2', 'app-window', 'monitor-smartphone'
+];
+
+const COLOR_PICKER_LIST = [
+  { id: 'teal', label: 'Teal', hex: '#0D9488' },
+  { id: 'blue', label: 'Blue', hex: '#2563eb' },
+  { id: 'violet', label: 'Violet', hex: '#7c3aed' },
+  { id: 'rose', label: 'Rose', hex: '#e11d48' },
+  { id: 'amber', label: 'Amber', hex: '#d97706' },
+  { id: 'emerald', label: 'Emerald', hex: '#059669' },
+  { id: 'sky', label: 'Sky', hex: '#0284c7' },
+  { id: 'orange', label: 'Orange', hex: '#ea580c' },
+  { id: 'fuchsia', label: 'Fuchsia', hex: '#c026d3' },
+  { id: 'cyan', label: 'Cyan', hex: '#0891b2' },
+  { id: 'red', label: 'Red', hex: '#dc2626' },
+  { id: 'green', label: 'Green', hex: '#16a34a' },
+  { id: 'yellow', label: 'Yellow', hex: '#ca8a04' }
+];
 
 /* ============================================================
    STATE
@@ -1066,12 +967,12 @@ const DEFAULT_KATS=['AI & Perangkat Ajar','Jurnal & Administrasi','Karya & Inspi
 const STATE={
   profile:null,user:null,
   menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,
-  gam:[],lead:[],inspi:[],config:null,agenda:[],docs:[],rewards:[],redem:[],
-  kudos:[],kudosTop:[],
-  editMenu:null,editAgenda:null,editDoc:null,editReward:null,
+  gam:[],lead:[],config:null,agenda:[],docs:[],
+  schoolsAdmin:[],guruPrefs:{},_guruPrefsLoadedAt:0,
+  editMenu:null,editAgenda:null,editDoc:null,
   currentTab:'dash',
   pending:[],
-  prefs:{debug:false,lastSyncAt:null}
+  prefs:{debug:false}
 };
 
 let CUR={tab:'dash'};
@@ -1108,7 +1009,7 @@ function toggleDebug(){
 }
 
 /* ============================================================
-   HELPER
+   HELPERS
    ============================================================ */
 function icons(){lucide.createIcons();}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);}
@@ -1116,7 +1017,6 @@ function debounce(fn,delay){
   let t;
   return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),delay);};
 }
-function isOnline(){return navigator.onLine;}
 
 /* ============================================================
    TOAST
@@ -1197,153 +1097,106 @@ function initTheme(){
 }
 
 /* ============================================================
-   SYNC INDICATOR
+   NAVIGASI
    ============================================================ */
-function setSyncState(state){
-  const dots=['syncDot','syncDotDesktop'];
-  const texts=['syncText','syncTextDesktop'];
-  const map={
-    synced:{cls:'',text:'Synced'},
-    syncing:{cls:'syncing',text:'Syncing…'},
-    pending:{cls:'pending',text:'Pending '+STATE.pending.length},
-    error:{cls:'error',text:'Error'},
-    offline:{cls:'offline',text:'Offline'}
-  };
-  const m=map[state]||map.synced;
-  dots.forEach(id=>{
-    const d=$(id);if(!d)return;
-    d.className='sync-dot'+(m.cls?' '+m.cls:'');
+function buildNav(){
+  const h=TABS.map(([t,i,l],x)=>{
+    const badge=(t==='fb')?`<span id="navBadgeFb" class="hidden ml-auto text-[10px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded-full">0</span>`:'';
+    return `<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full justify-start ${x===0?'active':''}"><i data-lucide="${i}" class="w-4 h-4"></i><span class="flex-1 text-left">${l}</span>${badge}</button>`;
+  }).join('');
+  $('navDesktop').innerHTML=h;
+  $('navMobile').innerHTML=h;
+  icons();
+}
+function setTab(t){
+  closeDrawer();
+  CUR.tab=t;STATE.currentTab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  TABS.forEach(([k])=>{
+    const sec=$('sec-'+k);
+    if(sec)sec.classList.toggle('hidden',k!==t);
   });
-  texts.forEach(id=>{
-    const t=$(id);if(!t)return;
-    t.textContent=m.text;
-  });
-  const pb=$('pendingBadgeDesktop');
-  if(pb){
-    if(STATE.pending.length>0){pb.textContent=STATE.pending.length;pb.classList.remove('hidden');}
-    else pb.classList.add('hidden');
-  }
-}
-
-/* ============================================================
-   OFFLINE QUEUE
-   ============================================================ */
-function loadPending(){
-  try{STATE.pending=JSON.parse(localStorage.getItem(KEYS.PENDING)||'[]');}
-  catch(_){STATE.pending=[];}
-}
-function savePending(){
-  try{localStorage.setItem(KEYS.PENDING,JSON.stringify(STATE.pending));}catch(_){}
-}
-function queuePending(op){
-  STATE.pending.push({...op,t:Date.now()});
-  savePending();
-  setSyncState(isOnline()?'pending':'offline');
-  dbg('Queued: '+op.action,'info');
-  if(isOnline())syncPending();
-}
-async function syncPending(){
-  if(!isOnline()){setSyncState('offline');return;}
-  if(!STATE.pending.length){setSyncState('synced');return;}
-  setSyncState('syncing');
-  const queue=[...STATE.pending];
-  const remaining=[];
-  for(const op of queue){
-    try{
-      await executePendingOp(op);
-      dbg('✓ '+op.action,'success');
-    }catch(e){
-      dbg('✗ '+op.action+': '+e.message,'error');
-      remaining.push(op);
-    }
-  }
-  STATE.pending=remaining;
-  savePending();
-  setSyncState(remaining.length?'error':'synced');
-  if(remaining.length===0){
-    toast('Semua perubahan tersinkron','success');
-    recordLastSync();
-  }
-}
-async function executePendingOp(op){
-  const ops={
-    add_menu:()=>sb.from('creative_menus').insert(op.data),
-    update_menu:()=>sb.from('creative_menus').update(op.data).eq('id',op.id),
-    delete_menu:()=>sb.from('creative_menus').delete().eq('id',op.id),
-    add_agenda:()=>sb.from('creative_agenda').insert(op.data),
-    update_agenda:()=>sb.from('creative_agenda').update(op.data).eq('id',op.id),
-    delete_agenda:()=>sb.from('creative_agenda').delete().eq('id',op.id),
-    add_doc:()=>sb.from('creative_documents').insert(op.data),
-    update_doc:()=>sb.from('creative_documents').update(op.data).eq('id',op.id),
-    delete_doc:()=>sb.from('creative_documents').delete().eq('id',op.id),
-    add_reward:()=>sb.from('creative_rewards').insert(op.data),
-    update_reward:()=>sb.from('creative_rewards').update(op.data).eq('id',op.id),
-    delete_reward:()=>sb.from('creative_rewards').delete().eq('id',op.id),
-    add_footer:()=>sb.from('creative_footers').insert(op.data),
-    delete_footer:()=>sb.from('creative_footers').delete().eq('id',op.id),
-    add_quote:()=>sb.from('creative_quotes').insert(op.data),
-    delete_quote:()=>sb.from('creative_quotes').delete().eq('id',op.id),
-    add_notif:()=>sb.from('creative_notifications').insert(op.data),
-    toggle_notif:()=>sb.from('creative_notifications').update({is_active:op.data.is_active}).eq('id',op.id),
-    delete_notif:()=>sb.from('creative_notifications').delete().eq('id',op.id),
-    save_info:()=>sb.from('creative_app_config').update(op.data).eq('id',op.id),
-    update_feedback:()=>sb.from('creative_feedback').update({status:op.data.status}).eq('id',op.id),
-    update_redem:()=>sb.from('creative_redemptions').update({status:op.data.status}).eq('id',op.id),
-    update_insp:()=>sb.from('creative_inspirasi').update({status:op.data.status}).eq('id',op.id),
-    delete_insp:()=>sb.from('creative_inspirasi').delete().eq('id',op.id)
+  const titles={
+    dash:'Dashboard',schools:'Sekolah',menu:'Menu',agenda:'Agenda',
+    dokumen:'Dokumen',guru:'Guru',info:'Banner',notif:'Notifikasi',
+    footer:'Footer',quotes:'Quotes',fb:'Saran'
   };
-  const fn=ops[op.action];
-  if(!fn)throw new Error('Action tidak dikenal: '+op.action);
-  const res=await fn();
-  if(res&&res.error)throw new Error(res.error.message||'Error');
-  return res;
+  const td=$('pageTitleDesktop');if(td)td.textContent=titles[t]||'Dashboard';
+
+  if(t==='guru') loadGuruPrefs().then(()=>renderGuru());
+  updateNavBadge();
+}
+function updateNavBadge(){
+  const badge=$('navBadgeFb');
+  if(!badge)return;
+  const n=STATE.fb.filter(x=>x.status==='baru').length;
+  if(n>0){badge.textContent=n>9?'9+':n;badge.classList.remove('hidden');}
+  else badge.classList.add('hidden');
+}
+function openDrawer(){
+  $('drawer').classList.remove('hidden');
+  requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));
+}
+function closeDrawer(){
+  const ds=$('drawerSheet');if(!ds)return;
+  ds.classList.add('-translate-x-full');
+  setTimeout(()=>$('drawer').classList.add('hidden'),300);
 }
 
 /* ============================================================
-   LAST SYNC
+   EXPORT CSV & JSON
    ============================================================ */
-function recordLastSync(){
-  STATE.prefs.lastSyncAt=Date.now();
-  try{localStorage.setItem(KEYS.LAST_SYNC,String(Date.now()));}catch(_){}
+function exportCSV(name,rows){
+  if(!rows||!rows.length)return toast('Tidak ada data','info');
+  const keys=Object.keys(rows[0]);
+  const csv=[keys.join(',')].concat(rows.map(r=>keys.map(k=>'"'+String(r[k]==null?'':r[k]).replace(/"/g,'""')+'"').join(','))).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download=name+'.csv';
+  a.click();
+  toast('CSV diunduh','success');
+}
+function exportData(){
+  const data={
+    version:'5.2',
+    exportedAt:new Date().toISOString(),
+    schools:STATE.schoolsAdmin,
+    menus:STATE.menus,
+    footer:STATE.footer,
+    quotes:STATE.quotes,
+    notifs:STATE.notifs,
+    config:STATE.config,
+    agenda:STATE.agenda,
+    docs:STATE.docs
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='gb-admin-backup-'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup diunduh','success');
 }
 
 /* ============================================================
-   CACHE
+   PURGE LOG
    ============================================================ */
-function loadFromCache(){
-  try{
-    const c=JSON.parse(localStorage.getItem(KEYS.CACHE)||'{}');
-    STATE.menus=c.menus||[];
-    STATE.footer=c.footer||[];
-    STATE.quotes=c.quotes||[];
-    STATE.notifs=c.notifs||[];
-    STATE.fb=c.fb||[];
-    STATE.guru=c.guru||[];
-    STATE.config=c.config||null;
-    STATE.agenda=c.agenda||[];
-    STATE.docs=c.docs||[];
-    STATE.rewards=c.rewards||[];
-    STATE.redem=c.redem||[];
-    STATE.kudos=c.kudos||[];
-    STATE.kudosTop=c.kudosTop||[];
-    STATE.inspi=c.inspi||[];
-    if(c.lastSyncAt){STATE.prefs.lastSyncAt=c.lastSyncAt;}
-  }catch(e){dbg('Cache error: '+e.message,'error');}
-}
-function saveCache(){
-  try{
-    localStorage.setItem(KEYS.CACHE,JSON.stringify({
-      menus:STATE.menus,footer:STATE.footer,quotes:STATE.quotes,
-      notifs:STATE.notifs,fb:STATE.fb,guru:STATE.guru,config:STATE.config,
-      agenda:STATE.agenda,docs:STATE.docs,rewards:STATE.rewards,
-      redem:STATE.redem,kudos:STATE.kudos,kudosTop:STATE.kudosTop,
-      inspi:STATE.inspi,lastSyncAt:STATE.prefs.lastSyncAt
-    }));
-  }catch(_){}
+async function purgeLog(){
+  const d=new Date();d.setDate(d.getDate()-90);
+  const iso=d.toISOString();
+  const {count}=await sb.from('creative_activity_log').select('*',{count:'exact',head:true}).lt('created_at',iso);
+  const n=count||0;
+  if(!n)return toast('Tidak ada log >90 hari','info');
+  confirmDialog(`Hapus ${n} log yang lebih tua dari 90 hari?`,async()=>{
+    const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});
+    toast((data||0)+' log dipurge','success');
+    loadAll();
+  },'Purge Log?','Hapus '+n);
 }
 
 /* ============================================================
-   AUTH
+   AUTH — LOGIN
    ============================================================ */
 $('formLogin').addEventListener('submit',async e=>{
   e.preventDefault();
@@ -1401,36 +1254,6 @@ sb.auth.onAuthStateChange((ev)=>{
   }
 });
 
-(async function boot(){
-  initTheme();
-  loadPending();
-  loadFromCache();
-  if(localStorage.getItem(KEYS.DEBUG)==='1'){
-    const panel=$('debug-panel');if(panel)panel.classList.add('show');
-  }
-  if(new URLSearchParams(location.search).get('debug')==='1'){
-    const panel=$('debug-panel');if(panel)panel.classList.add('show');
-  }
-  setSyncState(isOnline()?'synced':'offline');
-  icons();
-
-  const {data:{session}}=await sb.auth.getSession();
-  if(session){
-    const {data:isAdmin}=await sb.rpc('creative_is_admin');
-    if(isAdmin){
-      const email=session?.user?.email||'admin';
-      $('adminEmail').textContent=email;
-      $('adminEmailMobile').textContent=email;
-      $('drawerEmail').textContent=email;
-      $('scrLogin').classList.add('hidden');
-      $('scrApp').classList.remove('hidden');
-      buildNav();
-      loadAll();
-    }
-  }
-  dbg('Boot complete','success');
-})();
-
 function konfirmasiLogout(){
   confirmDialog('Keluar dari panel admin?',async()=>{
     await sb.auth.signOut();
@@ -1439,126 +1262,35 @@ function konfirmasiLogout(){
 }
 
 /* ============================================================
-   NAVIGASI
+   SYNC INDICATOR
    ============================================================ */
-function buildNav(){
-  const h=TABS.map(([t,i,l],x)=>{
-    const badge=(t==='fb')?`<span id="navBadgeFb" class="hidden ml-auto text-[10px] bg-rose-500 text-white font-bold px-1.5 py-0.5 rounded-full">0</span>`:'';
-    return `<button data-tab="${t}" onclick="setTab('${t}')" class="tab-btn w-full justify-start ${x===0?'active':''}"><i data-lucide="${i}" class="w-4 h-4"></i><span class="flex-1 text-left">${l}</span>${badge}</button>`;
-  }).join('');
-  $('navDesktop').innerHTML=h;
-  $('navMobile').innerHTML=h;
-  icons();
-}
-function setTab(t){
-  closeDrawer();
-  CUR.tab=t;STATE.currentTab=t;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
-  TABS.forEach(([k])=>{
-    const sec=$('sec-'+k);
-    if(sec)sec.classList.toggle('hidden',k!==t);
+function setSyncState(state){
+  const dots=['syncDot','syncDotDesktop'];
+  const texts=['syncText','syncTextDesktop'];
+  const map={
+    synced:{cls:'',text:'Synced'},
+    syncing:{cls:'syncing',text:'Syncing…'},
+    error:{cls:'error',text:'Error'},
+    offline:{cls:'offline',text:'Offline'}
+  };
+  const m=map[state]||map.synced;
+  dots.forEach(id=>{
+    const d=$(id);if(!d)return;
+    d.className='sync-dot'+(m.cls?' '+m.cls:'');
   });
-  const titles={
-    dash:'Dashboard',menu:'Menu',agenda:'Agenda',dokumen:'Dokumen',
-    rewards:'Toko Poin',kudos:'Apresiasi',info:'Banner',notif:'Notifikasi',
-    footer:'Footer',quotes:'Quotes',fb:'Saran',guru:'Guru',inspirasi:'Inspirasi'
-  };
-  const td=$('pageTitleDesktop');if(td)td.textContent=titles[t]||'Dashboard';
-  updateNavBadge();
-}
-function updateNavBadge(){
-  const badge=$('navBadgeFb');
-  if(!badge)return;
-  const n=STATE.fb.filter(x=>x.status==='baru').length;
-  if(n>0){badge.textContent=n>9?'9+':n;badge.classList.remove('hidden');}
-  else badge.classList.add('hidden');
-}
-function openDrawer(){
-  $('drawer').classList.remove('hidden');
-  requestAnimationFrame(()=>$('drawerSheet').classList.remove('-translate-x-full'));
-}
-function closeDrawer(){
-  const ds=$('drawerSheet');if(!ds)return;
-  ds.classList.add('-translate-x-full');
-  setTimeout(()=>$('drawer').classList.add('hidden'),300);
+  texts.forEach(id=>{
+    const t=$(id);if(!t)return;
+    t.textContent=m.text;
+  });
 }
 
-/* ============================================================
-   EXPORT CSV
-   ============================================================ */
-function exportCSV(name,rows){
-  if(!rows||!rows.length)return toast('Tidak ada data','info');
-  const keys=Object.keys(rows[0]);
-  const csv=[keys.join(',')].concat(rows.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"').join(','))).join('\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download=name+'.csv';
-  a.click();
-  toast('CSV diunduh','success');
-}
-
-/* ============================================================
-   EXPORT / IMPORT JSON
-   ============================================================ */
-function exportData(){
-  const data={
-    version:'5.1',
-    exportedAt:new Date().toISOString(),
-    menus:STATE.menus,footer:STATE.footer,quotes:STATE.quotes,
-    notifs:STATE.notifs,config:STATE.config,agenda:STATE.agenda,
-    docs:STATE.docs,rewards:STATE.rewards
-  };
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download=`gb-admin-backup-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('Backup diunduh','success');
-  dbg('Export JSON','success');
-}
-function importData(ev){
-  const file=ev.target.files[0];
-  if(!file)return;
-  const rd=new FileReader();
-  rd.onload=e=>{
-    try{
-      const data=JSON.parse(e.target.result);
-      if(!data.menus&&!data.config)throw new Error('Format tidak valid');
-      toast(`File berisi ${(data.menus||[]).length} menu`,'info');
-      dbg('Import file valid','success');
-    }catch(err){
-      toast('File tidak valid','error');
-      dbg('Import error: '+err.message,'error');
-    }
-    ev.target.value='';
-  };
-  rd.readAsText(file);
-}
-
-/* ============================================================
-   PURGE LOG
-   ============================================================ */
-async function purgeLog(){
-  const d=new Date();d.setDate(d.getDate()-90);
-  const iso=d.toISOString();
-  const {count}=await sb.from('creative_activity_log').select('*',{count:'exact',head:true}).lt('created_at',iso);
-  const n=count||0;
-  if(!n)return toast('Tidak ada log >90 hari','info');
-  confirmDialog(`Hapus ${n} log yang lebih tua dari 90 hari?`,async()=>{
-    const {data}=await sb.rpc('creative_admin_purge_log',{p_hari:90});
-    toast((data||0)+' log dipurge','success');
-    loadAll();
-  },'Purge Log?','Hapus '+n);
-}
 /* ============================================================
    LOAD ALL DATA
    ============================================================ */
 async function loadAll(){
   setSyncState('syncing');
   try{
-    const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,inspi,agenda,docs,rewards,redem,kudos,kudosTop]=await Promise.all([
+    const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,agenda,docs,schools]=await Promise.all([
       sb.from('creative_menus').select('*').order('sort_order'),
       sb.from('creative_footers').select('*').order('sort_order'),
       sb.from('creative_quotes').select('*').order('id'),
@@ -1569,13 +1301,9 @@ async function loadAll(){
       sb.from('creative_activity_log').select('guru_id,aksi,created_at,detail').order('created_at',{ascending:false}).limit(50),
       sb.rpc('creative_admin_list_guru'),
       sb.rpc('creative_leaderboard'),
-      sb.from('creative_inspirasi').select('*').order('created_at',{ascending:false}),
       sb.from('creative_agenda').select('*').order('tanggal',{ascending:false}),
       sb.from('creative_documents').select('*').order('kategori'),
-      sb.from('creative_rewards').select('*').order('biaya_poin'),
-      sb.from('creative_redemptions').select('*').order('created_at',{ascending:false}),
-      sb.from('creative_kudos').select('*').order('created_at',{ascending:false}),
-      sb.rpc('creative_kudos_top')
+      sb.from('creative_schools').select('*').order('nama')
     ]);
 
     STATE.menus=menus.data||[];
@@ -1588,13 +1316,9 @@ async function loadAll(){
     STATE.log=log.data||[];
     STATE.guru=guru.data||[];
     STATE.lead=lead.data||[];
-    STATE.inspi=inspi.data||[];
     STATE.agenda=agenda.data||[];
     STATE.docs=docs.data||[];
-    STATE.rewards=rewards.data||[];
-    STATE.redem=redem.data||[];
-    STATE.kudos=kudos.data||[];
-    STATE.kudosTop=kudosTop.data||[];
+    STATE.schoolsAdmin=schools.data||[];
 
     sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{
       STATE.logTotal=r.count||0;
@@ -1602,25 +1326,21 @@ async function loadAll(){
     });
 
     renderDash();
+    renderSchoolsAdmin();
     renderMenus();
     renderAgendaAdmin();
     renderDocsAdmin();
-    renderRewardsAdmin();
-    renderKudosAdmin();
     renderFooter();
     renderQuotes();
     renderNotif();
     renderFb();
     renderGuru();
-    renderInspirasi();
     fillInfo();
     scopeHint();
     updateNavBadge();
-    saveCache();
-    recordLastSync();
     setSyncState('synced');
     icons();
-    dbg('loadAll OK: '+STATE.menus.length+' menu, '+STATE.footer.length+' footer','success');
+    dbg('loadAll OK: '+STATE.menus.length+' menu, '+STATE.schoolsAdmin.length+' sekolah','success');
   }catch(e){
     dbg('loadAll error: '+e.message,'error');
     setSyncState('error');
@@ -1648,10 +1368,14 @@ function renderDash(){
   const week=new Date();week.setDate(week.getDate()-7);
 
   $('stGuru').textContent=STATE.guru.length;
-  $('stAktif').textContent=new Set(STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=week).map(l=>l.guru_id)).size;
+  $('stAktif').textContent=new Set(
+    STATE.log.filter(l=>(l.aksi==='login'||l.aksi==='buka_aplikasi')&&new Date(l.created_at)>=week).map(l=>l.guru_id)
+  ).size;
   $('stLogin').textContent=STATE.log.filter(l=>l.aksi==='login'&&new Date(l.created_at)>=today).length;
-  $('stPoin').textContent=STATE.gam.reduce((a,b)=>a+(b.total_poin||0),0);
-  $('stFb').textContent=STATE.fb.filter(f=>f.status==='baru').length;
+
+  const sch = $('stSchools'); if(sch) sch.textContent = STATE.schoolsAdmin.length;
+  const sl = $('stSchoolLogo'); if(sl) sl.textContent = STATE.schoolsAdmin.filter(s=>!!s.logo_url).length;
+  const sf = $('stFb'); if(sf) sf.textContent = STATE.fb.filter(f=>f.status==='baru').length;
 
   const cnt={};
   STATE.log.filter(l=>l.aksi==='buka_menu').forEach(l=>{
@@ -1665,245 +1389,515 @@ function renderDash(){
       <span class="text-xs font-black text-slate-400">${c}×</span>
     </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
 
-  const lg={};
-  STATE.log.filter(l=>l.guru_id&&(l.aksi==='login'||l.aksi==='buka_aplikasi')).forEach(l=>{
-    const g=STATE.guru.find(x=>x.id===l.guru_id);
-    if(g)lg[g.satuan_pendidikan||'-']=(lg[g.satuan_pendidikan||'-']||0)+1;
+  // Sekolah paling aktif by jumlah guru terdaftar (via guru list)
+  const schoolCount = {};
+  (STATE.guru || []).forEach(g => {
+    const key = g.npsn || g.satuan_pendidikan;
+    if(!key) return;
+    if(!schoolCount[key]) schoolCount[key] = { nama: g.satuan_pendidikan || key, count: 0 };
+    schoolCount[key].count++;
   });
-  $('leagueList').innerHTML=Object.entries(lg).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([s,c],i)=>`
+  const ranked = Object.values(schoolCount).sort((a,b)=>b.count-a.count).slice(0,8);
+  $('leagueList').innerHTML=ranked.map((s,i)=>`
     <div class="flex items-center gap-3">
       <span class="w-6 h-6 rounded-lg acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span>
-      <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s)}</span>
-      <span class="text-xs font-black text-slate-400">${c}</span>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
+      <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(s.nama)}</span>
+      <span class="text-[10px] font-black text-slate-400">${s.count} guru</span>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
 
   $('actList').innerHTML=STATE.log.map(l=>{
     const g=STATE.guru.find(x=>x.id===l.guru_id);
-    const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu',error:'Error'}[l.aksi]||l.aksi;
-    const det=(l.aksi==='buka_menu'&&l.detail&&l.detail.judul)?(' — '+esc(l.detail.judul)):'';
+    const a={login:'Login',buka_aplikasi:'Buka aplikasi',buka_menu:'Buka menu',wa_builder:'WA Builder',wa_builder_share:'Share WA',error:'Error'}[l.aksi]||l.aksi;
+    let det='';
+    if(l.aksi==='buka_menu'&&l.detail&&l.detail.judul) det=' — '+esc(l.detail.judul);
+    else if((l.aksi==='wa_builder'||l.aksi==='wa_builder_share')&&l.detail&&l.detail.template) det=' — '+esc(l.detail.template);
     return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
       <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span>
       <span class="text-[10px] text-slate-400 shrink-0">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
     </div>`;
-  }).join('');
+  }).join('')||'<p class="text-xs text-slate-400 text-center py-4">Belum ada aktivitas</p>';
   renderActCount();
 
-  $('leadBoard').innerHTML=STATE.lead.map((g,i)=>`
-    <div class="flex items-center gap-3 bg-slate-50 rounded-xl px-3 py-2.5">
-      <span class="text-lg">${['🥇','🥈','🥉'][i]||''}</span>
+  $('leadBoard').innerHTML=(STATE.lead||[]).map((g,i)=>`
+    <div class="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 rounded-xl px-3 py-2.5">
+      <span class="text-lg">${['🥇','🥈','🥉'][i]||'⭐'}</span>
       <span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap)}</span>
-      <span class="text-[10px] font-black text-amber-500">⭐ ${g.total_poin}</span>
-      <span class="text-[10px] font-bold text-slate-400">${esc(g.level||'')}</span>
-    </div>`).join('');
+      <span class="text-[10px] font-black text-amber-500">${g.total_poin} poin</span>
+    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada data.</p>';
 }
 
 /* ============================================================
-   MENU LIST
+   SEKOLAH ADMIN
    ============================================================ */
-function renderMenus(){
-  const f=($('mSearch').value||'').toLowerCase();
-  $('menuList').innerHTML=STATE.menus.filter(m=>m.judul.toLowerCase().includes(f)).map((m,idx)=>{
-    const [bg,tx]=COLOR[m.warna]||COLOR.blue;
-    const isPending=m.id&&String(m.id).startsWith('tmp-');
-    return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
-      <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-5 h-5')}</span>
+function getFilteredSchoolsAdmin(){
+  const q=($('schoolAdminSearch')?.value||'').toLowerCase().trim();
+  let list=STATE.schoolsAdmin||[];
+  if(q){
+    list=list.filter(s=>
+      (s.nama||'').toLowerCase().includes(q)||
+      (s.nama_singkat||'').toLowerCase().includes(q)||
+      (s.npsn||'').toLowerCase().includes(q)
+    );
+  }
+  return list;
+}
+
+function renderSchoolsAdmin(){
+  const list=$('schoolsAdminList');
+  if(!list)return;
+
+  const all=STATE.schoolsAdmin||[];
+  const total=all.length;
+  const withLogo=all.filter(s=>!!s.logo_url).length;
+  const noLogo=total-withLogo;
+  const inactive=all.filter(s=>s.is_active===false).length;
+
+  const st1=$('schoolStatTotal'); if(st1)st1.textContent=total;
+  const st2=$('schoolStatWithLogo'); if(st2)st2.textContent=withLogo;
+  const st3=$('schoolStatNoLogo'); if(st3)st3.textContent=noLogo;
+  const st4=$('schoolStatInactive'); if(st4)st4.textContent=inactive;
+
+  const filtered=getFilteredSchoolsAdmin();
+
+  if(!filtered.length){
+    list.innerHTML=`
+      <div class="card p-6 text-center">
+        <div class="w-12 h-12 mx-auto rounded-2xl acc-soft acc-text flex items-center justify-center mb-3">
+          <i data-lucide="school" class="w-6 h-6"></i>
+        </div>
+        <p class="text-sm font-extrabold text-slate-700">Tidak ada sekolah</p>
+        <p class="text-[11px] text-slate-500 mt-1">${total===0?'Belum ada data sekolah.':'Tidak ada yang cocok dengan pencarian.'}</p>
+      </div>`;
+    icons();
+    return;
+  }
+
+  list.innerHTML=filtered.map(s=>{
+    const isInactive=s.is_active===false;
+    const hasLogo=!!s.logo_url;
+    const logoTs=s.logo_uploaded_at?new Date(s.logo_uploaded_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'2-digit'}):null;
+
+    return `
+      <div class="card p-4 space-y-3 ${isInactive?'border-rose-300 dark:border-rose-700/50 opacity-75':''}">
+        <div class="flex items-start gap-3">
+          <div class="shrink-0 w-16 h-16 rounded-xl ${hasLogo?'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800':'bg-slate-100 dark:bg-slate-800'} flex items-center justify-center overflow-hidden">
+            ${hasLogo
+              ? `<img src="${esc(s.logo_thumb_url||s.logo_url)}" class="w-full h-full object-contain" loading="lazy" alt="">`
+              : `<i data-lucide="school" class="w-6 h-6 text-slate-400"></i>`}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              ${isInactive?`<span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Nonaktif</span>`:''}
+              ${hasLogo
+                ?`<span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center gap-1"><i data-lucide="check" class="w-2.5 h-2.5"></i>Logo</span>`
+                :`<span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Belum Logo</span>`}
+            </div>
+            <p class="text-[13px] font-extrabold text-slate-800 leading-snug">${esc(s.nama||'-')}</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">NPSN ${esc(s.npsn||'-')}${s.jenjang?' · '+esc(s.jenjang):''}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 flex-wrap">
+          ${logoTs?`<span class="text-[10px] text-slate-400 shrink-0"><i data-lucide="clock" class="inline w-3 h-3"></i> Logo: ${logoTs}</span>`:'<span></span>'}
+          <div class="ml-auto flex gap-1.5 flex-wrap">
+            <button onclick="editSchoolAdmin('${esc(s.npsn)}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600 active:scale-95 transition flex items-center gap-1">
+              <i data-lucide="pencil" class="w-3 h-3"></i>Edit
+            </button>
+            ${hasLogo?`
+              <button onclick="viewSchoolLogoAdmin('${esc(s.npsn)}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600 active:scale-95 transition flex items-center gap-1">
+                <i data-lucide="eye" class="w-3 h-3"></i>Logo
+              </button>
+              <button onclick="deleteSchoolLogoAdmin('${esc(s.npsn)}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-amber-50 text-amber-600 active:scale-95 transition flex items-center gap-1">
+                <i data-lucide="image-off" class="w-3 h-3"></i>Hapus Logo
+              </button>
+            `:''}
+            <button onclick="toggleSchoolActiveAdmin('${esc(s.npsn)}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg ${isInactive?'bg-emerald-50 text-emerald-600':'bg-rose-50 text-rose-600'} active:scale-95 transition flex items-center gap-1">
+              <i data-lucide="${isInactive?'check-circle':'x-circle'}" class="w-3 h-3"></i>${isInactive?'Aktifkan':'Nonaktifkan'}
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  icons();
+}
+const renderSchoolsAdminDebounced=debounce(()=>renderSchoolsAdmin(),200);
+
+function editSchoolAdmin(npsn){
+  const s=(STATE.schoolsAdmin||[]).find(x=>x.npsn===npsn);
+  if(!s)return;
+
+  const html=`
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <p class="text-base font-extrabold text-slate-800">Edit Sekolah</p>
+        <button onclick="closeModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+      <div>
+        <label class="lbl">NPSN (tidak bisa diubah)</label>
+        <input value="${esc(s.npsn)}" disabled class="inp opacity-60 cursor-not-allowed">
+      </div>
+      <div>
+        <label class="lbl">Nama Lengkap Sekolah</label>
+        <input id="editSchoolNama" value="${esc(s.nama||'')}" class="inp acc-ring" placeholder="SD Negeri 1 Pule">
+      </div>
+      <div>
+        <label class="lbl">Nama Singkat (untuk watermark)</label>
+        <input id="editSchoolSingkat" value="${esc(s.nama_singkat||'')}" class="inp acc-ring" placeholder="SDN 1 Pule">
+        <p class="text-[10px] text-slate-400 mt-1">Kosongkan untuk pakai nama lengkap.</p>
+      </div>
+      <div>
+        <label class="lbl">Jenjang</label>
+        <select id="editSchoolJenjang" class="inp acc-ring">
+          <option value="">—</option>
+          <option value="TK" ${s.jenjang==='TK'?'selected':''}>TK / PAUD</option>
+          <option value="SD" ${s.jenjang==='SD'?'selected':''}>SD</option>
+          <option value="SMP" ${s.jenjang==='SMP'?'selected':''}>SMP</option>
+          <option value="SMA" ${s.jenjang==='SMA'?'selected':''}>SMA</option>
+          <option value="SMK" ${s.jenjang==='SMK'?'selected':''}>SMK</option>
+        </select>
+      </div>
+      <div class="flex gap-2 pt-3 border-t border-slate-100">
+        <button onclick="saveSchoolAdmin('${esc(s.npsn)}')" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
+        <button onclick="closeModal('mPop')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Batal</button>
+      </div>
+    </div>`;
+
+  $('popContent').innerHTML=html;
+  openModal('mPop');
+  icons();
+}
+
+async function saveSchoolAdmin(npsn){
+  const nama=$('editSchoolNama').value.trim();
+  const singkat=$('editSchoolSingkat').value.trim();
+  const jenjang=$('editSchoolJenjang').value;
+
+  if(!nama)return toast('Nama sekolah wajib diisi','error');
+
+  const {error}=await sb.from('creative_schools').update({
+    nama,
+    nama_singkat:singkat||null,
+    jenjang:jenjang||null,
+    updated_at:new Date().toISOString()
+  }).eq('npsn',npsn);
+
+  if(error)return toast('Gagal: '+error.message,'error');
+
+  const s=STATE.schoolsAdmin.find(x=>x.npsn===npsn);
+  if(s){s.nama=nama;s.nama_singkat=singkat||null;s.jenjang=jenjang||null;}
+
+  toast('Perubahan tersimpan ✓');
+  closeModal('mPop');
+  renderSchoolsAdmin();
+}
+
+function viewSchoolLogoAdmin(npsn){
+  const s=(STATE.schoolsAdmin||[]).find(x=>x.npsn===npsn);
+  if(!s?.logo_url)return;
+
+  const html=`
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <p class="text-base font-extrabold text-slate-800">Logo Sekolah</p>
+        <button onclick="closeModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+      <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl flex items-center justify-center" style="aspect-ratio:1">
+        <img src="${esc(s.logo_url)}" class="max-w-full max-h-full object-contain" alt="">
+      </div>
+      <div class="text-center">
+        <p class="text-sm font-extrabold text-slate-800">${esc(s.nama)}</p>
+        <p class="text-[10px] text-slate-500 mt-0.5">NPSN ${esc(s.npsn)}</p>
+      </div>
+      <div class="flex gap-2">
+        <a href="${esc(s.logo_url)}" download target="_blank" rel="noopener" class="flex-1 bg-slate-100 text-slate-700 font-bold py-2.5 rounded-xl text-xs active:scale-95 transition flex items-center justify-center gap-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>Download
+        </a>
+        <button onclick="closeModal('mPop')" class="flex-1 bg-slate-100 text-slate-700 font-bold py-2.5 rounded-xl text-xs active:scale-95 transition">Tutup</button>
+      </div>
+    </div>`;
+  $('popContent').innerHTML=html;
+  openModal('mPop');
+  icons();
+}
+
+function deleteSchoolLogoAdmin(npsn){
+  const s=(STATE.schoolsAdmin||[]).find(x=>x.npsn===npsn);
+  if(!s)return;
+
+  confirmDialog(`Hapus logo ${s.nama}? Guru di sekolah ini perlu upload ulang.`,async()=>{
+    try{
+      await sb.storage.from('school-logos').remove([`${npsn}/logo.webp`,`${npsn}/thumb.webp`]);
+    }catch(e){console.warn('storage cleanup',e);}
+
+    const {error}=await sb.from('creative_schools').update({
+      logo_url:null,
+      logo_thumb_url:null,
+      logo_uploaded_at:null,
+      updated_at:new Date().toISOString()
+    }).eq('npsn',npsn);
+
+    if(error)return toast('Gagal: '+error.message,'error');
+
+    if(s){
+      s.logo_url=null;
+      s.logo_thumb_url=null;
+      s.logo_uploaded_at=null;
+    }
+
+    toast('Logo dihapus ✓');
+    renderSchoolsAdmin();
+    renderDash();
+  },'Hapus Logo?','Hapus Logo');
+}
+
+function toggleSchoolActiveAdmin(npsn){
+  const s=(STATE.schoolsAdmin||[]).find(x=>x.npsn===npsn);
+  if(!s)return;
+
+  const newActive=s.is_active===false;
+  const actionText=newActive?'Aktifkan':'Nonaktifkan';
+
+  confirmDialog(`${actionText} sekolah ${s.nama}?`,async()=>{
+    const {error}=await sb.from('creative_schools').update({
+      is_active:newActive,
+      updated_at:new Date().toISOString()
+    }).eq('npsn',npsn);
+    if(error)return toast('Gagal: '+error.message,'error');
+    s.is_active=newActive;
+    toast(`${actionText} ✓`);
+    renderSchoolsAdmin();
+    renderDash();
+  },`${actionText} Sekolah?`,actionText);
+}
+
+/* ============================================================
+   MENU
+   ============================================================ */
+function renderMenus() {
+  const f = ($('mSearch').value || '').toLowerCase();
+  const list = STATE.menus.filter(m => m.judul.toLowerCase().includes(f));
+  const showReorder = !f; // panah up/down hanya saat tidak ada filter
+  
+  $('menuList').innerHTML = list.map((m, idx) => {
+    const wrap = menuIconWrapHTML(m);
+    const globalIdx = STATE.menus.findIndex(x => x.id === m.id);
+    const isFirst = globalIdx === 0;
+    const isLast = globalIdx === STATE.menus.length - 1;
+    
+    return `<div class="card p-4 flex items-center gap-3">
+      <span class="w-10 h-10 rounded-xl ${wrap} flex items-center justify-center shrink-0 overflow-hidden">
+  ${isUrlIcon(m.icon)
+  ? `<img src="${esc(m.icon)}" class="w-5 h-5 object-cover rounded" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`
+  : `<i data-lucide="${esc(m.icon||'app-window')}" class="w-5 h-5"></i>`}
+</span>
       <div class="flex-1 min-w-0">
-        <p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${esc(m.label)}</span>`:''} ${!m.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
-        <p class="text-[10px] text-slate-400 truncate">${idx+1} · ${esc(m.kategori||'Umum')} · ${esc(m.akses_role||'all')}${m.sub_menu_dari?' · ↳ '+esc(m.sub_menu_dari):''}</p>
+        <p class="text-[13px] font-extrabold text-slate-800 truncate">${esc(m.judul)} ${m.label?`<span class="text-[8px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded font-black uppercase">${esc(m.label)}</span>`:''} ${!m.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
+        <p class="text-[10px] text-slate-400 truncate">${globalIdx+1} · ${esc(m.kategori||'Umum')} · ${esc(m.akses_role||'all')}${m.sub_menu_dari?' · ↳ '+esc(m.sub_menu_dari):''}</p>
       </div>
-      <div class="flex flex-col gap-1">
-        <button onclick="moveMenu(${m.id},-1)" aria-label="Naik" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center active:scale-90"><i data-lucide="arrow-up" class="w-3 h-3"></i></button>
-        <button onclick="moveMenu(${m.id},1)" aria-label="Turun" class="w-7 h-6 rounded-md bg-slate-100 text-slate-500 flex items-center justify-center active:scale-90"><i data-lucide="arrow-down" class="w-3 h-3"></i></button>
-      </div>
+      ${showReorder?`
+        <div class="flex flex-col gap-0.5 shrink-0">
+          <button onclick="moveMenu(${m.id},-1)" ${isFirst?'disabled':''} aria-label="Naik" class="w-7 h-6 rounded-md ${isFirst?'bg-slate-50 text-slate-300 cursor-not-allowed':'bg-slate-100 text-slate-500 active:scale-90'} flex items-center justify-center transition">
+            <i data-lucide="chevron-up" class="w-3.5 h-3.5"></i>
+          </button>
+          <button onclick="moveMenu(${m.id},1)" ${isLast?'disabled':''} aria-label="Turun" class="w-7 h-6 rounded-md ${isLast?'bg-slate-50 text-slate-300 cursor-not-allowed':'bg-slate-100 text-slate-500 active:scale-90'} flex items-center justify-center transition">
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>`:''}
       <button onclick="openMenuEditor(${m.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
     </div>`;
-  }).join('')||'<p class="text-xs text-slate-400">Belum ada menu.</p>';
+  }).join('') || '<p class="text-xs text-slate-400 text-center py-6">Belum ada menu.</p>';
   icons();
+}
+
+/* ============================================================
+   MOVE MENU — Reorder
+   ============================================================ */
+async function moveMenu(id, dir) {
+  const full = STATE.menus;
+  const i = full.findIndex(m => m.id === id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= full.length) return;
+  
+  // Snapshot sort_order lama
+  const oldOrder = {};
+  full.forEach(m => { oldOrder[m.id] = m.sort_order; });
+  
+  // Swap di array
+  [full[i], full[j]] = [full[j], full[i]];
+  
+  // Reassign sort_order = 1, 2, 3, ...
+  full.forEach((m, idx) => { m.sort_order = idx + 1; });
+  
+  // Render cepat (optimistic)
+  renderMenus();
+  
+  // Update hanya yang berubah
+  const changed = full.filter(m => oldOrder[m.id] !== m.sort_order);
+  try {
+    await Promise.all(changed.map(m =>
+      sb.from('creative_menus').update({ sort_order: m.sort_order }).eq('id', m.id)
+    ));
+    toast('Urutan tersimpan ✓');
+  } catch (e) {
+    console.error('[moveMenu]', e);
+    toast('Gagal simpan urutan, refresh halaman', 'error');
+    loadAll();
+  }
 }
 const renderMenusDebounced=debounce(renderMenus,200);
 
-async function moveMenu(id,dir){
-  const full=STATE.menus;
-  const i=full.findIndex(m=>m.id===id);
-  const j=i+dir;
-  if(i<0||j<0||j>=full.length)return;
-  const old={};full.forEach(m=>old[m.id]=m.sort_order);
-  [full[i],full[j]]=[full[j],full[i]];
-  full.forEach((m,idx)=>m.sort_order=idx+1);
-  renderMenus();
-  const ch=full.filter(m=>old[m.id]!==m.sort_order&&!String(m.id).startsWith('tmp-'));
-  await Promise.all(ch.map(m=>sb.from('creative_menus').update({sort_order:m.sort_order}).eq('id',m.id)));
-  toast('Urutan disimpan','success');
+function menuIconWrapHTML(m){
+  const warnaMap={
+    teal:'bg-teal-100 text-teal-600',blue:'bg-blue-100 text-blue-600',
+    violet:'bg-violet-100 text-violet-600',rose:'bg-rose-100 text-rose-600',
+    amber:'bg-amber-100 text-amber-600',green:'bg-green-100 text-green-600',
+    sky:'bg-sky-100 text-sky-600',orange:'bg-orange-100 text-orange-600',
+    fuchsia:'bg-fuchsia-100 text-fuchsia-600',cyan:'bg-cyan-100 text-cyan-600',
+    red:'bg-red-100 text-red-600',yellow:'bg-yellow-100 text-yellow-600'
+  };
+  return warnaMap[m.warna]||warnaMap.blue;
+}
+
+function openMenuEditor(id) {
+  STATE.editMenu = id || null;
+  $('eTitle').textContent = id ? 'Edit Menu' : 'Menu Baru';
+  $('eDelete').classList.toggle('hidden', !id);
+  const m = id ? STATE.menus.find(x => x.id === id) : null;
+  
+  $('eJudul').value = m ? m.judul : '';
+  $('eDesk').value = m ? m.deskripsi : '';
+  $('eUrl').value = m ? m.url : '';
+  
+  // Icon
+  const iconVal = m ? (m.icon || 'app-window') : 'app-window';
+  const isUrl = isUrlIcon(iconVal);
+  $('eIcon').value = iconVal;
+  $('eIconCustomUrl').value = isUrl ? iconVal : '';
+  switchIconMode(isUrl ? 'url' : 'lucide');
+  updateIconPreview(iconVal);
+  
+  // Warna
+  $('eWarna').value = m ? (m.warna || 'blue') : 'blue';
+  
+  $('eKategori').value = m ? m.kategori || 'Umum' : 'Umum';
+  $('eTampil').value = m ? m.tampil_di : 'all';
+  $('eRole').value = m ? m.akses_role : 'all';
+  $('eBuka').value = m ? m.cara_buka : '';
+  $('eParent').value = m ? m.sub_menu_dari || '' : '';
+  $('eLabel').value = m ? m.label || '' : '';
+  $('eActive').checked = m ? m.is_active : true;
+  
+  renderIconGrid('');
+  renderColorPicker();
+  
+  openModal('mMenu');
 }
 
 /* ============================================================
-   ICON RENDERER (Lucide atau URL gambar)
+   ICON PICKER HELPERS
    ============================================================ */
-function isUrlIcon(icon){
-  if(!icon)return false;
-  return /^https?:\/\//i.test(icon)||icon.startsWith('data:image');
-}
-function renderMenuIcon(icon,cls){
-  cls=cls||'w-5 h-5';
-  if(!icon)return `<i data-lucide="app-window" class="${cls}"></i>`;
-  if(isUrlIcon(icon)){
-    return `<img src="${esc(icon)}" class="${cls} menu-icon-img" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
-  }
-  return `<i data-lucide="${esc(icon)}" class="${cls}"></i>`;
+function isUrlIcon(icon) {
+  if (!icon) return false;
+  return /^https?:\/\//i.test(icon) || icon.startsWith('data:image');
 }
 
-/* ============================================================
-   DYNAMIC KATEGORI
-   ============================================================ */
-function populateKatOptions(){
-  const existing=[...new Set(STATE.menus.map(m=>m.kategori).filter(Boolean))];
-  const all=[...new Set([...DEFAULT_KATS,...existing])].sort((a,b)=>{
-    const ia=DEFAULT_KATS.indexOf(a),ib=DEFAULT_KATS.indexOf(b);
-    if(ia!==-1&&ib!==-1)return ia-ib;
-    if(ia!==-1)return -1;
-    if(ib!==-1)return 1;
-    return a.localeCompare(b);
-  });
-  const dl=$('katOptions');
-  if(dl)dl.innerHTML=all.map(k=>`<option value="${esc(k)}">`).join('');
+function renderIconGrid(filter) {
+  filter = (filter || '').toLowerCase();
+  const list = filter ? ICON_LIST.filter(i => i.includes(filter)) : ICON_LIST;
+  const grid = $('eIconGrid');
+  if (!grid) return;
+  const current = $('eIcon').value;
+  grid.innerHTML = list.map(ic =>
+    `<div class="icon-cell ${ic===current?'on':''}" data-icon="${ic}" onclick="selectIcon('${ic}')" title="${ic}"
+      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;transition:all .15s;${ic===current?'background:var(--acc);color:#fff;':'color:#64748B;'}">
+      <i data-lucide="${ic}" class="w-4 h-4"></i>
+    </div>`
+  ).join('') || '<div style="grid-column:1/-1;text-align:center;font-size:11px;color:#94A3B8;padding:1rem">Tidak ditemukan</div>';
+  icons();
 }
 
-/* ============================================================
-   MENU EDITOR — Tab & Icon Mode
-   ============================================================ */
-function switchMenuTab(n){
-  [1,2,3].forEach(i=>{
-    try{
-      const btn=$('menuTab'+i);
-      if(btn)btn.classList.toggle('active',i===n);
-      const content=$('menuTabContent'+i);
-      if(content)content.classList.toggle('hidden',i!==n);
-      else dbg('menuTabContent'+i+' NOT FOUND','error');
-    }catch(e){dbg('switchMenuTab err i='+i+': '+e.message,'error');}
+function filterMenuIcons(v) { renderIconGrid(v); }
+
+function selectIcon(ic) {
+  $('eIcon').value = ic;
+  $('eIconCustomUrl').value = '';
+  updateIconPreview(ic);
+  document.querySelectorAll('#eIconGrid [data-icon]').forEach(el => {
+    const on = el.dataset.icon === ic;
+    el.style.background = on ? 'var(--acc)' : '';
+    el.style.color = on ? '#fff' : '#64748B';
   });
 }
 
-function switchIconMode(mode){
-  ['lucide','url'].forEach(m=>{
-    const btn=$('iconMode'+(m.charAt(0).toUpperCase()+m.slice(1)));
-    if(btn)btn.classList.toggle('active',m===mode);
+function switchIconMode(mode) {
+  ['lucide', 'url'].forEach(m => {
+    const btn = $('iconMode' + m.charAt(0).toUpperCase() + m.slice(1));
+    if (btn) btn.classList.toggle('active', m === mode);
   });
-  const lc=$('iconModeContentLucide');
-  const uc=$('iconModeContentUrl');
-  if(lc)lc.classList.toggle('hidden',mode!=='lucide');
-  if(uc)uc.classList.toggle('hidden',mode!=='url');
+  const lc = $('iconModeContentLucide');
+  const uc = $('iconModeContentUrl');
+  if (lc) lc.classList.toggle('hidden', mode !== 'lucide');
+  if (uc) uc.classList.toggle('hidden', mode !== 'url');
 }
 
-function onCustomUrlInput(url){
-  url=(url||'').trim();
-  if(!url){updateIconPreview('app-window');return;}
-  if(!/^https?:\/\//i.test(url))return;
-  $('eIcon').value=url;
+function onCustomUrlInput(url) {
+  url = (url || '').trim();
+  if (!url) { updateIconPreview($('eIcon').value || 'app-window'); return; }
+  if (!/^https?:\/\//i.test(url)) return;
+  $('eIcon').value = url;
   updateIconPreview(url);
 }
 
-function testCustomUrl(){
-  const url=$('eIconCustomUrl').value.trim();
-  if(!url)return toast('Isi URL dulu','info');
-  const img=new Image();
-  img.onload=()=>toast('URL gambar valid ✓','success');
-  img.onerror=()=>toast('URL tidak dapat dimuat','error');
-  img.src=url;
-}
-
-function clearCustomUrl(){
-  $('eIconCustomUrl').value='';
-  switchIconMode('lucide');
-  const cur=$('eIcon').value;
-  if(isUrlIcon(cur)){$('eIcon').value='app-window';updateIconPreview('app-window');}
-}
-
-function updateIconPreview(iconVal){
-  const box=$('eIconPreview');
-  const lbl=$('eIconLabel');
-  if(!box||!lbl)return;
-  if(isUrlIcon(iconVal)){
-    box.innerHTML=`<img src="${esc(iconVal)}" class="w-full h-full object-cover" alt="" onerror="this.style.opacity='0.3'">`;
-    lbl.textContent=iconVal.slice(0,60)+(iconVal.length>60?'…':'');
-  }else{
-    box.innerHTML=`<i data-lucide="${esc(iconVal||'app-window')}" class="w-6 h-6 text-slate-600 dark:text-slate-300"></i>`;
-    lbl.textContent=iconVal||'app-window';
+function updateIconPreview(iconVal) {
+  const box = $('eIconPreview');
+  const lbl = $('eIconLabel');
+  if (!box || !lbl) return;
+  if (isUrlIcon(iconVal)) {
+    box.innerHTML = `<img src="${esc(iconVal)}" class="w-full h-full object-cover" alt="" onerror="this.style.opacity='0.3'">`;
+    lbl.textContent = iconVal.slice(0, 40) + (iconVal.length > 40 ? '…' : '');
+  } else {
+    box.innerHTML = `<i data-lucide="${esc(iconVal||'app-window')}" class="w-6 h-6 text-slate-600"></i>`;
+    lbl.textContent = iconVal || 'app-window';
     icons();
   }
 }
 
 /* ============================================================
-   MENU EDITOR — Icon Grid
+   COLOR PICKER HELPERS
    ============================================================ */
-function renderMenuIconGrid(filter){
-  filter=(filter||'').toLowerCase();
-  const list=filter?ICON_LIST.filter(i=>i.includes(filter)):ICON_LIST;
-  const grid=$('eIconGrid');
-  if(!grid)return;
-  const current=$('eIcon').value;
-  grid.innerHTML=list.map(ic=>`<div class="icon-cell ${ic===current?'on':''}" data-icon="${ic}" onclick="selectMenuIcon('${ic}')" title="${ic}"><i data-lucide="${ic}" class="w-4 h-4"></i></div>`).join('')||'<div class="col-span-full text-center text-xs text-slate-400 py-4">Tidak ditemukan</div>';
-  icons();
-}
-function filterMenuIcons(v){renderMenuIconGrid(v);}
-function selectMenuIcon(ic){
-  $('eIcon').value=ic;
-  $('eIconCustomUrl').value='';
-  updateIconPreview(ic);
-  document.querySelectorAll('#eIconGrid .icon-cell').forEach(el=>el.classList.toggle('on',el.dataset.icon===ic));
+function renderColorPicker() {
+  const picker = $('eWarnaPicker');
+  if (!picker) return;
+  const current = $('eWarna').value || 'blue';
+  picker.innerHTML = COLOR_PICKER_LIST.map(c =>
+    `<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectColor('${c.id}')" title="${c.label}"></div>`
+  ).join('');
+  paintColorDots();
 }
 
-/* ============================================================
-   MENU EDITOR — Color Picker
-   ============================================================ */
-function renderMenuColorPicker(){
-  const picker=$('eWarnaPicker');
-  if(!picker)return;
-  const current=$('eWarna').value;
-  picker.innerHTML=COLOR_PICKER_LIST.map(c=>`<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectMenuColor('${c.id}')" title="${c.label}"></div>`).join('');
-}
-function selectMenuColor(c){
-  $('eWarna').value=c;
-  document.querySelectorAll('#eWarnaPicker .color-dot').forEach(el=>el.classList.toggle('on',el.dataset.color===c));
+function selectColor(c) {
+  $('eWarna').value = c;
+  paintColorDots();
 }
 
-/* ============================================================
-   MENU EDITOR — Open & Save
-   ============================================================ */
-function fillParentSelect(){
-  $('eParent').innerHTML='<option value="">—</option>'+STATE.menus.filter(m=>!m.sub_menu_dari&&!String(m.id).startsWith('tmp-')).map(p=>`<option value="${esc(p.judul)}">${esc(p.judul)}</option>`).join('');
-}
-
-function openMenuEditor(id){
-  STATE.editMenu=id||null;
-  $('eTitle').textContent=id?'Edit Menu':'Menu Baru';
-  $('eDelete').classList.toggle('hidden',!id);
-  const m=id?STATE.menus.find(x=>x.id===id):null;
-  fillParentSelect();
-  populateKatOptions();
-  $('eJudul').value=m?m.judul:'';
-  $('eDesk').value=m?m.deskripsi:'';
-  $('eUrl').value=m?m.url:'';
-  
-  const iconVal=m?(m.icon||'app-window'):'app-window';
-  const isUrl=isUrlIcon(iconVal);
-  $('eIcon').value=iconVal;
-  $('eIconCustomUrl').value=isUrl?iconVal:'';
-  switchIconMode(isUrl?'url':'lucide');
-  updateIconPreview(iconVal);
-  
-  $('eWarna').value=m?(m.warna||'blue'):'blue';
-  $('eKategori').value=m?(m.kategori||'Umum'):'Umum';
-  $('eParent').value=m?(m.sub_menu_dari||''):'';
-  $('eTampil').value=m?m.tampil_di:'all';
-  $('eRole').value=m?m.akses_role:'all';
-  $('eBuka').value=m?m.cara_buka:'';
-  $('eLabel').value=m?m.label||'':'';
-  $('eSort').value=m?m.sort_order:0;
-  $('eActive').checked=m?m.is_active:true;
-  switchMenuTab(1);
-  renderMenuIconGrid('');
-  renderMenuColorPicker();
-  openModal('mMenu');
+function paintColorDots() {
+  const current = $('eWarna').value;
+  document.querySelectorAll('#eWarnaPicker .color-dot').forEach(el => {
+    const on = el.dataset.color === current;
+    el.style.width = '28px';
+    el.style.height = '28px';
+    el.style.borderRadius = '9999px';
+    el.style.cursor = 'pointer';
+    el.style.transition = 'all .15s';
+    el.style.border = on ? '2px solid #fff' : '2px solid transparent';
+    el.style.boxShadow = on ? '0 0 0 2px var(--acc)' : 'none';
+    el.style.transform = on ? 'scale(1.15)' : 'scale(1)';
+  });
 }
 
 async function saveMenu(){
@@ -1914,33 +1908,15 @@ async function saveMenu(){
     icon:$('eIcon').value.trim()||'app-window',
     warna:$('eWarna').value,
     kategori:$('eKategori').value.trim()||'Umum',
-    sub_menu_dari:$('eParent').value,
+    sub_menu_dari:$('eParent').value.trim(),
     tampil_di:$('eTampil').value,
     akses_role:$('eRole').value,
     cara_buka:$('eBuka').value,
     label:$('eLabel').value.trim(),
-    sort_order:parseInt($('eSort').value)||0,
     is_active:$('eActive').checked
   };
   if(!row.judul)return toast('Judul wajib','error');
-  
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    if(STATE.editMenu){
-      const idx=STATE.menus.findIndex(m=>m.id===STATE.editMenu);
-      if(idx>=0)STATE.menus[idx]={...STATE.menus[idx],...row};
-      queuePending({action:'update_menu',id:STATE.editMenu,data:row});
-    }else{
-      STATE.menus.push({...row,id:tempId});
-      queuePending({action:'add_menu',data:row,tempId});
-    }
-    saveCache();
-    renderMenus();
-    closeModal('mMenu');
-    toast('Disimpan offline — akan sync otomatis','warning');
-    return;
-  }
-  
+
   closeModal('mMenu');
   const q=STATE.editMenu
     ?sb.from('creative_menus').update(row).eq('id',STATE.editMenu)
@@ -1953,15 +1929,6 @@ async function saveMenu(){
 
 function delMenu(){
   confirmDialog('Hapus menu ini?',async()=>{
-    if(!isOnline()||String(STATE.editMenu).startsWith('tmp-')){
-      queuePending({action:'delete_menu',id:STATE.editMenu});
-      STATE.menus=STATE.menus.filter(m=>m.id!==STATE.editMenu);
-      saveCache();
-      renderMenus();
-      closeModal('mMenu');
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
     await sb.from('creative_menus').delete().eq('id',STATE.editMenu);
     toast('Menu dihapus','success');
     closeModal('mMenu');
@@ -1984,7 +1951,7 @@ function renderAgendaAdmin(){
         <p class="text-[10px] text-slate-500 truncate">${esc(a.kategori||'')} · ${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p>
       </div>
       <button onclick="openAgendaEditor(${a.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada agenda.</p>';
+    </div>`).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada agenda.</p>';
   icons();
 }
 function openAgendaEditor(id){
@@ -2014,20 +1981,6 @@ async function saveAgenda(){
     is_active:$('aActive').checked
   };
   if(!row.judul||!row.tanggal)return toast('Judul & tanggal wajib','error');
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    if(STATE.editAgenda){
-      const idx=STATE.agenda.findIndex(m=>m.id===STATE.editAgenda);
-      if(idx>=0)STATE.agenda[idx]={...STATE.agenda[idx],...row};
-      queuePending({action:'update_agenda',id:STATE.editAgenda,data:row});
-    }else{
-      STATE.agenda.push({...row,id:tempId});
-      queuePending({action:'add_agenda',data:row,tempId});
-    }
-    saveCache();renderAgendaAdmin();closeModal('mAgenda');
-    toast('Disimpan offline','warning');
-    return;
-  }
   closeModal('mAgenda');
   const q=STATE.editAgenda
     ?sb.from('creative_agenda').update(row).eq('id',STATE.editAgenda)
@@ -2039,13 +1992,6 @@ async function saveAgenda(){
 }
 function delAgenda(){
   confirmDialog('Hapus agenda ini?',async()=>{
-    if(!isOnline()){
-      queuePending({action:'delete_agenda',id:STATE.editAgenda});
-      STATE.agenda=STATE.agenda.filter(a=>a.id!==STATE.editAgenda);
-      saveCache();renderAgendaAdmin();closeModal('mAgenda');
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
     await sb.from('creative_agenda').delete().eq('id',STATE.editAgenda);
     toast('Agenda dihapus','success');
     closeModal('mAgenda');
@@ -2059,9 +2005,9 @@ function delAgenda(){
 function renderDocsAdmin(){
   const f=($('docSearch').value||'').toLowerCase();
   $('docListAdmin').innerHTML=STATE.docs.filter(d=>d.judul.toLowerCase().includes(f)).map(d=>{
-    const [bg,tx]=COLOR[d.warna]||COLOR.blue;
+    const wrap=menuIconWrapHTML(d);
     return `<div class="card p-4 flex items-center gap-3">
-      <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
+      <span class="w-10 h-10 rounded-xl ${wrap} flex items-center justify-center shrink-0"><i data-lucide="${esc(d.icon||'file-text')}" class="w-5 h-5"></i></span>
       <div class="flex-1 min-w-0">
         <p class="text-xs font-extrabold text-slate-800 truncate">${esc(d.judul)} ${!d.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(d.kategori||'Umum')}</p>
@@ -2069,21 +2015,10 @@ function renderDocsAdmin(){
       <a href="${esc(d.link)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
       <button onclick="openDocEditor(${d.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
     </div>`;
-  }).join('')||'<p class="text-xs text-slate-400">Belum ada dokumen.</p>';
+  }).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada dokumen.</p>';
   icons();
 }
 const renderDocsAdminDebounced=debounce(renderDocsAdmin,200);
-
-function renderDocColorPicker(){
-  const picker=$('docWarnaPicker');
-  if(!picker)return;
-  const current=$('docWarna').value;
-  picker.innerHTML=COLOR_PICKER_LIST.map(c=>`<div class="color-dot ${c.id===current?'on':''}" style="background:${c.hex}" data-color="${c.id}" onclick="selectDocColor('${c.id}')" title="${c.label}"></div>`).join('');
-}
-function selectDocColor(c){
-  $('docWarna').value=c;
-  document.querySelectorAll('#docWarnaPicker .color-dot').forEach(el=>el.classList.toggle('on',el.dataset.color===c));
-}
 
 function openDocEditor(id){
   STATE.editDoc=id||null;
@@ -2097,7 +2032,6 @@ function openDocEditor(id){
   $('docIcon').value=d?d.icon||'file-text':'file-text';
   $('docWarna').value=d?d.warna||'blue':'blue';
   $('docActive').checked=d?d.is_active:true;
-  renderDocColorPicker();
   openModal('mDoc');
 }
 async function saveDoc(){
@@ -2111,20 +2045,6 @@ async function saveDoc(){
     is_active:$('docActive').checked
   };
   if(!row.judul||!row.link)return toast('Judul & link wajib','error');
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    if(STATE.editDoc){
-      const idx=STATE.docs.findIndex(m=>m.id===STATE.editDoc);
-      if(idx>=0)STATE.docs[idx]={...STATE.docs[idx],...row};
-      queuePending({action:'update_doc',id:STATE.editDoc,data:row});
-    }else{
-      STATE.docs.push({...row,id:tempId});
-      queuePending({action:'add_doc',data:row,tempId});
-    }
-    saveCache();renderDocsAdmin();closeModal('mDoc');
-    toast('Disimpan offline','warning');
-    return;
-  }
   closeModal('mDoc');
   const q=STATE.editDoc
     ?sb.from('creative_documents').update(row).eq('id',STATE.editDoc)
@@ -2136,13 +2056,6 @@ async function saveDoc(){
 }
 function delDoc(){
   confirmDialog('Hapus dokumen ini?',async()=>{
-    if(!isOnline()){
-      queuePending({action:'delete_doc',id:STATE.editDoc});
-      STATE.docs=STATE.docs.filter(d=>d.id!==STATE.editDoc);
-      saveCache();renderDocsAdmin();closeModal('mDoc');
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
     await sb.from('creative_documents').delete().eq('id',STATE.editDoc);
     toast('Dokumen dihapus','success');
     closeModal('mDoc');
@@ -2151,130 +2064,203 @@ function delDoc(){
 }
 
 /* ============================================================
-   REWARDS
+   GURU
    ============================================================ */
-function renderRewardsAdmin(){
-  $('rewardListAdmin').innerHTML=STATE.rewards.map(r=>`
-    <div class="card p-4 flex items-center gap-3">
-      <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="gift" class="w-5 h-5"></i></span>
-      <div class="flex-1 min-w-0">
-        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(r.judul)} ${!r.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
-        <p class="text-[10px] text-slate-500">⭐ ${r.biaya_poin} poin · stok ${r.stok<0?'∞':r.stok}</p>
-      </div>
-      <button onclick="openRewardEditor(${r.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada reward.</p>';
+async function loadGuruPrefs(force){
+  if(!force && STATE._guruPrefsLoadedAt && (Date.now()-STATE._guruPrefsLoadedAt < 5*60*1000)){
+    return STATE.guruPrefs;
+  }
+  try{
+    const {data}=await sb.from('creative_user_preferences').select('guru_id,foto_url,foto_updated_at,sosial');
+    const map={};
+    (data||[]).forEach(p=>{map[p.guru_id]=p;});
+    STATE.guruPrefs=map;
+    STATE._guruPrefsLoadedAt=Date.now();
+    return map;
+  }catch(e){
+    console.warn('[loadGuruPrefs]',e);
+    return STATE.guruPrefs||{};
+  }
+}
 
-  $('redemList').innerHTML=STATE.redem.map(x=>{
-    const rw=STATE.rewards.find(r=>r.id===x.reward_id);
-    return `<div class="card p-4 flex items-center gap-3">
-      <div class="flex-1 min-w-0">
-        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(rw?rw.judul:'Reward')}</p>
-        <p class="text-[10px] text-slate-500 truncate">ID: …${String(x.guru_id).slice(-6)} · ${new Date(x.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short'})}</p>
-      </div>
-      <select onchange="setRedemStatus(${x.id},this.value)" class="text-[10px] font-black border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
-        <option value="menunggu" ${x.status==='menunggu'?'selected':''}>Menunggu</option>
-        <option value="selesai" ${x.status==='selesai'?'selected':''}>Selesai</option>
-        <option value="ditolak" ${x.status==='ditolak'?'selected':''}>Ditolak</option>
-      </select>
+function guruInitials(nama){
+  return (nama||'G').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'G';
+}
+function getGuruGradient(gid){
+  let h=0;
+  const s=String(gid||'');
+  for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}
+  const grads=[
+    'linear-gradient(135deg,#0D9488,#14B8A6)','linear-gradient(135deg,#2563EB,#0EA5E9)',
+    'linear-gradient(135deg,#7C3AED,#A855F7)','linear-gradient(135deg,#D97706,#F59E0B)',
+    'linear-gradient(135deg,#E11D48,#F43F5E)','linear-gradient(135deg,#059669,#34D399)',
+    'linear-gradient(135deg,#0891B2,#22D3EE)','linear-gradient(135deg,#C026D3,#E879F9)'
+  ];
+  return grads[h%grads.length];
+}
+
+function renderGuru(){
+  const q=($('gSearch')?.value||'').toLowerCase();
+  const list=STATE.guru.filter(g=>
+    (g.nama_lengkap||'').toLowerCase().includes(q)||
+    (g.satuan_pendidikan||'').toLowerCase().includes(q)||
+    (g.email||'').toLowerCase().includes(q)
+  );
+
+  $('guruTable').innerHTML=`
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-slate-100 dark:border-slate-800">
+            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase">Guru</th>
+            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase hidden md:table-cell">Sekolah</th>
+            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase">Foto</th>
+            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase text-right">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.length===0?`
+            <tr><td colspan="4" class="px-4 py-10 text-center text-xs text-slate-400">
+              ${q?'Tidak ada guru cocok dengan pencarian.':'Belum ada data guru.'}
+            </td></tr>`:
+            list.map(g=>{
+              const gid=g.id||g.guru_id;
+              const pref=STATE.guruPrefs[gid];
+              const hasCustom=!!pref?.foto_url;
+              const statusAktif=(g.status_akun||'Aktif')==='Aktif';
+              const inisial=guruInitials(g.nama_lengkap);
+              const grad=getGuruGradient(gid);
+              return `
+                <tr class="border-b border-slate-50 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                  <td class="px-4 py-3">
+                    <div class="flex items-center gap-3">
+                      <div class="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-white text-[12px] font-black shadow-sm" style="background:${grad}">${esc(inisial)}</div>
+                      <div class="min-w-0">
+                        <p class="text-xs font-bold text-slate-700 truncate">${esc(g.nama_lengkap||'—')}</p>
+                        <p class="text-[10px] text-slate-400 truncate">${esc(g.email||'—')}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-xs text-slate-500 hidden md:table-cell">${esc(g.satuan_pendidikan||'—')}</td>
+                  <td class="px-4 py-3">
+                    ${hasCustom
+                      ?`<span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full bg-emerald-100 text-emerald-700"><i data-lucide="check" class="w-3 h-3"></i>Custom</span>`
+                      :`<span class="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full bg-slate-100 text-slate-500">SSO</span>`}
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <span class="hidden md:inline-flex text-[9px] font-black uppercase px-2 py-1 rounded ${statusAktif?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${esc(g.status_akun||'Aktif')}</span>
+                      <button onclick="viewGuruProfile('${esc(gid)}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-600 active:scale-95 transition flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>Lihat</button>
+                      ${hasCustom?`<button onclick="deleteGuruProfilePhoto('${esc(gid)}','${esc(g.nama_lengkap||'')}')" class="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-amber-50 text-amber-600 active:scale-95 transition flex items-center gap-1"><i data-lucide="image-off" class="w-3 h-3"></i>Reset</button>`:''}
+                    </div>
+                  </td>
+                </tr>`;
+            }).join('')}
+        </tbody>
+      </table>
     </div>`;
-  }).join('')||'<p class="text-xs text-slate-400">Belum ada penukaran.</p>';
   icons();
 }
-function openRewardEditor(id){
-  STATE.editReward=id||null;
-  $('rTitle').textContent=id?'Edit Reward':'Reward Baru';
-  $('rDelete').classList.toggle('hidden',!id);
-  const r=id?STATE.rewards.find(x=>x.id===id):null;
-  $('rJudul').value=r?r.judul:'';
-  $('rDesk').value=r?r.deskripsi||'':'';
-  $('rBiaya').value=r?r.biaya_poin:50;
-  $('rStok').value=r?r.stok:-1;
-  $('rLink').value=r?r.link||'':'';
-  $('rActive').checked=r?r.is_active:true;
-  openModal('mReward');
+const renderGuruDebounced=debounce(renderGuru,200);
+
+function viewGuruProfile(gid){
+  const g=STATE.guru.find(x=>(x.id||x.guru_id)===gid);
+  if(!g)return;
+  const pref=STATE.guruPrefs[gid];
+  const hasCustom=!!pref?.foto_url;
+  const ssoUrl=fotoUrl(gid,false);
+  const customUrl=pref?.foto_url||null;
+  const inisial=guruInitials(g.nama_lengkap);
+  const grad=getGuruGradient(gid);
+  const sos=pref?.sosial||{};
+
+  const html=`
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <p class="text-base font-extrabold text-slate-800">Profil Guru</p>
+        <button onclick="closeModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-white text-lg font-black shadow-sm" style="background:${grad}">${esc(inisial)}</div>
+        <div class="min-w-0">
+          <p class="text-base font-extrabold text-slate-800 leading-tight">${esc(g.nama_lengkap||'—')}</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">${esc(g.jabatan||'Guru')}</p>
+          <p class="text-[10px] text-slate-400 mt-0.5">${esc(g.satuan_pendidikan||'—')} · NPSN ${esc(g.npsn||'—')}</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Foto SSO</p>
+          <div class="aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
+            <img src="${esc(ssoUrl)}" class="w-full h-full object-cover" loading="lazy" alt="" onerror="this.style.opacity='0.3'">
+          </div>
+        </div>
+        <div>
+          <p class="text-[10px] font-black uppercase tracking-wider ${hasCustom?'text-emerald-600':'text-slate-400'} mb-2">Foto Custom</p>
+          <div class="aspect-square rounded-2xl overflow-hidden ${hasCustom?'bg-white border border-emerald-200':'bg-slate-100 border border-slate-200 flex items-center justify-center'}">
+            ${hasCustom?`<img src="${esc(customUrl)}" class="w-full h-full object-cover" loading="lazy" alt="">`:`<span class="text-[10px] text-slate-400 font-bold">Belum ada</span>`}
+          </div>
+        </div>
+      </div>
+
+      ${hasCustom&&pref?.foto_updated_at?`<p class="text-[10px] text-slate-400 text-center">Foto custom diunggah: ${new Date(pref.foto_updated_at).toLocaleString('id-ID')}</p>`:''}
+
+      ${(sos.ig||sos.tiktok||sos.fb||sos.yt)?`
+        <div class="pt-3 border-t border-slate-100">
+          <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-2">Sosial Media</p>
+          <div class="flex flex-wrap gap-1.5">
+            ${sos.ig?`<span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">IG @${esc(sos.ig)}</span>`:''}
+            ${sos.tiktok?`<span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">TT @${esc(sos.tiktok)}</span>`:''}
+            ${sos.fb?`<span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">FB ${esc(sos.fb)}</span>`:''}
+            ${sos.yt?`<span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">YT ${esc(sos.yt)}</span>`:''}
+          </div>
+        </div>`:''}
+
+      <div class="pt-3 border-t border-slate-100 text-[10px] text-slate-400">
+        <p>guru_id: <span class="font-mono">${esc(gid)}</span></p>
+        <p class="mt-0.5">Status: ${esc(g.status_akun||'Aktif')}</p>
+      </div>
+
+      <div class="pt-2 flex gap-2">
+        ${hasCustom?`<button onclick="closeModal('mPop');deleteGuruProfilePhoto('${esc(gid)}','${esc(g.nama_lengkap||'')}')" class="flex-1 bg-amber-50 text-amber-600 font-bold py-3 rounded-xl text-xs active:scale-[.98] transition flex items-center justify-center gap-1.5"><i data-lucide="image-off" class="w-3.5 h-3.5"></i>Reset Foto Custom</button>`:''}
+        <button onclick="closeModal('mPop')" class="flex-1 bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-xs active:scale-[.98] transition">Tutup</button>
+      </div>
+    </div>`;
+
+  $('popContent').innerHTML=html;
+  openModal('mPop');
+  icons();
 }
-async function saveReward(){
-  const row={
-    judul:$('rJudul').value.trim(),
-    deskripsi:$('rDesk').value.trim(),
-    biaya_poin:parseInt($('rBiaya').value)||50,
-    stok:parseInt($('rStok').value),
-    link:$('rLink').value.trim(),
-    is_active:$('rActive').checked
-  };
-  if(!row.judul)return toast('Judul wajib','error');
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    if(STATE.editReward){
-      const idx=STATE.rewards.findIndex(m=>m.id===STATE.editReward);
-      if(idx>=0)STATE.rewards[idx]={...STATE.rewards[idx],...row};
-      queuePending({action:'update_reward',id:STATE.editReward,data:row});
-    }else{
-      STATE.rewards.push({...row,id:tempId});
-      queuePending({action:'add_reward',data:row,tempId});
+
+function deleteGuruProfilePhoto(gid,namaGuru){
+  confirmDialog(`Reset foto profil ${namaGuru||'guru ini'}? Foto akan kembali ke default SSO.`,async()=>{
+    try{
+      await sb.storage.from('profile-photos').remove([`${gid}/avatar.webp`]);
+    }catch(e){console.warn('storage cleanup',e);}
+
+    const {error}=await sb.from('creative_user_preferences').update({
+      foto_url:null,
+      foto_updated_at:null
+    }).eq('guru_id',gid);
+
+    if(error)return toast('Gagal: '+error.message,'error');
+
+    if(STATE.guruPrefs[gid]){
+      STATE.guruPrefs[gid].foto_url=null;
+      STATE.guruPrefs[gid].foto_updated_at=null;
     }
-    saveCache();renderRewardsAdmin();closeModal('mReward');
-    toast('Disimpan offline','warning');
-    return;
-  }
-  closeModal('mReward');
-  const q=STATE.editReward
-    ?sb.from('creative_rewards').update(row).eq('id',STATE.editReward)
-    :sb.from('creative_rewards').insert(row);
-  const {error}=await q;
-  if(error)return toast(error.message,'error');
-  toast('Reward tersimpan','success');
-  loadAll();
-}
-function delReward(){
-  confirmDialog('Hapus reward ini?',async()=>{
-    if(!isOnline()){
-      queuePending({action:'delete_reward',id:STATE.editReward});
-      STATE.rewards=STATE.rewards.filter(r=>r.id!==STATE.editReward);
-      saveCache();renderRewardsAdmin();closeModal('mReward');
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
-    await sb.from('creative_rewards').delete().eq('id',STATE.editReward);
-    toast('Reward dihapus','success');
-    closeModal('mReward');
-    loadAll();
-  },'Hapus Reward?');
-}
-async function setRedemStatus(id,st){
-  if(!isOnline()){
-    queuePending({action:'update_redem',id,data:{status:st}});
-    const r=STATE.redem.find(x=>x.id===id);if(r)r.status=st;
-    saveCache();
-    toast('Update akan disinkronkan','warning');
-    return;
-  }
-  await sb.from('creative_redemptions').update({status:st}).eq('id',id);
-  toast('Status diperbarui','success');
-  loadAll();
+
+    toast('Foto profil direset ke SSO ✓');
+    renderGuru();
+  },'Reset Foto Profil?','Reset');
 }
 
 /* ============================================================
-   KUDOS
-   ============================================================ */
-function renderKudosAdmin(){
-  $('kudosTopAdmin').innerHTML=(STATE.kudosTop||[]).map((k,i)=>`
-    <div class="flex items-center gap-3">
-      <span class="w-7 h-7 rounded-full acc-soft acc-text text-[10px] font-black flex items-center justify-center">${i+1}</span>
-      <span class="flex-1 text-xs font-bold text-slate-700 truncate">${esc(k.nama_lengkap)}</span>
-      <span class="text-[10px] font-black text-rose-500">❤ ${k.jumlah}</span>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-
-  $('kudosList').innerHTML=STATE.kudos.map(k=>`
-    <div class="card p-4">
-      <p class="text-xs font-bold text-slate-700">→ ${esc(k.to_nama||'')}</p>
-      <p class="text-[11px] text-slate-500 mt-1">${esc(k.pesan||'—')}</p>
-      <p class="text-[10px] text-slate-400 mt-1">${new Date(k.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</p>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada.</p>';
-  icons();
-}
-/* ============================================================
-   INFO / BANNER / POPUP
+   INFO / BANNER
    ============================================================ */
 function fillInfo(){
   const c=STATE.config;
@@ -2347,13 +2333,6 @@ async function saveInfo(){
     versi:$('iVersi').value,
     updated_at:new Date().toISOString()
   };
-  if(!isOnline()){
-    queuePending({action:'save_info',id:STATE.config.id,data:row});
-    STATE.config={...STATE.config,...row};
-    saveCache();
-    toast('Disimpan offline — akan sync otomatis','warning');
-    return;
-  }
   const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);
   if(error)return toast(error.message,'error');
   toast('Tersimpan & live','success');
@@ -2390,23 +2369,7 @@ async function addNotif(){
     is_active:true
   };
   if(!row.judul)return toast('Judul wajib','error');
-  
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    STATE.notifs.unshift({...row,id:tempId,scheduled_at:new Date().toISOString()});
-    queuePending({action:'add_notif',data:row,tempId});
-    saveCache();renderNotif();
-    $('iNotJudul').value='';
-    $('iNotPesan').value='';
-    $('iNotGambar').value='';
-    $('iNotLink').value='';
-    $('iNotScopeType').value='all';
-    $('iNotScopeVal').value='';
-    scopeHint();
-    toast('Disimpan offline','warning');
-    return;
-  }
-  
+
   const {error}=await sb.from('creative_notifications').insert(row);
   if(error)return toast(error.message,'error');
   $('iNotJudul').value='';
@@ -2422,48 +2385,29 @@ async function addNotif(){
 
 function renderNotif(){
   $('notList').innerHTML=STATE.notifs.map(n=>{
-    const isPending=n.id&&String(n.id).startsWith('tmp-');
     const scopeBadge=(n.scope_type&&n.scope_type!=='all')
       ?`<span class="text-[8px] font-black bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded uppercase ml-1">KHUSUS: ${esc(n.scope_type)}</span>`
       :'';
-    return `<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-60'} ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
+    return `<div class="card p-4 flex items-center gap-3 ${n.is_active?'':'opacity-60'}">
       ${n.gambar?`<img src="${esc(n.gambar)}" class="w-10 h-10 rounded-lg object-cover shrink-0" alt="">`:''}
       <div class="flex-1 min-w-0">
-        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(n.judul)} ${!n.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">OFF</span>':''}${scopeBadge} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(n.judul)} ${!n.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">OFF</span>':''}${scopeBadge}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(n.pesan)}${n.link?' · 🔗':''}</p>
       </div>
-      <button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100'} active:scale-95 transition">
-        ${n.is_active?'AKTIF':'OFF'}
-      </button>
-      <button onclick="delNotif('${n.id}')" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90">
-        <i data-lucide="trash-2" class="w-4 h-4"></i>
-      </button>
+      <button onclick="toggleNotif(${n.id},${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100'} active:scale-95 transition">${n.is_active?'AKTIF':'OFF'}</button>
+      <button onclick="delNotif(${n.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     </div>`;
-  }).join('')||'<p class="text-xs text-slate-400">Belum ada notifikasi.</p>';
+  }).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada notifikasi.</p>';
   icons();
 }
 
 async function toggleNotif(id,act){
-  if(!isOnline()||String(id).startsWith('tmp-')){
-    queuePending({action:'toggle_notif',id,data:{is_active:act}});
-    const n=STATE.notifs.find(x=>x.id===id);if(n)n.is_active=act;
-    saveCache();renderNotif();
-    toast('Update akan disinkronkan','warning');
-    return;
-  }
   await sb.from('creative_notifications').update({is_active:act}).eq('id',id);
   loadAll();
 }
 
 function delNotif(id){
   confirmDialog('Hapus notifikasi ini?',async()=>{
-    if(!isOnline()||String(id).startsWith('tmp-')){
-      queuePending({action:'delete_notif',id});
-      STATE.notifs=STATE.notifs.filter(n=>n.id!==id);
-      saveCache();renderNotif();
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
     await sb.from('creative_notifications').delete().eq('id',id);
     toast('Notifikasi dihapus','success');
     loadAll();
@@ -2471,24 +2415,8 @@ function delNotif(id){
 }
 
 /* ============================================================
-   FOOTER — Auto-kategori
+   FOOTER
    ============================================================ */
-const FOOTER_CAT_MAP={
-  instagram:'Sosial Media',facebook:'Sosial Media',youtube:'Sosial Media',
-  twitter:'Sosial Media','message-circle':'Sosial Media',send:'Sosial Media',
-  whatsapp:'Sosial Media',linkedin:'Sosial Media',tiktok:'Sosial Media',
-  globe:'Sumber Daya',link:'Sumber Daya','external-link':'Sumber Daya',
-  'link-2':'Sumber Daya',book:'Sumber Daya','book-open':'Sumber Daya',
-  school:'Sumber Daya','file-text':'Sumber Daya',folder:'Sumber Daya',
-  download:'Sumber Daya',cloud:'Sumber Daya',
-  info:'Informasi','help-circle':'Informasi',bell:'Informasi',
-  megaphone:'Informasi','alert-circle':'Informasi',newspaper:'Informasi'
-};
-function footerKategori(f){
-  const icon=(f.icon||'').toLowerCase();
-  return FOOTER_CAT_MAP[icon]||'Umum';
-}
-
 async function addFooter(){
   const row={
     judul:$('iFootJudul').value.trim(),
@@ -2498,17 +2426,7 @@ async function addFooter(){
   };
   if(!row.judul||!row.url)return toast('Judul & URL wajib','error');
   if(!/^https?:\/\//i.test(row.url))return toast('URL harus diawali http/https','error');
-  
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    STATE.footer.push({...row,id:tempId});
-    queuePending({action:'add_footer',data:row,tempId});
-    saveCache();renderFooter();
-    $('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';
-    toast('Disimpan offline','warning');
-    return;
-  }
-  
+
   const {error}=await sb.from('creative_footers').insert(row);
   if(error)return toast(error.message,'error');
   $('iFootJudul').value='';$('iFootUrl').value='';$('iFootIcon').value='';
@@ -2517,49 +2435,21 @@ async function addFooter(){
 }
 
 function renderFooter(){
-  const grouped={};
-  STATE.footer.forEach(f=>{
-    const k=footerKategori(f);
-    if(!grouped[k])grouped[k]=[];
-    grouped[k].push(f);
-  });
-  const catOrder=['Sumber Daya','Sosial Media','Informasi','Umum'];
-  const sortedCats=Object.keys(grouped).sort((a,b)=>catOrder.indexOf(a)-catOrder.indexOf(b));
-  
-  let html='';
-  sortedCats.forEach(kat=>{
-    const list=grouped[kat];
-    html+=`<p class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2 mt-3">${esc(kat)} · ${list.length}</p>`;
-    html+=list.map(f=>{
-      const isPending=f.id&&String(f.id).startsWith('tmp-');
-      return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
-        <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(f.icon||'globe','w-4 h-4')}</span>
-        <div class="flex-1 min-w-0">
-          <p class="text-xs font-extrabold text-slate-800 truncate">${esc(f.judul)} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
-          <p class="text-[10px] text-slate-500 truncate">${esc(f.url)}</p>
-        </div>
-        <a href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
-          <i data-lucide="external-link" class="w-4 h-4"></i>
-        </a>
-        <button onclick="delFooter('${f.id}')" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90">
-          <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-      </div>`;
-    }).join('');
-  });
-  $('footList').innerHTML=html||'<p class="text-xs text-slate-400">Belum ada footer.</p>';
+  $('footList').innerHTML=STATE.footer.map(f=>`
+    <div class="card p-4 flex items-center gap-3">
+      <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="${esc(f.icon||'globe')}" class="w-4 h-4"></i></span>
+      <div class="flex-1 min-w-0">
+        <p class="text-xs font-extrabold text-slate-800 truncate">${esc(f.judul)}</p>
+        <p class="text-[10px] text-slate-500 truncate">${esc(f.url)}</p>
+      </div>
+      <a href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+      <button onclick="delFooter(${f.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+    </div>`).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada footer.</p>';
   icons();
 }
 
 function delFooter(id){
   confirmDialog('Hapus footer ini?',async()=>{
-    if(!isOnline()||String(id).startsWith('tmp-')){
-      queuePending({action:'delete_footer',id});
-      STATE.footer=STATE.footer.filter(f=>f.id!==id);
-      saveCache();renderFooter();
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
     await sb.from('creative_footers').delete().eq('id',id);
     toast('Footer dihapus','success');
     loadAll();
@@ -2595,14 +2485,6 @@ function bacaFileQuotes(ev){
 async function imporQuotes(){
   const b=parseQuotesText($('qPaste').value);
   if(!b.length)return toast('Tidak ada data valid','error');
-  if(!isOnline()){
-    b.forEach(q=>queuePending({action:'add_quote',data:q}));
-    STATE.quotes=STATE.quotes.concat(b.map((q,i)=>({...q,id:'tmp-'+Date.now()+'-'+i})));
-    saveCache();renderQuotes();
-    $('qPaste').value='';
-    toast(b.length+' quote di-queue','warning');
-    return;
-  }
   const {error}=await sb.from('creative_quotes').insert(b);
   if(error)return toast(error.message,'error');
   toast(b.length+' quote diimpor','success');
@@ -2612,15 +2494,6 @@ async function imporQuotes(){
 async function addQuote(){
   const row={kutipan:$('iQuoteText').value.trim(),tokoh:$('iQuoteAuthor').value.trim()||'Anonim'};
   if(!row.kutipan)return toast('Kutipan wajib','error');
-  if(!isOnline()){
-    const tempId='tmp-'+Date.now();
-    STATE.quotes.push({...row,id:tempId});
-    queuePending({action:'add_quote',data:row,tempId});
-    saveCache();renderQuotes();
-    $('iQuoteText').value='';$('iQuoteAuthor').value='';
-    toast('Disimpan offline','warning');
-    return;
-  }
   const {error}=await sb.from('creative_quotes').insert(row);
   if(error)return toast(error.message,'error');
   $('iQuoteText').value='';$('iQuoteAuthor').value='';
@@ -2629,29 +2502,18 @@ async function addQuote(){
 }
 function renderQuotes(){
   $('qCount').textContent=STATE.quotes.length;
-  $('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>{
-    const isPending=q.id&&String(q.id).startsWith('tmp-');
-    return `<div class="card p-4 flex items-center gap-3 ${isPending?'border-amber-300 dark:border-amber-700/50':''}">
+  $('quoteList').innerHTML=STATE.quotes.slice().reverse().map(q=>`
+    <div class="card p-4 flex items-center gap-3">
       <div class="flex-1 min-w-0">
         <p class="text-xs italic text-slate-600">"${esc(q.kutipan)}"</p>
-        <p class="text-[10px] text-slate-400">— ${esc(q.tokoh)} ${isPending?'<span class="pending-badge ml-1">⏳</span>':''}</p>
+        <p class="text-[10px] text-slate-400">— ${esc(q.tokoh)}</p>
       </div>
-      <button onclick="delQuote('${q.id}')" aria-label="Hapus" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90">
-        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-      </button>
-    </div>`;
-  }).join('')||'<p class="text-xs text-slate-400">Belum ada quotes.</p>';
+      <button onclick="delQuote(${q.id})" aria-label="Hapus" class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+    </div>`).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada quotes.</p>';
   icons();
 }
 function delQuote(id){
   confirmDialog('Hapus quote ini?',async()=>{
-    if(!isOnline()||String(id).startsWith('tmp-')){
-      queuePending({action:'delete_quote',id});
-      STATE.quotes=STATE.quotes.filter(q=>q.id!==id);
-      saveCache();renderQuotes();
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
     await sb.from('creative_quotes').delete().eq('id',id);
     toast('Quote dihapus','success');
     loadAll();
@@ -2662,13 +2524,6 @@ function delQuote(id){
    FEEDBACK
    ============================================================ */
 async function setFbStatus(id,st){
-  if(!isOnline()){
-    queuePending({action:'update_feedback',id,data:{status:st}});
-    const f=STATE.fb.find(x=>x.id===id);if(f)f.status=st;
-    saveCache();updateNavBadge();
-    toast('Update akan disinkronkan','warning');
-    return;
-  }
   await sb.from('creative_feedback').update({status:st}).eq('id',id);
   toast('Status diperbarui','success');
   loadAll();
@@ -2680,123 +2535,28 @@ function renderFb(){
       <div class="flex items-center gap-2 flex-wrap">
         <span class="text-[10px] font-black px-2 py-1 rounded-lg acc-soft acc-text">${esc(x.tipe)}</span>
         <span class="text-[10px] text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span>
-        <select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
-          <option value="baru" ${x.status==='baru'?'selected':''}>🔴 Baru</option>
-          <option value="diproses" ${x.status==='diproses'?'selected':''}>🟡 Diproses</option>
-          <option value="selesai" ${x.status==='selesai'?'selected':''}>🟢 Selesai</option>
+        <select onchange="setFbStatus(${x.id},this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
+          <option value="baru" ${x.status==='baru'?'selected':''}>Baru</option>
+          <option value="diproses" ${x.status==='diproses'?'selected':''}>Diproses</option>
+          <option value="selesai" ${x.status==='selesai'?'selected':''}>Selesai</option>
         </select>
       </div>
       <p class="text-[13px] text-slate-600 mt-2">${esc(x.pesan)}</p>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Tidak ada.</p>';
+    </div>`).join('')||'<p class="text-xs text-slate-400 text-center py-6">Tidak ada feedback.</p>';
   icons();
   updateNavBadge();
 }
 
 /* ============================================================
-   GURU
-   ============================================================ */
-function renderGuru(){
-  const q=($('gSearch').value||'').toLowerCase();
-  const list=STATE.guru.filter(g=>(g.nama_lengkap||'').toLowerCase().includes(q)||(g.satuan_pendidikan||'').toLowerCase().includes(q));
-  $('guruTable').innerHTML=`
-    <div class="overflow-x-auto">
-      <table class="w-full text-left">
-        <thead>
-          <tr class="border-b border-slate-100">
-            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase">Nama</th>
-            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase">Sekolah</th>
-            <th class="px-4 py-3 text-[10px] font-black text-slate-500 uppercase">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${list.map(g=>`
-            <tr class="border-b border-slate-50 hover:bg-slate-50">
-              <td class="px-4 py-3">
-                <p class="text-xs font-bold text-slate-700">${esc(g.nama_lengkap)}</p>
-                <p class="text-[10px] text-slate-400">${esc(g.email||'')}</p>
-              </td>
-              <td class="px-4 py-3 text-xs text-slate-500">${esc(g.satuan_pendidikan||'')}</td>
-              <td class="px-4 py-3">
-                <span class="text-[9px] font-black px-2 py-1 rounded ${g.status_akun==='Aktif'?'acc-soft acc-text':'bg-slate-100 text-slate-500'}">${esc(g.status_akun||'Aktif')}</span>
-              </td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`;
-  icons();
-}
-const renderGuruDebounced=debounce(renderGuru,200);
-
-/* ============================================================
-   INSPIRASI
-   ============================================================ */
-async function toggleInsp(id,st){
-  if(!isOnline()){
-    queuePending({action:'update_insp',id,data:{status:st}});
-    const n=STATE.inspi.find(x=>x.id===id);if(n)n.status=st;
-    saveCache();renderInspirasi();
-    toast('Update akan disinkronkan','warning');
-    return;
-  }
-  await sb.from('creative_inspirasi').update({status:st}).eq('id',id);
-  loadAll();
-}
-function delInsp(id){
-  confirmDialog('Hapus inspirasi ini?',async()=>{
-    if(!isOnline()){
-      queuePending({action:'delete_insp',id});
-      STATE.inspi=STATE.inspi.filter(n=>n.id!==id);
-      saveCache();renderInspirasi();
-      toast('Akan dihapus saat online','warning');
-      return;
-    }
-    await sb.from('creative_inspirasi').delete().eq('id',id);
-    toast('Inspirasi dihapus','success');
-    loadAll();
-  },'Hapus Inspirasi?');
-}
-function purgeInspirasi(){
-  confirmDialog('Purge inspirasi yang lebih tua dari 30 hari?',async()=>{
-    const {data}=await sb.rpc('creative_admin_purge_inspirasi',{p_hari:30});
-    toast((data||0)+' dipurge','success');
-    loadAll();
-  },'Purge Inspirasi?');
-}
-function renderInspirasi(){
-  $('inspList').innerHTML=STATE.inspi.map(n=>`
-    <div class="card p-4 space-y-2 ${n.status==='aktif'?'':'opacity-60'}">
-      <p class="text-[13px] text-slate-600">${esc(n.isi)}</p>
-      <p class="text-[10px] text-slate-400">${esc(n.nama)} · ❤ ${n.likes||0}</p>
-      <div class="flex gap-2">
-        <button onclick="toggleInsp(${n.id},'${n.status==='aktif'?'disembunyikan':'aktif'}')" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.status==='aktif'?'bg-slate-100 text-slate-500':'acc-soft acc-text'} active:scale-95 transition">
-          ${n.status==='aktif'?'SEMBUNYIKAN':'TAYANGKAN'}
-        </button>
-        <button onclick="delInsp(${n.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center active:scale-90">
-          <i data-lucide="trash-2" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>`).join('')||'<p class="text-xs text-slate-400">Belum ada inspirasi.</p>';
-  icons();
-}
-
-/* ============================================================
    ONLINE / OFFLINE
    ============================================================ */
-window.addEventListener('online',()=>{
-  setSyncState('synced');
-  toast('Kembali online — sync antrian…','info');
-  syncPending();
-});
-window.addEventListener('offline',()=>{
-  setSyncState('offline');
-  toast('Anda offline. Perubahan akan disimpan lokal.','warning');
-});
+window.addEventListener('online',()=>setSyncState('synced'));
+window.addEventListener('offline',()=>setSyncState('offline'));
 
 /* ============================================================
    KEYBOARD SHORTCUTS
    ============================================================ */
 document.addEventListener('keydown',e=>{
-  // Ctrl+K → focus search
   if((e.ctrlKey||e.metaKey)&&e.key==='k'){
     e.preventDefault();
     const m=$('mSearch');
@@ -2805,13 +2565,13 @@ document.addEventListener('keydown',e=>{
     if(d&&!$('sec-dokumen').classList.contains('hidden')){d.focus();return;}
     const g=$('gSearch');
     if(g&&!$('sec-guru').classList.contains('hidden')){g.focus();return;}
+    const s=$('schoolAdminSearch');
+    if(s&&!$('sec-schools').classList.contains('hidden')){s.focus();return;}
   }
-  // Ctrl+Shift+D → toggle debug
   if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==='d'){
     e.preventDefault();
     toggleDebug();
   }
-  // Escape → close modal/drawer
   if(e.key==='Escape'){
     document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'));
     closeDrawer();
@@ -2819,9 +2579,35 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ============================================================
-   INITIAL LOG
+   BOOT
    ============================================================ */
-dbg('admin.html v5.1 loaded','success');
+(async function boot(){
+  initTheme();
+  if(localStorage.getItem(KEYS.DEBUG)==='1'){
+    const panel=$('debug-panel');if(panel)panel.classList.add('show');
+  }
+  if(new URLSearchParams(location.search).get('debug')==='1'){
+    const panel=$('debug-panel');if(panel)panel.classList.add('show');
+  }
+  setSyncState(navigator.onLine?'synced':'offline');
+  icons();
+
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){
+    const {data:isAdmin}=await sb.rpc('creative_is_admin');
+    if(isAdmin){
+      const email=session?.user?.email||'admin';
+      $('adminEmail').textContent=email;
+      $('adminEmailMobile').textContent=email;
+      $('drawerEmail').textContent=email;
+      $('scrLogin').classList.add('hidden');
+      $('scrApp').classList.remove('hidden');
+      buildNav();
+      loadAll();
+    }
+  }
+  dbg('Boot complete v5.2','success');
+})();
 </script>
 </body>
 </html>
