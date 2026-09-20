@@ -3327,10 +3327,53 @@ async function doForceSync(){
   toast('Update terbaru diterapkan ✓');
 }
 function recordLastSync(){try{localStorage.setItem('gb_last_sync',String(Date.now()));}catch(e){}}
-function showLastSync(){
-  const t=localStorage.getItem('gb_last_sync');
-  const el=$('lastSyncLbl');
-  if(el)el.textContent=t?('· terakhir '+waktuRelatif(parseInt(t,10))):'';
+function showLastSync() {
+  const t = localStorage.getItem('gb_last_sync');
+  const el = $('lastSyncLbl');
+  if (el) el.textContent = t ? ('· terakhir ' + waktuRelatif(parseInt(t, 10))) : '';
+}
+
+/* ============================================================
+   AUTO REFRESH — v4.63
+   "Fresh saat dibutuhkan, bukan selalu fresh"
+
+   Trigger:
+   - Saat user balik ke app (dari background)
+   - Saat user balik dari idle > 15 menit
+
+   Guard:
+   - Skip kalau belum login
+   - Skip kalau < 60 detik dari refresh terakhir
+   - Tetap pakai TTL — hanya refresh data yang expired
+   ============================================================ */
+let _lastAutoRefresh = 0;
+let _lastInteraction = Date.now();
+const AUTO_REFRESH_MIN_GAP = 60 * 1000; // minimal 60 detik antar refresh
+const IDLE_THRESHOLD = 15 * 60 * 1000; // 15 menit dianggap idle
+
+function autoRefresh(reason) {
+  if (!STATE.profile) return; // belum login
+  if (document.hidden) return; // app masih di background
+  if (Date.now() - _lastAutoRefresh < AUTO_REFRESH_MIN_GAP) return; // hindari spam
+  _lastAutoRefresh = Date.now();
+  silentRefresh(false); // TTL-based, ringan
+}
+
+function initAutoRefresh() {
+  /* Trigger 1 — balik dari background */
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) autoRefresh('visibility');
+  });
+  
+  /* Trigger 2 — balik dari idle */
+  ['touchstart', 'mousedown', 'keydown', 'wheel'].forEach(ev => {
+    document.addEventListener(ev, () => {
+      if (Date.now() - _lastInteraction > IDLE_THRESHOLD) {
+        autoRefresh('idle');
+      }
+      _lastInteraction = Date.now();
+    }, { passive: true });
+  });
 }
 
 /* ============================================================
@@ -3768,15 +3811,16 @@ async function submitFb() {
 /* ============================================================
    BOOT
    ============================================================ */
-(async function boot(){
-  initPrefs();
-  setSapaan();
-  initPWA();
-  initSheetSwipe();
-  initDialogScrollDismiss();
-  initCtxMenuScrollDismiss();
-  initQuickLongPress();
-  updateOnlineStatus();
+(async function boot() {
+      initPrefs();
+      setSapaan();
+      initPWA();
+      initSheetSwipe();
+      initDialogScrollDismiss();
+      initCtxMenuScrollDismiss();
+      initQuickLongPress();
+      initAutoRefresh(); // ← v4.63: refresh saat app balik aktif
+      updateOnlineStatus();
   if('serviceWorker' in navigator){
     window.addEventListener('load',()=>{
       navigator.serviceWorker.register('sw.js').then(()=>console.log('SW aktif')).catch(e=>console.warn('SW gagal:',e));
