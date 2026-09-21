@@ -268,6 +268,76 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .menu-icon-img{border-radius:var(--r-md);object-fit:cover;background:#F1F5F9}
 
   /* ============================================
+     WORKSTATION STUDIO — v4.80
+     ============================================ */
+  .ws-mini-hdr{display:flex;align-items:center;gap:10px;padding:4px 0 12px}
+  .ws-hdr-avatar{width:44px;height:44px;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);flex-shrink:0;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+  .ws-hdr-avatar img{width:100%;height:100%;object-fit:cover}
+  .ws-resume{
+    background:linear-gradient(135deg,var(--acc),var(--acc2));
+    border-radius:20px;padding:16px;position:relative;overflow:hidden;color:#fff;
+  }
+  .ws-resume::after{
+    content:'';position:absolute;top:-40px;right:-40px;
+    width:140px;height:140px;border-radius:9999px;background:rgba(255,255,255,.08);
+  }
+  .ws-resume-inner{position:relative;display:flex;align-items:center;gap:12px}
+  .ws-resume-preview{
+    width:64px;height:96px;border-radius:14px;overflow:hidden;
+    background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .ws-resume-preview img{width:100%;height:100%;object-fit:cover}
+  .ws-resume-arrow{
+    width:40px;height:40px;border-radius:14px;
+    background:rgba(255,255,255,.2);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.3);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;flex-shrink:0;transition:transform .15s;border:0;
+  }
+  .ws-resume-arrow:active{transform:scale(.9)}
+  .ws-tabs{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--border);border-radius:16px;margin-top:16px}
+  .ws-tab{flex:1;padding:10px 8px;border-radius:12px;font-size:11.5px;font-weight:800;border:0;background:transparent;color:#64748B;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .ws-tab.on{background:#fff;box-shadow:0 1px 3px rgba(20,18,26,.1);color:var(--acc-text)}
+  html.dark .ws-tab.on{background:#2A2F38;box-shadow:none;color:var(--acc-text)}
+  .ws-tpl{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:16px;overflow:hidden;cursor:pointer;transition:all .15s;
+    display:flex;flex-direction:column;
+  }
+  .ws-tpl:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(20,18,26,.08);border-color:var(--acc)}
+  .ws-tpl:active{transform:translateY(0) scale(.98)}
+  .ws-tpl-thumb{aspect-ratio:9/16;position:relative;overflow:hidden}
+  .ws-tpl-thumb-sq{aspect-ratio:1/1}
+  .ws-tpl-thumb-img{position:absolute;top:0;left:0;right:0;height:62%;background:rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55)}
+  .ws-tpl-thumb-img-sq{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;gap:6px}
+  .ws-tpl-label{padding:8px 6px;font-size:10px;font-weight:800;color:#1E293B;text-align:center;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  html.dark .ws-tpl-label{color:#E8EBF0}
+  .ws-seeall{aspect-ratio:9/16;border-radius:16px;border:1.5px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all .15s;background:transparent}
+  .ws-seeall:hover{border-color:var(--acc);background:var(--acc-soft)}
+  .ws-seeall-ico{width:40px;height:40px;border-radius:14px;background:var(--acc-soft);color:var(--acc-text);display:flex;align-items:center;justify-content:center}
+  html.dark .ws-seeall-ico{background:rgba(20,184,166,.15);color:var(--acc-text)}
+  .ws-seeall-lbl{font-size:9px;font-weight:900;color:#64748B;text-transform:uppercase;letter-spacing:.08em}
+  .ws-seeall-sq{aspect-ratio:1/1}
+  .ws-sec-label{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#94A3B8;padding:0 4px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+  .ws-sec-label-btn{font-size:10px;font-weight:800;color:var(--acc-text);background:none;border:0;cursor:pointer;padding:0}
+  .ws-sec-label-btn:active{opacity:.7}
+  .ws-draft{padding:14px;background:var(--card);border:1px solid var(--border);border-radius:18px}
+  .ws-draft-input{width:100%;background:transparent;border:0;outline:none;font-size:12px;line-height:1.55;color:#1E293B;resize:none;font-family:inherit;padding:0}
+  html.dark .ws-draft-input{color:#E8EBF0}
+  .ws-draft-input::placeholder{color:#94A3B8}
+  .ws-draft-actions{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+  .ws-draft-btn{flex:1;padding:8px;border-radius:10px;font-size:10.5px;font-weight:800;border:0;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+  .ws-draft-btn-sec{background:#F1F5F9;color:#475569}
+  html.dark .ws-draft-btn-sec{background:#282D36;color:#B5BCC8}
+  .ws-draft-btn-sec:active{transform:scale(.96)}
+  .ws-draft-btn-pri{background:var(--acc);color:#fff}
+  .ws-draft-btn-pri:active{transform:scale(.96)}
+  .ws-karya{aspect-ratio:9/16;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;transition:transform .15s;display:flex;align-items:flex-end;padding:6px}
+  .ws-karya:active{transform:scale(.95)}
+  .ws-karya-lbl{font-size:7px;font-weight:900;color:#fff;text-align:center;line-height:1.1;width:100%;text-shadow:0 1px 2px rgba(0,0,0,.4);position:relative;z-index:1}
+
+  /* ============================================
      TOAST
      ============================================ */
   #toastContainer{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 1rem);z-index:90;width:max-content;max-width:92vw;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
@@ -781,12 +851,89 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <!-- ============================================
            PAGE: BAGI
            ============================================ -->
+      <!-- ============================================
+           PAGE: BAGI (Workstation Studio)
+           ============================================ -->
       <section id="pageBagi" class="hidden space-y-4 min-w-0">
 
-        <!-- Catatan Saya -->
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Catatan Saya</p>
+        <!-- 1. MINI HEADER -->
+        <div class="ws-mini-hdr">
+          <div class="ws-hdr-avatar">
+            <img id="wsHdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" alt="Avatar" loading="lazy">
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[13px] font-extrabold text-slate-800 leading-tight truncate">Studio Kreatif</p>
+            <p id="wsHdrSub" class="text-[10px] text-slate-500 truncate">Tamu · Portal Selogiri</p>
+          </div>
+          <button onclick="openStudioSettings()" aria-label="Kustomisasi Studio" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+            <i data-lucide="settings-2" class="w-4 h-4 text-slate-600"></i>
+          </button>
+        </div>
+
+        <!-- 2. RESUME CARD -->
+        <div id="wsResumeWrap"></div>
+
+        <!-- 3. TABS -->
+        <div class="ws-tabs">
+          <button id="wsTabFoto" onclick="switchStudioTab('foto')" class="ws-tab on">
+            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+            Foto WA
+          </button>
+          <button id="wsTabKartu" onclick="switchStudioTab('kartu')" class="ws-tab">
+            <i data-lucide="layout-template" class="w-3.5 h-3.5"></i>
+            Kartu
+          </button>
+        </div>
+
+        <!-- 4. PANEL FOTO -->
+        <div id="wsPanelFoto" class="grid grid-cols-3 gap-2"></div>
+
+        <!-- 5. PANEL KARTU -->
+        <div id="wsPanelKartu" class="grid grid-cols-3 gap-2 hidden"></div>
+
+        <!-- 6. CATATAN DRAFT -->
+        <div class="pt-2">
+          <div class="ws-sec-label">
+            <span>Catatan Hari Ini</span>
+            <button onclick="navToCatatan()" class="ws-sec-label-btn flex items-center gap-1">
+              Lihat semua <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </button>
+          </div>
+          <div class="ws-draft">
+            <div class="flex items-start gap-2">
+              <span class="w-7 h-7 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="pencil-line" class="w-3.5 h-3.5"></i>
+              </span>
+              <textarea id="wsDraftInput" rows="2" placeholder="Hari ini saya…" class="ws-draft-input flex-1"></textarea>
+            </div>
+            <div class="ws-draft-actions">
+              <button onclick="simpanDraftQuick()" class="ws-draft-btn ws-draft-btn-sec">
+                <i data-lucide="save" class="w-3 h-3"></i>
+                Simpan
+              </button>
+              <button onclick="buatWADariDraft()" class="ws-draft-btn ws-draft-btn-pri">
+                <i data-lucide="image-plus" class="w-3 h-3"></i>
+                Buat WA
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. KARYA SAYA -->
+        <div id="wsKaryaWrap" class="pt-2 hidden">
+          <div class="ws-sec-label">
+            <span>Karya Saya · <span id="wsKaryaCount">0</span></span>
+            <button onclick="bukaGaleriKarya()" class="ws-sec-label-btn flex items-center gap-1">
+              Galeri <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </button>
+          </div>
+          <div id="wsKaryaGrid" class="grid grid-cols-4 gap-2"></div>
+        </div>
+
+        <!-- 8. RIWAYAT CATATAN -->
+        <div id="postSectionWrap" class="hidden pt-2">
+          <div class="ws-sec-label">
+            <span>Catatan Tersimpan</span>
             <span id="myPostCount" class="text-[10px] font-bold text-slate-400"></span>
           </div>
 
@@ -822,32 +969,11 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
               <option value="belajar">Momen Belajar</option>
               <option value="info">Info</option>
             </select>
-            <button onclick="submitPost()" id="postSubmitBtn" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Bagikan Catatan</button>
+            <button onclick="submitPost()" id="postSubmitBtn" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan Catatan</button>
           </div>
 
           <div id="postList" class="space-y-2 mt-2"></div>
           <button id="postMore" onclick="morePost()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
-        </div>
-
-        <!-- Status WA — Photo-first Builder -->
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Status WA</p>
-            <span class="text-[10px] text-slate-400">Foto + teks, siap share</span>
-          </div>
-          <div id="waStatusGrid" class="grid grid-cols-3 md:grid-cols-5 gap-2"></div>
-        </div>
-
-        <!-- Studio Kreatif -->
-        <div>
-          <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Studio Kreatif</p>
-          <div id="tplGrid" class="grid grid-cols-3 md:grid-cols-6 gap-2"></div>
-        </div>
-
-        <!-- Karya Saya -->
-        <div id="karyaWrap" class="hidden">
-          <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">Karya Saya</p>
-          <div id="karyaList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
         </div>
 
       </section>
@@ -1383,7 +1509,9 @@ const STATE={
   favs:new Set(JSON.parse(localStorage.getItem('gb_favs')||'[]')),
   favsDok:new Set(JSON.parse(localStorage.getItem('gb_favs_dok')||'[]')),
   favsAgenda:new Set(JSON.parse(localStorage.getItem('gb_favs_agenda')||'[]')),
-  filterLayanan:'all'
+  filterLayanan:'all',
+  studioTab:'foto',
+  studioResume:null
 };
 
 const COLOR={
@@ -3703,6 +3831,94 @@ async function loadLucideSvg(name, color, size){
     return null;
   }
 }
+/* ============================================================
+   USER AVATAR — untuk watermark footer
+   ============================================================ */
+let userAvatarImg = null;
+let userAvatarGid = null;
+
+async function ensureUserAvatarLoaded(){
+  const gid = guruId();
+  if(!gid) return null;
+  if(userAvatarImg && userAvatarGid === gid) return userAvatarImg;
+
+  try {
+    let url = null;
+    // 1. Custom override
+    try {
+      const { data: pref } = await sb.from('creative_user_preferences')
+        .select('foto_url').eq('guru_id', gid).maybeSingle();
+      if(pref?.foto_url) url = pref.foto_url;
+    } catch(_) {}
+
+    // 2. IndexedDB cache
+    if(!url) url = await fotoCacheGet(gid);
+
+    // 3. SSO
+    if(!url) url = fotoUrl(gid, false);
+
+    if(!url) return null;
+
+    userAvatarImg = await loadImg(url);
+    userAvatarGid = gid;
+    return userAvatarImg;
+  } catch(e){
+    console.warn('[userAvatar]', e);
+    return null;
+  }
+}
+
+/* Draw avatar circle dengan cover + fallback initial */
+function drawAvatarCircle(ctx, img, cx, cy, r, nama, s){
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, 7);
+  ctx.closePath();
+
+  if(img){
+    ctx.clip();
+    const ir = img.width / img.height;
+    let dw, dh, dx, dy;
+    if(ir > 1){
+      dh = 2 * r;
+      dw = dh * ir;
+      dx = cx - dw / 2;
+      dy = cy - r;
+    } else {
+      dw = 2 * r;
+      dh = dw / ir;
+      dx = cx - r;
+      dy = cy - dh / 2;
+    }
+    ctx.drawImage(img, dx, dy, dw, dh);
+  } else {
+    // Fallback: gradient + initial
+    const acc  = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()  || '#0D9488';
+    const acc2 = getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim() || '#14B8A6';
+    const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+    grad.addColorStop(0, acc);
+    grad.addColorStop(1, acc2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    const ini = (nama || 'G').split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'G';
+    ctx.fillStyle = '#fff';
+    ctx.font = `900 ${Math.round(r * 1.1)}px Inter, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(ini, cx, cy);
+    ctx.textBaseline = 'alphabetic';
+  }
+  ctx.restore();
+
+  // Border putih
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, 7);
+  ctx.strokeStyle = 'rgba(255,255,255,.6)';
+  ctx.lineWidth = 3 * s;
+  ctx.stroke();
+}
+
 let fontsExtra=false;
 function loadExtraFonts(){
   if(fontsExtra)return;
@@ -3728,7 +3944,7 @@ function openStudio(tpl,pre,opts){
     photoSmall:null,
     showFoot:true,
     showTag:true,
-    showSchoolLogo:true,
+    showSchoolLogo:false,
     tagText:'#GuruBerbagiSelogiri #GTKSelogiri'
   };
 
@@ -3739,6 +3955,17 @@ function openStudio(tpl,pre,opts){
   buildControls();
   openModal('mStudio');
   renderStudio();
+
+  // Track sebagai "terakhir dibuka" untuk Resume card
+  try {
+    localStorage.setItem('gb_studio_last', JSON.stringify({
+      waMode,
+      tpl,
+      fields: STATE.studio.fields,
+      thumb: null,
+      t: Date.now()
+    }));
+  } catch(_) {}
 
   if(!schoolLogoImg && STATE.profile?.npsn){
     ensureSchoolLogoLoaded().then(img=>{
@@ -3803,9 +4030,15 @@ function buildControls(){
     h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Footnote aplikasi ${sw('showFoot',st.showFoot)}</div>`;
   }
   if(schoolLogoImg){
-    h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Logo Sekolah ${sw('showSchoolLogo',st.showSchoolLogo)}</div>`;
+    h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">
+      <span class="flex items-center gap-1.5">
+        Logo Sekolah
+        <span class="text-[9px] font-normal text-slate-400">(opsional)</span>
+      </span>
+      ${sw('showSchoolLogo',st.showSchoolLogo)}
+    </div>`;
   }else if(STATE.profile?.npsn){
-    h+=`<p class="text-[10px] text-slate-400 italic">Logo sekolah belum tersedia. Upload di Profil → Sekolah Saya.</p>`;
+    h+=`<p class="text-[10px] text-slate-400 italic">Logo sekolah belum tersedia. Upload di Profil → Sekolah Saya (opsional).</p>`;
   }
   h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Hashtag ${sw('showTag',st.showTag)}</div><input value="${esc(st.tagText)}" oninput="STATE.studio.tagText=this.value;queueStudio()" placeholder="Hashtag kustom" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring"></div>`;
   $('stControls').innerHTML=h;
@@ -3947,21 +4180,34 @@ async function renderStudio(){
     ctx.fillText(st.tagText,W-60*s,H-200*s);
   }
   if(st.showFoot){
-    const ls=120*s,lx=70*s,ly=H-190*s;
-    ctx.save();roundRect(ctx,lx,ly,ls,ls,28*s);ctx.clip();
-    ctx.fillStyle='#fff';ctx.fillRect(lx,ly,ls,ls);
-    if(logoImg){const z=ls*1.18;ctx.drawImage(logoImg,lx+(ls-z)/2,ly+(ls-z)/2,z,z);}
-    ctx.restore();
-    ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.95)';
-    ctx.font=`800 ${42*s}px Inter, sans-serif`;
-    ctx.fillText('Guru Berbagi',lx+ls+26*s,ly+ls/2-8*s);
-    ctx.fillStyle='rgba(255,255,255,.7)';ctx.font=`600 ${30*s}px Inter, sans-serif`;
-    ctx.fillText('Creative App',lx+ls+26*s,ly+ls/2+34*s);
-    const hd=handlesStr();
-    if(hd&&STATE.profile){
-      ctx.textAlign='right';ctx.fillStyle='rgba(255,255,255,.8)';
-      ctx.font=`600 ${30*s}px Inter, sans-serif`;
-      ctx.fillText(hd,W-70*s,ly+ls/2+10*s);
+    const avatarR = 60 * s;
+    const cx = 70 * s + avatarR;
+    const cy = H - 190 * s + avatarR;
+
+    const avatarImg = await ensureUserAvatarLoaded();
+    drawAvatarCircle(ctx, avatarImg, cx, cy, avatarR, STATE.profile?.nama, s);
+
+    const nameX = 70 * s + avatarR * 2 + 26 * s;
+    const namaGuru = STATE.profile?.nama || 'Guru';
+    const namaSekolah = STATE.profile?.sekolah || '';
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(255,255,255,.95)';
+    ctx.font = `800 ${42*s}px Inter, sans-serif`;
+    ctx.fillText(namaGuru.length > 28 ? namaGuru.slice(0,28)+'…' : namaGuru, nameX, cy - 8 * s);
+
+    if(namaSekolah){
+      ctx.fillStyle = 'rgba(255,255,255,.7)';
+      ctx.font = `600 ${28*s}px Inter, sans-serif`;
+      ctx.fillText(namaSekolah.length > 32 ? namaSekolah.slice(0,32)+'…' : namaSekolah, nameX, cy + 32 * s);
+    }
+
+    const hd = handlesStr();
+    if(hd && STATE.profile){
+      ctx.textAlign = 'right';
+      ctx.fillStyle = 'rgba(255,255,255,.8)';
+      ctx.font = `600 ${30*s}px Inter, sans-serif`;
+      ctx.fillText(hd, W - 70 * s, cy + 10 * s);
     }
   }
 
@@ -3990,12 +4236,37 @@ async function renderStudio(){
 async function renderStudioWA(ctx, W, H, s){
   const st = STATE.studio;
   const f = st.fields;
+  const isLandscape = W > H;
+
+  // Load assets yang dibutuhkan
+  const avatarImg = await ensureUserAvatarLoaded();
+  const kat = KAT_WA[st.tpl] || { label: 'STATUS' };
+  const tpl = TPL_WA[st.tpl];
+  const katIconName = tpl?.i || 'image';
+
+  if(isLandscape){
+    await renderStudioWALandscape(ctx, W, H, s, { avatarImg, kat, katIconName });
+  } else {
+    await renderStudioWAPortrait(ctx, W, H, s, { avatarImg, kat, katIconName });
+  }
+}
+
+/* ============================================================
+   WA STATUS — Portrait (Story / Feed / Potret)
+   Foto atas 65% · Teks bawah 35%
+   ============================================================ */
+async function renderStudioWAPortrait(ctx, W, H, s, assets){
+  const st = STATE.studio;
+  const f = st.fields;
+  const { avatarImg, kat, katIconName } = assets;
   const fotoH = Math.round(H * 0.65);
   const pad = 70 * s;
 
+  // Background
   ctx.fillStyle = '#181B21';
   ctx.fillRect(0, 0, W, H);
 
+  // Foto / placeholder
   if (st.photo) {
     const img = st.photo;
     const ir = img.width / img.height;
@@ -4026,47 +4297,43 @@ async function renderStudioWA(ctx, W, H, s){
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, fotoH);
 
-    // Placeholder ikon Lucide "image"
-const phImg = await loadLucideSvg('image', 'rgba(255,255,255,0.7)', Math.round(120 * s));
-if (phImg) {
-  ctx.drawImage(phImg, W / 2 - 60 * s, fotoH / 2 - 100 * s, 120 * s, 120 * s);
-}
-ctx.textAlign = 'center';
-ctx.fillStyle = 'rgba(255,255,255,.85)';
-ctx.font = `600 ${30*s}px Inter, sans-serif`;
-ctx.fillText('Tap "Foto Latar" untuk pilih gambar', W / 2, fotoH / 2 + 80 * s);
+    const phImg = await loadLucideSvg('image', 'rgba(255,255,255,0.7)', Math.round(120 * s));
+    if (phImg) ctx.drawImage(phImg, W / 2 - 60 * s, fotoH / 2 - 100 * s, 120 * s, 120 * s);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = `600 ${30*s}px Inter, sans-serif`;
+    ctx.fillText('Tap "Foto Latar" untuk pilih gambar', W / 2, fotoH / 2 + 80 * s);
   }
 
+  // ---- Kategori Badge ----
   ctx.textAlign = 'left';
   let cy = fotoH + 70 * s;
 
-  const kat = KAT_WA[st.tpl] || { label: 'STATUS' };
-const tpl = TPL_WA[st.tpl];
-const katIconName = tpl?.i || 'image';
-const iconSize = 22 * s;
-const iconColor = '#5EEAD4';
-const iconImg = await loadLucideSvg(katIconName, iconColor, Math.round(iconSize));
+  const iconSize = 22 * s;
+  const iconColor = '#5EEAD4';
+  const iconImg = await loadLucideSvg(katIconName, iconColor, Math.round(iconSize));
 
-ctx.font = `800 ${22*s}px Inter, sans-serif`;
-const katTextWidth = ctx.measureText(kat.label).width;
-const iconGap = iconImg ? 10 * s : 0;
-const iconW = iconImg ? iconSize : 0;
-const katW = iconW + iconGap + katTextWidth;
+  ctx.font = `800 ${22*s}px Inter, sans-serif`;
+  const katTextWidth = ctx.measureText(kat.label).width;
+  const iconGap = iconImg ? 10 * s : 0;
+  const iconW = iconImg ? iconSize : 0;
+  const katW = iconW + iconGap + katTextWidth;
 
-ctx.fillStyle = 'rgba(20,184,166,.18)';
-roundRect(ctx, pad, cy, katW + 36 * s, 46 * s, 23 * s);
-ctx.fill();
+  ctx.fillStyle = 'rgba(20,184,166,.18)';
+  roundRect(ctx, pad, cy, katW + 36 * s, 46 * s, 23 * s);
+  ctx.fill();
 
-// Render ikon (kalau ada)
-if (iconImg) {
-  ctx.drawImage(iconImg, pad + 18 * s, cy + (46 * s - iconSize) / 2, iconSize, iconSize);
-}
+  if (iconImg) {
+    ctx.drawImage(iconImg, pad + 18 * s, cy + (46 * s - iconSize) / 2, iconSize, iconSize);
+  }
 
-ctx.fillStyle = iconColor;
-ctx.fillText(kat.label, pad + 18 * s + iconW + iconGap, cy + 31 * s);
+  ctx.fillStyle = iconColor;
+  ctx.fillText(kat.label, pad + 18 * s + iconW + iconGap, cy + 31 * s);
 
-cy += 46 * s + 40 * s;
+  cy += 46 * s + 40 * s;
 
+  // ---- Judul ----
   const ff = FONTS[st.font];
   let judul = '';
   switch(st.tpl){
@@ -4087,6 +4354,7 @@ cy += 46 * s + 40 * s;
     cy += 58*s + Math.min(jLines.length, 2) * 70*s + 20*s;
   }
 
+  // ---- Body / Caption ----
   let bodyText = '';
   switch(st.tpl){
     case 'belajar':
@@ -4124,24 +4392,13 @@ cy += 46 * s + 40 * s;
     ctx.fillText('— ' + f.author, pad, cy + 40*s);
   }
 
+  // ---- Footer: Avatar User + Nama + Sekolah ----
   const fY = H - pad - 80 * s;
   const fSize = 90 * s;
-  let nameX = pad;
+  const avatarR = fSize / 2;
 
-  if (schoolLogoImg && st.showSchoolLogo) {
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,255,255,.95)';
-    roundRect(ctx, pad, fY - fSize/2, fSize, fSize, 18*s);
-    ctx.fill();
-    ctx.save();
-    ctx.beginPath();
-    roundRect(ctx, pad+6*s, fY - fSize/2 + 6*s, fSize-12*s, fSize-12*s, 12*s);
-    ctx.clip();
-    ctx.drawImage(schoolLogoImg, pad+6*s, fY - fSize/2 + 6*s, fSize-12*s, fSize-12*s);
-    ctx.restore();
-    ctx.restore();
-    nameX = pad + fSize + 24*s;
-  }
+  drawAvatarCircle(ctx, avatarImg, pad + avatarR, fY, avatarR, STATE.profile?.nama, s);
+  const nameX = pad + fSize + 24 * s;
 
   const namaGuru = STATE.profile?.nama || 'Guru';
   const namaSekolah = STATE.profile?.sekolah || '';
@@ -4159,6 +4416,200 @@ cy += 46 * s + 40 * s;
     ctx.fillStyle = 'rgba(94,234,212,.75)';
     ctx.font = `700 ${22*s}px Inter, sans-serif`;
     ctx.fillText(tagFirst, W - pad, fY + 10*s);
+  }
+
+  // ---- Logo sekolah opsional (pojok kanan atas) ----
+  if(st.showSchoolLogo && schoolLogoImg){
+    const sSize = 80 * s;
+    const sPad = 25 * s;
+    const sX = W - 42*s - sSize - sPad;
+    const sY = 42*s + sPad;
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,255,255,.94)';
+    roundRect(ctx, sX - 8*s, sY - 8*s, sSize + 16*s, sSize + 16*s, 16*s);
+    ctx.fill();
+    ctx.drawImage(schoolLogoImg, sX, sY, sSize, sSize);
+    ctx.restore();
+  }
+}
+
+/* ============================================================
+   WA STATUS — Landscape (Lanskap / Thumb)
+   Split: Foto kiri 45% · Teks kanan 55%
+   ============================================================ */
+async function renderStudioWALandscape(ctx, W, H, s, assets){
+  const st = STATE.studio;
+  const f = st.fields;
+  const { avatarImg, kat, katIconName } = assets;
+  const pad = 55 * s;
+  const fotoW = Math.round(W * 0.45);
+
+  // Background
+  ctx.fillStyle = '#181B21';
+  ctx.fillRect(0, 0, W, H);
+
+  // ---- Foto kiri ----
+  if (st.photo) {
+    const img = st.photo;
+    const ir = img.width / img.height;
+    const cr = fotoW / H;
+    let dw, dh, dx, dy;
+    if (ir > cr) { dh = H; dw = H * ir; dx = (fotoW - dw) / 2; dy = 0; }
+    else { dw = fotoW; dh = fotoW / ir; dx = 0; dy = (H - dh) / 2; }
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, fotoW, H);
+    ctx.clip();
+    ctx.drawImage(img, dx, dy, dw, dh);
+    ctx.restore();
+
+    // Gradient fade di kanan foto
+    const fade = 120 * s;
+    const og = ctx.createLinearGradient(fotoW - fade, 0, fotoW, 0);
+    og.addColorStop(0, 'rgba(24,27,33,0)');
+    og.addColorStop(1, 'rgba(24,27,33,1)');
+    ctx.fillStyle = og;
+    ctx.fillRect(fotoW - fade, 0, fade, H);
+  } else {
+    const acc  = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()  || '#0D9488';
+    const acc2 = getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim() || '#14B8A6';
+    const g = ctx.createLinearGradient(0, 0, fotoW, H);
+    g.addColorStop(0, acc);
+    g.addColorStop(1, acc2);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, fotoW, H);
+
+    const phImg = await loadLucideSvg('image', 'rgba(255,255,255,0.7)', Math.round(70 * s));
+    if (phImg) ctx.drawImage(phImg, fotoW/2 - 35*s, H/2 - 35*s, 70*s, 70*s);
+  }
+
+  // ---- Teks kanan ----
+  const textX = fotoW + pad * 0.5;
+  const textW = W - textX - pad;
+  let cy = pad;
+
+  // Kategori Badge
+  const iconSize = 18 * s;
+  const iconColor = '#5EEAD4';
+  const iconImg = await loadLucideSvg(katIconName, iconColor, Math.round(iconSize));
+
+  ctx.font = `800 ${18*s}px Inter, sans-serif`;
+  const katTextWidth = ctx.measureText(kat.label).width;
+  const iconGap = iconImg ? 8 * s : 0;
+  const iconW = iconImg ? iconSize : 0;
+  const katW = iconW + iconGap + katTextWidth;
+
+  ctx.fillStyle = 'rgba(20,184,166,.18)';
+  roundRect(ctx, textX, cy, katW + 30 * s, 40 * s, 20 * s);
+  ctx.fill();
+
+  if (iconImg) {
+    ctx.drawImage(iconImg, textX + 14 * s, cy + (40 * s - iconSize) / 2, iconSize, iconSize);
+  }
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = iconColor;
+  ctx.fillText(kat.label, textX + 14 * s + iconW + iconGap, cy + 27 * s);
+
+  cy += 40 * s + 30 * s;
+
+  // Judul
+  const ff = FONTS[st.font];
+  let judul = '';
+  switch(st.tpl){
+    case 'belajar':  judul = 'Belajar Hari Ini'; break;
+    case 'kelas':    judul = (f.kelas || 'Kelas') + (f.materi ? ' · ' + f.materi : ''); break;
+    case 'momen':    judul = f.judul || 'Momen Belajar'; break;
+    case 'prestasi': judul = 'Selamat!'; break;
+    case 'quote':    judul = ''; break;
+  }
+
+  if (judul) {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `800 ${48*s}px ${ff.f}`;
+    const jLines = wrapText(ctx, judul, textW);
+    jLines.slice(0, 2).forEach((ln, i) => {
+      ctx.fillText(ln, textX, cy + 48*s + i * 58*s);
+    });
+    cy += 48*s + Math.min(jLines.length, 2) * 58*s + 16*s;
+  }
+
+  // Body / Caption
+  let bodyText = '';
+  switch(st.tpl){
+    case 'belajar':
+    case 'kelas':
+    case 'momen':
+      bodyText = f.caption || '';
+      break;
+    case 'prestasi': {
+      const parts = [];
+      if (f.nama) parts.push(f.nama);
+      if (f.lomba) parts.push((f.peringkat ? f.peringkat + ' ' : '') + f.lomba);
+      bodyText = parts.join('\n');
+      break;
+    }
+    case 'quote':
+      bodyText = '"' + (f.text || '') + '"';
+      break;
+  }
+
+  if (bodyText) {
+    ctx.fillStyle = st.tpl === 'quote' ? '#E8EBF0' : '#C7CDD6';
+    ctx.font = `600 ${st.tpl === 'quote' ? 32*s : 26*s}px ${st.tpl === 'quote' ? ff.f : 'Inter, sans-serif'}`;
+    const maxLines = 4;
+    const lineH = (st.tpl === 'quote' ? 32 : 26) * 1.5 * s;
+    const lines = bodyText.split('\n').flatMap(t => wrapText(ctx, t, textW));
+    lines.slice(0, maxLines).forEach((ln, i) => {
+      ctx.fillText(ln, textX, cy + i * lineH);
+    });
+    cy += Math.min(lines.length, maxLines) * lineH;
+  }
+
+  if (st.tpl === 'quote' && f.author) {
+    ctx.fillStyle = '#5EEAD4';
+    ctx.font = `800 ${24*s}px ${ff.f}`;
+    ctx.fillText('— ' + f.author, textX, cy + 32*s);
+  }
+
+  // Footer: Avatar + Nama + Sekolah
+  const fY = H - pad - 40 * s;
+  const avatarR = 26 * s;
+
+  drawAvatarCircle(ctx, avatarImg, textX + avatarR, fY, avatarR, STATE.profile?.nama, s);
+  const nameX = textX + avatarR * 2 + 16 * s;
+
+  const namaGuru = STATE.profile?.nama || 'Guru';
+  const namaSekolah = STATE.profile?.sekolah || '';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `800 ${22*s}px Inter, sans-serif`;
+  ctx.fillText(namaGuru.length > 20 ? namaGuru.slice(0,20)+'…' : namaGuru, nameX, fY - 2*s);
+  ctx.fillStyle = 'rgba(232,235,240,.6)';
+  ctx.font = `600 ${16*s}px Inter, sans-serif`;
+  if (namaSekolah) ctx.fillText(namaSekolah.length > 28 ? namaSekolah.slice(0,28)+'…' : namaSekolah, nameX, fY + 20*s);
+
+  // Hashtag
+  if (st.showTag && st.tagText) {
+    const tagFirst = (st.tagText.split(/\s+/)[0] || '#GuruBerbagi');
+    ctx.textAlign = 'right';
+    ctx.fillStyle = 'rgba(94,234,212,.75)';
+    ctx.font = `700 ${16*s}px Inter, sans-serif`;
+    ctx.fillText(tagFirst, W - pad, fY + 6*s);
+  }
+
+  // Logo sekolah opsional (kanan atas)
+  if(st.showSchoolLogo && schoolLogoImg){
+    const sSize = 60 * s;
+    const sX = W - pad - sSize;
+    const sY = pad;
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,255,255,.94)';
+    roundRect(ctx, sX - 6*s, sY - 6*s, sSize + 12*s, sSize + 12*s, 12*s);
+    ctx.fill();
+    ctx.drawImage(schoolLogoImg, sX, sY, sSize, sSize);
+    ctx.restore();
   }
 }
 
@@ -4216,16 +4667,72 @@ function simpanKarya(){
   const tw=216,th=Math.round(tw*cv.height/cv.width);
   t.width=tw;t.height=th;
   t.getContext('2d').drawImage(cv,0,0,tw,th);
+  const thumb = t.toDataURL('image/jpeg',.7);
+
   let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
-  arr.unshift({waMode:!!st.waMode,tpl:st.tpl,fmt:st.fmt,font:st.font,fields:st.fields,photoSmall:st.photoSmall,showFoot:st.showFoot,showTag:st.showTag,showSchoolLogo:st.showSchoolLogo,tagText:st.tagText,thumb:t.toDataURL('image/jpeg',.7),t:Date.now()});
-  arr=arr.slice(0,6);
+  arr.unshift({
+    waMode:!!st.waMode,
+    tpl:st.tpl,
+    fmt:st.fmt,
+    font:st.font,
+    fields:st.fields,
+    photoSmall:st.photoSmall,
+    showFoot:st.showFoot,
+    showTag:st.showTag,
+    showSchoolLogo:st.showSchoolLogo,
+    tagText:st.tagText,
+    thumb,
+    t:Date.now()
+  });
+  arr=arr.slice(0,12);
   localStorage.setItem('gb_karya',JSON.stringify(arr));
+
+  // Track "terakhir" untuk Resume Card
+  try {
+    localStorage.setItem('gb_studio_last', JSON.stringify({
+      waMode: !!st.waMode,
+      tpl: st.tpl,
+      fields: st.fields,
+      thumb,
+      t: Date.now()
+    }));
+  } catch(_) {}
+
   renderKarya();
+  renderStudioResume();
 }
 function renderKarya(){
-  const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
-  $('karyaWrap').classList.toggle('hidden',!arr.length||!STATE.profile);
-  $('karyaList').innerHTML=arr.map((k,i)=>`<button onclick="openKarya(${i})" class="shrink-0 w-24 rounded-xl overflow-hidden border border-slate-100 active:scale-95 transition"><img src="${k.thumb}" class="w-24 h-32 object-cover" loading="lazy" decoding="async" alt="Karya"></button>`).join('');
+  const arr = (() => {
+    try { return JSON.parse(localStorage.getItem('gb_karya') || '[]'); }
+    catch(_) { return []; }
+  })();
+
+  const wrap = $('wsKaryaWrap');
+  const grid = $('wsKaryaGrid');
+  const count = $('wsKaryaCount');
+
+  if(!wrap || !grid) return;
+
+  if(!arr.length || !STATE.profile){
+    wrap.classList.add('hidden');
+    return;
+  }
+
+  wrap.classList.remove('hidden');
+  if(count) count.textContent = arr.length;
+
+  const preview = arr.slice(0, 4);
+  grid.innerHTML = preview.map((k, i) => {
+    const tplDef = TPL_WA[k.tpl] || TPL[k.tpl] || { n: 'Karya' };
+    const bg = 'linear-gradient(135deg,var(--acc),var(--acc2))';
+    return `
+      <div onclick="openKarya(${i})" class="ws-karya" style="background:${bg}">
+        <img src="${esc(k.thumb)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" loading="lazy">
+        <span class="ws-karya-lbl">${esc(tplDef.n)}</span>
+      </div>`;
+  }).join('');
+
+  icons();
 }
 function openKarya(i){
   const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
@@ -4287,21 +4794,281 @@ async function bagiStudio(){
    GRID RENDER — Studio + WA
    ============================================================ */
 function renderStudioGrid(){
-  $('tplGrid').innerHTML=Object.entries(TPL).map(([k,t])=>`<a href="${dl('?studio='+k)}" onclick="event.preventDefault();openStudio('${k}')" class="card p-4 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition"><span class="w-12 h-12 rounded-xl acc-soft acc-text flex items-center justify-center"><i data-lucide="${t.i}" class="w-6 h-6"></i></span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight">${t.n}</span></a>`).join('');
+  const box = $('wsPanelKartu');
+  if(!box) return;
+
+  const GRAD = {
+    quote:       'linear-gradient(135deg,#7C3AED,#A855F7)',
+    ucapan:      'linear-gradient(135deg,#E11D48,#F43F5E)',
+    undangan:    'linear-gradient(135deg,#2563EB,#0EA5E9)',
+    prestasi:    'linear-gradient(135deg,#D97706,#F59E0B)',
+    cover:       'linear-gradient(135deg,#059669,#10B981)',
+    dokumentasi: 'linear-gradient(135deg,#0C4A6E,#0284C7)'
+  };
+
+  const entries = Object.entries(TPL);
+  const MAX_SHOW = 5;
+
+  let html = '';
+  entries.slice(0, MAX_SHOW).forEach(([k,t])=>{
+    const grad = GRAD[k] || 'linear-gradient(135deg,#7C3AED,#A855F7)';
+    html += `
+      <div onclick="openStudio('${k}')" class="ws-tpl">
+        <div class="ws-tpl-thumb ws-tpl-thumb-sq" style="background:${grad}">
+          <div class="ws-tpl-thumb-img-sq">
+            <i data-lucide="${t.i}" class="w-6 h-6" style="color:rgba(255,255,255,.85)"></i>
+            <p class="text-white text-[9px] font-black leading-tight text-center">${esc(t.n)}</p>
+          </div>
+        </div>
+        <div class="ws-tpl-label">${esc(t.n)}</div>
+      </div>`;
+  });
+
+  html += `
+    <div onclick="bukaSemuaTemplate('kartu')" class="ws-seeall ws-seeall-sq">
+      <div class="ws-seeall-ico">
+        <i data-lucide="grid-3x3" class="w-5 h-5"></i>
+      </div>
+      <span class="ws-seeall-lbl">Semua</span>
+    </div>`;
+
+  box.innerHTML = html;
   icons();
 }
 
-function renderWAStatusGrid() {
-  const box = $('waStatusGrid');
-  if (!box) return;
-  box.innerHTML = Object.entries(TPL_WA).map(([k, t]) => {
-    return `<button onclick="openWAStatus('${k}')" class="card p-3 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0">
-      <span class="w-12 h-12 rounded-xl acc-soft acc-text flex items-center justify-center">
-        <i data-lucide="${t.i}" class="w-6 h-6"></i>
-      </span>
-      <span class="text-[10px] font-bold text-slate-600 text-center leading-tight line-clamp-2">${t.n}</span>
-    </button>`;
+/* ============================================================
+   STUDIO — Buka Semua Template (modal)
+   ============================================================ */
+function bukaSemuaTemplate(mode){
+  const isWA = mode === 'foto';
+  const source = isWA ? TPL_WA : TPL;
+  const GRAD = isWA ? {
+    belajar:'linear-gradient(135deg,#0D9488,#14B8A6)',
+    kelas:'linear-gradient(135deg,#2563EB,#0EA5E9)',
+    momen:'linear-gradient(135deg,#7C3AED,#A855F7)',
+    prestasi:'linear-gradient(135deg,#D97706,#F59E0B)',
+    quote:'linear-gradient(135deg,#0F766E,#14B8A6)'
+  } : {
+    quote:'linear-gradient(135deg,#7C3AED,#A855F7)',
+    ucapan:'linear-gradient(135deg,#E11D48,#F43F5E)',
+    undangan:'linear-gradient(135deg,#2563EB,#0EA5E9)',
+    prestasi:'linear-gradient(135deg,#D97706,#F59E0B)',
+    cover:'linear-gradient(135deg,#059669,#10B981)',
+    dokumentasi:'linear-gradient(135deg,#0C4A6E,#0284C7)'
+  };
+
+  const items = Object.entries(source).map(([k,t])=>{
+    const grad = GRAD[k] || 'linear-gradient(135deg,#0D9488,#14B8A6)';
+    return `
+      <button onclick="tutupModal('mPop');${isWA?`openWAStatus('${k}')`:`openStudio('${k}')`}" class="card p-3 flex flex-col items-center gap-2 active:scale-95 transition">
+        <span class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:${grad}">
+          <i data-lucide="${t.i}" class="w-6 h-6 text-white"></i>
+        </span>
+        <span class="text-[10px] font-bold text-slate-700 text-center leading-tight">${esc(t.n)}</span>
+      </button>`;
   }).join('');
+
+  const html = `
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <p class="text-base font-extrabold text-slate-800">${isWA ? 'Template Foto WA' : 'Template Kartu'}</p>
+        <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-2">${items}</div>
+    </div>`;
+
+  $('popContent').innerHTML = html;
+  openModal('mPop');
+  icons();
+}
+
+/* ============================================================
+   STUDIO — Draft Catatan
+   ============================================================ */
+async function simpanDraftQuick(){
+  const el = $('wsDraftInput');
+  if(!el) return;
+  const txt = el.value.trim();
+  if(!txt) return toast('Tulis dulu catatannya','info');
+
+  const gid = guruId();
+  if(!gid){ toast('Login untuk menyimpan','info'); openPanel('pLogin'); return; }
+
+  try {
+    const row = {
+      id: Date.now(),
+      guru_id: gid,
+      nama: STATE.profile?.nama || '',
+      sekolah: STATE.profile?.sekolah || '',
+      npsn: STATE.profile?.npsn || '',
+      judul: txt.slice(0, 60),
+      isi: txt,
+      foto: null,
+      kategori: 'belajar',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      is_active: true
+    };
+    await idb.put('posts', row);
+    el.value = '';
+    toast('Catatan tersimpan ✓');
+    fetchPosts();
+  } catch(e){
+    console.error('[simpanDraftQuick]', e);
+    toast('Gagal menyimpan','error');
+  }
+}
+
+async function buatWADariDraft(){
+  const el = $('wsDraftInput');
+  if(!el) return;
+  const txt = el.value.trim();
+  if(!txt){ toast('Tulis dulu catatan Anda','info'); return; }
+
+  await simpanDraftQuick();
+  openStudio('belajar', { caption: txt }, { wa: true });
+}
+
+function navToCatatan(){
+  const w = $('postSectionWrap');
+  if(!w) return;
+  w.classList.remove('hidden');
+  w.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if(!STATE.posts || !STATE.posts.length){
+    togglePostForm(true);
+  }
+}
+
+/* ============================================================
+   STUDIO — Karya Saya
+   ============================================================ */
+function bukaGaleriKarya(){
+  const arr = (() => {
+    try { return JSON.parse(localStorage.getItem('gb_karya') || '[]'); }
+    catch(_) { return []; }
+  })();
+
+  if(!arr.length) return toast('Belum ada karya','info');
+
+  const items = arr.map((k, i) => `
+    <button onclick="tutupModal('mPop');openKarya(${i})" class="ws-tpl">
+      <div class="ws-tpl-thumb">
+        <img src="${esc(k.thumb)}" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+      </div>
+      <div class="ws-tpl-label">${esc((TPL_WA[k.tpl] || TPL[k.tpl] || {n:'Karya'}).n)}</div>
+    </button>
+  `).join('');
+
+  const html = `
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <p class="text-base font-extrabold text-slate-800">Karya Saya · ${arr.length}</p>
+        <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-2">${items}</div>
+    </div>`;
+
+  $('popContent').innerHTML = html;
+  openModal('mPop');
+  icons();
+}
+
+/* ============================================================
+   STUDIO — Settings
+   ============================================================ */
+function openStudioSettings(){
+  const cur = localStorage.getItem('gb_acc')||'hijau';
+  const ACCS = [
+    {id:'hijau', name:'Teal', hex:'#0D9488'},
+    {id:'biru', name:'Biru', hex:'#2563eb'},
+    {id:'violet', name:'Violet', hex:'#7c3aed'},
+    {id:'amber', name:'Amber', hex:'#d97706'},
+    {id:'rose', name:'Rose', hex:'#e11d48'}
+  ];
+  const buttons = ACCS.map(a => `
+    <button onclick="setAccent('${a.id}');tutupModal('mPop');toast('Warna aksen: ${a.name}')"
+      class="w-10 h-10 rounded-full transition active:scale-90"
+      style="background:${a.hex};${cur===a.id?'box-shadow:0 0 0 2px #fff, 0 0 0 4px '+a.hex:''}"
+      title="${a.name}"></button>
+  `).join('');
+
+  const html = `
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-base font-extrabold text-slate-800">Kustomisasi Studio</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">Sesuaikan warna aksen studio</p>
+        </div>
+        <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+
+      <div class="card p-4 space-y-3">
+        <p class="text-[10px] font-black uppercase tracking-wider text-slate-400">Warna Aksen</p>
+        <div class="flex gap-2 flex-wrap">${buttons}</div>
+      </div>
+
+      <button onclick="tutupModal('mPop')" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl text-sm active:scale-95 transition">Tutup</button>
+    </div>`;
+
+  $('popContent').innerHTML = html;
+  openModal('mPop');
+  icons();
+}
+
+function renderWAStatusGrid(){
+  const box = $('wsPanelFoto');
+  if(!box) return;
+
+  const GRAD = {
+    belajar:  'linear-gradient(135deg,#0D9488,#14B8A6)',
+    kelas:    'linear-gradient(135deg,#2563EB,#0EA5E9)',
+    momen:    'linear-gradient(135deg,#7C3AED,#A855F7)',
+    prestasi: 'linear-gradient(135deg,#D97706,#F59E0B)',
+    quote:    'linear-gradient(135deg,#0F766E,#14B8A6)'
+  };
+
+  const LABEL_PREVIEW = {
+    belajar:  'Belajar<br>Hari Ini',
+    kelas:    'Kelas 5<br>Matematika',
+    momen:    'Momen<br>Belajar',
+    prestasi: 'SELAMAT<br>Juara 1',
+    quote:    '"Belajar<br>sepanjang<br>hayat"'
+  };
+
+  const entries = Object.entries(TPL_WA);
+  const MAX_SHOW = 5;
+
+  let html = '';
+  entries.slice(0, MAX_SHOW).forEach(([k,t])=>{
+    const grad = GRAD[k] || 'linear-gradient(135deg,#0D9488,#14B8A6)';
+    const prev = LABEL_PREVIEW[k] || t.n;
+    html += `
+      <div onclick="openWAStatus('${k}')" class="ws-tpl">
+        <div class="ws-tpl-thumb" style="background:${grad}">
+          <div class="ws-tpl-thumb-img">
+            <i data-lucide="camera" class="w-5 h-5"></i>
+          </div>
+          <p class="absolute bottom-2 left-2 right-2 text-white text-[8px] font-black leading-tight">${prev}</p>
+        </div>
+        <div class="ws-tpl-label">${esc(t.n)}</div>
+      </div>`;
+  });
+
+  html += `
+    <div onclick="bukaSemuaTemplate('foto')" class="ws-seeall">
+      <div class="ws-seeall-ico">
+        <i data-lucide="grid-3x3" class="w-5 h-5"></i>
+      </div>
+      <span class="ws-seeall-lbl">Semua</span>
+    </div>`;
+
+  box.innerHTML = html;
   icons();
 }
 
@@ -4309,11 +5076,140 @@ function renderWAStatusGrid() {
    RENDER BAGI
    ============================================================ */
 function renderBagi(){
-  renderWAStatusGrid();
-  renderStudioGrid();
+  renderStudioHeader();
+  renderStudioResume();
+  renderStudioTabContent();
   renderKarya();
   fetchPosts();
   icons();
+}
+
+/* ============================================================
+   STUDIO — Header
+   ============================================================ */
+function renderStudioHeader(){
+  const av = $('wsHdrAvatar');
+  const sub = $('wsHdrSub');
+  if(!sub) return;
+
+  if(!STATE.profile){
+    if(av) av.src = LOGO;
+    sub.textContent = 'Tamu · Portal Selogiri';
+    return;
+  }
+
+  const gid = guruId();
+  const applyAv = (el, url) => {
+    if(!el) return;
+    el.onerror = () => { el.onerror = null; el.src = LOGO; };
+    el.src = url;
+  };
+  (async () => {
+    try {
+      const { data: pref } = await sb.from('creative_user_preferences')
+        .select('foto_url').eq('guru_id', gid).maybeSingle();
+      if(pref?.foto_url){ applyAv(av, pref.foto_url); }
+      else {
+        const cached = await fotoCacheGet(gid);
+        applyAv(av, cached || fotoUrl(gid, true));
+      }
+    } catch(_) { applyAv(av, LOGO); }
+  })();
+
+  const nama = namaPanggil(STATE.profile.nama || 'Guru');
+  const sek = STATE.profile.sekolah || 'Portal Selogiri';
+  sub.textContent = nama + ' · ' + sek;
+}
+
+/* ============================================================
+   STUDIO — Resume Card
+   ============================================================ */
+function renderStudioResume(){
+  const wrap = $('wsResumeWrap');
+  if(!wrap) return;
+
+  if(!STATE.profile){ wrap.innerHTML = ''; return; }
+
+  const last = (() => {
+    try { return JSON.parse(localStorage.getItem('gb_studio_last') || 'null'); }
+    catch(_) { return null; }
+  })();
+
+  if(!last){ wrap.innerHTML = ''; return; }
+
+  const templateDef = last.waMode ? TPL_WA[last.tpl] : TPL[last.tpl];
+  if(!templateDef) { wrap.innerHTML = ''; return; }
+
+  const tplName = templateDef.n || 'Studio';
+  const timeAgo = waktuRelatif(last.t);
+
+  const thumbHTML = last.thumb
+    ? `<img src="${esc(last.thumb)}" alt="">`
+    : `<i data-lucide="${last.waMode ? 'camera' : 'palette'}" class="w-5 h-5 text-white/70"></i>`;
+
+  wrap.innerHTML = `
+    <div class="ws-resume">
+      <div class="ws-resume-inner">
+        <div class="ws-resume-preview">${thumbHTML}</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[9px] font-black uppercase tracking-widest text-white/75 flex items-center gap-1">
+            <i data-lucide="history" class="w-3 h-3"></i>
+            Lanjutkan
+          </p>
+          <p class="text-[13px] font-extrabold text-white leading-tight mt-1 truncate">${esc(tplName)}</p>
+          <p class="text-[10px] text-white/75 mt-0.5">${timeAgo}</p>
+        </div>
+        <button onclick="lanjutkanStudio()" aria-label="Lanjutkan" class="ws-resume-arrow">
+          <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>`;
+  icons();
+}
+
+function lanjutkanStudio(){
+  try {
+    const last = JSON.parse(localStorage.getItem('gb_studio_last') || 'null');
+    if(!last) return toast('Tidak ada riwayat','info');
+    if(last.waMode){
+      openStudio(last.tpl, last.fields || {}, { wa: true });
+    } else {
+      openStudio(last.tpl, last.fields || {});
+    }
+  } catch(e){
+    toast('Gagal lanjutkan','error');
+  }
+}
+
+/* ============================================================
+   STUDIO — Tabs
+   ============================================================ */
+function switchStudioTab(tab){
+  STATE.studioTab = tab;
+  const tf = $('wsTabFoto');
+  const tk = $('wsTabKartu');
+  const pf = $('wsPanelFoto');
+  const pk = $('wsPanelKartu');
+  if(!tf || !tk || !pf || !pk) return;
+
+  if(tab === 'foto'){
+    tf.classList.add('on');
+    tk.classList.remove('on');
+    pf.classList.remove('hidden');
+    pk.classList.add('hidden');
+  } else {
+    tk.classList.add('on');
+    tf.classList.remove('on');
+    pk.classList.remove('hidden');
+    pf.classList.add('hidden');
+  }
+  icons();
+}
+
+function renderStudioTabContent(){
+  renderWAStatusGrid();
+  renderStudioGrid();
+  switchStudioTab(STATE.studioTab || 'foto');
 }
 
 /* ============================================================
