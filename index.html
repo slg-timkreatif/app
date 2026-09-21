@@ -485,11 +485,19 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button data-nav="profile" onclick="navPage('profile')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
     </nav>
 
-    <div id="footSide" class="mt-auto pt-5 border-t border-slate-100">
-      <p class="px-3 mb-1 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300">Tautan</p>
-      <div id="footSideList" class="space-y-0.5 opacity-80"></div>
+    <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800">
+      <p class="px-3 mb-2 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600 flex items-center gap-1.5">
+        <i data-lucide="link" class="w-2.5 h-2.5"></i>
+        Tautan
+      </p>
+      <div id="footSideList" class="space-y-0.5"></div>
+      <p class="px-3 pt-3 text-[10px] text-slate-400 dark:text-slate-600 font-semibold flex items-center gap-1">
+        Made with
+        <i data-lucide="heart" class="w-2.5 h-2.5 text-rose-500 fill-rose-500"></i>
+        in Selogiri
+      </p>
     </div>
-    <p class="pt-3 text-[10px] text-slate-300 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.75</span></p>
+    <p class="pt-2 px-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.75</span></p>
   </aside>
 
   <!-- ============================================
@@ -2693,50 +2701,89 @@ function renderDokWidget(){
 }
 
 function renderFoot(){
-  const wrap=$('footList');
-  const side=$('footSide');
-  const sideList=$('footSideList');
+  const wrap = $('footList');
+  const side = $('footSide');
+  const sideList = $('footSideList');
 
-  if(!STATE.footer.length){
-    if(side) side.classList.add('hidden');
-    if(wrap) wrap.innerHTML='';
-    return;
-  }
-  if(side) side.classList.remove('hidden');
+  const rawV = (STATE.config && STATE.config.versi) ? String(STATE.config.versi).trim() : '';
+  const V = rawV ? ('v' + rawV.replace(/^v/i, '')) : '';
+  const copyright = '© 2026' + (V ? ' · ' + V : '');
 
-  const rawV=(STATE.config&&STATE.config.versi)?String(STATE.config.versi).trim():'';
-  const V=rawV ? ('v'+rawV.replace(/^v/i,'')) : '';
-  const copyright='© 2026'+(V?' · '+V:'');
-
-  if(wrap){
-    const links=STATE.footer.map(f=>`
-      <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:acc-text active:scale-95 transition">${esc(f.judul)}</button>
-    `).join('');
-    wrap.innerHTML=`<div class="card overflow-hidden">
-      <div class="px-5 py-4 flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl overflow-hidden border border-slate-200 shrink-0">
-          <img src="${LOGO}" class="w-full h-full object-cover" alt="Logo">
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-[12px] font-extrabold text-slate-800 truncate">Tim Kreatif Selogiri</p>
-          <p class="text-[10px] text-slate-400 truncate">Portal Berbagi & Berkarya GTK</p>
-        </div>
-      </div>
-      <div class="border-t border-slate-100 px-5 py-3 flex items-center justify-between gap-3 flex-wrap">
-        <p class="text-[10px] font-semibold text-slate-400 shrink-0">${copyright}</p>
-        <div class="flex items-center gap-3 flex-wrap">${links}</div>
-      </div>
-    </div>`;
+  // ============================================
+  // DESKTOP SIDEBAR — Brand block + link list
+  // ============================================
+  if(side){
+    const hasLinks = STATE.footer.length > 0;
+    side.classList.toggle('hidden', !hasLinks && !V);
   }
 
   if(sideList){
-    sideList.innerHTML=STATE.footer.map(f=>`
-      <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g,"&#39;")})' class="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition text-left">
-        <i data-lucide="${f.icon||'globe'}" class="w-3 h-3 opacity-60 shrink-0"></i>
-        <span class="truncate">${esc(f.judul)}</span>
-      </button>
-    `).join('');
+    if(!STATE.footer.length){
+      sideList.innerHTML = '';
+    } else {
+      sideList.innerHTML = STATE.footer.map(f => `
+        <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g, "&#39;")})'
+          class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] font-semibold text-slate-400 hover:text-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition text-left active:scale-[.98]">
+          <i data-lucide="${f.icon || 'globe'}" class="w-3 h-3 opacity-70 shrink-0"></i>
+          <span class="truncate flex-1">${esc(f.judul)}</span>
+          <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-60 shrink-0"></i>
+        </button>
+      `).join('');
+    }
   }
+
+  // ============================================
+  // MOBILE FOOTER — Elegant card
+  // ============================================
+  if(!wrap) return;
+
+  // Link chips (kalau ada)
+  const linkChips = STATE.footer.map(f => `
+    <button onclick='bukaFoot(${JSON.stringify(f).replace(/'/g, "&#39;")})'
+      class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-[11px] font-bold text-slate-600 dark:text-slate-300 active:scale-95 transition">
+      <i data-lucide="${f.icon || 'globe'}" class="w-3 h-3 opacity-70"></i>
+      <span>${esc(f.judul)}</span>
+    </button>
+  `).join('');
+
+  wrap.innerHTML = `
+    <div class="card overflow-hidden">
+
+      <!-- BRAND -->
+      <div class="px-5 pt-5 pb-4 flex items-start gap-3">
+        <div class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-white shadow-md shrink-0 bg-white">
+          <img src="${LOGO}" class="w-full h-full object-cover" alt="Logo">
+        </div>
+        <div class="flex-1 min-w-0 pt-0.5">
+          <p class="text-[14px] font-extrabold text-slate-800 leading-tight truncate">Guru Berbagi Selogiri</p>
+          <p class="text-[10px] text-slate-500 leading-snug mt-1">Portal Berbagi & Berkarya GTK Kecamatan Selogiri</p>
+        </div>
+      </div>
+
+      ${linkChips ? `
+      <!-- LINKS -->
+      <div class="border-t border-slate-100 dark:border-slate-800 px-5 py-4">
+        <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2.5 flex items-center gap-1.5">
+          <i data-lucide="link" class="w-2.5 h-2.5"></i>
+          Tautan Penting
+        </p>
+        <div class="flex flex-wrap gap-1.5">
+          ${linkChips}
+        </div>
+      </div>
+      ` : ''}
+
+      <!-- BOTTOM -->
+      <div class="border-t border-slate-100 dark:border-slate-800 px-5 py-3 bg-slate-50/50 dark:bg-slate-800/40 flex items-center justify-between gap-2">
+        <p class="text-[10px] font-bold text-slate-400 shrink-0">${copyright}</p>
+        <p class="text-[10px] font-semibold text-slate-400 inline-flex items-center gap-1 shrink-0">
+          Made with
+          <i data-lucide="heart" class="w-2.5 h-2.5 text-rose-500 fill-rose-500"></i>
+          in Selogiri
+        </p>
+      </div>
+
+    </div>`;
 
   icons();
 }
