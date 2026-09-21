@@ -546,20 +546,20 @@ html.dark .onboard-dot{background:#3A404A}
   <div class="flex-1 flex flex-col relative min-w-0">
 
     <!-- HEADER -->
-    <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2">
+    <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2 md:max-w-6xl md:mx-auto md:w-full">
       <div class="flex items-start gap-3">
         <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-14 h-14 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
           <i data-lucide="menu" class="w-6 h-6 text-slate-600"></i>
         </button>
-        <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 rounded-3xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil">
+        <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 md:w-14 md:h-14 rounded-3xl md:rounded-2xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil">
           <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
         </button>
         <div class="flex-1 min-w-0">
           <div class="flex items-start justify-between gap-3 pt-1.5">
             <div class="min-w-0 flex-1">
               <div id="hdrInfoBlock">
-                <p id="hdrName" class="text-xl font-bold text-slate-800 leading-tight truncate">Guru Berbagi</p>
-                <p id="hdrSub" class="text-sm font-semibold acc-text truncate mt-0.5"></p>
+                <p id="hdrName" class="text-xl md:text-2xl font-bold text-slate-800 leading-tight truncate">Guru Berbagi</p>
+<p id="hdrSub" class="text-sm md:text-base font-semibold acc-text truncate mt-0.5"></p>
               </div>
               <p id="hdrTitle" class="text-xl font-bold text-slate-800 leading-tight truncate"></p>
             </div>
@@ -583,7 +583,7 @@ html.dark .onboard-dot{background:#3A404A}
     </header>
 
     <!-- MAIN -->
-    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4">
+    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4 md:space-y-6 md:max-w-6xl md:mx-auto md:w-full">
 
       <!-- ============================================
            PAGE: HOME
@@ -608,15 +608,15 @@ html.dark .onboard-dot{background:#3A404A}
         </div>
 
         <div id="caroBox" class="hidden animate-fade-up min-w-0">
-          <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1"></div>
-          <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
-        </div>
+  <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1 md:snap-none"></div>
+  <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
+</div>
 
-        <div id="infoPanel" class="card overflow-hidden animate-fade-up">
-          <button onclick="navPage('agenda')" class="w-full p-4 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-          <div class="border-t border-slate-200/70"></div>
-          <button onclick="navPage('dokumen')" class="w-full p-4 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-        </div>
+        <div id="infoPanel" class="card overflow-hidden animate-fade-up md:grid md:grid-cols-2">
+  <button onclick="navPage('agenda')" class="w-full p-4 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+  <div class="border-t border-slate-200/70 md:border-t-0 md:border-l md:border-slate-200/70"></div>
+  <button onclick="navPage('dokumen')" class="w-full p-4 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+</div>
 
         <div id="recentBox" class="hidden animate-fade-up">
           <div class="flex items-center justify-between mb-2">
@@ -699,9 +699,9 @@ html.dark .onboard-dot{background:#3A404A}
           <button onclick="openPanel('pLogin')" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk dengan Akun</button>
         </div>
 
-        <div id="profData" class="hidden space-y-4">
-          <!-- Kartu Avatar -->
-          <div class="card p-5 flex items-center gap-4">
+        <div id="profData" class="hidden space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 md:items-start">
+  <!-- Kartu Avatar -->
+  <div class="card p-5 flex items-center gap-4 md:col-span-2">
             <button id="pfAvatar" type="button" onclick="changeProfilePhoto()" class="relative shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md active:scale-95 transition group" title="Tap untuk ganti foto">
               <img id="pfAvatarImg" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
               <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition flex items-center justify-center">
@@ -716,8 +716,8 @@ html.dark .onboard-dot{background:#3A404A}
           </div>
 
           <!-- Data Diri -->
-          <div class="card p-4 space-y-2.5">
-            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
+<div class="card p-4 space-y-2.5 md:col-span-1">
+  <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
@@ -725,10 +725,10 @@ html.dark .onboard-dot{background:#3A404A}
           </div>
 
           <!-- Sekolah Saya -->
-          <div id="schoolCard"></div>
+<div id="schoolCard" class="md:col-span-1"></div>
 
-          <!-- Sosial Media -->
-          <div class="card p-4 space-y-2.5">
+<!-- Sosial Media -->
+<div class="card p-4 space-y-2.5 md:col-span-1">
             <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
             <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
@@ -741,25 +741,25 @@ html.dark .onboard-dot{background:#3A404A}
             </div>
           </div>
 
-          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500">
-            <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
-            <span id="aboutVer">v4.75</span>
-          </div>
+          <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 md:col-span-1">
+  <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
+  <span id="aboutVer">v4.75</span>
+</div>
 
-          <a href="https://slg-timkreatif.github.io/guruberbagi/akun/guru.html"
-             target="_blank" rel="noopener"
-             class="card p-4 flex items-center gap-3 active:scale-[.98] transition">
-            <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
-              <i data-lucide="user-cog" class="w-5 h-5"></i>
-            </span>
-            <span class="flex-1 min-w-0">
-              <span class="block text-[13px] font-extrabold text-slate-800">Kelola Akun & PIN</span>
-              <span class="block text-[10px] text-slate-500 mt-0.5">Ganti PIN · Riwayat tiket · Info lengkap</span>
-            </span>
-            <i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i>
-          </a>
+<a href="https://slg-timkreatif.github.io/guruberbagi/akun/guru.html"
+   target="_blank" rel="noopener"
+   class="card p-4 flex items-center gap-3 active:scale-[.98] transition md:col-span-1">
+  <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
+    <i data-lucide="user-cog" class="w-5 h-5"></i>
+  </span>
+  <span class="flex-1 min-w-0">
+    <span class="block text-[13px] font-extrabold text-slate-800">Kelola Akun & PIN</span>
+    <span class="block text-[10px] text-slate-500 mt-0.5">Ganti PIN · Riwayat tiket · Info lengkap</span>
+  </span>
+  <i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i>
+</a>
 
-          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+<button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition md:col-span-2"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </section>
 
@@ -931,8 +931,14 @@ html.dark .onboard-dot{background:#3A404A}
           </button>
         </div>
 
-        <!-- 2. RESUME CARD -->
-        <div id="wsResumeWrap"></div>
+        <!-- WRAPPER GRID 2 KOLOM -->
+<div class="md:grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:gap-6 md:space-y-0 space-y-4 md:items-start">
+  
+  <!-- KOLOM KIRI — Workspace Studio -->
+  <div class="space-y-4 md:space-y-5 min-w-0">
+    
+    <!-- 2. RESUME CARD -->
+    <div id="wsResumeWrap"></div>
 
         <!-- 3. TABS -->
         <div class="ws-tabs">
@@ -947,13 +953,18 @@ html.dark .onboard-dot{background:#3A404A}
         </div>
 
         <!-- 4. PANEL FOTO -->
-        <div id="wsPanelFoto" class="grid grid-cols-3 gap-2"></div>
+<div id="wsPanelFoto" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3"></div>
 
-        <!-- 5. PANEL KARTU -->
-        <div id="wsPanelKartu" class="grid grid-cols-3 gap-2 hidden"></div>
+<!-- 5. PANEL KARTU -->
+<div id="wsPanelKartu" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 hidden"></div>
 
-        <!-- 6. CATATAN DRAFT -->
-        <div class="pt-2">
+        </div><!-- /KOLOM KIRI -->
+
+<!-- KOLOM KANAN — Catatan & Karya -->
+<div class="space-y-4 md:space-y-5 min-w-0">
+  
+  <!-- 6. CATATAN DRAFT -->
+  <div class="pt-2">
           <div class="ws-sec-label">
             <span>Catatan Hari Ini</span>
             <button onclick="navToCatatan()" class="ws-sec-label-btn flex items-center gap-1">
@@ -988,7 +999,7 @@ html.dark .onboard-dot{background:#3A404A}
               Galeri <i data-lucide="arrow-right" class="w-3 h-3"></i>
             </button>
           </div>
-          <div id="wsKaryaGrid" class="grid grid-cols-4 gap-2"></div>
+          <div id="wsKaryaGrid" class="grid grid-cols-4 md:grid-cols-6 gap-2"></div>
         </div>
 
         <!-- 8. RIWAYAT CATATAN -->
@@ -1033,13 +1044,17 @@ html.dark .onboard-dot{background:#3A404A}
             <button onclick="submitPost()" id="postSubmitBtn" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan Catatan</button>
           </div>
 
-          <div id="postList" class="space-y-2 mt-2"></div>
-          <button id="postMore" onclick="morePost()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
-        </div>
-
+          <div id="postList" class="grid md:grid-cols-2 gap-2 md:gap-3 mt-2"></div>
+                <button id="postMore" onclick="morePost()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
+      </div>
+      
+      </div><!-- /KOLOM KANAN -->
+      
+      </div><!-- /WRAPPER GRID -->
+      
       </section>
-
-    </main>
+      
+      </main>
 
     <!-- BOTTOM NAVBAR -->
     <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
@@ -1189,24 +1204,33 @@ html.dark .onboard-dot{background:#3A404A}
       <p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1 truncate">Studio</p>
       <span class="text-[9px] font-black uppercase tracking-wider text-slate-400 shrink-0">Studio Kreatif</span>
     </div>
-    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4">
-      <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100" style="aspect-ratio:9/16"></canvas>
-
-      <!-- Caption WA Preview (muncul hanya di mode WA) -->
-      <div id="stCaptionBox" class="hidden card p-3.5 space-y-2">
-        <div class="flex items-center justify-between">
-          <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-            <i data-lucide="message-square" class="w-3 h-3 acc-text"></i>Caption untuk WA
-          </p>
-          <button onclick="copyCaptionWA()" class="text-[10px] font-bold acc-text active:scale-95 transition flex items-center gap-1">
-            <i data-lucide="copy" class="w-3 h-3"></i>Salin
-          </button>
-        </div>
-        <p id="stCaptionText" class="text-[12px] text-slate-600 leading-relaxed whitespace-pre-line"></p>
+    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4 md:grid md:grid-cols-[minmax(0,1fr)_400px] md:gap-6 md:p-6 md:space-y-0 md:overflow-hidden md:min-h-0">
+  
+  <!-- Canvas column (desktop: own scroll, centered) -->
+  <div class="md:flex md:items-start md:justify-center md:overflow-y-auto md:no-scroll md:bg-slate-100 dark:md:bg-slate-900/40 md:rounded-2xl md:p-6">
+    <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100 md:w-auto md:max-h-[calc(100vh-220px)] md:mx-auto" style="aspect-ratio:9/16"></canvas>
+  </div>
+  
+  <!-- Controls column (desktop: own scroll) -->
+  <div class="space-y-4 md:overflow-y-auto md:no-scroll md:pr-1">
+    
+    <!-- Caption WA Preview (muncul hanya di mode WA) -->
+    <div id="stCaptionBox" class="hidden card p-3.5 space-y-2">
+      <div class="flex items-center justify-between">
+        <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+          <i data-lucide="message-square" class="w-3 h-3 acc-text"></i>Caption untuk WA
+        </p>
+        <button onclick="copyCaptionWA()" class="text-[10px] font-bold acc-text active:scale-95 transition flex items-center gap-1">
+          <i data-lucide="copy" class="w-3 h-3"></i>Salin
+        </button>
       </div>
-
-      <div id="stControls" class="space-y-1"></div>
+      <p id="stCaptionText" class="text-[12px] text-slate-600 leading-relaxed whitespace-pre-line"></p>
     </div>
+    
+    <div id="stControls" class="space-y-1"></div>
+    
+  </div>
+</div>
     <div class="fs-modal-footer p-4 grid grid-cols-2 gap-2 bg-white border-t border-slate-100 shrink-0">
       <button onclick="unduhStudio()" class="bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
       <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
@@ -1241,8 +1265,8 @@ html.dark .onboard-dot{background:#3A404A}
     </button>
   </div>
   
-  <div class="flex-1 flex items-center justify-center p-4 overflow-hidden">
-    <div id="cropStage" class="relative touch-none select-none" style="max-width:100%;max-height:100%">
+  <div class="flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden">
+  <div id="cropStage" class="relative touch-none select-none" style="max-width:100%;max-height:100%">
       <canvas id="cropCanvas" class="rounded-xl shadow-2xl block"></canvas>
       <div id="cropGrid" class="absolute inset-0 pointer-events-none rounded-xl" style="display:none">
         <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -1284,8 +1308,8 @@ html.dark .onboard-dot{background:#3A404A}
       <p class="text-sm font-bold text-white flex-1 text-center truncate">Bagikan sebagai Gambar</p>
       <span class="w-9 h-9 shrink-0"></span>
     </div>
-    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4 flex flex-col items-center">
-      <canvas id="piCanvas" class="max-w-full rounded-xl" style="max-height:60vh;box-shadow:0 10px 40px rgba(0,0,0,.5)"></canvas>
+    <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4 flex flex-col items-center md:flex-row md:items-start md:justify-center md:gap-8 md:p-8">
+  <canvas id="piCanvas" class="max-w-full rounded-xl md:max-h-[calc(100vh-220px)] md:w-auto" style="max-height:60vh;box-shadow:0 10px 40px rgba(0,0,0,.5)"></canvas>
       <div class="w-full max-w-sm space-y-3">
         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Ukuran</p>
         <div class="flex gap-2">
@@ -2695,31 +2719,34 @@ function renderCarousel(){
   const slides=[];
   const retry=`onerror="if(this.dataset.r){this.style.display='none'}else{this.dataset.r='1';this.src=this.src}"`;
 
-  if(c.banner_status==='ON'){
-    const w={blue:'from-blue-600 to-indigo-600',green:'from-teal-600 to-teal-500',red:'from-rose-600 to-red-600'}[c.banner_warna]||'from-teal-600 to-teal-500';
-    if(c.banner_gambar){
-      slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${w} text-white"><div class="flex h-40"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="mt-2 self-start bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div></div>`);
-    }else{
-      slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);
-    }
+  if (c.banner_status === 'ON') {
+  const w = { blue: 'from-blue-600 to-indigo-600', green: 'from-teal-600 to-teal-500', red: 'from-rose-600 to-red-600' } [c.banner_warna] || 'from-teal-600 to-teal-500';
+  if (c.banner_gambar) {
+    slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${w} text-white"><div class="flex h-40 md:h-48"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 md:p-5 flex flex-col justify-center"><p class="text-xs md:text-sm font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="mt-2 self-start bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div></div>`);
+  } else {
+    slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl p-4 md:p-5 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs md:text-sm font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);
   }
+}
   if (c.info_status !== 'OFF') {
   const NC = { pengumuman: 'from-teal-600 to-teal-500', info: 'from-sky-600 to-blue-600', gamifikasi: 'from-amber-500 to-orange-600', sistem: 'from-slate-600 to-slate-800' };
-  const EI = { info: 'info', gamifikasi: 'trophy', pengumuman: 'megaphone', sistem: 'sparkles' };
-  STATE.notifs.slice(0, 4).forEach(n => {
-    if (n.gambar) {
-      slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 flex flex-col justify-center"><p class="text-xs font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
-    } else {
-      const ic = EI[n.tipe] || 'info';
-      slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full rounded-2xl p-4 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0"><i data-lucide="${ic}" class="w-5 h-5 text-white"></i></span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);
-    }
-  });
+const EI = { info: 'info', gamifikasi: 'trophy', pengumuman: 'megaphone', sistem: 'sparkles' };
+STATE.notifs.slice(0, 4).forEach(n => {
+  if (n.gambar) {
+    slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40 md:h-48"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 md:p-5 flex flex-col justify-center"><p class="text-xs md:text-sm font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] md:text-[11px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
+  } else {
+    const ic = EI[n.tipe] || 'info';
+    slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl p-4 md:p-5 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0"><i data-lucide="${ic}" class="w-5 h-5 text-white"></i></span><span class="min-w-0 flex-1"><span class="block text-xs md:text-sm font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] md:text-[11px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);
+  }
+});
 }
-  box.classList.toggle('hidden',!slides.length);
-  $('caroTrack').innerHTML=slides.join('');
-  $('caroDots').innerHTML=slides.length>1?slides.map((_,i)=>`<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300'}"></button>`).join(''):'';
+    box.classList.toggle('hidden', !slides.length);
+  $('caroTrack').innerHTML = slides.join('');
+  // Kalau cuma 1 slide, center di desktop
+  const track = $('caroTrack');
+  if (track) track.classList.toggle('md:justify-center', slides.length === 1);
+  $('caroDots').innerHTML = slides.length > 1 ? slides.map((_, i) => `<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300'}"></button>`).join('') : '';
   icons();
-}
+  }
 
 /* ============================================================
    ICON RENDERER
@@ -3199,10 +3226,10 @@ function renderAgenda(){
 
   let html='';
 
-  const favAgenda=list.filter(a=>STATE.favsAgenda.has(String(a.id)));
-  if(favAgenda.length){
-    html+=`<div class="space-y-2 mb-4"><p class="text-[10px] font-black uppercase tracking-widest text-amber-500 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Agenda Favorit</p>${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div>`;
-  }
+  const favAgenda = list.filter(a => STATE.favsAgenda.has(String(a.id)));
+if (favAgenda.length) {
+  html += `<div class="space-y-2 mb-4"><p class="text-[10px] font-black uppercase tracking-widest text-amber-500 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Agenda Favorit</p><div class="grid md:grid-cols-2 gap-2">${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div></div>`;
+}
 
   const upMonths=[...new Set(up.map(a=>(a.tanggal||'').slice(0,7)))].sort();
   upMonths.forEach(mk=>{html+=monthSection(mk,up.filter(a=>(a.tanggal||'').slice(0,7)===mk),false,tstr);});
@@ -3233,9 +3260,9 @@ function agendaRow(a,isPast,tstr){
   const star=`<button onclick="toggleFavAgenda(${a.id},event)" aria-label="Favorit" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
   return `<div class="card p-4 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${star}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
 }
-function monthSection(mk,items,isPast,tstr){
-  const d=new Date(mk+'-01T00:00:00');
-  return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p>${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div>`;
+function monthSection(mk, items, isPast, tstr) {
+  const d = new Date(mk + '-01T00:00:00');
+  return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10 bg-[var(--bg)]">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p><div class="grid md:grid-cols-2 gap-2">${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div></div>`;
 }
 
 /* ============================================================
@@ -3281,20 +3308,20 @@ function renderDokumen(filter){
   const rest=all.filter(d=>!STATE.favsDok.has(String(d.id)));
 
   let html='';
-  if(favs.length && !f){
-    html+=`<p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 mt-4 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p>`;
-    html+=view==='grid'
-      ?`<div class="grid grid-cols-2 gap-2">${favs.map(dokGridItem).join('')}</div>`
-      :`<div class="space-y-2">${favs.map(dokRowItem).join('')}</div>`;
-  }
+  if (favs.length && !f) {
+  html += `<p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 mt-4 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p>`;
+  html += view === 'grid' ?
+    `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">${favs.map(dokGridItem).join('')}</div>` :
+    `<div class="space-y-2">${favs.map(dokRowItem).join('')}</div>`;
+}
 
   const cats=[...new Set(rest.map(d=>d.kategori||'Umum'))];
   html+=cats.map(c=>{
     const list=rest.filter(d=>(d.kategori||'Umum')===c);
     const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 mt-4">${esc(c)}</p>`;
-    return view==='grid'
-      ? head+`<div class="grid grid-cols-2 gap-2">${list.map(dokGridItem).join('')}</div>`
-      : head+`<div class="space-y-2">${list.map(dokRowItem).join('')}</div>`;
+    return view === 'grid' ?
+  head + `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">${list.map(dokGridItem).join('')}</div>` :
+  head + `<div class="space-y-2">${list.map(dokRowItem).join('')}</div>`;
   }).join('');
 
   $('dokList').innerHTML=html;
