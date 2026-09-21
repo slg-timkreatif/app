@@ -4566,16 +4566,21 @@ function openStudio(tpl, pre, opts) {
   // Safety net: kalau tpl ada di TPL_WA tapi dipanggil tanpa wa:true,
   // auto-correct ke WA mode. Cegah error "Template tidak dikenali".
   let def = waMode ? TPL_WA[tpl] : TPL[tpl];
-  if (!def && !waMode && TPL_WA[tpl]) {
-    console.warn('[openStudio] auto-correct: "' + tpl + '" is WA template — enabling waMode');
-    def = TPL_WA[tpl];
-    waMode = true;
-  }
-  if (!def) {
-    console.warn('[openStudio] tpl invalid:', tpl, 'waMode:', waMode, 'available:', Object.keys(waMode ? TPL_WA : TPL));
-    toast('Template tidak dikenali: ' + tpl, 'error');
-    return;
-  }
+// Auto-correct ke WA mode kalau:
+// (a) tpl tidak ada di TPL sama sekali, tapi ada di TPL_WA
+// (b) tpl ambigu (ada di kedua TPL) DAN caller eksplisit dari WA grid
+//     → dideteksi lewat absence opts.wa tapi ada flag dari caller
+const onlyInWA = !waMode && !TPL[tpl] && TPL_WA[tpl];
+if (onlyInWA) {
+  console.warn('[openStudio] auto-correct: "' + tpl + '" is WA-only — enabling waMode');
+  def = TPL_WA[tpl];
+  waMode = true;
+}
+if (!def) {
+  console.warn('[openStudio] tpl invalid:', tpl, 'waMode:', waMode, 'available:', Object.keys(waMode ? TPL_WA : TPL));
+  toast('Template tidak dikenali: ' + tpl, 'error');
+  return;
+}
   
   STATE.studio = {
     waMode,
@@ -5054,11 +5059,11 @@ if (st.photo) {
       bodyText = parts.join('\n');
       break;
     }
-    case 'quote':
-      bodyText = '"' + (f.text || '') + '"';
-      break;
+      case 'quote':
+  bodyText = f.text ? ('"' + f.text + '"') : '"Tulis quote Anda di panel bawah…"';
+  break;
   }
-
+  
   if (bodyText) {
     ctx.fillStyle = st.tpl === 'quote' ? '#E8EBF0' : '#C7CDD6';
     ctx.font = `600 ${st.tpl === 'quote' ? 40*s : 34*s}px ${st.tpl === 'quote' ? ff.f : 'Inter, sans-serif'}`;
@@ -5228,11 +5233,11 @@ if (st.photo) {
       bodyText = parts.join('\n');
       break;
     }
-    case 'quote':
-      bodyText = '"' + (f.text || '') + '"';
-      break;
+      case 'quote':
+  bodyText = f.text ? ('"' + f.text + '"') : '"Tulis quote Anda di panel bawah…"';
+  break;
   }
-
+  
   if (bodyText) {
     ctx.fillStyle = st.tpl === 'quote' ? '#E8EBF0' : '#C7CDD6';
     ctx.font = `600 ${st.tpl === 'quote' ? 32*s : 26*s}px ${st.tpl === 'quote' ? ff.f : 'Inter, sans-serif'}`;
@@ -5721,13 +5726,14 @@ entries.slice(0, MAX_SHOW).forEach(([k, t]) => {
   const grad = GRAD[k] || 'linear-gradient(135deg,#7C3AED,#A855F7)';
   const illus = TPL_ILLUS[k] || `<i data-lucide="${t.i}" class="w-6 h-6" style="color:rgba(255,255,255,.6)"></i>`;
   html += `
-    <div onclick="openStudio('${k}')" class="ws-tpl">
-      <div class="ws-tpl-thumb" style="aspect-ratio:3/4">
-        <div style="position:absolute;inset:0;background:${grad}"></div>
-        <div class="ws-illus">${illus}</div>
-      </div>
-      <div class="ws-tpl-label">${esc(t.n)}</div>
-    </div>`;
+    <div onclick="openWAStatus('${k}')" class="ws-tpl">
+  <div class="ws-tpl-thumb" style="aspect-ratio:3/4">
+    <div style="position:absolute;inset:0;background:${grad}"></div>
+    <div class="ws-illus">${illus}</div>
+    <span style="position:absolute;bottom:6px;left:6px;right:6px;height:3px;background:rgba(94,234,212,.75);border-radius:2px;width:38%"></span>
+  </div>
+  <div class="ws-tpl-label">${esc(t.n)}</div>
+</div>`;
 });
 
   html += `
