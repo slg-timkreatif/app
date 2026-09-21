@@ -93,6 +93,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
      CARD
      ============================================ */
   .card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
+  .modal-card{border-radius:var(--r-2xl)}
 
   /* ============================================
      BUTTON LOADING
@@ -176,12 +177,13 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   /* ============================================
      ONBOARD
      ============================================ */
-  .onboard-backdrop{position:fixed;inset:0;z-index:150;background:rgba(15,17,21,.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:1.5rem}
+  .onboard-backdrop{position:fixed;inset:0;z-index:100;background:rgba(15,17,21,.72);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:1.5rem;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 1.5rem)}
   .onboard-backdrop.show{display:flex;animation:fadeIn .25s ease both}
   .onboard-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-2xl);padding:var(--p-xl);max-width:24rem;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUp .3s cubic-bezier(.4,0,.2,1) both}
   @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   .onboard-dots{display:flex;gap:.35rem;justify-content:center;margin-top:1rem}
   .onboard-dot{width:6px;height:6px;border-radius:9999px;background:#CBD5E1;transition:all .2s}
+html.dark .onboard-dot{background:#3A404A}
   .onboard-dot.active{width:20px;background:var(--acc)}
 
   /* ============================================
@@ -338,10 +340,46 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .ws-karya-lbl{font-size:7px;font-weight:900;color:#fff;text-align:center;line-height:1.1;width:100%;text-shadow:0 1px 2px rgba(0,0,0,.4);position:relative;z-index:1}
 
   /* ============================================
+     MODAL — Animations + Safe-area (v4.83)
+     ============================================ */
+  .modal-enter {
+    animation: modalFadeIn .22s ease both;
+  }
+  /* #popContent — bg ada di parent card mPop */
+  .mShare-wrap{
+    position:absolute;left:12px;right:12px;
+    bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem);
+  }
+  @media (min-width:768px){
+    .mShare-wrap{
+      left:50%;right:auto;bottom:auto;top:50%;
+      transform:translate(-50%,-50%);
+      width:100%;max-width:28rem;
+    }
+  }
+  @keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .fs-modal-header {
+    padding-top: calc(env(safe-area-inset-top) + 0.75rem) !important;
+  }
+  .fs-modal-footer {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 1rem) !important;
+  }
+
+  /* ============================================
+     IN-APP NOTIF
+     ============================================ */
+  @keyframes inappIn{from{transform:translateY(-16px);opacity:0}to{transform:translateY(0);opacity:1}}
+  #inAppNotif:not(.hidden) .card{animation:inappIn .35s cubic-bezier(.16,1,.3,1) both}
+
+  /* ============================================
      TOAST
      ============================================ */
-  #toastContainer{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 1rem);z-index:90;width:max-content;max-width:92vw;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
-  .toast-item{padding:12px 16px 12px 12px;border-radius:var(--r-lg);font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 30px -5px rgba(0,0,0,.4);color:#fff;animation:toastIn .3s cubic-bezier(.16,1,.3,1) both;pointer-events:auto}
+  #toastContainer{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 1rem);z-index:90;width:100%;max-width:calc(100vw - 2rem);padding:0 1rem;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+  @media (min-width:768px){#toastContainer{width:22rem;padding:0}}
+  .toast-item{padding:12px 14px;border-radius:var(--r-lg);font-size:13px;font-weight:700;display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 30px -5px rgba(0,0,0,.4);color:#fff;animation:toastIn .3s cubic-bezier(.16,1,.3,1) both;pointer-events:auto;cursor:pointer;width:100%}
   @keyframes toastIn{from{transform:translateY(-16px) scale(.95);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
   .toast-item.out{animation:toastOut .25s ease both}
   @keyframes toastOut{to{transform:translateY(-12px);opacity:0}}
@@ -1035,7 +1073,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        PANEL: LOGIN
        ============================================ -->
   <div id="pLogin" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pLogin')"></div>
+    <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pLogin')"></div>
     <div id="pLoginSheet" class="sheet p-6 overflow-y-auto no-scroll">
       <div class="sheet-drag" data-sheet-handle></div>
       <div class="text-center mb-5">
@@ -1059,7 +1097,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        PANEL: NOTIFIKASI
        ============================================ -->
   <div id="pNotif" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pNotif')"></div>
+    <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pNotif')"></div>
     <div id="pNotifSheet" class="sheet bg-slate-50">
       <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
         <p class="text-base font-extrabold text-slate-800">Notifikasi</p>
@@ -1073,7 +1111,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        PANEL: PARENT MENU
        ============================================ -->
   <div id="pParent" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pParent')"></div>
+    <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pParent')"></div>
     <div id="pParentSheet" class="sheet bg-slate-50">
       <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
         <div class="flex items-center gap-3 min-w-0">
@@ -1095,7 +1133,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        PANEL: FEEDBACK
        ============================================ -->
   <div id="pFb" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupPanel('pFb')"></div>
+    <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pFb')"></div>
     <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll">
       <div class="sheet-drag" data-sheet-handle></div>
       <p class="text-base font-extrabold text-slate-800 mb-1">Ceritakan ke Kami</p>
@@ -1115,26 +1153,26 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        MODAL: APP VIEWER (WebView)
        ============================================ -->
   <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
-    <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
-      <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1">Aplikasi</p>
+    <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
+      <button onclick="tutupApp()" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
+      </button>
+      <p id="mAppTitle" class="text-sm font-bold text-white truncate flex-1 text-center">Aplikasi</p>
       <button onclick="bukaExternal()" aria-label="Buka di browser" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="external-link" class="w-4 h-4 text-white"></i>
       </button>
-      <button onclick="tutupApp()" aria-label="Tutup aplikasi" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
-        <i data-lucide="x" class="w-4 h-4 text-white"></i>
-      </button>
     </div>
-    <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer"></iframe>
+    <iframe id="mAppFrame" class="w-full flex-1 bg-white" referrerpolicy="no-referrer" style="padding-bottom:env(safe-area-inset-bottom)"></iframe>
   </div>
 
   <!-- ============================================
        MODAL: STUDIO KREATIF
        ============================================ -->
   <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
-    <div class="px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
-      <button onclick="tutupModal('mStudio')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button>
-      <p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1">Studio</p>
-      <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Studio Kreatif</span>
+    <div class="fs-modal-header px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
+      <button onclick="tutupModal('mStudio')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button>
+      <p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1 truncate">Studio</p>
+      <span class="text-[9px] font-black uppercase tracking-wider text-slate-400 shrink-0">Studio Kreatif</span>
     </div>
     <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4">
       <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100" style="aspect-ratio:9/16"></canvas>
@@ -1154,7 +1192,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
       <div id="stControls" class="space-y-1"></div>
     </div>
-    <div class="p-4 grid grid-cols-2 gap-2 bg-white border-t border-slate-100 shrink-0">
+    <div class="fs-modal-footer p-4 grid grid-cols-2 gap-2 bg-white border-t border-slate-100 shrink-0">
       <button onclick="unduhStudio()" class="bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
       <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
     </div>
@@ -1163,10 +1201,14 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: POPUP INFO
        ============================================ -->
-  <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm animate-pop max-h-[85vh] overflow-y-auto no-scroll">
-      <div id="popContent" class="rounded-3xl overflow-hidden shadow-2xl"></div>
-      <button onclick="tutupPop()" class="mt-4 w-full acc-grad text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg">Mengerti</button>
+  <div id="mPop" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/50" role="dialog" aria-modal="true" aria-label="Dialog">
+    <div class="w-full max-w-md animate-pop max-h-[85vh] overflow-y-auto no-scroll">
+      <div class="rounded-3xl overflow-hidden shadow-2xl" style="background:var(--card)">
+        <div id="popContent"></div>
+        <div class="px-5 pb-5 pt-3">
+          <button onclick="tutupPop()" class="w-full acc-grad text-white font-bold py-3 rounded-xl active:scale-[.98] transition shadow-lg">Mengerti</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1174,12 +1216,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        MODAL: POST IMAGE BUILDER
        ============================================ -->
   <div id="mPostImage" class="fixed inset-0 z-[85] hidden flex-col bg-slate-950">
-    <div class="flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2" style="padding-top:calc(env(safe-area-inset-top) + 0.75rem)">
+    <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
       <button onclick="tutupModal('mPostImage')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
       </button>
       <p class="text-sm font-bold text-white flex-1 text-center truncate">Bagikan sebagai Gambar</p>
-      <span class="w-9 h-9"></span>
+      <span class="w-9 h-9 shrink-0"></span>
     </div>
     <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4 flex flex-col items-center">
       <canvas id="piCanvas" class="max-w-full rounded-xl" style="max-height:60vh;box-shadow:0 10px 40px rgba(0,0,0,.5)"></canvas>
@@ -1199,7 +1241,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         </div>
       </div>
     </div>
-    <div class="p-4 grid grid-cols-2 gap-2 bg-slate-900 border-t border-slate-800 shrink-0" style="padding-bottom:calc(env(safe-area-inset-bottom) + 1rem)">
+    <div class="fs-modal-footer p-4 grid grid-cols-2 gap-2 bg-slate-900 border-t border-slate-800 shrink-0">
       <button onclick="unduhPostImage()" class="bg-slate-800 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition">
         <i data-lucide="download" class="w-4 h-4"></i> Unduh
       </button>
@@ -1213,7 +1255,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        MODAL: DETAIL SEKOLAH
        ============================================ -->
   <div id="mSchoolDetail" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="tutupModal('mSchoolDetail')"></div>
+    <div class="absolute inset-0 bg-black/50" onclick="tutupModal('mSchoolDetail')"></div>
     <div id="mSchoolDetailSheet" class="sheet bg-slate-50">
       <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
         <p class="text-base font-extrabold text-slate-800">Detail Sekolah</p>
@@ -1228,9 +1270,13 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: IOS INSTALL GUIDE
        ============================================ -->
-  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-sm card p-6 animate-pop">
-      <p class="text-base font-extrabold text-slate-800 mb-3">Pasang di iPhone/iPad</p>
+  <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6" role="dialog" aria-modal="true" aria-labelledby="iosTitle">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupModal('mIos')"></div>
+    <div class="relative w-full max-w-sm card modal-card p-6 animate-pop">
+      <button onclick="tutupModal('mIos')" aria-label="Tutup" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+      </button>
+      <p id="iosTitle" class="text-base font-extrabold text-slate-800 mb-3 pr-10">Pasang di iPhone/iPad</p>
       <ol class="text-sm text-slate-600 space-y-2 list-decimal list-inside">
         <li>Ketuk tombol <b>Bagikan</b></li>
         <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
@@ -1243,13 +1289,13 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: SHARE
        ============================================ -->
-  <div id="mShare" class="fixed inset-0 z-[80] hidden">
+  <div id="mShare" class="fixed inset-0 z-[80] hidden" role="dialog" aria-modal="true" aria-labelledby="shareTitleLabel">
     <div class="absolute inset-0 bg-black/50" onclick="tutupModal('mShare')"></div>
-    <div class="absolute left-3 right-3 md:left-1/2 md:-translate-x-1/2 md:max-w-md md:top-1/2 md:-translate-y-1/2" style="bottom:calc(env(safe-area-inset-bottom) + 0.75rem)">
-      <div class="card p-5 space-y-4">
+    <div class="mShare-wrap">
+      <div class="card modal-card p-5 space-y-4 animate-pop">
         <div class="flex items-center justify-between">
-          <p class="text-base font-extrabold text-slate-800">Bagikan</p>
-          <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+          <p id="shareTitleLabel" class="text-base font-extrabold text-slate-800">Bagikan</p>
+        <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
         </div>
         <div class="rounded-xl p-3.5" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
           <p class="text-[10px] font-black uppercase tracking-widest text-white/80">Guru Berbagi Selogiri</p>
@@ -1281,7 +1327,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        OVERLAY: SYNC
        ============================================ -->
-  <div id="syncOverlay" class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div id="syncOverlay" class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm" role="alert" aria-live="polite" aria-busy="true">
     <div class="flex flex-col items-center gap-4">
       <div class="relative w-16 h-16">
         <div class="absolute inset-0 rounded-full border-4 border-white/20"></div>
@@ -1295,8 +1341,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: CONFIRM
        ============================================ -->
-  <div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6 bg-black/60">
-    <div class="w-full max-w-xs card p-6 text-center animate-pop">
+  <div id="mConfirm" class="fixed inset-0 z-[95] hidden items-center justify-center p-6" role="dialog" aria-modal="true" aria-labelledby="cfTitle" aria-describedby="cfMsg">
+    <div class="absolute inset-0 bg-black/50" onclick="cfCancel()"></div>
+    <div class="relative w-full max-w-xs card modal-card p-6 text-center animate-pop">
+      <button onclick="cfCancel()" aria-label="Tutup" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+      </button>
       <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3"><i data-lucide="alert-triangle" class="w-7 h-7"></i></div>
       <p id="cfTitle" class="text-base font-extrabold text-slate-800">Yakin lanjut?</p>
       <p id="cfMsg" class="text-xs text-slate-500 mt-1">…</p>
@@ -1310,9 +1360,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        TOAST & NOTIF
        ============================================ -->
-  <div id="toastContainer"></div>
+  <div id="toastContainer" role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <div id="inAppNotif" class="fixed left-3 right-3 z-[85] hidden" style="top:calc(env(safe-area-inset-top) + 1rem)">
+  <div id="inAppNotif" class="fixed z-[85] hidden left-3 right-3 md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-md" style="top:calc(env(safe-area-inset-top) + 1rem)" role="status" aria-live="polite" aria-atomic="true">
     <div class="card p-4 flex items-start gap-3 shadow-2xl" style="background:var(--card);border-color:var(--acc);border-width:2px">
       <span class="w-10 h-10 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="bell" class="w-5 h-5"></i></span>
       <div class="flex-1 min-w-0">
@@ -1327,10 +1377,13 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        ONBOARD
        ============================================ -->
-  <div id="onboard" class="onboard-backdrop" role="dialog" aria-modal="true">
+  <div id="onboard" class="onboard-backdrop" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" onclick="if(event.target===this)closeOnboard(true)">
     <div class="onboard-card">
+      <button onclick="closeOnboard(true)" aria-label="Tutup" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+      </button>
       <div id="onboardIcon" class="w-14 h-14 rounded-2xl acc-soft acc-text flex items-center justify-center mb-3"><i data-lucide="hand" class="w-7 h-7"></i></div>
-      <p id="onboardTitle" class="text-base font-extrabold text-slate-800">Selamat datang 👋</p>
+      <p id="onboardTitle" class="text-base font-extrabold text-slate-800 pr-10">Selamat datang 👋</p>
       <p id="onboardDesc" class="text-sm text-slate-500 mt-1 leading-relaxed">Kenali fitur baru yang bikin kerja makin gampang.</p>
       <div class="onboard-dots"><span class="onboard-dot active"></span><span class="onboard-dot"></span><span class="onboard-dot"></span></div>
       <div class="grid grid-cols-2 gap-2 mt-4">
@@ -1708,21 +1761,36 @@ async function compressLogo(img, size, quality){
 /* ============================================================
    TOAST — Hybrid
    ============================================================ */
+let _lastToastKey=null,_lastToastAt=0;
 function toast(m,type){
   type=type||'success';
-  const ICONS={success:'check',error:'triangle-alert',warning:'alert-triangle',info:'info'};
+  const key=type+'|'+m;
+  const now=Date.now();
+  // Dedup: pesan sama dalam 1.5s di-skip
+  if(key===_lastToastKey && now-_lastToastAt<1500) return;
+  _lastToastKey=key; _lastToastAt=now;
+
+  const ICONS={success:'check-circle',error:'alert-circle',warning:'alert-triangle',info:'info'};
   const container=$('toastContainer');
   if(!container)return;
   const el=document.createElement('div');
   el.className='toast-item t-'+type;
-  el.innerHTML=`<span class="toast-icon"><i data-lucide="${ICONS[type]||'check'}" class="w-4 h-4 text-white"></i></span><p class="toast-msg">${esc(m)}</p>`;
+  el.innerHTML=`<span class="toast-icon"><i data-lucide="${ICONS[type]||'check-circle'}" class="w-4 h-4 text-white"></i></span><p class="toast-msg">${esc(m)}</p>`;
   container.appendChild(el);
   icons();
   while(container.children.length>3){container.removeChild(container.firstChild);}
-  setTimeout(()=>{
+
+  // Timing adaptif: 2.4s base + 17ms/char di atas 30 char, cap 5s
+  const dur=Math.min(5000, 2400+Math.max(0, m.length-30)*17);
+  let dismissed=false;
+  const dismiss=()=>{
+    if(dismissed)return;
+    dismissed=true;
     el.classList.add('out');
     setTimeout(()=>el.remove(),250);
-  },2400);
+  };
+  el.addEventListener('click',dismiss);
+  setTimeout(dismiss,dur);
 }
 
 let cfCb=null;
@@ -1731,12 +1799,13 @@ function confirmDialog(msg,onOk,title,okLabel){
   $('cfTitle').textContent=title||'Yakin lanjut?';
   $('cfOk').textContent=okLabel||'Hapus';
   cfCb=onOk;
-  const m=$('mConfirm');
-  m.classList.remove('hidden');
-  m.classList.add('flex');
+  showModalInstant('mConfirm');
   icons();
 }
-function cfCancel(){$('mConfirm').classList.add('hidden');$('mConfirm').classList.remove('flex');cfCb=null;}
+function cfCancel(){
+  closeModalInstant('mConfirm');
+  cfCb=null;
+}
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 
 /* ============================================================
@@ -2122,8 +2191,30 @@ function renderState(s){
     applying=false;
   }
 }
-function showInstant(id){$(id).classList.remove('hidden');requestAnimationFrame(()=>$(id+'Sheet').classList.add('sheet-open'));}
-function closeInstant(id){$(id).classList.add('hidden');$(id+'Sheet').classList.remove('sheet-open');}
+function showInstant(id){
+  const el = $(id);
+  if(!el) return;
+  const wasHidden = el.classList.contains('hidden');
+  el.classList.remove('hidden');
+  if(wasHidden){
+    lockBodyScroll();
+    setActiveModal(el);
+    el.classList.add('modal-enter');
+    setTimeout(()=>el.classList.remove('modal-enter'), 300);
+  }
+  requestAnimationFrame(()=>$(id+'Sheet')?.classList.add('sheet-open'));
+}
+function closeInstant(id){
+  const el = $(id);
+  if(!el) return;
+  const wasVisible = !el.classList.contains('hidden');
+  el.classList.add('hidden');
+  $(id+'Sheet')?.classList.remove('sheet-open');
+  if(wasVisible){
+    unlockBodyScroll();
+    if(_activeModalEl === el) setActiveModal(null);
+  }
+}
 function openPanel(id){
   showInstant(id);
   CUR.panel=id;
@@ -2140,9 +2231,51 @@ async function tandaiBaca(){
   if(rows.length)await sb.from('creative_notification_reads').upsert(rows,{onConflict:'notification_id,guru_id',ignoreDuplicates:true});
   setTimeout(()=>setBadge(0),1200);
 }
-function showModalInstant(id){$(id).classList.remove('hidden');$(id).classList.add('flex');}
-function closeModalInstant(id){$(id).classList.add('hidden');$(id).classList.remove('flex');}
-function openModal(id){if(CUR.modal===id)return;showModalInstant(id);CUR.modal=id;safePush({...CUR});}
+function showModalInstant(id){
+  const el = $(id);
+  if(!el) return;
+  const wasHidden = el.classList.contains('hidden');
+  el.classList.remove('hidden');
+  el.classList.add('flex');
+  if(wasHidden){
+    lockBodyScroll();
+    setActiveModal(el);
+    el.classList.add('modal-enter');
+    setTimeout(()=>el.classList.remove('modal-enter'), 300);
+    // Auto-focus first input (kecuali mobile)
+    if(window.innerWidth > 768){
+      setTimeout(()=>{
+        const firstInput = el.querySelector('input:not([type="hidden"]):not([disabled]), textarea:not([disabled])');
+        if(firstInput) firstInput.focus({ preventScroll: true });
+      }, 350);
+    }
+  }
+}
+function closeModalInstant(id){
+  const el = $(id);
+  if(!el) return;
+  const wasVisible = !el.classList.contains('hidden');
+  el.classList.add('hidden');
+  el.classList.remove('flex');
+  if(wasVisible){
+    unlockBodyScroll();
+    if(_activeModalEl === el) setActiveModal(null);
+  }
+}
+function openModal(id){
+  if(CUR.modal===id)return;
+  if(id==='mPop'){
+    const el=$('mPop');
+    if(el){
+      const h=el.querySelector('#popContent h3, #popContent p.font-extrabold, #popContent p.text-base, #popContent p.text-sm.font-extrabold');
+      const label=h&&h.textContent?h.textContent.trim().slice(0,60):'Dialog';
+      el.setAttribute('aria-label',label||'Dialog');
+    }
+  }
+  showModalInstant(id);
+  CUR.modal=id;
+  safePush({...CUR});
+}
 function tutupModal(id){if(CUR.modal===id){try{history.back()}catch(e){closeModalInstant(id);CUR.modal=null;}}else closeModalInstant(id);}
 function tutupApp(){tutupModal('mApp');$('mAppFrame').src='';}
 function tutupPop(){popDismissed=true;tutupModal('mPop');}
@@ -2157,15 +2290,119 @@ function bukaExternal(){
 function openDrawer(){
   const d=$('mDrawer'),s=$('mDrawerSheet');
   if(!d||!s)return;
+  const wasHidden = d.classList.contains('hidden');
   d.classList.remove('hidden');
+  if(wasHidden) lockBodyScroll();
   requestAnimationFrame(()=>s.classList.remove('-translate-x-full'));
 }
 function closeDrawer(){
   const d=$('mDrawer'),s=$('mDrawerSheet');
   if(!d||!s)return;
+  const wasVisible = !d.classList.contains('hidden');
   s.classList.add('-translate-x-full');
+  if(wasVisible) unlockBodyScroll();
   setTimeout(()=>d.classList.add('hidden'),300);
 }
+
+/* ============================================================
+   MODAL HELPERS — Scroll Lock · Focus Trap · Escape
+   ============================================================ */
+let _scrollLockCount = 0;
+let _mainScrollTop = 0;
+let _activeModalEl = null;
+
+function lockBodyScroll(){
+  if(_scrollLockCount === 0){
+    const main = $('mainContent');
+    if(main) _mainScrollTop = main.scrollTop;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    if(main) main.style.overflow = 'hidden';
+  }
+  _scrollLockCount++;
+}
+function unlockBodyScroll(){
+  _scrollLockCount = Math.max(0, _scrollLockCount - 1);
+  if(_scrollLockCount === 0){
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    const main = $('mainContent');
+    if(main){
+      main.style.overflow = '';
+      main.scrollTop = _mainScrollTop;
+    }
+  }
+}
+function setActiveModal(el){ _activeModalEl = el; }
+
+/* Focus trap — Tab tetap di dalam modal (desktop) */
+document.addEventListener('keydown', (e) => {
+  if(e.key !== 'Tab' || !_activeModalEl) return;
+  const focusable = _activeModalEl.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  if(!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  const active = document.activeElement;
+  if(e.shiftKey){
+    if(active === first || !_activeModalEl.contains(active)){
+      e.preventDefault();
+      last.focus();
+    }
+  } else {
+    if(active === last || !_activeModalEl.contains(active)){
+      e.preventDefault();
+      first.focus();
+    }
+  }
+});
+
+/* Escape handler — priority: confirm > modal > panel > drawer > ctx */
+document.addEventListener('keydown', (e) => {
+  if(e.key !== 'Escape') return;
+
+  // 0. Onboarding (overlay top-level)
+  const ob = $('onboard');
+  if(ob && ob.classList.contains('show')){
+    closeOnboard(true);
+    return;
+  }
+
+  // 1. Confirm dialog
+  const cf = $('mConfirm');
+  if(cf && !cf.classList.contains('hidden')){
+    cfCancel();
+    return;
+  }
+
+  // 2. Modal
+  if(CUR.modal){
+    if(CUR.modal === 'mPop') popDismissed = true;
+    tutupModal(CUR.modal);
+    return;
+  }
+
+  // 3. Panel
+  if(CUR.panel){
+    tutupPanel(CUR.panel);
+    return;
+  }
+
+  // 4. Drawer
+  const drawer = $('mDrawer');
+  if(drawer && !drawer.classList.contains('hidden')){
+    closeDrawer();
+    return;
+  }
+
+  // 5. Context menu
+  const ctx = $('ctxMenu');
+  if(ctx && ctx.classList.contains('show')){
+    hideCtxMenu();
+    return;
+  }
+});
 
 /* ============================================================
    DEEP LINK
@@ -4916,7 +5153,7 @@ function bukaSemuaTemplate(mode){
   }).join('');
 
   const html = `
-    <div class="space-y-3">
+    <div class="p-5 space-y-3">
       <div class="flex items-center justify-between">
         <p class="text-base font-extrabold text-slate-800">${isWA ? 'Template Foto WA' : 'Template Kartu'}</p>
         <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
@@ -5009,7 +5246,7 @@ function bukaGaleriKarya(){
   `).join('');
 
   const html = `
-    <div class="space-y-3">
+    <div class="p-5 space-y-3">
       <div class="flex items-center justify-between">
         <p class="text-base font-extrabold text-slate-800">Karya Saya · ${arr.length}</p>
         <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
@@ -5044,7 +5281,7 @@ function openStudioSettings(){
   `).join('');
 
   const html = `
-    <div class="space-y-4">
+    <div class="p-5 space-y-4">
       <div class="flex items-center justify-between">
         <div>
           <p class="text-base font-extrabold text-slate-800">Kustomisasi Studio</p>
@@ -5059,8 +5296,6 @@ function openStudioSettings(){
         <p class="text-[10px] font-black uppercase tracking-wider text-slate-400">Warna Aksen</p>
         <div class="flex gap-2 flex-wrap">${buttons}</div>
       </div>
-
-      <button onclick="tutupModal('mPop')" class="w-full bg-slate-100 text-slate-600 font-bold py-3 rounded-xl text-sm active:scale-95 transition">Tutup</button>
     </div>`;
 
   $('popContent').innerHTML = html;
@@ -5540,7 +5775,11 @@ function forceSync(){
 }
 async function doForceSync(){
   const ov=$('syncOverlay');
-  if(ov){ov.classList.remove('hidden');ov.classList.add('flex');}
+  if(ov){
+    ov.classList.remove('hidden');
+    ov.classList.add('flex');
+    lockBodyScroll();
+  }
   resetRenderSig();
   _cacheMemo=null;
   ['gb_cache','gb_wx','gb_recent'].forEach(k=>localStorage.removeItem(k));
@@ -5552,7 +5791,11 @@ async function doForceSync(){
   schoolLogoImg=null;
   schoolLogoNpsn=null;
   try{await muatSemuaData(true);renderAuthUI();recordLastSync();}catch(e){}
-  if(ov){ov.classList.add('hidden');ov.classList.remove('flex');}
+  if(ov){
+    ov.classList.add('hidden');
+    ov.classList.remove('flex');
+    unlockBodyScroll();
+  }
   toast('Update terbaru diterapkan ✓');
 }
 function recordLastSync(){try{localStorage.setItem('gb_last_sync',String(Date.now()));}catch(e){}}
@@ -5631,7 +5874,7 @@ function renderPopup(){
   if(c.pop_pesan&&c.pop_pesan.trim().startsWith('<')){html=sanitizeHtml(c.pop_pesan);}
   else{
     const img=c.pop_gambar?`<div class="p-4 pb-0"><img src="${c.pop_gambar}" alt="Flyer" class="w-full h-auto rounded-2xl border border-slate-100" style="max-height:260px;object-fit:contain" loading="lazy" decoding="async"></div>`:'';
-    html=`<div class="bg-white"><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;
+    html=`<div><div class="h-1.5 acc-grad"></div>${img}<div class="p-6 text-center"><h3 class="text-lg font-black text-slate-800">${c.pop_judul||'Informasi'}</h3><p class="text-sm text-slate-500 mt-2 leading-relaxed">${c.pop_pesan||''}</p></div></div>`;
   }
   $('popContent').innerHTML=html;
   openModal('mPop');
@@ -5858,6 +6101,10 @@ let _onboardIdx=0;
 function showOnboard(){
   if(localStorage.getItem('gb_onboarded')==='1')return;
   const el=$('onboard');if(!el)return;
+  // Guard: jangan muncul bareng modal/panel/overlay lain
+  if(CUR.modal || CUR.panel) return;
+  const so=$('syncOverlay');
+  if(so && !so.classList.contains('hidden')) return;
   _onboardIdx=0;paintOnboard();
   el.classList.add('show');
 }
@@ -6119,7 +6366,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   setPageInstant('home');
   muatSemuaData(false);
 
-  setTimeout(showOnboard,800);
+  setTimeout(showOnboard,1200);
 })();
 </script>
 </body>
