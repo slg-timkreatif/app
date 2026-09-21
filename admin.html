@@ -116,8 +116,9 @@
   @keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.35}}
 
   /* MODAL */
-  .modal{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(15,17,21,.6);backdrop-filter:blur(2px)}
+  .modal{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:1rem;padding-top:max(1rem, calc(env(safe-area-inset-top) + 0.5rem));padding-bottom:max(1rem, calc(env(safe-area-inset-bottom) + 0.5rem));background:rgba(15,17,21,.6);backdrop-filter:blur(2px)}
   .modal.show{display:flex;animation:fadeIn .15s}
+  body.modal-open{overflow:hidden!important}
   .modal-box{background:var(--card);border-radius:1.5rem;max-width:32rem;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeUp .25s ease both}
   .modal-box.no-scroll{scrollbar-width:none}
   .modal-box.no-scroll::-webkit-scrollbar{display:none}
@@ -665,7 +666,7 @@
 </div>
 
 <!-- ============ MODAL: MENU EDITOR ============ -->
-<div id="mMenu" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+<div id="mMenu" class="modal" role="dialog" aria-modal="true" aria-labelledby="eTitle"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p>
     <button onclick="closeModal('mMenu')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
@@ -781,7 +782,7 @@
 </div></div>
 
 <!-- ============ MODAL: AGENDA ============ -->
-<div id="mAgenda" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+<div id="mAgenda" class="modal" role="dialog" aria-modal="true" aria-labelledby="aTitle"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="aTitle">Editor Agenda</p>
     <button onclick="closeModal('mAgenda')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -808,7 +809,7 @@
 </div></div>
 
 <!-- ============ MODAL: DOKUMEN ============ -->
-<div id="mDoc" class="modal"><div class="modal-box no-scroll p-6 space-y-3">
+<div id="mDoc" class="modal" role="dialog" aria-modal="true" aria-labelledby="docTitle"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="docTitle">Editor Dokumen</p>
     <button onclick="closeModal('mDoc')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -844,7 +845,10 @@
 </div></div>
 
 <!-- ============ MODAL: CONFIRM ============ -->
-<div id="mConfirm" class="modal"><div class="modal-box p-6 text-center" style="max-width:20rem">
+<div id="mConfirm" class="modal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" aria-describedby="cfMsg"><div class="modal-box p-6 text-center relative" style="max-width:20rem">
+  <button onclick="cfCancel()" aria-label="Tutup" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+    <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+  </button>
   <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3">
     <i data-lucide="alert-triangle" class="w-7 h-7"></i>
   </div>
@@ -857,8 +861,13 @@
 </div></div>
 
 <!-- ============ MODAL: AKSEN ============ -->
-<div id="mAksen" class="modal"><div class="modal-box p-6 space-y-4" style="max-width:22rem">
-  <p class="text-base font-extrabold text-slate-800">Warna Aksen</p>
+<div id="mAksen" class="modal" role="dialog" aria-modal="true" aria-labelledby="aksenTitle"><div class="modal-box p-6 space-y-4 relative" style="max-width:22rem">
+  <div class="flex items-center justify-between">
+    <p id="aksenTitle" class="text-base font-extrabold text-slate-800">Warna Aksen</p>
+    <button onclick="closeModal('mAksen')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+      <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
+    </button>
+  </div>
   <div class="flex justify-around gap-3">
     <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
     <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-10 h-10 rounded-full ring-offset-2 transition active:scale-90 acc-choice"></button>
@@ -870,10 +879,10 @@
 </div></div>
 
 <!-- ============ MODAL: POPUP INFO (untuk viewer detail sekolah/guru) ============ -->
-<div id="mPop" class="modal"><div class="modal-box p-6" id="popContent"></div></div>
+<div id="mPop" class="modal" role="dialog" aria-modal="true" aria-label="Detail"><div class="modal-box no-scroll p-6" id="popContent"></div></div>
 
 <!-- ============ TOAST ============ -->
-<div id="toast-container" class="fixed z-[190] flex flex-col gap-2" style="top:calc(env(safe-area-inset-top) + 3.5rem);right:14px;max-width:320px;pointer-events:none"></div>
+<div id="toast-container" class="fixed z-[190] flex flex-col gap-2" style="top:calc(env(safe-area-inset-top) + 3.5rem);right:14px;max-width:320px;pointer-events:none" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- ============ DEBUG PANEL ============ -->
 <div id="debug-panel">
@@ -1021,29 +1030,72 @@ function debounce(fn,delay){
 /* ============================================================
    TOAST
    ============================================================ */
+let _lastToastKey=null,_lastToastAt=0;
 function toast(msg,type){
   type=type||'success';
+  const key=type+'|'+msg;
+  const now=Date.now();
+  // Dedup: pesan identik dalam 1.5s di-skip
+  if(key===_lastToastKey && now-_lastToastAt<1500) return;
+  _lastToastKey=key; _lastToastAt=now;
+
   const ic={success:'check-circle',error:'alert-circle',warning:'alert-triangle',info:'info'}[type]||'info';
   const el=document.createElement('div');
   el.className='toast-item toast-'+type;
   el.style.pointerEvents='auto';
+  el.style.cursor='pointer';
   el.innerHTML=`<i data-lucide="${ic}" class="w-4 h-4 shrink-0"></i><span class="flex-1">${esc(msg)}</span>`;
   const c=$('toast-container');
-  if(c)c.appendChild(el);
+  if(!c)return;
+  c.appendChild(el);
   icons();
-  setTimeout(()=>{
+  // Max 3 stack
+  while(c.children.length>3)c.removeChild(c.firstChild);
+
+  let dismissed=false;
+  const dismiss=()=>{
+    if(dismissed)return;
+    dismissed=true;
     el.style.transition='all .3s';
     el.style.opacity='0';
     el.style.transform='translateX(120%)';
     setTimeout(()=>el.remove(),300);
-  },3000);
+  };
+  el.addEventListener('click',dismiss);
+  // Adaptive timing: base 3s + 17ms/char di atas 30 char, cap 6s
+  const dur=Math.min(6000, 3000+Math.max(0, msg.length-30)*17);
+  setTimeout(dismiss,dur);
 }
 
 /* ============================================================
    MODAL
    ============================================================ */
-function openModal(id){const m=$(id);if(m)m.classList.add('show');icons();}
-function closeModal(id){const m=$(id);if(m)m.classList.remove('show');}
+let _modalOpenCount=0;
+function openModal(id){
+  const m=$(id);
+  if(!m)return;
+  if(!m.classList.contains('show')){
+    m.classList.add('show');
+    _modalOpenCount++;
+    if(_modalOpenCount===1)document.body.classList.add('modal-open');
+    // Dynamic aria-label untuk mPop (konten dinamis)
+    if(id==='mPop'){
+      const h=m.querySelector('#popContent p.text-base.font-extrabold, #popContent p.text-base, #popContent p.font-extrabold');
+      const label=h&&h.textContent?h.textContent.trim().slice(0,60):'Detail';
+      m.setAttribute('aria-label',label||'Detail');
+    }
+  }
+  icons();
+}
+function closeModal(id){
+  const m=$(id);
+  if(!m)return;
+  if(m.classList.contains('show')){
+    m.classList.remove('show');
+    _modalOpenCount=Math.max(0,_modalOpenCount-1);
+    if(_modalOpenCount===0)document.body.classList.remove('modal-open');
+  }
+}
 
 function confirmDialog(msg,onOk,title,okLabel){
   $('cfMsg').textContent=msg;
@@ -1052,6 +1104,14 @@ function confirmDialog(msg,onOk,title,okLabel){
   cfCb=onOk;
   openModal('mConfirm');
 }
+
+/* Backdrop click dismiss — klik di luar .modal-box */
+document.addEventListener('click',(e)=>{
+  if(!e.target.classList || !e.target.classList.contains('modal'))return;
+  if(!e.target.classList.contains('show'))return;
+  if(e.target.id==='mConfirm'){cfCancel();return;}
+  closeModal(e.target.id);
+});
 function cfCancel(){closeModal('mConfirm');cfCb=null;}
 $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 
@@ -2554,6 +2614,32 @@ window.addEventListener('online',()=>setSyncState('synced'));
 window.addEventListener('offline',()=>setSyncState('offline'));
 
 /* ============================================================
+   FOCUS TRAP — Tab tetap di dalam modal
+   ============================================================ */
+document.addEventListener('keydown',(e)=>{
+  if(e.key!=='Tab')return;
+  const active=document.querySelector('.modal.show');
+  if(!active)return;
+  const focusable=active.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  if(!focusable.length)return;
+  const first=focusable[0];
+  const last=focusable[focusable.length-1];
+  if(e.shiftKey){
+    if(document.activeElement===first||!active.contains(document.activeElement)){
+      e.preventDefault();
+      last.focus();
+    }
+  }else{
+    if(document.activeElement===last||!active.contains(document.activeElement)){
+      e.preventDefault();
+      first.focus();
+    }
+  }
+});
+
+/* ============================================================
    KEYBOARD SHORTCUTS
    ============================================================ */
 document.addEventListener('keydown',e=>{
@@ -2573,7 +2659,10 @@ document.addEventListener('keydown',e=>{
     toggleDebug();
   }
   if(e.key==='Escape'){
-    document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'));
+    const cf=$('mConfirm');
+    if(cf && cf.classList.contains('show')){cfCancel();return;}
+    const openModals=document.querySelectorAll('.modal.show');
+    if(openModals.length){openModals.forEach(m=>closeModal(m.id));return;}
     closeDrawer();
   }
 });
