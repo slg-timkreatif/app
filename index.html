@@ -1673,6 +1673,34 @@ const COLOR_SOLID={
   rose:'bg-rose-500',violet:'bg-violet-500',fuchsia:'bg-fuchsia-500',cyan:'bg-cyan-500',
   red:'bg-red-500',emerald:'bg-emerald-500',yellow:'bg-yellow-500',sky:'bg-sky-500'
 };
+
+/* ============================================================
+   PALETTES — Preset warna studio (independen dari app accent)
+   ============================================================ */
+const PALETTES = {
+  teal:     { n:'Teal',       c1:'#0D9488', c2:'#14B8A6' },
+  sunset:   { n:'Sunset',     c1:'#EA580C', c2:'#F97316' },
+  ocean:    { n:'Ocean',      c1:'#0284C7', c2:'#38BDF8' },
+  lavender: { n:'Lavender',   c1:'#7C3AED', c2:'#A78BFA' },
+  forest:   { n:'Forest',     c1:'#15803D', c2:'#4ADE80' },
+  cherry:   { n:'Cherry',     c1:'#DC2626', c2:'#F87171' },
+  rosegold: { n:'Rose Gold',  c1:'#BE185D', c2:'#FB7185' },
+  midnight: { n:'Midnight',   c1:'#0F172A', c2:'#334155' },
+  charcoal: { n:'Charcoal',   c1:'#18181B', c2:'#52525B' },
+  blush:    { n:'Blush',      c1:'#BE123C', c2:'#F43F5E' }
+};
+
+function studioColors(){
+  const key = (STATE.studio && STATE.studio.palette) || 'teal';
+  return PALETTES[key] || PALETTES.teal;
+}
+
+function setPalette(k){
+  if(!STATE.studio || !PALETTES[k]) return;
+  STATE.studio.palette = k;
+  buildControls();
+  renderStudio();
+}
 function menuIconWrapClass(warna){
   const [bg,tx]=COLOR[warna]||COLOR.blue;
   const style=document.body.dataset.iconstyle||'default';
@@ -4521,12 +4549,11 @@ function drawAvatarCircle(ctx, img, cx, cy, r, nama, s){
     }
     ctx.drawImage(img, dx, dy, dw, dh);
   } else {
-    // Fallback: gradient + initial
-    const acc  = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()  || '#0D9488';
-    const acc2 = getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim() || '#14B8A6';
+    // Fallback: gradient + initial (ikut palette studio)
+    const pc = studioColors();
     const grad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-    grad.addColorStop(0, acc);
-    grad.addColorStop(1, acc2);
+    grad.addColorStop(0, pc.c1);
+    grad.addColorStop(1, pc.c2);
     ctx.fillStyle = grad;
     ctx.fill();
 
@@ -4585,16 +4612,17 @@ if (!def) {
   STATE.studio = {
     waMode,
     tpl,
-    fmt: 'story',
-    font: 'modern',
-    fields: Object.assign({}, pre || {}),
-    photo: null,
-    photoSmall: null,
-    crop: { offsetX: 0, offsetY: 0, scale: 1 },
-    showFoot: true,
-    showTag: true,
-    showSchoolLogo: false,
-    tagText: '#GuruBerbagiSelogiri #GTKSelogiri'
+    fmt:'story',
+    font:'modern',
+    palette:'teal',
+    fields: Object.assign({}, pre||{}),
+    photo:null,
+    photoSmall:null,
+    crop:{offsetX:0,offsetY:0,scale:1},
+    showFoot:true,
+    showTag:true,
+    showSchoolLogo:false,
+    tagText:'#GuruBerbagiSelogiri #GTKSelogiri'
   };
   
   $('stTitle').textContent = def.n;
@@ -4673,7 +4701,17 @@ function buildControls(){
   const t = st.waMode ? TPL_WA[st.tpl] : TPL[st.tpl];
   if(!t) return;
   let h='';
-  h+='<p class="lbl">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
+
+  // ─── Palette Warna ───
+  h+='<p class="lbl">Warna Latar</p>';
+  h+='<div class="flex flex-wrap gap-2 mb-1">';
+  h+=Object.entries(PALETTES).map(([k,p])=>{
+    const on=(st.palette||'teal')===k;
+    return `<button type="button" onclick="setPalette('${k}')" title="${p.n}" aria-label="${p.n}" class="w-9 h-9 rounded-full transition active:scale-90 shrink-0" style="background:linear-gradient(135deg,${p.c1},${p.c2});${on?'box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--acc)':'box-shadow:0 0 0 2px rgba(255,255,255,.25)'}"></button>`;
+  }).join('');
+  h+='</div>';
+
+  h+='<p class="lbl mt-3">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
   h+='<p class="lbl mt-3">Font</p><div class="flex gap-1.5">'+Object.entries(FONTS).map(([k,v])=>`<button onclick="setSFont('${k}')" class="flex-1 py-2 rounded-lg text-[11px] font-bold transition ${k===st.font?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
   h+=t.f.map(([k,ph])=>`<input value="${esc(st.fields[k]||'')}" oninput="setField('${k}',this.value)" placeholder="${ph}" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">`).join('');
   if (st.photo) {
@@ -4804,10 +4842,9 @@ if(st.photo){
   og.addColorStop(1,'rgba(19,78,74,.85)');
   ctx.fillStyle=og;ctx.fillRect(0,0,W,H);
 }else{
-    const acc=getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()||'#0D9488';
-    const acc2=getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim()||'#14B8A6';
+    const pc=studioColors();
     const g=ctx.createLinearGradient(0,0,W,H);
-    g.addColorStop(0,'#134E4A');g.addColorStop(.55,acc);g.addColorStop(1,acc2);
+    g.addColorStop(0,pc.c1);g.addColorStop(.55,pc.c1);g.addColorStop(1,pc.c2);
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     ctx.save();ctx.globalAlpha=.10;ctx.fillStyle='#fbbf24';
     ctx.beginPath();ctx.arc(W-140*s,180*s,260*s,0,7);ctx.fill();ctx.restore();
@@ -4979,11 +5016,10 @@ if (st.photo) {
   ctx.fillStyle = og;
   ctx.fillRect(0, fotoH - fade, W, fade);
 } else {
-    const acc  = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()  || '#0D9488';
-    const acc2 = getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim() || '#14B8A6';
+    const pc = studioColors();
     const g = ctx.createLinearGradient(0, 0, W, fotoH);
-    g.addColorStop(0, acc);
-    g.addColorStop(1, acc2);
+    g.addColorStop(0, pc.c1);
+    g.addColorStop(1, pc.c2);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, fotoH);
 
@@ -5155,11 +5191,10 @@ if (st.photo) {
     ctx.fillStyle = og;
     ctx.fillRect(fotoW - fade, 0, fade, H);
   } else {
-    const acc  = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim()  || '#0D9488';
-    const acc2 = getComputedStyle(document.documentElement).getPropertyValue('--acc2').trim() || '#14B8A6';
+    const pc = studioColors();
     const g = ctx.createLinearGradient(0, 0, fotoW, H);
-    g.addColorStop(0, acc);
-    g.addColorStop(1, acc2);
+    g.addColorStop(0, pc.c1);
+    g.addColorStop(1, pc.c2);
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, fotoW, H);
 
@@ -5358,6 +5393,7 @@ function simpanKarya(){
   tpl: st.tpl,
   fmt: st.fmt,
   font: st.font,
+  palette: st.palette || 'teal',
   fields: st.fields,
   photoSmall: st.photoSmall,
   crop: st.crop || { offsetX: 0, offsetY: 0, scale: 1 },
@@ -5421,7 +5457,7 @@ function renderKarya(){
 function openKarya(i){
   const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
   const k=arr[i];if(!k)return;
-  STATE.studio={waMode:!!k.waMode,tpl:k.tpl,fmt:k.fmt,font:k.font,fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,crop:k.crop||{offsetX:0,offsetY:0,scale:1},showFoot:k.showFoot,showTag:k.showTag,showSchoolLogo:k.showSchoolLogo||false,tagText:k.tagText};
+  STATE.studio={waMode:!!k.waMode,tpl:k.tpl,fmt:k.fmt,font:k.font,palette:k.palette||'teal',fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,crop:k.crop||{offsetX:0,offsetY:0,scale:1},showFoot:k.showFoot,showTag:k.showTag,showSchoolLogo:k.showSchoolLogo||false,tagText:k.tagText};
   if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}
   const def = k.waMode ? TPL_WA[k.tpl] : TPL[k.tpl];
   $('stTitle').textContent=def.n;
@@ -5496,16 +5532,12 @@ function renderStudioGrid(){
   let html = '';
 entries.slice(0, MAX_SHOW).forEach(([k, t]) => {
   const grad = GRAD[k] || 'linear-gradient(135deg,#7C3AED,#A855F7)';
+  const illus = TPL_ILLUS[k] || `<i data-lucide="${t.i}" class="w-6 h-6" style="color:rgba(255,255,255,.6)"></i>`;
   html += `
     <div onclick="openStudio('${k}')" class="ws-tpl">
       <div class="ws-tpl-thumb" style="aspect-ratio:3/4">
-        <div style="height:55%;background:${grad};display:flex;align-items:center;justify-content:center">
-          <i data-lucide="${t.i}" class="w-5 h-5" style="color:rgba(255,255,255,.7)"></i>
-        </div>
-        <div style="height:45%;padding:6px 6px;background:rgba(0,0,0,.35);display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center">
-          <div style="height:4px;width:80%;background:rgba(255,255,255,.5);border-radius:2px"></div>
-          <div style="height:3px;width:55%;background:rgba(255,255,255,.3);border-radius:2px"></div>
-        </div>
+        <div style="position:absolute;inset:0;background:${grad}"></div>
+        <div class="ws-illus">${illus}</div>
       </div>
       <div class="ws-tpl-label">${esc(t.n)}</div>
     </div>`;
