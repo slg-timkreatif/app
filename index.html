@@ -4615,11 +4615,12 @@ if (!def) {
     fmt:'story',
     font:'modern',
     palette:'teal',
-    fields: Object.assign({}, pre||{}),
-    photo:null,
-    photoSmall:null,
-    crop:{offsetX:0,offsetY:0,scale:1},
-    showFoot:true,
+    fields: Object.assign({}, pre || {}),
+  photo: null,
+  photoSmall: null,
+  crop: { offsetX: 0, offsetY: 0, scale: 1 },
+  tintPhoto: false,
+  showFoot: true,
     showTag:true,
     showSchoolLogo:false,
     tagText:'#GuruBerbagiSelogiri #GTKSelogiri'
@@ -4709,9 +4710,10 @@ function buildControls(){
     const on=(st.palette||'teal')===k;
     return `<button type="button" onclick="setPalette('${k}')" title="${p.n}" aria-label="${p.n}" class="w-9 h-9 rounded-full transition active:scale-90 shrink-0" style="background:linear-gradient(135deg,${p.c1},${p.c2});${on?'box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--acc)':'box-shadow:0 0 0 2px rgba(255,255,255,.25)'}"></button>`;
   }).join('');
-  h+='</div>';
+h += '</div>';
+h += '<div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mt-3">Warnai Foto ' + sw('tintPhoto', st.tintPhoto) + '</div>';
 
-  h+='<p class="lbl mt-3">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
+h += '<p class="lbl mt-3">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
   h+='<p class="lbl mt-3">Font</p><div class="flex gap-1.5">'+Object.entries(FONTS).map(([k,v])=>`<button onclick="setSFont('${k}')" class="flex-1 py-2 rounded-lg text-[11px] font-bold transition ${k===st.font?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
   h+=t.f.map(([k,ph])=>`<input value="${esc(st.fields[k]||'')}" oninput="setField('${k}',this.value)" placeholder="${ph}" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">`).join('');
   if (st.photo) {
@@ -4836,6 +4838,17 @@ async function renderStudio(){
   const ff=FONTS[st.font];const f=st.fields;
 if(st.photo){
   drawPhotoWithCrop(ctx,st.photo,0,0,W,H,st.crop);
+  if(st.tintPhoto){
+    const pc=studioColors();
+    const tg=ctx.createLinearGradient(0,0,W,H);
+    tg.addColorStop(0,pc.c1);
+    tg.addColorStop(1,pc.c2);
+    ctx.save();
+    ctx.globalAlpha=0.25;
+    ctx.fillStyle=tg;
+    ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
   const og=ctx.createLinearGradient(0,0,0,H);
   og.addColorStop(0,'rgba(19,78,74,.55)');
   og.addColorStop(.5,'rgba(19,78,74,.25)');
@@ -5007,6 +5020,15 @@ if (st.photo) {
   ctx.rect(0, 0, W, fotoH);
   ctx.clip();
   drawPhotoWithCrop(ctx, st.photo, 0, 0, W, fotoH, st.crop);
+  if (st.tintPhoto) {
+    const pc = studioColors();
+    const tg = ctx.createLinearGradient(0, 0, W, fotoH);
+    tg.addColorStop(0, pc.c1);
+    tg.addColorStop(1, pc.c2);
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = tg;
+    ctx.fillRect(0, 0, W, fotoH);
+  }
   ctx.restore();
   
   const fade = 200 * s;
@@ -5181,10 +5203,19 @@ if (st.photo) {
   ctx.rect(0, 0, fotoW, H);
   ctx.clip();
   drawPhotoWithCrop(ctx, st.photo, 0, 0, fotoW, H, st.crop);
+  if (st.tintPhoto) {
+    const pc = studioColors();
+    const tg = ctx.createLinearGradient(0, 0, fotoW, H);
+    tg.addColorStop(0, pc.c1);
+    tg.addColorStop(1, pc.c2);
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = tg;
+    ctx.fillRect(0, 0, fotoW, H);
+  }
   ctx.restore();
-
-    // Gradient fade di kanan foto
-    const fade = 120 * s;
+  
+  // Gradient fade di kanan foto
+  const fade = 120 * s;
     const og = ctx.createLinearGradient(fotoW - fade, 0, fotoW, 0);
     og.addColorStop(0, 'rgba(24,27,33,0)');
     og.addColorStop(1, 'rgba(24,27,33,1)');
@@ -5397,6 +5428,7 @@ function simpanKarya(){
   fields: st.fields,
   photoSmall: st.photoSmall,
   crop: st.crop || { offsetX: 0, offsetY: 0, scale: 1 },
+  tintPhoto: !!st.tintPhoto,
   showFoot: st.showFoot,
   showTag: st.showTag,
   showSchoolLogo: st.showSchoolLogo,
@@ -5457,7 +5489,7 @@ function renderKarya(){
 function openKarya(i){
   const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
   const k=arr[i];if(!k)return;
-  STATE.studio={waMode:!!k.waMode,tpl:k.tpl,fmt:k.fmt,font:k.font,palette:k.palette||'teal',fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,crop:k.crop||{offsetX:0,offsetY:0,scale:1},showFoot:k.showFoot,showTag:k.showTag,showSchoolLogo:k.showSchoolLogo||false,tagText:k.tagText};
+  STATE.studio={waMode:!!k.waMode,tpl:k.tpl,fmt:k.fmt,font:k.font,palette:k.palette||'teal',fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,crop:k.crop||{offsetX:0,offsetY:0,scale:1},tintPhoto:!!k.tintPhoto,showFoot:k.showFoot,showTag:k.showTag,showSchoolLogo:k.showSchoolLogo||false,tagText:k.tagText};
   if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}
   const def = k.waMode ? TPL_WA[k.tpl] : TPL[k.tpl];
   $('stTitle').textContent=def.n;
