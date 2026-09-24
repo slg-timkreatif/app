@@ -136,8 +136,85 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   .sheet.sheet-open{transform:translateY(0)}
   @media (min-width:768px){.sheet{top:50%;left:50%;right:auto;bottom:auto;width:100%;border-radius:var(--r-2xl);transform:translate(-50%,-50%) translateY(28px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease}.sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}}
 
-  .sync-bar{width:0;animation:syncprog 1.4s ease-in-out infinite}
-  @keyframes syncprog{0%{width:0}60%{width:80%}100%{width:100%}}
+  /* ============================================
+     SYNC OVERLAY v2 — Logo Pulse Orbit
+     ============================================ */
+  #syncOverlay{
+    position:fixed;inset:0;z-index:96;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:32px;
+    background:rgba(15,17,21,.75);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  #syncOverlay.show{opacity:1;pointer-events:auto}
+  html.dark #syncOverlay{
+    background:rgba(15,17,21,.9);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .sync-msg{
+    font-size:15px;font-weight:700;color:rgba(255,255,255,.92);
+    letter-spacing:.01em;min-height:22px;text-align:center;
+    transition:opacity .2s ease;
+  }
+  .sync-progress{width:200px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+  .sync-progress-fill{
+    height:100%;width:0;
+    background:linear-gradient(90deg,var(--acc),var(--acc2));
+    border-radius:2px;
+  }
+
+  /* Logo Orbit */
+  .sync-orbit{position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center}
+  .sync-pulse{
+    position:absolute;width:72px;height:72px;border-radius:50%;
+    border:2px solid var(--acc-ring);
+    animation:syncPulse 2.4s cubic-bezier(.4,0,.6,1) infinite;
+  }
+  .sync-pulse:nth-child(2){animation-delay:.8s}
+  .sync-pulse:nth-child(3){animation-delay:1.6s}
+  @keyframes syncPulse{
+    0%{transform:scale(1);opacity:.8}
+    100%{transform:scale(1.9);opacity:0}
+  }
+
+  .sync-ring{position:absolute;inset:0;animation:syncRotate 4s linear infinite}
+  .sync-ring svg{width:100%;height:100%;display:block}
+  @keyframes syncRotate{to{transform:rotate(360deg)}}
+  .sync-ring circle{stroke:var(--acc)}
+
+  .sync-dot{
+    position:absolute;width:8px;height:8px;border-radius:50%;
+    background:var(--acc2);top:0;left:50%;transform:translateX(-50%);
+    box-shadow:0 0 12px var(--acc),0 0 4px var(--acc2);
+  }
+
+  .sync-logo{
+    position:relative;width:72px;height:72px;border-radius:50%;
+    overflow:hidden;background:#fff;
+    box-shadow:0 8px 32px var(--acc-ring),0 0 0 4px rgba(255,255,255,.08);
+    z-index:2;
+  }
+  .sync-logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .sync-logo-fallback{
+    position:absolute;inset:0;display:none;
+    align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--acc),var(--acc2));
+  }
+  .sync-logo-fallback svg{width:36px;height:36px;color:#fff}
+  .sync-logo.fallback .sync-logo-fallback{display:flex}
+  .sync-logo.fallback img{display:none}
+
+  /* Message dots */
+  .sync-msg-dots{display:inline-flex;gap:3px;margin-left:4px;vertical-align:middle}
+  .sync-msg-dot{
+    width:3px;height:3px;border-radius:50%;
+    background:rgba(255,255,255,.6);
+    animation:syncMsgDot 1.4s infinite;
+  }
+  .sync-msg-dot:nth-child(2){animation-delay:.2s}
+  .sync-msg-dot:nth-child(3){animation-delay:.4s}
+  @keyframes syncMsgDot{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
   .skip-link{position:fixed;left:-9999px;top:8px;z-index:200;background:var(--acc);color:#fff;padding:.65rem 1rem;border-radius:.75rem;font-weight:800;font-size:.8rem;text-decoration:none}
   .skip-link:focus{left:8px}
@@ -1411,15 +1488,34 @@ html.dark .onboard-dot{background:#3A404A}
   <!-- ============================================
        OVERLAY: SYNC
        ============================================ -->
-  <div id="syncOverlay" class="fixed inset-0 z-[96] hidden items-center justify-center bg-black/60 backdrop-blur-sm" role="alert" aria-live="polite" aria-busy="true">
-    <div class="flex flex-col items-center gap-4">
-      <div class="relative w-16 h-16">
-        <div class="absolute inset-0 rounded-full border-4 border-white/20"></div>
-        <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-white animate-spin"></div>
+  <div id="syncOverlay" role="alert" aria-live="polite" aria-busy="true">
+    <div class="sync-orbit">
+      <div class="sync-pulse"></div>
+      <div class="sync-pulse"></div>
+      <div class="sync-pulse"></div>
+      <div class="sync-ring">
+        <svg viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="58" fill="none" stroke-opacity=".25" stroke-width="1.5" stroke-dasharray="4 6"/>
+        </svg>
+        <div class="sync-dot"></div>
       </div>
-      <p class="text-white text-sm font-bold">Mengunduh update terbaru…</p>
-      <div class="w-44 h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white rounded-full sync-bar"></div></div>
+      <div class="sync-logo" id="syncLogo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" alt="" onerror="this.parentElement.classList.add('fallback')">
+        <div class="sync-logo-fallback">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+      </div>
     </div>
+
+    <p class="sync-msg">
+      <span id="syncMsg">Menghubungkan ke server</span>
+      <span class="sync-msg-dots"><span class="sync-msg-dot"></span><span class="sync-msg-dot"></span><span class="sync-msg-dot"></span></span>
+    </p>
+
+    <div class="sync-progress"><div class="sync-progress-fill" id="syncProgress"></div></div>
   </div>
 
   <!-- ============================================
@@ -6255,16 +6351,59 @@ async function muatSemuaData(force){
   handleDeepLink();
 }
 
+/* ============================================================
+   SYNC OVERLAY v2 — Logo Pulse Orbit
+   ============================================================ */
+const _syncMsgs = ['Menghubungkan ke server','Menyinkronkan data','Memperbarui konten','Hampir selesai'];
+let _syncMsgTimer = null;
+let _syncStartAt = 0;
+
+function startSyncOverlay(){
+  const ov = $('syncOverlay');
+  if(!ov || ov.classList.contains('show')) return;
+  _syncStartAt = Date.now();
+  ov.classList.add('show');
+  ov.setAttribute('aria-busy','true');
+
+  const msgEl = $('syncMsg');
+  const progEl = $('syncProgress');
+  if(msgEl) msgEl.textContent = _syncMsgs[0];
+  if(progEl){
+    progEl.style.transition = 'none';
+    progEl.style.width = '0';
+    void progEl.offsetWidth; /* reflow */
+    progEl.style.transition = 'width 3.2s cubic-bezier(.4,0,.2,1)';
+    progEl.style.width = '100%';
+  }
+
+  let idx = 0;
+  if(_syncMsgTimer) clearInterval(_syncMsgTimer);
+  _syncMsgTimer = setInterval(() => {
+    idx++;
+    if(idx >= _syncMsgs.length){ clearInterval(_syncMsgTimer); _syncMsgTimer = null; return; }
+    if(msgEl) msgEl.textContent = _syncMsgs[idx];
+  }, 800);
+}
+
+function stopSyncOverlay(minDuration){
+  minDuration = minDuration || 1500;
+  const ov = $('syncOverlay');
+  if(!ov) return;
+  const elapsed = Date.now() - _syncStartAt;
+  const wait = Math.max(0, minDuration - elapsed);
+  setTimeout(() => {
+    ov.classList.remove('show');
+    ov.setAttribute('aria-busy','false');
+    if(_syncMsgTimer){ clearInterval(_syncMsgTimer); _syncMsgTimer = null; }
+  }, wait);
+}
+
 function forceSync(){
   confirmDialog('Hapus cache lokal dan tarik data terbaru dari server? Pastikan koneksi internet stabil.',doForceSync,'Force Sync?','Sync Sekarang');
 }
 async function doForceSync(){
-  const ov=$('syncOverlay');
-  if(ov){
-    ov.classList.remove('hidden');
-    ov.classList.add('flex');
-    lockBodyScroll();
-  }
+  startSyncOverlay();
+  lockBodyScroll();
   resetRenderSig();
   _cacheMemo=null;
   ['gb_cache','gb_wx','gb_recent'].forEach(k=>localStorage.removeItem(k));
@@ -6276,11 +6415,8 @@ async function doForceSync(){
   schoolLogoImg=null;
   schoolLogoNpsn=null;
   try{await muatSemuaData(true);renderAuthUI();recordLastSync();}catch(e){}
-  if(ov){
-    ov.classList.add('hidden');
-    ov.classList.remove('flex');
-    unlockBodyScroll();
-  }
+  unlockBodyScroll();
+  stopSyncOverlay(1500);
   toast('Update terbaru diterapkan ✓');
 }
 function recordLastSync(){try{localStorage.setItem('gb_last_sync',String(Date.now()));}catch(e){}}
@@ -6589,7 +6725,7 @@ function showOnboard(){
   // Guard: jangan muncul bareng modal/panel/overlay lain
   if(CUR.modal || CUR.panel) return;
   const so=$('syncOverlay');
-  if(so && !so.classList.contains('hidden')) return;
+  if(so && so.classList.contains('show')) return;
   _onboardIdx=0;paintOnboard();
   el.classList.add('show');
 }
