@@ -491,7 +491,7 @@ html.dark .onboard-dot{background:#3A404A}
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
 
-<div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row">
+<div id="scrApp" class="w-full min-h-screen relative flex flex-col md:flex-row md:h-screen md:overflow-hidden">
 
   <!-- ============================================
        OFFLINE BAR
@@ -503,7 +503,7 @@ html.dark .onboard-dot{background:#3A404A}
   <!-- ============================================
        SIDEBAR (Desktop)
        ============================================ -->
-  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white p-5 sticky top-0 h-screen">
+  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white p-5 md:h-screen md:overflow-y-auto">
     <div class="flex items-center gap-3 mb-8">
       <div class="w-11 h-11 rounded-xl overflow-hidden border border-slate-200">
         <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
@@ -543,7 +543,7 @@ html.dark .onboard-dot{background:#3A404A}
   <!-- ============================================
        MAIN CONTENT WRAPPER
        ============================================ -->
-  <div class="flex-1 flex flex-col relative min-w-0">
+  <div class="flex-1 flex flex-col relative min-w-0 md:h-screen md:overflow-hidden">
 
     <!-- HEADER -->
     <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2 md:max-w-6xl md:mx-auto md:w-full">
@@ -1617,7 +1617,7 @@ window.addEventListener('unhandledrejection',(e)=>{
    ============================================================ */
 async function fotoCacheGet(gid){if(!gid)return null;const rec=await idb.get('foto',gid);return rec?rec.data:null;}
 async function fotoCachePut(gid,data){return idb.set('foto',gid,{data,t:Date.now()});}
-async function fotoCacheFresh(gid){const rec=await idb.get('foto',gid);return !!(rec&&rec.t&&(Date.now()-rec.t)<86400000);}
+async function fotoCacheFresh(gid){const rec=await idb.get('foto',gid);return !!(rec&&rec.t&&(Date.now()-rec.t)<604800000);}
 function cacheFotoFromNet(gid){
   if(!gid)return;
   const net=fotoUrl(gid,true);
@@ -1888,6 +1888,9 @@ function sanitizeHtml(html){
   return tpl.innerHTML;
 }
 
+function isUUID(v){
+  return typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+}
 function namaPanggil(full){let n=(full||'').split(',')[0].trim();n=n.replace(/^(Dra?\.|Dr\.|H\.|Hj\.|Ir\.|Prof\.)\s*/i,'');const w=(n.split(/\s+/)[0]||'Guru');return w.charAt(0)+w.slice(1).toLowerCase();}
 const needsLogin=m=>['Guru','Kepala Sekolah'].includes(m.akses_role);
 
@@ -3256,7 +3259,7 @@ function renderAgenda(){
 
   const favAgenda = list.filter(a => STATE.favsAgenda.has(String(a.id)));
 if (favAgenda.length) {
-  html += `<div class="space-y-2 mb-4"><p class="text-[10px] font-black uppercase tracking-widest text-amber-500 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Agenda Favorit</p><div class="grid md:grid-cols-2 gap-2">${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div></div>`;
+  html += `<div class="space-y-2 mb-4"><p class="text-[10px] font-black uppercase tracking-widest text-amber-500 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Agenda Favorit</p><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div></div>`;
 }
 
   const upMonths=[...new Set(up.map(a=>(a.tanggal||'').slice(0,7)))].sort();
@@ -3290,7 +3293,7 @@ function agendaRow(a,isPast,tstr){
 }
 function monthSection(mk, items, isPast, tstr) {
   const d = new Date(mk + '-01T00:00:00');
-  return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10 bg-[var(--bg)]">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p><div class="grid md:grid-cols-2 gap-2">${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div></div>`;
+  return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10 bg-[var(--bg)]">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div></div>`;
 }
 
 /* ============================================================
@@ -3299,11 +3302,19 @@ function monthSection(mk, items, isPast, tstr) {
 function dokGridItem(d){
   const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   const isFav=STATE.favsDok.has(String(d.id));
-  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex flex-col gap-2 active:scale-[.96] transition relative">
-    <button onclick="toggleFavDok(${d.id},event)" aria-label="Favorit" class="absolute top-2 right-2 w-7 h-7 rounded-lg flex items-center justify-center z-10"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>
-    <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
-    <span class="text-[12px] font-extrabold text-slate-800 leading-tight pr-6">${esc(d.judul)}</span>
-    <span class="text-[10px] text-slate-400 line-clamp-2">${esc(d.deskripsi||'')}</span>
+  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex flex-col gap-3 active:scale-[.96] transition relative min-h-[140px]">
+    <div class="flex items-start gap-3">
+      <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden shrink-0">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
+      <button onclick="toggleFavDok(${d.id},event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center ml-auto shrink-0 -mt-1 -mr-1"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>
+    </div>
+    <div class="flex-1 flex flex-col gap-1.5">
+      <span class="text-[13px] font-extrabold text-slate-800 leading-tight line-clamp-2">${esc(d.judul)}</span>
+      <span class="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">${esc(d.deskripsi||'')}</span>
+    </div>
+    <div class="flex items-center justify-between text-[9px] font-bold text-slate-300 uppercase tracking-wider">
+      <span>${esc(d.kategori||'Umum')}</span>
+      <i data-lucide="external-link" class="w-3 h-3"></i>
+    </div>
   </a>`;
 }
 function dokRowItem(d){
@@ -3339,7 +3350,7 @@ function renderDokumen(filter){
   if (favs.length && !f) {
   html += `<p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 mt-4 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p>`;
   html += view === 'grid' ?
-    `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">${favs.map(dokGridItem).join('')}</div>` :
+    `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${favs.map(dokGridItem).join('')}</div>` :
     `<div class="space-y-2">${favs.map(dokRowItem).join('')}</div>`;
 }
 
@@ -3348,7 +3359,7 @@ function renderDokumen(filter){
     const list=rest.filter(d=>(d.kategori||'Umum')===c);
     const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 mt-4">${esc(c)}</p>`;
     return view === 'grid' ?
-  head + `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">${list.map(dokGridItem).join('')}</div>` :
+  head + `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${list.map(dokGridItem).join('')}</div>` :
   head + `<div class="space-y-2">${list.map(dokRowItem).join('')}</div>`;
   }).join('');
 
@@ -4501,12 +4512,14 @@ async function ensureUserAvatarLoaded(){
 
   try {
     let url = null;
-    // 1. Custom override
-    try {
-      const { data: pref } = await sb.from('creative_user_preferences')
-        .select('foto_url').eq('guru_id', gid).maybeSingle();
-      if(pref?.foto_url) url = pref.foto_url;
-    } catch(_) {}
+    // 1. Custom override (hanya kalau guru_id UUID)
+    if(isUUID(gid)){
+      try {
+        const { data: pref } = await sb.from('creative_user_preferences')
+          .select('foto_url').eq('guru_id', gid).maybeSingle();
+        if(pref?.foto_url) url = pref.foto_url;
+      } catch(_) {}
+    }
 
     // 2. IndexedDB cache
     if(!url) url = await fotoCacheGet(gid);
@@ -5846,6 +5859,11 @@ function renderStudioHeader(){
   };
   (async () => {
     try {
+      if(!isUUID(gid)){
+        const cached = await fotoCacheGet(gid);
+        applyAv(av, cached || fotoUrl(gid, true));
+        return;
+      }
       const { data: pref } = await sb.from('creative_user_preferences')
         .select('foto_url').eq('guru_id', gid).maybeSingle();
       if(pref?.foto_url){ applyAv(av, pref.foto_url); }
@@ -5961,6 +5979,7 @@ async function uploadProfilePhoto(file){
   if(file.size > 10 * 1024 * 1024) return toast('Ukuran foto maksimal 10 MB','error');
   const gid = guruId();
   if(!gid) return toast('Login dulu','info');
+  if(!isUUID(gid)) return toast('Format ID akun tidak valid — hubungi admin SSO','error');
   if(!navigator.onLine) return toast('Butuh koneksi internet untuk upload','warning');
 
   toast('Memproses foto…','info');
@@ -6038,7 +6057,7 @@ $('formLogin').addEventListener('submit',async e=>{
     STATE.profile=res.profile;STATE.token=res.token;
     tutupPanel('pLogin');
     const gid=guruId();
-    if(gid){
+    if(gid && isUUID(gid)){
       const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();
       if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}
     }
@@ -6079,6 +6098,11 @@ function renderAuthUI(){
     const setAv = async (el) => {
       if(!el) return;
       applyAv(el, LOGO);
+      if(!isUUID(gid)){
+        const cached = await fotoCacheGet(gid);
+        applyAv(el, cached || fotoUrl(gid, true));
+        return;
+      }
       try {
         const { data: pref } = await sb.from('creative_user_preferences')
           .select('foto_url').eq('guru_id', gid).maybeSingle();
@@ -6133,7 +6157,9 @@ async function simpanSosmed(){
   const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});
   STATE.sosmed=clean;
   localStorage.setItem('gb_sosmed',JSON.stringify(clean));
-  await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});
+  if(isUUID(gid)){
+    await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});
+  }
   renderAuthUI();
   toast('Sosial media tersimpan untuk watermark');
 }
@@ -6141,7 +6167,9 @@ async function hapusSosmed(){
   const gid=guruId();if(!gid)return;
   STATE.sosmed={};
   localStorage.setItem('gb_sosmed','{}');
-  await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});
+  if(isUUID(gid)){
+    await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});
+  }
   renderAuthUI();
   toast('Sosial media dihapus');
 }
@@ -6806,7 +6834,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
         const _lastOpenLog=parseInt(localStorage.getItem('gb_last_open_log')||'0',10);
         if(Date.now()-_lastOpenLog>5*60*1000){localStorage.setItem('gb_last_open_log',String(Date.now()));logAktivitas('buka_aplikasi');}
         const gid=guruId();
-        if(gid){
+        if(gid && isUUID(gid)){
           const {data:pref}=await sb.from('creative_user_preferences').select('sosial').eq('guru_id',gid).maybeSingle();
           if(pref&&pref.sosial){STATE.sosmed=pref.sosial;localStorage.setItem('gb_sosmed',JSON.stringify(pref.sosial));}
         }
