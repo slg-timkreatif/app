@@ -737,40 +737,92 @@ function pasangApp(){
 }
 
 /* ============================================================
-   Offline Queue
+   Offline Queue — robust version (Tahap 3)
    ============================================================ */
-async function queueOffline(aksi,payload){
-  const queue=(await idb.get('misc','offline_queue'))||[];
-  queue.push({aksi,payload,t:Date.now()});
-  await idb.set('misc','offline_queue',queue);
+const QUEUE_MAX_RETRIES = 3;
+
+async function updatePendingBadge(){
+  try {
+    const queue = (await idb.get('misc','offline_queue')) || [];
+    const n = queue.length;
+    const wrap = $('pendingSyncWrap');
+    const badge = $('pendingSyncBadge');
+    if(wrap) wrap.classList.toggle('hidden', n === 0);
+    if(badge && n > 0) badge.textContent = n > 99 ? '99+' : n;
+  } catch(_) {}
+}
+
+async function queueOffline(aksi, payload){
+  const queue = (await idb.get('misc','offline_queue')) || [];
+  // Dedup untuk sosmed: aksi sama untuk guru_id sama → replace
+  if(aksi === 'sosmed_upsert' || aksi === 'sosmed_delete'){
+    const idx = queue.findIndex(x => x.aksi === aksi && x.payload && x.payload.guru_id === payload.guru_id);
+    if(idx >= 0) queue.splice(idx, 1);
+  }
+  queue.push({ aksi, payload, t: Date.now(), retries: 0 });
+  await idb.set('misc','offline_queue', queue);
+  await updatePendingBadge();
   try{
-    if('serviceWorker' in navigator&&'SyncManager' in window){
-      const reg=await navigator.serviceWorker.ready;
+    if('serviceWorker' in navigator && 'SyncManager' in window){
+      const reg = await navigator.serviceWorker.ready;
       await reg.sync.register('gb-sync-offline');
     }
   }catch(_){}
 }
-async function flushOfflineQueue(){
-  const queue=(await idb.get('misc','offline_queue'))||[];
-  if(!queue.length)return;
-  const remaining=[];
-  for(const item of queue){
-    try{
-      remaining.push(item); // semua item lama di-drop
-    }catch(_){remaining.push(item);}
+
+async function processQueueItem(item){
+  switch(item.aksi){
+    case 'sosmed_upsert':
+      await sb.from('creative_user_preferences').upsert(item.payload, { onConflict: 'guru_id' });
+      break;
+    case 'sosmed_delete':
+      await sb.from('creative_user_preferences').upsert(item.payload, { onConflict: 'guru_id' });
+      break;
+    case 'feedback':
+      await sb.functions.invoke('creative-feedback', { body: item.payload });
+      break;
+    default:
+      console.warn('[queue] unknown aksi:', item.aksi);
   }
-  await idb.set('misc','offline_queue',remaining);
-  if(queue.length>remaining.length){
-    toast(`${queue.length-remaining.length} data offline tersinkron ✓`);
+}
+
+async function flushOfflineQueue(){
+  const queue = (await idb.get('misc','offline_queue')) || [];
+  if(!queue.length){ await updatePendingBadge(); return; }
+
+  const remaining = [];
+  let success = 0;
+
+  for(const item of queue){
+    try {
+      await processQueueItem(item);
+      success++;
+    } catch(e) {
+      console.warn('[queue] item failed:', item.aksi, e && e.message);
+      const retries = (item.retries || 0) + 1;
+      if(retries < QUEUE_MAX_RETRIES){
+        remaining.push({ ...item, retries });
+      } else {
+        console.warn('[queue] item dropped after max retries:', item.aksi);
+      }
+    }
+  }
+
+  await idb.set('misc','offline_queue', remaining);
+  await updatePendingBadge();
+
+  if(success > 0){
+    toast(`${success} data tersinkron ✓`);
     silentRefresh(true);
   }
 }
+
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.addEventListener('message',(e)=>{
-    if(e.data&&e.data.type==='FLUSH_OFFLINE_QUEUE')flushOfflineQueue();
+  navigator.serviceWorker.addEventListener('message', (e) => {
+    if(e.data && e.data.type === 'FLUSH_OFFLINE_QUEUE') flushOfflineQueue();
   });
 }
-window.addEventListener('online',()=>{
+window.addEventListener('online', () => {
   toast('Kembali online — sinkronisasi...','info');
   flushOfflineQueue();
 });
@@ -4666,25 +4718,61 @@ function setSapaan(){
 
 async function simpanSosmed(){
   const gid=guruId();if(!gid)return;
+  if(!isUUID(gid)) return toast('Format ID akun tidak valid — hubungi admin SSO','error');
+
   const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};
   const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});
+
+  // Optimistic UI — update lokal dulu
   STATE.sosmed=clean;
   localStorage.setItem('gb_sosmed',JSON.stringify(clean));
-  if(isUUID(gid)){
-    await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:clean},{onConflict:'guru_id'});
-  }
   renderAuthUI();
-  toast('Sosial media tersimpan untuk watermark');
+
+  const payload = { guru_id: gid, sosial: clean };
+
+  if(!navigator.onLine){
+    await queueOffline('sosmed_upsert', payload);
+    toast('Tersimpan lokal — akan sync saat online ✓');
+    return;
+  }
+
+  try {
+    const { error } = await sb.from('creative_user_preferences').upsert(payload,{onConflict:'guru_id'});
+    if(error) throw error;
+    toast('Sosial media tersimpan untuk watermark');
+  } catch(e) {
+    console.warn('[simpanSosmed] network error, queueing:', e && e.message);
+    await queueOffline('sosmed_upsert', payload);
+    toast('Koneksi bermasalah — tersimpan lokal, akan sync nanti ✓','warning');
+  }
 }
+
 async function hapusSosmed(){
   const gid=guruId();if(!gid)return;
+  if(!isUUID(gid)) return toast('Format ID akun tidak valid — hubungi admin SSO','error');
+
+  // Optimistic UI
   STATE.sosmed={};
   localStorage.setItem('gb_sosmed','{}');
-  if(isUUID(gid)){
-    await sb.from('creative_user_preferences').upsert({guru_id:gid,sosial:{}},{onConflict:'guru_id'});
-  }
   renderAuthUI();
-  toast('Sosial media dihapus');
+
+  const payload = { guru_id: gid, sosial: {} };
+
+  if(!navigator.onLine){
+    await queueOffline('sosmed_delete', payload);
+    toast('Tersimpan lokal — akan sync saat online ✓');
+    return;
+  }
+
+  try {
+    const { error } = await sb.from('creative_user_preferences').upsert(payload,{onConflict:'guru_id'});
+    if(error) throw error;
+    toast('Sosial media dihapus');
+  } catch(e) {
+    console.warn('[hapusSosmed] network error, queueing:', e && e.message);
+    await queueOffline('sosmed_delete', payload);
+    toast('Koneksi bermasalah — tersimpan lokal, akan sync nanti ✓','warning');
+  }
 }
 
 /* ============================================================
@@ -5111,18 +5199,38 @@ renderStars();
 async function submitFb(){
   const pesan=$('fbPesan').value.trim();
   if(!pesan)return toast('Isi pesan dulu ya','info');
+
+  const payload = {
+    tipe: STATE.tipeFb,
+    pesan,
+    rating: STATE.rating,
+    is_anonim: !STATE.profile,
+    token_sso: STATE.token
+  };
+
+  // Offline: queue, jangan block user
+  if(!navigator.onLine){
+    await queueOffline('feedback', payload);
+    $('fbPesan').value='';
+    tutupPanel('pFb');
+    toast('Tersimpan — akan terkirim saat online ✓');
+    return;
+  }
+
   const _btn=$('btnFb');
   setBtnLoading(_btn,true);
   try{
-    const {error}=await sb.functions.invoke('creative-feedback',{body:{tipe:STATE.tipeFb,pesan,rating:STATE.rating,is_anonim:!STATE.profile,token_sso:STATE.token}});
-    if(error)toast('Gagal mengirim, coba lagi','error');
-    else{
-      $('fbPesan').value='';
-      tutupPanel('pFb');
-      toast('Terkirim! Terima kasih atas masukannya');
-    }
+    const {error}=await sb.functions.invoke('creative-feedback',{body:payload});
+    if(error) throw error;
+    $('fbPesan').value='';
+    tutupPanel('pFb');
+    toast('Terkirim! Terima kasih atas masukannya');
   }catch(e){
-    toast('Gagal mengirim, coba lagi','error');
+    console.warn('[submitFb] failed, queueing:', e && e.message);
+    await queueOffline('feedback', payload);
+    $('fbPesan').value='';
+    tutupPanel('pFb');
+    toast('Koneksi bermasalah — akan terkirim nanti ✓','warning');
   }finally{
     setBtnLoading(_btn,false);
   }
@@ -5404,6 +5512,9 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
 
   setPageInstant('home');
   muatSemuaData(false);
+
+  // Init badge pending sync — baca dari IndexedDB
+  updatePendingBadge();
 
   setTimeout(showOnboard,1200);
 })();
