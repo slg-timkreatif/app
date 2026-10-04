@@ -33,8 +33,9 @@ function fetchWithTimeout(req, ms) {
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      .then(c => Promise.allSettled(SHELL.map(u => c.add(u).catch(() => null))))
-      .then(() => self.skipWaiting())
+    .then(c => Promise.allSettled(SHELL.map(u => c.add(u).catch(() => null))))
+    // JANGAN skipWaiting otomatis — tunggu user klik "Muat Ulang"
+    // supaya tidak ada state mismatch mid-session
   );
 });
 
@@ -44,10 +45,10 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE && k !== RUNTIME).map(k => caches.delete(k))
-      ))
-      .then(() => self.clients.claim())
+    .then(keys => Promise.all(
+      keys.filter(k => k !== CACHE && k !== RUNTIME).map(k => caches.delete(k))
+    ))
+    .then(() => self.clients.claim())
   );
 });
 
@@ -58,7 +59,7 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-
+  
   /* 1. Supabase API
      - Auth & Functions → network only (perlu fresh untuk keamanan)
      - REST/Storage GET → StaleWhileRevalidate (data lama tampil offline)
@@ -72,7 +73,7 @@ self.addEventListener('fetch', e => {
     if (url.pathname.startsWith('/realtime/')) return;
     // Write operations — network only (app.js yang handle queue)
     if (req.method !== 'GET') return;
-
+    
     // GET REST/Storage → StaleWhileRevalidate
     e.respondWith(
       caches.open(RUNTIME).then(c =>
@@ -89,29 +90,29 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
-
+  
   /* 2. Navigasi HTML → network first, cache fallback */
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy));
-          return res;
-        })
-        .catch(async () => {
-          const cached = await caches.match(req);
-          if (cached) return cached;
-          const idx = await caches.match('./index.html');
-          if (idx) return idx;
-          const cr = await caches.match('./creative.html');
-          if (cr) return cr;
-          return caches.match('./');
-        })
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(req, copy));
+        return res;
+      })
+      .catch(async () => {
+        const cached = await caches.match(req);
+        if (cached) return cached;
+        const idx = await caches.match('./index.html');
+        if (idx) return idx;
+        const cr = await caches.match('./creative.html');
+        if (cr) return cr;
+        return caches.match('./');
+      })
     );
     return;
   }
-
+  
   /* 3. Aset cross-origin (CDN, fonts, icon) → cache first, network fallback (timeout 3s) */
   if (url.origin !== location.origin) {
     e.respondWith(
@@ -131,7 +132,7 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
-
+  
   /* 4. Aset same-origin (CSS, JS lokal, gambar) → cache first */
   e.respondWith(
     caches.match(req).then(cached => {
@@ -164,12 +165,12 @@ self.addEventListener('sync', event => {
    ============================================================ */
 self.addEventListener('message', event => {
   const data = event.data || {};
-
+  
   if (data.type === 'SKIP_WAITING') {
     self.skipWaiting();
     return;
   }
-
+  
   if (data.type === 'CLEAR_CACHE') {
     event.waitUntil(
       caches.keys().then(keys =>
@@ -189,8 +190,8 @@ self.addEventListener('push', event => {
   let data = { title: 'Guru Berbagi', body: 'Ada informasi baru', url: '/' };
   try {
     if (event.data) data = Object.assign(data, event.data.json());
-  } catch(e) {}
-
+  } catch (e) {}
+  
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
