@@ -1,20 +1,31 @@
 /* ============================================================
    Service Worker — Guru Berbagi Selogiri
-   Version: 3.6.1
+   Version: 4.85 (offline-first)
    ============================================================ */
 
-const CACHE = 'gb-cache-v3.6.1';
-const RUNTIME = 'gb-runtime-v3.6.1';
+const CACHE = 'gb-cache-v4.85';
+const RUNTIME = 'gb-runtime-v4.85';
 
 /* File yang di-cache saat install */
 const SHELL = [
   './',
   './index.html',
-  './creative.html',
+  './styles.css',
+  './app.js',
   './manifest.json',
   './assetlinks.json',
-  'https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png'
+  'https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png'
 ];
+
+/* ============================================================
+   HELPER — fetch with timeout (cegah nunggu lama)
+   ============================================================ */
+function fetchWithTimeout(req, ms) {
+  return Promise.race([
+    fetch(req),
+    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))
+  ]);
+}
 
 /* ============================================================
    INSTALL
@@ -48,8 +59,36 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  /* 1. Supabase API → network only (data harus live) */
-  if (url.hostname.endsWith('supabase.co')) return;
+  /* 1. Supabase API
+     - Auth & Functions → network only (perlu fresh untuk keamanan)
+     - REST/Storage GET → StaleWhileRevalidate (data lama tampil offline)
+     - REST write (POST/PUT/DELETE/PATCH) → network only (queue di app.js) */
+  if (url.hostname.endsWith('supabase.co')) {
+    // Auth endpoints — selalu network (token, session)
+    if (url.pathname.startsWith('/auth/')) return;
+    // Edge Functions — selalu network (login, verify, ult)
+    if (url.pathname.startsWith('/functions/')) return;
+    // Realtime (WebSocket via HTTP upgrade) — network only
+    if (url.pathname.startsWith('/realtime/')) return;
+    // Write operations — network only (app.js yang handle queue)
+    if (req.method !== 'GET') return;
+
+    // GET REST/Storage → StaleWhileRevalidate
+    e.respondWith(
+      caches.open(RUNTIME).then(c =>
+        c.match(req).then(cached => {
+          const net = fetch(req)
+            .then(res => {
+              if (res && res.status === 200) c.put(req, res.clone());
+              return res;
+            })
+            .catch(() => cached);
+          return cached || net;
+        })
+      )
+    );
+    return;
+  }
 
   /* 2. Navigasi HTML → network first, cache fallback */
   if (req.mode === 'navigate') {
@@ -73,12 +112,12 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  /* 3. Aset cross-origin (CDN, fonts, icon) → cache first, network fallback */
+  /* 3. Aset cross-origin (CDN, fonts, icon) → cache first, network fallback (timeout 3s) */
   if (url.origin !== location.origin) {
     e.respondWith(
       caches.open(RUNTIME).then(c =>
         c.match(req).then(cached => {
-          const net = fetch(req)
+          const net = fetchWithTimeout(req, 3000)
             .then(res => {
               if (res && (res.ok || res.type === 'opaque')) {
                 c.put(req, res.clone());
@@ -155,8 +194,8 @@ self.addEventListener('push', event => {
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
-      icon: 'https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png',
-      badge: 'https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png',
+      icon: 'https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png',
+      badge: 'https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png',
       data: { url: data.url || '/' },
       vibrate: [100, 50, 100]
     })
