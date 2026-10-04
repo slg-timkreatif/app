@@ -1082,8 +1082,27 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        CONTEXT MENU
        ============================================ -->
   <div id="ctxMenu" class="ctx-menu" role="menu"></div>
-
-</div>
-<script defer src="app.js?v=4.85"></script>
+  
+  <!-- ============================================
+       UPDATE BANNER — SW update notification
+       ============================================ -->
+  <div id="updateBanner" class="hidden fixed left-3 right-3 z-[82] md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-md" style="bottom:calc(env(safe-area-inset-bottom,0px) + 5rem)" role="status" aria-live="polite">
+    <div class="card p-3 flex items-center gap-3 shadow-2xl" style="background:var(--card);border-color:var(--acc);border-width:2px">
+      <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+      </span>
+      <div class="flex-1 min-w-0">
+        <p class="text-[10px] font-black uppercase tracking-wider acc-text">Versi Baru</p>
+        <p class="text-[12px] font-semibold text-slate-700 dark:text-slate-200 mt-0.5">Pembaruan tersedia</p>
+      </div>
+      <button onclick="applyUpdate()" class="acc-bg text-white text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition shrink-0">Muat Ulang</button>
+      <button onclick="dismissUpdate()" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 active:scale-90 transition">
+        <i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i>
+      </button>
+    </div>
+  </div>
+  
+  </div>
+  <script defer src="app.js?v=4.85"></script>
 </body>
 </html>
