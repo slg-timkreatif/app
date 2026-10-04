@@ -4637,7 +4637,7 @@ async function uploadProfilePhoto(file){
   if(file.size > 10 * 1024 * 1024) return toast('Ukuran foto maksimal 10 MB','error');
   const gid = guruId();
   if(!gid) return toast('Login dulu','info');
-  if(!isUUID(gid)) return toast('Format ID akun tidak valid — hubungi admin SSO','error');
+  if(!isUUID(gid)) return toast('Fitur upload foto belum tersedia untuk akun Anda — hubungi admin SSO','info');
   if(!navigator.onLine) return toast('Butuh koneksi internet untuk upload','warning');
 
   toast('Memproses foto…','info');
@@ -4811,15 +4811,20 @@ function setSapaan(){
 
 async function simpanSosmed(){
   const gid=guruId();if(!gid)return;
-  if(!isUUID(gid)) return toast('Format ID akun tidak valid — hubungi admin SSO','error');
 
   const s={ig:$('smIg').value.trim(),tiktok:$('smTiktok').value.trim(),fb:$('smFb').value.trim(),yt:$('smYt').value.trim()};
   const clean={};Object.entries(s).forEach(([k,v])=>{if(v)clean[k]=v;});
 
-  // Optimistic UI — update lokal dulu
+  // Optimistic UI — update lokal dulu (selalu)
   STATE.sosmed=clean;
   localStorage.setItem('gb_sosmed',JSON.stringify(clean));
   renderAuthUI();
+
+  // Guru dengan ID non-UUID → hanya simpan lokal (dipakai untuk watermark)
+  if(!isUUID(gid)){
+    toast('Sosmed tersimpan di perangkat — dipakai untuk watermark ✓');
+    return;
+  }
 
   const payload = { guru_id: gid, sosial: clean };
 
@@ -4842,12 +4847,17 @@ async function simpanSosmed(){
 
 async function hapusSosmed(){
   const gid=guruId();if(!gid)return;
-  if(!isUUID(gid)) return toast('Format ID akun tidak valid — hubungi admin SSO','error');
 
-  // Optimistic UI
+  // Update lokal dulu (selalu)
   STATE.sosmed={};
   localStorage.setItem('gb_sosmed','{}');
   renderAuthUI();
+
+  // Guru dengan ID non-UUID → hanya hapus lokal
+  if(!isUUID(gid)){
+    toast('Sosmed dihapus dari perangkat ✓');
+    return;
+  }
 
   const payload = { guru_id: gid, sosial: {} };
 
