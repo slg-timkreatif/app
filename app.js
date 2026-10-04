@@ -822,7 +822,7 @@ if('serviceWorker' in navigator){
     if(e.data && e.data.type === 'FLUSH_OFFLINE_QUEUE') flushOfflineQueue();
   });
 }
-window.addEventListener('online', () => {
+window.addEventListener('online',()=>{
   toast('Kembali online — sinkronisasi...','info');
   flushOfflineQueue();
 });
@@ -832,6 +832,99 @@ function updateOnlineStatus(){
 }
 window.addEventListener('online',updateOnlineStatus);
 window.addEventListener('offline',updateOnlineStatus);
+
+/* ============================================================
+   SW UPDATE NOTIFICATION
+   ============================================================ */
+let _waitingWorker = null;
+let _swRefreshing = false;
+
+function showUpdateBanner(worker){
+  _waitingWorker = worker || _waitingWorker;
+  const b = $('updateBanner');
+  if(!b) return;
+  // Snooze 6 jam setelah user dismiss
+  const dismissedAt = parseInt(localStorage.getItem('gb_update_dismissed_at') || '0', 10);
+  if(Date.now() - dismissedAt < 6 * 3600 * 1000) return;
+  b.classList.remove('hidden');
+  icons();
+}
+
+function dismissUpdate(){
+  const b = $('updateBanner');
+  if(b) b.classList.add('hidden');
+  try { localStorage.setItem('gb_update_dismissed_at', String(Date.now())); } catch(_) {}
+}
+
+function applyUpdate(){
+  const b = $('updateBanner');
+  if(b) b.classList.add('hidden');
+  // Clear snooze
+  try { localStorage.removeItem('gb_update_dismissed_at'); } catch(_) {}
+  if(_waitingWorker){
+    _waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+    return;
+  }
+  // Fallback: cari waiting worker
+  if(navigator.serviceWorker && navigator.serviceWorker.getRegistration){
+    navigator.serviceWorker.getRegistration().then(reg => {
+      if(reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      else window.location.reload();
+    }).catch(() => window.location.reload());
+  } else {
+    window.location.reload();
+  }
+}
+
+function initSWUpdate(){
+  if(!('serviceWorker' in navigator)) return;
+
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('sw.js');
+      console.log('SW aktif');
+
+      // 1. Waiting worker sudah ada dari session sebelumnya
+      if(reg.waiting && navigator.serviceWorker.controller){
+        showUpdateBanner(reg.waiting);
+      }
+
+      // 2. Update found — new SW installing
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange', () => {
+          if(nw.state === 'installed' && navigator.serviceWorker.controller){
+            // New SW installed & waiting
+            showUpdateBanner(nw);
+          }
+        });
+      });
+
+      // 3. Controllerchange → reload sekali
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if(_swRefreshing) return;
+        _swRefreshing = true;
+        window.location.reload();
+      });
+
+      // 4. Cek update saat app kembali aktif (user balik ke tab)
+      document.addEventListener('visibilitychange', () => {
+        if(!document.hidden){
+          try { reg.update(); } catch(_) {}
+        }
+      });
+
+      // 5. Cek update berkala tiap 30 menit
+      setInterval(() => {
+        try { reg.update(); } catch(_) {}
+      }, 30 * 60 * 1000);
+
+    } catch(e) {
+      console.warn('SW gagal:', e);
+    }
+  });
+}
 
 /* ============================================================
    Cuaca
@@ -5446,11 +5539,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   initQuickLongPress();
   initAutoRefresh();
   updateOnlineStatus();
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>{
-      navigator.serviceWorker.register('sw.js').then(()=>console.log('SW aktif')).catch(e=>console.warn('SW gagal:',e));
-    });
-  }
+  initSWUpdate();
   muatCuaca();
   icons();
   paintToggles();
