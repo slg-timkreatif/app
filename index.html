@@ -143,6 +143,10 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
+              <div id="pendingSyncWrap" class="relative hidden w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center" title="Menunggu sinkronisasi" aria-label="Ada data menunggu sinkronisasi">
+                <i data-lucide="cloud-off" class="w-5 h-5 text-amber-600"></i>
+                <span id="pendingSyncBadge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-amber-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
+              </div>
               <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
                 <i data-lucide="bell" class="w-5 h-5 text-slate-600"></i>
                 <span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
