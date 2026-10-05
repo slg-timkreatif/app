@@ -504,10 +504,12 @@ $('cfOk').addEventListener('click',()=>{const cb=cfCb;cfCancel();if(cb)cb();});
 /* ============================================================
    PREFERENSI TEMA
    ============================================================ */
-function setAccent(a){
-  document.documentElement.dataset.acc=a;
-  localStorage.setItem('gb_acc',a);
+function setAccent(a) {
+  document.documentElement.dataset.acc = a;
+  localStorage.setItem('gb_acc', a);
+  localStorage.removeItem('gb_preset');
   markAcc();
+  paintPresetUI();
 }
 function markAcc(){
   const cur=localStorage.getItem('gb_acc')||'hijau';
@@ -575,7 +577,20 @@ function paintToggles(){
 /* ============================================================
    KUSTOMISASI TEMA
    ============================================================ */
-function applyPreset(name){
+function toggleSettingSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('open');
+}
+
+function paintPresetUI() {
+  const cur = localStorage.getItem('gb_preset') || null;
+  document.querySelectorAll('.preset-card').forEach(c => {
+    c.classList.toggle('on', c.dataset.preset === cur);
+  });
+}
+
+function applyPreset(name) {
   const p=PRESETS[name];
   if(!p)return;
   document.body.dataset.navbar=p.navbar;
@@ -592,10 +607,11 @@ function applyPreset(name){
   markAcc();
   paintToggles();
   paintCustomizeUI();
-  renderLayanan($('inSearch').value||'');
+  paintPresetUI();
+  renderLayanan($('inSearch').value || '');
   renderQuick();
   renderRecentActivity();
-  toast('Tema "'+name+'" diterapkan');
+  toast('Tema "' + name + '" diterapkan');
 }
 function setNavbarStyle(v){
   if(!['floating','classic'].includes(v))return;
@@ -639,20 +655,22 @@ function resetTheme(){
     markAcc();
     paintToggles();
     paintCustomizeUI();
-    renderLayanan($('inSearch').value||'');
+    paintPresetUI();
+    renderLayanan($('inSearch').value || '');
     renderQuick();
     renderRecentActivity();
     toast('Tema direset ke default');
   },'Reset Tema?','Reset');
 }
-function paintCustomizeUI(){
-  document.querySelectorAll('[data-navstyle]').forEach(b=>b.classList.toggle('on',b.dataset.navstyle===document.body.dataset.navbar));
-  document.querySelectorAll('[data-navcolor]').forEach(b=>b.classList.toggle('on',b.dataset.navcolor===document.body.dataset.navbarColor));
-  document.querySelectorAll('[data-navmode]').forEach(b=>b.classList.toggle('on',b.dataset.navmode===(document.body.dataset.navmode||'bottom')));
-  document.querySelectorAll('[data-density]').forEach(b=>b.classList.toggle('on',b.dataset.density===document.body.dataset.density));
-  document.querySelectorAll('[data-iconstyle]').forEach(b=>b.classList.toggle('on',b.dataset.iconstyle===(document.body.dataset.iconstyle||'default')));
-  const ap=localStorage.getItem('gb_preset');
-  document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('on',b.dataset.preset===ap));
+function paintCustomizeUI() {
+  document.querySelectorAll('[data-navstyle]').forEach(b => b.classList.toggle('on', b.dataset.navstyle === document.body.dataset.navbar));
+  document.querySelectorAll('[data-navcolor]').forEach(b => b.classList.toggle('on', b.dataset.navcolor === document.body.dataset.navbarColor));
+  document.querySelectorAll('[data-navmode]').forEach(b => b.classList.toggle('on', b.dataset.navmode === (document.body.dataset.navmode || 'bottom')));
+  document.querySelectorAll('[data-density]').forEach(b => b.classList.toggle('on', b.dataset.density === document.body.dataset.density));
+  document.querySelectorAll('[data-iconstyle]').forEach(b => b.classList.toggle('on', b.dataset.iconstyle === (document.body.dataset.iconstyle || 'default')));
+  const ap = localStorage.getItem('gb_preset');
+  document.querySelectorAll('[data-preset]').forEach(b => b.classList.toggle('on', b.dataset.preset === ap));
+  paintPresetUI();
 }
 function setIconStyle(v){
   if(!['default','solid','colored'].includes(v))return;
@@ -697,9 +715,10 @@ function initPrefs(){
   markAcc();
   paintToggles();
   paintCustomizeUI();
+  paintPresetUI();
   paintQuickView();
   paintThemeMode();
-}
+  }
 
 /* ============================================================
    Helper Auth
