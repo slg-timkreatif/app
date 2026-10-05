@@ -3182,7 +3182,32 @@ async function sharePostImage(){
    ============================================================ */
 let logoImg=null;
 loadImg(LOGO).then(i=>logoImg=i).catch(()=>{});
-function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.crossOrigin='anonymous';i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
+async function loadImg(src){
+  // Coba via fetch + blob (bisa dipakai canvas karena same-origin blob)
+  try {
+    const res = await fetch(src, { mode: 'cors', credentials: 'omit', cache: 'force-cache' });
+    if(!res.ok) throw new Error('http ' + res.status);
+    const blob = await res.blob();
+    const objUrl = URL.createObjectURL(blob);
+    const img = await new Promise((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error('img decode failed'));
+      i.src = objUrl;
+    });
+    URL.revokeObjectURL(objUrl);
+    return img;
+  } catch(e1) {
+    console.warn('[loadImg] fetch+blob failed, fallback direct:', e1.message);
+    // Fallback: direct load tanpa crossOrigin (display-only, tidak bisa canvas)
+    return new Promise((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error('all methods failed'));
+      i.src = src;
+    });
+  }
+}
 
 /* ============================================================
    LUCIDE SVG LOADER — untuk render ikon di canvas
