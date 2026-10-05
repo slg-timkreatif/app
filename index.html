@@ -64,7 +64,7 @@
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
-<link rel="stylesheet" href="styles.css?v=4.90">
+<link rel="stylesheet" href="styles.css?v=4.89">
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
@@ -1156,25 +1156,71 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <div id="ctxMenu" class="ctx-menu" role="menu"></div>
   
   <!-- ============================================
-       UPDATE BANNER — SW update notification
+       UPDATE BANNER v2 — Enhanced
        ============================================ -->
-  <div id="updateBanner" class="hidden fixed left-3 right-3 z-[82] md:left-1/2 md:-translate-x-1/2 md:right-auto md:w-full md:max-w-md" style="bottom:calc(env(safe-area-inset-bottom,0px) + 5rem)" role="status" aria-live="polite">
-    <div class="card p-3 flex items-center gap-3 shadow-2xl" style="background:var(--card);border-color:var(--acc);border-width:2px">
-      <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
-        <i data-lucide="sparkles" class="w-4 h-4"></i>
-      </span>
-      <div class="flex-1 min-w-0">
-        <p class="text-[10px] font-black uppercase tracking-wider acc-text">Versi Baru</p>
-        <p class="text-[12px] font-semibold text-slate-700 dark:text-slate-200 mt-0.5">Pembaruan tersedia</p>
+  <div id="updateBanner" class="update-banner-enhanced" role="status" aria-live="polite">
+    <div class="upd-icon-wrap">
+      <i data-lucide="sparkles"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="upd-banner-label">Update Tersedia</div>
+      <p class="text-[13px] font-extrabold text-slate-800 dark:text-slate-100 mt-0.5">Versi Baru</p>
+      <p class="text-[10px] text-slate-500 mt-0.5">Pembaruan siap dipasang</p>
+    </div>
+    <button id="updBannerBtn" onclick="applyUpdate()" class="upd-banner-btn">
+      <span id="updBannerBtnText">Update</span>
+    </button>
+    <button onclick="dismissUpdate()" aria-label="Tutup" class="upd-banner-close">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+
+  <!-- ============================================
+       UPDATE OVERLAY v2 — Progress + Steps
+       ============================================ -->
+  <div id="updateOverlay" class="sync-orbit" style="display:none;position:fixed;inset:0;z-index:97;flex-direction:column;gap:28px;background:rgba(15,17,21,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transition:opacity .35s ease" role="alert" aria-live="polite" aria-busy="true">
+    <div style="position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center">
+      <div class="sync-pulse"></div>
+      <div class="sync-pulse"></div>
+      <div class="sync-pulse"></div>
+      <div class="sync-ring">
+        <svg viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="58" fill="none" stroke="rgba(20,184,166,.25)" stroke-width="1.5" stroke-dasharray="4 6"/>
+        </svg>
+        <div class="sync-dot"></div>
       </div>
-      <button onclick="applyUpdate()" class="acc-bg text-white text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition shrink-0">Muat Ulang</button>
-      <button onclick="dismissUpdate()" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 active:scale-90 transition">
-        <i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i>
-      </button>
+      <div class="upd-overlay-logo" id="updOverlayLogo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" alt="" onerror="this.parentElement.classList.add('fallback')">
+        <div class="upd-overlay-logo-fallback">
+          <i data-lucide="rocket"></i>
+        </div>
+      </div>
+    </div>
+
+    <p class="sync-msg">
+      <span id="updOverlayMsg">Menyiapkan pembaruan</span>
+      <span class="sync-msg-dots"><span class="sync-msg-dot"></span><span class="sync-msg-dot"></span><span class="sync-msg-dot"></span></span>
+    </p>
+
+    <div class="sync-progress"><div class="sync-progress-fill" id="updProgressFill"></div></div>
+
+    <div class="upd-steps">
+      <div class="upd-step" id="updStep1" data-num="1">
+        <div class="upd-step-circle"><span>1</span></div>
+        <div class="upd-step-label">Unduh</div>
+      </div>
+      <div class="upd-step" id="updStep2" data-num="2">
+        <div class="upd-step-circle"><span>2</span></div>
+        <div class="upd-step-label">Pasang</div>
+      </div>
+      <div class="upd-step" id="updStep3" data-num="3">
+        <div class="upd-step-circle"><span>3</span></div>
+        <div class="upd-step-label">Muat Ulang</div>
+      </div>
     </div>
   </div>
   
   </div>
-  <script defer src="app.js?v=4.90"></script>
+  <script defer src="app.js?v=4.89"></script>
 </body>
 </html>
