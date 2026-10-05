@@ -1,0 +1,60 @@
+name: Auto Bump Version
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app.js'
+      - 'styles.css'
+      - 'index.html'
+
+jobs:
+  bump:
+    # Skip kalau commit dari action ini sendiri
+    if: "!contains(github.event.head_commit.message, '[skip-bump]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump version
+        run: |
+          # Ambil versi dari sw.js
+          OLD=$(grep -oP "gb-cache-v\K[0-9]+\.[0-9]+" sw.js | head -1)
+          if [ -z "$OLD" ]; then
+            echo "Version not found"; exit 1
+          fi
+          
+          # Increment patch (4.86 → 4.87)
+          MAJOR=$(echo $OLD | cut -d. -f1)
+          MINOR=$(echo $OLD | cut -d. -f2)
+          NEW="$MAJOR.$((MINOR + 1))"
+          
+          echo "Bumping $OLD → $NEW"
+          
+          # Update index.html
+          sed -i "s/styles.css?v=$OLD/styles.css?v=$NEW/g" index.html
+          sed -i "s/app.js?v=$OLD/app.js?v=$NEW/g" index.html
+          
+          # Update sw.js
+          sed -i "s/gb-cache-v$OLD/gb-cache-v$NEW/g" sw.js
+          sed -i "s/gb-runtime-v$OLD/gb-runtime-v$NEW/g" sw.js
+          
+          # Update comment version (opsional)
+          sed -i "s/Version: $OLD/Version: $NEW/g" sw.js
+          
+          echo "NEW_VERSION=$NEW" >> $GITHUB_ENV
+
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sw.js
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: auto-bump version to ${{ env.NEW_VERSION }} [skip-bump]"
+          git push
+
+      - name: Summary
+        run: echo "✅ Bumped to version ${{ env.NEW_VERSION }}" >> $GITHUB_STEP_SUMMARY
