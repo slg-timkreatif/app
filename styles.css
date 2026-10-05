@@ -462,6 +462,169 @@ html.dark .setting-row-t{color:#E8EBF0}
 html.dark .preset-label{color:#B5BCC8}
 
 /* ============================================
+   UPDATE BANNER + OVERLAY v2
+   ============================================ */
+.update-banner-enhanced{
+  position:fixed;left:12px;right:12px;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 5rem);
+  z-index:82;
+  border-radius:18px;
+  background:var(--card);
+  border:2px solid var(--acc);
+  box-shadow:
+    0 0 0 4px var(--acc-soft),
+    0 12px 32px rgba(20,18,26,.15),
+    0 4px 12px var(--acc-ring);
+  padding:14px;
+  display:flex;align-items:center;gap:12px;
+  opacity:0;
+  transform:translateY(80px) scale(.95);
+  pointer-events:none;
+  transition:opacity .4s cubic-bezier(.16,1,.3,1),transform .4s cubic-bezier(.16,1,.3,1);
+}
+@media(min-width:768px){
+  .update-banner-enhanced{
+    left:50%;right:auto;
+    transform:translate(-50%,80px) scale(.95);
+    width:100%;max-width:28rem;
+  }
+}
+.update-banner-enhanced.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0) scale(1);
+}
+@media(min-width:768px){
+  .update-banner-enhanced.show{transform:translate(-50%,0) scale(1)}
+}
+
+.upd-icon-wrap{
+  width:44px;height:44px;border-radius:14px;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;position:relative;overflow:hidden;
+}
+.upd-icon-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.3) 50%,transparent 60%);
+  animation:updShimmer 2.5s ease-in-out infinite;
+}
+@keyframes updShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.upd-icon-wrap svg{
+  width:22px;height:22px;color:#fff;
+  position:relative;z-index:1;
+  animation:updSparkle 2s ease-in-out infinite;
+}
+@keyframes updSparkle{
+  0%,100%{transform:scale(1) rotate(0deg);opacity:1}
+  50%{transform:scale(1.15) rotate(15deg);opacity:.85}
+}
+
+.upd-banner-label{
+  font-size:9px;font-weight:900;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--acc-text);
+  display:flex;align-items:center;gap:5px;
+}
+.upd-banner-label::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:#10B981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.2);
+  animation:updDotPulse 2s infinite;
+}
+@keyframes updDotPulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 3px rgba(16,185,129,.2)}
+  50%{opacity:.5;box-shadow:0 0 0 6px rgba(16,185,129,.05)}
+}
+
+.upd-banner-btn{
+  background:var(--acc);color:#fff;
+  font-size:11px;font-weight:800;
+  padding:9px 14px;border-radius:11px;
+  border:0;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;gap:6px;
+  transition:all .15s;flex-shrink:0;position:relative;
+}
+.upd-banner-btn:active{transform:scale(.95)}
+.upd-banner-btn.loading{
+  pointer-events:none;
+  background:var(--acc-soft);color:var(--acc-text);
+  padding-right:32px;
+}
+.upd-banner-btn.loading::after{
+  content:'';position:absolute;right:12px;top:50%;margin-top:-7px;
+  width:14px;height:14px;
+  border:2px solid var(--acc-ring);
+  border-top-color:var(--acc-text);
+  border-radius:50%;
+  animation:updSpin .7s linear infinite;
+}
+@keyframes updSpin{to{transform:rotate(360deg)}}
+
+.upd-banner-close{
+  width:28px;height:28px;border-radius:8px;
+  background:#F1F5F9;border:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+html.dark .upd-banner-close{background:#282D36}
+.upd-banner-close:active{transform:scale(.9)}
+.upd-banner-close svg{width:14px;height:14px;color:#64748B}
+html.dark .upd-banner-close svg{color:#94A0AE}
+
+/* ============================================
+   UPDATE OVERLAY — Step Indicator
+   ============================================ */
+.upd-steps{
+  display:flex;gap:24px;
+  margin-top:-8px;
+}
+.upd-step{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:.35;transition:opacity .3s;
+}
+.upd-step.active,.upd-step.done{opacity:1}
+.upd-step-circle{
+  width:26px;height:26px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:rgba(255,255,255,.6);
+  transition:all .3s;
+}
+.upd-step.active .upd-step-circle{
+  border-color:var(--acc2);
+  background:var(--acc-ring);
+  color:var(--acc2);
+}
+.upd-step.done .upd-step-circle{
+  border-color:#10B981;
+  background:#10B981;
+  color:#fff;
+}
+.upd-step-circle svg{width:13px;height:13px}
+.upd-step-label{
+  font-size:9px;font-weight:800;
+  color:rgba(255,255,255,.7);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+
+/* Logo fallback icon (kalau gambar gagal load) */
+.upd-overlay-logo{
+  position:relative;width:72px;height:72px;border-radius:50%;
+  overflow:hidden;background:#fff;
+  box-shadow:0 8px 32px var(--acc-ring),0 0 0 4px rgba(255,255,255,.08);
+  z-index:2;
+}
+.upd-overlay-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.upd-overlay-logo-fallback{
+  position:absolute;inset:0;display:none;
+  align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+}
+.upd-overlay-logo-fallback svg{width:36px;height:36px;color:#fff}
+.upd-overlay-logo.fallback .upd-overlay-logo-fallback{display:flex}
+.upd-overlay-logo.fallback img{display:none}
+
+/* ============================================
    DARK MODE — Soft Charcoal
    ============================================ */
 html.dark{
