@@ -590,6 +590,22 @@ function paintPresetUI() {
   });
 }
 
+/* ============================================================
+   SETTING PAGE v2 — Accordion + Preset
+   ============================================================ */
+function toggleSettingSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('open');
+}
+
+function paintPresetUI() {
+  const cur = localStorage.getItem('gb_preset') || null;
+  document.querySelectorAll('.preset-card').forEach(c => {
+    c.classList.toggle('on', c.dataset.preset === cur);
+  });
+}
+
 function applyPreset(name) {
   const p=PRESETS[name];
   if(!p)return;
@@ -1284,11 +1300,11 @@ function handleDeepLink(){
     if(page)navPage(page);
     if(panel==='notif')openPanel('pNotif');
     else if(panel==='login')openPanel('pLogin');
-    if(menu){
-      const m=STATE.menus.find(x=>x.judul===menu);
-      if(m)klikMenu(m.judul);
-      else toast('Menu tidak ditemukan: '+menu,'info');
-    }
+    if (menu) {
+  const m = STATE.menus.find(x => x.judul === menu);
+  if (m) klikMenu(m.judul, { sameTab: true });
+  else toast('Menu tidak ditemukan: ' + menu, 'info');
+}
     if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
     if(school){
       navPage('bagi');
@@ -1617,28 +1633,34 @@ function resetLayananFilter(){
 }
 $('inSearch').addEventListener('input',e=>{$('inSearchHome').value=e.target.value;renderLayanan(e.target.value);});
 
-function klikMenu(judul){
+function klikMenu(judul, opts){
   const m=STATE.menus.find(x=>x.judul===judul);
   if(!m)return;
   if(needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}
   const children=STATE.menus.filter(x=>visible(x)&&x.sub_menu_dari===judul);
   if(children.length>0){openParentMenu(m,children);return;}
-  bukaUrl(m);
+  bukaUrl(m, opts);
 }
 function isSafeUrl(u){if(!u)return false;return u.startsWith('http://')||u.startsWith('https://')||u.startsWith('/')||u.startsWith('?');}
-function bukaUrl(m){
-  if(!m)return;
-  logAktivitas('buka_menu',{judul:m.judul});
-  trackRecentActivity('menu',{id:m.judul,icon:m.icon});
-  const u=m.url||'#';
-  if(m.cara_buka==='app'&&u.startsWith('http')){
-    $('mAppTitle').textContent=m.judul;
-    $('mAppFrame').src=u;
+function bukaUrl(m, opts) {
+  opts = opts || {};
+  if (!m) return;
+  logAktivitas('buka_menu', { judul: m.judul });
+  trackRecentActivity('menu', { id: m.judul, icon: m.icon });
+  const u = m.url || '#';
+  if (m.cara_buka === 'app' && u.startsWith('http')) {
+    $('mAppTitle').textContent = m.judul;
+    $('mAppFrame').src = u;
     openModal('mApp');
-  }else if(u.startsWith('http')){
-    window.open(u,'_blank','noopener');
-  }else if(u&&u!=='#'&&isSafeUrl(u)){
-    location.href=u;
+  } else if (u.startsWith('http')) {
+    if (opts.sameTab) {
+      // Deep link context → same tab, hindari popup blocker
+      location.href = u;
+    } else {
+      window.open(u, '_blank', 'noopener');
+    }
+  } else if (u && u !== '#' && isSafeUrl(u)) {
+    location.href = u;
   }
 }
 function bukaFoot(f){
@@ -5634,5 +5656,19 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   // Init badge pending sync — baca dari IndexedDB
   updatePendingBadge();
 
-  setTimeout(showOnboard,1200);
-})();
+  // Setting Page v2 — Accordion + Preset
+  window.toggleSettingSection = function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('open');
+  };
+  
+  window.paintPresetUI = function() {
+    const cur = localStorage.getItem('gb_preset') || null;
+    document.querySelectorAll('.preset-card').forEach(c => {
+      c.classList.toggle('on', c.dataset.preset === cur);
+    });
+  };
+  
+  setTimeout(showOnboard, 1200);
+  })();
