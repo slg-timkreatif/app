@@ -5706,6 +5706,140 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
       c.classList.toggle('on', c.dataset.preset === cur);
     });
   };
-  
+
+  /* ============================================================
+     SW UPDATE NOTIFICATION v2 — Enhanced
+     Override fungsi lama dengan versi baru (banner + overlay + step)
+     ============================================================ */
+  window._waitingWorker = null;
+
+  window.showUpdateBanner = function(worker){
+    window._waitingWorker = worker || window._waitingWorker;
+    const b = document.getElementById('updateBanner');
+    if(!b) return;
+    const dismissedAt = parseInt(localStorage.getItem('gb_update_dismissed_at') || '0', 10);
+    if(Date.now() - dismissedAt < 6 * 3600 * 1000) return;
+    requestAnimationFrame(() => b.classList.add('show'));
+    if(typeof icons === 'function') icons();
+  };
+
+  window.dismissUpdate = function(){
+    const b = document.getElementById('updateBanner');
+    if(b) b.classList.remove('show');
+    try { localStorage.setItem('gb_update_dismissed_at', String(Date.now())); } catch(_) {}
+  };
+
+  window._resetUpdSteps = function(){
+    ['updStep1','updStep2','updStep3'].forEach(function(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.classList.remove('active','done');
+      const circle = el.querySelector('.upd-step-circle');
+      if(circle) circle.innerHTML = '<span>' + (el.dataset.num || '') + '</span>';
+    });
+    const prog = document.getElementById('updProgressFill');
+    if(prog){ prog.style.transition = 'none'; prog.style.width = '0'; }
+  };
+
+  window._showUpdateOverlay = function(){
+    const ov = document.getElementById('updateOverlay');
+    if(!ov) return;
+    ov.style.display = 'flex';
+    window._resetUpdSteps();
+    requestAnimationFrame(function(){ ov.style.opacity = '1'; });
+    if(typeof icons === 'function') icons();
+  };
+
+  window._runUpdateSequence = function(onComplete){
+    const msg = document.getElementById('updOverlayMsg');
+    const prog = document.getElementById('updProgressFill');
+
+    // Step 1 — Unduh
+    setTimeout(function(){
+      const s1 = document.getElementById('updStep1');
+      if(s1) s1.classList.add('active');
+      if(msg) msg.textContent = 'Mengunduh berkas';
+      if(prog){ prog.style.transition = 'width 1.2s cubic-bezier(.4,0,.2,1)'; prog.style.width = '60%'; }
+    }, 100);
+
+    // Step 2 — Pasang
+    setTimeout(function(){
+      const s1 = document.getElementById('updStep1');
+      if(s1){
+        s1.classList.remove('active'); s1.classList.add('done');
+        const c = s1.querySelector('.upd-step-circle');
+        if(c) c.innerHTML = '<i data-lucide="check"></i>';
+      }
+      const s2 = document.getElementById('updStep2');
+      if(s2) s2.classList.add('active');
+      if(msg) msg.textContent = 'Memasang pembaruan';
+      if(prog){ prog.style.transition = 'width 1s cubic-bezier(.4,0,.2,1)'; prog.style.width = '85%'; }
+      if(typeof icons === 'function') icons();
+    }, 1400);
+
+    // Step 3 — Muat Ulang
+    setTimeout(function(){
+      const s2 = document.getElementById('updStep2');
+      if(s2){
+        s2.classList.remove('active'); s2.classList.add('done');
+        const c = s2.querySelector('.upd-step-circle');
+        if(c) c.innerHTML = '<i data-lucide="check"></i>';
+      }
+      const s3 = document.getElementById('updStep3');
+      if(s3) s3.classList.add('active');
+      if(msg) msg.textContent = 'Menyiapkan muat ulang';
+      if(prog){ prog.style.transition = 'width .8s cubic-bezier(.4,0,.2,1)'; prog.style.width = '100%'; }
+      if(typeof icons === 'function') icons();
+    }, 2400);
+
+    // Selesai
+    setTimeout(function(){
+      const s3 = document.getElementById('updStep3');
+      if(s3){
+        s3.classList.remove('active'); s3.classList.add('done');
+        const c = s3.querySelector('.upd-step-circle');
+        if(c) c.innerHTML = '<i data-lucide="check"></i>';
+      }
+      if(msg) msg.textContent = 'Selesai';
+      if(typeof icons === 'function') icons();
+      if(onComplete) onComplete();
+    }, 3200);
+  };
+
+  window.applyUpdate = function(){
+    const btn = document.getElementById('updBannerBtn');
+    const btnText = document.getElementById('updBannerBtnText');
+    if(btn) btn.classList.add('loading');
+    if(btnText) btnText.textContent = 'Memuat';
+
+    try { localStorage.removeItem('gb_update_dismissed_at'); } catch(_) {}
+
+    setTimeout(function(){
+      const b = document.getElementById('updateBanner');
+      if(b) b.classList.remove('show');
+
+      setTimeout(function(){
+        window._showUpdateOverlay();
+        window._runUpdateSequence(function(){
+          setTimeout(function(){
+            const w = window._waitingWorker;
+            if(w){
+              w.postMessage({ type: 'SKIP_WAITING' });
+              return;
+            }
+            if(navigator.serviceWorker && navigator.serviceWorker.getRegistration){
+              navigator.serviceWorker.getRegistration().then(function(reg){
+                if(reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                else window.location.reload();
+              }).catch(function(){ window.location.reload(); });
+            } else {
+              window.location.reload();
+            }
+          }, 400);
+        });
+      }, 300);
+    }, 500);
+  };
+
   setTimeout(showOnboard, 1200);
   })();
