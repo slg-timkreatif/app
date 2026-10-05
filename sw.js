@@ -18,16 +18,6 @@ const SHELL = [
 ];
 
 /* ============================================================
-   HELPER — fetch with timeout (cegah nunggu lama)
-   ============================================================ */
-function fetchWithTimeout(req, ms) {
-  return Promise.race([
-    fetch(req),
-    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), ms))
-  ]);
-}
-
-/* ============================================================
    INSTALL
    ============================================================ */
 self.addEventListener('install', e => {
@@ -113,23 +103,9 @@ self.addEventListener('fetch', e => {
     return;
   }
   
-  /* 3. Aset cross-origin (CDN, fonts, icon) → cache first, network fallback (timeout 3s) */
+  /* 3. Aset cross-origin (CDN, fonts, icon) → biarkan browser handle native
+     Menghindari error "opaque response for non-no-cors request" */
   if (url.origin !== location.origin) {
-    e.respondWith(
-      caches.open(RUNTIME).then(c =>
-        c.match(req).then(cached => {
-          const net = fetchWithTimeout(req, 3000)
-            .then(res => {
-              if (res && (res.ok || res.type === 'opaque')) {
-                c.put(req, res.clone());
-              }
-              return res;
-            })
-            .catch(() => cached);
-          return cached || net;
-        })
-      )
-    );
     return;
   }
   
