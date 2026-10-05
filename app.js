@@ -995,6 +995,7 @@ function showWx(cw){
    ============================================================ */
 let applying=false,popDismissed=false;
 let CUR={view:'home',sub:null,panel:null,modal:null};
+let _pendingIntent = null;
 function safePush(s){try{history.pushState(s,'')}catch(e){}}
 function dl(path){return location.pathname+path;}
 function studioFieldsFromQuery(q){
@@ -1028,6 +1029,14 @@ function setPageInstant(pg){
 
   if(pg==='dokumen'){paintDokView();renderDokumen($('inSearchDok')?.value||'');}
   if(pg==='setting'){paintCustomizeUI();paintToggles();markAcc();paintThemeMode();showLastSync();}
+
+  // Clear pending intent kalau user navigasi manual (bukan deep link flow)
+  if(applying){
+    // dari popstate/deep link → jangan clear
+  } else if(_pendingIntent){
+    // user navigasi manual → clear
+    _pendingIntent = null;
+  }
 
   CUR.view=pg;
 }
@@ -1636,7 +1645,12 @@ $('inSearch').addEventListener('input',e=>{$('inSearchHome').value=e.target.valu
 function klikMenu(judul, opts){
   const m=STATE.menus.find(x=>x.judul===judul);
   if(!m)return;
-  if(needsLogin(m)&&!STATE.profile){toast('Silakan masuk untuk membuka menu ini','info');openPanel('pLogin');return;}
+  if(needsLogin(m)&&!STATE.profile){
+    _pendingIntent = { type:'menu', judul, opts, t: Date.now() };
+    toast('Silakan masuk untuk membuka menu ini','info');
+    openPanel('pLogin');
+    return;
+  }
   const children=STATE.menus.filter(x=>visible(x)&&x.sub_menu_dari===judul);
   if(children.length>0){openParentMenu(m,children);return;}
   bukaUrl(m, opts);
@@ -3364,6 +3378,7 @@ if (!def) {
 
 function openWAStatus(tpl) {
   if (!STATE.profile) {
+    _pendingIntent = { type:'studio', tpl, opts:{wa:true}, t: Date.now() };
     toast('Login dulu untuk pakai Status WA', 'info');
     openPanel('pLogin');
     return;
@@ -4766,6 +4781,28 @@ $('formLogin').addEventListener('submit',async e=>{
     await muatSemuaData(true);
     recordLastSync();
     toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');
+
+    // Lanjutkan pending intent (kalau user login setelah klik menu/studio butuh login)
+    if(_pendingIntent && (Date.now() - _pendingIntent.t) < 3 * 60 * 1000){
+      const intent = _pendingIntent;
+      _pendingIntent = null;
+      setTimeout(() => {
+        try {
+          if(intent.type === 'menu'){
+            klikMenu(intent.judul, intent.opts);
+          } else if(intent.type === 'studio'){
+            logAktivitas('wa_builder', { template: intent.tpl });
+            openStudio(intent.tpl, {}, intent.opts);
+          } else if(intent.type === 'panel'){
+            openPanel(intent.id);
+          }
+        } catch(e){
+          console.warn('[pending intent]', e);
+        }
+      }, 400);
+    } else {
+      _pendingIntent = null;
+    }
   } catch (err) {
     toast('Email/PIN salah atau akun nonaktif', 'error');
   }
