@@ -64,7 +64,7 @@
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
-<link rel="stylesheet" href="styles.css?v=4.96">
+<link rel="stylesheet" href="styles.css?v=4.97">
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
@@ -1178,7 +1178,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        UPDATE OVERLAY v2 — Progress + Steps
        ============================================ -->
-  <div id="updateOverlay" style="display:none;position:fixed;inset:0;z-index:97;display:flex;flex-direction:column;gap:28px;background:rgba(15,17,21,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;transition:opacity .35s ease;align-items:center;justify-content:center;padding:24px" role="alert" aria-live="polite" aria-busy="true">
+  <div id="updateOverlay" style="position:fixed;inset:0;z-index:97;display:none;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:rgba(15,17,21,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:24px;opacity:0;transition:opacity .35s ease" role="alert" aria-live="polite" aria-busy="true">
     <div style="position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center">
       <div class="sync-pulse"></div>
       <div class="sync-pulse"></div>
@@ -1221,6 +1221,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
   
   </div>
-  <script defer src="app.js?v=4.96"></script>
+  <script defer src="app.js?v=4.97"></script>
 </body>
 </html>
