@@ -1,10 +1,10 @@
 /* ============================================================
    Service Worker — Guru Berbagi Selogiri
-   Version: 4.95 (offline-first)
+   Version: 4.96 (offline-first)
    ============================================================ */
 
-const CACHE = 'gb-cache-v4.95';
-const RUNTIME = 'gb-runtime-v4.95';
+const CACHE = 'gb-cache-v4.96';
+const RUNTIME = 'gb-runtime-v4.96';
 
 /* File yang di-cache saat install */
 const SHELL = [
