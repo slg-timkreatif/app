@@ -200,10 +200,10 @@ html.dark .onboard-dot{background:#3A404A}
 .ctx-menu button{display:flex;align-items:center;gap:.6rem;width:100%;padding:.65rem .85rem;font-size:.78rem;font-weight:700;color:#334155;background:none;border:0;text-align:left;border-radius:.6rem;cursor:pointer}
 .ctx-menu button:hover{background:#F1F5F9}
 
-body:not([data-page="home"]) #hdrAvatarBtn,
 body:not([data-page="home"]) #hdrInfoBlock,
-body:not([data-page="home"]) #hdrMetaRow{display:none!important}
+body:not([data-page="home"]) #hdrSub{display:none!important}
 body[data-page="home"] #hdrTitle{display:none!important}
+body:not([data-page="home"]) #hdrTitle{display:block!important;flex:1;min-width:0}
 
 /* ============================================
    NAVBAR
