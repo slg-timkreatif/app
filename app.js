@@ -510,6 +510,7 @@ function setAccent(a) {
   localStorage.removeItem('gb_preset');
   markAcc();
   paintPresetUI();
+  updateThemeMeta();
 }
 function markAcc(){
   const cur=localStorage.getItem('gb_acc')||'hijau';
