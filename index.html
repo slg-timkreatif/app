@@ -124,37 +124,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <div class="flex-1 flex flex-col relative min-w-0 md:h-screen md:overflow-hidden">
 
     <!-- HEADER -->
-    <header class="topbar-v8">
-  <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-12 h-12 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
-    <i data-lucide="menu" class="w-5 h-5 text-slate-600"></i>
-  </button>
-  <div class="tb-avatar-v8">
-    <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
-  </div>
-  <div class="tb-text-v8">
-    <div class="tb-row1-v8">
-      <div id="hdrInfoBlock" class="flex-1 min-w-0">
-        <p id="hdrName" class="tb-name-v8">Guru Berbagi</p>
-      </div>
-      <p id="hdrTitle" class="tb-name-v8" style="display:none"></p>
-      <div class="tb-actions-v8">
-        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-3 py-2 rounded-xl active:scale-95 transition">Masuk</button>
-        <div id="pendingSyncWrap" class="relative hidden w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center" title="Menunggu sinkronisasi">
-          <i data-lucide="cloud-off" class="w-4 h-4 text-amber-600"></i>
-          <span id="pendingSyncBadge" class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
-        </div>
-        <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="tb-icon-btn-v8">
-          <i data-lucide="bell"></i>
-          <span id="badgeNotif" class="hidden badge-dot-v8">0</span>
-        </button>
-        <button onclick="navPage('setting')" aria-label="Buka pengaturan" class="tb-icon-btn-v8">
-          <i data-lucide="settings"></i>
-        </button>
-      </div>
-    </div>
-    <p id="hdrSub" class="tb-greeting-v8"></p>
-  </div>
-</header>
+    <!-- HEADER LAMA — DIHAPUS. Sudah diganti topbar-v8 di atas. -->
       <div class="flex items-start gap-3">
         <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-14 h-14 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
           <i data-lucide="menu" class="w-6 h-6 text-slate-600"></i>
