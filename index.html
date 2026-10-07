@@ -124,7 +124,37 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <div class="flex-1 flex flex-col relative min-w-0 md:h-screen md:overflow-hidden">
 
     <!-- HEADER -->
-    <header class="px-5 md:px-8 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-2 md:max-w-6xl md:mx-auto md:w-full">
+    <header class="topbar-v8">
+  <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-12 h-12 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
+    <i data-lucide="menu" class="w-5 h-5 text-slate-600"></i>
+  </button>
+  <div class="tb-avatar-v8">
+    <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
+  </div>
+  <div class="tb-text-v8">
+    <div class="tb-row1-v8">
+      <div id="hdrInfoBlock" class="flex-1 min-w-0">
+        <p id="hdrName" class="tb-name-v8">Guru Berbagi</p>
+      </div>
+      <p id="hdrTitle" class="tb-name-v8" style="display:none"></p>
+      <div class="tb-actions-v8">
+        <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-3 py-2 rounded-xl active:scale-95 transition">Masuk</button>
+        <div id="pendingSyncWrap" class="relative hidden w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center" title="Menunggu sinkronisasi">
+          <i data-lucide="cloud-off" class="w-4 h-4 text-amber-600"></i>
+          <span id="pendingSyncBadge" class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
+        </div>
+        <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="tb-icon-btn-v8">
+          <i data-lucide="bell"></i>
+          <span id="badgeNotif" class="hidden badge-dot-v8">0</span>
+        </button>
+        <button onclick="navPage('setting')" aria-label="Buka pengaturan" class="tb-icon-btn-v8">
+          <i data-lucide="settings"></i>
+        </button>
+      </div>
+    </div>
+    <p id="hdrSub" class="tb-greeting-v8"></p>
+  </div>
+</header>
       <div class="flex items-start gap-3">
         <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-14 h-14 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
           <i data-lucide="menu" class="w-6 h-6 text-slate-600"></i>
@@ -171,8 +201,53 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
            PAGE: HOME
            ============================================ -->
       <section id="pageHome" class="space-y-4 min-w-0">
-        <div class="relative animate-fade-up">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+  
+  <!-- ============================================
+       HERO CARD — Quote + Cuaca + Ilustrasi
+       ============================================ -->
+  <section id="heroCard" class="hero-card-v8 animate-fade-up">
+    <div class="hero-top-v8">
+      <span class="hero-chip-v8">Inspirasi Hari Ini</span>
+      <div class="hero-actions-v8">
+        <button id="btnQuoteHome" onclick="gantiQuote()" aria-label="Ganti kutipan" class="hero-action-v8" title="Ganti">
+          <i data-lucide="refresh-cw"></i>
+        </button>
+        <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="hero-action-v8" title="Bagikan">
+          <i data-lucide="share-2"></i>
+        </button>
+      </div>
+    </div>
+    
+    <p id="quoteTextHome" class="hero-quote-v8">"Memuat kata mutiara…"</p>
+    <div id="quoteAuthorHome" class="hero-author-v8">—</div>
+    
+    <div class="hero-bottom-v8">
+      <!-- Badge cuaca + hari + lokasi -->
+      <div class="hero-weather-v8">
+        <div class="hw-line1-v8">
+          <span id="heroWxEmoji" class="hw-emoji-v8">☀️</span>
+          <span id="heroWxTemp" class="hw-temp-v8">--°</span>
+        </div>
+        <div id="heroWxDesc" class="hw-desc-v8">Memuat…</div>
+        <div id="heroWxDay" class="hw-day-v8">—</div>
+        <div class="hw-location-v8">
+          <i data-lucide="map-pin"></i>
+          <span>Selogiri, Wonogiri</span>
+        </div>
+      </div>
+      
+      <!-- Ilustrasi (dinamis dari admin) -->
+      <div id="heroIllustration" class="hero-illustration-v8">
+        <div class="hero-illus-fallback-v8">
+          <i data-lucide="sparkles"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- SEARCH -->
+  <div class="relative animate-fade-up">
+    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
           <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
           <div id="searchProg" class="search-prog"></div>
           <div id="searchHistory" class="search-history"></div>
@@ -220,18 +295,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
         </div>
 
-        <!-- Quotes -->
-        <div id="quoteHomeBox" class="card p-4 relative overflow-hidden animate-fade-up min-w-0">
-          <i data-lucide="quote" class="w-7 h-7 text-slate-100 absolute top-3 right-3"></i>
-          <p id="quoteTextHome" class="text-[13px] font-medium italic text-slate-600 leading-relaxed pr-6">"Memuat kata mutiara…"</p>
-          <div class="flex items-center justify-between mt-2 gap-2">
-            <p id="quoteAuthorHome" class="text-[11px] font-bold text-slate-500 truncate">— …</p>
-            <div class="flex items-center gap-2 shrink-0">
-              <button id="btnQuoteHome" onclick="gantiQuote()" aria-label="Ganti kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="w-8 h-8 flex items-center justify-center acc-text active:scale-90 transition"><i data-lucide="share-2" class="w-4 h-4"></i></button>
-            </div>
-          </div>
-        </div>
+        <!-- Quote hero dipindah ke atas (lihat hero card) -->
 
         <div id="footList" class="animate-fade-up md:hidden"></div>
       </section>
