@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#F6F5F9">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark">
 <meta name="format-detection" content="telephone=no,email=no,address=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
   var isDark=mode==='dark'||(mode==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
   if(isDark)document.documentElement.classList.add('dark');
   var m=document.querySelector('meta[name=theme-color]');
-  if(m)m.setAttribute('content',isDark?'#181B21':'#F6F5F9');
+  if(m)m.setAttribute('content',isDark?'#22262E':'#FFFFFF');
 }catch(e){}})();
 </script>
 
@@ -64,7 +64,7 @@
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
-<link rel="stylesheet" href="styles.css?v=4.101">
+<link rel="stylesheet" href="styles.css?v=4.97">
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
@@ -124,39 +124,35 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <div class="flex-1 flex flex-col relative min-w-0 md:h-screen md:overflow-hidden">
 
     <!-- HEADER -->
-    <!-- HEADER LAMA — DIHAPUS. Sudah diganti topbar-v8 di atas. -->
-      <div class="flex items-start gap-3">
-        <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-14 h-14 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
-          <i data-lucide="menu" class="w-6 h-6 text-slate-600"></i>
-        </button>
-        <button id="hdrAvatarBtn" onclick="navPage('profile')" aria-label="Buka profil" class="shrink-0 w-20 h-20 md:w-14 md:h-14 rounded-3xl md:rounded-2xl overflow-hidden border-2 border-white bg-white shadow-md active:scale-95 transition" title="Profil">
-          <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
-        </button>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-start justify-between gap-3 pt-1.5">
-            <div class="min-w-0 flex-1">
-              <div id="hdrInfoBlock">
-                <p id="hdrName" class="text-xl md:text-2xl font-bold text-slate-800 leading-tight truncate">Guru Berbagi</p>
-<p id="hdrSub" class="text-sm md:text-base font-semibold acc-text truncate mt-0.5"></p>
-              </div>
-              <p id="hdrTitle" class="text-xl font-bold text-slate-800 leading-tight truncate"></p>
+    <header class="topbar-v8">
+      <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-12 h-12 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
+        <i data-lucide="menu" class="w-5 h-5 text-slate-600"></i>
+      </button>
+      <div class="tb-avatar-v8">
+        <img id="hdrAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil" fetchpriority="high" decoding="async">
+      </div>
+      <div class="tb-text-v8">
+        <div class="tb-row1-v8">
+          <div id="hdrInfoBlock" class="flex-1 min-w-0">
+            <p id="hdrName" class="tb-name-v8">Guru Berbagi</p>
+          </div>
+          <p id="hdrTitle" class="tb-name-v8" style="display:none"></p>
+          <div class="tb-actions-v8">
+            <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-3 py-2 rounded-xl active:scale-95 transition">Masuk</button>
+            <div id="pendingSyncWrap" class="relative hidden w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center" title="Menunggu sinkronisasi">
+              <i data-lucide="cloud-off" class="w-4 h-4 text-amber-600"></i>
+              <span id="pendingSyncBadge" class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button id="btnMasuk" onclick="openPanel('pLogin')" class="hidden acc-bg text-white text-xs font-bold px-4 py-2.5 rounded-xl active:scale-95 transition shadow-md">Masuk</button>
-              <div id="pendingSyncWrap" class="relative hidden w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center" title="Menunggu sinkronisasi" aria-label="Ada data menunggu sinkronisasi">
-                <i data-lucide="cloud-off" class="w-5 h-5 text-amber-600"></i>
-                <span id="pendingSyncBadge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-amber-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
-              </div>
-              <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
-                <i data-lucide="bell" class="w-5 h-5 text-slate-600"></i>
-                <span id="badgeNotif" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">0</span>
-              </button>
-              <button onclick="navPage('setting')" aria-label="Buka pengaturan" class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
-                <i data-lucide="settings" class="w-5 h-5 text-slate-600"></i>
-              </button>
-            </div>
+            <button id="bellHdr" onclick="openPanel('pNotif')" aria-label="Buka notifikasi" class="tb-icon-btn-v8">
+              <i data-lucide="bell"></i>
+              <span id="badgeNotif" class="hidden badge-dot-v8">0</span>
+            </button>
+            <button onclick="navPage('setting')" aria-label="Buka pengaturan" class="tb-icon-btn-v8">
+              <i data-lucide="settings"></i>
+            </button>
           </div>
         </div>
+        <p id="hdrSub" class="tb-greeting-v8"></p>
       </div>
     </header>
 
@@ -167,53 +163,53 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
            PAGE: HOME
            ============================================ -->
       <section id="pageHome" class="space-y-4 min-w-0">
-  
-  <!-- ============================================
-       HERO CARD — Quote + Cuaca + Ilustrasi
-       ============================================ -->
-  <section id="heroCard" class="hero-card-v8 animate-fade-up">
-    <div class="hero-top-v8">
-      <span class="hero-chip-v8">Inspirasi Hari Ini</span>
-      <div class="hero-actions-v8">
-        <button id="btnQuoteHome" onclick="gantiQuote()" aria-label="Ganti kutipan" class="hero-action-v8" title="Ganti">
-          <i data-lucide="refresh-cw"></i>
-        </button>
-        <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="hero-action-v8" title="Bagikan">
-          <i data-lucide="share-2"></i>
-        </button>
-      </div>
-    </div>
-    
-    <p id="quoteTextHome" class="hero-quote-v8">"Memuat kata mutiara…"</p>
-    <div id="quoteAuthorHome" class="hero-author-v8">—</div>
-    
-    <div class="hero-bottom-v8">
-      <!-- Badge cuaca + hari + lokasi -->
-      <div class="hero-weather-v8">
-        <div class="hw-line1-v8">
-          <span id="heroWxEmoji" class="hw-emoji-v8">☀️</span>
-          <span id="heroWxTemp" class="hw-temp-v8">--°</span>
-        </div>
-        <div id="heroWxDesc" class="hw-desc-v8">Memuat…</div>
-        <div id="heroWxDay" class="hw-day-v8">—</div>
-        <div class="hw-location-v8">
-          <i data-lucide="map-pin"></i>
-          <span>Selogiri, Wonogiri</span>
-        </div>
-      </div>
-      
-      <!-- Ilustrasi (dinamis dari admin) -->
-      <div id="heroIllustration" class="hero-illustration-v8">
-        <div class="hero-illus-fallback-v8">
-          <i data-lucide="sparkles"></i>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- SEARCH -->
-  <div class="relative animate-fade-up">
-    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+
+        <!-- ============================================
+             HERO CARD — Quote + Cuaca + Ilustrasi
+             ============================================ -->
+        <section id="heroCard" class="hero-card-v8 animate-fade-up">
+          <div class="hero-top-v8">
+            <span class="hero-chip-v8">Inspirasi Hari Ini</span>
+            <div class="hero-actions-v8">
+              <button id="btnQuoteHome" onclick="gantiQuote()" aria-label="Ganti kutipan" class="hero-action-v8" title="Ganti">
+                <i data-lucide="refresh-cw"></i>
+              </button>
+              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="hero-action-v8" title="Bagikan">
+                <i data-lucide="share-2"></i>
+              </button>
+            </div>
+          </div>
+
+          <p id="quoteTextHome" class="hero-quote-v8">"Memuat kata mutiara…"</p>
+          <div id="quoteAuthorHome" class="hero-author-v8">—</div>
+
+          <div class="hero-bottom-v8">
+            <!-- Badge cuaca + hari + lokasi -->
+            <div class="hero-weather-v8">
+              <div class="hw-line1-v8">
+                <span id="heroWxEmoji" class="hw-emoji-v8">☀️</span>
+                <span id="heroWxTemp" class="hw-temp-v8">--°</span>
+              </div>
+              <div id="heroWxDesc" class="hw-desc-v8">Memuat…</div>
+              <div id="heroWxDay" class="hw-day-v8">—</div>
+              <div class="hw-location-v8">
+                <i data-lucide="map-pin"></i>
+                <span>Selogiri, Wonogiri</span>
+              </div>
+            </div>
+
+            <!-- Ilustrasi (dinamis dari admin) -->
+            <div id="heroIllustration" class="hero-illustration-v8">
+              <div class="hero-illus-fallback-v8">
+                <i data-lucide="sparkles"></i>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SEARCH -->
+        <div class="relative animate-fade-up">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
           <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
           <div id="searchProg" class="search-prog"></div>
           <div id="searchHistory" class="search-history"></div>
@@ -231,14 +227,14 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         </div>
 
         <div id="caroBox" class="hidden animate-fade-up min-w-0">
-  <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1 md:snap-none"></div>
-  <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
-</div>
+          <div id="caroTrack" class="flex gap-3 overflow-x-auto no-scroll snap-x snap-mandatory pb-1 md:snap-none"></div>
+          <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
+        </div>
 
         <div id="infoPanel" class="card overflow-hidden animate-fade-up md:grid md:grid-cols-2">
-  <button onclick="navPage('agenda')" class="w-full p-4 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition border-b border-slate-200/70 md:border-b-0 md:border-r md:border-slate-200/70"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-  <button onclick="navPage('dokumen')" class="w-full p-4 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-</div>
+          <button onclick="navPage('agenda')" class="w-full p-4 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition border-b border-slate-200/70 md:border-b-0 md:border-r md:border-slate-200/70"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+          <button onclick="navPage('dokumen')" class="w-full p-4 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
+        </div>
 
         <div id="recentBox" class="hidden animate-fade-up">
           <div class="flex items-center justify-between mb-2">
@@ -260,8 +256,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
           <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
         </div>
-
-        <!-- Quote hero dipindah ke atas (lihat hero card) -->
 
         <div id="footList" class="animate-fade-up md:hidden"></div>
       </section>
@@ -311,8 +305,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         </div>
 
         <div id="profData" class="hidden space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 md:items-start">
-  <!-- Kartu Avatar -->
-  <div class="card p-5 flex items-center gap-4 md:col-span-2">
+          <!-- Kartu Avatar -->
+          <div class="card p-5 flex items-center gap-4 md:col-span-2">
             <button id="pfAvatar" type="button" onclick="changeProfilePhoto()" class="relative shrink-0 w-20 h-20 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md active:scale-95 transition group" title="Tap untuk ganti foto">
               <img id="pfAvatarImg" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Profil">
               <span class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition flex items-center justify-center">
@@ -327,8 +321,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
 
           <!-- Data Diri -->
-<div class="card p-4 space-y-2.5 md:col-span-1">
-  <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
+          <div class="card p-4 space-y-2.5 md:col-span-1">
+            <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="id-card" class="w-4 h-4 acc-text"></i> Data Diri</p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="briefcase" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dJabatan" class="truncate">—</span></p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="school" class="w-3.5 h-3.5 acc-text shrink-0"></i><span id="dSekolah" class="truncate">—</span></p>
             <p class="flex items-center gap-2.5 text-[12px] font-semibold text-slate-600"><i data-lucide="hash" class="w-3.5 h-3.5 acc-text shrink-0"></i><span>NPSN <span id="dNpsn">—</span></span></p>
@@ -336,10 +330,10 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
 
           <!-- Sekolah Saya -->
-<div id="schoolCard" class="md:col-span-1"></div>
+          <div id="schoolCard" class="md:col-span-1"></div>
 
-<!-- Sosial Media -->
-<div class="card p-4 space-y-2.5 md:col-span-1">
+          <!-- Sosial Media -->
+          <div class="card p-4 space-y-2.5 md:col-span-1">
             <p class="text-xs font-extrabold text-slate-700 flex items-center gap-2 mb-1"><i data-lucide="at-sign" class="w-4 h-4 acc-text"></i> Sosial Media <span class="text-[9px] font-bold text-slate-400">(watermark story)</span></p>
             <div id="smChips" class="hidden flex-wrap gap-1.5"></div>
             <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-gradient-to-br from-rose-500 to-pink-600 text-white text-[9px] font-black flex items-center justify-center shrink-0">IG</span><input id="smIg" placeholder="username Instagram" class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] text-slate-700 acc-ring"></div>
@@ -353,24 +347,24 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
 
           <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 md:col-span-1">
-  <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
-  <span id="aboutVer">v4.75</span>
-</div>
+            <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
+            <span id="aboutVer">v4.75</span>
+          </div>
 
-<a href="https://slg-timkreatif.github.io/guruberbagi/akun/guru.html"
-   target="_blank" rel="noopener"
-   class="card p-4 flex items-center gap-3 active:scale-[.98] transition md:col-span-1">
-  <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
-    <i data-lucide="user-cog" class="w-5 h-5"></i>
-  </span>
-  <span class="flex-1 min-w-0">
-    <span class="block text-[13px] font-extrabold text-slate-800">Kelola Akun & PIN</span>
-    <span class="block text-[10px] text-slate-500 mt-0.5">Ganti PIN · Riwayat tiket · Info lengkap</span>
-  </span>
-  <i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i>
-</a>
+          <a href="https://slg-timkreatif.github.io/guruberbagi/akun/guru.html"
+             target="_blank" rel="noopener"
+             class="card p-4 flex items-center gap-3 active:scale-[.98] transition md:col-span-1">
+            <span class="w-10 h-10 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0">
+              <i data-lucide="user-cog" class="w-5 h-5"></i>
+            </span>
+            <span class="flex-1 min-w-0">
+              <span class="block text-[13px] font-extrabold text-slate-800">Kelola Akun & PIN</span>
+              <span class="block text-[10px] text-slate-500 mt-0.5">Ganti PIN · Riwayat tiket · Info lengkap</span>
+            </span>
+            <i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i>
+          </a>
 
-<button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition md:col-span-2"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition md:col-span-2"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </section>
 
@@ -378,223 +372,220 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
            PAGE: SETTING
            ============================================ -->
       <section id="pageSetting" class="hidden space-y-3 min-w-0">
-  
-  <!-- ============ TEMA CEPAT (SELALU TERBUKA) ============ -->
-  <div class="setting-section open" id="setSectionPreset">
-    <div class="setting-head" style="cursor:default">
-      <div class="setting-head-icon"><i data-lucide="palette"></i></div>
-      <div class="setting-head-text">
-        <div class="setting-head-title">Tema Cepat</div>
-        <div class="setting-head-sub">Pilih preset, semua pengaturan menyesuaikan</div>
-      </div>
-    </div>
-    <div class="setting-content" style="max-height:none">
-      <div class="setting-content-inner">
-        <div class="preset-grid">
-          <button class="preset-card" data-preset="profesional" onclick="applyPreset('profesional')">
-            <div class="preset-swatch">
-              <div class="preset-swatch-top" style="background:linear-gradient(135deg,#0D9488,#14B8A6)"></div>
-              <div class="preset-swatch-bot" style="background:#0F0F12"></div>
-            </div>
-            <span class="preset-label">Profesional</span>
-          </button>
-          <button class="preset-card" data-preset="hangat" onclick="applyPreset('hangat')">
-            <div class="preset-swatch">
-              <div class="preset-swatch-top" style="background:linear-gradient(135deg,#D97706,#F59E0B)"></div>
-              <div class="preset-swatch-bot" style="background:#0F0F12"></div>
-            </div>
-            <span class="preset-label">Hangat</span>
-          </button>
-          <button class="preset-card" data-preset="fresh" onclick="applyPreset('fresh')">
-            <div class="preset-swatch">
-              <div class="preset-swatch-top" style="background:linear-gradient(135deg,#2563EB,#0EA5E9)"></div>
-              <div class="preset-swatch-bot" style="background:#fff;border:1px solid #E8E6EE"></div>
-            </div>
-            <span class="preset-label">Fresh</span>
-          </button>
-          <button class="preset-card" data-preset="elegan" onclick="applyPreset('elegan')">
-            <div class="preset-swatch">
-              <div class="preset-swatch-top" style="background:linear-gradient(135deg,#7C3AED,#A855F7)"></div>
-              <div class="preset-swatch-bot" style="background:#0F0F12"></div>
-            </div>
-            <span class="preset-label">Elegan</span>
-          </button>
-          <button class="preset-card" data-preset="charcoal" onclick="applyPreset('charcoal')">
-            <div class="preset-swatch">
-              <div class="preset-swatch-top" style="background:linear-gradient(135deg,#0D9488,#14B8A6)"></div>
-              <div class="preset-swatch-bot" style="background:#22262E"></div>
-            </div>
-            <span class="preset-label">Charcoal</span>
-          </button>
-          <button class="preset-card" data-preset="minimal" onclick="applyPreset('minimal')">
-            <div class="preset-swatch">
-              <div class="preset-swatch-top" style="background:linear-gradient(135deg,#2563EB,#0EA5E9)"></div>
-              <div class="preset-swatch-bot" style="background:#22262E"></div>
-            </div>
-            <span class="preset-label">Minimal</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- ============ TAMPILAN LANJUTAN ============ -->
-  <div class="setting-section" id="setSectionVisual">
-    <div class="setting-head" onclick="toggleSettingSection('setSectionVisual')">
-      <div class="setting-head-icon"><i data-lucide="sliders-horizontal"></i></div>
-      <div class="setting-head-text">
-        <div class="setting-head-title">Tampilan Lanjutan</div>
-        <div class="setting-head-sub">Warna aksen · Navbar · Ikon · Kepadatan</div>
-      </div>
-      <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
-    </div>
-    <div class="setting-content">
-      <div class="setting-content-inner">
-        
-        <div class="setting-row">
-          <div>
-            <div class="setting-row-t">Warna Aksen</div>
-            <div class="setting-row-s">Teal · Biru · Violet · Amber · Rose</div>
-          </div>
-          <div class="setting-row-right" id="accRow">
-            <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
-            <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
-            <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
-            <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
-            <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
-          </div>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Gaya Navbar</div>
-          <div class="setting-row-right">
-            <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
-            <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
-          </div>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Warna Navbar</div>
-          <div class="setting-row-right">
-            <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
-            <button data-navcolor="charcoal" onclick="setNavbarColor('charcoal')" class="seg-btn">Charcoal</button>
-            <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
-          </div>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Mode Navigasi</div>
-          <div class="setting-row-right">
-            <button data-navmode="bottom" onclick="setNavMode('bottom')" class="seg-btn">Navbar Bawah</button>
-            <button data-navmode="hamburger" onclick="setNavMode('hamburger')" class="seg-btn">Sidebar</button>
-          </div>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Gaya Ikon Menu</div>
-          <div class="setting-row-right">
-            <button data-iconstyle="default" onclick="setIconStyle('default')" class="seg-btn">Ringan</button>
-            <button data-iconstyle="solid" onclick="setIconStyle('solid')" class="seg-btn">Solid</button>
-            <button data-iconstyle="colored" onclick="setIconStyle('colored')" class="seg-btn">Warna</button>
-          </div>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Kepadatan</div>
-          <div class="setting-row-right">
-            <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
-            <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
-            <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  
-  <!-- ============ AKSESIBILITAS ============ -->
-  <div class="setting-section" id="setSectionAkses">
-    <div class="setting-head" onclick="toggleSettingSection('setSectionAkses')">
-      <div class="setting-head-icon"><i data-lucide="eye"></i></div>
-      <div class="setting-head-text">
-        <div class="setting-head-title">Aksesibilitas</div>
-        <div class="setting-head-sub">Tema warna · Teks besar · Hemat animasi</div>
-      </div>
-      <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
-    </div>
-    <div class="setting-content">
-      <div class="setting-content-inner">
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Tema Warna</div>
-          <div class="setting-row-right">
-            <button id="themeModeAuto" onclick="setThemeMode('auto')" class="seg-btn">Auto</button>
-            <button id="themeModeLight" onclick="setThemeMode('light')" class="seg-btn">Terang</button>
-            <button id="themeModeDark" onclick="setThemeMode('dark')" class="seg-btn">Gelap</button>
-          </div>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Teks Besar</div>
-          <button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
-        </div>
-        
-        <div class="setting-row">
-          <div class="setting-row-t">Hemat Animasi</div>
-          <button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  
-  <!-- ============ APLIKASI ============ -->
-  <div class="setting-section" id="setSectionApp">
-    <div class="setting-head" onclick="toggleSettingSection('setSectionApp')">
-      <div class="setting-head-icon"><i data-lucide="smartphone"></i></div>
-      <div class="setting-head-text">
-        <div class="setting-head-title">Aplikasi</div>
-        <div class="setting-head-sub">Install · Feedback · Force Sync</div>
-      </div>
-      <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
-    </div>
-    <div class="setting-content">
-      <div class="setting-content-inner">
-        
-        <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left border-b border-slate-100">
-          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-        </button>
-        
-        <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left border-b border-slate-100">
-          <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-        </button>
-        
-        <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left">
-          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
-        </button>
-        
-      </div>
-    </div>
-  </div>
-  
-  <!-- ============ RESET + FOOTER ============ -->
-  <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
-    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
-  </button>
-  
-  <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.85</span></p>
-  
-</section>
 
-      <!-- ============================================
-           PAGE: BAGI
-           ============================================ -->
+        <!-- ============ TEMA CEPAT (SELALU TERBUKA) ============ -->
+        <div class="setting-section open" id="setSectionPreset">
+          <div class="setting-head" style="cursor:default">
+            <div class="setting-head-icon"><i data-lucide="palette"></i></div>
+            <div class="setting-head-text">
+              <div class="setting-head-title">Tema Cepat</div>
+              <div class="setting-head-sub">Pilih preset, semua pengaturan menyesuaikan</div>
+            </div>
+          </div>
+          <div class="setting-content" style="max-height:none">
+            <div class="setting-content-inner">
+              <div class="preset-grid">
+                <button class="preset-card" data-preset="profesional" onclick="applyPreset('profesional')">
+                  <div class="preset-swatch">
+                    <div class="preset-swatch-top" style="background:linear-gradient(135deg,#0D9488,#14B8A6)"></div>
+                    <div class="preset-swatch-bot" style="background:#0F0F12"></div>
+                  </div>
+                  <span class="preset-label">Profesional</span>
+                </button>
+                <button class="preset-card" data-preset="hangat" onclick="applyPreset('hangat')">
+                  <div class="preset-swatch">
+                    <div class="preset-swatch-top" style="background:linear-gradient(135deg,#D97706,#F59E0B)"></div>
+                    <div class="preset-swatch-bot" style="background:#0F0F12"></div>
+                  </div>
+                  <span class="preset-label">Hangat</span>
+                </button>
+                <button class="preset-card" data-preset="fresh" onclick="applyPreset('fresh')">
+                  <div class="preset-swatch">
+                    <div class="preset-swatch-top" style="background:linear-gradient(135deg,#2563EB,#0EA5E9)"></div>
+                    <div class="preset-swatch-bot" style="background:#fff;border:1px solid #E8E6EE"></div>
+                  </div>
+                  <span class="preset-label">Fresh</span>
+                </button>
+                <button class="preset-card" data-preset="elegan" onclick="applyPreset('elegan')">
+                  <div class="preset-swatch">
+                    <div class="preset-swatch-top" style="background:linear-gradient(135deg,#7C3AED,#A855F7)"></div>
+                    <div class="preset-swatch-bot" style="background:#0F0F12"></div>
+                  </div>
+                  <span class="preset-label">Elegan</span>
+                </button>
+                <button class="preset-card" data-preset="charcoal" onclick="applyPreset('charcoal')">
+                  <div class="preset-swatch">
+                    <div class="preset-swatch-top" style="background:linear-gradient(135deg,#0D9488,#14B8A6)"></div>
+                    <div class="preset-swatch-bot" style="background:#22262E"></div>
+                  </div>
+                  <span class="preset-label">Charcoal</span>
+                </button>
+                <button class="preset-card" data-preset="minimal" onclick="applyPreset('minimal')">
+                  <div class="preset-swatch">
+                    <div class="preset-swatch-top" style="background:linear-gradient(135deg,#2563EB,#0EA5E9)"></div>
+                    <div class="preset-swatch-bot" style="background:#22262E"></div>
+                  </div>
+                  <span class="preset-label">Minimal</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TAMPILAN LANJUTAN ============ -->
+        <div class="setting-section" id="setSectionVisual">
+          <div class="setting-head" onclick="toggleSettingSection('setSectionVisual')">
+            <div class="setting-head-icon"><i data-lucide="sliders-horizontal"></i></div>
+            <div class="setting-head-text">
+              <div class="setting-head-title">Tampilan Lanjutan</div>
+              <div class="setting-head-sub">Warna aksen · Navbar · Ikon · Kepadatan</div>
+            </div>
+            <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
+          </div>
+          <div class="setting-content">
+            <div class="setting-content-inner">
+
+              <div class="setting-row">
+                <div>
+                  <div class="setting-row-t">Warna Aksen</div>
+                  <div class="setting-row-s">Teal · Biru · Violet · Amber · Rose</div>
+                </div>
+                <div class="setting-row-right" id="accRow">
+                  <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
+                  <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
+                  <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
+                  <button data-acc="amber" onclick="setAccent('amber')" title="Amber" style="background:#d97706" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
+                  <button data-acc="rose" onclick="setAccent('rose')" title="Rose" style="background:#e11d48" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Gaya Navbar</div>
+                <div class="setting-row-right">
+                  <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
+                  <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Warna Navbar</div>
+                <div class="setting-row-right">
+                  <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
+                  <button data-navcolor="charcoal" onclick="setNavbarColor('charcoal')" class="seg-btn">Charcoal</button>
+                  <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Mode Navigasi</div>
+                <div class="setting-row-right">
+                  <button data-navmode="bottom" onclick="setNavMode('bottom')" class="seg-btn">Navbar Bawah</button>
+                  <button data-navmode="hamburger" onclick="setNavMode('hamburger')" class="seg-btn">Sidebar</button>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Gaya Ikon Menu</div>
+                <div class="setting-row-right">
+                  <button data-iconstyle="default" onclick="setIconStyle('default')" class="seg-btn">Ringan</button>
+                  <button data-iconstyle="solid" onclick="setIconStyle('solid')" class="seg-btn">Solid</button>
+                  <button data-iconstyle="colored" onclick="setIconStyle('colored')" class="seg-btn">Warna</button>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Kepadatan</div>
+                <div class="setting-row-right">
+                  <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
+                  <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
+                  <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ AKSESIBILITAS ============ -->
+        <div class="setting-section" id="setSectionAkses">
+          <div class="setting-head" onclick="toggleSettingSection('setSectionAkses')">
+            <div class="setting-head-icon"><i data-lucide="eye"></i></div>
+            <div class="setting-head-text">
+              <div class="setting-head-title">Aksesibilitas</div>
+              <div class="setting-head-sub">Tema warna · Teks besar · Hemat animasi</div>
+            </div>
+            <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
+          </div>
+          <div class="setting-content">
+            <div class="setting-content-inner">
+
+              <div class="setting-row">
+                <div class="setting-row-t">Tema Warna</div>
+                <div class="setting-row-right">
+                  <button id="themeModeAuto" onclick="setThemeMode('auto')" class="seg-btn">Auto</button>
+                  <button id="themeModeLight" onclick="setThemeMode('light')" class="seg-btn">Terang</button>
+                  <button id="themeModeDark" onclick="setThemeMode('dark')" class="seg-btn">Gelap</button>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Teks Besar</div>
+                <button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
+              </div>
+
+              <div class="setting-row">
+                <div class="setting-row-t">Hemat Animasi</div>
+                <button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ APLIKASI ============ -->
+        <div class="setting-section" id="setSectionApp">
+          <div class="setting-head" onclick="toggleSettingSection('setSectionApp')">
+            <div class="setting-head-icon"><i data-lucide="smartphone"></i></div>
+            <div class="setting-head-text">
+              <div class="setting-head-title">Aplikasi</div>
+              <div class="setting-head-sub">Install · Feedback · Force Sync</div>
+            </div>
+            <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
+          </div>
+          <div class="setting-content">
+            <div class="setting-content-inner">
+
+              <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left border-b border-slate-100">
+                <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
+                <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+              </button>
+
+              <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left border-b border-slate-100">
+                <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0"><i data-lucide="lightbulb" class="w-4 h-4"></i></span>
+                <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Ceritakan ke Kami</span><span class="block text-[10px] text-slate-500 mt-0.5">Saran, bug, atau pujian</span></span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+              </button>
+
+              <button id="btnForceSync" onclick="forceSync()" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left">
+                <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="refresh-cw" class="w-4 h-4"></i></span>
+                <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Force Sync</span><span class="block text-[10px] text-slate-500 mt-0.5">Hapus cache & ambil data terbaru <span id="lastSyncLbl" class="acc-text"></span></span></span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ RESET + FOOTER ============ -->
+        <button onclick="resetTheme()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
+        </button>
+
+        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.85</span></p>
+
+      </section>
+
       <!-- ============================================
            PAGE: BAGI (Workstation Studio)
            ============================================ -->
@@ -615,129 +606,129 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         </div>
 
         <!-- WRAPPER GRID 2 KOLOM -->
-<div class="md:grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:gap-6 md:space-y-0 space-y-4 md:items-start">
-  
-  <!-- KOLOM KIRI — Workspace Studio -->
-  <div class="space-y-4 md:space-y-5 min-w-0">
-    
-    <!-- 2. RESUME CARD -->
-    <div id="wsResumeWrap"></div>
+        <div class="md:grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] md:gap-6 md:space-y-0 space-y-4 md:items-start">
 
-        <!-- 3. TABS -->
-        <div class="ws-tabs">
-          <button id="wsTabFoto" onclick="switchStudioTab('foto')" class="ws-tab on">
-            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-            Foto WA
-          </button>
-          <button id="wsTabKartu" onclick="switchStudioTab('kartu')" class="ws-tab">
-            <i data-lucide="layout-template" class="w-3.5 h-3.5"></i>
-            Kartu
-          </button>
-        </div>
+          <!-- KOLOM KIRI — Workspace Studio -->
+          <div class="space-y-4 md:space-y-5 min-w-0">
 
-        <!-- 4. PANEL FOTO -->
-<div id="wsPanelFoto" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3"></div>
+            <!-- 2. RESUME CARD -->
+            <div id="wsResumeWrap"></div>
 
-<!-- 5. PANEL KARTU -->
-<div id="wsPanelKartu" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 hidden"></div>
-
-        </div><!-- /KOLOM KIRI -->
-
-<!-- KOLOM KANAN — Catatan & Karya -->
-<div class="space-y-4 md:space-y-5 min-w-0">
-  
-  <!-- 6. CATATAN DRAFT -->
-  <div class="pt-2">
-          <div class="ws-sec-label">
-            <span>Catatan Hari Ini</span>
-            <button onclick="navToCatatan()" class="ws-sec-label-btn flex items-center gap-1">
-              Lihat semua <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </button>
-          </div>
-          <div class="ws-draft">
-            <div class="flex items-start gap-2">
-              <span class="w-7 h-7 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0 mt-0.5">
-                <i data-lucide="pencil-line" class="w-3.5 h-3.5"></i>
-              </span>
-              <textarea id="wsDraftInput" rows="2" placeholder="Hari ini saya…" class="ws-draft-input flex-1"></textarea>
-            </div>
-            <div class="ws-draft-actions">
-              <button onclick="simpanDraftQuick()" class="ws-draft-btn ws-draft-btn-sec">
-                <i data-lucide="save" class="w-3 h-3"></i>
-                Simpan
+            <!-- 3. TABS -->
+            <div class="ws-tabs">
+              <button id="wsTabFoto" onclick="switchStudioTab('foto')" class="ws-tab on">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                Foto WA
               </button>
-              <button onclick="buatWADariDraft()" class="ws-draft-btn ws-draft-btn-pri">
-                <i data-lucide="image-plus" class="w-3 h-3"></i>
-                Buat WA
+              <button id="wsTabKartu" onclick="switchStudioTab('kartu')" class="ws-tab">
+                <i data-lucide="layout-template" class="w-3.5 h-3.5"></i>
+                Kartu
               </button>
             </div>
-          </div>
-        </div>
 
-        <!-- 7. KARYA SAYA -->
-        <div id="wsKaryaWrap" class="pt-2 hidden">
-          <div class="ws-sec-label">
-            <span>Karya Saya · <span id="wsKaryaCount">0</span></span>
-            <button onclick="bukaGaleriKarya()" class="ws-sec-label-btn flex items-center gap-1">
-              Galeri <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </button>
-          </div>
-          <div id="wsKaryaGrid" class="grid grid-cols-4 md:grid-cols-6 gap-2"></div>
-        </div>
+            <!-- 4. PANEL FOTO -->
+            <div id="wsPanelFoto" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3"></div>
 
-        <!-- 8. RIWAYAT CATATAN -->
-        <div id="postSectionWrap" class="hidden pt-2">
-          <div class="ws-sec-label">
-            <span>Catatan Tersimpan</span>
-            <span id="myPostCount" class="text-[10px] font-bold text-slate-400"></span>
-          </div>
+            <!-- 5. PANEL KARTU -->
+            <div id="wsPanelKartu" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 hidden"></div>
 
-          <button id="postOpenBtn" onclick="togglePostForm(true)" class="w-full card p-4 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition acc-soft border-transparent">
-            <span class="w-10 h-10 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="pencil-line" class="w-5 h-5"></i></span>
-            <span class="flex-1 min-w-0">
-              <span class="block text-xs font-extrabold text-slate-800">Tulis Catatan Baru</span>
-              <span class="block text-[10px] text-slate-500 mt-0.5">Catatan pribadi — bisa dibagikan ke WA</span>
-            </span>
-            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 shrink-0"></i>
-          </button>
+          </div><!-- /KOLOM KIRI -->
 
-          <div id="postForm" class="hidden card p-4 space-y-2 mt-2">
-            <div class="flex items-center justify-between">
-              <p id="postFormTitle" class="text-[11px] font-bold text-slate-500">Tulis catatanmu…</p>
-              <button onclick="togglePostForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+          <!-- KOLOM KANAN — Catatan & Karya -->
+          <div class="space-y-4 md:space-y-5 min-w-0">
+
+            <!-- 6. CATATAN DRAFT -->
+            <div class="pt-2">
+              <div class="ws-sec-label">
+                <span>Catatan Hari Ini</span>
+                <button onclick="navToCatatan()" class="ws-sec-label-btn flex items-center gap-1">
+                  Lihat semua <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                </button>
+              </div>
+              <div class="ws-draft">
+                <div class="flex items-start gap-2">
+                  <span class="w-7 h-7 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0 mt-0.5">
+                    <i data-lucide="pencil-line" class="w-3.5 h-3.5"></i>
+                  </span>
+                  <textarea id="wsDraftInput" rows="2" placeholder="Hari ini saya…" class="ws-draft-input flex-1"></textarea>
+                </div>
+                <div class="ws-draft-actions">
+                  <button onclick="simpanDraftQuick()" class="ws-draft-btn ws-draft-btn-sec">
+                    <i data-lucide="save" class="w-3 h-3"></i>
+                    Simpan
+                  </button>
+                  <button onclick="buatWADariDraft()" class="ws-draft-btn ws-draft-btn-pri">
+                    <i data-lucide="image-plus" class="w-3 h-3"></i>
+                    Buat WA
+                  </button>
+                </div>
+              </div>
             </div>
-            <input id="postJudul" placeholder="Judul (max 60)" maxlength="60" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">
-            <textarea id="postIsi" rows="3" placeholder="Tulis catatanmu… (max 500 karakter)" maxlength="500" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring resize-none"></textarea>
-            <div class="flex items-center justify-between">
-              <p id="postCounter" class="text-[10px] text-slate-400 font-bold">0/500</p>
-              <button onclick="$('postFoto').click()" class="text-[10px] font-bold acc-text flex items-center gap-1 active:scale-95 transition">
-                <i data-lucide="image" class="w-3.5 h-3.5"></i> <span id="postFotoLabel">Foto (opsional)</span>
+
+            <!-- 7. KARYA SAYA -->
+            <div id="wsKaryaWrap" class="pt-2 hidden">
+              <div class="ws-sec-label">
+                <span>Karya Saya · <span id="wsKaryaCount">0</span></span>
+                <button onclick="bukaGaleriKarya()" class="ws-sec-label-btn flex items-center gap-1">
+                  Galeri <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                </button>
+              </div>
+              <div id="wsKaryaGrid" class="grid grid-cols-4 md:grid-cols-6 gap-2"></div>
+            </div>
+
+            <!-- 8. RIWAYAT CATATAN -->
+            <div id="postSectionWrap" class="hidden pt-2">
+              <div class="ws-sec-label">
+                <span>Catatan Tersimpan</span>
+                <span id="myPostCount" class="text-[10px] font-bold text-slate-400"></span>
+              </div>
+
+              <button id="postOpenBtn" onclick="togglePostForm(true)" class="w-full card p-4 flex items-center gap-3 text-left active:scale-[.98] hover:shadow-md transition acc-soft border-transparent">
+                <span class="w-10 h-10 rounded-xl acc-bg text-white flex items-center justify-center shrink-0"><i data-lucide="pencil-line" class="w-5 h-5"></i></span>
+                <span class="flex-1 min-w-0">
+                  <span class="block text-xs font-extrabold text-slate-800">Tulis Catatan Baru</span>
+                  <span class="block text-[10px] text-slate-500 mt-0.5">Catatan pribadi — bisa dibagikan ke WA</span>
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 shrink-0"></i>
               </button>
-            </div>
-            <input type="file" id="postFoto" accept="image/*" class="hidden" onchange="onPostFotoSelected(event)">
-            <div id="postFotoPreview" class="hidden relative w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-              <img id="postFotoImg" class="w-full max-h-48 object-cover" alt="">
-              <button onclick="clearPostFoto()" aria-label="Hapus foto" class="absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/60 text-white flex items-center justify-center active:scale-90"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-            </div>
-            <select id="postKat" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
-              <option value="refleksi">Refleksi</option>
-              <option value="belajar">Momen Belajar</option>
-              <option value="info">Info</option>
-            </select>
-            <button onclick="submitPost()" id="postSubmitBtn" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan Catatan</button>
-          </div>
 
-          <div id="postList" class="grid md:grid-cols-2 gap-2 md:gap-3 mt-2"></div>
-                <button id="postMore" onclick="morePost()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
-      </div>
-      
-      </div><!-- /KOLOM KANAN -->
-      
-      </div><!-- /WRAPPER GRID -->
-      
+              <div id="postForm" class="hidden card p-4 space-y-2 mt-2">
+                <div class="flex items-center justify-between">
+                  <p id="postFormTitle" class="text-[11px] font-bold text-slate-500">Tulis catatanmu…</p>
+                  <button onclick="togglePostForm(false)" aria-label="Tutup" class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-3.5 h-3.5 text-slate-500"></i></button>
+                </div>
+                <input id="postJudul" placeholder="Judul (max 60)" maxlength="60" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">
+                <textarea id="postIsi" rows="3" placeholder="Tulis catatanmu… (max 500 karakter)" maxlength="500" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring resize-none"></textarea>
+                <div class="flex items-center justify-between">
+                  <p id="postCounter" class="text-[10px] text-slate-400 font-bold">0/500</p>
+                  <button onclick="$('postFoto').click()" class="text-[10px] font-bold acc-text flex items-center gap-1 active:scale-95 transition">
+                    <i data-lucide="image" class="w-3.5 h-3.5"></i> <span id="postFotoLabel">Foto (opsional)</span>
+                  </button>
+                </div>
+                <input type="file" id="postFoto" accept="image/*" class="hidden" onchange="onPostFotoSelected(event)">
+                <div id="postFotoPreview" class="hidden relative w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                  <img id="postFotoImg" class="w-full max-h-48 object-cover" alt="">
+                  <button onclick="clearPostFoto()" aria-label="Hapus foto" class="absolute top-2 right-2 w-7 h-7 rounded-lg bg-black/60 text-white flex items-center justify-center active:scale-90"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                </div>
+                <select id="postKat" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-2 py-2.5 text-[11px] text-slate-700 acc-ring">
+                  <option value="refleksi">Refleksi</option>
+                  <option value="belajar">Momen Belajar</option>
+                  <option value="info">Info</option>
+                </select>
+                <button onclick="submitPost()" id="postSubmitBtn" class="w-full acc-bg text-white font-bold py-2.5 rounded-xl text-xs active:scale-[.98] transition shadow-sm">Simpan Catatan</button>
+              </div>
+
+              <div id="postList" class="grid md:grid-cols-2 gap-2 md:gap-3 mt-2"></div>
+              <button id="postMore" onclick="morePost()" class="hidden w-full card p-2.5 text-[11px] font-bold text-slate-500 active:scale-[.98] transition">Muat lagi</button>
+            </div>
+
+          </div><!-- /KOLOM KANAN -->
+
+        </div><!-- /WRAPPER GRID -->
+
       </section>
-      
-      </main>
+
+    </main>
 
     <!-- BOTTOM NAVBAR -->
     <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
@@ -747,7 +738,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
     </nav>
   </div>
-  
+
   <!-- ============================================
        DRAWER — Sidebar Mode
        ============================================ -->
@@ -888,32 +879,31 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <span class="text-[9px] font-black uppercase tracking-wider text-slate-400 shrink-0">Studio Kreatif</span>
     </div>
     <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4 md:grid md:grid-cols-[minmax(0,1fr)_400px] md:gap-6 md:p-6 md:space-y-0 md:overflow-hidden md:min-h-0">
-  
-  <!-- Canvas column (desktop: own scroll, centered) -->
-  <div class="md:flex md:items-start md:justify-center md:overflow-y-auto md:no-scroll md:bg-slate-100 dark:md:bg-slate-900/40 md:rounded-2xl md:p-6">
-    <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100 md:w-auto md:max-h-[calc(100vh-220px)] md:mx-auto" style="aspect-ratio:9/16"></canvas>
-  </div>
-  
-  <!-- Controls column (desktop: own scroll) -->
-  <div class="space-y-4 md:overflow-y-auto md:no-scroll md:pr-1">
-    
-    <!-- Caption WA Preview (muncul hanya di mode WA) -->
-    <div id="stCaptionBox" class="hidden card p-3.5 space-y-2">
-      <div class="flex items-center justify-between">
-        <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-          <i data-lucide="message-square" class="w-3 h-3 acc-text"></i>Caption untuk WA
-        </p>
-        <button onclick="copyCaptionWA()" class="text-[10px] font-bold acc-text active:scale-95 transition flex items-center gap-1">
-          <i data-lucide="copy" class="w-3 h-3"></i>Salin
-        </button>
+
+      <!-- Canvas column -->
+      <div class="md:flex md:items-start md:justify-center md:overflow-y-auto md:no-scroll md:bg-slate-100 dark:md:bg-slate-900/40 md:rounded-2xl md:p-6">
+        <canvas id="stCanvas" class="w-full rounded-2xl border border-slate-100 md:w-auto md:max-h-[calc(100vh-220px)] md:mx-auto" style="aspect-ratio:9/16"></canvas>
       </div>
-      <p id="stCaptionText" class="text-[12px] text-slate-600 leading-relaxed whitespace-pre-line"></p>
+
+      <!-- Controls column -->
+      <div class="space-y-4 md:overflow-y-auto md:no-scroll md:pr-1">
+
+        <div id="stCaptionBox" class="hidden card p-3.5 space-y-2">
+          <div class="flex items-center justify-between">
+            <p class="text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <i data-lucide="message-square" class="w-3 h-3 acc-text"></i>Caption untuk WA
+            </p>
+            <button onclick="copyCaptionWA()" class="text-[10px] font-bold acc-text active:scale-95 transition flex items-center gap-1">
+              <i data-lucide="copy" class="w-3 h-3"></i>Salin
+            </button>
+          </div>
+          <p id="stCaptionText" class="text-[12px] text-slate-600 leading-relaxed whitespace-pre-line"></p>
+        </div>
+
+        <div id="stControls" class="space-y-1"></div>
+
+      </div>
     </div>
-    
-    <div id="stControls" class="space-y-1"></div>
-    
-  </div>
-</div>
     <div class="fs-modal-footer p-4 grid grid-cols-2 gap-2 bg-white border-t border-slate-100 shrink-0">
       <button onclick="unduhStudio()" class="bg-slate-100 text-slate-700 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="download" class="w-4 h-4"></i> Unduh</button>
       <button onclick="bagiStudio()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm"><i data-lucide="share-2" class="w-4 h-4"></i> Bagikan</button>
@@ -935,55 +925,55 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
 
   <!-- ============================================
-     MODAL: CROP EDITOR
-     ============================================ -->
-<div id="mCrop" class="fixed inset-0 z-[78] hidden flex-col bg-slate-950" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
-  <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
-    <button onclick="tutupCrop()" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
-      <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
-    </button>
-    <p id="cropTitle" class="text-sm font-bold text-white flex-1 text-center truncate">Atur Posisi Foto</p>
-    <button onclick="toggleCropGrid()" aria-label="Toggle grid" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
-      <i data-lucide="grid-3x3" class="w-4 h-4 text-white"></i>
-    </button>
-  </div>
-  
-  <div class="flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden">
-  <div id="cropStage" class="relative touch-none select-none" style="max-width:100%;max-height:100%">
-      <canvas id="cropCanvas" class="rounded-xl shadow-2xl block"></canvas>
-      <div id="cropGrid" class="absolute inset-0 pointer-events-none rounded-xl" style="display:none">
-        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <line x1="33.33" y1="0" x2="33.33" y2="100" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
-          <line x1="66.66" y1="0" x2="66.66" y2="100" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
-          <line x1="0" y1="33.33" x2="100" y2="33.33" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
-          <line x1="0" y1="66.66" x2="100" y2="66.66" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
-        </svg>
+       MODAL: CROP EDITOR
+       ============================================ -->
+  <div id="mCrop" class="fixed inset-0 z-[78] hidden flex-col bg-slate-950" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+    <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
+      <button onclick="tutupCrop()" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
+      </button>
+      <p id="cropTitle" class="text-sm font-bold text-white flex-1 text-center truncate">Atur Posisi Foto</p>
+      <button onclick="toggleCropGrid()" aria-label="Toggle grid" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
+        <i data-lucide="grid-3x3" class="w-4 h-4 text-white"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden">
+      <div id="cropStage" class="relative touch-none select-none" style="max-width:100%;max-height:100%">
+        <canvas id="cropCanvas" class="rounded-xl shadow-2xl block"></canvas>
+        <div id="cropGrid" class="absolute inset-0 pointer-events-none rounded-xl" style="display:none">
+          <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <line x1="33.33" y1="0" x2="33.33" y2="100" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
+            <line x1="66.66" y1="0" x2="66.66" y2="100" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
+            <line x1="0" y1="33.33" x2="100" y2="33.33" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
+            <line x1="0" y1="66.66" x2="100" y2="66.66" stroke="rgba(255,255,255,.4)" stroke-width=".3" vector-effect="non-scaling-stroke" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-modal-footer p-4 space-y-3 bg-slate-900 border-t border-slate-800 shrink-0">
+      <div class="flex items-center gap-3">
+        <i data-lucide="zoom-out" class="w-4 h-4 text-slate-400 shrink-0"></i>
+        <input id="cropZoom" type="range" min="100" max="300" value="100" oninput="setCropZoom(this.value)" class="flex-1 accent-teal-500">
+        <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 shrink-0"></i>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="resetCrop()" class="bg-slate-800 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+        </button>
+        <button onclick="tutupCrop()" class="bg-slate-800 text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition">Batal</button>
+        <button onclick="applyCrop()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm">
+          <i data-lucide="check" class="w-4 h-4"></i> Terapkan
+        </button>
       </div>
     </div>
   </div>
-  
-  <div class="fs-modal-footer p-4 space-y-3 bg-slate-900 border-t border-slate-800 shrink-0">
-    <div class="flex items-center gap-3">
-      <i data-lucide="zoom-out" class="w-4 h-4 text-slate-400 shrink-0"></i>
-      <input id="cropZoom" type="range" min="100" max="300" value="100" oninput="setCropZoom(this.value)" class="flex-1 accent-teal-500">
-      <i data-lucide="zoom-in" class="w-4 h-4 text-slate-400 shrink-0"></i>
-    </div>
-    <div class="grid grid-cols-3 gap-2">
-      <button onclick="resetCrop()" class="bg-slate-800 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition">
-        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
-      </button>
-      <button onclick="tutupCrop()" class="bg-slate-800 text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition">Batal</button>
-      <button onclick="applyCrop()" class="acc-bg text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-sm">
-        <i data-lucide="check" class="w-4 h-4"></i> Terapkan
-      </button>
-    </div>
-  </div>
-</div>
 
-<!-- ============================================
-     MODAL: POST IMAGE BUILDER
-     ============================================ -->
-<div id="mPostImage" class="fixed inset-0 z-[85] hidden flex-col bg-slate-950">
+  <!-- ============================================
+       MODAL: POST IMAGE BUILDER
+       ============================================ -->
+  <div id="mPostImage" class="fixed inset-0 z-[85] hidden flex-col bg-slate-950">
     <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
       <button onclick="tutupModal('mPostImage')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
@@ -992,7 +982,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <span class="w-9 h-9 shrink-0"></span>
     </div>
     <div class="flex-1 overflow-y-auto no-scroll p-4 space-y-4 flex flex-col items-center md:flex-row md:items-start md:justify-center md:gap-8 md:p-8">
-  <canvas id="piCanvas" class="max-w-full rounded-xl md:max-h-[calc(100vh-220px)] md:w-auto" style="max-height:60vh;box-shadow:0 10px 40px rgba(0,0,0,.5)"></canvas>
+      <canvas id="piCanvas" class="max-w-full rounded-xl md:max-h-[calc(100vh-220px)] md:w-auto" style="max-height:60vh;box-shadow:0 10px 40px rgba(0,0,0,.5)"></canvas>
       <div class="w-full max-w-sm space-y-3">
         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Ukuran</p>
         <div class="flex gap-2">
@@ -1063,7 +1053,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <div class="card modal-card p-5 space-y-4 animate-pop">
         <div class="flex items-center justify-between">
           <p id="shareTitleLabel" class="text-base font-extrabold text-slate-800">Bagikan</p>
-        <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+          <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
         </div>
         <div class="rounded-xl p-3.5" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
           <p class="text-[10px] font-black uppercase tracking-widest text-white/80">Guru Berbagi Selogiri</p>
@@ -1184,9 +1174,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        CONTEXT MENU
        ============================================ -->
   <div id="ctxMenu" class="ctx-menu" role="menu"></div>
-  
+
   <!-- ============================================
-       UPDATE BANNER v2 — Enhanced
+       UPDATE BANNER v2
        ============================================ -->
   <div id="updateBanner" class="update-banner-enhanced" role="status" aria-live="polite">
     <div class="upd-icon-wrap">
@@ -1249,8 +1239,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       </div>
     </div>
   </div>
-  
-  </div>
-  <script defer src="app.js?v=4.101"></script>
+
+</div>
+<script defer src="app.js?v=4.97"></script>
 </body>
 </html>
