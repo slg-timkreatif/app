@@ -994,9 +994,6 @@ function showWx(cw){
   if(tempEl)  tempEl.textContent=Math.round(cw.temperature)+'°';
   if(descEl)  descEl.textContent=label;
 
-  // Legacy target (kalau masih ada elemen lama)
-  const el=$('wxInline');
-  if(el){el.className='text-[11px] font-bold shrink-0 '+color;el.textContent=emoji+' '+Math.round(cw.temperature)+'° '+label;}
 }
 
 /* ============================================================
