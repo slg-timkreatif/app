@@ -533,10 +533,10 @@ function setAnim(){
 
 /* Dark Mode Controller */
 function getThemeMode(){return localStorage.getItem('gb_theme_mode')||'auto';}
-function updateThemeMeta(){
-  const isDark=document.documentElement.classList.contains('dark');
-  const m=document.querySelector('meta[name=theme-color]');
-  if(m)m.setAttribute('content',isDark?'#181B21':'#F6F5F9');
+function updateThemeMeta() {
+  const isDark = document.documentElement.classList.contains('dark');
+  const m = document.querySelector('meta[name=theme-color]');
+  if (m) m.setAttribute('content', isDark ? '#22262E' : '#FFFFFF');
 }
 function paintThemeMode(){
   const cur=getThemeMode();
@@ -986,6 +986,15 @@ function showWx(cw){
   else if(cd===3){emoji='☁️';label='Berawan';color='text-slate-500';}
   else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';label='Hujan';color='text-sky-600';}
   else if(cd>=95){emoji='⛈️';label='Petir';color='text-sky-600';}
+  // Target baru — hero weather badge
+  const emojiEl=$('heroWxEmoji');
+  const tempEl=$('heroWxTemp');
+  const descEl=$('heroWxDesc');
+  if(emojiEl) emojiEl.textContent=emoji;
+  if(tempEl)  tempEl.textContent=Math.round(cw.temperature)+'°';
+  if(descEl)  descEl.textContent=label;
+
+  // Legacy target (kalau masih ada elemen lama)
   const el=$('wxInline');
   if(el){el.className='text-[11px] font-bold shrink-0 '+color;el.textContent=emoji+' '+Math.round(cw.temperature)+'° '+label;}
 }
@@ -4905,11 +4914,15 @@ function setSapaan(){
   const j=new Date().getHours();
   const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
   const el=$('hdrSub');if(el)el.textContent=s;
-  const H=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const B=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const d=new Date();
-  const t=$('txtTanggal');
-  if(t)t.textContent=`${H[d.getDay()].slice(0,3)}, ${d.getDate()} ${B[d.getMonth()].slice(0,3)} ${d.getFullYear()}`;
+
+  // Tanggal hero (format: "Sen, 5 Okt 2026")
+  const dayEl=$('heroWxDay');
+  if(dayEl){
+    const H=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+    const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+    const d=new Date();
+    dayEl.textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
+  }
 }
 
 async function simpanSosmed(){
@@ -5195,7 +5208,9 @@ function applyPortal(p){
   renderFoot();
   renderRecentActivity();
   gantiQuote();
-}
+  renderHeroIllustration();
+  setSapaan();
+  }
 
 /* ============================================================
    POPUP FLYER
@@ -5216,14 +5231,86 @@ function renderPopup(){
 /* ============================================================
    QUOTES
    ============================================================ */
+let _lastQuoteIdx = -1;
+
 function gantiQuote(){
-  if(!STATE.quotes.length)return;
+  if(!STATE.quotes.length){
+    // Tanpa quotes → tetap render ilustrasi (biar tidak kosong)
+    renderHeroIllustration();
+    return;
+  }
   const b=$('btnQuoteHome');
   if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}
-  const q=STATE.quotes[Math.floor(Math.random()*STATE.quotes.length)];
-  STATE.quoteNow=q;
+
+  // Hindari repeat quote yang sama berturut-turut (kalau >1 quotes)
+  let idx;
+  if(STATE.quotes.length > 1){
+    let tries=0;
+    do {
+      idx = Math.floor(Math.random()*STATE.quotes.length);
+      tries++;
+    } while(idx === _lastQuoteIdx && tries < 5);
+  } else {
+    idx = 0;
+  }
+  _lastQuoteIdx = idx;
+
+  const q = STATE.quotes[idx];
+  STATE.quoteNow = q;
   const qt=$('quoteTextHome');if(qt)qt.textContent='"'+q.kutipan+'"';
   const qa=$('quoteAuthorHome');if(qa)qa.textContent='— '+q.tokoh;
+
+  // Rotasi ilustrasi bareng quote
+  renderHeroIllustration();
+}
+
+/* ============================================================
+   HERO ILLUSTRATION — Random dari config.hero_illustrasi_urls
+   Max 5, terima http:// dan https:// dan data:
+   ============================================================ */
+let _lastIllusIdx = -1;
+
+function parseHeroIllustrasiUrls() {
+  const raw = (STATE.config && STATE.config.hero_illustrasi_urls) ?
+    String(STATE.config.hero_illustrasi_urls) :
+    '';
+  return raw
+    .split(/\r?\n/)
+    .map(s => s.trim())
+    .filter(s => s && /^(https?:|data:)/i.test(s))
+    .slice(0, 5);
+}
+
+function renderHeroIllustration() {
+  const wrap = $('heroIllustration');
+  if (!wrap) return;
+  
+  const urls = parseHeroIllustrasiUrls();
+  
+  // Kosong → fallback Lucide
+  if (!urls.length) {
+    wrap.innerHTML = `<div class="hero-illus-fallback-v8"><i data-lucide="sparkles"></i></div>`;
+    icons();
+    return;
+  }
+  
+  // Hanya 1 → langsung pakai
+  if (urls.length === 1) {
+    wrap.innerHTML = `<img src="${esc(urls[0])}" alt="" loading="lazy" decoding="async">`;
+    _lastIllusIdx = 0;
+    return;
+  }
+  
+  // Random, hindari repeat dari sebelumnya
+  let idx;
+  let tries = 0;
+  do {
+    idx = Math.floor(Math.random() * urls.length);
+    tries++;
+  } while (idx === _lastIllusIdx && tries < 5);
+  _lastIllusIdx = idx;
+  
+  wrap.innerHTML = `<img src="${esc(urls[idx])}" alt="" loading="lazy" decoding="async">`;
 }
 
 /* ============================================================
@@ -5645,6 +5732,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
 (async function boot(){
   initPrefs();
   setSapaan();
+  renderHeroIllustration();
   initPWA();
   initSheetSwipe();
   initDialogScrollDismiss();
