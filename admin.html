@@ -526,11 +526,34 @@
           </div>
         </div>
 
-        <div class="card p-5">
-          <label class="lbl">Versi Aplikasi</label>
-          <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.75" autocomplete="off">
-          <p class="text-[10px] text-slate-400 mt-2">Versi ini muncul di seluruh aplikasi. Ganti = trigger Force Sync ke semua user.</p>
-        </div>
+        <div class="card p-5 space-y-3">
+  <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+    <i data-lucide="image" class="w-4 h-4 acc-text"></i> Inspirasi Hero — Ilustrasi
+  </p>
+  <p class="text-[11px] text-slate-500 leading-relaxed">
+    Ilustrasi tampil di hero card beranda, bergantian saat user tap <b>Ganti</b>. Satu URL per baris. Maksimal 5.
+  </p>
+  <textarea
+    id="iHeroUrls"
+    rows="5"
+    oninput="updateHeroCounter()"
+    class="inp acc-ring font-mono text-[11px] leading-relaxed"
+    placeholder="https://contoh.com/ilustrasi-1.png&#10;https://contoh.com/ilustrasi-2.png&#10;https://contoh.com/ilustrasi-3.png"></textarea>
+  <div class="flex items-center justify-between text-[10px]">
+    <span id="iHeroCounter" class="font-bold text-slate-400">0/5 ilustrasi</span>
+    <button type="button" onclick="clearHeroUrls()" class="text-rose-500 font-bold active:scale-95 transition">Kosongkan</button>
+  </div>
+  <div id="iHeroPreview" class="grid grid-cols-5 gap-2"></div>
+  <p class="text-[10px] text-slate-400 leading-relaxed">
+    💡 Terima <b>http://</b>, <b>https://</b>, atau <b>data:image</b>. Kalau kosong → tampil ikon fallback.
+  </p>
+</div>
+
+<div class="card p-5">
+  <label class="lbl">Versi Aplikasi</label>
+  <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.75" autocomplete="off">
+  <p class="text-[10px] text-slate-400 mt-2">Versi ini muncul di seluruh aplikasi. Ganti = trigger Force Sync ke semua user.</p>
+</div>
 
         <button onclick="saveInfo()" class="acc-bg text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 active:scale-95 transition shadow-sm">
           <i data-lucide="save" class="w-4 h-4"></i> Simpan Pengaturan
@@ -2322,22 +2345,81 @@ function deleteGuruProfilePhoto(gid,namaGuru){
 /* ============================================================
    INFO / BANNER
    ============================================================ */
-function fillInfo(){
-  const c=STATE.config;
-  if(!c)return;
-  $('iBanStatus').value=c.banner_status||'OFF';
-  $('iInfoStatus').value=c.info_status||'ON';
-  $('iQuoteStatus').value=c.quote_status||'ON';
-  $('iBanWarna').value=c.banner_warna||'green';
-  $('iBanPesan').value=c.banner_pesan||'';
-  $('iBanLink').value=c.banner_link||'';
-  $('iBanLabel').value=c.banner_label||'';
-  $('iBanGambar').value=c.banner_gambar||'';
-  $('iPopStatus').value=c.pop_status||'OFF';
-  $('iPopJudul').value=c.pop_judul||'';
-  $('iPopPesan').value=c.pop_pesan||'';
-  $('iPopGambar').value=c.pop_gambar||'';
-  $('iVersi').value=c.versi||'';
+function fillInfo() {
+  const c = STATE.config;
+  if (!c) return;
+  $('iBanStatus').value = c.banner_status || 'OFF';
+  $('iInfoStatus').value = c.info_status || 'ON';
+  $('iQuoteStatus').value = c.quote_status || 'ON';
+  $('iBanWarna').value = c.banner_warna || 'green';
+  $('iBanPesan').value = c.banner_pesan || '';
+  $('iBanLink').value = c.banner_link || '';
+  $('iBanLabel').value = c.banner_label || '';
+  $('iBanGambar').value = c.banner_gambar || '';
+  $('iPopStatus').value = c.pop_status || 'OFF';
+  $('iPopJudul').value = c.pop_judul || '';
+  $('iPopPesan').value = c.pop_pesan || '';
+  $('iPopGambar').value = c.pop_gambar || '';
+  $('iVersi').value = c.versi || '';
+  
+  // Hero ilustrasi URL (multi-line)
+  const heroEl = $('iHeroUrls');
+  if (heroEl) {
+    heroEl.value = c.hero_illustrasi_urls || '';
+    updateHeroCounter();
+  }
+  }
+  
+  /* ============================================================
+     HERO ILLUSTRASI — Admin helper
+     ============================================================ */
+  function updateHeroCounter() {
+    const ta = $('iHeroUrls');
+    const counter = $('iHeroCounter');
+    const preview = $('iHeroPreview');
+    if (!ta) return;
+    
+    const urls = ta.value
+      .split(/\r?\n/)
+      .map(s => s.trim())
+      .filter(s => s && /^(https?:|data:)/i.test(s));
+    
+    const total = urls.length;
+    const shown = urls.slice(0, 5);
+    
+    if (counter) {
+      counter.textContent = total + '/5 ilustrasi';
+      counter.className = 'font-bold ' + (total > 5 ? 'text-rose-500' : 'text-slate-400');
+    }
+    
+    if (preview) {
+      if (!shown.length) {
+        preview.innerHTML = '';
+      } else {
+        preview.innerHTML = shown.map((u, i) => `
+        <div class="relative aspect-square rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800">
+          <img src="${esc(u)}" alt="" class="w-full h-full object-contain" loading="lazy" onerror="this.style.opacity='.15'">
+          <span class="absolute top-0.5 left-0.5 min-w-[14px] h-[14px] px-1 bg-black/60 text-white text-[8px] font-bold rounded flex items-center justify-center">${i+1}</span>
+        </div>
+      `).join('');
+      }
+    }
+  }
+  
+  function clearHeroUrls() {
+    const ta = $('iHeroUrls');
+    if (!ta) return;
+    if (!ta.value.trim()) return;
+    ta.value = '';
+    updateHeroCounter();
+  }
+  
+  // Hero ilustrasi URL (multi-line)
+  const heroEl = $('iHeroUrls');
+  if (heroEl) {
+    heroEl.value = c.hero_illustrasi_urls || '';
+    updateHeroCounter();
+  }
 }
 
 function sanitizeHtml(html){
@@ -2374,28 +2456,38 @@ function sanitizeHtml(html){
   return tpl.innerHTML;
 }
 
-async function saveInfo(){
-  const popPesanRaw=$('iPopPesan').value;
-  const popPesanSafe=popPesanRaw.trim().startsWith('<')?sanitizeHtml(popPesanRaw):popPesanRaw;
-  const row={
-    banner_status:$('iBanStatus').value,
-    info_status:$('iInfoStatus').value,
-    quote_status:$('iQuoteStatus').value,
-    banner_warna:$('iBanWarna').value,
-    banner_pesan:$('iBanPesan').value,
-    banner_link:$('iBanLink').value,
-    banner_label:$('iBanLabel').value,
-    banner_gambar:$('iBanGambar').value,
-    pop_status:$('iPopStatus').value,
-    pop_judul:$('iPopJudul').value,
-    pop_pesan:popPesanSafe,
-    pop_gambar:$('iPopGambar').value,
-    versi:$('iVersi').value,
-    updated_at:new Date().toISOString()
+async function saveInfo() {
+  const popPesanRaw = $('iPopPesan').value;
+  const popPesanSafe = popPesanRaw.trim().startsWith('<') ? sanitizeHtml(popPesanRaw) : popPesanRaw;
+  
+  // Sanitasi hero ilustrasi URL — max 5, terima http/https/data:
+  const heroUrlsRaw = ($('iHeroUrls')?.value || '')
+    .split(/\r?\n/)
+    .map(s => s.trim())
+    .filter(s => s && /^(https?:|data:)/i.test(s))
+    .slice(0, 5);
+  const heroUrlsClean = heroUrlsRaw.join('\n');
+  
+  const row = {
+    banner_status: $('iBanStatus').value,
+    info_status: $('iInfoStatus').value,
+    quote_status: $('iQuoteStatus').value,
+    banner_warna: $('iBanWarna').value,
+    banner_pesan: $('iBanPesan').value,
+    banner_link: $('iBanLink').value,
+    banner_label: $('iBanLabel').value,
+    banner_gambar: $('iBanGambar').value,
+    pop_status: $('iPopStatus').value,
+    pop_judul: $('iPopJudul').value,
+    pop_pesan: popPesanSafe,
+    pop_gambar: $('iPopGambar').value,
+    hero_illustrasi_urls: heroUrlsClean,
+    versi: $('iVersi').value,
+    updated_at: new Date().toISOString()
   };
-  const {error}=await sb.from('creative_app_config').update(row).eq('id',STATE.config.id);
-  if(error)return toast(error.message,'error');
-  toast('Tersimpan & live','success');
+  const { error } = await sb.from('creative_app_config').update(row).eq('id', STATE.config.id);
+  if (error) return toast(error.message, 'error');
+  toast('Tersimpan & live', 'success');
   loadAll();
 }
 
