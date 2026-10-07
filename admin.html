@@ -2413,14 +2413,6 @@ function fillInfo() {
     ta.value = '';
     updateHeroCounter();
   }
-  
-  // Hero ilustrasi URL (multi-line)
-  const heroEl = $('iHeroUrls');
-  if (heroEl) {
-    heroEl.value = c.hero_illustrasi_urls || '';
-    updateHeroCounter();
-  }
-}
 
 function sanitizeHtml(html){
   if(!html)return '';
