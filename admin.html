@@ -8,7 +8,8 @@
 <script>
 (function(){try{
   var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
-  if(localStorage.getItem('gb_dark')==='1')document.documentElement.classList.add('dark');
+  var mode=localStorage.getItem('gb_theme_mode')||'light';
+  if(mode==='dark')document.documentElement.classList.add('dark');
 }catch(e){}})();
 </script>
 <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png">
