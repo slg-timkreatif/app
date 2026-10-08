@@ -533,7 +533,7 @@ function setAnim(){
 }
 
 /* Dark Mode Controller */
-function getThemeMode(){return localStorage.getItem('gb_theme_mode')||'auto';}
+function getThemeMode(){return localStorage.getItem('gb_theme_mode')||'light';}
 function updateThemeMeta() {
   const isDark = document.documentElement.classList.contains('dark');
   const m = document.querySelector('meta[name=theme-color]');
@@ -555,6 +555,8 @@ function setThemeMode(mode){
   toast(mode==='auto'?'Mode Auto — ikut sistem':(mode==='dark'?'Mode Gelap aktif':'Mode Terang aktif'),'info');
 }
 function initThemeModeListener(){
+  // Hanya aktif kalau user pilih 'auto' (opsional).
+  // Default 'light' → tidak ikut sistem.
   const mq=window.matchMedia('(prefers-color-scheme: dark)');
   const handler=()=>{
     if(getThemeMode()!=='auto')return;
@@ -718,7 +720,7 @@ function initPrefs(){
   if(localStorage.getItem('gb_anim')==='off')document.documentElement.classList.add('no-anim');
 
   const mode=getThemeMode();
-  const isDark=mode==='dark'||(mode==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDark=mode==='dark';
   document.documentElement.classList.toggle('dark',isDark);
   updateThemeMeta();
   initThemeModeListener();
@@ -967,15 +969,31 @@ function initSWUpdate(){
    ============================================================ */
 async function muatCuaca(){
   try{
+    // Cek cache dulu
     const cache=JSON.parse(localStorage.getItem('gb_wx')||'null');
     if(cache&&Date.now()-cache.t<3*3600000){showWx(cache.d);return;}
-    const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.52&longitude=110.93&current_weather=true');
+
+    // Default koordinat: Selogiri, Wonogiri
+    let lat=-7.79, lon=110.85;
+
+    // Coba geolocation (butuh izin user)
+    if(navigator.geolocation){
+      try{
+        const pos=await new Promise((res,rej)=>{
+          navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000,maximumAge:3600000});
+        });
+        lat=pos.coords.latitude;
+        lon=pos.coords.longitude;
+      }catch(_){ /* user tolak / timeout → pakai default Selogiri */ }
+    }
+
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=Asia%2FJakarta`);
     const j=await r.json();
     if(j&&j.current_weather){
       localStorage.setItem('gb_wx',JSON.stringify({t:Date.now(),d:j.current_weather}));
       showWx(j.current_weather);
     }
-  }catch(e){}
+  }catch(e){console.warn('[muatCuaca]',e);}
 }
 function showWx(cw){
   const cd=cw.weathercode;
@@ -1614,17 +1632,19 @@ function renderLayanan(filter){
 
   let html='';
   if(favs.length){
-    html+=view==='baris'
-      ?`<div class="mb-5"><p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p><div class="space-y-2">${favs.map(rowItem).join('')}</div></div>`
-      :`<div class="mb-5"><p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p><div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${favs.map(boxItem).join('')}</div></div>`;
+    const favBody = view==='baris'
+      ? `<div class="space-y-2">${favs.map(rowItem).join('')}</div>`
+      : `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${favs.map(boxItem).join('')}</div>`;
+    html += `<div class="mb-5"><div class="sec-head"><div class="sec-title">Favorit</div></div>${favBody}</div>`;
   }
   const cats=getKatOrder().filter(k=>rest.some(m=>(m.kategori||'Umum')===k));
   html+=cats.map(k=>{
     const list=rest.filter(m=>(m.kategori||'Umum')===k);
-    const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">${k}</p>`;
-    return view==='baris'
-      ?`<div class="mb-5">${head}<div class="space-y-2">${list.map(rowItem).join('')}</div></div>`
-      :`<div class="mb-5">${head}<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${list.map(boxItem).join('')}</div></div>`;
+    const head=`<div class="sec-title" style="display:inline-flex;margin-bottom:10px">${esc(k)}</div>`;
+    const body = view==='baris'
+      ? `<div class="space-y-2">${list.map(rowItem).join('')}</div>`
+      : `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">${list.map(boxItem).join('')}</div>`;
+    return `<div class="mb-5">${head}${body}</div>`;
   }).join('');
   if(html){
     $('layananBody').innerHTML=html;
@@ -1802,7 +1822,8 @@ function renderQuick(){
   const all=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari);
   const favs=all.filter(m=>STATE.favs.has(m.judul));
   const others=all.filter(m=>!STATE.favs.has(m.judul));
-  const list=[...favs,...others].slice(0,6);
+  const MAX_QUICK = window.innerWidth >= 1024 ? 8 : 6;
+  const list=[...favs,...others].slice(0, MAX_QUICK);
   const view=localStorage.getItem('gb_quick_view')||'grid';
 
   if(view==='list'){
@@ -1818,11 +1839,23 @@ function renderQuick(){
       </a>`;
     }).join('');
   } else {
-    $('quickList').className='grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full';
+    $('quickList').className='quick-grid';
+    const TILE_COLOR = {
+      teal:'q-teal', green:'q-teal', emerald:'q-teal', cyan:'q-teal',
+      amber:'q-amber', orange:'q-amber', yellow:'q-amber',
+      blue:'q-blue', sky:'q-blue',
+      violet:'q-violet', fuchsia:'q-violet', purple:'q-violet',
+      rose:'q-rose', red:'q-rose'
+    };
     $('quickList').innerHTML=list.map(m=>{
-      const wrap=menuIconWrapClass(m.warna);
+      const tileCls = TILE_COLOR[m.warna] || 'q-teal';
       const isFav=STATE.favs.has(m.judul);
-      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card p-4 flex flex-col items-center gap-2 active:scale-95 hover:shadow-md transition min-w-0 relative">${isFav?'<i data-lucide="star" class="w-3 h-3 text-amber-400 fill-current absolute top-1.5 right-1.5"></i>':''}<span class="${wrap} w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">${renderMenuIcon(m.icon,'w-6 h-6')}</span><span class="text-[10px] font-bold text-slate-600 text-center leading-tight truncate w-full">${m.judul}</span></a>`;
+      const iconWrap = menuIconWrapClass(m.warna);
+      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="q-tile ${tileCls}">
+        ${isFav?'<i data-lucide="star" class="w-3 h-3 absolute top-2 right-2" style="color:inherit;opacity:.7"></i>':''}
+        <span class="${iconWrap} q-tile-icon-fit">${renderMenuIcon(m.icon,'w-5 h-5')}</span>
+        <span class="q-tile-label">${esc(m.judul)}</span>
+      </a>`;
     }).join('');
   }
   icons();
@@ -1979,7 +2012,7 @@ function renderAgenda(){
 
   const favAgenda = list.filter(a => STATE.favsAgenda.has(String(a.id)));
 if (favAgenda.length) {
-  html += `<div class="space-y-2 mb-4"><p class="text-[10px] font-black uppercase tracking-widest text-amber-500 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Agenda Favorit</p><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div></div>`;
+  html += `<div class="mb-4"><div class="sec-head"><div class="sec-title">Agenda Favorit</div></div><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">${favAgenda.map(a=>agendaRow(a,a.tanggal<tstr,tstr)).join('')}</div></div>`;
 }
 
   const upMonths=[...new Set(up.map(a=>(a.tanggal||'').slice(0,7)))].sort();
@@ -2009,11 +2042,11 @@ function agendaRow(a,isPast,tstr){
       :`<span class="shrink-0 text-[9px] font-black px-2 py-1 rounded-md text-white" style="background:${diff<=3?'#F59E0B':'#0D9488'}">H-${diff}</span>`);
   const isFav=STATE.favsAgenda.has(String(a.id));
   const star=`<button onclick="toggleFavAgenda(${a.id},event)" aria-label="Favorit" class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>`;
-  return `<div class="card p-4 flex items-center gap-3 ${isPast?'opacity-70':''}"><div class="w-11 h-11 rounded-xl acc-soft acc-text flex flex-col items-center justify-center shrink-0"><span class="text-sm font-black leading-none">${dd.getDate()}</span><span class="text-[8px] font-bold uppercase">${dd.toLocaleDateString('id-ID',{month:'short'})}</span></div><div class="flex-1 min-w-0"><p class="text-xs font-extrabold text-slate-700 truncate">${esc(a.judul)}</p><p class="text-[10px] text-slate-500 truncate">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</p></div>${badge}${star}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
+  return `<div class="card" style="border-radius:20px;padding:14px 16px;display:flex;align-items:center;gap:12px;${isPast?'opacity:.7':''}"><div class="ag-date"><span class="ag-date-num">${dd.getDate()}</span><span class="ag-date-mon">${dd.toLocaleDateString('id-ID',{month:'short'}).slice(0,3)}</span></div><div class="ag-info"><div class="ag-title">${esc(a.judul)}</div><div class="ag-meta">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</div></div>${badge}${star}${a.link?`<a href="${esc(a.link)}" target="_blank" rel="noopener" class="w-8 h-8 rounded-lg acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>`:''}</div>`;
 }
 function monthSection(mk, items, isPast, tstr) {
   const d = new Date(mk + '-01T00:00:00');
-  return `<div id="m-${mk}" class="space-y-2 scroll-mt-2"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400 sticky top-0 py-1 z-10 bg-[var(--bg)]">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</p><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div></div>`;
+  return `<div id="m-${mk}" class="space-y-3 scroll-mt-2"><div class="sec-title" style="display:inline-flex">${d.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</div><div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">${items.map(a=>agendaRow(a,isPast,tstr)).join('')}</div></div>`;
 }
 
 /* ============================================================
@@ -2022,7 +2055,7 @@ function monthSection(mk, items, isPast, tstr) {
 function dokGridItem(d){
   const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   const isFav=STATE.favsDok.has(String(d.id));
-  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex flex-col gap-3 active:scale-[.96] transition relative min-h-[140px]">
+  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex flex-col gap-3 active:scale-[.96] transition relative min-h-[140px]" style="border-radius:20px">
     <div class="flex items-start gap-3">
       <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center overflow-hidden shrink-0">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
       <button onclick="toggleFavDok(${d.id},event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center ml-auto shrink-0 -mt-1 -mr-1"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>
@@ -2040,11 +2073,11 @@ function dokGridItem(d){
 function dokRowItem(d){
   const [bg,tx]=COLOR[d.warna]||COLOR.blue;
   const isFav=STATE.favsDok.has(String(d.id));
-  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card p-4 flex items-center gap-3 active:scale-[.99] transition">
-    <span class="w-10 h-10 rounded-xl ${bg} ${tx} flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(d.icon||'file-text','w-5 h-5')}</span>
-    <span class="flex-1 min-w-0">
-      <span class="block text-[13px] font-extrabold text-slate-800 truncate">${esc(d.judul)}</span>
-      <span class="block text-[10px] text-slate-400 truncate mt-0.5">${esc(d.deskripsi||'')}</span>
+  return `<a href="${esc(d.link)}" target="_blank" rel="noopener" onclick="trackRecentActivity('doc',{id:'${esc(d.judul).replace(/'/g,"\\'")}',url:'${esc(d.link)}'})" class="card" style="border-radius:20px;padding:12px 16px;display:flex;align-items:center;gap:12px;text-decoration:none">
+    <span class="dc-icon ${bg} ${tx}">${renderMenuIcon(d.icon||'file-text','w-4 h-4')}</span>
+    <span style="flex:1;min-width:0">
+      <span class="dc-name" style="display:block">${esc(d.judul)}</span>
+      <span class="dc-meta" style="display:block">${esc(d.deskripsi||'')}</span>
     </span>
     <button onclick="toggleFavDok(${d.id},event)" aria-label="Favorit" class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="star" class="w-4 h-4 ${isFav?'text-amber-400 fill-current':'text-slate-300'}"></i></button>
     <i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i>
@@ -2068,19 +2101,20 @@ function renderDokumen(filter){
 
   let html='';
   if (favs.length && !f) {
-  html += `<p class="text-[11px] font-extrabold text-amber-500 uppercase tracking-wider mb-2 mt-4 flex items-center gap-1.5"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Favorit</p>`;
+  html += `<div class="mb-4"><div class="sec-head"><div class="sec-title">Favorit</div></div>`;
   html += view === 'grid' ?
-    `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${favs.map(dokGridItem).join('')}</div>` :
-    `<div class="space-y-2">${favs.map(dokRowItem).join('')}</div>`;
+    `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${favs.map(dokGridItem).join('')}</div></div>` :
+    `<div class="space-y-2">${favs.map(dokRowItem).join('')}</div></div>`;
 }
 
   const cats=[...new Set(rest.map(d=>d.kategori||'Umum'))];
   html+=cats.map(c=>{
     const list=rest.filter(d=>(d.kategori||'Umum')===c);
-    const head=`<p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 mt-4">${esc(c)}</p>`;
-    return view === 'grid' ?
-  head + `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${list.map(dokGridItem).join('')}</div>` :
-  head + `<div class="space-y-2">${list.map(dokRowItem).join('')}</div>`;
+    const head=`<div class="sec-title" style="display:inline-flex;margin-bottom:10px">${esc(c)}</div>`;
+    const body = view === 'grid' ?
+      `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${list.map(dokGridItem).join('')}</div>` :
+      `<div class="space-y-2">${list.map(dokRowItem).join('')}</div>`;
+    return `<div class="mb-4">${head}${body}</div>`;
   }).join('');
 
   $('dokList').innerHTML=html;
@@ -5017,6 +5051,9 @@ function renderFromCache(){
     if(sigChanged('docs',STATE.docs))renderDokWidget();
     if(sigChanged('agenda',STATE.agenda))renderAgendaWidget();
     if(CUR.view==='bagi')renderBagi();
+    renderRailNotif();
+    renderRailRecent();
+    renderHomeWidgets();
     icons();
   }
   return true;
@@ -5042,7 +5079,10 @@ async function silentRefresh(force){
   if(stale('agenda'))jobs.agenda=sb.from('creative_agenda').select('*').eq('is_active',true).order('tanggal',{ascending:false}).limit(60);
   if(stale('docs'))jobs.docs=sb.from('creative_documents').select('*').eq('is_active',true).order('kategori').limit(100);
   const keys=Object.keys(jobs);
-  if(!keys.length)return;
+  if(!keys.length){
+    renderHomeWidgets();
+    return;
+  }
   const res=await Promise.allSettled(keys.map(k=>jobs[k]));
   const newDyn=Object.assign({},dyn);
   const newTs=Object.assign({},ts);
@@ -5057,6 +5097,9 @@ async function silentRefresh(force){
   if(sigChanged('docs',STATE.docs))renderDokWidget();
   if(sigChanged('agenda',STATE.agenda))renderAgendaWidget();
   if(sigChanged('notifs',STATE.notifs))updateNotifBadge();
+  renderRailNotif();
+  renderRailRecent();
+  renderHomeWidgets();
   if(CUR.view==='agenda')renderAgenda();
   if(CUR.view==='dokumen')renderDokumen();
   if(CUR.panel==='pNotif')renderNotif();
@@ -5208,6 +5251,7 @@ function applyPortal(p){
   gantiQuote();
   renderHeroIllustration();
   setSapaan();
+  syncAllDesktop();
   }
 
 /* ============================================================
@@ -5256,7 +5300,7 @@ function gantiQuote(){
   const q = STATE.quotes[idx];
   STATE.quoteNow = q;
   const qt=$('quoteTextHome');if(qt)qt.textContent='"'+q.kutipan+'"';
-  const qa=$('quoteAuthorHome');if(qa)qa.textContent='— '+q.tokoh;
+  const qa=$('quoteAuthorHome');if(qa)qa.textContent=q.tokoh;
 
   // Rotasi ilustrasi bareng quote
   renderHeroIllustration();
@@ -5317,8 +5361,14 @@ function renderHeroIllustration() {
 function setBadge(n){
   ['badgeNotif','badgeNotifD','badgeNotifDrawer'].forEach(id=>{
     const b=$(id);if(!b)return;
-    if(n>0){b.classList.remove('hidden');b.textContent=n;}
-    else b.classList.add('hidden');
+    if(n>0){
+      b.classList.remove('hidden');
+      b.style.display='flex';
+      b.textContent=n;
+    } else {
+      b.classList.add('hidden');
+      b.style.display='none';
+    }
   });
 }
 async function updateNotifBadge(){
@@ -5328,7 +5378,7 @@ async function updateNotifBadge(){
   try{
     const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
     const readIds=new Set((reads||[]).map(r=>r.notification_id));
-    setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
+    setBadge(0);
   }catch(e){}
 }
 async function renderNotif(){
@@ -5339,7 +5389,7 @@ async function renderNotif(){
       const {data:reads}=await sb.from('creative_notification_reads').select('notification_id').eq('guru_id',gid);
       readIds=new Set((reads||[]).map(r=>r.notification_id));
     }
-    setBadge(STATE.notifs.filter(n=>!readIds.has(n.id)).length);
+    setBadge(0);
   }else setBadge(0);
     const NOTIF_META = {
     info: { ico: 'info', cls: 'bg-sky-100 text-sky-600' },
@@ -5351,15 +5401,15 @@ async function renderNotif(){
     const m = NOTIF_META[n.tipe] || NOTIF_META.info;
     const tgl = new Date(n.scheduled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     const scope = (n.scope_type && n.scope_type !== 'all') ? `<span class="text-[9px] font-black acc-soft acc-text px-1.5 py-0.5 rounded">KHUSUS</span>` : '';
-    return `<div class="card p-4 flex gap-3 ${readIds.has(n.id)?'opacity-60':''}">
-      <span class="w-10 h-10 rounded-xl ${m.cls} flex items-center justify-center shrink-0">
+    return `<div class="card p-4 flex gap-3" style="border-radius:20px">
+      <span class="w-11 h-11 rounded-xl ${m.cls} flex items-center justify-center shrink-0">
         <i data-lucide="${m.ico}" class="w-5 h-5"></i>
       </span>
       <div class="flex-1 min-w-0">
-        <p class="text-[13px] font-bold text-slate-800">${n.judul} ${scope}</p>
-        <p class="text-xs text-slate-500 mt-0.5">${n.pesan}</p>
-        ${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener" class="text-[10px] font-bold acc-text">Buka lampiran →</a>`:''}
-        <p class="text-[10px] text-slate-400 mt-1 font-semibold">${tgl}</p>
+        <p class="text-[13px] font-extrabold text-slate-800 leading-snug">${n.judul} ${scope}</p>
+        <p class="text-[11.5px] text-slate-500 mt-1 leading-relaxed">${n.pesan}</p>
+        ${n.link?`<a href="${esc(n.link)}" target="_blank" rel="noopener" class="text-[10px] font-bold acc-text mt-1 inline-block">Buka lampiran →</a>`:''}
+        <p class="text-[10px] text-slate-400 mt-2 font-semibold">${tgl}</p>
       </div>
     </div>`;
   }).join('') || emptyState('bell-off', 'Belum ada notifikasi', 'Kami akan kabari kamu kalau ada info baru.');
@@ -5729,8 +5779,10 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
    ============================================================ */
 (async function boot(){
   initPrefs();
+  restoreSidebarState();
   setSapaan();
   renderHeroIllustration();
+  syncAllDesktop();
   initPWA();
   initSheetSwipe();
   initDialogScrollDismiss();
@@ -5953,4 +6005,320 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   };
 
   setTimeout(showOnboard, 1200);
+
+  // Re-render quick grid saat resize melewati breakpoint
+  let _rzT=null, _lastNarrow = window.innerWidth < 1024;
+  window.addEventListener('resize', ()=>{
+    const narrow = window.innerWidth < 1024;
+    if(narrow === _lastNarrow) return;
+    _lastNarrow = narrow;
+    clearTimeout(_rzT);
+    _rzT = setTimeout(()=>{ try{renderQuick();}catch(_){} }, 250);
+  });
   })();
+
+/* ============================================================
+   DESKTOP PORTAL — v4.99
+   Sidebar toggle, user sync, promo card, rail widgets
+   ============================================================ */
+
+/* ---------- SIDEBAR TOGGLE ---------- */
+function toggleSidebar(){
+  const sb = $('sidebar');
+  if(!sb) return;
+  sb.classList.toggle('collapsed');
+  try{ localStorage.setItem('gb_sidebar_collapsed', sb.classList.contains('collapsed') ? '1' : '0'); }catch(_){}
+  icons();
+}
+function restoreSidebarState(){
+  try{
+    const saved = localStorage.getItem('gb_sidebar_collapsed');
+    const sb = $('sidebar');
+    if(saved === '1' && sb) sb.classList.add('collapsed');
+  }catch(_){}
+}
+
+/* ---------- SYNC SIDEBAR USER INFO ---------- */
+async function syncSidebarUser(){
+  const nameEl = $('sideName');
+  const roleEl = $('sideRole');
+  const avEl   = $('sideAvatar');
+  if(!nameEl || !roleEl || !avEl) return;
+
+  if(!STATE.profile){
+    nameEl.textContent = 'Tamu';
+    roleEl.textContent = 'Portal Selogiri';
+    avEl.onerror = () => { avEl.onerror = null; avEl.src = LOGO; };
+    avEl.src = LOGO;
+    return;
+  }
+
+  const nama = STATE.profile.nama || 'Guru';
+  const sek  = STATE.profile.sekolah || 'Portal Selogiri';
+  nameEl.textContent = nama;
+  roleEl.textContent = sek;
+
+  // Avatar dengan fallback berlapis (sama seperti topbar HP)
+  const gid = guruId();
+  avEl.onerror = () => { avEl.onerror = null; avEl.src = LOGO; };
+  if(!gid){ avEl.src = LOGO; return; }
+
+  try {
+    if(!isUUID(gid)){
+      const cached = await fotoCacheGet(gid);
+      avEl.src = cached || fotoUrl(gid, true);
+      return;
+    }
+    const { data: pref } = await sb.from('creative_user_preferences')
+      .select('foto_url').eq('guru_id', gid).maybeSingle();
+    if(pref?.foto_url){ avEl.src = pref.foto_url; return; }
+    const cached = await fotoCacheGet(gid);
+    avEl.src = cached || fotoUrl(gid, true);
+  } catch(_) {
+    avEl.src = LOGO;
+  }
+}
+
+/* ---------- PROMO CARD (dari config) ---------- */
+function renderPromo(){
+  const card = $('promoCard');
+  if(!card) return;
+  const c = STATE.config || {};
+  const status = c.promo_status || 'OFF';
+
+  if(status !== 'ON'){
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = '';
+
+  const labelEl = $('promoLabel');
+  const titleEl = $('promoTitle');
+  const descEl  = $('promoDesc');
+  const btnLbl  = $('promoBtnLabel');
+  const iconEl  = $('promoIcon');
+
+  if(labelEl) labelEl.textContent = c.promo_label || 'Baru';
+  if(titleEl) titleEl.textContent = c.promo_title || 'Studio Kreatif';
+  if(descEl)  descEl.textContent  = c.promo_desc  || '';
+  if(btnLbl)  btnLbl.textContent  = c.promo_btn_label || 'Coba Sekarang';
+
+  // Icon Lucide — hanya update data-lucide attr
+  if(iconEl && c.promo_icon){
+    iconEl.setAttribute('data-lucide', c.promo_icon);
+    icons();
+  }
+
+  // Simpan link untuk handler
+  window._promoLink = c.promo_link || '';
+}
+
+function klikPromo(){
+  const u = window._promoLink || '';
+  if(!u) return;
+
+  // Link internal (mis. ?page=bagi atau relative path)
+  if(u.startsWith('?')){
+    const q = new URLSearchParams(u.slice(1));
+    const page = q.get('page');
+    if(page){ navPage(page); return; }
+  }
+  if(u.startsWith('/') && !u.startsWith('//')){
+    location.href = u;
+    return;
+  }
+
+  // Link eksternal
+  if(/^https?:\/\//i.test(u)){
+    if(u.startsWith('ext:')) u = u.slice(4);
+    window.open(u, '_blank', 'noopener');
+    return;
+  }
+
+  // Fallback — anggap menu
+  klikMenu(u);
+}
+
+/* ---------- RAIL WIDGET: NOTIFIKASI ---------- */
+function renderRailNotif(){
+  const box = $('railNotifList');
+  if(!box) return;
+
+  const list = (STATE.notifs || []).slice(0, 5);
+  if(!list.length){
+    box.innerHTML = `
+      <div class="nt-item">
+        <div class="nt-icon bg-slate-100 text-slate-500"><i data-lucide="bell-off"></i></div>
+        <div class="nt-body">
+          <div class="nt-title">Belum ada notifikasi</div>
+          <div class="nt-desc">Info terbaru akan muncul di sini.</div>
+        </div>
+      </div>`;
+    icons();
+    return;
+  }
+
+  const META = {
+    info:        { ico:'info',      cls:'bg-sky-100 text-sky-600' },
+    gamifikasi:  { ico:'trophy',    cls:'bg-amber-100 text-amber-600' },
+    pengumuman:  { ico:'megaphone', cls:'bg-teal-100 text-teal-600' },
+    sistem:      { ico:'sparkles',  cls:'bg-violet-100 text-violet-600' }
+  };
+
+  box.innerHTML = list.map(n => {
+    const m = META[n.tipe] || META.info;
+    return `<div class="nt-item" onclick="openPanel('pNotif')" style="cursor:pointer">
+      <div class="nt-icon ${m.cls}"><i data-lucide="${m.ico}"></i></div>
+      <div class="nt-body">
+        <div class="nt-title">${esc(n.judul)}</div>
+        <div class="nt-desc">${esc(n.pesan)}</div>
+        <div class="nt-time">${waktuRelatif(n.scheduled_at || n.created_at || Date.now())}</div>
+      </div>
+    </div>`;
+  }).join('');
+  icons();
+}
+
+/* ---------- RAIL WIDGET: TERAKHIR DIBUKA ---------- */
+function renderRailRecent(){
+  const box = $('railRecentList');
+  if(!box) return;
+
+  let arr = [];
+  try{ arr = JSON.parse(localStorage.getItem('gb_recent_activity_v1') || '[]'); }catch(_){}
+
+  if(!arr.length){
+    box.innerHTML = `
+      <div style="padding:8px 0;font-size:11.5px;color:#94A3B8;text-align:center">
+        Belum ada riwayat
+      </div>`;
+    return;
+  }
+
+  const TILE_COLOR = {
+    teal:'bg-teal-100 text-teal-600', green:'bg-teal-100 text-teal-600',
+    emerald:'bg-teal-100 text-teal-600', cyan:'bg-cyan-100 text-cyan-600',
+    amber:'bg-amber-100 text-amber-600', orange:'bg-orange-100 text-orange-600',
+    yellow:'bg-yellow-100 text-yellow-600',
+    blue:'bg-blue-100 text-blue-600', sky:'bg-sky-100 text-sky-600',
+    violet:'bg-violet-100 text-violet-600', fuchsia:'bg-fuchsia-100 text-fuchsia-600',
+    rose:'bg-rose-100 text-rose-600', red:'bg-red-100 text-red-600'
+  };
+
+  box.innerHTML = arr.slice(0,5).map(item => {
+    let iconCls = 'bg-slate-100 text-slate-600';
+    let icoName = 'app-window';
+
+    if(item.type === 'menu'){
+      const m = STATE.menus.find(x => x.judul === item.id);
+      if(m) iconCls = TILE_COLOR[m.warna] || 'bg-teal-100 text-teal-600';
+      icoName = (item.icon && !isUrlIcon(item.icon)) ? item.icon : (m?.icon || 'app-window');
+    } else if(item.type === 'doc'){
+      iconCls = 'bg-amber-100 text-amber-600';
+      icoName = 'file-text';
+    } else if(item.type === 'agenda'){
+      iconCls = 'bg-rose-100 text-rose-600';
+      icoName = 'calendar-days';
+    }
+
+    const click = item.type === 'menu'
+      ? `klikMenu('${String(item.id).replace(/'/g,"\\'")}')`
+      : (item.type === 'doc' && item.url
+          ? `window.open('${esc(item.url)}','_blank','noopener')`
+          : `navPage('${item.type === 'agenda' ? 'agenda' : 'home'}')`);
+
+    return `<div class="rc-item" onclick="${click}" style="cursor:pointer">
+      <div class="rc-icon ${iconCls}"><i data-lucide="${esc(icoName)}"></i></div>
+      <div class="rc-name">${esc(item.id)}</div>
+      <div class="rc-time">${waktuRelatif(item.t)}</div>
+    </div>`;
+  }).join('');
+  icons();
+}
+
+/* ---------- HOME WIDGETS: Agenda + Dokumen ---------- */
+function renderHomeWidgets(){
+  const wrap = $('homeWidgets');
+  if(!wrap) return;
+  wrap.style.display='';
+  const hasAgenda = (STATE.agenda||[]).length > 0;
+  const hasDocs = (STATE.docs||[]).length > 0;
+
+  // ---- Agenda ----
+  const agBox = $('homeAgendaList');
+  if(agBox){
+    const tstr = new Date().toISOString().slice(0,10);
+    const today = new Date(tstr);
+    // Gabung semua, urut berdasarkan jarak ke hari ini (paling dekat di atas)
+    const all = (STATE.agenda||[])
+      .slice()
+      .sort((a,b)=>{
+        const da = Math.abs((new Date(a.tanggal) - today) / 86400000);
+        const db = Math.abs((new Date(b.tanggal) - today) / 86400000);
+        return da - db;
+      })
+      .slice(0,5);
+
+    if(!all.length){
+      agBox.innerHTML = `<div class="w-empty">Belum ada agenda</div>`;
+    } else {
+      agBox.innerHTML = all.map(a=>{
+        const d = new Date(a.tanggal);
+        const diff = Math.ceil((d - today)/86400000);
+        let badge, bc;
+        if(diff === 0){ badge='HARI INI'; bc='#DC2626'; }
+        else if(diff > 0 && diff <= 3){ badge='H-'+diff; bc='#F59E0B'; }
+        else if(diff > 0){ badge='H-'+diff; bc='#0D9488'; }
+        else { badge='SELESAI'; bc='#64748B'; }
+        const dayMon = d.toLocaleDateString('id-ID',{month:'short'});
+        const monShort = dayMon.charAt(0).toUpperCase()+dayMon.slice(1,3);
+        return `<div class="ag-item" onclick="navPage('agenda')" style="${diff<0?'opacity:.65':''}">
+          <div class="ag-date">
+            <span class="ag-date-num">${d.getDate()}</span>
+            <span class="ag-date-mon">${monShort}</span>
+          </div>
+          <div class="ag-info">
+            <div class="ag-title">${esc(a.judul)}</div>
+            <div class="ag-meta">${esc(a.tempat||'')}${a.waktu?' · '+esc(a.waktu):''}</div>
+          </div>
+          <span class="ag-badge" style="background:${bc}">${badge}</span>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // ---- Dokumen ----
+  const dcBox = $('homeDokList');
+  if(dcBox){
+    const docs = (STATE.docs||[])
+      .slice()
+      .sort((a,b)=>(b.created_at||'').localeCompare(a.created_at||''))
+      .slice(0,5);
+    if(!docs.length){
+      dcBox.innerHTML = `<div class="w-empty">Belum ada dokumen</div>`;
+    } else {
+      dcBox.innerHTML = docs.map(d=>{
+        const [bg,tx] = COLOR[d.warna] || COLOR.blue;
+        return `<div class="dc-item" onclick="window.open('${esc(d.link)}','_blank','noopener')">
+          <div class="dc-icon ${bg} ${tx}">${renderMenuIcon(d.icon||'file-text','w-4 h-4')}</div>
+          <div style="flex:1;min-width:0">
+            <div class="dc-name">${esc(d.judul)}</div>
+            <div class="dc-meta">${esc(d.kategori||'Umum')}</div>
+          </div>
+          <i data-lucide="download" style="width:14px;height:14px;color:#94A3B8;flex-shrink:0"></i>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  icons();
+}
+
+/* ---------- HELPER: panggil semua sync desktop ---------- */
+function syncAllDesktop(){
+  syncSidebarUser();
+  renderPromo();
+  renderRailNotif();
+  renderRailRecent();
+  renderHomeWidgets();
+}
