@@ -11,6 +11,12 @@ const isTWA=(document.referrer||'').startsWith('android-app://');
 function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
 
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
+
+/* Project DATA — untuk Spotlight Karya (karya_guru) */
+const SB_DATA_URL='https://qdgtfhknuvncbzsbcbwo.supabase.co';
+const SB_DATA_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkZ3RmaGtudXZuY2J6c2JjYndvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyNzUyMzUsImV4cCI6MjEwMTg1MTIzNX0.GcEczGIaSO2twdTEK10_KedDPTzutr-EEl4vyNHG3bc';
+const sbData=window.supabase.createClient(SB_DATA_URL,SB_DATA_ANON);
+
 const $=id=>document.getElementById(id);
 
 /* ============================================================
@@ -1189,7 +1195,13 @@ function openModal(id){
   safePush({...CUR});
 }
 function tutupModal(id){if(CUR.modal===id){try{history.back()}catch(e){closeModalInstant(id);CUR.modal=null;}}else closeModalInstant(id);}
-function tutupApp(){tutupModal('mApp');$('mAppFrame').src='';}
+function tutupApp(){
+  tutupModal('mApp');
+  const f = $('mAppFrame');
+  f.removeAttribute('sandbox');
+  f.removeAttribute('srcdoc');
+  f.src = '';
+}
 function tutupPop(){popDismissed=true;tutupModal('mPop');}
 function bukaExternal(){
   const u=$('mAppFrame').src;
@@ -1476,35 +1488,79 @@ function renderCarousel(){
   const box=$('caroBox');
   const slides=[];
   const retry=`onerror="if(this.dataset.r){this.style.display='none'}else{this.dataset.r='1';this.src=this.src}"`;
+  const wrapCls='snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl';
 
-  if (c.banner_status === 'ON') {
-  const w = { blue: 'from-blue-600 to-indigo-600', green: 'from-teal-600 to-teal-500', red: 'from-rose-600 to-red-600' } [c.banner_warna] || 'from-teal-600 to-teal-500';
-  if (c.banner_gambar) {
-    slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${w} text-white"><div class="flex h-40 md:h-48"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 md:p-5 flex flex-col justify-center"><p class="text-xs md:text-sm font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="mt-2 self-start bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div></div>`);
-  } else {
-    slides.push(`<div class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl p-4 md:p-5 text-white shadow-lg bg-gradient-to-r ${w}"><div class="flex items-center gap-3"><i data-lucide="megaphone" class="w-5 h-5 shrink-0"></i><p class="flex-1 min-w-0 text-xs md:text-sm font-semibold leading-snug">${esc(c.banner_pesan)}</p><button onclick="klikBanner()" class="shrink-0 bg-white/95 text-slate-700 text-[11px] font-bold px-3 py-2 rounded-lg active:scale-95 transition">${esc(c.banner_label||'Cek')}</button></div></div>`);
+  // ---- Banner ----
+  if(c.banner_status === 'ON'){
+    const bannerTipe = { blue:'tipe-info', green:'tipe-pengumuman', red:'tipe-rose' }[c.banner_warna] || 'tipe-pengumuman';
+
+    if(c.banner_gambar){
+      slides.push(`<button onclick="klikBanner()" class="caro-slide ${bannerTipe} ${wrapCls}">
+        <div class="caro-img"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} alt="" loading="lazy" decoding="async"></div>
+        <div class="caro-body">
+          <span class="caro-chip">Pengumuman</span>
+          <p class="caro-title">${esc(c.banner_pesan||'')}</p>
+          <span class="caro-btn">${esc(c.banner_label||'Cek')} <i data-lucide="arrow-right"></i></span>
+        </div>
+      </button>`);
+    } else {
+      slides.push(`<button onclick="klikBanner()" class="caro-slide no-img ${bannerTipe} ${wrapCls}">
+        <div class="caro-body">
+          <div class="caro-icon"><i data-lucide="megaphone"></i></div>
+          <div class="caro-text">
+            <span class="caro-chip">Pengumuman</span>
+            <p class="caro-title">${esc(c.banner_pesan||'')}</p>
+            <span class="caro-btn">${esc(c.banner_label||'Cek')} <i data-lucide="arrow-right"></i></span>
+          </div>
+        </div>
+      </button>`);
+    }
   }
-}
-  if (c.info_status !== 'OFF') {
-  const NC = { pengumuman: 'from-teal-600 to-teal-500', info: 'from-sky-600 to-blue-600', gamifikasi: 'from-amber-500 to-orange-600', sistem: 'from-slate-600 to-slate-800' };
-const EI = { info: 'info', gamifikasi: 'trophy', pengumuman: 'megaphone', sistem: 'sparkles' };
-STATE.notifs.slice(0, 4).forEach(n => {
-  if (n.gambar) {
-    slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl overflow-hidden shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} text-white text-left active:scale-[.98] transition"><div class="flex h-40 md:h-48"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} class="w-[42%] h-full object-cover" alt="" loading="lazy" decoding="async"><div class="flex-1 min-w-0 p-4 md:p-5 flex flex-col justify-center"><p class="text-xs md:text-sm font-extrabold leading-snug line-clamp-2">${esc(n.judul)}</p><p class="text-[10px] md:text-[11px] opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</p></div></div></button>`);
-  } else {
-    const ic = EI[n.tipe] || 'info';
-    slides.push(`<button onclick="openPanel('pNotif')" class="snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl rounded-2xl p-4 md:p-5 text-white text-left flex items-center gap-3 shadow-lg bg-gradient-to-r ${NC[n.tipe]||NC.pengumuman} active:scale-[.98] transition"><span class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center shrink-0"><i data-lucide="${ic}" class="w-5 h-5 text-white"></i></span><span class="min-w-0 flex-1"><span class="block text-xs md:text-sm font-extrabold leading-snug line-clamp-1">${esc(n.judul)}</span><span class="block text-[10px] md:text-[11px] font-medium opacity-90 line-clamp-2 leading-snug mt-0.5">${esc(n.pesan)}</span></span></button>`);
+
+  // ---- Notifikasi ----
+  if(c.info_status !== 'OFF'){
+    const NOTIF_ICO = { info:'info', gamifikasi:'trophy', pengumuman:'megaphone', sistem:'sparkles' };
+    const NOTIF_LBL = { info:'Info', gamifikasi:'Pencapaian', pengumuman:'Pengumuman', sistem:'Sistem' };
+
+    STATE.notifs.slice(0, 4).forEach(n => {
+      const tipe = n.tipe || 'info';
+      const ico = NOTIF_ICO[tipe] || 'info';
+      const lbl = NOTIF_LBL[tipe] || 'Info';
+      const tipeCls = 'tipe-' + tipe;
+
+      if(n.gambar){
+        slides.push(`<button onclick="openPanel('pNotif')" class="caro-slide ${tipeCls} ${wrapCls}">
+          <div class="caro-img"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} alt="" loading="lazy" decoding="async"></div>
+          <div class="caro-body">
+            <span class="caro-chip">${lbl}</span>
+            <p class="caro-title">${esc(n.judul)}</p>
+            <p class="caro-desc">${esc(n.pesan)}</p>
+          </div>
+        </button>`);
+      } else {
+        slides.push(`<button onclick="openPanel('pNotif')" class="caro-slide no-img ${tipeCls} ${wrapCls}">
+          <div class="caro-body">
+            <div class="caro-icon"><i data-lucide="${ico}"></i></div>
+            <div class="caro-text">
+              <span class="caro-chip">${lbl}</span>
+              <p class="caro-title">${esc(n.judul)}</p>
+              <p class="caro-desc">${esc(n.pesan)}</p>
+            </div>
+          </div>
+        </button>`);
+      }
+    });
   }
-});
-}
-    box.classList.toggle('hidden', !slides.length);
+
+  box.classList.toggle('hidden', !slides.length);
   $('caroTrack').innerHTML = slides.join('');
-  // Kalau cuma 1 slide, center di desktop
   const track = $('caroTrack');
-  if (track) track.classList.toggle('md:justify-center', slides.length === 1);
-  $('caroDots').innerHTML = slides.length > 1 ? slides.map((_, i) => `<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="h-1.5 rounded-full transition-all ${i===0?'w-5 acc-bg':'w-1.5 bg-slate-300'}"></button>`).join('') : '';
+  if(track) track.classList.toggle('md:justify-center', slides.length === 1);
+  $('caroDots').innerHTML = slides.length > 1
+    ? slides.map((_, i) => `<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="caro-dot${i===0?' on':''}"></button>`).join('')
+    : '';
   icons();
-  }
+}
 
 /* ============================================================
    ICON RENDERER
@@ -1691,7 +1747,10 @@ function bukaUrl(m, opts) {
   const u = m.url || '#';
   if (m.cara_buka === 'app' && u.startsWith('http')) {
     $('mAppTitle').textContent = m.judul;
-    $('mAppFrame').src = u;
+    const f = $('mAppFrame');
+    f.removeAttribute('sandbox');
+    f.removeAttribute('srcdoc');
+    f.src = u;
     openModal('mApp');
   } else if (u.startsWith('http')) {
     if (opts.sameTab) {
@@ -1828,7 +1887,7 @@ function renderQuick(){
 
   if(view==='list'){
     $('quickList').className='space-y-1.5 quick-list-view';
-    $('quickList').innerHTML=list.map(m=>{
+    $('quickList').innerHTML = list.map(m=>{
       const wrap=menuIconWrapClass(m.warna);
       const isFav=STATE.favs.has(m.judul);
       return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card px-3.5 py-2.5 flex items-center gap-3 active:scale-[.98] transition">
@@ -1847,7 +1906,7 @@ function renderQuick(){
       violet:'q-violet', fuchsia:'q-violet', purple:'q-violet',
       rose:'q-rose', red:'q-rose'
     };
-    $('quickList').innerHTML=list.map(m=>{
+    $('quickList').innerHTML = list.map(m=>{
       const tileCls = TILE_COLOR[m.warna] || 'q-teal';
       const isFav=STATE.favs.has(m.judul);
       const iconWrap = menuIconWrapClass(m.warna);
@@ -5097,6 +5156,7 @@ async function silentRefresh(force){
   if(sigChanged('docs',STATE.docs))renderDokWidget();
   if(sigChanged('agenda',STATE.agenda))renderAgendaWidget();
   if(sigChanged('notifs',STATE.notifs))updateNotifBadge();
+  renderSpotlight();
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();
@@ -5853,6 +5913,18 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   setPageInstant('home');
   muatSemuaData(false);
 
+  // Safety net — render Spotlight setelah DOM + sbData siap
+  const _bootSpotlight = () => {
+    renderSpotlight().catch(e=>console.warn('[boot spotlight]', e));
+  };
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', _bootSpotlight, {once:true});
+  } else {
+    // DOM sudah ready — panggil langsung + retry sekali setelah 400ms
+    _bootSpotlight();
+    setTimeout(_bootSpotlight, 400);
+  }
+
   // Init badge pending sync — baca dari IndexedDB
   updatePendingBadge();
 
@@ -6235,6 +6307,208 @@ function renderRailRecent(){
   }).join('');
   icons();
 }
+/* ---------- SPOTLIGHT KARYA ---------- */
+const SPOTLIGHT_TTL = 5*60*1000;
+const SPOTLIGHT_LS_KEY = 'gb_spotlight_cache_v1';
+let _spotlightCache = { data: null, ts: 0 };
+let _spotlightLastId = null;
+let _spotlightDetailCache = {};
+
+/* Hydrate dari localStorage saat script load — biar refresh langsung tampil */
+(function _hydrateSpotlight(){
+  try{
+    const raw = localStorage.getItem(SPOTLIGHT_LS_KEY);
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    if(parsed && Array.isArray(parsed.data) && parsed.data.length){
+      _spotlightCache = { data: parsed.data, ts: parsed.ts || 0 };
+    }
+  }catch(_){}
+})();
+
+function _spotlightTsFromId(id){
+  const m = String(id||'').match(/(\d{13})/);
+  return m ? parseInt(m[1]) : 0;
+}
+function _spotlightRelTime(id){
+  const t = _spotlightTsFromId(id);
+  if(!t) return '';
+  const diff = Date.now() - t;
+  if(diff < 0) return '';
+  const mnt = Math.floor(diff/60000);
+  const jam = Math.floor(diff/3600000);
+  const hr  = Math.floor(diff/86400000);
+  if(mnt < 1) return 'Baru saja';
+  if(mnt < 60) return mnt + ' mnt lalu';
+  if(jam < 24) return jam + ' jam lalu';
+  if(hr < 7) return hr + ' hari lalu';
+  const d = new Date(t);
+  const B = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  return d.getDate() + ' ' + B[d.getMonth()] + ' ' + d.getFullYear();
+}
+
+async function fetchSpotlight(force){
+  const now = Date.now();
+  if(!force && _spotlightCache.data && (now - _spotlightCache.ts) < SPOTLIGHT_TTL){
+    return _spotlightCache.data;
+  }
+  try{
+    const { data, error } = await sbData.from('karya_guru')
+      .select('ID,"Judul Media","Nama Guru","Nama Sekolah","Jenis Konten","Mata Pelajaran","Link Media Luar",VIEWS')
+      .eq('Status','DISETUJUI')
+      .order('ID',{ascending:false})
+      .limit(10);
+    if(error) throw error;
+    const sorted = (data||[]).slice().sort((a,b)=>_spotlightTsFromId(b.ID)-_spotlightTsFromId(a.ID));
+    _spotlightCache = { data: sorted, ts: now };
+    try{ localStorage.setItem(SPOTLIGHT_LS_KEY, JSON.stringify(_spotlightCache)); }catch(_){}
+    return sorted;
+  }catch(e){
+    console.warn('[fetchSpotlight]', e);
+    return _spotlightCache.data || [];
+  }
+}
+
+const SPOTLIGHT_META = {
+  'Modul Interaktif': { icon:'book-open',    grad:'linear-gradient(140deg,#0D9488 0%,#14B8A6 100%)', agrad:'linear-gradient(135deg,#0D9488,#14B8A6)' },
+  'Game':             { icon:'gamepad-2',    grad:'linear-gradient(140deg,#7C3AED 0%,#A855F7 100%)', agrad:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+  'Video':            { icon:'play',         grad:'linear-gradient(140deg,#E11D48 0%,#F43F5E 100%)', agrad:'linear-gradient(135deg,#E11D48,#F43F5E)' },
+  'Kuis Online':      { icon:'check-circle', grad:'linear-gradient(140deg,#D97706 0%,#F59E0B 100%)', agrad:'linear-gradient(135deg,#D97706,#F59E0B)' },
+  'Storybook':        { icon:'book',         grad:'linear-gradient(140deg,#C026D3 0%,#E879F9 100%)', agrad:'linear-gradient(135deg,#C026D3,#E879F9)' },
+  'Ice Breaking':     { icon:'snowflake',    grad:'linear-gradient(140deg,#0891B2 0%,#22D3EE 100%)', agrad:'linear-gradient(135deg,#0891B2,#22D3EE)' },
+  '_default':         { icon:'monitor',      grad:'linear-gradient(140deg,#475569 0%,#64748B 100%)', agrad:'linear-gradient(135deg,#475569,#64748B)' }
+};
+function _spotlightMeta(jenis){
+  return SPOTLIGHT_META[jenis] || SPOTLIGHT_META['_default'];
+}
+function _spotlightInitials(nama){
+  return (nama||'G').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'G';
+}
+const _spotDetailCache = {};
+
+async function bukaSpotlight(id){
+  if(!id) return;
+  toast('Memuat karya…','info');
+
+  if(!_spotDetailCache[id]){
+    try{
+      const { data, error } = await sbData.from('karya_guru')
+        .select('"Kode HTML/Canvas","Link Media Luar","Judul Media"')
+        .eq('ID', id)
+        .single();
+      if(error) throw error;
+      _spotDetailCache[id] = data;
+    }catch(e){
+      console.warn('[bukaSpotlight]', e);
+      toast('Gagal memuat karya','error');
+      return;
+    }
+  }
+
+  const d = _spotDetailCache[id];
+  const html = (d['Kode HTML/Canvas']||'').trim();
+  const link = (d['Link Media Luar']||'').trim();
+  const judul = d['Judul Media']||'Karya';
+
+  // Track VIEWS (dedupe per sesi)
+  try{
+    const seen = JSON.parse(sessionStorage.getItem('gb_spot_viewed')||'[]');
+    if(!seen.includes(id)){
+      seen.push(id);
+      sessionStorage.setItem('gb_spot_viewed', JSON.stringify(seen));
+      const { data: cur } = await sbData.from('karya_guru').select('VIEWS').eq('ID',id).single();
+      const nv = (parseInt(cur?.VIEWS)||0)+1;
+      await sbData.from('karya_guru').update({ VIEWS: nv }).eq('ID', id);
+    }
+  }catch(_){}
+
+  const frame = $('mAppFrame');
+  // Reset dulu (biar bisa ganti sumber clean)
+  frame.removeAttribute('src');
+  frame.removeAttribute('srcdoc');
+
+  if(html.length > 10){
+    // HTML karya → sandbox (scripts allowed, same-origin blocked untuk keamanan)
+    frame.setAttribute('sandbox','allow-scripts allow-popups allow-forms allow-modals allow-top-navigation-by-user-activation');
+    frame.srcdoc = html;
+  } else if(link){
+    // Link eksternal → lepas sandbox (beberapa situs butuh cookies)
+    frame.removeAttribute('sandbox');
+    let u = link;
+    if(u.includes('drive.google')) u = u.replace('/view','/preview');
+    const yt = u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([^#&?]{11})/);
+    if(yt) u = 'https://www.youtube.com/embed/' + yt[1];
+    frame.src = u;
+  } else {
+    toast('Karya tidak punya konten','info');
+    return;
+  }
+
+  $('mAppTitle').textContent = judul;
+  openModal('mApp');
+}
+
+function bukaGaleriMedia(){
+  window.open('galeri.html', '_blank', 'noopener');
+}
+
+async function renderSpotlight(){
+  const box = $('spotlightBox');
+  if(!box){ console.warn('[spotlight] #spotlightBox tidak ada di DOM'); return; }
+  try{
+  const list = await fetchSpotlight(false);
+  if(!list.length){
+    box.classList.add('hidden');
+    box.innerHTML = '';
+    return;
+  }
+  let pick;
+  if(list.length > 1){
+    let tries = 0;
+    do {
+      pick = list[Math.floor(Math.random()*list.length)];
+      tries++;
+    } while(pick.ID === _spotlightLastId && tries < 5);
+  } else {
+    pick = list[0];
+  }
+  _spotlightLastId = pick.ID;
+
+  const meta = _spotlightMeta(pick['Jenis Konten']);
+  const views = parseInt(pick.VIEWS)||0;
+  const initials = _spotlightInitials(pick['Nama Guru']);
+  const relTime = _spotlightRelTime(pick.ID);
+
+  box.classList.remove('hidden');
+  box.innerHTML = `
+    <div class="w-head" style="margin-bottom:10px">
+      <div class="w-title"><i data-lucide="star"></i> Spotlight Karya</div>
+      <button class="sec-link" onclick="bukaGaleriMedia()" style="font-size:10px">Lihat semua <i data-lucide="arrow-right"></i></button>
+    </div>
+    <div class="sp-card" onclick="bukaSpotlight('${esc(pick.ID)}')" role="button" tabindex="0">
+      <div class="sp-thumb" style="background:${meta.grad}">
+        <span class="sp-thumb-chip">${esc(pick['Jenis Konten']||'Karya')}</span>
+        <span class="sp-thumb-views"><i data-lucide="eye"></i><span>${views}</span></span>
+        <span class="sp-thumb-label"><i data-lucide="star"></i> Spotlight</span>
+        <div class="sp-thumb-icon"><i data-lucide="${meta.icon}"></i></div>
+      </div>
+      <div class="sp-body">
+        <p class="sp-title">${esc(pick['Judul Media']||'Tanpa Judul')}</p>
+        <div class="sp-foot">
+          <div class="sp-avatar" style="background:${meta.agrad}">${esc(initials)}</div>
+          <div class="sp-author-info">
+            <div class="sp-author-name">${esc(pick['Nama Guru']||'Guru')}</div>
+            <div class="sp-author-sekolah">${esc(pick['Nama Sekolah']||'')}${relTime?' <span class="sp-time-sep">·</span> <span class="sp-time">'+esc(relTime)+'</span>':''}</div>
+          </div>
+          <div class="sp-arrow"><i data-lucide="arrow-right"></i></div>
+        </div>
+      </div>
+    </div>`;
+  icons();
+  }catch(e){
+    console.warn('[spotlight] render gagal:', e);
+  }
+}
 
 /* ---------- HOME WIDGETS: Agenda + Dokumen ---------- */
 function renderHomeWidgets(){
@@ -6318,6 +6592,7 @@ function renderHomeWidgets(){
 function syncAllDesktop(){
   syncSidebarUser();
   renderPromo();
+  renderSpotlight();
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();
