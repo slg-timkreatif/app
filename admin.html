@@ -2608,8 +2608,8 @@ function renderNotif(){
         <p class="text-xs font-extrabold text-slate-800 truncate">${esc(n.judul)} ${!n.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">OFF</span>':''}${scopeBadge}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(n.pesan)}${n.link?' · 🔗':''}</p>
       </div>
-      <button onclick="toggleNotif(${n.id},${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100'} active:scale-95 transition">${n.is_active?'AKTIF':'OFF'}</button>
-      <button onclick="delNotif(${n.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      <button onclick="toggleNotif('${n.id}',${!n.is_active})" class="text-[10px] font-black px-3 py-2 rounded-lg ${n.is_active?'acc-soft acc-text':'bg-slate-100'} active:scale-95 transition">${n.is_active?'AKTIF':'OFF'}</button>
+      <button onclick="delNotif('${n.id}')" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     </div>`;
   }).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada notifikasi.</p>';
   icons();
@@ -2749,7 +2749,7 @@ function renderFb(){
       <div class="flex items-center gap-2 flex-wrap">
         <span class="text-[10px] font-black px-2 py-1 rounded-lg acc-soft acc-text">${esc(x.tipe)}</span>
         <span class="text-[10px] text-slate-400">${esc(x.pengirim)} · ${x.rating}⭐</span>
-        <select onchange="setFbStatus(${x.id},this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
+        <select onchange="setFbStatus('${x.id}',this.value)" class="ml-auto text-[10px] font-black border border-slate-200 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800">
           <option value="baru" ${x.status==='baru'?'selected':''}>Baru</option>
           <option value="diproses" ${x.status==='diproses'?'selected':''}>Diproses</option>
           <option value="selesai" ${x.status==='selesai'?'selected':''}>Selesai</option>
