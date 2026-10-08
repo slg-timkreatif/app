@@ -549,6 +549,59 @@
   </p>
 </div>
 
+<!-- ============ PROMO CARD ============ -->
+<div class="card p-5 space-y-3">
+  <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+    <i data-lucide="star" class="w-4 h-4 acc-text"></i> Promo Card
+  </p>
+  <p class="text-[11px] text-slate-500 leading-relaxed">
+    Card promo di rail kanan (desktop) & HP (di bawah quick access). Kosongkan field → tampil default.
+  </p>
+
+  <div>
+    <label class="lbl">Status</label>
+    <select id="iPromoStatus" class="inp acc-ring">
+      <option value="OFF">OFF — sembunyikan</option>
+      <option value="ON">ON — tampilkan</option>
+    </select>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Label Chip</label>
+      <input id="iPromoLabel" class="inp acc-ring" placeholder="Baru" maxlength="12">
+    </div>
+    <div>
+      <label class="lbl">Icon (Lucide)</label>
+      <input id="iPromoIcon" class="inp acc-ring" placeholder="sparkles" autocomplete="off">
+    </div>
+  </div>
+
+  <div>
+    <label class="lbl">Judul</label>
+    <input id="iPromoTitle" class="inp acc-ring" placeholder="Studio Kreatif" maxlength="30">
+  </div>
+
+  <div>
+    <label class="lbl">Deskripsi</label>
+    <textarea id="iPromoDesc" rows="2" class="inp acc-ring" placeholder="Buat Status WA edukatif dari catatanmu dalam 30 detik." maxlength="140"></textarea>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="lbl">Label Tombol</label>
+      <input id="iPromoBtnLabel" class="inp acc-ring" placeholder="Coba Sekarang" maxlength="20">
+    </div>
+    <div>
+      <label class="lbl">Link / Aksi</label>
+      <input id="iPromoLink" class="inp acc-ring" placeholder="?page=bagi" autocomplete="off">
+    </div>
+  </div>
+  <p class="text-[10px] text-slate-400 leading-relaxed">
+    Contoh: <code>?page=bagi</code> · <code>?page=agenda</code> · <code>ext:https://…</code> · nama menu (mis. "Studio Kreatif")
+  </p>
+</div>
+
 <div class="card p-5">
   <label class="lbl">Versi Aplikasi</label>
   <input id="iVersi" class="inp acc-ring" placeholder="contoh: 4.75" autocomplete="off">
@@ -2368,7 +2421,16 @@ function fillInfo() {
     heroEl.value = c.hero_illustrasi_urls || '';
     updateHeroCounter();
   }
-  }
+
+  // Promo card
+  const ps=$('iPromoStatus'); if(ps) ps.value = c.promo_status || 'OFF';
+  const pl=$('iPromoLabel'); if(pl) pl.value = c.promo_label || '';
+  const pt=$('iPromoTitle'); if(pt) pt.value = c.promo_title || '';
+  const pd=$('iPromoDesc'); if(pd) pd.value = c.promo_desc || '';
+  const pbl=$('iPromoBtnLabel'); if(pbl) pbl.value = c.promo_btn_label || '';
+  const plk=$('iPromoLink'); if(plk) plk.value = c.promo_link || '';
+  const pi=$('iPromoIcon'); if(pi) pi.value = c.promo_icon || '';
+}
   
   /* ============================================================
      HERO ILLUSTRASI — Admin helper
@@ -2474,6 +2536,13 @@ async function saveInfo() {
     pop_pesan: popPesanSafe,
     pop_gambar: $('iPopGambar').value,
     hero_illustrasi_urls: heroUrlsClean,
+    promo_status: $('iPromoStatus')?.value || 'OFF',
+    promo_label: $('iPromoLabel')?.value.trim() || '',
+    promo_title: $('iPromoTitle')?.value.trim() || '',
+    promo_desc: $('iPromoDesc')?.value.trim() || '',
+    promo_btn_label: $('iPromoBtnLabel')?.value.trim() || '',
+    promo_link: $('iPromoLink')?.value.trim() || '',
+    promo_icon: $('iPromoIcon')?.value.trim() || '',
     versi: $('iVersi').value,
     updated_at: new Date().toISOString()
   };
