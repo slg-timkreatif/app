@@ -16,8 +16,9 @@
 <script>
 (function(){try{
   var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
-  var mode=localStorage.getItem('gb_theme_mode')||'auto';
-  var isDark=mode==='dark'||(mode==='auto'&&window.matchMedia('(prefers-color-scheme: dark)').matches);
+  // Default: LIGHT. Dark hanya kalau user pilih sendiri di setting.
+  var mode=localStorage.getItem('gb_theme_mode')||'light';
+  var isDark=mode==='dark';
   if(isDark)document.documentElement.classList.add('dark');
   var m=document.querySelector('meta[name=theme-color]');
   if(m)m.setAttribute('content',isDark?'#22262E':'#FFFFFF');
@@ -64,7 +65,7 @@
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
-<link rel="stylesheet" href="styles.css?v=4.97">
+<link rel="stylesheet" href="styles.css?v=4.99">
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
@@ -81,41 +82,66 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        SIDEBAR (Desktop)
        ============================================ -->
-  <aside class="hidden md:flex flex-col w-64 shrink-0 border-r border-slate-200 bg-white p-5 md:h-screen md:overflow-y-auto">
-    <div class="flex items-center gap-3 mb-8">
-      <div class="w-11 h-11 rounded-xl overflow-hidden border border-slate-200">
-        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" class="w-full h-full object-cover" alt="Logo">
+  <aside id="sidebar" class="sidebar-desktop">
+    <div class="sb-brand">
+      <div class="sb-brand-logo">
+        <img src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" alt="Logo">
       </div>
-      <div>
-        <p class="font-extrabold text-slate-800 leading-tight">Guru Berbagi</p>
-        <p id="sideVersi" class="text-[11px] text-slate-400 font-semibold">Portal Selogiri</p>
+      <div class="sb-brand-text">
+        <div class="sb-brand-name">Guru Berbagi</div>
+        <div class="sb-brand-ver" id="sideVersi">Portal · v4.98</div>
       </div>
     </div>
 
-    <nav class="space-y-1.5">
-      <button data-nav="home" onclick="navPage('home')" class="side-btn nav-active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="home" class="w-4 h-4"></i>Beranda</button>
-      <button data-nav="apps" onclick="navPage('apps')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="layout-grid" class="w-4 h-4"></i>Layanan</button>
-      <button data-nav="agenda" onclick="navPage('agenda')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="calendar-days" class="w-4 h-4"></i>Agenda</button>
-      <button data-nav="dokumen" onclick="navPage('dokumen')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="folder-open" class="w-4 h-4"></i>Dokumen</button>
-      <button id="sideNotif" onclick="openPanel('pNotif')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition"><i data-lucide="bell" class="w-4 h-4"></i>Notifikasi<span id="badgeNotifD" class="hidden ml-auto min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span></button>
-      <button data-nav="bagi" onclick="navPage('bagi')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="share-2" class="w-4 h-4"></i>Berbagi</button>
-      <button data-nav="setting" onclick="navPage('setting')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="settings" class="w-4 h-4"></i>Pengaturan</button>
-      <button data-nav="profile" onclick="navPage('profile')" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
-    </nav>
+    <div class="sb-section-label">Menu Utama</div>
+    <button data-nav="home" onclick="navPage('home')" class="sb-item on" data-tooltip="Beranda">
+      <i data-lucide="home"></i><span class="sb-item-label">Beranda</span>
+    </button>
+    <button data-nav="apps" onclick="navPage('apps')" class="sb-item" data-tooltip="Layanan">
+      <i data-lucide="layout-grid"></i><span class="sb-item-label">Layanan</span>
+    </button>
+    <button data-nav="agenda" onclick="navPage('agenda')" class="sb-item" data-tooltip="Agenda">
+      <i data-lucide="calendar-days"></i><span class="sb-item-label">Agenda</span>
+    </button>
+    <button data-nav="dokumen" onclick="navPage('dokumen')" class="sb-item" data-tooltip="Dokumen">
+      <i data-lucide="folder-open"></i><span class="sb-item-label">Dokumen</span>
+    </button>
+    <button data-nav="bagi" onclick="navPage('bagi')" class="sb-item" data-tooltip="Berbagi">
+      <i data-lucide="share-2"></i><span class="sb-item-label">Berbagi</span>
+    </button>
 
-    <div id="footSide" class="mt-auto pt-5 border-t border-slate-100 dark:border-slate-800">
-      <p class="px-3 mb-2 text-[9px] font-black uppercase tracking-[0.18em] text-slate-300 dark:text-slate-600 flex items-center gap-1.5">
-        <i data-lucide="link" class="w-2.5 h-2.5"></i>
-        Tautan
-      </p>
-      <div id="footSideList" class="space-y-0.5"></div>
-      <p class="px-3 pt-3 text-[10px] text-slate-400 dark:text-slate-600 font-semibold flex items-center gap-1">
-        Made with
-        <i data-lucide="heart" class="w-2.5 h-2.5 text-rose-500 fill-rose-500"></i>
-        in Selogiri
-      </p>
+    <div class="sb-section-label">Personal</div>
+    <button id="sideNotif" onclick="openPanel('pNotif')" class="sb-item" data-tooltip="Notifikasi">
+      <i data-lucide="bell"></i><span class="sb-item-label">Notifikasi</span>
+      <span id="badgeNotifD" class="badge hidden">0</span>
+    </button>
+    <button data-nav="setting" onclick="navPage('setting')" class="sb-item" data-tooltip="Pengaturan">
+      <i data-lucide="settings"></i><span class="sb-item-label">Pengaturan</span>
+    </button>
+
+    <!-- Footer compact -->
+    <div class="sb-footer">
+      <div class="sb-footer-links">
+        <a href="?page=about" onclick="event.preventDefault();navPage('about')">Tentang</a>
+        <a href="?page=help">Bantuan</a>
+        <a href="?page=privacy">Kebijakan</a>
+      </div>
+      <div class="sb-footer-copyright">Tim Kreatif © 2026 · <span id="sideVersi2">v4.98</span></div>
     </div>
-    <p class="pt-2 px-3 text-[10px] text-slate-300 dark:text-slate-600 font-medium">Tim Kreatif © 2026 · <span id="sideVersi2">v4.75</span></p>
+
+    <!-- User -->
+    <div class="sb-user">
+      <button class="sb-user-btn" onclick="navPage('profile')" data-tooltip="Akun Saya">
+        <div class="sb-user-avatar">
+          <img id="sideAvatar" src="https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png" alt="Avatar">
+        </div>
+        <div class="sb-user-info">
+          <div class="sb-user-name" id="sideName">Guru Berbagi</div>
+          <div class="sb-user-role" id="sideRole">Portal Selogiri</div>
+        </div>
+        <i data-lucide="chevron-down" class="sb-user-chev"></i>
+      </button>
+    </div>
   </aside>
 
   <!-- ============================================
@@ -123,7 +149,27 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        ============================================ -->
   <div class="flex-1 flex flex-col relative min-w-0 md:h-screen md:overflow-hidden">
 
-    <!-- HEADER -->
+    <!-- TOPBAR DESKTOP (≥1024px) -->
+    <header class="topbar-desktop">
+      <button class="tb-toggle" onclick="toggleSidebar()" title="Toggle sidebar" aria-label="Toggle sidebar">
+        <i data-lucide="menu"></i>
+      </button>
+      <div class="tb-search">
+        <input id="inSearchDesktop" type="text" placeholder="Cari layanan, dokumen, agenda, atau guru…" autocomplete="off">
+        <i data-lucide="search" class="tb-search-icon"></i>
+      </div>
+      <div class="tb-actions">
+        <button class="tb-icon" onclick="openPanel('pNotif')" title="Notifikasi" aria-label="Notifikasi">
+          <i data-lucide="bell"></i>
+          <span id="badgeNotifDesk" class="badge hidden">0</span>
+        </button>
+        <button class="tb-icon" onclick="navPage('setting')" title="Pengaturan" aria-label="Pengaturan">
+          <i data-lucide="settings"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- TOPBAR HP (≤1023px) -->
     <header class="topbar-v8">
       <button id="hamburgerBtn" onclick="openDrawer()" aria-label="Buka menu" class="shrink-0 w-12 h-12 rounded-2xl bg-slate-100 items-center justify-center active:scale-95 transition">
         <i data-lucide="menu" class="w-5 h-5 text-slate-600"></i>
@@ -157,12 +203,15 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </header>
 
     <!-- MAIN -->
-    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 pb-32 md:pb-8 space-y-4 md:space-y-6 md:max-w-6xl md:mx-auto md:w-full">
+    <main id="mainContent" class="flex-1 overflow-y-auto overflow-x-hidden no-scroll px-5 md:px-8 pt-2 md:pt-4 pb-32 md:pb-8 space-y-4 md:space-y-6 md:w-full">
 
       <!-- ============================================
            PAGE: HOME
            ============================================ -->
-      <section id="pageHome" class="space-y-4 min-w-0">
+      <section id="pageHome" class="min-w-0">
+
+      <div class="home-grid">
+        <div class="col-main">
 
         <!-- ============================================
              HERO CARD — Quote + Cuaca + Ilustrasi
@@ -207,8 +256,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
         </section>
 
-        <!-- SEARCH -->
-        <div class="relative animate-fade-up">
+        <!-- SEARCH (HP only) -->
+        <div class="relative animate-fade-up search-home-mobile">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
           <input id="inSearchHome" type="text" placeholder="Cari layanan, dokumen, agenda…" autocomplete="off" class="w-full card pl-11 pr-4 py-3 text-sm font-medium text-slate-700 acc-ring" oninput="homeSearch(this.value)" onfocus="showSearchHistory()" onblur="hideSearchHistorySoon()">
           <div id="searchProg" class="search-prog"></div>
@@ -231,33 +280,101 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <div id="caroDots" class="flex justify-center gap-1.5 mt-2"></div>
         </div>
 
-        <div id="infoPanel" class="card overflow-hidden animate-fade-up md:grid md:grid-cols-2">
-          <button onclick="navPage('agenda')" class="w-full p-4 flex items-center gap-3 text-left bg-rose-50/60 active:scale-[.99] transition border-b border-slate-200/70 md:border-b-0 md:border-r md:border-slate-200/70"><span id="agendaRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-          <button onclick="navPage('dokumen')" class="w-full p-4 flex items-center gap-3 text-left bg-amber-50/60 active:scale-[.99] transition"><span id="dokRowContent" class="flex items-center gap-3 flex-1 min-w-0"></span></button>
-        </div>
-
         <div id="recentBox" class="hidden animate-fade-up">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Terakhir Dibuka</p>
-            <button onclick="clearRecentActivity()" class="text-[10px] font-bold text-slate-400 active:scale-95 transition">Bersihkan</button>
+          <div class="sec-head">
+            <div class="sec-title">Terakhir Dibuka</div>
+            <button onclick="clearRecentActivity()" class="sec-link">Bersihkan</button>
           </div>
           <div id="recentList" class="flex gap-2 overflow-x-auto no-scroll pb-1"></div>
         </div>
 
         <div id="quickBox" class="animate-fade-up">
-          <div class="flex items-center justify-between mb-2">
-            <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pintasan Cepat</p>
-            <div class="flex items-center gap-2">
-              <button onclick="toggleQuickView()" class="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center active:scale-90 transition" aria-label="Ganti tampilan">
-                <i id="quickViewIcon" data-lucide="layout-grid" class="w-3 h-3 text-slate-500"></i>
+          <div class="sec-head">
+            <div class="sec-title">Pintasan Cepat</div>
+            <div class="flex items-center gap-1">
+              <button onclick="toggleQuickView()" class="sec-link" aria-label="Ganti tampilan" style="padding:5px 8px">
+                <i id="quickViewIcon" data-lucide="layout-grid"></i>
               </button>
-              <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="text-[10px] font-bold acc-text">Semua Layanan →</a>
+              <a href="?page=apps" onclick="event.preventDefault();navPage('apps')" class="sec-link">Semua Layanan <i data-lucide="arrow-right"></i></a>
             </div>
           </div>
-          <div id="quickList" class="grid grid-cols-3 md:grid-cols-6 gap-3 min-w-0 max-w-full"></div>
+          <div id="quickList" class="quick-grid"></div>
         </div>
 
-        <div id="footList" class="animate-fade-up md:hidden"></div>
+        <!-- Widget Agenda + Dokumen -->
+        <section class="bottom-grid" id="homeWidgets">
+          <div class="w">
+            <div class="w-head">
+              <div class="w-title"><i data-lucide="calendar-days"></i> Agenda Terbaru</div>
+              <button class="sec-link" onclick="navPage('agenda')">Lihat semua <i data-lucide="arrow-right"></i></button>
+            </div>
+            <div id="homeAgendaList"></div>
+          </div>
+          <div class="w">
+            <div class="w-head">
+              <div class="w-title"><i data-lucide="folder-open"></i> Dokumen Terbaru</div>
+              <button class="sec-link" onclick="navPage('dokumen')">Lihat semua <i data-lucide="arrow-right"></i></button>
+            </div>
+            <div id="homeDokList"></div>
+          </div>
+        </section>
+
+        </div><!-- /col-main -->
+
+        <!-- ============================================
+             RAIL KANAN (desktop) — hanya muncul di ≥1024px
+             ============================================ -->
+        <div class="col-rail">
+
+          <!-- Promo -->
+          <div class="promo" id="promoCard">
+            <div class="promo-content">
+              <span class="promo-chip" id="promoLabel">Baru</span>
+              <div class="promo-title" id="promoTitle">Studio Kreatif</div>
+              <div class="promo-desc" id="promoDesc">Buat Status WA edukatif dari catatanmu dalam 30 detik.</div>
+              <button class="promo-btn" id="promoBtn" onclick="if(window._promoLink)klikPromo()">
+                <span id="promoBtnLabel">Coba Sekarang</span>
+                <i data-lucide="arrow-right" style="width:12px;height:12px"></i>
+              </button>
+            </div>
+            <div class="promo-illus">
+              <i data-lucide="sparkles" id="promoIcon"></i>
+            </div>
+          </div>
+
+          <!-- Widget: Notifikasi -->
+          <div class="w">
+            <div class="w-head">
+              <div class="w-title"><i data-lucide="bell"></i> Notifikasi</div>
+              <button class="sec-link" style="font-size:10px" onclick="openPanel('pNotif')">Lihat semua</button>
+            </div>
+            <div id="railNotifList">
+              <!-- placeholder, akan diisi JS -->
+              <div class="nt-item">
+                <div class="nt-icon acc-soft acc-text"><i data-lucide="info"></i></div>
+                <div class="nt-body">
+                  <div class="nt-title">Memuat notifikasi…</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget: Terakhir Dibuka (hanya desktop) -->
+          <div class="w" id="railRecentWidget">
+            <div class="w-head">
+              <div class="w-title"><i data-lucide="history"></i> Terakhir Dibuka</div>
+            </div>
+            <div id="railRecentList">
+              <!-- placeholder, akan diisi JS -->
+            </div>
+          </div>
+
+        </div><!-- /col-rail -->
+
+      </div><!-- /home-grid -->
+
+      <div id="footList" class="animate-fade-up md:hidden" style="margin-top:16px"></div>
+
       </section>
 
       <!-- ============================================
@@ -1241,6 +1358,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
 
 </div>
-<script defer src="app.js?v=4.97"></script>
+<script defer src="app.js?v=4.99"></script>
 </body>
 </html>
