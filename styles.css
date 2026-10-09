@@ -216,7 +216,7 @@ body:not([data-page="home"]) #hdrTitle{display:block!important;flex:1;min-width:
 .side-btn.nav-inactive{background-color:transparent!important;color:#64748b!important}
 
 .app-navbar{transition:left .2s,bottom .2s,border-radius .2s,box-shadow .2s}
-body[data-navbar="floating"] .app-navbar{left:12px!important;right:12px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem)!important;border-radius:var(--r-lg)!important;border:0;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+body[data-navbar="floating"] .app-navbar{left:16px!important;right:16px!important;bottom:calc(env(safe-area-inset-bottom,0px) + 0.75rem)!important;border-radius:20px!important;border:0;box-shadow:0 8px 32px rgba(0,0,0,.25)}
 body[data-navbar="classic"] .app-navbar{left:0!important;right:0!important;bottom:0!important;border-radius:0!important;border:0;border-top:1px solid var(--border);box-shadow:0 -2px 12px rgba(0,0,0,.08);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem)}
 
 body[data-navbar-color="dark"] .app-navbar{background:#0F0F12;color:#fff}
@@ -727,7 +727,7 @@ html.dark #mDrawerSheet{background:var(--card);border-right-color:#2F343D}
   top: 0;
   z-index: 20;
   background: var(--card);
-  padding: calc(env(safe-area-inset-top) + 10px) 18px 10px 16px;
+  padding: calc(env(safe-area-inset-top) + 10px) 16px 10px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
