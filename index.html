@@ -346,6 +346,34 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <div id="quickList" class="quick-grid"></div>
         </div>
 
+        <!-- ⭐ SPOTLIGHT KARYA — Carousel -->
+        <section id="spotlightSection" class="spot-wrap hidden">
+          <div class="spot-head">
+            <div style="min-width:0">
+              <div class="spot-head-label">Koleksi Pilihan</div>
+              <h2 class="spot-head-title">Spotlight Karya</h2>
+              <p class="spot-head-sub">Karya terbaru pilihan untuk inspirasi mengajar.</p>
+            </div>
+            <button class="spot-head-cta" onclick="bukaGaleriMedia()">
+              Lihat Semua <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="spot-track" id="spotTrack"></div>
+
+          <div class="spot-nav" id="spotNav">
+            <button class="spot-nav-btn" id="spPrev" aria-label="Sebelumnya" disabled>
+              <i data-lucide="arrow-left"></i>
+            </button>
+            <div class="spot-nav-counter">
+              <b id="spCurr">1</b> / <span id="spTotal">0</span>
+            </div>
+            <button class="spot-nav-btn" id="spNext" aria-label="Selanjutnya">
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
         <!-- Widget Agenda + Dokumen -->
         <section class="bottom-grid" id="homeWidgets">
           <div class="w">
@@ -370,9 +398,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
              RAIL KANAN (desktop) — hanya muncul di ≥1024px
              ============================================ -->
         <div class="col-rail">
-
-          <!-- Spotlight Karya (dinamis dari project DATA) -->
-          <div id="spotlightBox" class="hidden"></div>
 
           <!-- Promo -->
           <div class="promo" id="promoCard">
