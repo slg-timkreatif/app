@@ -63,7 +63,19 @@ html.no-anim *,html.no-anim *::before,html.no-anim *::after{animation:none!impor
    ============================================ */
 .sheet{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:28rem;max-height:92vh;border-radius:var(--r-2xl) var(--r-2xl) 0 0;transform:translateY(100%);transition:transform .3s ease;display:flex;flex-direction:column;background:var(--card)}
 .sheet.sheet-open{transform:translateY(0)}
-@media (min-width:768px){.sheet{top:50%;left:50%;right:auto;bottom:auto;width:100%;border-radius:var(--r-2xl);transform:translate(-50%,-50%) translateY(28px) scale(.97);opacity:0;transition:transform .25s ease,opacity .25s ease}.sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}}
+@media (min-width:768px){
+  .sheet{
+    top:50%;left:50%;right:auto;bottom:auto;
+    width:100%;max-width:30rem;max-height:min(82vh,640px);
+    border-radius:var(--r-2xl);
+    transform:translate(-50%,-50%) translateY(28px) scale(.97);
+    opacity:0;
+    transition:transform .25s ease,opacity .25s ease;
+    box-shadow:0 24px 60px -12px rgba(20,18,26,.35), 0 0 0 1px rgba(20,18,26,.04);
+  }
+  .sheet.sheet-open{transform:translate(-50%,-50%);opacity:1}
+  html.dark .sheet{box-shadow:0 24px 60px -12px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05)}
+}
 
 /* ============================================
    SYNC OVERLAY v2 — Logo Pulse Orbit
@@ -2179,6 +2191,121 @@ html.dark .caro-slide.tipe-rose.no-img .caro-icon{color:#FDA4AF}
 .caro-dot.on{width:22px;background:var(--acc)}
 html.dark .caro-dot{background:rgba(255,255,255,.15)}
 html.dark .caro-dot.on{background:var(--acc)}
+
+/* ============================================================
+   CAROUSEL — Desktop Grid (compact cards)
+   Mobile tetap horizontal swipe 92%
+   ============================================================ */
+@media (min-width: 1024px) {
+  #caroTrack {
+    display: grid !important;
+    gap: 12px !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+    scroll-snap-type: none !important;
+    scroll-padding-left: 0 !important;
+  }
+  /* Jumlah kolom mengikuti jumlah slide */
+  #caroTrack[data-count="1"] { grid-template-columns: minmax(220px, 480px) !important; }
+  #caroTrack[data-count="2"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; max-width: 700px; }
+  #caroTrack[data-count="3"] { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+  #caroTrack[data-count="4"] { grid-template-columns: repeat(4, minmax(0,1fr)) !important; }
+
+  /* Dots disembunyikan di desktop */
+  #caroDots { display: none !important; }
+
+  /* Ubah slide dari horizontal → vertical stack */
+  .caro-slide {
+    width: 100% !important;
+    max-width: none !important;
+    scroll-snap-align: none !important;
+    flex-direction: column !important;
+    min-height: 0 !important;
+  }
+  .caro-slide:active { transform: none; }
+
+  /* Image full-width di atas, aspect 16:9 */
+  .caro-img {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+    aspect-ratio: 16/9;
+  }
+  .caro-img img { width: 100%; height: 100%; object-fit: cover; }
+  .caro-img::after { display: none !important; }
+
+  /* Body lebih compact */
+  .caro-body {
+    padding: 14px 16px 16px !important;
+    gap: 6px !important;
+  }
+  .caro-title { font-size: 13.5px !important; }
+  .caro-desc  { font-size: 11px !important; }
+  .caro-chip  { font-size: 9px !important; }
+  .caro-btn   { padding: 6px 11px !important; font-size: 10px !important; }
+
+  /* No-image variant — hero icon area setara gambar 16:9 */
+  .caro-slide.no-img .caro-body {
+    padding: 0 !important;
+    gap: 0 !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* Hero area ikon — aspect 16:9, sejajar dengan card ber-gambar */
+  .caro-slide.no-img .caro-icon {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16/9;
+    border-radius: 0 !important;
+    background: transparent !important;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+  }
+
+  /* Pattern dots halus di background hero */
+  .caro-slide.no-img .caro-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(rgba(0,0,0,.075) 1.5px, transparent 1.5px),
+      radial-gradient(rgba(0,0,0,.035) 1px, transparent 1px);
+    background-size: 22px 22px, 44px 44px;
+    background-position: 0 0, 11px 11px;
+    opacity: .75;
+    pointer-events: none;
+    z-index: 1;
+  }
+  html.dark .caro-slide.no-img .caro-icon::before {
+    background-image:
+      radial-gradient(rgba(255,255,255,.10) 1.5px, transparent 1.5px),
+      radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+  }
+
+  /* Ikon besar di tengah hero area */
+  .caro-slide.no-img .caro-icon svg {
+    width: 96px !important;
+    height: 96px !important;
+    stroke-width: 1.1 !important;
+    opacity: .55;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,.08));
+  }
+
+  /* Text wrapper dapat padding sendiri setelah hero icon */
+  .caro-slide.no-img .caro-text {
+    padding: 14px 16px 16px;
+    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
 /* ============================================================
    SPOTLIGHT KARYA — Carousel Compact Soft Tint
    ============================================================ */
@@ -2432,6 +2559,499 @@ html.dark .spot-nav-btn{background:#22262E;border-color:#2F343D}
   letter-spacing:.02em;
 }
 .spot-nav-counter b{color:var(--acc-text);font-weight:900}
+
+/* ============================================================
+   HERO BANNER MODE (V4)
+   ============================================================ */
+.hero-banner-mode{
+  position:relative;
+  z-index:2;
+}
+.hero-inspirasi-mode{
+  position:relative;
+  z-index:2;
+}
+
+.hero-card-v8[data-mode="banner"]{
+  padding-bottom:18px;
+}
+@media (min-width:1024px){
+  .hero-card-v8[data-mode="banner"]{
+    padding:28px;
+    min-height:auto;
+  }
+  .hero-card-v8[data-mode="banner"] .hero-banner-title{
+    max-width:36ch;
+    padding-right:0;
+    font-size:26px;
+  }
+  .hero-card-v8[data-mode="banner"] .hero-banner-img{
+    max-width:520px;
+  }
+}
+
+.hero-banner-img{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:18px;
+  overflow:hidden;
+  background:linear-gradient(140deg,#7C3AED 0%,#A855F7 100%);
+  position:relative;
+  margin-bottom:14px;
+  box-shadow:0 4px 12px -4px rgba(124,58,237,.3);
+}
+.hero-banner-img img{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+}
+.hero-banner-img::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(rgba(255,255,255,.25) 1px,transparent 1px),
+    radial-gradient(rgba(255,255,255,.15) 1px,transparent 1px);
+  background-size:18px 18px,36px 36px;
+  background-position:0 0,9px 9px;
+  opacity:.5;pointer-events:none;
+  z-index:1;
+}
+.hero-banner-img-fallback{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;opacity:.9;
+  z-index:2;
+}
+.hero-banner-img-fallback svg{
+  width:64px;height:64px;stroke-width:1.2;
+}
+
+.hero-banner-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1.2;
+  letter-spacing:-.02em;
+  color:var(--ink,#0F172A);
+  margin:0 0 6px;
+  max-width:20ch;
+  position:relative;
+  z-index:2;
+}
+html.dark .hero-banner-title{color:#F1F5F9}
+
+.hero-banner-meta{
+  font-size:11px;
+  font-weight:700;
+  color:#64748B;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:2;
+}
+.hero-banner-meta b{color:var(--acc-text);font-weight:800}
+.hero-banner-meta .sep{opacity:.4}
+
+.hero-banner-cta{
+  margin-top:14px;
+  padding:11px 18px;
+  border-radius:12px;
+  background:var(--acc);
+  color:#fff;
+  border:0;
+  font-family:inherit;
+  font-size:12.5px;
+  font-weight:800;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  transition:all .15s;
+  box-shadow:0 4px 12px -2px var(--acc-ring);
+  position:relative;
+  z-index:2;
+}
+.hero-banner-cta:active{transform:scale(.96)}
+.hero-banner-cta svg{width:14px;height:14px}
+
+/* ============================================================
+   MODAL: NEWS READER
+   ============================================================ */
+.mNews-wrap{
+  position:absolute;
+  left:12px;right:12px;
+  top:calc(env(safe-area-inset-top,0px) + 12px);
+  bottom:calc(env(safe-area-inset-bottom,0px) + 12px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.mNews-wrap > .news-box{
+  pointer-events:auto;
+}
+@media (min-width:768px){
+  .mNews-wrap{
+    left:50%;right:auto;top:50%;bottom:auto;
+    transform:translate(-50%,-50%);
+    width:100%;max-width:540px;
+    max-height:88vh;
+  }
+}
+
+.news-box{
+  background:var(--card);
+  border-radius:24px;
+  width:100%;
+  max-width:540px;
+  max-height:100%;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  animation:newsSlideUp .3s cubic-bezier(.4,0,.2,1);
+}
+@keyframes newsSlideUp{
+  from{opacity:0;transform:translateY(20px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.news-head{
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.news-head-title{
+  font-size:14px;
+  font-weight:900;
+  color:var(--ink,#0F172A);
+  flex:1;min-width:0;
+}
+html.dark .news-head-title{color:#F1F5F9}
+.news-action{
+  width:34px;height:34px;
+  border-radius:11px;
+  background:#F1F5F9;
+  border:0;
+  color:#475569;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:all .15s;
+  flex-shrink:0;
+}
+html.dark .news-action{background:#282D36;color:#94A3B8}
+.news-action:active{transform:scale(.9)}
+
+.news-body{
+  flex:1;
+  overflow-y:auto;
+  padding:0;
+  -webkit-overflow-scrolling:touch;
+}
+
+.news-hero{
+  width:100%;
+  aspect-ratio:16/9;
+  background:linear-gradient(140deg,#7C3AED 0%,#A855F7 100%);
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.news-hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(rgba(255,255,255,.25) 1px,transparent 1px),
+    radial-gradient(rgba(255,255,255,.15) 1px,transparent 1px);
+  background-size:18px 18px,36px 36px;
+  background-position:0 0,9px 9px;
+  opacity:.5;
+  z-index:1;
+  pointer-events:none;
+}
+
+.news-content{
+  padding:20px 22px 24px;
+}
+.news-cat{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--acc-soft);
+  color:var(--acc-text);
+  font-size:9.5px;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.news-cat::before{
+  content:'';width:4px;height:4px;border-radius:50%;
+  background:var(--acc);
+}
+.news-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-.02em;
+  color:var(--ink,#0F172A);
+  margin:14px 0 10px;
+}
+html.dark .news-title{color:#F1F5F9}
+.news-meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  font-weight:700;
+  color:#64748B;
+  flex-wrap:wrap;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+}
+.news-meta b{color:var(--acc-text);font-weight:800}
+.news-meta .sep{opacity:.4}
+.news-text{
+  font-size:14px;
+  line-height:1.7;
+  color:#1E293B;
+}
+html.dark .news-text{color:#D5DAE3}
+.news-text p{margin:0 0 14px}
+.news-text p:last-child{margin-bottom:0}
+
+.news-sign{
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  font-weight:700;
+  color:#64748B;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.news-sign-avatar{
+  width:32px;height:32px;
+  border-radius:10px;
+  background:var(--acc-soft);
+  color:var(--acc-text);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;
+  flex-shrink:0;
+}
+
+.news-foot{
+  padding:12px 20px;
+  border-top:1px solid var(--border);
+  background:var(--card);
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-shrink:0;
+}
+.news-foot-btn{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  background:#F1F5F9;
+  color:#475569;
+  border:0;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  transition:all .15s;
+}
+html.dark .news-foot-btn{background:#282D36;color:#B5BCC8}
+.news-foot-btn:active{transform:scale(.98)}
+.news-foot-btn.primary{
+  background:var(--acc);
+  color:#fff;
+  box-shadow:0 4px 10px -2px var(--acc-ring);
+}
+
+/* ============================================================
+   CAROUSEL NOTIFIKASI (pure)
+   ============================================================ */
+.notif-track{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  scroll-snap-type:x proximity;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  margin:0 -16px;
+  padding:4px 16px 4px;
+  scroll-padding-left:16px;
+}
+.notif-track::-webkit-scrollbar{display:none}
+.notif-slide{
+  flex:0 0 78%;
+  max-width:290px;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  min-width:0;
+}
+@media (min-width:1024px){
+  .notif-slide{flex:0 0 calc(25% - 8px);max-width:calc(25% - 8px)}
+}
+.notif-card{
+  padding:13px 14px;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  cursor:pointer;
+  transition:all .15s;
+  box-shadow:0 1px 2px rgba(20,18,26,.03),0 4px 14px -8px rgba(20,18,26,.06);
+  height:100%;
+}
+@media (min-width:1024px){
+  .notif-card{padding:12px 13px;border-radius:16px;gap:9px}
+}
+.notif-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px -8px rgba(20,18,26,.12)}
+.notif-card:active{transform:scale(.98)}
+.notif-icon{
+  width:40px;height:40px;
+  border-radius:13px;
+  background:var(--acc-soft);
+  color:var(--acc-text);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.notif-icon svg{width:18px;height:18px}
+@media (min-width:1024px){
+  .notif-icon{width:34px;height:34px;border-radius:11px}
+  .notif-icon svg{width:15px;height:15px}
+}
+.notif-icon.t-info{background:#DBEAFE;color:#1D4ED8}
+.notif-icon.t-trophy{background:#FEF3C7;color:#B45309}
+.notif-icon.t-sistem{background:#EDE9FE;color:#6D28D9}
+.notif-body{flex:1;min-width:0}
+.notif-title{
+  font-size:12.5px;
+  font-weight:800;
+  color:var(--ink,#0F172A);
+  line-height:1.3;
+  margin:0;
+  display:-webkit-box;
+  -webkit-line-clamp:1;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+@media (min-width:1024px){
+  .notif-title{font-size:11.5px}
+}
+html.dark .notif-title{color:#F1F5F9}
+.notif-desc{
+  font-size:11px;
+  color:#64748B;
+  margin:4px 0 0;
+  line-height:1.4;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+@media (min-width:1024px){
+  .notif-desc{font-size:10.5px;margin-top:3px}
+}
+.notif-time{
+  font-size:10px;
+  color:#94A3B8;
+  margin-top:6px;
+  font-weight:600;
+}
+@media (min-width:1024px){
+  .notif-time{font-size:9.5px;margin-top:5px}
+}
+
+/* ============================================================
+   HERO BANNER — DESKTOP LAYOUT (2-column)
+   Image kiri + Teks kanan
+   ============================================================ */
+@media (min-width:1024px){
+  /* Card container — matikan padding-right 260px dari hero inspirasi */
+  .hero-card-v8[data-mode="banner"]{
+    padding:24px 28px 26px;
+    min-height:auto;
+  }
+  .hero-card-v8[data-mode="banner"] .hero-top-v8{
+    margin-bottom:18px;
+  }
+
+  /* Bungkus banner-mode jadi grid 2 kolom */
+  .hero-card-v8[data-mode="banner"] #heroBannerMode.hero-banner-mode{
+    display:grid !important;
+    grid-template-columns:280px minmax(0,1fr);
+    grid-template-rows:min-content min-content min-content;
+    column-gap:32px;
+    row-gap:0;
+    align-content:center;
+    align-items:start;
+    padding-right:0;
+  }
+
+  /* Image — kolom kiri, aspect 16:9, lebih kecil */
+  #heroBannerMode .hero-banner-img{
+    grid-row:1 / span 3;
+    grid-column:1;
+    align-self:center;
+    width:100%;
+    max-width:280px;
+    margin-bottom:0;
+    aspect-ratio:16/9;
+  }
+
+  #heroBannerMode .hero-banner-title{
+    grid-row:1;
+    grid-column:2;
+    font-size:26px;
+    line-height:1.25;
+    max-width:none;
+    padding-right:0;
+    margin:0 0 6px;
+  }
+
+  #heroBannerMode .hero-banner-meta{
+    grid-row:2;
+    grid-column:2;
+    margin:0 0 12px;
+  }
+
+  #heroBannerMode .hero-banner-cta{
+    grid-row:3;
+    grid-column:2;
+    margin-top:0;
+    justify-self:start;
+  }
+
+  /* Reorder grid supaya image span 2 rows */
+  #heroBannerMode .hero-banner-img{
+    grid-row:1 / span 3;
+    grid-column:1;
+  }
+  #heroBannerMode .hero-banner-title{
+    grid-row:1;
+  }
+  #heroBannerMode .hero-banner-meta{
+    grid-row:2;
+  }
+  #heroBannerMode .hero-banner-cta{
+    grid-row:3;
+  }
+}
 /* ============================================
    GUEST LANDING — First-time only
    ============================================ */
@@ -2864,3 +3484,127 @@ html.dark .ref-btn-sec{color:#E8EBF0}
   font-size:11px;color:#94A3B8;
   margin:0;line-height:1.5;text-align:center;
 }
+
+/* ============================================================
+   HERO ACTIONS — Tombol Beda Bentuk per Mode
+   ============================================================ */
+
+/* Tombol icon-only (mode inspirasi) */
+.hero-action-icon{
+  width:34px;height:34px;border-radius:11px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.65);
+  color:var(--acc-text);
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;font-family:inherit;
+  flex-shrink:0;
+}
+html.dark .hero-action-icon{
+  background:rgba(20,184,166,.12);
+  border-color:rgba(94,234,212,.16);
+}
+.hero-action-icon:hover{background:rgba(255,255,255,.6)}
+html.dark .hero-action-icon:hover{background:rgba(20,184,166,.2)}
+.hero-action-icon:active{transform:scale(.92)}
+.hero-action-icon svg{width:15px;height:15px}
+
+/* Tombol pill text+icon (mode banner) */
+.hero-action-pill{
+  height:34px;padding:0 12px;border-radius:999px;
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.9);
+  color:var(--acc-text);
+  display:inline-flex;align-items:center;gap:6px;
+  cursor:pointer;transition:all .15s;font-family:inherit;
+  font-size:11px;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 2px 6px -2px rgba(20,18,26,.08);
+  flex-shrink:0;
+}
+html.dark .hero-action-pill{
+  background:rgba(20,184,166,.18);
+  border-color:rgba(94,234,212,.28);
+  box-shadow:none;
+}
+.hero-action-pill:hover{background:rgba(255,255,255,.9)}
+html.dark .hero-action-pill:hover{background:rgba(20,184,166,.28)}
+.hero-action-pill:active{transform:scale(.95)}
+.hero-action-pill svg{width:13px;height:13px}
+.hero-action-pill span{
+  white-space:nowrap;
+}
+
+/* ============================================================
+   HERO PANEL — Animasi Transisi
+   ============================================================ */
+@keyframes heroExit{
+  from{opacity:1;transform:translateY(0)}
+  to{opacity:0;transform:translateY(-8px)}
+}
+@keyframes heroEnter{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.hero-panel.exiting{
+  animation:heroExit 180ms ease forwards;
+  pointer-events:none;
+}
+.hero-panel.entering{
+  animation:heroEnter 320ms cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* Hormati user yang set "hemat animasi" */
+html.no-anim .hero-panel.exiting,
+html.no-anim .hero-panel.entering{
+  animation:none;
+}
+/* ============================================
+   NOTIF PANEL — Header & Body
+   ============================================ */
+.notif-head{
+  padding:16px 18px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--border);
+  background:var(--card);
+  border-radius:var(--r-2xl) var(--r-2xl) 0 0;
+  flex-shrink:0;
+}
+.notif-head-icon{
+  width:40px;height:40px;border-radius:13px;
+  background:var(--acc-soft);color:var(--acc-text);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.notif-head-icon svg{width:18px;height:18px}
+.notif-head-text{flex:1;min-width:0}
+.notif-head-title{
+  font-size:15px;font-weight:900;line-height:1.15;
+  margin:0;color:var(--ink,#0F172A);letter-spacing:-.01em;
+}
+html.dark .notif-head-title{color:#F1F5F9}
+.notif-head-sub{
+  font-size:11px;font-weight:600;color:#64748B;
+  margin:3px 0 0;line-height:1.3;
+}
+html.dark .notif-head-sub{color:#94A3B8}
+.notif-head-close{
+  width:34px;height:34px;border-radius:11px;
+  background:#F1F5F9;border:0;cursor:pointer;
+  color:#475569;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .15s;
+}
+html.dark .notif-head-close{background:#282D36;color:#94A3B8}
+.notif-head-close:active{transform:scale(.92)}
+.notif-head-close svg{width:15px;height:15px}
+
+.notif-body{
+  flex:1;
+  overflow-y:auto;
+  padding:14px;
+  background:#F8FAFC;
+  display:flex;flex-direction:column;gap:10px;
+  border-radius:0 0 var(--r-2xl) var(--r-2xl);
+}
+html.dark .notif-body{background:#1A1E24}
