@@ -328,7 +328,7 @@ const TPL_ILLUS = {
 };
 const FONTS={modern:{n:'Modern',f:'Inter, Arial, sans-serif',w:'700'},elegan:{n:'Elegan',f:'"Playfair Display", Georgia, serif',w:'800'},hangat:{n:'Hangat',f:'Caveat, cursive',w:'700'}};
 const PANELS=['pNotif','pFb','pLogin','pParent','pAvatar'];
-const MODALS=['mApp','mPop','mIos','mStudio','mShare','mPostImage','mSchoolDetail'];
+const MODALS=['mApp','mPop','mIos','mStudio','mShare','mPostImage','mSchoolDetail','mNews'];
 const isMobile=matchMedia('(max-width:768px)').matches;
 const RENDER_SIG={};
 function sigChanged(key,val){let s;try{s=JSON.stringify(val);}catch(e){s=String(val);}if(RENDER_SIG[key]===s)return false;RENDER_SIG[key]=s;return true;}
@@ -1342,19 +1342,32 @@ function handleDeepLink(){
   try{
     const q=new URLSearchParams(location.search);
     if(!q.toString())return;
-    const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel'),school=q.get('school');
+    const page=q.get('page'),menu=q.get('menu'),studio=q.get('studio'),panel=q.get('panel'),school=q.get('school'),news=q.get('news');
     if(page)navPage(page);
     if(panel==='notif')openPanel('pNotif');
     else if(panel==='login')openPanel('pLogin');
     if (menu) {
-  const m = STATE.menus.find(x => x.judul === menu);
-  if (m) klikMenu(m.judul, { sameTab: true });
-  else toast('Menu tidak ditemukan: ' + menu, 'info');
-}
+      const m = STATE.menus.find(x => x.judul === menu);
+      if (m) klikMenu(m.judul, { sameTab: true });
+      else toast('Menu tidak ditemukan: ' + menu, 'info');
+    }
     if(studio&&TPL[studio])openStudio(studio,studioFieldsFromQuery(q));
     if(school){
       navPage('bagi');
       setTimeout(async ()=>{ await loadSchools(); showSchoolDetail(school); }, 600);
+    }
+    if(news){
+      const cfg = STATE.config || {};
+      const strip = s => String(s||'').replace(/\D/g,'');
+      if(cfg.banner_status === 'ON' && cfg.banner_body){
+        if(strip(cfg.banner_tanggal) === strip(news)){
+          setTimeout(()=>openNewsReader(), 400);
+        } else {
+          toast('Berita tidak ditemukan','info');
+        }
+      } else {
+        toast('Belum ada berita','info');
+      }
     }
     history.replaceState(CUR,'',location.pathname);
   }catch(e){}
@@ -1488,34 +1501,9 @@ function renderCarousel(){
   const box=$('caroBox');
   const slides=[];
   const retry=`onerror="if(this.dataset.r){this.style.display='none'}else{this.dataset.r='1';this.src=this.src}"`;
-  const wrapCls='snap-center shrink-0 w-[92%] md:w-full md:max-w-2xl';
+  const wrapCls='snap-center shrink-0 w-[92%] md:w-full';
 
-  // ---- Banner ----
-  if(c.banner_status === 'ON'){
-    const bannerTipe = { blue:'tipe-info', green:'tipe-pengumuman', red:'tipe-rose' }[c.banner_warna] || 'tipe-pengumuman';
-
-    if(c.banner_gambar){
-      slides.push(`<button onclick="klikBanner()" class="caro-slide ${bannerTipe} ${wrapCls}">
-        <div class="caro-img"><img src="${c.banner_gambar}" referrerpolicy="no-referrer" ${retry} alt="" loading="lazy" decoding="async"></div>
-        <div class="caro-body">
-          <span class="caro-chip">Pengumuman</span>
-          <p class="caro-title">${esc(c.banner_pesan||'')}</p>
-          <span class="caro-btn">${esc(c.banner_label||'Cek')} <i data-lucide="arrow-right"></i></span>
-        </div>
-      </button>`);
-    } else {
-      slides.push(`<button onclick="klikBanner()" class="caro-slide no-img ${bannerTipe} ${wrapCls}">
-        <div class="caro-body">
-          <div class="caro-icon"><i data-lucide="megaphone"></i></div>
-          <div class="caro-text">
-            <span class="caro-chip">Pengumuman</span>
-            <p class="caro-title">${esc(c.banner_pesan||'')}</p>
-            <span class="caro-btn">${esc(c.banner_label||'Cek')} <i data-lucide="arrow-right"></i></span>
-          </div>
-        </div>
-      </button>`);
-    }
-  }
+  // ---- Banner DIHAPUS: sudah pindah ke hero mode (banner_status) ----
 
   // ---- Notifikasi ----
   if(c.info_status !== 'OFF'){
@@ -1553,9 +1541,9 @@ function renderCarousel(){
   }
 
   box.classList.toggle('hidden', !slides.length);
-  $('caroTrack').innerHTML = slides.join('');
   const track = $('caroTrack');
-  if(track) track.classList.toggle('md:justify-center', slides.length === 1);
+  track.innerHTML = slides.join('');
+  track.setAttribute('data-count', String(slides.length));
   $('caroDots').innerHTML = slides.length > 1
     ? slides.map((_, i) => `<button onclick="caroGo(${i})" aria-label="Slide ${i+1}" class="caro-dot${i===0?' on':''}"></button>`).join('')
     : '';
@@ -5355,6 +5343,7 @@ function applyPortal(p){
   }
   const c=STATE.config||{};
   const qb=$('quoteHomeBox');if(qb)qb.classList.toggle('hidden',c.quote_status==='OFF');
+  renderHeroBanner();
   renderCarousel();
   renderFilterBar();
   renderLayanan($('inSearch').value);
@@ -5510,6 +5499,14 @@ async function renderNotif(){
     pengumuman: { ico: 'megaphone', cls: 'bg-teal-100 text-teal-600' },
     sistem: { ico: 'sparkles', cls: 'bg-violet-100 text-violet-600' }
   };
+  const _nHeadSub = $('notifHeadSub');
+  if(_nHeadSub){
+    const _n = STATE.notifs.length;
+    const _unread = STATE.notifs.filter(x => !readIds.has(x.id)).length;
+    _nHeadSub.textContent = _n === 0
+      ? 'Tidak ada notifikasi'
+      : (_unread > 0 ? _unread + ' belum dibaca · ' + _n + ' total' : _n + ' notifikasi');
+  }
   $('notifList').innerHTML = STATE.notifs.map(n => {
     const m = NOTIF_META[n.tipe] || NOTIF_META.info;
     const tgl = new Date(n.scheduled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -6840,6 +6837,234 @@ function initSpotlightCarousel(){
   icons();
 }
 
+/* ============================================================
+   HERO MODE — Batch 2 (Placeholder sampai Batch 4)
+   ============================================================ */
+let _heroSwitching = false;
+
+function heroLeftAction(){
+  if(_heroSwitching) return;
+  const hero = $('heroCard');
+  if(!hero) return;
+  const current = hero.dataset.mode || 'banner';
+  const next = current === 'banner' ? 'inspirasi' : 'banner';
+  switchHero(next);
+}
+
+function switchHero(next){
+  if(_heroSwitching) return;
+  _heroSwitching = true;
+
+  const hero = $('heroCard');
+  if(!hero){ _heroSwitching = false; return; }
+  const currentMode = hero.dataset.mode || 'banner';
+  if(currentMode === next){ _heroSwitching = false; return; }
+
+  const panelMap = { banner: 'heroBannerMode', inspirasi: 'heroInspirasiMode' };
+  const currentPanel = $(panelMap[currentMode]);
+  const nextPanel = $(panelMap[next]);
+  if(!currentPanel || !nextPanel){ _heroSwitching = false; return; }
+
+  // Update chip + tombol dulu sebelum animasi masuk
+  updateHeroChrome(next);
+
+  // Exit animasi pada panel lama
+  currentPanel.classList.add('exiting');
+
+  setTimeout(() => {
+    currentPanel.classList.remove('exiting');
+    currentPanel.classList.add('hidden');
+
+    // Show + enter animasi pada panel baru
+    nextPanel.classList.remove('hidden');
+    nextPanel.classList.add('entering');
+
+    // Update data-mode untuk layout desktop 2-kolom
+    hero.dataset.mode = next;
+
+    setTimeout(() => {
+      nextPanel.classList.remove('entering');
+      _heroSwitching = false;
+      icons();
+    }, 330);
+  }, 180);
+}
+
+function updateHeroChrome(mode){
+  const chip = $('heroChip');
+  const btn = $('btnHeroLeft');
+
+  if(chip){
+    chip.textContent = mode === 'banner'
+      ? (STATE.config?.banner_kategori || 'Kegiatan')
+      : 'Inspirasi Hari Ini';
+  }
+
+  if(btn){
+    if(mode === 'banner'){
+      // Di mode banner: tombol kiri = pill "✨ Inspirasi" untuk pindah ke inspirasi
+      btn.className = 'hero-action-pill';
+      btn.title = 'Tampilkan Inspirasi';
+      btn.innerHTML = '<i data-lucide="sparkles"></i><span>Inspirasi</span>';
+    } else {
+      // Di mode inspirasi: tombol kiri = icon refresh untuk balik ke banner
+      btn.className = 'hero-action-icon';
+      btn.title = 'Ganti tampilan';
+      btn.innerHTML = '<i data-lucide="refresh-cw"></i>';
+    }
+    icons();
+  }
+}
+
+function heroRightAction(){
+  const hero = $('heroCard');
+  const mode = hero?.dataset.mode || 'banner';
+  if(mode === 'banner'){
+    heroShare();
+  } else {
+    // Share quote ke studio
+    const q = STATE.quoteNow || {};
+    openStudio('quote', { text: q.kutipan || '', author: q.tokoh || '' });
+  }
+}
+
+// Backward compat — kalau ada yang masih panggil toggleHeroMode
+function toggleHeroMode(){ heroLeftAction(); }
+
+function heroShare(){
+  const c = STATE.config || {};
+  const judul = c.banner_judul || 'Guru Berbagi Selogiri';
+  const url = location.origin + location.pathname + (c.banner_tanggal ? '?news=' + c.banner_tanggal : '');
+  if(navigator.share){
+    navigator.share({ title: judul, url }).catch(()=>{});
+  } else {
+    copyToClipboard(url).then(ok => ok ? toast('Link disalin ✓') : toast('Gagal menyalin','error'));
+  }
+}
+
+function openNewsReader(){
+  const c = STATE.config || {};
+  if(!c.banner_body){ toast('Belum ada berita','info'); return; }
+  const fmtDate = d => {
+    if(!d) return '';
+    try{
+      return new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+    }catch(_){ return d; }
+  };
+  const readTime = Math.max(1, Math.ceil(((c.banner_body||'').split(/\s+/).length)/200)) + ' menit baca';
+  const initials = (c.banner_penulis||'Tim Kreatif').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+
+  const set = (id, val) => { const el=$(id); if(el) el.textContent = val || '—'; };
+  set('newsKategori', c.banner_kategori || 'Kegiatan');
+  set('newsTitle', c.banner_judul || 'Berita');
+  set('newsPenulis', c.banner_penulis || 'Tim Kreatif');
+  set('newsTanggal', fmtDate(c.banner_tanggal));
+  set('newsReadTime', readTime);
+  set('newsSignPenulis', c.banner_penulis || 'Tim Kreatif Selogiri');
+
+  const av = $('newsSignAvatar');
+  if(av) av.textContent = initials || 'TK';
+
+  const heroImg = $('newsHero');
+  if(heroImg && c.banner_gambar){
+    heroImg.innerHTML = `<img src="${esc(c.banner_gambar)}" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:2">`;
+  } else if(heroImg){
+    heroImg.innerHTML = `<i data-lucide="newspaper" class="w-20 h-20 text-white" style="opacity:.92;position:relative;z-index:2"></i>`;
+  }
+
+  const bodyEl = $('newsBody');
+  if(bodyEl){
+    const paras = (c.banner_body||'').split(/\n\s*\n/).filter(Boolean);
+    bodyEl.innerHTML = paras.map(p => `<p>${esc(p.trim())}</p>`).join('');
+  }
+
+  openModal('mNews');
+  icons();
+}
+
+function shareNewsLink(){
+  const c = STATE.config || {};
+  const url = location.origin + location.pathname + (c.banner_tanggal ? '?news=' + c.banner_tanggal : '');
+  const title = c.banner_judul || 'Guru Berbagi Selogiri';
+
+  if(navigator.share){
+    navigator.share({ title, url }).catch((err)=>{
+      // User cancel — jangan tampil toast
+      if(err && err.name === 'AbortError') return;
+      // Error lain (mis. tidak ada app) → fallback copy
+      copyToClipboard(url).then(ok => ok ? toast('Link disalin ✓') : toast('Gagal menyalin','error'));
+    });
+  } else {
+    copyToClipboard(url).then(ok => ok ? toast('Link disalin (Share tidak tersedia) ✓') : toast('Gagal menyalin','error'));
+  }
+}
+
+function copyNewsLink(){
+  const c = STATE.config || {};
+  const url = location.origin + location.pathname + (c.banner_tanggal ? '?news=' + c.banner_tanggal : '');
+  copyToClipboard(url).then(ok => ok ? toast('Link disalin ✓') : toast('Gagal menyalin','error'));
+}
+
+function renderHeroBanner(){
+  const c = STATE.config || {};
+  const hero = $('heroCard');
+  if(!hero) return;
+
+  const bannerActive = c.banner_status === 'ON' && (c.banner_judul || c.banner_body);
+
+  if(!bannerActive){
+    hero.dataset.mode = 'inspirasi';
+    const banner = $('heroBannerMode');
+    const insp = $('heroInspirasiMode');
+    if(banner) banner.classList.add('hidden');
+    if(insp) insp.classList.remove('hidden');
+    updateHeroChrome('inspirasi');
+    return;
+  }
+
+  hero.dataset.mode = 'banner';
+  const banner = $('heroBannerMode');
+  const insp = $('heroInspirasiMode');
+  if(banner) banner.classList.remove('hidden');
+  if(insp) insp.classList.add('hidden');
+  updateHeroChrome('banner');
+
+  const t = $('heroBannerTitle');
+  if(t) t.textContent = c.banner_judul || 'Berita';
+
+  const p = $('heroBannerPenulis');
+  if(p) p.textContent = c.banner_penulis || 'Tim Kreatif';
+
+  const d = $('heroBannerTanggal');
+  if(d){
+    if(c.banner_tanggal){
+      try{
+        d.textContent = new Date(c.banner_tanggal).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+      }catch(_){
+        d.textContent = c.banner_tanggal;
+      }
+    } else {
+      d.textContent = '—';
+    }
+  }
+
+  const r = $('heroBannerReadTime');
+  if(r){
+    const wc = (c.banner_body||'').split(/\s+/).filter(Boolean).length;
+    r.textContent = Math.max(1, Math.ceil(wc/200)) + ' mnt baca';
+  }
+
+  const img = $('heroBannerImg');
+  if(img){
+    if(c.banner_gambar){
+      img.innerHTML = `<img src="${esc(c.banner_gambar)}" alt="" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:2">`;
+    } else {
+      img.innerHTML = `<div class="hero-banner-img-fallback"><i data-lucide="sparkles"></i></div>`;
+    }
+  }
+
+  icons();
+}
 
 /* ---------- HOME WIDGETS: Agenda + Dokumen ---------- */
 function renderHomeWidgets(){
