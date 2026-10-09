@@ -4792,19 +4792,19 @@ function renderStudioResume(){
 
   const thumbHTML = last.thumb
     ? `<img src="${esc(last.thumb)}" alt="">`
-    : `<i data-lucide="${last.waMode ? 'camera' : 'palette'}" class="w-5 h-5 text-white/70"></i>`;
+    : `<i data-lucide="${last.waMode ? 'camera' : 'palette'}" class="w-5 h-5" style="color:var(--acc-text);opacity:.7"></i>`;
 
   wrap.innerHTML = `
     <div class="ws-resume">
       <div class="ws-resume-inner">
         <div class="ws-resume-preview">${thumbHTML}</div>
         <div class="flex-1 min-w-0">
-          <p class="text-[9px] font-black uppercase tracking-widest text-white/75 flex items-center gap-1">
+          <p class="text-[9px] font-black uppercase tracking-widest flex items-center gap-1" style="color:var(--acc-text);opacity:.75">
             <i data-lucide="history" class="w-3 h-3"></i>
             Lanjutkan
           </p>
-          <p class="text-[13px] font-extrabold text-white leading-tight mt-1 truncate">${esc(tplName)}</p>
-          <p class="text-[10px] text-white/75 mt-0.5">${timeAgo}</p>
+          <p class="text-[13px] font-extrabold leading-tight mt-1 truncate" style="color:var(--ink)">${esc(tplName)}</p>
+          <p class="text-[10px] mt-0.5" style="color:#64748B">${timeAgo}</p>
         </div>
         <button onclick="lanjutkanStudio()" aria-label="Lanjutkan" class="ws-resume-arrow">
           <i data-lucide="arrow-right" class="w-5 h-5"></i>
@@ -5433,7 +5433,7 @@ function parseHeroIllustrasiUrls() {
     .split(/\r?\n/)
     .map(s => s.trim())
     .filter(s => s && /^(https?:|data:)/i.test(s))
-    .slice(0, 5);
+    .slice(0, 12);
 }
 
 function renderHeroIllustration() {
@@ -6596,14 +6596,13 @@ function renderRailRecent(){
   }).join('');
   icons();
 }
-/* ---------- SPOTLIGHT KARYA ---------- */
+/* ---------- SPOTLIGHT KARYA (Carousel) ---------- */
 const SPOTLIGHT_TTL = 5*60*1000;
 const SPOTLIGHT_LS_KEY = 'gb_spotlight_cache_v1';
 let _spotlightCache = { data: null, ts: 0 };
-let _spotlightLastId = null;
 let _spotlightDetailCache = {};
 
-/* Hydrate dari localStorage saat script load — biar refresh langsung tampil */
+/* Hydrate dari localStorage saat script load */
 (function _hydrateSpotlight(){
   try{
     const raw = localStorage.getItem(SPOTLIGHT_LS_KEY);
@@ -6619,22 +6618,6 @@ function _spotlightTsFromId(id){
   const m = String(id||'').match(/(\d{13})/);
   return m ? parseInt(m[1]) : 0;
 }
-function _spotlightRelTime(id){
-  const t = _spotlightTsFromId(id);
-  if(!t) return '';
-  const diff = Date.now() - t;
-  if(diff < 0) return '';
-  const mnt = Math.floor(diff/60000);
-  const jam = Math.floor(diff/3600000);
-  const hr  = Math.floor(diff/86400000);
-  if(mnt < 1) return 'Baru saja';
-  if(mnt < 60) return mnt + ' mnt lalu';
-  if(jam < 24) return jam + ' jam lalu';
-  if(hr < 7) return hr + ' hari lalu';
-  const d = new Date(t);
-  const B = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  return d.getDate() + ' ' + B[d.getMonth()] + ' ' + d.getFullYear();
-}
 
 async function fetchSpotlight(force){
   const now = Date.now();
@@ -6643,7 +6626,7 @@ async function fetchSpotlight(force){
   }
   try{
     const { data, error } = await sbData.from('karya_guru')
-      .select('ID,"Judul Media","Nama Guru","Nama Sekolah","Jenis Konten","Mata Pelajaran","Link Media Luar",VIEWS')
+      .select('ID,"Judul Media","Nama Guru","Nama Sekolah","Jenis Konten","Mata Pelajaran","Fase/Kelas","Link Media Luar",VIEWS')
       .eq('Status','DISETUJUI')
       .order('ID',{ascending:false})
       .limit(10);
@@ -6664,7 +6647,8 @@ const SPOTLIGHT_META = {
   'Video':            { icon:'play',         grad:'linear-gradient(140deg,#E11D48 0%,#F43F5E 100%)', agrad:'linear-gradient(135deg,#E11D48,#F43F5E)' },
   'Kuis Online':      { icon:'check-circle', grad:'linear-gradient(140deg,#D97706 0%,#F59E0B 100%)', agrad:'linear-gradient(135deg,#D97706,#F59E0B)' },
   'Storybook':        { icon:'book',         grad:'linear-gradient(140deg,#C026D3 0%,#E879F9 100%)', agrad:'linear-gradient(135deg,#C026D3,#E879F9)' },
-  'Ice Breaking':     { icon:'snowflake',    grad:'linear-gradient(140deg,#0891B2 0%,#22D3EE 100%)', agrad:'linear-gradient(135deg,#0891B2,#22D3EE)' },
+  'Materi Interaktif':{ icon:'presentation', grad:'linear-gradient(140deg,#0891B2 0%,#22D3EE 100%)', agrad:'linear-gradient(135deg,#0891B2,#22D3EE)' },
+  'Ice Breaking':     { icon:'snowflake',    grad:'linear-gradient(140deg,#0284C7 0%,#38BDF8 100%)', agrad:'linear-gradient(135deg,#0284C7,#38BDF8)' },
   '_default':         { icon:'monitor',      grad:'linear-gradient(140deg,#475569 0%,#64748B 100%)', agrad:'linear-gradient(135deg,#475569,#64748B)' }
 };
 function _spotlightMeta(jenis){
@@ -6673,33 +6657,34 @@ function _spotlightMeta(jenis){
 function _spotlightInitials(nama){
   return (nama||'G').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'G';
 }
-const _spotDetailCache = {};
+function _spotlightJenjang(fase){
+  if(!fase) return '';
+  const m = String(fase).match(/Fase\s+([A-Z])/i);
+  return m ? m[1].toUpperCase() : String(fase).slice(0,6);
+}
 
 async function bukaSpotlight(id){
   if(!id) return;
   toast('Memuat karya…','info');
-
-  if(!_spotDetailCache[id]){
+  if(!_spotlightDetailCache[id]){
     try{
       const { data, error } = await sbData.from('karya_guru')
         .select('"Kode HTML/Canvas","Link Media Luar","Judul Media"')
         .eq('ID', id)
         .single();
       if(error) throw error;
-      _spotDetailCache[id] = data;
+      _spotlightDetailCache[id] = data;
     }catch(e){
       console.warn('[bukaSpotlight]', e);
       toast('Gagal memuat karya','error');
       return;
     }
   }
-
-  const d = _spotDetailCache[id];
+  const d = _spotlightDetailCache[id];
   const html = (d['Kode HTML/Canvas']||'').trim();
   const link = (d['Link Media Luar']||'').trim();
   const judul = d['Judul Media']||'Karya';
 
-  // Track VIEWS (dedupe per sesi)
   try{
     const seen = JSON.parse(sessionStorage.getItem('gb_spot_viewed')||'[]');
     if(!seen.includes(id)){
@@ -6712,16 +6697,13 @@ async function bukaSpotlight(id){
   }catch(_){}
 
   const frame = $('mAppFrame');
-  // Reset dulu (biar bisa ganti sumber clean)
   frame.removeAttribute('src');
   frame.removeAttribute('srcdoc');
 
   if(html.length > 10){
-    // HTML karya → sandbox (scripts allowed, same-origin blocked untuk keamanan)
     frame.setAttribute('sandbox','allow-scripts allow-popups allow-forms allow-modals allow-top-navigation-by-user-activation');
     frame.srcdoc = html;
   } else if(link){
-    // Link eksternal → lepas sandbox (beberapa situs butuh cookies)
     frame.removeAttribute('sandbox');
     let u = link;
     if(u.includes('drive.google')) u = u.replace('/view','/preview');
@@ -6732,7 +6714,6 @@ async function bukaSpotlight(id){
     toast('Karya tidak punya konten','info');
     return;
   }
-
   $('mAppTitle').textContent = judul;
   openModal('mApp');
 }
@@ -6742,62 +6723,112 @@ function bukaGaleriMedia(){
 }
 
 async function renderSpotlight(){
-  const box = $('spotlightBox');
-  if(!box){ console.warn('[spotlight] #spotlightBox tidak ada di DOM'); return; }
+  const section = $('spotlightSection');
+  const track = $('spotTrack');
+  if(!section || !track){ console.warn('[spotlight] DOM tidak ada'); return; }
+
   try{
-  const list = await fetchSpotlight(false);
-  if(!list.length){
-    box.classList.add('hidden');
-    box.innerHTML = '';
-    return;
-  }
-  let pick;
-  if(list.length > 1){
-    let tries = 0;
-    do {
-      pick = list[Math.floor(Math.random()*list.length)];
-      tries++;
-    } while(pick.ID === _spotlightLastId && tries < 5);
-  } else {
-    pick = list[0];
-  }
-  _spotlightLastId = pick.ID;
+    const list = await fetchSpotlight(false);
+    if(!list.length){
+      section.classList.add('hidden');
+      return;
+    }
 
-  const meta = _spotlightMeta(pick['Jenis Konten']);
-  const views = parseInt(pick.VIEWS)||0;
-  const initials = _spotlightInitials(pick['Nama Guru']);
-  const relTime = _spotlightRelTime(pick.ID);
-
-  box.classList.remove('hidden');
-  box.innerHTML = `
-    <div class="w-head" style="margin-bottom:10px">
-      <div class="w-title"><i data-lucide="star"></i> Spotlight Karya</div>
-      <button class="sec-link" onclick="bukaGaleriMedia()" style="font-size:10px">Lihat semua <i data-lucide="arrow-right"></i></button>
-    </div>
-    <div class="sp-card" onclick="bukaSpotlight('${esc(pick.ID)}')" role="button" tabindex="0">
-      <div class="sp-thumb" style="background:${meta.grad}">
-        <span class="sp-thumb-chip">${esc(pick['Jenis Konten']||'Karya')}</span>
-        <span class="sp-thumb-views"><i data-lucide="eye"></i><span>${views}</span></span>
-        <span class="sp-thumb-label"><i data-lucide="star"></i> Spotlight</span>
-        <div class="sp-thumb-icon"><i data-lucide="${meta.icon}"></i></div>
-      </div>
-      <div class="sp-body">
-        <p class="sp-title">${esc(pick['Judul Media']||'Tanpa Judul')}</p>
-        <div class="sp-foot">
-          <div class="sp-avatar" style="background:${meta.agrad}">${esc(initials)}</div>
-          <div class="sp-author-info">
-            <div class="sp-author-name">${esc(pick['Nama Guru']||'Guru')}</div>
-            <div class="sp-author-sekolah">${esc(pick['Nama Sekolah']||'')}${relTime?' <span class="sp-time-sep">·</span> <span class="sp-time">'+esc(relTime)+'</span>':''}</div>
+    track.innerHTML = list.map(item => {
+      const meta = _spotlightMeta(item['Jenis Konten']);
+      const views = parseInt(item.VIEWS)||0;
+      const initials = _spotlightInitials(item['Nama Guru']);
+      const mapel = item['Mata Pelajaran']||'';
+      const jenjang = _spotlightJenjang(item['Fase/Kelas']);
+      const jenis = item['Jenis Konten']||'Karya';
+      return `
+        <div class="spot-slide">
+          <div class="spot-card" onclick="bukaSpotlight('${esc(item.ID)}')" role="button" tabindex="0">
+            <div class="spot-thumb" style="background:${meta.grad}">
+              <span class="spot-chip">${esc(jenis)}</span>
+              <span class="spot-views"><i data-lucide="eye"></i>${views}</span>
+              <div class="spot-thumb-icon"><i data-lucide="${meta.icon}"></i></div>
+            </div>
+            <div class="spot-body">
+              <p class="spot-title">${esc(item['Judul Media']||'Tanpa Judul')}</p>
+              <div class="spot-chips">
+                <span class="spot-chip-mapel">${esc(mapel)}</span>
+                ${jenjang ? `<span class="spot-chip-jenjang">${esc(jenjang)}</span>` : ''}
+              </div>
+              <div class="spot-foot">
+                <div class="spot-avatar" style="background:${meta.agrad}">${esc(initials)}</div>
+                <div class="spot-author"><b>${esc(item['Nama Guru']||'Guru')}</b></div>
+              </div>
+            </div>
           </div>
-          <div class="sp-arrow"><i data-lucide="arrow-right"></i></div>
-        </div>
-      </div>
-    </div>`;
-  icons();
+        </div>`;
+    }).join('');
+
+    section.classList.remove('hidden');
+    icons();
+    initSpotlightCarousel();
   }catch(e){
     console.warn('[spotlight] render gagal:', e);
   }
 }
+
+function initSpotlightCarousel(){
+  const track = $('spotTrack');
+  if(!track) return;
+  const slides = track.querySelectorAll('.spot-slide');
+  const btnPrev = $('spPrev');
+  const btnNext = $('spNext');
+  const currEl = $('spCurr');
+  const totalEl = $('spTotal');
+
+  if(totalEl) totalEl.textContent = slides.length;
+  if(currEl) currEl.textContent = '1';
+
+  track.scrollLeft = 0;
+
+  if(!btnPrev || !btnNext || !currEl) return;
+
+  const getIdx = () => {
+    const sl = track.scrollLeft;
+    let idx = 0, min = Infinity;
+    slides.forEach((s, i) => {
+      const d = Math.abs(s.offsetLeft - track.offsetLeft - sl);
+      if(d < min){ min = d; idx = i; }
+    });
+    return idx;
+  };
+  const update = () => {
+    const i = getIdx();
+    currEl.textContent = i + 1;
+    btnPrev.disabled = i === 0;
+    btnNext.disabled = i === slides.length - 1;
+  };
+  const go = (i) => {
+    const s = slides[i]; if(!s) return;
+    track.scrollTo({ left: s.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+  };
+
+  const newPrev = btnPrev.cloneNode(true);
+  const newNext = btnNext.cloneNode(true);
+  btnPrev.parentNode.replaceChild(newPrev, btnPrev);
+  btnNext.parentNode.replaceChild(newNext, btnNext);
+
+  newPrev.addEventListener('click', () => go(getIdx() - 1));
+  newNext.addEventListener('click', () => go(getIdx() + 1));
+
+  if(!track._spScrollWired){
+    let tick = false;
+    track.addEventListener('scroll', () => {
+      if(tick) return; tick = true;
+      requestAnimationFrame(() => { tick = false; update(); });
+    }, { passive: true });
+    track._spScrollWired = true;
+  }
+
+  update();
+  icons();
+}
+
 
 /* ---------- HOME WIDGETS: Agenda + Dokumen ---------- */
 function renderHomeWidgets(){
