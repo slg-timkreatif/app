@@ -327,7 +327,7 @@ const TPL_ILLUS = {
   `)
 };
 const FONTS={modern:{n:'Modern',f:'Inter, Arial, sans-serif',w:'700'},elegan:{n:'Elegan',f:'"Playfair Display", Georgia, serif',w:'800'},hangat:{n:'Hangat',f:'Caveat, cursive',w:'700'}};
-const PANELS=['pNotif','pFb','pLogin','pParent'];
+const PANELS=['pNotif','pFb','pLogin','pParent','pAvatar'];
 const MODALS=['mApp','mPop','mIos','mStudio','mShare','mPostImage','mSchoolDetail'];
 const isMobile=matchMedia('(max-width:768px)').matches;
 const RENDER_SIG={};
@@ -1877,23 +1877,47 @@ function clearRecentActivity(){
    QUICK LIST
    ============================================================ */
 function renderQuick(){
-  if(!STATE.profile)return;
-  const all=STATE.menus.filter(m=>visible(m)&&!m.sub_menu_dari);
-  const favs=all.filter(m=>STATE.favs.has(m.judul));
-  const others=all.filter(m=>!STATE.favs.has(m.judul));
+  const isGuest = !STATE.profile;
+  const all = STATE.menus.filter(m=>visible(m) && !m.sub_menu_dari);
+
+  // Guest: filter hanya menu publik + menu yang butuh login (untuk teaser)
+  const publicMenus = isGuest
+    ? all.filter(m=>m.akses_role==='all' || m.akses_role==='tamu' || !m.akses_role)
+    : all;
+  const lockedMenus = isGuest
+    ? all.filter(m=>m.akses_role==='Guru' || m.akses_role==='Kepala Sekolah')
+    : [];
+
+  const favs = publicMenus.filter(m=>STATE.favs.has(m.judul));
+  const others = publicMenus.filter(m=>!STATE.favs.has(m.judul));
   const MAX_QUICK = window.innerWidth >= 1024 ? 8 : 6;
-  const list=[...favs,...others].slice(0, MAX_QUICK);
-  const view=localStorage.getItem('gb_quick_view')||'grid';
+
+  // Guest: sisipkan 2 menu terkunci sebagai teaser di akhir
+  const lockedPreview = isGuest ? lockedMenus.slice(0,2) : [];
+  const publicSlots = MAX_QUICK - lockedPreview.length;
+  const list = [...favs, ...others].slice(0, publicSlots);
+
+  // Gabung: publik + locked (locked ditandai)
+  const combined = [
+    ...list.map(m=>({m, locked:false})),
+    ...lockedPreview.map(m=>({m, locked:true}))
+  ];
+
+  const view = localStorage.getItem('gb_quick_view')||'grid';
 
   if(view==='list'){
     $('quickList').className='space-y-1.5 quick-list-view';
-    $('quickList').innerHTML = list.map(m=>{
-      const wrap=menuIconWrapClass(m.warna);
-      const isFav=STATE.favs.has(m.judul);
-      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="card px-3.5 py-2.5 flex items-center gap-3 active:scale-[.98] transition">
+    $('quickList').innerHTML = combined.map(({m, locked})=>{
+      const wrap = menuIconWrapClass(m.warna);
+      const isFav = STATE.favs.has(m.judul);
+      const onclick = locked
+        ? `event.preventDefault();openPanel('pAvatar')`
+        : `event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')`;
+      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="${onclick}" class="card px-3.5 py-2.5 flex items-center gap-3 active:scale-[.98] transition"${locked?' style="opacity:.75"':''}>
         <span class="${wrap} w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">${renderMenuIcon(m.icon,'w-4 h-4')}</span>
         <span class="flex-1 min-w-0 text-[12px] font-bold text-slate-700 truncate">${m.judul}</span>
-        ${isFav?'<i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-current shrink-0"></i>':''}
+        ${locked ? '<span class="quick-list-lock"><i data-lucide="lock"></i></span>' : ''}
+        ${isFav && !locked ? '<i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-current shrink-0"></i>' : ''}
         <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
       </a>`;
     }).join('');
@@ -1906,17 +1930,37 @@ function renderQuick(){
       violet:'q-violet', fuchsia:'q-violet', purple:'q-violet',
       rose:'q-rose', red:'q-rose'
     };
-    $('quickList').innerHTML = list.map(m=>{
+    $('quickList').innerHTML = combined.map(({m, locked})=>{
       const tileCls = TILE_COLOR[m.warna] || 'q-teal';
-      const isFav=STATE.favs.has(m.judul);
+      const isFav = STATE.favs.has(m.judul);
       const iconWrap = menuIconWrapClass(m.warna);
-      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')" class="q-tile ${tileCls}">
-        ${isFav?'<i data-lucide="star" class="w-3 h-3 absolute top-2 right-2" style="color:inherit;opacity:.7"></i>':''}
+      const onclick = locked
+        ? `event.preventDefault();openPanel('pAvatar')`
+        : `event.preventDefault();klikMenu('${m.judul.replace(/'/g," \\'")}')`;
+      return `<a href="${dl('?menu='+encodeURIComponent(m.judul))}" data-judul="${esc(m.judul)}" onclick="${onclick}" class="q-tile ${tileCls}${locked?' locked':''}">
+        ${locked ? '<span class="q-lock"><i data-lucide="lock"></i></span>' : ''}
+        ${isFav && !locked ? '<i data-lucide="star" class="w-3 h-3 absolute top-2 right-2" style="color:inherit;opacity:.7"></i>' : ''}
         <span class="${iconWrap} q-tile-icon-fit">${renderMenuIcon(m.icon,'w-5 h-5')}</span>
         <span class="q-tile-label">${esc(m.judul)}</span>
       </a>`;
     }).join('');
   }
+
+  // Hint text bawah pintasan cepat (guest only)
+  const hintId = 'quickHint';
+  let hint = $(hintId);
+  if(isGuest && lockedPreview.length){
+    if(!hint){
+      hint = document.createElement('p');
+      hint.id = hintId;
+      hint.className = 'quick-hint';
+      $('quickList').parentElement.appendChild(hint);
+    }
+    hint.innerHTML = '<i data-lucide="lock"></i><span>Menu bertanda kunci butuh login</span>';
+  } else if(hint){
+    hint.remove();
+  }
+
   icons();
 }
 
@@ -3479,6 +3523,7 @@ if (!def) {
   
   $('stTitle').textContent = def.n;
 
+  updateStudioGuestBanner();
   buildControls();
   openModal('mStudio');
   renderStudio();
@@ -3683,6 +3728,7 @@ async function renderStudio(){
 
   if(st.waMode){
     await renderStudioWA(ctx, W, H, s);
+    drawGuestWatermark(ctx, W, H, s);
     paintCaptionBox();
     return;
   }
@@ -3827,6 +3873,9 @@ if (hd && STATE.profile) {
     ctx.font=`700 ${18*s}px Inter, sans-serif`;
     ctx.fillText(sNama, W-42*s-sPad, sY+sSize+26*s);
   }
+
+  // Watermark untuk guest
+  drawGuestWatermark(ctx, W, H, s);
 }
 
 /* ============================================================
@@ -4345,6 +4394,7 @@ function openKarya(i){
   if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}
   const def = k.waMode ? TPL_WA[k.tpl] : TPL[k.tpl];
   $('stTitle').textContent=def.n;
+  updateStudioGuestBanner();
   buildControls();
   openModal('mStudio');
   renderStudio();
@@ -4903,6 +4953,8 @@ $('formLogin').addEventListener('submit',async e=>{
     renderAuthUI();
     setSapaan();
     resetRenderSig();
+    clearTimeout(_softPromptTimer);
+    dismissSoftPrompt();
     await muatSemuaData(true);
     recordLastSync();
     toast('Selamat datang, '+namaPanggil(res.profile.nama)+'!');
@@ -4936,6 +4988,7 @@ $('formLogin').addEventListener('submit',async e=>{
 function doLogout(){
   localStorage.removeItem('gb_token');
   localStorage.removeItem('gb_profile');
+  localStorage.removeItem('gb_soft_prompt_snooze');
   location.reload();
 }
 
@@ -4944,9 +4997,9 @@ function doLogout(){
    ============================================================ */
 function renderAuthUI(){
   const on=!!STATE.profile;
-  const bm=$('btnMasuk');if(bm)bm.classList.toggle('hidden',on);
-  const ac=$('authCard');if(ac)ac.classList.toggle('hidden',on);
-  ['quickBox','bellHdr','sideNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
+  // quickBox: SELALU tampil (guest + login) — guest mode
+  // bellHdr, sideNotif: hanya login
+  ['bellHdr','sideNotif'].forEach(id=>{const el=$(id);if(el)el.classList.toggle('hidden',!on);});
   if(on){
     const p=STATE.profile;const s=STATE.sosmed||{};
     const gid=guruId();
@@ -5905,6 +5958,8 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
 
   renderAuthUI();
+  initGuestLanding();
+  initSoftPrompt();
 
   ['hdrAvatarBtn','hdrName','hdrSub','hdrMetaRow','hdrTitle'].forEach(id=>{
     const e=$(id); if(e) e.style.removeProperty('display');
@@ -6088,6 +6143,240 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
     _rzT = setTimeout(()=>{ try{renderQuick();}catch(_){} }, 250);
   });
   })();
+
+/* ============================================================
+   GUEST LANDING — first-time only
+   ============================================================ */
+function initGuestLanding(){
+  const el = $('guestLanding');
+  if(!el) return;
+
+  // Guru sudah login → tidak perlu landing
+  if(STATE.profile){ el.remove(); return; }
+
+  // Guest sudah pernah lihat → skip
+  try{
+    if(localStorage.getItem('gb_guest_landing_seen')==='1'){ el.remove(); return; }
+  }catch(_){}
+
+  // Show
+  el.classList.add('show');
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  icons();
+
+  // Fetch stats di background (non-blocking)
+  loadGuestStats();
+}
+
+function closeGuestLanding(){
+  const el = $('guestLanding');
+  if(!el) return;
+  el.classList.add('closing');
+  try{ localStorage.setItem('gb_guest_landing_seen','1'); }catch(_){}
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  setTimeout(()=>{
+    el.classList.remove('show');
+    el.remove();
+  }, 400);
+}
+
+async function loadGuestStats(){
+  const set = (id, v) => {
+    const el = $(id);
+    if(el && v != null && v !== '') el.textContent = v;
+  };
+  try{
+    const [karyaRes, sekolahRes] = await Promise.allSettled([
+      sbData.rpc('stats_karya'),
+      sb.from('creative_schools').select('*',{count:'exact',head:true}).eq('is_active', true)
+    ]);
+
+    if(karyaRes.status==='fulfilled' && karyaRes.value && karyaRes.value.data){
+      const st = karyaRes.value.data;
+      set('glGuru', st.guru);
+      set('glKarya', fmtStatNumber(st.total));
+    }
+    if(sekolahRes.status==='fulfilled' && sekolahRes.value && sekolahRes.value.count != null){
+      set('glSekolah', sekolahRes.value.count);
+    }
+
+    // Fallback kalau ada yang kosong
+    const g = $('glGuru');    if(g && g.textContent==='—') g.textContent='260';
+    const s = $('glSekolah'); if(s && s.textContent==='—') s.textContent='30';
+    const k = $('glKarya');   if(k && k.textContent==='—') k.textContent='1.2K+';
+  }catch(e){
+    console.warn('[guestStats]', e);
+    const g = $('glGuru');    if(g) g.textContent='260';
+    const s = $('glSekolah'); if(s) s.textContent='30';
+    const k = $('glKarya');   if(k) k.textContent='1.2K+';
+  }
+}
+
+function fmtStatNumber(n){
+  n = parseInt(n)||0;
+  if(n >= 1000) return (n/1000).toFixed(n>=10000?0:1).replace('.',',') + 'K+';
+  return String(n);
+}
+
+/* ============================================================
+   GUEST MODE — Avatar sheet + fitur demo
+   ============================================================ */
+function openAvatarOrProfile(){
+  if(STATE.profile){
+    navPage('profile');
+  } else {
+    openPanel('pAvatar');
+  }
+}
+
+function bukalLoginDariAvatar(){
+  closeInstant('pAvatar');
+  CUR.panel = null;
+  setTimeout(()=>openPanel('pLogin'), 250);
+}
+
+function bukaFiturDemo(){
+  closeInstant('pAvatar');
+  CUR.panel = null;
+  try{ localStorage.removeItem('gb_onboarded'); }catch(_){}
+  setTimeout(()=>{
+    if(typeof showOnboard==='function') showOnboard();
+  }, 300);
+}
+
+/* ============================================================
+   GUEST MODE — Watermark di Studio
+   ============================================================ */
+function drawGuestWatermark(ctx, W, H, s){
+  if(STATE.profile) return; // Skip kalau login
+  ctx.save();
+  const fontSize = Math.min(W, H) * 0.10;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.translate(W/2, H/2);
+  ctx.rotate(-Math.PI/6);
+
+  // Teks utama
+  ctx.font = `900 ${fontSize}px Inter, sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.14)';
+  ctx.fillText('GURU BERBAGI', 0, -fontSize * 0.55);
+
+  // Sub-teks
+  ctx.font = `700 ${fontSize * 0.42}px Inter, sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  ctx.fillText('PORTAL GTK SELOGIRI', 0, fontSize * 0.68);
+
+  ctx.restore();
+}
+
+function updateStudioGuestBanner(){
+  const b = $('stGuestBanner');
+  if(!b) return;
+  b.classList.toggle('hidden', !!STATE.profile);
+  icons();
+}
+
+/* ============================================================
+   GUEST MODE — Soft Prompt (3 menit)
+   ============================================================ */
+var SOFT_PROMPT_DELAY_MS = 3 * 60 * 1000; // 3 menit
+var SOFT_PROMPT_SNOOZE_MS = 60 * 60 * 1000; // snooze 1 jam setelah dismiss
+var _softPromptTimer = null;
+
+function initSoftPrompt(){
+  if(STATE.profile) return; // Skip kalau login
+
+  // Kalau sudah pernah dismiss, cek snooze
+  try{
+    const snoozedUntil = parseInt(localStorage.getItem('gb_soft_prompt_snooze')||'0', 10);
+    if(snoozedUntil && Date.now() < snoozedUntil) return;
+  }catch(_){}
+
+  clearTimeout(_softPromptTimer);
+  _softPromptTimer = setTimeout(showSoftPrompt, SOFT_PROMPT_DELAY_MS);
+}
+
+function showSoftPrompt(){
+  if(STATE.profile) return; // Login setelah timer jalan → skip
+  if(CUR.panel || CUR.modal) return; // Jangan muncul bareng panel/modal
+
+  const el = $('softPrompt');
+  if(!el) return;
+  el.classList.add('show');
+  icons();
+
+  // Auto-dismiss setelah 12 detik kalau user tidak interaksi
+  clearTimeout(_softPromptTimer);
+  _softPromptTimer = setTimeout(()=>{
+    if($('softPrompt')?.classList.contains('show')) dismissSoftPrompt();
+  }, 12000);
+}
+
+function dismissSoftPrompt(){
+  const el = $('softPrompt');
+  if(!el) return;
+  el.classList.remove('show');
+  try{
+    localStorage.setItem('gb_soft_prompt_snooze', String(Date.now() + SOFT_PROMPT_SNOOZE_MS));
+  }catch(_){}
+  clearTimeout(_softPromptTimer);
+}
+
+function softPromptLogin(){
+  dismissSoftPrompt();
+  setTimeout(()=>openPanel('pAvatar'), 250);
+}
+
+/* ============================================================
+   REFERRAL — Ajak Teman
+   ============================================================ */
+function bukaReferral(){
+  // Tutup sheet avatar kalau terbuka
+  closeInstant('pAvatar');
+  CUR.panel = null;
+  setTimeout(()=>{
+    openModal('mReferral');
+    icons();
+  }, 250);
+}
+
+function _referralData(){
+  const url = 'https://slg-timkreatif.github.io/app/';
+  const text = 'Ayo coba portal guru Selogiri! Ada studio kreatif, jurnal, dan ribuan karya siap pakai. Gratis.';
+  return { url, text };
+}
+
+function referralWA(){
+  const { url, text } = _referralData();
+  const full = text + '\n\n' + url;
+  window.open('https://wa.me/?text=' + encodeURIComponent(full), '_blank', 'noopener');
+  tutupModal('mReferral');
+  toast('Terima kasih sudah berbagi! 🙌','success');
+}
+
+async function referralCopy(){
+  const { url } = _referralData();
+  const ok = await copyToClipboard(url);
+  if(ok) toast('Link disalin ✓');
+  else toast('Gagal menyalin, coba lagi','error');
+}
+
+async function referralNative(){
+  const { url, text } = _referralData();
+  if(navigator.share){
+    try{
+      await navigator.share({ title:'Guru Berbagi Selogiri', text, url });
+      tutupModal('mReferral');
+      toast('Terima kasih sudah berbagi! 🙌','success');
+    }catch(e){
+      if(e.name !== 'AbortError') console.warn('[referralNative]', e);
+    }
+  } else {
+    referralCopy();
+  }
+}
 
 /* ============================================================
    DESKTOP PORTAL — v4.99
@@ -6514,7 +6803,14 @@ async function renderSpotlight(){
 function renderHomeWidgets(){
   const wrap = $('homeWidgets');
   if(!wrap) return;
-  wrap.style.display='';
+
+  // Guest: sembunyikan widget agenda + dokumen (butuh login)
+  if(!STATE.profile){
+    wrap.style.display = 'none';
+    return;
+  }
+
+  wrap.style.display = '';
   const hasAgenda = (STATE.agenda||[]).length > 0;
   const hasDocs = (STATE.docs||[]).length > 0;
 
