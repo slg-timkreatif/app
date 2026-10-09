@@ -6808,14 +6808,17 @@ function initSpotlightCarousel(){
     track.scrollTo({ left: s.offsetLeft - track.offsetLeft, behavior: 'smooth' });
   };
 
-  const newPrev = btnPrev.cloneNode(true);
-  const newNext = btnNext.cloneNode(true);
-  btnPrev.parentNode.replaceChild(newPrev, btnPrev);
-  btnNext.parentNode.replaceChild(newNext, btnNext);
+  // Wire listener SEKALI saja pakai flag di element (bukan clone)
+  if(!btnPrev._spWired){
+    btnPrev.addEventListener('click', () => go(getIdx() - 1));
+    btnPrev._spWired = true;
+  }
+  if(!btnNext._spWired){
+    btnNext.addEventListener('click', () => go(getIdx() + 1));
+    btnNext._spWired = true;
+  }
 
-  newPrev.addEventListener('click', () => go(getIdx() - 1));
-  newNext.addEventListener('click', () => go(getIdx() + 1));
-
+  // Scroll listener — sekali saja
   if(!track._spScrollWired){
     let tick = false;
     track.addEventListener('scroll', () => {
