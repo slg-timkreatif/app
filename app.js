@@ -982,8 +982,8 @@ async function muatCuaca(){
     // Default koordinat: Selogiri, Wonogiri
     let lat=-7.79, lon=110.85;
 
-    // Coba geolocation (butuh izin user)
-    if(navigator.geolocation){
+    // GPS presisi hanya untuk user login. Guest → langsung default Selogiri.
+    if(STATE.profile && navigator.geolocation){
       try{
         const pos=await new Promise((res,rej)=>{
           navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000,maximumAge:3600000});
