@@ -2234,7 +2234,8 @@ html.dark .spot-head-sub{color:#94A3B8}
 .spot-track{
   display:flex;gap:10px;
   overflow-x:auto;
-  scroll-snap-type:x mandatory;
+  scroll-snap-type:x proximity;
+  scroll-behavior:smooth;
   scrollbar-width:none;-ms-overflow-style:none;
   padding:2px 20px 10px;
   scroll-padding-left:20px;
