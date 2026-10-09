@@ -472,33 +472,72 @@
         <div class="grid lg:grid-cols-2 gap-4">
           <div class="card p-5 space-y-3">
             <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
-              <i data-lucide="megaphone" class="w-4 h-4 acc-text"></i> Banner
+              <i data-lucide="newspaper" class="w-4 h-4 acc-text"></i> Banner / Berita
             </p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              Banner tampil di <b>hero beranda</b> (menggantikan quote). User klik → modal baca lengkap.
+            </p>
+
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="lbl">Warna</label>
-                <select id="iBanWarna" class="inp acc-ring">
-                  <option value="blue">Biru</option>
-                  <option value="green">Teal</option>
-                  <option value="red">Merah</option>
+                <label class="lbl">Kategori</label>
+                <select id="iBanKategori" class="inp acc-ring">
+                  <option value="Kegiatan">Kegiatan</option>
+                  <option value="Pengumuman">Pengumuman</option>
+                  <option value="Prestasi">Prestasi</option>
+                  <option value="Artikel">Artikel</option>
+                  <option value="Info">Info</option>
                 </select>
               </div>
               <div>
-                <label class="lbl">Label Tombol</label>
-                <input id="iBanLabel" class="inp acc-ring" placeholder="Cek Sekarang">
+                <label class="lbl">Tanggal Publish</label>
+                <input id="iBanTanggal" type="date" class="inp acc-ring">
               </div>
             </div>
+
             <div>
-              <label class="lbl">Pesan</label>
-              <textarea id="iBanPesan" rows="3" class="inp acc-ring"></textarea>
+              <label class="lbl">Judul Berita</label>
+              <input id="iBanJudul" class="inp acc-ring" placeholder="Workshop AI untuk Guru Selogiri" maxlength="80">
             </div>
+
             <div>
-              <label class="lbl">Link (awali ext: untuk luar)</label>
-              <input id="iBanLink" class="inp acc-ring" placeholder="ext:https://…">
+              <label class="lbl">Body Berita</label>
+              <textarea id="iBanBody" rows="6" class="inp acc-ring" placeholder="Isi berita lengkap…"></textarea>
+              <p class="text-[10px] text-slate-400 mt-1">Pisahkan paragraf dengan <b>baris kosong</b>. Maks 800 karakter.</p>
             </div>
+
             <div>
-              <label class="lbl">URL Gambar</label>
+              <label class="lbl">Penulis / Sumber</label>
+              <input id="iBanPenulis" class="inp acc-ring" placeholder="Tim Kreatif Selogiri" maxlength="40">
+            </div>
+
+            <div>
+              <label class="lbl">Hero Image (rasio 16:9)</label>
               <input id="iBanGambar" class="inp acc-ring" placeholder="https://…">
+              <p class="text-[10px] text-slate-400 mt-1">Opsional. Kalau kosong → tampil ilustrasi default.</p>
+            </div>
+
+            <div class="rounded-xl p-3 bg-slate-50 border border-slate-200 mt-2">
+              <p class="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
+                <i data-lucide="history" class="w-3 h-3"></i> Fallback (Banner Lama)
+              </p>
+              <p class="text-[10px] text-slate-500 leading-relaxed mb-2">
+                Field di bawah ini dari model banner lama (hyperlink). Hanya dipakai kalau <b>Body Berita</b> di atas kosong.
+              </p>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="lbl">Label Tombol</label>
+                  <input id="iBanLabel" class="inp acc-ring" placeholder="Cek Sekarang">
+                </div>
+                <div>
+                  <label class="lbl">Link / Aksi</label>
+                  <input id="iBanLink" class="inp acc-ring" placeholder="ext:https://…">
+                </div>
+              </div>
+              <div class="mt-3">
+                <label class="lbl">Pesan Singkat</label>
+                <textarea id="iBanPesan" rows="2" class="inp acc-ring"></textarea>
+              </div>
             </div>
           </div>
 
@@ -2405,7 +2444,11 @@ function fillInfo() {
   $('iBanStatus').value = c.banner_status || 'OFF';
   $('iInfoStatus').value = c.info_status || 'ON';
   $('iQuoteStatus').value = c.quote_status || 'ON';
-  $('iBanWarna').value = c.banner_warna || 'green';
+  const bj = $('iBanJudul'); if(bj) bj.value = c.banner_judul || '';
+  const bb = $('iBanBody'); if(bb) bb.value = c.banner_body || '';
+  const bp = $('iBanPenulis'); if(bp) bp.value = c.banner_penulis || '';
+  const bt = $('iBanTanggal'); if(bt) bt.value = c.banner_tanggal || '';
+  const bk = $('iBanKategori'); if(bk) bk.value = c.banner_kategori || 'Kegiatan';
   $('iBanPesan').value = c.banner_pesan || '';
   $('iBanLink').value = c.banner_link || '';
   $('iBanLabel').value = c.banner_label || '';
@@ -2527,11 +2570,15 @@ async function saveInfo() {
     banner_status: $('iBanStatus').value,
     info_status: $('iInfoStatus').value,
     quote_status: $('iQuoteStatus').value,
-    banner_warna: $('iBanWarna').value,
-    banner_pesan: $('iBanPesan').value,
-    banner_link: $('iBanLink').value,
-    banner_label: $('iBanLabel').value,
-    banner_gambar: $('iBanGambar').value,
+    banner_judul: $('iBanJudul')?.value.trim() || '',
+    banner_body: $('iBanBody')?.value.trim() || '',
+    banner_penulis: $('iBanPenulis')?.value.trim() || '',
+    banner_tanggal: $('iBanTanggal')?.value || '',
+    banner_kategori: $('iBanKategori')?.value || 'Kegiatan',
+    banner_pesan: $('iBanPesan')?.value || '',
+    banner_link: $('iBanLink')?.value || '',
+    banner_label: $('iBanLabel')?.value || '',
+    banner_gambar: $('iBanGambar')?.value || '',
     pop_status: $('iPopStatus').value,
     pop_judul: $('iPopJudul').value,
     pop_pesan: popPesanSafe,
