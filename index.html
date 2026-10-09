@@ -268,41 +268,63 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <!-- ============================================
              HERO CARD — Quote + Cuaca + Ilustrasi
              ============================================ -->
-        <section id="heroCard" class="hero-card-v8 animate-fade-up">
+        <section id="heroCard" class="hero-card-v8 animate-fade-up" data-mode="banner">
           <div class="hero-top-v8">
-            <span class="hero-chip-v8">Inspirasi Hari Ini</span>
+            <span id="heroChip" class="hero-chip-v8">Kegiatan</span>
             <div class="hero-actions-v8">
-              <button id="btnQuoteHome" onclick="gantiQuote()" aria-label="Ganti kutipan" class="hero-action-v8" title="Ganti">
-                <i data-lucide="refresh-cw"></i>
+              <button id="btnHeroLeft" onclick="heroLeftAction()" aria-label="Ganti tampilan" class="hero-action-icon" title="Tampilkan Inspirasi">
+                <i data-lucide="sparkles"></i>
               </button>
-              <button onclick="openStudio('quote',{text:(STATE.quoteNow||{}).kutipan||'',author:(STATE.quoteNow||{}).tokoh||''})" aria-label="Bagikan kutipan" class="hero-action-v8" title="Bagikan">
+              <button id="btnHeroShare" onclick="heroRightAction()" aria-label="Bagikan" class="hero-action-icon" title="Bagikan">
                 <i data-lucide="share-2"></i>
               </button>
             </div>
           </div>
 
-          <p id="quoteTextHome" class="hero-quote-v8">"Memuat kata mutiara…"</p>
-          <div id="quoteAuthorHome" class="hero-author-v8">—</div>
-
-          <div class="hero-bottom-v8">
-            <!-- Badge cuaca + hari + lokasi -->
-            <div class="hero-weather-v8">
-              <div class="hw-line1-v8">
-                <span id="heroWxEmoji" class="hw-emoji-v8">☀️</span>
-                <span id="heroWxTemp" class="hw-temp-v8">--°</span>
-              </div>
-              <div id="heroWxDesc" class="hw-desc-v8">Memuat…</div>
-              <div id="heroWxDay" class="hw-day-v8">—</div>
-              <div class="hw-location-v8">
-                <i data-lucide="map-pin"></i>
-                <span>Selogiri, Wonogiri</span>
+          <!-- ═══ MODE BANNER ═══ -->
+          <div id="heroBannerMode" class="hero-panel hero-banner-mode">
+            <div class="hero-banner-img" id="heroBannerImg">
+              <div class="hero-banner-img-fallback">
+                <i data-lucide="sparkles"></i>
               </div>
             </div>
+            <h2 id="heroBannerTitle" class="hero-banner-title">—</h2>
+            <div class="hero-banner-meta">
+              <b id="heroBannerPenulis">—</b>
+              <span class="sep">·</span>
+              <span id="heroBannerTanggal">—</span>
+              <span class="sep">·</span>
+              <span id="heroBannerReadTime">1 mnt baca</span>
+            </div>
+            <button class="hero-banner-cta" onclick="openNewsReader()">
+              <i data-lucide="book-open"></i>
+              Baca Selengkapnya
+            </button>
+          </div>
 
-            <!-- Ilustrasi (dinamis dari admin) -->
-            <div id="heroIllustration" class="hero-illustration-v8">
-              <div class="hero-illus-fallback-v8">
-                <i data-lucide="sparkles"></i>
+          <!-- ═══ MODE INSPIRASI ═══ -->
+          <div id="heroInspirasiMode" class="hero-panel hero-inspirasi-mode hidden">
+            <p id="quoteTextHome" class="hero-quote-v8">"Memuat kata mutiara…"</p>
+            <div id="quoteAuthorHome" class="hero-author-v8">—</div>
+
+            <div class="hero-bottom-v8">
+              <div class="hero-weather-v8">
+                <div class="hw-line1-v8">
+                  <span id="heroWxEmoji" class="hw-emoji-v8">☀️</span>
+                  <span id="heroWxTemp" class="hw-temp-v8">--°</span>
+                </div>
+                <div id="heroWxDesc" class="hw-desc-v8">Memuat…</div>
+                <div id="heroWxDay" class="hw-day-v8">—</div>
+                <div class="hw-location-v8">
+                  <i data-lucide="map-pin"></i>
+                  <span>Selogiri, Wonogiri</span>
+                </div>
+              </div>
+
+              <div id="heroIllustration" class="hero-illustration-v8">
+                <div class="hero-illus-fallback-v8">
+                  <i data-lucide="sparkles"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -1076,13 +1098,17 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        PANEL: NOTIFIKASI
        ============================================ -->
   <div id="pNotif" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pNotif')"></div>
-    <div id="pNotifSheet" class="sheet bg-slate-50">
-      <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
-        <p class="text-base font-extrabold text-slate-800">Notifikasi</p>
-        <button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onclick="tutupPanel('pNotif')"></div>
+    <div id="pNotifSheet" class="sheet">
+      <div class="notif-head">
+        <div class="notif-head-icon"><i data-lucide="bell"></i></div>
+        <div class="notif-head-text">
+          <p class="notif-head-title">Notifikasi</p>
+          <p class="notif-head-sub" id="notifHeadSub">Memuat…</p>
+        </div>
+        <button onclick="tutupPanel('pNotif')" aria-label="Tutup" class="notif-head-close"><i data-lucide="x"></i></button>
       </div>
-      <div id="notifList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-3"></div>
+      <div id="notifList" class="notif-body no-scroll"></div>
     </div>
   </div>
 
@@ -1391,6 +1417,59 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     </div>
   </div>
 
+  <!-- ============================================
+       MODAL: NEWS READER — Berita / Banner
+       ============================================ -->
+  <div id="mNews" class="fixed inset-0 z-[85] hidden" role="dialog" aria-modal="true" aria-labelledby="newsTitle">
+    <div class="absolute inset-0 bg-black/60" onclick="tutupModal('mNews')"></div>
+    <div class="mNews-wrap">
+      <div class="card modal-card news-box animate-pop">
+        <!-- Header sticky -->
+        <div class="news-head">
+          <button onclick="tutupModal('mNews')" aria-label="Tutup" class="news-action">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+          <p class="news-head-title">Berita</p>
+          <div style="width:34px;height:34px;flex-shrink:0" aria-hidden="true"></div>
+        </div>
+
+        <!-- Scroll area -->
+        <div class="news-body no-scroll">
+          <div id="newsHero" class="news-hero">
+            <i data-lucide="sparkles" class="w-20 h-20 text-white" style="opacity:.92"></i>
+          </div>
+
+          <div class="news-content">
+            <span id="newsKategori" class="news-cat">Kegiatan</span>
+            <h1 id="newsTitle" class="news-title">—</h1>
+            <div class="news-meta">
+              <b id="newsPenulis">—</b>
+              <span class="sep">·</span>
+              <span id="newsTanggal">—</span>
+              <span class="sep">·</span>
+              <span id="newsReadTime">1 menit baca</span>
+            </div>
+            <div id="newsBody" class="news-text"></div>
+            <div class="news-sign">
+              <div id="newsSignAvatar" class="news-sign-avatar">TK</div>
+              <div>
+                <span id="newsSignPenulis">Tim Kreatif Selogiri</span><br>
+                <span style="font-weight:600;color:#94A3B8">Portal Guru Berbagi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="news-foot">
+          <button onclick="shareNewsLink()" class="news-foot-btn primary">
+            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+            Bagikan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================
        MODAL: SHARE
