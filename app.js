@@ -6788,11 +6788,18 @@ function initSpotlightCarousel(){
 
   if(!btnPrev || !btnNext || !currEl) return;
 
+  const getOffset = (slide) => {
+    // Hitung offset slide relative ke track (lebih akurat dari offsetLeft)
+    const trackRect = track.getBoundingClientRect();
+    const slideRect = slide.getBoundingClientRect();
+    return (slideRect.left - trackRect.left) + track.scrollLeft;
+  };
+
   const getIdx = () => {
     const sl = track.scrollLeft;
     let idx = 0, min = Infinity;
     slides.forEach((s, i) => {
-      const d = Math.abs(s.offsetLeft - track.offsetLeft - sl);
+      const d = Math.abs(getOffset(s) - sl);
       if(d < min){ min = d; idx = i; }
     });
     return idx;
@@ -6805,7 +6812,8 @@ function initSpotlightCarousel(){
   };
   const go = (i) => {
     const s = slides[i]; if(!s) return;
-    track.scrollTo({ left: s.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+    const left = getOffset(s);
+    track.scrollTo({ left, behavior: 'smooth' });
   };
 
   // Wire listener SEKALI saja pakai flag di element (bukan clone)
