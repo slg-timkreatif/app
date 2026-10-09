@@ -532,7 +532,7 @@
     <i data-lucide="image" class="w-4 h-4 acc-text"></i> Inspirasi Hero — Ilustrasi
   </p>
   <p class="text-[11px] text-slate-500 leading-relaxed">
-    Ilustrasi tampil di hero card beranda, bergantian saat user tap <b>Ganti</b>. Satu URL per baris. Maksimal 5.
+    Ilustrasi tampil di hero card beranda, bergantian saat user tap <b>Ganti</b>. Satu URL per baris. Maksimal 12.
   </p>
   <textarea
     id="iHeroUrls"
@@ -544,7 +544,7 @@
     <span id="iHeroCounter" class="font-bold text-slate-400">0/5 ilustrasi</span>
     <button type="button" onclick="clearHeroUrls()" class="text-rose-500 font-bold active:scale-95 transition">Kosongkan</button>
   </div>
-  <div id="iHeroPreview" class="grid grid-cols-5 gap-2"></div>
+  <div id="iHeroPreview" class="grid grid-cols-4 sm:grid-cols-6 gap-2"></div>
   <p class="text-[10px] text-slate-400 leading-relaxed">
     💡 Terima <b>http://</b>, <b>https://</b>, atau <b>data:image</b>. Kalau kosong → tampil ikon fallback.
   </p>
@@ -2447,13 +2447,13 @@ function fillInfo() {
       .map(s => s.trim())
       .filter(s => s && /^(https?:|data:)/i.test(s));
     
-    const total = urls.length;
-    const shown = urls.slice(0, 5);
-    
-    if (counter) {
-      counter.textContent = total + '/5 ilustrasi';
-      counter.className = 'font-bold ' + (total > 5 ? 'text-rose-500' : 'text-slate-400');
-    }
+  const total = urls.length;
+  const shown = urls.slice(0, 12);
+  
+  if (counter) {
+    counter.textContent = total + '/12 ilustrasi';
+    counter.className = 'font-bold ' + (total > 12 ? 'text-rose-500' : 'text-slate-400');
+  }
     
     if (preview) {
       if (!shown.length) {
@@ -2520,7 +2520,7 @@ async function saveInfo() {
     .split(/\r?\n/)
     .map(s => s.trim())
     .filter(s => s && /^(https?:|data:)/i.test(s))
-    .slice(0, 5);
+    .slice(0, 12);
   const heroUrlsClean = heroUrlsRaw.join('\n');
   
   const row = {
