@@ -1516,6 +1516,10 @@ function renderCarousel(){
       const lbl = NOTIF_LBL[tipe] || 'Info';
       const tipeCls = 'tipe-' + tipe;
 
+      const lampiranChip = n.link
+        ? `<span class="caro-link-chip"><i data-lucide="link-2"></i>Lampiran</span>`
+        : '';
+
       if(n.gambar){
         slides.push(`<button onclick="openPanel('pNotif')" class="caro-slide ${tipeCls} ${wrapCls}">
           <div class="caro-img"><img src="${n.gambar}" referrerpolicy="no-referrer" ${retry} alt="" loading="lazy" decoding="async"></div>
@@ -1523,6 +1527,7 @@ function renderCarousel(){
             <span class="caro-chip">${lbl}</span>
             <p class="caro-title">${esc(n.judul)}</p>
             <p class="caro-desc">${esc(n.pesan)}</p>
+            ${lampiranChip}
           </div>
         </button>`);
       } else {
@@ -1533,6 +1538,7 @@ function renderCarousel(){
               <span class="caro-chip">${lbl}</span>
               <p class="caro-title">${esc(n.judul)}</p>
               <p class="caro-desc">${esc(n.pesan)}</p>
+              ${lampiranChip}
             </div>
           </div>
         </button>`);
@@ -5511,10 +5517,17 @@ async function renderNotif(){
     const m = NOTIF_META[n.tipe] || NOTIF_META.info;
     const tgl = new Date(n.scheduled_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     const scope = (n.scope_type && n.scope_type !== 'all') ? `<span class="text-[9px] font-black acc-soft acc-text px-1.5 py-0.5 rounded">KHUSUS</span>` : '';
+
+    // Media lead: thumbnail gambar kalau ada, kalau tidak pakai icon tipe
+    const media = n.gambar
+      ? `<div class="notif-thumb">
+           <span class="notif-thumb-fallback ${m.cls}"><i data-lucide="${m.ico}"></i></span>
+           <img src="${esc(n.gambar)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">
+         </div>`
+      : `<span class="w-11 h-11 rounded-xl ${m.cls} flex items-center justify-center shrink-0"><i data-lucide="${m.ico}" class="w-5 h-5"></i></span>`;
+
     return `<div class="card p-4 flex gap-3" style="border-radius:20px">
-      <span class="w-11 h-11 rounded-xl ${m.cls} flex items-center justify-center shrink-0">
-        <i data-lucide="${m.ico}" class="w-5 h-5"></i>
-      </span>
+      ${media}
       <div class="flex-1 min-w-0">
         <p class="text-[13px] font-extrabold text-slate-800 leading-snug">${n.judul} ${scope}</p>
         <p class="text-[11.5px] text-slate-500 mt-1 leading-relaxed">${n.pesan}</p>
@@ -6980,6 +6993,22 @@ function openNewsReader(){
 
   openModal('mNews');
   icons();
+
+  // Reset + wire reading progress
+  const fill = $('newsProgressFill');
+  const scroller = $('newsBodyScroll');
+  if(fill && scroller){
+    fill.style.width = '0%';
+    const onScroll = () => {
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      const pct = max <= 0 ? 100 : Math.min(100, (scroller.scrollTop / max) * 100);
+      fill.style.width = pct + '%';
+    };
+    scroller._newsScrollHandler && scroller.removeEventListener('scroll', scroller._newsScrollHandler);
+    scroller._newsScrollHandler = onScroll;
+    scroller.addEventListener('scroll', onScroll, { passive:true });
+    requestAnimationFrame(onScroll);
+  }
 }
 
 function shareNewsLink(){
