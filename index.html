@@ -1421,52 +1421,60 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
        MODAL: NEWS READER — Berita / Banner
        ============================================ -->
   <div id="mNews" class="fixed inset-0 z-[85] hidden" role="dialog" aria-modal="true" aria-labelledby="newsTitle">
-    <div class="absolute inset-0 bg-black/60" onclick="tutupModal('mNews')"></div>
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]" onclick="tutupModal('mNews')"></div>
     <div class="mNews-wrap">
       <div class="card modal-card news-box animate-pop">
-        <!-- Header sticky -->
-        <div class="news-head">
-          <button onclick="tutupModal('mNews')" aria-label="Tutup" class="news-action">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-          <p class="news-head-title">Berita</p>
-          <div style="width:34px;height:34px;flex-shrink:0" aria-hidden="true"></div>
+
+        <!-- HERO IMAGE — kiri di desktop, atas di mobile -->
+        <div id="newsHero" class="news-hero">
+          <i data-lucide="sparkles" class="w-20 h-20 text-white" style="opacity:.92"></i>
         </div>
 
-        <!-- Scroll area -->
-        <div class="news-body no-scroll">
-          <div id="newsHero" class="news-hero">
-            <i data-lucide="sparkles" class="w-20 h-20 text-white" style="opacity:.92"></i>
+        <!-- KOLOM KONTEN -->
+        <div class="news-col">
+
+          <!-- HEADER -->
+          <div class="news-head">
+            <p class="news-head-title">Berita</p>
+            <div class="news-head-actions">
+              <button onclick="shareNewsLink()" class="news-action" aria-label="Bagikan" title="Bagikan">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+              </button>
+              <button onclick="tutupModal('mNews')" class="news-action" aria-label="Tutup" title="Tutup">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
 
-          <div class="news-content">
-            <span id="newsKategori" class="news-cat">Kegiatan</span>
-            <h1 id="newsTitle" class="news-title">—</h1>
-            <div class="news-meta">
-              <b id="newsPenulis">—</b>
-              <span class="sep">·</span>
-              <span id="newsTanggal">—</span>
-              <span class="sep">·</span>
-              <span id="newsReadTime">1 menit baca</span>
-            </div>
-            <div id="newsBody" class="news-text"></div>
-            <div class="news-sign">
-              <div id="newsSignAvatar" class="news-sign-avatar">TK</div>
-              <div>
-                <span id="newsSignPenulis">Tim Kreatif Selogiri</span><br>
-                <span style="font-weight:600;color:#94A3B8">Portal Guru Berbagi</span>
+          <!-- BODY SCROLLABLE -->
+          <div class="news-body no-scroll" id="newsBodyScroll">
+            <div class="news-content">
+              <span id="newsKategori" class="news-cat">Kegiatan</span>
+              <h1 id="newsTitle" class="news-title">—</h1>
+              <div class="news-meta">
+                <b id="newsPenulis">—</b>
+                <span class="sep">·</span>
+                <span id="newsTanggal">—</span>
+                <span class="sep">·</span>
+                <span id="newsReadTime">1 menit baca</span>
+              </div>
+              <div id="newsBody" class="news-text"></div>
+              <div class="news-sign">
+                <div id="newsSignAvatar" class="news-sign-avatar">TK</div>
+                <div>
+                  <span id="newsSignPenulis">Tim Kreatif Selogiri</span><br>
+                  <span style="font-weight:600;color:#94A3B8">Portal Guru Berbagi</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Footer -->
-        <div class="news-foot">
-          <button onclick="shareNewsLink()" class="news-foot-btn primary">
-            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-            Bagikan
-          </button>
-        </div>
+          <!-- READING PROGRESS BAR -->
+          <div class="news-progress" aria-hidden="true">
+            <div class="news-progress-fill" id="newsProgressFill"></div>
+          </div>
+
+        </div><!-- /news-col -->
       </div>
     </div>
   </div>
