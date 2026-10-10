@@ -133,6 +133,40 @@
 
   .pending-badge{background:#FBBF24;color:#78350F;font-weight:800;font-size:9px;padding:2px 6px;border-radius:9999px}
 
+
+  /* ============================================
+     PREVIEW GAMBAR — form notifikasi
+     ============================================ */
+  .notif-preview{margin-top:.6rem;animation:fadeUp .25s ease both}
+  .notif-preview-frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:.75rem;
+    overflow:hidden;
+    background:#F1F5F9;
+    border:1px solid var(--border);
+  }
+  html.dark .notif-preview-frame{background:#1F232B;border-color:#2F343D}
+  .notif-preview-frame img{
+    width:100%;height:100%;
+    object-fit:cover;display:block;
+  }
+  .notif-preview-fallback{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:.5rem;
+    color:#94A3B8;
+    font-size:.7rem;font-weight:700;
+    text-align:center;padding:1rem;
+  }
+  .notif-preview-fallback svg{opacity:.55}
+  .notif-preview-hint{
+    font-size:.65rem;
+    color:#94A3B8;
+    margin-top:.4rem;
+    line-height:1.4;
+  }
   #debug-panel{position:fixed;bottom:0;left:0;right:0;max-height:40vh;background:#0a0b10;border-top:2px solid var(--acc);color:#5EEAD4;font-family:ui-monospace,Consolas,monospace;font-size:10px;padding:8px 10px;overflow-y:auto;z-index:200;transform:translateY(100%);transition:transform .25s ease}
   #debug-panel.show{transform:translateY(0)}
   #debug-panel .log-line{padding:2px 0;border-bottom:1px solid #1e2230;word-break:break-all}
@@ -679,7 +713,17 @@
           </div>
           <div>
             <label class="lbl">URL Gambar (opsional)</label>
-            <input id="iNotGambar" class="inp acc-ring" placeholder="https://…">
+            <input id="iNotGambar" class="inp acc-ring" placeholder="https://…" oninput="previewNotifGambar(this.value)">
+            <div id="notifGambarPreview" class="notif-preview hidden">
+              <div class="notif-preview-frame">
+                <img id="notifGambarPreviewImg" alt="" referrerpolicy="no-referrer" onerror="notifPreviewError()">
+                <div id="notifGambarPreviewFallback" class="notif-preview-fallback hidden">
+                  <i data-lucide="image-off" class="w-6 h-6"></i>
+                  <span>Gambar tidak bisa dimuat</span>
+                </div>
+              </div>
+              <p class="notif-preview-hint">Preview 16:9 — begini kira-kira tampilannya di carousel</p>
+            </div>
           </div>
           <div>
             <label class="lbl">URL Lampiran (opsional)</label>
@@ -2618,13 +2662,19 @@ function scopeHint(){
 }
 
 async function addNotif(){
+  const normUrl = (v) => {
+    v = (v||'').trim();
+    if(!v) return '';
+    if(/^https?:\/\//i.test(v)) return v;
+    return 'https://' + v;
+  };
   const row={
     judul:$('iNotJudul').value.trim(),
     pesan:$('iNotPesan').value.trim(),
     tipe:$('iNotTipe').value,
     target_role:'all',
-    gambar:$('iNotGambar').value.trim(),
-    link:$('iNotLink').value.trim(),
+    gambar:normUrl($('iNotGambar').value),
+    link:normUrl($('iNotLink').value),
     scope_type:$('iNotScopeType').value,
     scope_value:$('iNotScopeVal').value.trim(),
     is_active:true
@@ -2640,8 +2690,52 @@ async function addNotif(){
   $('iNotScopeType').value='all';
   $('iNotScopeVal').value='';
   scopeHint();
+  previewNotifGambar('');
   toast('Terkirim','success');
   loadAll();
+}
+
+/* ============================================================
+   PREVIEW GAMBAR — form notifikasi admin
+   ============================================================ */
+let _notifPreviewTimer = null;
+function previewNotifGambar(url){
+  clearTimeout(_notifPreviewTimer);
+  const box = $('notifGambarPreview');
+  const img = $('notifGambarPreviewImg');
+  const fb = $('notifGambarPreviewFallback');
+  if(!box || !img || !fb) return;
+
+  url = (url || '').trim();
+  if(!url){
+    box.classList.add('hidden');
+    img.removeAttribute('src');
+    fb.classList.add('hidden');
+    return;
+  }
+
+  // Normalisasi URL untuk preview (kalau belum ada protokol)
+  let previewUrl = url;
+  if(!/^https?:\/\//i.test(previewUrl) && !previewUrl.startsWith('data:')){
+    previewUrl = 'https://' + previewUrl;
+  }
+
+  // Debounce biar tidak flicker saat user masih mengetik
+  _notifPreviewTimer = setTimeout(() => {
+    box.classList.remove('hidden');
+    fb.classList.add('hidden');
+    img.classList.remove('hidden');
+    img.src = previewUrl;
+    icons();
+  }, 400);
+}
+
+function notifPreviewError(){
+  const img = $('notifGambarPreviewImg');
+  const fb = $('notifGambarPreviewFallback');
+  if(img) img.classList.add('hidden');
+  if(fb) fb.classList.remove('hidden');
+  icons();
 }
 
 function renderNotif(){
