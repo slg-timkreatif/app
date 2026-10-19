@@ -2345,13 +2345,37 @@ html.dark .spot-head-title{color:#F1F5F9}
   color:#64748B;margin:0;max-width:34ch;
 }
 html.dark .spot-head-sub{color:#94A3B8}
+.spot-head-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-shrink:0;
+  margin-top:4px;
+}
+.spot-head-refresh{
+  width:32px;height:32px;
+  border-radius:10px;
+  background:var(--card);
+  border:1px solid color-mix(in srgb, var(--acc) 20%, transparent);
+  color:var(--acc-text);
+  cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+  flex-shrink:0;
+}
+html.dark .spot-head-refresh{background:#22262E;border-color:#2F343D}
+.spot-head-refresh:hover{background:var(--acc-soft)}
+.spot-head-refresh:active{transform:scale(.92)}
+.spot-head-refresh.loading svg{animation:spin 1s linear infinite}
+.spot-head-refresh svg{width:14px;height:14px}
+
 .spot-head-cta{
   padding:7px 12px;border-radius:10px;
   background:var(--acc);color:#fff;border:0;
   font-family:inherit;font-size:10.5px;font-weight:800;
   cursor:pointer;flex-shrink:0;
   display:flex;align-items:center;gap:5px;
-  transition:all .15s;margin-top:4px;
+  transition:all .15s;margin-top:0;
   box-shadow:0 4px 10px -2px var(--acc-ring);
 }
 .spot-head-cta:active{transform:scale(.95)}
