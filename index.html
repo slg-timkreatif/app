@@ -376,9 +376,14 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
               <h2 class="spot-head-title">Spotlight Karya</h2>
               <p class="spot-head-sub">Karya terbaru pilihan untuk inspirasi mengajar.</p>
             </div>
-            <button class="spot-head-cta" onclick="bukaGaleriMedia()">
-              Lihat Semua <i data-lucide="arrow-right"></i>
-            </button>
+            <div class="spot-head-actions">
+              <button class="spot-head-refresh" onclick="refreshSpotlight()" aria-label="Muat ulang spotlight" title="Muat ulang">
+                <i data-lucide="refresh-cw"></i>
+              </button>
+              <button class="spot-head-cta" onclick="bukaGaleriMedia()">
+                Lihat Semua <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
           </div>
 
           <div class="spot-track" id="spotTrack"></div>
