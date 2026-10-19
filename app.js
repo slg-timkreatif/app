@@ -1060,6 +1060,14 @@ function setPageInstant(pg){
 
   if(pg==='dokumen'){paintDokView();renderDokumen($('inSearchDok')?.value||'');}
   if(pg==='setting'){paintCustomizeUI();paintToggles();markAcc();paintThemeMode();showLastSync();}
+  if(pg==='home'){
+    try{
+      const now = Date.now();
+      if(typeof renderSpotlight === 'function' && (!_spotlightCache.ts || now - _spotlightCache.ts > 30 * 1000)){
+        renderSpotlight(true);
+      }
+    }catch(_){}
+  }
 
   // Clear pending intent kalau user navigasi manual (bukan deep link flow)
   if(applying){
@@ -5185,6 +5193,7 @@ async function silentRefresh(force){
   if(stale('agenda'))jobs.agenda=sb.from('creative_agenda').select('*').eq('is_active',true).order('tanggal',{ascending:false}).limit(60);
   if(stale('docs'))jobs.docs=sb.from('creative_documents').select('*').eq('is_active',true).order('kategori').limit(100);
   const keys=Object.keys(jobs);
+  renderSpotlight(true);
   if(!keys.length){
     renderHomeWidgets();
     return;
@@ -5203,7 +5212,6 @@ async function silentRefresh(force){
   if(sigChanged('docs',STATE.docs))renderDokWidget();
   if(sigChanged('agenda',STATE.agenda))renderAgendaWidget();
   if(sigChanged('notifs',STATE.notifs))updateNotifBadge();
-  renderSpotlight();
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();
@@ -6607,7 +6615,7 @@ function renderRailRecent(){
   icons();
 }
 /* ---------- SPOTLIGHT KARYA (Carousel) ---------- */
-const SPOTLIGHT_TTL = 5*60*1000;
+const SPOTLIGHT_TTL = 2*60*1000;
 const SPOTLIGHT_LS_KEY = 'gb_spotlight_cache_v1';
 let _spotlightCache = { data: null, ts: 0 };
 let _spotlightDetailCache = {};
@@ -6732,13 +6740,35 @@ function bukaGaleriMedia(){
   window.open('galeri.html', '_blank', 'noopener');
 }
 
-async function renderSpotlight(){
+/* ============================================================
+   SPOTLIGHT — Refresh Manual
+   ============================================================ */
+async function refreshSpotlight(){
+  const btn = document.querySelector('.spot-head-refresh');
+  if(btn) btn.classList.add('loading');
+  try{
+    await renderSpotlight(true);
+    toast('Spotlight diperbarui ✓','success');
+  }catch(e){
+    console.warn('[refreshSpotlight]', e);
+    toast('Gagal memperbarui','error');
+  }finally{
+    if(btn) btn.classList.remove('loading');
+  }
+}
+async function renderSpotlight(force){
   const section = $('spotlightSection');
   const track = $('spotTrack');
   if(!section || !track){ console.warn('[spotlight] DOM tidak ada'); return; }
 
+  if(force && track.children.length){
+    track.style.transition = 'opacity .2s';
+    track.style.opacity = '0.55';
+  }
+
   try{
-    const list = await fetchSpotlight(false);
+    const list = await fetchSpotlight(!!force);
+    if(track) track.style.opacity = '1';
     if(!list.length){
       section.classList.add('hidden');
       return;
