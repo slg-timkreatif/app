@@ -113,8 +113,7 @@ input,select,textarea{font-family:inherit}
 .fab svg{width:24px;height:24px}
 .overlay{position:fixed;inset:0;background:rgba(15,18,25,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s}
 .overlay.open{opacity:1;pointer-events:auto}
-/* 🔧 FIX: share & QR overlay di atas preview (300) */
-#shareOverlay.open, #qrOverlay.open { z-index: 400; }
+#shareOverlay.open,#qrOverlay.open{z-index:400}
 .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-width:860px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
 .modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .modal-head h3{font-size:.95rem;font-weight:800}
@@ -338,7 +337,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- PREVIEW -->
 <div class="preview-overlay" id="previewOverlay">
   <div class="preview-header">
     <span class="preview-title" id="previewTitle">Preview</span>
@@ -353,7 +351,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   <iframe class="preview-frame" id="previewFrame" allowfullscreen allow="autoplay"></iframe>
 </div>
 
-<!-- SHARE -->
 <div class="overlay" id="shareOverlay">
   <div class="modal-box" style="max-width:380px;padding:20px">
     <h3 style="font-weight:800">Bagikan Karya</h3>
@@ -369,7 +366,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- QR -->
 <div class="overlay" id="qrOverlay">
   <div class="modal-box" style="max-width:320px;padding:24px;text-align:center">
     <h3 style="font-weight:800;margin-bottom:12px">QR Kode Karya</h3>
@@ -379,7 +375,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- LOGIN -->
 <div class="overlay" id="loginOverlay">
   <div class="modal-box login-box">
     <div class="login-icon"><i data-lucide="graduation-cap"></i></div>
@@ -401,7 +396,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- UPLOAD -->
 <div class="overlay" id="uploadOverlay">
   <div class="modal-box">
     <div class="modal-head"><h3 id="uploadTitle">Bagikan Karya</h3><button class="icon-btn" onclick="closeUpload()"><i data-lucide="x"></i></button></div>
@@ -459,7 +453,6 @@ textarea.form-control{min-height:96px;resize:vertical;font-family:ui-monospace,m
   </div>
 </div>
 
-<!-- KARTU CREATOR -->
 <div class="overlay" id="cardOverlay">
   <div class="modal-box" style="max-width:380px;padding:24px">
     <div style="display:flex;justify-content:space-between;margin-bottom:18px"><h3 style="font-weight:800">Kartu Tanda Creator</h3><button class="icon-btn" onclick="closeCard()"><i data-lucide="x"></i></button></div>
@@ -504,7 +497,7 @@ const db = window.supabase.createClient(DATA_URL, DATA_ANON);
 
 const LITE_COLS = 'ID, Timestamp, "Nama Guru", "Nama Sekolah", "Fase/Kelas", Semester, "Judul Media", "Mata Pelajaran", "Link Media Luar", "Jenis Konten", VIEWS';
 const PAGE_SIZE = 12;
-const CACHE_KEY = 'gb_lite_cache_v5';
+const CACHE_KEY = 'gb_lite_cache_v6';
 const UMUR_BARU_MS = 3 * 86400000;
 
 const STATE = { filtered: [], settings: [], user: null, myWorks: [], sourceType: 'LINK', favMode: false };
@@ -533,12 +526,7 @@ function isGuest(){ return !STATE.user; }
 function userKey(){ return isGuest() ? 'GUEST' : (STATE.user.email || STATE.user.nama); }
 function getFavoritIds(){ try{ return JSON.parse(localStorage.getItem('GB_FAV_'+userKey())||'[]'); }catch(e){ return []; } }
 function kaihSet(){ return new Set(STATE.settings.map(r=>r[3]).filter(Boolean)); }
-
-/* 🔧 FIX: ekstrak timestamp numerik dari ID untuk sort yang benar */
-function tsFromId(id){
-  const m = String(id||'').match(/(\d{13})/);
-  return m ? parseInt(m[1]) : 0;
-}
+function tsFromId(id){ const m = String(id||'').match(/(\d{13})/); return m ? parseInt(m[1]) : 0; }
 
 function parseTs(ts, id){
   const idMs = String(id||'').match(/(\d{13})/);
@@ -559,7 +547,61 @@ function formatReleaseDate(ts, id){
 }
 function isNew(ts,id){ const t=parseTs(ts,id); return t>0 && (Date.now()-t) < UMUR_BARU_MS; }
 
-/* ================= CACHE SESI ================= */
+/* ============================================================
+   [HEMAT KUOTA A] CACHE KONTEN HTML PER KARYA DI PERANGKAT
+   - memori + sessionStorage (per tab), penjaga ukuran 400KB
+   - reload murid yang sama = 0 egress HTML
+   ============================================================ */
+const HTML_CACHE = {};
+function cacheGetHtml(id){
+  if (HTML_CACHE[id]) return HTML_CACHE[id];
+  try{
+    const s = sessionStorage.getItem('gb_html_' + id);
+    if (s){ HTML_CACHE[id] = s; return s; }
+  }catch(e){}
+  return '';
+}
+function cacheSetHtml(id, stored){
+  if (!stored) return;
+  HTML_CACHE[id] = stored;
+  try{
+    if (stored.length < 400 * 1024) sessionStorage.setItem('gb_html_' + id, stored);
+  }catch(e){ /* kuota sessionStorage penuh: lewati, cache memori tetap jalan */ }
+}
+function cacheClearHtml(id){
+  delete HTML_CACHE[id];
+  try{ sessionStorage.removeItem('gb_html_' + id); }catch(e){}
+}
+
+/* ============================================================
+   [HEMAT KUOTA B] KOMPRESI GZIP UNTUK KARYA HTML BARU
+   - simpan sebagai "GZ:<base64 gzip>"; baca lama tanpa prefix tetap jalan
+   - transfer turun ±70-80% untuk semua pembuka karya baru
+   ============================================================ */
+async function gzCompress(text){
+  if (!text || !('CompressionStream' in window)) return text;
+  try{
+    const stream = new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'));
+    const bytes = new Uint8Array(await new Response(stream).arrayBuffer());
+    let bin = ''; const CH = 0x8000;
+    for (let i = 0; i < bytes.length; i += CH) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+    return 'GZ:' + btoa(bin);
+  }catch(e){ return text; }
+}
+async function gzDecompress(stored){
+  if (!stored) return '';
+  if (!stored.startsWith('GZ:')) return stored;           // karya lama: raw
+  if (!('DecompressionStream' in window)) return stored;  // browser sangat lama
+  try{
+    const bin = atob(stored.slice(3));
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return await new Response(stream).text();
+  }catch(e){ return ''; }
+}
+
+/* ================= CACHE SESI LIST ================= */
 async function getFingerprint(){
   const { data, error, count } = await db.from('karya_guru')
     .select('ID', { count: 'exact' }).eq('Status','DISETUJUI')
@@ -594,7 +636,6 @@ async function loadPage(reset){
     const { data, error, count } = await q.order('ID', { ascending:false }).range(from, to);
     if (error) throw error;
     totalRows = count || 0;
-    /* 🔧 FIX: urutkan ulang numerik berdasarkan timestamp dari ID */
     const mapped = (data||[]).map(mapRow).sort((a,b) => tsFromId(b[13]) - tsFromId(a[13]));
     STATE.filtered = STATE.filtered.concat(mapped);
     page++;
@@ -604,7 +645,6 @@ async function loadPage(reset){
   finally{ loading = false; }
 }
 
-/* 🔧 FIX: sort cache juga numerik */
 async function initGallery(){
   const fp = await getFingerprint();
   let cached = null;
@@ -635,7 +675,7 @@ async function loadStats(){
   }
 }
 
-/* ================= RENDER ================= */
+/* ================= RENDER GALERI ================= */
 function renderGallery(){
   DOM.skeletonGrid.classList.add('d-none');
   const grid = DOM.galleryGrid; grid.innerHTML=''; grid.classList.remove('d-none');
@@ -714,7 +754,7 @@ function toggleFavorit(id){
   if (STATE.favMode) loadPage(true);
 }
 
-/* ================= PREVIEW + DEDUPE VIEW ================= */
+/* ================= PREVIEW + DEDUPE VIEW + CACHE KONTEN ================= */
 async function getKaryaDetail(id){
   const { data } = await db.from('karya_guru').select('"Kode HTML/Canvas"').eq('ID', id).single();
   return (data && data['Kode HTML/Canvas']) || '';
@@ -728,8 +768,14 @@ function registerView(id, row){
 }
 async function openPreviewRow(row){
   currentRow = row;
-  const link = row[8]||''; let html = row[7]||'';
-  if (!html && !link){ html = await getKaryaDetail(row[13]); row[7] = html; }
+  const link = row[8]||'';
+  let stored = row[7]||'';
+  if (!stored && !link){
+    stored = cacheGetHtml(row[13]);                       /* [A] coba cache perangkat */
+    if (!stored){ stored = await getKaryaDetail(row[13]); /* baru unduh jika belum ada */
+      if (stored) cacheSetHtml(row[13], stored); }
+    row[7] = stored;
+  } else if (stored){ cacheSetHtml(row[13], stored); }
   registerView(row[13], row);
   const isExt = link.includes('canva')||link.includes('gemini')||(row[11]||'').toUpperCase().includes('STORY');
   if (link && isExt){ window.open(link,'_blank'); return; }
@@ -739,6 +785,7 @@ async function openPreviewRow(row){
   DOM.previewOverlay.classList.add('open');
   document.body.style.overflow='hidden';
   const f = DOM.previewFrame;
+  const html = await gzDecompress(stored);                /* [B] dekompresi bila perlu */
   if (html && html.length>10){ f.src = URL.createObjectURL(new Blob([html],{type:'text/html'})); }
   else if (link){
     let u = link;
@@ -753,16 +800,9 @@ function toggleFullscreen(){ if(document.fullscreenElement)document.exitFullscre
 /* ================= SHARE ================= */
 function deepLink(){ return location.origin + location.pathname + '?karya=' + encodeURIComponent(currentRow[13]); }
 function shareText(){ return '📚 ' + currentRow[5] + ' — karya ' + currentRow[1] + ' (' + currentRow[2] + ') di Guru Berbagi Selogiri'; }
-function openShare(){
-  if(!currentRow) return;
-  DOM.shareCaption.textContent = currentRow[5];
-  DOM.shareOverlay.classList.add('open');
-}
+function openShare(){ if(!currentRow) return; DOM.shareCaption.textContent = currentRow[5]; DOM.shareOverlay.classList.add('open'); }
 function closeShare(){ DOM.shareOverlay.classList.remove('open'); }
-async function nativeShare(){
-  try{ await navigator.share({ title: currentRow[5], text: shareText(), url: deepLink() }); }catch(e){}
-  closeShare();
-}
+async function nativeShare(){ try{ await navigator.share({ title: currentRow[5], text: shareText(), url: deepLink() }); }catch(e){} closeShare(); }
 function shareWA(){ window.open('https://wa.me/?text=' + encodeURIComponent(shareText() + '\n' + deepLink()), '_blank'); closeShare(); }
 function shareTG(){ window.open('https://t.me/share/url?url=' + encodeURIComponent(deepLink()) + '&text=' + encodeURIComponent(shareText()), '_blank'); closeShare(); }
 async function copyLink(){
@@ -778,7 +818,7 @@ function showQr(){
 }
 function closeQr(){ DOM.qrOverlay.classList.remove('open'); }
 
-/* ================= UNDUH + WATERMARK ================= */
+/* ================= UNDUH + WATERMARK (dekompresi dulu) ================= */
 function injectWatermark(html, nama, sekolah){
   const wm = '\n<!-- Karya oleh ' + nama + ' (' + sekolah + ') — dibagikan melalui Guru Berbagi Selogiri -->\n' +
     '<div id="gb-watermark" style="position:fixed;bottom:8px;right:8px;z-index:2147483647;background:rgba(15,23,42,.78);color:#fff;font:600 10px/1.5 system-ui,sans-serif;padding:5px 10px;border-radius:999px;pointer-events:none;opacity:.9">📚 ' + esc(nama) + ' • Guru Berbagi Selogiri</div>\n';
@@ -788,8 +828,12 @@ function injectWatermark(html, nama, sekolah){
 }
 async function downloadKarya(){
   const row = currentRow; if(!row) return;
-  let html = row[7] || '';
-  if (!html && !row[8]) html = await getKaryaDetail(row[13]);
+  let stored = row[7] || '';
+  if (!stored && !row[8]){
+    stored = cacheGetHtml(row[13]) || await getKaryaDetail(row[13]);
+    if (stored){ cacheSetHtml(row[13], stored); row[7] = stored; }
+  }
+  const html = await gzDecompress(stored);
   let out;
   if (html && html.length > 10){
     out = injectWatermark(html, row[1], row[2]);
@@ -890,7 +934,6 @@ async function loadMyWorks(){
     const out = await res.json().catch(()=> ({}));
     if (!res.ok){ toast(out.error || 'Gagal memuat karya'); return; }
     STATE.myWorks = (out.data || []).map(r => { const a = mapRow(r); a[7] = r['Kode HTML/Canvas'] || ''; a[10] = r['Feedback'] || ''; return a; });
-    /* 🔧 FIX: sort numerik berdasarkan timestamp di ID */
     STATE.myWorks.sort((a,b) => tsFromId(b[13]) - tsFromId(a[13]));
     renderDashboard();
   }catch(e){ toast('Gagal terhubung: '+e.message); }
@@ -930,7 +973,7 @@ function getLevelInfo(n){
   return{name:'PEMULA 🌱',color:'#64748b'};
 }
 
-/* ================= 🔧 BARU: HAPUS KARYA (milik sendiri) ================= */
+/* ================= HAPUS KARYA SENDIRI ================= */
 async function hapusKarya(i){
   const row = STATE.myWorks[i]; if(!row) return;
   if (!confirm(`Hapus karya "${row[5]}" secara permanen?\nTindakan ini tidak bisa dibatalkan.`)) return;
@@ -942,6 +985,7 @@ async function hapusKarya(i){
     });
     const out = await res.json().catch(()=> ({}));
     if (!res.ok) throw new Error(out.error || ('Gagal ('+res.status+')'));
+    cacheClearHtml(row[13]);
     STATE.myWorks.splice(i, 1);
     renderDashboard();
     clearCache(); loadStats();
@@ -964,6 +1008,11 @@ function openUploadModal(){
 }
 async function openEdit(i){
   const row = STATE.myWorks[i]; if(!row) return;
+  /* lazy ambil HTML bila daftar tidak membawanya (karya-saya kini ringan) */
+  if (!row[7] && !row[8]){
+    const s = cacheGetHtml(row[13]) || await getKaryaDetail(row[13]);
+    if (s){ cacheSetHtml(row[13], s); row[7] = s; }
+  }
   DOM.formMode.value='EDIT'; DOM.editRowId.value=row[13]; DOM.uploadTitle.textContent='Edit Karya';
   DOM.inJudul.value=row[5]||'';
   setValOrOther('inMapel','manMapel',row[6]||'');
@@ -978,7 +1027,8 @@ async function openEdit(i){
   if (isK) DOM.inKaihType.value = fb;
   DOM.feedbackAlert.classList.toggle('d-none', !isNote);
   if (isNote) DOM.feedbackMsg.textContent = fb;
-  if (row[7]){ setSource('HTML'); DOM.inHtml.value=row[7]; } else { setSource('LINK'); DOM.inLink.value=row[8]||''; DOM.inLinkStory.value=''; }
+  if (row[7]){ setSource('HTML'); DOM.inHtml.value = await gzDecompress(row[7]); }
+  else { setSource('LINK'); DOM.inLink.value=row[8]||''; DOM.inLinkStory.value=''; }
   updateLivePreview();
   DOM.uploadOverlay.classList.add('open');
 }
@@ -1017,7 +1067,7 @@ async function saveKarya(){
   const mode = DOM.formMode.value, editId = DOM.editRowId.value;
   const kaihOn = DOM.kaihToggle.classList.contains('on');
   let linkLuar='', kodeHtml='';
-  if (STATE.sourceType==='HTML') kodeHtml = DOM.inHtml.value;
+  if (STATE.sourceType==='HTML') kodeHtml = await gzCompress(DOM.inHtml.value); /* [B] kompres */
   else if (STATE.sourceType==='STORY') linkLuar = DOM.inLinkStory.value;
   else linkLuar = DOM.inLink.value;
   DOM.saveBtn.disabled=true;
@@ -1040,8 +1090,9 @@ async function saveKarya(){
       const nr = mapRow(Object.assign({}, rowData, { ID: out.id || ('ID-'+Date.now()), VIEWS: 0, Timestamp: new Date().toISOString() }));
       if (isDefaultView()){ STATE.filtered.unshift(nr); totalRows++; renderGallery(); }
       clearCache(); loadStats();
-      toast('Karya berhasil diterbitkan! 🎉');
+      toast('Karya diterbitkan (terkompres hemat kuota) 🎉');
     } else {
+      cacheClearHtml(editId);   /* buang cache lama agar tidak stale */
       clearCache();
       toast('Karya berhasil diperbarui ✅');
       loadMyWorks();
