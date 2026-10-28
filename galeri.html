@@ -746,6 +746,7 @@ function resetAll(){
   setFavMode(false); switchView('GALERI');
 }
 function toggleFavorit(id){
+  if (!id || id === 'null') return;
   let s = getFavoritIds();
   if (s.includes(id)){ s = s.filter(i=>i!==id); toast('Dihapus dari favorit'); }
   else { s.push(id); toast('Ditambahkan ke favorit ❤️'); }
@@ -756,10 +757,12 @@ function toggleFavorit(id){
 
 /* ================= PREVIEW + DEDUPE VIEW + CACHE KONTEN ================= */
 async function getKaryaDetail(id){
-  const { data } = await db.from('karya_guru').select('"Kode HTML/Canvas"').eq('ID', id).single();
+  if (!id) return '';
+  const { data } = await db.from('karya_guru').select('"Kode HTML/Canvas"').eq('ID', id).maybeSingle();
   return (data && data['Kode HTML/Canvas']) || '';
 }
 function registerView(id, row){
+  if (!id) return;
   const seen = JSON.parse(sessionStorage.getItem('gb_viewed')||'[]');
   if (seen.includes(id)) return;
   seen.push(id); sessionStorage.setItem('gb_viewed', JSON.stringify(seen));
@@ -767,6 +770,7 @@ function registerView(id, row){
   db.from('karya_guru').update({ VIEWS: nv }).eq('ID', id).then();
 }
 async function openPreviewRow(row){
+  if (!row || !row[13]) { toast('Data karya tidak valid (ID kosong).'); return; }
   currentRow = row;
   const link = row[8]||'';
   let stored = row[7]||'';
@@ -976,6 +980,7 @@ function getLevelInfo(n){
 /* ================= HAPUS KARYA SENDIRI ================= */
 async function hapusKarya(i){
   const row = STATE.myWorks[i]; if(!row) return;
+  if (!row[13]) { toast('Data karya tidak valid (ID kosong).'); return; }
   if (!confirm(`Hapus karya "${row[5]}" secara permanen?\nTindakan ini tidak bisa dibatalkan.`)) return;
   try{
     const res = await fetch(DATA_URL + '/functions/v1/simpan-karya', {
@@ -1008,6 +1013,7 @@ function openUploadModal(){
 }
 async function openEdit(i){
   const row = STATE.myWorks[i]; if(!row) return;
+  if (!row[13]) { toast('Data karya tidak valid (ID kosong).'); return; }
   /* lazy ambil HTML bila daftar tidak membawanya (karya-saya kini ringan) */
   if (!row[7] && !row[8]){
     const s = cacheGetHtml(row[13]) || await getKaryaDetail(row[13]);
