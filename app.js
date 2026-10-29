@@ -6680,28 +6680,90 @@ function _spotlightJenjang(fase){
   const m = String(fase).match(/Fase\s+([A-Z])/i);
   return m ? m[1].toUpperCase() : String(fase).slice(0,6);
 }
+/* ============================================================
+   DEKOMPRESI GZIP UNTUK KARYA (Update Galeri)
+   ============================================================ */
+async function decompressGzipBase64(base64Str) {
+  try {
+    const binaryString = atob(base64Str);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const ds = new DecompressionStream('gzip');
+    const decompressedStream = new Blob([bytes]).stream().pipeThrough(ds);
+    const response = new Response(decompressedStream);
+    return await response.text();
+  } catch (e) {
+    console.error('[decompressGzip]', e);
+    throw new Error('Gagal dekompresi');
+  }
+}
 
+async function extractKaryaHtml(rawHtml) {
+  if (!rawHtml) return '';
+  const trimmed = rawHtml.trim();
+  if (trimmed.startsWith('GZ:')) {
+    return await decompressGzipBase64(trimmed.substring(3));
+  }
+  return trimmed;
+}
 async function bukaSpotlight(id){
   if(!id) return;
   toast('Memuat karya…','info');
-  if(!_spotlightDetailCache[id]){
+  
+  let d = _spotlightDetailCache[id];
+  
+  // 1. Cek IndexedDB cache lokal (Cache Konten)
+  if(!d) {
+    const cachedData = await idb.get('misc', 'spotlight_' + id);
+    if(cachedData && cachedData.html) {
+      _spotlightDetailCache[id] = cachedData;
+      d = cachedData;
+    }
+  }
+
+  // 2. Fetch ke Supabase jika belum ada di cache
+  if(!d){
     try{
       const { data, error } = await sbData.from('karya_guru')
         .select('"Kode HTML/Canvas","Link Media Luar","Judul Media"')
         .eq('ID', id)
         .single();
       if(error) throw error;
-      _spotlightDetailCache[id] = data;
+      
+      let rawHtml = (data['Kode HTML/Canvas']||'').trim();
+      let finalHtml = '';
+      
+      // Dekompresi GZ:
+      if (rawHtml.startsWith('GZ:')) {
+        finalHtml = await extractKaryaHtml(rawHtml);
+      } else {
+        finalHtml = rawHtml;
+      }
+      
+      // Simpan ke cache lokal dengan penjaga ukuran (max 2MB)
+      d = {
+        html: finalHtml,
+        link: (data['Link Media Luar']||'').trim(),
+        judul: data['Judul Media']||'Karya'
+      };
+      
+      if (JSON.stringify(d).length < 2000000) {
+        await idb.set('misc', 'spotlight_' + id, d);
+      }
+      
+      _spotlightDetailCache[id] = d;
     }catch(e){
       console.warn('[bukaSpotlight]', e);
       toast('Gagal memuat karya','error');
       return;
     }
   }
-  const d = _spotlightDetailCache[id];
-  const html = (d['Kode HTML/Canvas']||'').trim();
-  const link = (d['Link Media Luar']||'').trim();
-  const judul = d['Judul Media']||'Karya';
+
+  const html = d.html || '';
+  const link = d.link || '';
+  const judul = d.judul || 'Karya';
 
   try{
     const seen = JSON.parse(sessionStorage.getItem('gb_spot_viewed')||'[]');
