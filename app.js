@@ -6637,17 +6637,33 @@ function _spotlightTsFromId(id){
   return m ? parseInt(m[1]) : 0;
 }
 
+const SPOTLIGHT_COLS = 'ID,"Judul Media","Nama Guru","Nama Sekolah","Jenis Konten","Mata Pelajaran","Fase/Kelas","Link Media Luar",VIEWS,Thumbnail,guru_id';
+function _spotlightQuery(cols){
+  return sbData.from('karya_guru')
+    .select(cols)
+    .eq('Status','DISETUJUI')
+    .order('ID',{ascending:false})   /* karya terbaru, bukan yang paling banyak dilihat */
+    .limit(10);
+}
+function _spotlightCover(item){
+  const cover = (item.Thumbnail||'').trim();
+  if(cover) return cover;
+  const link = String(item['Link Media Luar']||'');
+  const yt = link.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([^#&?]{11})/);
+  return yt ? 'https://img.youtube.com/vi/'+yt[1]+'/hqdefault.jpg' : '';
+}
+
 async function fetchSpotlight(force){
   const now = Date.now();
   if(!force && _spotlightCache.data && (now - _spotlightCache.ts) < SPOTLIGHT_TTL){
     return _spotlightCache.data;
   }
   try{
-    const { data, error } = await sbData.from('karya_guru')
-      .select('ID,"Judul Media","Nama Guru","Nama Sekolah","Jenis Konten","Mata Pelajaran","Fase/Kelas","Link Media Luar",VIEWS')
-      .eq('Status','DISETUJUI')
-      .order('ID',{ascending:false})
-      .limit(10);
+    let res = await _spotlightQuery(SPOTLIGHT_COLS);
+    if(res.error && /guru_id|Thumbnail|42703|PGRST204/i.test(String(res.error.message||''))){
+      res = await _spotlightQuery(SPOTLIGHT_COLS.replace(',guru_id','').replace(',Thumbnail',''));
+    }
+    const { data, error } = res;
     if(error) throw error;
     const sorted = (data||[]).slice().sort((a,b)=>_spotlightTsFromId(b.ID)-_spotlightTsFromId(a.ID));
     _spotlightCache = { data: sorted, ts: now };
@@ -6843,23 +6859,36 @@ async function renderSpotlight(force){
       const mapel = item['Mata Pelajaran']||'';
       const jenjang = _spotlightJenjang(item['Fase/Kelas']);
       const jenis = item['Jenis Konten']||'Karya';
+      const cover = _spotlightCover(item);
+      const ts = _spotlightTsFromId(item.ID);
+      const isNew = ts && (Date.now()-ts) < 7*24*60*60*1000;
+      const gid = (item.guru_id||'').trim();
+      const avatar = gid
+        ? `<img src="${esc(fotoUrl(gid,true))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
+        : esc(initials);
+      const open = `bukaSpotlight('${esc(item.ID)}')`;
       return `
         <div class="spot-slide">
-          <div class="spot-card" onclick="bukaSpotlight('${esc(item.ID)}')" role="button" tabindex="0">
-            <div class="spot-thumb" style="background:${meta.grad}">
-              <span class="spot-chip">${esc(jenis)}</span>
-              <span class="spot-views"><i data-lucide="eye"></i>${views}</span>
+          <div class="spot-card" onclick="${open}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${open}}" role="button" tabindex="0" aria-label="${esc(item['Judul Media']||'Karya')}">
+            <div class="spot-cover" style="background:${meta.grad}">
               <div class="spot-thumb-icon"><i data-lucide="${meta.icon}"></i></div>
-            </div>
-            <div class="spot-body">
-              <p class="spot-title">${esc(item['Judul Media']||'Tanpa Judul')}</p>
-              <div class="spot-chips">
-                <span class="spot-chip-mapel">${esc(mapel)}</span>
-                ${jenjang ? `<span class="spot-chip-jenjang">${esc(jenjang)}</span>` : ''}
+              ${cover ? `<img class="spot-cover-img" src="${esc(cover)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+              <div class="spot-shade"></div>
+              <div class="spot-top">
+                ${isNew ? '<span class="spot-baru"><i data-lucide="sparkles"></i>Baru</span>' : '<span></span>'}
+                <span class="spot-top-right">
+                  <span class="spot-type" title="${esc(jenis)}"><i data-lucide="${meta.icon}"></i></span>
+                  <span class="spot-views"><i data-lucide="eye"></i>${views}</span>
+                </span>
               </div>
-              <div class="spot-foot">
-                <div class="spot-avatar" style="background:${meta.agrad}">${esc(initials)}</div>
-                <div class="spot-author"><b>${esc(item['Nama Guru']||'Guru')}</b></div>
+              <div class="spot-overlay-body">
+                ${(mapel||jenjang) ? `<div class="spot-meta">${esc(mapel)}${mapel&&jenjang?' · ':''}${esc(jenjang)}</div>` : ''}
+                <p class="spot-title">${esc(item['Judul Media']||'Tanpa Judul')}</p>
+                <div class="spot-authorline">
+                  <span class="spot-avatar" style="background:${meta.agrad}">${avatar}</span>
+                  <span class="spot-author">${esc(item['Nama Guru']||'Guru')}</span>
+                  <span class="spot-open">Buka <i data-lucide="arrow-right"></i></span>
+                </div>
               </div>
             </div>
           </div>
@@ -6877,26 +6906,22 @@ async function renderSpotlight(force){
 function initSpotlightCarousel(){
   const track = $('spotTrack');
   if(!track) return;
-  const slides = track.querySelectorAll('.spot-slide');
+  const slides = Array.from(track.querySelectorAll('.spot-slide'));
+  if(!slides.length) return;
   const btnPrev = $('spPrev');
   const btnNext = $('spNext');
   const currEl = $('spCurr');
   const totalEl = $('spTotal');
 
   if(totalEl) totalEl.textContent = slides.length;
-  if(currEl) currEl.textContent = '1';
 
-  track.scrollLeft = 0;
-
-  if(!btnPrev || !btnNext || !currEl) return;
-
+  const padLeft = () => parseFloat(getComputedStyle(track).paddingLeft) || 0;
+  const maxScroll = () => Math.max(0, track.scrollWidth - track.clientWidth);
   const getOffset = (slide) => {
-    // Hitung offset slide relative ke track (lebih akurat dari offsetLeft)
     const trackRect = track.getBoundingClientRect();
     const slideRect = slide.getBoundingClientRect();
-    return (slideRect.left - trackRect.left) + track.scrollLeft;
+    return (slideRect.left - trackRect.left) + track.scrollLeft - padLeft();
   };
-
   const getIdx = () => {
     const sl = track.scrollLeft;
     let idx = 0, min = Infinity;
@@ -6908,27 +6933,33 @@ function initSpotlightCarousel(){
   };
   const update = () => {
     const i = getIdx();
-    currEl.textContent = i + 1;
-    btnPrev.disabled = i === 0;
-    btnNext.disabled = i === slides.length - 1;
+    track._spIndex = i;
+    if(currEl) currEl.textContent = i + 1;
+    // Pakai batas scroll, bukan index===terakhir: slide terakhir tidak selalu
+    // bisa sejajar kiri kalau beberapa slide tampil bersamaan (desktop).
+    if(btnPrev) btnPrev.disabled = track.scrollLeft <= 1;
+    if(btnNext) btnNext.disabled = track.scrollLeft >= maxScroll() - 1;
   };
-  const go = (i) => {
-    const s = slides[i]; if(!s) return;
-    const left = getOffset(s);
-    track.scrollTo({ left, behavior: 'smooth' });
+  const go = (i, instant) => {
+    const s = slides[Math.max(0, Math.min(i, slides.length - 1))];
+    if(!s) return;
+    const left = Math.min(getOffset(s), maxScroll());
+    if(instant){
+      const oldBehavior = track.style.scrollBehavior;
+      track.style.scrollBehavior = 'auto';
+      track.scrollLeft = left;
+      track.style.scrollBehavior = oldBehavior;
+    }else{
+      track.scrollTo({ left, behavior: 'smooth' });
+    }
+    update();
   };
 
-  // Wire listener SEKALI saja pakai flag di element (bukan clone)
-  if(!btnPrev._spWired){
-    btnPrev.addEventListener('click', () => go(getIdx() - 1));
-    btnPrev._spWired = true;
-  }
-  if(!btnNext._spWired){
-    btnNext.addEventListener('click', () => go(getIdx() + 1));
-    btnNext._spWired = true;
-  }
+  // Pakai property handler, bukan addEventListener + flag: closure lama
+  // (berisi slide hasil render sebelumnya) akan selalu ditimpa saat render ulang.
+  if(btnPrev) btnPrev.onclick = () => go(getIdx() - 1);
+  if(btnNext) btnNext.onclick = () => go(getIdx() + 1);
 
-  // Scroll listener — sekali saja
   if(!track._spScrollWired){
     let tick = false;
     track.addEventListener('scroll', () => {
@@ -6938,7 +6969,9 @@ function initSpotlightCarousel(){
     track._spScrollWired = true;
   }
 
-  update();
+  // Pulihkan posisi setelah data di-refresh, jangan selalu loncat ke awal.
+  const saved = Math.max(0, Math.min(track._spIndex || 0, slides.length - 1));
+  if(saved > 0) go(saved, true); else { track.scrollLeft = 0; update(); }
   icons();
 }
 
