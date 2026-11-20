@@ -1575,7 +1575,7 @@ function renderMenuIcon(icon,cls){
   cls=cls||'w-5 h-5';
   if(!icon)return `<i data-lucide="app-window" class="${cls}"></i>`;
   if(isUrlIcon(icon)){
-    return `<img src="${esc(icon)}" class="${cls} menu-icon-img" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
+    return `<img src="${esc(icon)}" class="menu-icon-img w-full h-full object-cover" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
   }
   return `<i data-lucide="${esc(icon)}" class="${cls}"></i>`;
 }
@@ -1782,7 +1782,7 @@ function openParentMenu(m,children){
   const iconBox=$('pParentIcon');
   if(iconBox){
     if(isUrlIcon(m.icon)){
-      iconBox.innerHTML=`<img src="${esc(m.icon)}" class="w-full h-full object-cover" alt="">`;
+      iconBox.innerHTML=`<img src="${esc(m.icon)}" class="menu-icon-img w-full h-full object-cover" alt="">`;
     }else{
       iconBox.innerHTML=`<i data-lucide="${esc(m.icon||'folder')}" class="w-5 h-5"></i>`;
     }

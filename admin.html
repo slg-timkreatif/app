@@ -44,6 +44,10 @@
   body{background:var(--bg)}
   .brand-grad{background-image:linear-gradient(135deg,#0D9488,#0F766E 55%,#134E4A)}
 
+  /* Ikon menu dari URL gambar: full tanpa bingkai */
+  .menu-icon-img{width:100%!important;height:100%!important;border:0!important;border-radius:0!important;object-fit:cover;background:transparent!important}
+  :is(span,div):has(> .menu-icon-img){border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
+
   .inp{width:100%;border:1px solid var(--border);border-radius:.75rem;background:#F8FAFC;padding:.65rem .9rem;font-size:.85rem;font-weight:500;color:#1E293B;outline:none;transition:border-color .15s,background .15s}
   .inp:focus{background:#fff;box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
   .lbl{display:block;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#64748B;margin-bottom:.35rem}
@@ -1912,7 +1916,7 @@ function renderMenus() {
     return `<div class="card p-4 flex items-center gap-3">
       <span class="w-10 h-10 rounded-xl ${wrap} flex items-center justify-center shrink-0 overflow-hidden">
   ${isUrlIcon(m.icon)
-  ? `<img src="${esc(m.icon)}" class="w-5 h-5 object-cover rounded" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`
+  ? `<img src="${esc(m.icon)}" class="menu-icon-img w-full h-full object-cover" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`
   : `<i data-lucide="${esc(m.icon||'app-window')}" class="w-5 h-5"></i>`}
 </span>
       <div class="flex-1 min-w-0">
@@ -2078,7 +2082,7 @@ function updateIconPreview(iconVal) {
   const lbl = $('eIconLabel');
   if (!box || !lbl) return;
   if (isUrlIcon(iconVal)) {
-    box.innerHTML = `<img src="${esc(iconVal)}" class="w-full h-full object-cover" alt="" onerror="this.style.opacity='0.3'">`;
+    box.innerHTML = `<img src="${esc(iconVal)}" class="menu-icon-img w-full h-full object-cover" alt="" onerror="this.style.opacity='0.3'">`;
     lbl.textContent = iconVal.slice(0, 40) + (iconVal.length > 40 ? '…' : '');
   } else {
     box.innerHTML = `<i data-lucide="${esc(iconVal||'app-window')}" class="w-6 h-6 text-slate-600"></i>`;

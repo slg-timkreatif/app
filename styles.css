@@ -285,7 +285,9 @@ body:not([data-navmode="hamburger"]) #hamburgerBtn{display:none!important}
 .filter-chip:active{transform:scale(.95)}
 .filter-chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 
-.menu-icon-img{border-radius:var(--r-md);object-fit:cover;background:#F1F5F9}
+/* Ikon menu dari URL gambar: mengisi penuh kotak ikon, tanpa bingkai/melengkung */
+.menu-icon-img{width:100%!important;height:100%!important;border-radius:0!important;object-fit:cover;background:transparent}
+:is(span,div):has(> .menu-icon-img){border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
 
 /* ============================================
    WORKSTATION STUDIO — v4.80
@@ -734,7 +736,7 @@ html.dark .seg-btn{background:#1F232B;color:#A0A8B5;border-color:#2F343D}
 html.dark .seg-btn.on{background:var(--acc);color:#0F1115;border-color:var(--acc)}
 html.dark .filter-chip{background:var(--card);color:#A0A8B5;border-color:var(--border)}
 html.dark .filter-chip.on{background:var(--acc);color:#0F1115;border-color:var(--acc)}
-html.dark .menu-icon-img{background:#282D36}
+html.dark .menu-icon-img{background:transparent}
 html.dark .divide-slate-100 > * + *{border-color:#252A33!important}
 html.dark .shadow-md{box-shadow:0 4px 12px rgba(0,0,0,.35)!important}
 html.dark .shadow-lg{box-shadow:0 8px 24px rgba(0,0,0,.4)!important}
