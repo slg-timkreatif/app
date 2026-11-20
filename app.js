@@ -891,18 +891,18 @@ async function flushOfflineQueue(){
 
   if(success > 0){
     toast(`${success} data tersinkron ✓`);
-    silentRefresh(true);
+    silentRefresh(true).catch(e=>console.warn('[sync]', e));
   }
 }
 
 if('serviceWorker' in navigator){
   navigator.serviceWorker.addEventListener('message', (e) => {
-    if(e.data && e.data.type === 'FLUSH_OFFLINE_QUEUE') flushOfflineQueue();
+    if(e.data && e.data.type === 'FLUSH_OFFLINE_QUEUE') flushOfflineQueue().catch(()=>{});
   });
 }
 window.addEventListener('online',()=>{
   toast('Kembali online — sinkronisasi...','info');
-  flushOfflineQueue();
+  flushOfflineQueue().catch(()=>{});
 });
 function updateOnlineStatus(){
   const bar=$('offlineBar'); if(!bar)return;
@@ -1104,7 +1104,7 @@ function setPageInstant(pg){
     try{
       const now = Date.now();
       if(typeof renderSpotlight === 'function' && (!_spotlightCache.ts || now - _spotlightCache.ts > 30 * 1000)){
-        renderSpotlight(true);
+        renderSpotlight(true).catch(()=>{});
       }
     }catch(_){}
   }
@@ -1186,8 +1186,8 @@ function openPanel(id){
   CUR.panel=id;
   safePush({...CUR});
   if(id==='pNotif'){
-    renderNotif();
-    if(STATE.profile)tandaiBaca();
+    renderNotif().catch(()=>{});
+    if(STATE.profile)tandaiBaca().catch(()=>{});
   }
 }
 function tutupPanel(id){try{history.back()}catch(e){closeInstant(id);CUR.panel=null;}}
@@ -5209,7 +5209,7 @@ function renderFromCache(){
     STATE.agenda=cache.dyn.agenda||[];
     STATE.docs=cache.dyn.docs||[];
     if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
-    if(sigChanged('notifs',STATE.notifs))updateNotifBadge();
+    if(sigChanged('notifs',STATE.notifs))updateNotifBadge().catch(()=>{});
     if(sigChanged('docs',STATE.docs))renderDokWidget();
     if(sigChanged('agenda',STATE.agenda))renderAgendaWidget();
     if(CUR.view==='bagi')renderBagi();
@@ -5230,8 +5230,10 @@ async function silentRefresh(force){
   try{const {data:cv}=await sb.from('creative_app_config').select('versi').limit(1).maybeSingle();serverVersi=cv?cv.versi:null;}catch(e){}
   const cacheVersi=(cache&&cache.d&&cache.d.config)?cache.d.config.versi:null;
   if(!cache||!cache.d||cacheAge>=86400000||(serverVersi&&serverVersi!==cacheVersi)){
-    const {data:pd}=await sb.rpc('creative_get_portal');
-    if(pd){writeCache({t:now,d:pd,dyn:cache?cache.dyn:null,dynTs:cache?cache.dynTs:null});applyPortal(pd);}
+    try{
+      const {data:pd}=await sb.rpc('creative_get_portal');
+      if(pd){writeCache({t:now,d:pd,dyn:cache?cache.dyn:null,dynTs:cache?cache.dynTs:null});applyPortal(pd);}
+    }catch(e){ console.warn('[portal] rpc gagal, pakai cache:', e); }
   }
   const TTL={notifs:900000,agenda:21600000,docs:21600000};
   const ts=(cache&&cache.dynTs)||{};
@@ -5242,7 +5244,7 @@ async function silentRefresh(force){
   if(stale('agenda'))jobs.agenda=sb.from('creative_agenda').select('*').eq('is_active',true).order('tanggal',{ascending:false}).limit(60);
   if(stale('docs'))jobs.docs=sb.from('creative_documents').select('*').eq('is_active',true).order('kategori').limit(100);
   const keys=Object.keys(jobs);
-  renderSpotlight(true);
+  renderSpotlight(true).catch(()=>{});
   if(!keys.length){
     renderHomeWidgets();
     renderTodayPanel();
@@ -5261,14 +5263,14 @@ async function silentRefresh(force){
   if(sigChanged('carousel',{c:STATE.config,n:STATE.notifs.slice(0,4)}))renderCarousel();
   if(sigChanged('docs',STATE.docs))renderDokWidget();
   if(sigChanged('agenda',STATE.agenda))renderAgendaWidget();
-  if(sigChanged('notifs',STATE.notifs))updateNotifBadge();
+  if(sigChanged('notifs',STATE.notifs))updateNotifBadge().catch(()=>{});
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();
   renderTodayPanel();
   if(CUR.view==='agenda')renderAgenda();
   if(CUR.view==='dokumen')renderDokumen();
-  if(CUR.panel==='pNotif')renderNotif();
+  if(CUR.panel==='pNotif')renderNotif().catch(()=>{});
   icons();
   checkInAppNotif();
 }
@@ -5371,7 +5373,7 @@ function autoRefresh(reason) {
   if (document.hidden) return;
   if (Date.now() - _lastAutoRefresh < AUTO_REFRESH_MIN_GAP) return;
   _lastAutoRefresh = Date.now();
-  silentRefresh(false);
+  silentRefresh(false).catch(e=>console.warn('[autoRefresh]', e));
 }
 
 function initAutoRefresh() {
@@ -6010,7 +6012,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
     }
     Object.keys(localStorage).filter(k=>k.startsWith('gb_foto_')).forEach(k=>localStorage.removeItem(k));
     await idb.set('misc','migrated_foto_v1',true);
-  })();
+  })().catch(e=>console.warn('[migrateFoto]', e));
 
   const token=localStorage.getItem('gb_token'),saved=localStorage.getItem('gb_profile');
   if(token&&saved){
@@ -6050,7 +6052,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   });
 
   setPageInstant('home');
-  muatSemuaData(false);
+  muatSemuaData(false).catch(e=>console.warn('[boot data]', e));
 
   // Safety net — render Spotlight setelah DOM + sbData siap
   const _bootSpotlight = () => {
@@ -6066,7 +6068,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   }
 
   // Init badge pending sync — baca dari IndexedDB
-  updatePendingBadge();
+  updatePendingBadge().catch(()=>{});
 
   // Setting Page v2 — Accordion + Preset
   window.toggleSettingSection = function(id) {
@@ -7310,6 +7312,7 @@ function renderHeroBanner(){
 
 /* ---------- PANEL HARI INI: agenda + karya ringkas ---------- */
 async function renderTodayPanel(){
+  try{
   // Agenda paling dekat: yang akan datang diprioritaskan, lalu yang sudah lewat
   const agBox=$('todayAgenda');
   if(agBox){
@@ -7360,6 +7363,7 @@ async function renderTodayPanel(){
       icons();
     }
   }
+  }catch(e){ console.warn('[today] render gagal:', e); }
 }
 
 /* ---------- HOME WIDGETS: Agenda + Dokumen ---------- */
@@ -7451,8 +7455,8 @@ function renderHomeWidgets(){
 function syncAllDesktop(){
   syncSidebarUser();
   renderPromo();
-  renderSpotlight();
-  renderTodayPanel();
+  renderSpotlight().catch(()=>{});
+  renderTodayPanel().catch(()=>{});
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();
