@@ -353,6 +353,19 @@
         <div class="card p-5">
           <div class="flex items-center justify-between mb-3">
             <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+              <i data-lucide="smartphone" class="w-4 h-4 acc-text"></i> Instalasi Aplikasi
+            </p>
+            <button onclick="exportCSV('instalasi',STATE.installs)" class="card px-2.5 py-1.5 text-[10px] font-bold text-slate-500 flex items-center gap-1.5 active:scale-95 transition">
+              <i data-lucide="download" class="w-3 h-3"></i>Export
+            </button>
+          </div>
+          <div id="installStats" class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3"></div>
+          <div id="installList" class="space-y-2"></div>
+        </div>
+
+        <div class="card p-5">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
               <i data-lucide="history" class="w-4 h-4 acc-text"></i> Aktivitas Terbaru
               <span id="logCount" class="text-[10px] text-slate-400 font-normal"></span>
             </p>
@@ -1104,7 +1117,7 @@ const COLOR_PICKER_LIST = [
    ============================================================ */
 const STATE={
   profile:null,user:null,
-  menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,
+  menus:[],footer:[],quotes:[],notifs:[],fb:[],guru:[],log:[],logTotal:0,installs:[],
   gam:[],lead:[],config:null,agenda:[],docs:[],
   schoolsAdmin:[],guruPrefs:{},_guruPrefsLoadedAt:0,
   editMenu:null,editAgenda:null,editDoc:null,
@@ -1479,7 +1492,7 @@ function setSyncState(state){
 async function loadAll(){
   setSyncState('syncing');
   try{
-    const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,agenda,docs,schools]=await Promise.all([
+    const [menus,footer,quotes,notifs,fb,cfg,gam,log,guru,lead,agenda,docs,schools,installs]=await Promise.all([
       sb.from('creative_menus').select('*').order('sort_order'),
       sb.from('creative_footers').select('*').order('sort_order'),
       sb.from('creative_quotes').select('*').order('id'),
@@ -1492,7 +1505,8 @@ async function loadAll(){
       sb.rpc('creative_leaderboard'),
       sb.from('creative_agenda').select('*').order('tanggal',{ascending:false}),
       sb.from('creative_documents').select('*').order('kategori'),
-      sb.from('creative_schools').select('*').order('nama')
+      sb.from('creative_schools').select('*').order('nama'),
+      sb.from('creative_installs').select('install_id,guru_id,client,pkg,apkv,web_ver,first_seen').order('first_seen',{ascending:false}).limit(200)
     ]);
 
     STATE.menus=menus.data||[];
@@ -1508,6 +1522,7 @@ async function loadAll(){
     STATE.agenda=agenda.data||[];
     STATE.docs=docs.data||[];
     STATE.schoolsAdmin=schools.data||[];
+    STATE.installs=installs.data||[];
 
     sb.from('creative_activity_log').select('*',{count:'exact',head:true}).then(r=>{
       STATE.logTotal=r.count||0;
@@ -1515,6 +1530,7 @@ async function loadAll(){
     });
 
     renderDash();
+    renderInstalls();
     renderSchoolsAdmin();
     renderMenus();
     renderAgendaAdmin();
@@ -1540,6 +1556,34 @@ async function loadAll(){
 function renderActCount(){
   const el=$('logCount');
   if(el)el.textContent=`(${STATE.log.length}/${STATE.logTotal||0})`;
+}
+
+function renderInstalls(){
+  const st=$('installStats'), ls=$('installList');
+  if(!st||!ls)return;
+  const rows=STATE.installs||[];
+  const twa=rows.filter(r=>r.client==='twa').length;
+  const pwa=rows.filter(r=>r.client==='pwa').length;
+  const versi={};
+  rows.forEach(r=>{
+    const k=r.client==='twa'?('APK '+(r.apkv||'?')):('PWA '+(r.web_ver||'?'));
+    versi[k]=(versi[k]||0)+1;
+  });
+  const top=Object.entries(versi).sort((a,b)=>b[1]-a[1]).slice(0,2);
+  const chip=(label,val,cls)=>`<div class="card p-2.5"><p class="text-[9px] font-black uppercase text-slate-400">${label}</p><p class="text-lg font-black ${cls||'text-slate-700'}">${val}</p></div>`;
+  st.innerHTML=chip('Total',rows.length)+chip('APK / TWA',twa,'acc-text')+chip('PWA',pwa)
+    +top.map(([k,v])=>chip(k,v)).join('');
+  ls.innerHTML=rows.slice(0,12).map(r=>{
+    const g=STATE.guru.find(x=>x.id===r.guru_id);
+    const kind=r.client==='twa'?`APK ${esc(r.apkv||'?')}`:'PWA';
+    return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
+      <span class="text-base">${r.client==='twa'?'📱':'💻'}</span>
+      <div class="min-w-0 flex-1">
+        <p class="text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'Tamu')} <span class="text-slate-400 font-semibold">· ${kind} · ${esc(r.pkg||'-')}</span></p>
+        <p class="text-[10px] text-slate-400">Web ${esc(r.web_ver||'-')} · ${new Date(r.first_seen).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</p>
+      </div>
+    </div>`;
+  }).join('')||'<p class="text-xs text-slate-400 text-center py-4">Belum ada data instalasi.</p>';
 }
 async function loadMoreLog(){
   const from=STATE.log.length;
@@ -1600,6 +1644,8 @@ function renderDash(){
     let det='';
     if(l.aksi==='buka_menu'&&l.detail&&l.detail.judul) det=' — '+esc(l.detail.judul);
     else if((l.aksi==='wa_builder'||l.aksi==='wa_builder_share')&&l.detail&&l.detail.template) det=' — '+esc(l.detail.template);
+    if(l.detail&&l.detail.apkv) det+=` <span class="ml-1 rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-black text-emerald-600">APK ${esc(l.detail.apkv)}</span>`;
+    else if(l.detail&&l.detail.client==='pwa') det+=` <span class="ml-1 rounded bg-sky-50 px-1.5 py-0.5 text-[9px] font-black text-sky-600">PWA</span>`;
     return `<div class="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
       <span class="flex-1 text-xs font-bold text-slate-600 truncate">${esc(g?g.nama_lengkap:'?')} <span class="text-slate-400 font-semibold">${a}${det}</span></span>
       <span class="text-[10px] text-slate-400 shrink-0">${new Date(l.created_at).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span>
