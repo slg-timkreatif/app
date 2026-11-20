@@ -2,9 +2,10 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F6F5F9">
 <meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
 <script>
 (function(){try{
   var a=localStorage.getItem('gb_acc');if(a)document.documentElement.dataset.acc=a;
@@ -19,56 +20,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']}}}}</script>
+<link rel="stylesheet" href="ui-core.css?v=1.0">
 <style>
   *{-webkit-tap-highlight-color:transparent}
   body{font-family:'Inter',sans-serif}
   html,body{overflow-x:hidden}
   a{-webkit-touch-callout:default}
 
-  :root{--acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-text:#0B7C72;--acc-ring:rgba(13,148,136,.35);--bg:#F1F5F9;--card:#fff;--border:#E2E8F0}
-  html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-text:#2563eb;--acc-ring:rgba(37,99,235,.35)}
-  html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-text:#7c3aed;--acc-ring:rgba(124,58,237,.35)}
-  html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-text:#d97706;--acc-ring:rgba(217,119,6,.35)}
-  html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-text:#e11d48;--acc-ring:rgba(225,29,72,.35)}
+  /* Token, reset, dan komponen dasar (card, acc-*, lbl, inp, seg-btn,
+     menu-icon-img, skeleton, animasi) berasal dari ui-core.css */
 
-  .no-scroll::-webkit-scrollbar{display:none}
-  .no-scroll{scrollbar-width:none}
-
-  .card{background:var(--card);border:1px solid var(--border);box-shadow:0 1px 3px rgba(20,18,26,.05);border-radius:1.25rem}
-  .acc-bg{background-color:var(--acc)}
-  .acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
-  .acc-soft{background-color:var(--acc-soft)}
-  .acc-text{color:var(--acc-text)}
-  .acc-ring:focus{outline:none;box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
-
-  body{background:var(--bg)}
   .brand-grad{background-image:linear-gradient(135deg,#0D9488,#0F766E 55%,#134E4A)}
 
-  /* Ikon menu dari URL gambar: full tanpa bingkai */
-  .menu-icon-img{width:100%!important;height:100%!important;border:0!important;border-radius:0!important;object-fit:cover;background:transparent!important}
-  :is(span,div):has(> .menu-icon-img){border:0!important;border-radius:0!important;background:transparent!important;padding:0!important;box-shadow:none!important}
-
-  .inp{width:100%;border:1px solid var(--border);border-radius:.75rem;background:#F8FAFC;padding:.65rem .9rem;font-size:.85rem;font-weight:500;color:#1E293B;outline:none;transition:border-color .15s,background .15s}
-  .inp:focus{background:#fff;box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
-  .lbl{display:block;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#64748B;margin-bottom:.35rem}
-
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .spin{animation:spin .8s linear infinite}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  .anim-in{animation:fadeUp .3s ease both}
-
-  .seg-btn{padding:10px 12px;border-radius:12px;font-size:11px;font-weight:800;background:#F1F5F9;color:#64748B;border:1px solid var(--border);cursor:pointer;transition:all .15s}
-  .seg-btn:active{transform:scale(.97)}
-  .seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-
-  /* DARK MODE */
-  html.dark{--bg:#0F1115;--card:#1A1D24;--border:#2A2D35;color-scheme:dark}
+  /* DARK MODE — override khusus admin */
   html.dark body{background:var(--bg);color:#E5E7EB}
-  html.dark .card{background:var(--card);border-color:var(--border)}
-  html.dark .inp{background:#1F232B;border-color:#2A2D35;color:#E5E7EB}
-  html.dark .inp:focus{background:#252A33}
-  html.dark .lbl{color:#94A3B8}
   html.dark aside{background:#141821!important;border-color:#252A33!important}
   html.dark .bg-white{background:var(--card)!important}
   html.dark .bg-slate-100{background:#252A33!important}
@@ -225,20 +190,20 @@
     <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto no-scroll" id="navDesktop"></nav>
     <div class="p-5 border-t border-slate-100 space-y-3">
       <div class="flex items-center gap-2">
-        <button id="btnDark" onclick="toggleDark()" aria-label="Dark mode" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <button id="btnDark" onclick="toggleDark()" aria-label="Dark mode" class="ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition">
           <i data-lucide="moon" class="w-4 h-4 text-slate-600"></i>
         </button>
-        <button onclick="openAksenPicker()" aria-label="Warna aksen" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <button onclick="openAksenPicker()" aria-label="Warna aksen" class="ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition">
           <i data-lucide="palette" class="w-4 h-4 text-slate-600"></i>
         </button>
-        <button onclick="toggleDebug()" aria-label="Debug" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <button onclick="toggleDebug()" aria-label="Debug" class="ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition">
           <i data-lucide="bug" class="w-4 h-4 text-slate-600"></i>
         </button>
         <div class="flex-1 min-w-0 text-right">
           <p id="adminEmail" class="text-[10px] font-bold text-slate-500 truncate">—</p>
         </div>
       </div>
-      <button onclick="konfirmasiLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 active:scale-[.98] transition">
+      <button onclick="konfirmasiLogout()" class="ui-btn ui-btn-danger w-full py-2.5">
         <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
       </button>
     </div>
@@ -258,7 +223,7 @@
         <span id="syncDot" class="sync-dot"></span>
         <span id="syncText" class="text-[9px] font-mono font-semibold text-slate-500">Synced</span>
       </div>
-      <button id="btnDarkMobile" onclick="toggleDark()" aria-label="Dark" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition shrink-0">
+      <button id="btnDarkMobile" onclick="toggleDark()" aria-label="Dark" class="ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition shrink-0">
         <i data-lucide="moon" class="w-4 h-4"></i>
       </button>
     </div>
@@ -270,7 +235,7 @@
         <span id="syncDotDesktop" class="sync-dot"></span>
         <span id="syncTextDesktop" class="text-[10px] font-mono font-semibold text-slate-500">Synced</span>
       </div>
-      <button onclick="exportData()" aria-label="Export" title="Export JSON" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+      <button onclick="exportData()" aria-label="Export" title="Export JSON" class="ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition">
         <i data-lucide="download" class="w-4 h-4"></i>
       </button>
     </div>
@@ -289,7 +254,7 @@
               <p id="drawerEmail" class="text-[10px] text-slate-400 truncate">—</p>
             </div>
           </div>
-          <button onclick="closeDrawer()" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+          <button onclick="closeDrawer()" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon shrink-0">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
@@ -298,7 +263,7 @@
           <button onclick="toggleDebug()" class="w-full py-2.5 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold flex items-center justify-center gap-2 active:scale-[.98]">
             <i data-lucide="bug" class="w-3.5 h-3.5"></i> Debug Panel
           </button>
-          <button onclick="konfirmasiLogout()" class="w-full py-2.5 rounded-xl bg-rose-50 text-rose-600 text-xs font-bold flex items-center justify-center gap-2 active:scale-[.98]">
+          <button onclick="konfirmasiLogout()" class="ui-btn ui-btn-danger w-full py-2.5">
             <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Keluar
           </button>
         </div>
@@ -833,7 +798,7 @@
 <div id="mMenu" class="modal" role="dialog" aria-modal="true" aria-labelledby="eTitle"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="eTitle">Editor Menu</p>
-    <button onclick="closeModal('mMenu')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+    <button onclick="closeModal('mMenu')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon">
       <i data-lucide="x" class="w-4 h-4"></i>
     </button>
   </div>
@@ -940,7 +905,7 @@
   </label>
   <div class="flex gap-2 pt-3 border-t border-slate-100">
     <button onclick="saveMenu()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
-    <button id="eDelete" onclick="delMenu()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button id="eDelete" onclick="delMenu()" class="ui-btn ui-btn-danger hidden px-4">Hapus</button>
     <button onclick="closeModal('mMenu')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
   </div>
 </div></div>
@@ -949,7 +914,7 @@
 <div id="mAgenda" class="modal" role="dialog" aria-modal="true" aria-labelledby="aTitle"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="aTitle">Editor Agenda</p>
-    <button onclick="closeModal('mAgenda')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <button onclick="closeModal('mAgenda')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon"><i data-lucide="x" class="w-4 h-4"></i></button>
   </div>
   <div><label class="lbl">Judul</label><input id="aJudul" class="inp acc-ring"></div>
   <div><label class="lbl">Deskripsi</label><textarea id="aDesk" rows="2" class="inp acc-ring"></textarea></div>
@@ -967,7 +932,7 @@
   </label>
   <div class="flex gap-2 pt-3 border-t border-slate-100">
     <button onclick="saveAgenda()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
-    <button id="aDelete" onclick="delAgenda()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button id="aDelete" onclick="delAgenda()" class="ui-btn ui-btn-danger hidden px-4">Hapus</button>
     <button onclick="closeModal('mAgenda')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
   </div>
 </div></div>
@@ -976,7 +941,7 @@
 <div id="mDoc" class="modal" role="dialog" aria-modal="true" aria-labelledby="docTitle"><div class="modal-box no-scroll p-6 space-y-3">
   <div class="flex items-center justify-between">
     <p class="text-base font-extrabold text-slate-800" id="docTitle">Editor Dokumen</p>
-    <button onclick="closeModal('mDoc')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <button onclick="closeModal('mDoc')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon"><i data-lucide="x" class="w-4 h-4"></i></button>
   </div>
   <div><label class="lbl">Judul</label><input id="docJudul" class="inp acc-ring"></div>
   <div><label class="lbl">Deskripsi</label><input id="docDesk" class="inp acc-ring"></div>
@@ -1003,14 +968,14 @@
   </label>
   <div class="flex gap-2 pt-3 border-t border-slate-100">
     <button onclick="saveDoc()" class="flex-1 acc-bg text-white font-bold py-3 rounded-xl text-sm active:scale-95 transition shadow-sm">Simpan</button>
-    <button id="docDelete" onclick="delDoc()" class="hidden bg-rose-50 text-rose-600 font-bold px-4 rounded-xl text-sm active:scale-95 transition">Hapus</button>
+    <button id="docDelete" onclick="delDoc()" class="ui-btn ui-btn-danger hidden px-4">Hapus</button>
     <button onclick="closeModal('mDoc')" class="bg-slate-100 text-slate-700 px-4 rounded-xl text-sm active:scale-95 transition">Tutup</button>
   </div>
 </div></div>
 
 <!-- ============ MODAL: CONFIRM ============ -->
 <div id="mConfirm" class="modal" role="dialog" aria-modal="true" aria-labelledby="cfTitle" aria-describedby="cfMsg"><div class="modal-box p-6 text-center relative" style="max-width:20rem">
-  <button onclick="cfCancel()" aria-label="Tutup" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+  <button onclick="cfCancel()" aria-label="Tutup" class="absolute top-3 right-3 ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition">
     <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
   </button>
   <div class="w-14 h-14 mx-auto rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3">
@@ -1028,7 +993,7 @@
 <div id="mAksen" class="modal" role="dialog" aria-modal="true" aria-labelledby="aksenTitle"><div class="modal-box p-6 space-y-4 relative" style="max-width:22rem">
   <div class="flex items-center justify-between">
     <p id="aksenTitle" class="text-base font-extrabold text-slate-800">Warna Aksen</p>
-    <button onclick="closeModal('mAksen')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+    <button onclick="closeModal('mAksen')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon active:scale-90 transition">
       <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
     </button>
   </div>
@@ -1755,7 +1720,7 @@ function editSchoolAdmin(npsn){
     <div class="space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-base font-extrabold text-slate-800">Edit Sekolah</p>
-        <button onclick="closeModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+        <button onclick="closeModal('mPop')" class="ui-btn ui-btn-ghost ui-btn-icon">
           <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
         </button>
       </div>
@@ -1826,7 +1791,7 @@ function viewSchoolLogoAdmin(npsn){
     <div class="space-y-3">
       <div class="flex items-center justify-between">
         <p class="text-base font-extrabold text-slate-800">Logo Sekolah</p>
-        <button onclick="closeModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+        <button onclick="closeModal('mPop')" class="ui-btn ui-btn-ghost ui-btn-icon">
           <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
         </button>
       </div>
@@ -1916,7 +1881,7 @@ function renderMenus() {
     return `<div class="card p-4 flex items-center gap-3">
       <span class="w-10 h-10 rounded-xl ${wrap} flex items-center justify-center shrink-0 overflow-hidden">
   ${isUrlIcon(m.icon)
-  ? `<img src="${esc(m.icon)}" class="menu-icon-img w-full h-full object-cover" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`
+  ? `<img src="${esc(m.icon)}" class="menu-icon-img" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`
   : `<i data-lucide="${esc(m.icon||'app-window')}" class="w-5 h-5"></i>`}
 </span>
       <div class="flex-1 min-w-0">
@@ -2082,7 +2047,7 @@ function updateIconPreview(iconVal) {
   const lbl = $('eIconLabel');
   if (!box || !lbl) return;
   if (isUrlIcon(iconVal)) {
-    box.innerHTML = `<img src="${esc(iconVal)}" class="menu-icon-img w-full h-full object-cover" alt="" onerror="this.style.opacity='0.3'">`;
+    box.innerHTML = `<img src="${esc(iconVal)}" class="menu-icon-img" alt="" onerror="this.style.opacity='0.3'">`;
     lbl.textContent = iconVal.slice(0, 40) + (iconVal.length > 40 ? '…' : '');
   } else {
     box.innerHTML = `<i data-lucide="${esc(iconVal||'app-window')}" class="w-6 h-6 text-slate-600"></i>`;
@@ -2236,7 +2201,7 @@ function renderDocsAdmin(){
         <p class="text-xs font-extrabold text-slate-800 truncate">${esc(d.judul)} ${!d.is_active?'<span class="text-[8px] bg-slate-200 text-slate-500 px-1.5 py-0.5 rounded font-black">NONAKTIF</span>':''}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(d.kategori||'Umum')}</p>
       </div>
-      <a href="${esc(d.link)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+      <a href="${esc(d.link)}" target="_blank" rel="noopener" aria-label="Buka" class="ui-btn ui-btn-ghost ui-btn-icon shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
       <button onclick="openDocEditor(${d.id})" aria-label="Edit" class="acc-soft acc-text w-9 h-9 rounded-xl flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="pencil" class="w-4 h-4"></i></button>
     </div>`;
   }).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada dokumen.</p>';
@@ -2402,7 +2367,7 @@ function viewGuruProfile(gid){
     <div class="space-y-4">
       <div class="flex items-center justify-between">
         <p class="text-base font-extrabold text-slate-800">Profil Guru</p>
-        <button onclick="closeModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
+        <button onclick="closeModal('mPop')" class="ui-btn ui-btn-ghost ui-btn-icon">
           <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
         </button>
       </div>
@@ -2801,7 +2766,7 @@ function renderFooter(){
         <p class="text-xs font-extrabold text-slate-800 truncate">${esc(f.judul)}</p>
         <p class="text-[10px] text-slate-500 truncate">${esc(f.url)}</p>
       </div>
-      <a href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Buka" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+      <a href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Buka" class="ui-btn ui-btn-ghost ui-btn-icon shrink-0"><i data-lucide="external-link" class="w-4 h-4"></i></a>
       <button onclick="delFooter(${f.id})" aria-label="Hapus" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 active:scale-90"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
     </div>`).join('')||'<p class="text-xs text-slate-400 text-center py-6">Belum ada footer.</p>';
   icons();

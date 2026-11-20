@@ -525,6 +525,7 @@ function markAcc(){
     b.classList.toggle('ring-2',on);
     b.classList.toggle('ring-white',on);
     b.classList.toggle('scale-110',on);
+    b.setAttribute('aria-pressed',on?'true':'false');
   });
 }
 function setFs(){
@@ -549,7 +550,7 @@ function paintThemeMode(){
   const cur=getThemeMode();
   ['auto','light','dark'].forEach(v=>{
     const b=$('themeMode'+v.charAt(0).toUpperCase()+v.slice(1));
-    if(b)b.classList.toggle('on',v===cur);
+    if(b){b.classList.toggle('on',v===cur);b.setAttribute('aria-pressed',v===cur?'true':'false');}
   });
 }
 function setThemeMode(mode){
@@ -579,6 +580,7 @@ function paintToggles(){
   [['tglFs',fs],['tglAnim',an]].forEach(([id,on])=>{
     const b=$(id);if(!b)return;
     b.className='w-12 h-7 rounded-full relative transition '+(on?'acc-bg':'bg-slate-200');
+    b.setAttribute('aria-checked',on?'true':'false');
     b.firstElementChild.className='absolute top-1 w-5 h-5 bg-white rounded-full transition '+(on?'left-6':'left-1');
   });
 }
@@ -688,13 +690,25 @@ function resetTheme(){
   },'Reset Tema?','Reset');
 }
 function paintCustomizeUI() {
-  document.querySelectorAll('[data-navstyle]').forEach(b => b.classList.toggle('on', b.dataset.navstyle === document.body.dataset.navbar));
-  document.querySelectorAll('[data-navcolor]').forEach(b => b.classList.toggle('on', b.dataset.navcolor === document.body.dataset.navbarColor));
-  document.querySelectorAll('[data-navmode]').forEach(b => b.classList.toggle('on', b.dataset.navmode === (document.body.dataset.navmode || 'bottom')));
-  document.querySelectorAll('[data-density]').forEach(b => b.classList.toggle('on', b.dataset.density === document.body.dataset.density));
-  document.querySelectorAll('[data-iconstyle]').forEach(b => b.classList.toggle('on', b.dataset.iconstyle === (document.body.dataset.iconstyle || 'default')));
+  const setSeg = (key, getCur) => {
+    const cur = getCur();
+    document.querySelectorAll('[data-' + key + ']').forEach(b => {
+      const on = b.dataset[key] === cur;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  };
+  setSeg('navstyle', () => document.body.dataset.navbar);
+  setSeg('navcolor', () => document.body.dataset.navbarColor);
+  setSeg('navmode', () => document.body.dataset.navmode || 'bottom');
+  setSeg('density', () => document.body.dataset.density);
+  setSeg('iconstyle', () => document.body.dataset.iconstyle || 'default');
   const ap = localStorage.getItem('gb_preset');
-  document.querySelectorAll('[data-preset]').forEach(b => b.classList.toggle('on', b.dataset.preset === ap));
+  document.querySelectorAll('[data-preset]').forEach(b => {
+    const on = b.dataset.preset === ap;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
   paintPresetUI();
 }
 function setIconStyle(v){
@@ -1012,13 +1026,18 @@ function showWx(cw){
   else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';label='Hujan';color='text-sky-600';}
   else if(cd>=95){emoji='⛈️';label='Petir';color='text-sky-600';}
   // Target baru — hero weather badge
+  const temp=Math.round(cw.temperature)+'°';
   const emojiEl=$('heroWxEmoji');
   const tempEl=$('heroWxTemp');
   const descEl=$('heroWxDesc');
   if(emojiEl) emojiEl.textContent=emoji;
-  if(tempEl)  tempEl.textContent=Math.round(cw.temperature)+'°';
+  if(tempEl)  tempEl.textContent=temp;
   if(descEl)  descEl.textContent=label;
 
+  // Panel "Hari Ini" memakai data cuaca yang sama
+  const tEmoji=$('todayWxEmoji');if(tEmoji)tEmoji.textContent=emoji;
+  const tTemp=$('todayWxTemp');if(tTemp)tTemp.textContent=temp;
+  const tDesc=$('todayWxDesc');if(tDesc)tDesc.textContent=label;
 }
 
 /* ============================================================
@@ -1056,6 +1075,7 @@ function setPageInstant(pg){
     b.classList.remove('acc-soft','acc-text','text-slate-400','text-slate-500');
     b.classList.toggle('nav-active',on);
     b.classList.toggle('nav-inactive',!on);
+    if(on)b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
   });
 
   if(pg==='dokumen'){paintDokView();renderDokumen($('inSearchDok')?.value||'');}
@@ -1575,7 +1595,7 @@ function renderMenuIcon(icon,cls){
   cls=cls||'w-5 h-5';
   if(!icon)return `<i data-lucide="app-window" class="${cls}"></i>`;
   if(isUrlIcon(icon)){
-    return `<img src="${esc(icon)}" class="menu-icon-img w-full h-full object-cover" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
+    return `<img src="${esc(icon)}" class="menu-icon-img" alt="" loading="lazy" onerror="this.style.opacity='0.3'">`;
   }
   return `<i data-lucide="${esc(icon)}" class="${cls}"></i>`;
 }
@@ -1782,7 +1802,7 @@ function openParentMenu(m,children){
   const iconBox=$('pParentIcon');
   if(iconBox){
     if(isUrlIcon(m.icon)){
-      iconBox.innerHTML=`<img src="${esc(m.icon)}" class="menu-icon-img w-full h-full object-cover" alt="">`;
+      iconBox.innerHTML=`<img src="${esc(m.icon)}" class="menu-icon-img" alt="">`;
     }else{
       iconBox.innerHTML=`<i data-lucide="${esc(m.icon||'folder')}" class="w-5 h-5"></i>`;
     }
@@ -1971,6 +1991,12 @@ function renderQuick(){
    ============================================================ */
 function emptyState(icon,title,desc,cta){
   return `<div class="empty-state"><div class="es-icon"><i data-lucide="${icon}" class="w-6 h-6"></i></div><p class="es-title">${esc(title)}</p><p class="es-desc">${esc(desc)}</p>${cta?`<button onclick="${cta.action}" class="mt-4 acc-bg text-white font-bold px-4 py-2.5 rounded-xl text-xs active:scale-95 transition">${esc(cta.label)}</button>`:''}</div>`;
+}
+function skeletonRows(n=3){
+  return Array.from({length:n},()=>`<div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>`).join('');
+}
+function skeletonCards(n=3){
+  return Array.from({length:n},()=>`<div class="spot-slide"><div class="skel-card"><span class="skel" style="display:block;aspect-ratio:16/10;border-radius:12px"></span><span class="skel skel-line" style="width:85%"></span><span class="skel skel-line w45"></span></div></div>`).join('');
 }
 
 /* ============================================================
@@ -5061,14 +5087,16 @@ function setSapaan(){
   const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
   const el=$('hdrSub');if(el)el.textContent=s;
 
-  // Tanggal hero (format: "Sen, 5 Okt 2026")
-  const dayEl=$('heroWxDay');
-  if(dayEl){
-    const H=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
-    const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
-    const d=new Date();
-    dayEl.textContent=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
-  }
+  // Tanggal dipakai hero sekaligus panel "Hari Ini" (format: "Sen, 5 Okt 2026")
+  const H=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+  const d=new Date();
+  const tanggal=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
+  const dayEl=$('heroWxDay');if(dayEl)dayEl.textContent=tanggal;
+
+  const nama=namaPanggil(STATE.profile?.nama||'Guru');
+  const tSapaan=$('todaySapaan');if(tSapaan)tSapaan.textContent=s+', '+nama;
+  const tTanggal=$('todayTanggal');if(tTanggal)tTanggal.textContent=tanggal;
 }
 
 async function simpanSosmed(){
@@ -5168,6 +5196,7 @@ function renderFromCache(){
     renderRailNotif();
     renderRailRecent();
     renderHomeWidgets();
+    renderTodayPanel();
     icons();
   }
   return true;
@@ -5196,6 +5225,7 @@ async function silentRefresh(force){
   renderSpotlight(true);
   if(!keys.length){
     renderHomeWidgets();
+    renderTodayPanel();
     return;
   }
   const res=await Promise.allSettled(keys.map(k=>jobs[k]));
@@ -5215,6 +5245,7 @@ async function silentRefresh(force){
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();
+  renderTodayPanel();
   if(CUR.view==='agenda')renderAgenda();
   if(CUR.view==='dokumen')renderDokumen();
   if(CUR.panel==='pNotif')renderNotif();
@@ -5392,8 +5423,18 @@ function renderPopup(){
 let _lastQuoteIdx = -1;
 
 function gantiQuote(){
+  const FALLBACK='"Karya kecil hari ini, berarti besar di kemudian hari."';
+  const FALLBACK_BY='Pegangan guru';
+  const qt=$('quoteTextHome');
+  const qa=$('quoteAuthorHome');
+  const tq=$('todayQuoteText');
+  const tqa=$('todayQuoteAuthor');
   if(!STATE.quotes.length){
-    // Tanpa quotes → tetap render ilustrasi (biar tidak kosong)
+    // Tanpa quotes → pakai pegangan default supaya panel tidak kosong
+    if(qt)qt.textContent=FALLBACK;
+    if(qa)qa.textContent=FALLBACK_BY;
+    if(tq)tq.textContent=FALLBACK;
+    if(tqa)tqa.textContent=FALLBACK_BY;
     renderHeroIllustration();
     return;
   }
@@ -5415,8 +5456,11 @@ function gantiQuote(){
 
   const q = STATE.quotes[idx];
   STATE.quoteNow = q;
-  const qt=$('quoteTextHome');if(qt)qt.textContent='"'+q.kutipan+'"';
-  const qa=$('quoteAuthorHome');if(qa)qa.textContent=q.tokoh;
+  const teks='"'+q.kutipan+'"';
+  if(qt)qt.textContent=teks;
+  if(qa)qa.textContent=q.tokoh;
+  if(tq)tq.textContent=teks;
+  if(tqa)tqa.textContent=q.tokoh;
 
   // Rotasi ilustrasi bareng quote
   renderHeroIllustration();
@@ -5498,6 +5542,8 @@ async function updateNotifBadge(){
   }catch(e){}
 }
 async function renderNotif(){
+  const _nl=$('notifList');
+  if(_nl && !(STATE.notifs||[]).length) _nl.innerHTML = skeletonRows(3);
   let readIds=new Set();
   if(STATE.profile){
     const gid=guruId();
@@ -5989,6 +6035,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
   // Safety net — render Spotlight setelah DOM + sbData siap
   const _bootSpotlight = () => {
     renderSpotlight().catch(e=>console.warn('[boot spotlight]', e));
+    renderTodayPanel().catch(e=>console.warn('[boot hari-ini]', e));
   };
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', _bootSpotlight, {once:true});
@@ -6814,6 +6861,38 @@ async function bukaSpotlight(id){
   openModal('mApp');
 }
 
+async function bukaGaleriMedia(){
+  const list = await fetchSpotlight();
+  if(!list.length){
+    toast('Belum ada karya untuk ditampilkan','info');
+    return;
+  }
+  const items = list.map(item => {
+    const meta = _spotlightMeta(item['Jenis Konten']);
+    const cover = _spotlightCover(item);
+    return `<button onclick="tutupModal('mPop');bukaSpotlight('${esc(item.ID)}')" class="text-left rounded-2xl overflow-hidden border border-slate-100 bg-white active:scale-[.97] transition">
+      <span class="block aspect-video overflow-hidden" style="background:${meta.grad}">
+        ${cover
+          ? `<img src="${esc(cover)}" alt="" loading="lazy" referrerpolicy="no-referrer" class="w-full h-full object-cover" onerror="this.remove()">`
+          : `<span class="w-full h-full flex items-center justify-center text-white"><i data-lucide="${meta.icon}" class="w-6 h-6"></i></span>`}
+      </span>
+      <span class="block px-2.5 py-2">
+        <span class="block text-[11px] font-extrabold text-slate-800 leading-tight line-clamp-2">${esc(item['Judul Media']||'Karya')}</span>
+        <span class="block text-[9px] text-slate-400 mt-1 truncate">${esc(item['Nama Guru']||'Guru')} · ${esc(item['Jenis Konten']||'Karya')}</span>
+      </span>
+    </button>`;
+  }).join('');
+
+  $('popContent').innerHTML = `
+    <div class="p-5 space-y-3">
+      <p class="text-base font-extrabold text-slate-800">Semua Karya · ${list.length}</p>
+      <div class="grid grid-cols-2 gap-2.5">${items}</div>
+    </div>`;
+  icons();
+  openModal('mPop');
+}
+
+/* Kompatibilitas halaman galeri pada repo slg-timkreatif/app */
 function bukaGaleriMedia(){
   window.open('galeri.html', '_blank', 'noopener');
 }
@@ -6826,6 +6905,7 @@ async function refreshSpotlight(){
   if(btn) btn.classList.add('loading');
   try{
     await renderSpotlight(true);
+    renderTodayPanel();
     toast('Spotlight diperbarui ✓','success');
   }catch(e){
     console.warn('[refreshSpotlight]', e);
@@ -6839,14 +6919,10 @@ async function renderSpotlight(force){
   const track = $('spotTrack');
   if(!section || !track){ console.warn('[spotlight] DOM tidak ada'); return; }
 
-  if(force && track.children.length){
-    track.style.transition = 'opacity .2s';
-    track.style.opacity = '0.55';
-  }
+  if(!track.children.length || force) track.innerHTML = skeletonCards(3);
 
   try{
     const list = await fetchSpotlight(!!force);
-    if(track) track.style.opacity = '1';
     if(!list.length){
       section.classList.add('hidden');
       return;
@@ -6855,6 +6931,9 @@ async function renderSpotlight(force){
     track.innerHTML = list.map(item => {
       const meta = _spotlightMeta(item['Jenis Konten']);
       const views = parseInt(item.VIEWS)||0;
+      const viewsLabel = views >= 1000
+        ? (views/1000).toFixed(1).replace('.0','').replace('.',',')+'rb'
+        : String(views);
       const initials = _spotlightInitials(item['Nama Guru']);
       const mapel = item['Mata Pelajaran']||'';
       const jenjang = _spotlightJenjang(item['Fase/Kelas']);
@@ -6864,7 +6943,7 @@ async function renderSpotlight(force){
       const isNew = ts && (Date.now()-ts) < 7*24*60*60*1000;
       const gid = (item.guru_id||'').trim();
       const avatar = gid
-        ? `<img src="${esc(fotoUrl(gid,true))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
+        ? `${esc(initials)}<img src="${esc(fotoUrl(gid,true))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
         : esc(initials);
       const open = `bukaSpotlight('${esc(item.ID)}')`;
       return `
@@ -6877,18 +6956,18 @@ async function renderSpotlight(force){
               <div class="spot-top">
                 ${isNew ? '<span class="spot-baru"><i data-lucide="sparkles"></i>Baru</span>' : '<span></span>'}
                 <span class="spot-top-right">
-                  <span class="spot-type" title="${esc(jenis)}"><i data-lucide="${meta.icon}"></i></span>
-                  <span class="spot-views"><i data-lucide="eye"></i>${views}</span>
+                  <span class="spot-type" title="${esc(jenis)}">${esc(jenis)}</span>
+                  <span class="spot-views"><i data-lucide="eye"></i>${viewsLabel}</span>
                 </span>
               </div>
-              <div class="spot-overlay-body">
-                ${(mapel||jenjang) ? `<div class="spot-meta">${esc(mapel)}${mapel&&jenjang?' · ':''}${esc(jenjang)}</div>` : ''}
-                <p class="spot-title">${esc(item['Judul Media']||'Tanpa Judul')}</p>
-                <div class="spot-authorline">
-                  <span class="spot-avatar" style="background:${meta.agrad}">${avatar}</span>
-                  <span class="spot-author">${esc(item['Nama Guru']||'Guru')}</span>
-                  <span class="spot-open">Buka <i data-lucide="arrow-right"></i></span>
-                </div>
+            </div>
+            <div class="spot-body">
+              ${(mapel||jenjang) ? `<div class="spot-meta">${esc(mapel)}${mapel&&jenjang?' · ':''}${esc(jenjang)}</div>` : ''}
+              <p class="spot-title">${esc(item['Judul Media']||'Tanpa Judul')}</p>
+              <div class="spot-authorline">
+                <span class="spot-avatar" style="background:${meta.agrad}">${avatar}</span>
+                <span class="spot-author">${esc(item['Nama Guru']||'Guru')}</span>
+                <span class="spot-open">Buka <i data-lucide="arrow-right"></i></span>
               </div>
             </div>
           </div>
@@ -6910,10 +6989,15 @@ function initSpotlightCarousel(){
   if(!slides.length) return;
   const btnPrev = $('spPrev');
   const btnNext = $('spNext');
-  const currEl = $('spCurr');
-  const totalEl = $('spTotal');
+  const dotsEl = $('spotDots');
 
-  if(totalEl) totalEl.textContent = slides.length;
+  if(dotsEl){
+    dotsEl.innerHTML = slides.map((_,i)=>`<button class="spot-dot${i===0?' active':''}" data-i="${i}" aria-label="Slide ${i+1}"></button>`).join('');
+    dotsEl.onclick = e => {
+      const d = e.target.closest('.spot-dot');
+      if(d) go(Number(d.dataset.i));
+    };
+  }
 
   const padLeft = () => parseFloat(getComputedStyle(track).paddingLeft) || 0;
   const maxScroll = () => Math.max(0, track.scrollWidth - track.clientWidth);
@@ -6934,7 +7018,7 @@ function initSpotlightCarousel(){
   const update = () => {
     const i = getIdx();
     track._spIndex = i;
-    if(currEl) currEl.textContent = i + 1;
+    if(dotsEl) dotsEl.querySelectorAll('.spot-dot').forEach((d,di)=>d.classList.toggle('active',di===i));
     // Pakai batas scroll, bukan index===terakhir: slide terakhir tidak selalu
     // bisa sejajar kiri kalau beberapa slide tampil bersamaan (desktop).
     if(btnPrev) btnPrev.disabled = track.scrollLeft <= 1;
@@ -7220,6 +7304,60 @@ function renderHeroBanner(){
   icons();
 }
 
+/* ---------- PANEL HARI INI: agenda + karya ringkas ---------- */
+async function renderTodayPanel(){
+  // Agenda paling dekat: yang akan datang diprioritaskan, lalu yang sudah lewat
+  const agBox=$('todayAgenda');
+  if(agBox){
+    if(!STATE.profile){
+      agBox.innerHTML='<span class="today-empty">Masuk untuk melihat agenda.</span>';
+    }else{
+      const today=new Date();today.setHours(0,0,0,0);
+      const sorted=(STATE.agenda||[]).filter(a=>a&&a.tanggal).slice().sort((a,b)=>{
+        const da=new Date(a.tanggal).getTime(), db=new Date(b.tanggal).getTime();
+        const ua=da>=today.getTime(), ub=db>=today.getTime();
+        if(ua!==ub) return ua?-1:1;
+        return ua ? da-db : db-da;
+      });
+      const a=sorted[0];
+      if(!a){
+        agBox.innerHTML='<span class="today-empty">Belum ada agenda terdekat.</span>';
+      }else{
+        const d=new Date(a.tanggal);
+        const diff=Math.ceil((d-today)/86400000);
+        const badge=diff===0?'HARI INI':diff>0?('H-'+diff):'SELESAI';
+        const loc=[a.tempat,a.waktu].filter(Boolean).map(esc).join(' · ');
+        agBox.innerHTML=`<span class="today-agenda-title">${esc(a.judul||'Agenda')}</span>
+          <span class="today-agenda-meta"><b>${badge}</b>${loc?' · '+loc:''}</span>`;
+      }
+    }
+  }
+
+  // Karya pilihan terbaru dari cache Spotlight
+  const kBox=$('todayKarya');
+  if(kBox){
+    let list=_spotlightCache.data || [];
+    if(!list.length){ try{ list=await fetchSpotlight(); }catch(_){} }
+    const item=list[0];
+    if(!item){
+      kBox.innerHTML='<span class="today-empty">Belum ada karya untuk ditampilkan.</span>';
+    }else{
+      const meta=_spotlightMeta(item['Jenis Konten']);
+      const cover=_spotlightCover(item);
+      kBox.dataset.id=item.ID||'';
+      kBox.innerHTML=`<span class="today-karya-thumb" style="background:${meta.grad}">
+          ${cover?`<img src="${esc(cover)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:`<i data-lucide="${meta.icon}"></i>`}
+        </span>
+        <span class="today-karya-text">
+          <b>${esc(item['Judul Media']||'Karya')}</b>
+          <small>${esc(item['Nama Guru']||'Guru')} · ${esc(item['Jenis Konten']||'Karya')}</small>
+        </span>
+        <i data-lucide="arrow-up-right" class="today-karya-arrow"></i>`;
+      icons();
+    }
+  }
+}
+
 /* ---------- HOME WIDGETS: Agenda + Dokumen ---------- */
 function renderHomeWidgets(){
   const wrap = $('homeWidgets');
@@ -7310,6 +7448,7 @@ function syncAllDesktop(){
   syncSidebarUser();
   renderPromo();
   renderSpotlight();
+  renderTodayPanel();
   renderRailNotif();
   renderRailRecent();
   renderHomeWidgets();

@@ -1,0 +1,185 @@
+/* ============================================================
+   UI CORE — Guru Berbagi Selogiri
+   ------------------------------------------------------------
+   Sumber tunggal untuk token desain + komponen dasar.
+   Dipakai bersama oleh aplikasi publik (index.html) dan admin
+   (admin.html). MUAT FILE INI SEBELUM stylesheet spesifik halaman
+   supaya override lokal tetap menang.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. TOKEN
+   ------------------------------------------------------------ */
+:root{
+  --acc:#0D9488;--acc2:#14B8A6;--acc-soft:#DDF5F2;--acc-text:#0B7C72;
+  --acc-ring:rgba(13,148,136,.35);--bg:#F6F5F9;--card:#fff;--border:#E8E6EE;
+  --ink:#0F172A;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;--r-2xl:24px;
+  --p-sm:12px;--p-md:16px;--p-lg:20px;--p-xl:24px;
+  --fs-2xs:10px;--fs-xs:11px;--fs-sm:12px;--fs-md:14px;--fs-lg:20px;
+  --shadow-1:0 1px 3px rgba(20,18,26,.05);
+  --shadow-2:0 4px 12px rgba(20,18,26,.08);
+}
+html[data-acc="biru"]{--acc:#2563eb;--acc2:#0ea5e9;--acc-soft:#dbeafe;--acc-text:#2563eb;--acc-ring:rgba(37,99,235,.35)}
+html[data-acc="violet"]{--acc:#7c3aed;--acc2:#a855f7;--acc-soft:#ede9fe;--acc-text:#7c3aed;--acc-ring:rgba(124,58,237,.35)}
+html[data-acc="amber"]{--acc:#d97706;--acc2:#f59e0b;--acc-soft:#fef3c7;--acc-text:#d97706;--acc-ring:rgba(217,119,6,.35)}
+html[data-acc="rose"]{--acc:#e11d48;--acc2:#f43f5e;--acc-soft:#ffe4e6;--acc-text:#e11d48;--acc-ring:rgba(225,29,72,.35)}
+
+html.dark{
+  --acc:#14B8A6;--acc2:#2DD4BF;--acc-soft:rgba(20,184,166,.15);--acc-text:#5EEAD4;--acc-ring:rgba(20,184,166,.4);
+  --bg:#181B21;--card:#22262E;--border:#2F343D;
+  --ink:#F1F5F9;
+  color-scheme:dark;
+}
+html.dark[data-acc="biru"]{--acc:#60A5FA;--acc2:#93C5FD;--acc-soft:rgba(96,165,250,.15);--acc-text:#93C5FD;--acc-ring:rgba(96,165,250,.4)}
+html.dark[data-acc="violet"]{--acc:#A78BFA;--acc2:#C4B5FD;--acc-soft:rgba(167,139,250,.15);--acc-text:#C4B5FD;--acc-ring:rgba(167,139,250,.4)}
+html.dark[data-acc="amber"]{--acc:#FBBF24;--acc2:#FCD34D;--acc-soft:rgba(251,191,36,.15);--acc-text:#FCD34D;--acc-ring:rgba(251,191,36,.4)}
+html.dark[data-acc="rose"]{--acc:#FB7185;--acc2:#FDA4AF;--acc-soft:rgba(251,113,133,.15);--acc-text:#FDA4AF;--acc-ring:rgba(251,113,133,.4)}
+
+/* ------------------------------------------------------------
+   2. RESET RINGAN
+   ------------------------------------------------------------ */
+*{-webkit-tap-highlight-color:transparent}
+:where(a,button,[role="button"],input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+body{font-family:'Inter',sans-serif;background:var(--bg)}
+a{-webkit-touch-callout:default}
+.no-scroll::-webkit-scrollbar{display:none}
+.no-scroll{scrollbar-width:none}
+
+/* ------------------------------------------------------------
+   3. KOMPONEN: CARD
+   ------------------------------------------------------------ */
+.card{background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow-1);border-radius:var(--r-xl)}
+
+/* ------------------------------------------------------------
+   3b. KOMPONEN: BUTTON / BADGE / AVATAR
+   ------------------------------------------------------------ */
+.ui-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 14px;border-radius:var(--r-lg);
+  font-size:var(--fs-sm);font-weight:800;line-height:1.2;
+  border:1px solid transparent;cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+}
+.ui-btn:active{transform:scale(.97)}
+.ui-btn-primary{background:var(--acc);color:#fff;box-shadow:0 4px 12px rgba(13,148,136,.22)}
+.ui-btn-primary:hover{box-shadow:0 6px 16px rgba(13,148,136,.30)}
+.ui-btn-soft{background:var(--acc-soft);color:var(--acc-text)}
+.ui-btn-danger{background:#FFE4E6;color:#E11D48}
+.ui-btn-ghost{background:#F1F5F9;color:#475569;border-color:var(--border)}
+html.dark .ui-btn-danger{background:rgba(225,29,72,.18);color:#FDA4AF}
+html.dark .ui-btn-ghost{background:#252A33;color:#CBD5E1;border-color:var(--border)}
+.ui-btn-icon{width:36px;height:36px;padding:0;border-radius:var(--r-md)}
+
+.ui-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:9999px;
+  font-size:var(--fs-2xs);font-weight:800;line-height:1.4;
+  background:#F1F5F9;color:#475569;white-space:nowrap;
+}
+.ui-badge-soft{background:var(--acc-soft);color:var(--acc-text)}
+.ui-badge-danger{background:#FFE4E6;color:#E11D48}
+html.dark .ui-badge{background:#252A33;color:#CBD5E1}
+html.dark .ui-badge-soft{background:var(--acc-soft);color:var(--acc-text)}
+html.dark .ui-badge-danger{background:rgba(225,29,72,.18);color:#FDA4AF}
+
+.ui-avatar{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:36px;height:36px;flex-shrink:0;overflow:hidden;
+  border-radius:var(--r-md);background:var(--acc-soft);color:var(--acc-text);
+  font-size:var(--fs-sm);font-weight:800;
+}
+.ui-avatar img{width:100%;height:100%;object-fit:cover}
+.ui-avatar-lg{width:44px;height:44px;border-radius:var(--r-lg);font-size:var(--fs-md)}
+
+/* ------------------------------------------------------------
+   4. KOMPONEN: WARNA AKSEN
+   ------------------------------------------------------------ */
+.acc-bg{background-color:var(--acc)}
+.acc-grad{background-color:var(--acc);background-image:linear-gradient(135deg,var(--acc),var(--acc2))}
+.acc-soft{background-color:var(--acc-soft)}
+.acc-text{color:var(--acc-text)}
+.acc-ring:focus{outline:none;box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
+
+/* ------------------------------------------------------------
+   5. KOMPONEN: LABEL & INPUT
+   ------------------------------------------------------------ */
+.lbl{
+  display:block;font-size:var(--fs-2xs);font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:#64748B;margin-bottom:.35rem;
+}
+html.dark .lbl{color:#94A0AE}
+.inp{
+  width:100%;border:1px solid var(--border);border-radius:.75rem;
+  background:var(--card);padding:.65rem .9rem;
+  font-size:.85rem;font-weight:500;color:var(--ink);
+  outline:none;transition:border-color .15s,background .15s;
+}
+.inp:focus{background:var(--card);box-shadow:0 0 0 3px var(--acc-ring);border-color:var(--acc)}
+html.dark .inp{background:#1F232B;border-color:var(--border);color:#E5E7EB}
+html.dark .inp:focus{background:#252A33}
+
+/* ------------------------------------------------------------
+   6. KOMPONEN: SEGMENTED BUTTON
+   ------------------------------------------------------------ */
+.seg-btn{
+  padding:8px 12px;border-radius:var(--r-md);
+  font-size:11px;font-weight:800;
+  background:var(--bg);color:#64748B;
+  border:1px solid var(--border);cursor:pointer;transition:all .15s;
+}
+.seg-btn:active{transform:scale(.97)}
+.seg-btn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+html.dark .seg-btn{background:#1F232B;color:#A0A8B5;border-color:var(--border)}
+html.dark .seg-btn.on{background:var(--acc);color:#0F1115;border-color:var(--acc)}
+
+/* ------------------------------------------------------------
+   7. KOMPONEN: IKON DARI URL
+   ------------------------------------------------------------ */
+.menu-icon-img{
+  width:82%!important;height:82%!important;
+  object-fit:contain!important;border-radius:26%!important;
+  background:transparent;
+  box-shadow:0 0 0 1px rgba(255,255,255,.7),0 2px 6px rgba(20,18,26,.10);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
+}
+:is(a,button):hover .menu-icon-img{
+  transform:translateY(-1px) scale(1.04);
+  box-shadow:0 0 0 1px rgba(255,255,255,.85),0 5px 12px rgba(20,18,26,.16);
+}
+html.dark .menu-icon-img{box-shadow:0 0 0 1px rgba(255,255,255,.10),0 2px 8px rgba(0,0,0,.4)}
+html.dark :is(a,button):hover .menu-icon-img{box-shadow:0 0 0 1px rgba(255,255,255,.16),0 5px 14px rgba(0,0,0,.5)}
+:is(.dc-icon,.nt-icon,.notif-icon,.q-tile-icon) > img{
+  width:82%!important;height:82%!important;
+  object-fit:contain!important;border-radius:26%!important;
+}
+
+/* ------------------------------------------------------------
+   8. KOMPONEN: SKELETON
+   ------------------------------------------------------------ */
+.skeleton,.skel{position:relative;overflow:hidden;background:#E9EDF3;border-radius:8px}
+html.dark .skeleton,html.dark .skel{background:#2B3038}
+:is(.skeleton,.skel)::after{
+  content:'';position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+  animation:uiShimmer 1.25s infinite;
+}
+html.dark :is(.skeleton,.skel)::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
+@keyframes uiShimmer{to{transform:translateX(100%)}}
+.skel-line{display:block;height:10px;margin-top:7px}
+.skel-line.w70{width:70%}
+.skel-line.w45{width:45%}
+.skel-avatar{width:36px;height:36px;border-radius:12px;flex-shrink:0}
+.skel-card{padding:12px;border-radius:16px;background:var(--card);border:1px solid var(--border)}
+.skel-row{display:flex;align-items:center;gap:10px;padding:10px 0}
+.skel-row + .skel-row{border-top:1px solid var(--border)}
+
+/* ------------------------------------------------------------
+   9. ANIMASI DASAR (nama unik, tidak bentrok dengan Tailwind)
+   ------------------------------------------------------------ */
+@keyframes uiSpin{to{transform:rotate(360deg)}}
+.spin{animation:uiSpin .8s linear infinite}
+@keyframes uiFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes uiFadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.anim-in{animation:uiFadeUp .3s ease both}

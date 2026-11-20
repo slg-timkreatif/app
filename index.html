@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark">
 <meta name="format-detection" content="telephone=no,email=no,address=no">
@@ -65,7 +65,8 @@
 <script>
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
-<link rel="stylesheet" href="styles.css?v=5.1">
+<link rel="stylesheet" href="ui-core.css?v=1.0">
+<link rel="stylesheet" href="styles.css?v=5.0">
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
@@ -142,7 +143,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       </div>
       <div class="sb-brand-text">
         <div class="sb-brand-name">Guru Berbagi</div>
-        <div class="sb-brand-ver" id="sideVersi">Portal · v4.98</div>
+        <div class="sb-brand-ver" id="sideVersi">Portal · v4.140</div>
       </div>
     </div>
 
@@ -179,7 +180,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <a href="?page=help">Bantuan</a>
         <a href="?page=privacy">Kebijakan</a>
       </div>
-      <div class="sb-footer-copyright">Tim Kreatif © 2026 · <span id="sideVersi2">v4.98</span></div>
+      <div class="sb-footer-copyright">Tim Kreatif © 2026 · <span id="sideVersi2">v4.140</span></div>
     </div>
 
     <!-- User -->
@@ -330,6 +331,50 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
         </section>
 
+        <!-- ============================================
+             PANEL HARI INI — ringkasan adaptif beranda
+             ============================================ -->
+        <section id="todayPanel" class="today-panel animate-fade-up" aria-label="Ringkasan Hari Ini">
+          <div class="today-head">
+            <div class="today-head-text">
+              <span class="today-eyebrow"><i data-lucide="calendar-check-2"></i> Ringkasan Hari Ini</span>
+              <h2 id="todaySapaan" class="today-sapaan">Selamat datang, Guru</h2>
+              <p id="todayTanggal" class="today-tanggal">—</p>
+            </div>
+            <div class="today-wx" title="Cuaca Selogiri">
+              <span id="todayWxEmoji" class="today-wx-emoji">☀️</span>
+              <span class="today-wx-main"><b id="todayWxTemp">--°</b><small id="todayWxDesc">Memuat…</small></span>
+            </div>
+          </div>
+
+          <div class="today-grid">
+            <button class="today-cell" onclick="navPage('agenda')" aria-label="Lihat agenda">
+              <span class="today-cell-label"><i data-lucide="calendar-days"></i> Agenda Terdekat</span>
+              <span id="todayAgenda" class="today-cell-body">
+                <span class="skel skel-line" style="width:80%"></span>
+                <span class="skel skel-line w45"></span>
+              </span>
+            </button>
+
+            <div class="today-cell">
+              <span class="today-cell-label"><i data-lucide="sparkles"></i> Karya Pilihan</span>
+              <button id="todayKarya" class="today-karya" data-id="" onclick="bukaSpotlight(this.dataset.id)" aria-label="Buka karya pilihan">
+                <span class="skel skel-line" style="width:80%"></span>
+                <span class="skel skel-line w45"></span>
+              </button>
+            </div>
+
+            <div class="today-cell today-quote">
+              <span class="today-cell-label"><i data-lucide="quote"></i> Kata Mutiara</span>
+              <p id="todayQuoteText" class="today-quote-text">"Memuat kata mutiara…"</p>
+              <div class="today-quote-foot">
+                <span id="todayQuoteAuthor" class="today-quote-author">—</span>
+                <button onclick="gantiQuote()" class="today-quote-btn" aria-label="Ganti kata mutiara" title="Ganti kata mutiara"><i data-lucide="refresh-cw"></i></button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- SEARCH (HP only) -->
         <div class="relative animate-fade-up search-home-mobile">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"></i>
@@ -392,9 +437,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <button class="spot-nav-btn" id="spPrev" aria-label="Sebelumnya" disabled>
               <i data-lucide="arrow-left"></i>
             </button>
-            <div class="spot-nav-counter">
-              <b id="spCurr">1</b> / <span id="spTotal">0</span>
-            </div>
+            <div class="spot-dots" id="spotDots" aria-label="Navigasi slide"></div>
             <button class="spot-nav-btn" id="spNext" aria-label="Selanjutnya">
               <i data-lucide="arrow-right"></i>
             </button>
@@ -408,14 +451,20 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
               <div class="w-title"><i data-lucide="calendar-days"></i> Agenda Terbaru</div>
               <button class="sec-link" onclick="navPage('agenda')">Lihat semua <i data-lucide="arrow-right"></i></button>
             </div>
-            <div id="homeAgendaList"></div>
+            <div id="homeAgendaList">
+              <div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>
+              <div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>
+            </div>
           </div>
           <div class="w">
             <div class="w-head">
               <div class="w-title"><i data-lucide="folder-open"></i> Dokumen Terbaru</div>
               <button class="sec-link" onclick="navPage('dokumen')">Lihat semua <i data-lucide="arrow-right"></i></button>
             </div>
-            <div id="homeDokList"></div>
+            <div id="homeDokList">
+              <div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>
+              <div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>
+            </div>
           </div>
         </section>
 
@@ -449,13 +498,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
               <button class="sec-link" style="font-size:10px" onclick="openPanel('pNotif')">Lihat semua</button>
             </div>
             <div id="railNotifList">
-              <!-- placeholder, akan diisi JS -->
-              <div class="nt-item">
-                <div class="nt-icon acc-soft acc-text"><i data-lucide="info"></i></div>
-                <div class="nt-body">
-                  <div class="nt-title">Memuat notifikasi…</div>
-                </div>
-              </div>
+              <div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>
+              <div class="skel-row"><span class="skel skel-avatar"></span><span style="flex:1;min-width:0"><span class="skel skel-line"></span><span class="skel skel-line w45"></span></span></div>
             </div>
           </div>
 
@@ -565,7 +609,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
           <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 md:col-span-1">
             <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
-            <span id="aboutVer">v4.75</span>
+            <span id="aboutVer">v4.140</span>
           </div>
 
           <a href="https://slg-timkreatif.github.io/guruberbagi/akun/guru.html"
@@ -581,7 +625,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <i data-lucide="external-link" class="w-4 h-4 text-slate-300 shrink-0"></i>
           </a>
 
-          <button onclick="doLogout()" class="w-full bg-rose-50 text-rose-600 font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition md:col-span-2"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
+          <button onclick="doLogout()" class="ui-btn ui-btn-danger w-full py-3.5 md:col-span-2"><i data-lucide="log-out" class="w-4 h-4"></i> Keluar Aplikasi</button>
         </div>
       </section>
 
@@ -601,7 +645,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           </div>
           <div class="setting-content" style="max-height:none">
             <div class="setting-content-inner">
-              <div class="preset-grid">
+              <div class="preset-grid" role="group" aria-label="Preset tema">
                 <button class="preset-card" data-preset="profesional" onclick="applyPreset('profesional')">
                   <div class="preset-swatch">
                     <div class="preset-swatch-top" style="background:linear-gradient(135deg,#0D9488,#14B8A6)"></div>
@@ -667,7 +711,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
                   <div class="setting-row-t">Warna Aksen</div>
                   <div class="setting-row-s">Teal · Biru · Violet · Amber · Rose</div>
                 </div>
-                <div class="setting-row-right" id="accRow">
+                <div class="setting-row-right" id="accRow" role="group" aria-label="Warna aksen">
                   <button data-acc="hijau" onclick="setAccent('hijau')" title="Teal" style="background:#0D9488" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
                   <button data-acc="biru" onclick="setAccent('biru')" title="Biru" style="background:#2563eb" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
                   <button data-acc="violet" onclick="setAccent('violet')" title="Violet" style="background:#7c3aed" class="w-7 h-7 rounded-full ring-offset-2 transition active:scale-90"></button>
@@ -678,7 +722,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Gaya Navbar</div>
-                <div class="setting-row-right">
+                <div class="setting-row-right" role="group" aria-label="Gaya navbar">
                   <button data-navstyle="floating" onclick="setNavbarStyle('floating')" class="seg-btn">Mengambang</button>
                   <button data-navstyle="classic" onclick="setNavbarStyle('classic')" class="seg-btn">Menempel</button>
                 </div>
@@ -686,7 +730,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Warna Navbar</div>
-                <div class="setting-row-right">
+                <div class="setting-row-right" role="group" aria-label="Warna navbar">
                   <button data-navcolor="dark" onclick="setNavbarColor('dark')" class="seg-btn">Gelap</button>
                   <button data-navcolor="charcoal" onclick="setNavbarColor('charcoal')" class="seg-btn">Charcoal</button>
                   <button data-navcolor="light" onclick="setNavbarColor('light')" class="seg-btn">Terang</button>
@@ -695,7 +739,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Mode Navigasi</div>
-                <div class="setting-row-right">
+                <div class="setting-row-right" role="group" aria-label="Mode navigasi">
                   <button data-navmode="bottom" onclick="setNavMode('bottom')" class="seg-btn">Navbar Bawah</button>
                   <button data-navmode="hamburger" onclick="setNavMode('hamburger')" class="seg-btn">Sidebar</button>
                 </div>
@@ -703,7 +747,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Gaya Ikon Menu</div>
-                <div class="setting-row-right">
+                <div class="setting-row-right" role="group" aria-label="Gaya ikon menu">
                   <button data-iconstyle="default" onclick="setIconStyle('default')" class="seg-btn">Ringan</button>
                   <button data-iconstyle="solid" onclick="setIconStyle('solid')" class="seg-btn">Solid</button>
                   <button data-iconstyle="colored" onclick="setIconStyle('colored')" class="seg-btn">Warna</button>
@@ -712,7 +756,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Kepadatan</div>
-                <div class="setting-row-right">
+                <div class="setting-row-right" role="group" aria-label="Kepadatan tampilan">
                   <button data-density="compact" onclick="setDensity('compact')" class="seg-btn">Padat</button>
                   <button data-density="normal" onclick="setDensity('normal')" class="seg-btn">Normal</button>
                   <button data-density="lega" onclick="setDensity('lega')" class="seg-btn">Lega</button>
@@ -738,7 +782,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Tema Warna</div>
-                <div class="setting-row-right">
+                <div class="setting-row-right" role="group" aria-label="Tema warna">
                   <button id="themeModeAuto" onclick="setThemeMode('auto')" class="seg-btn">Auto</button>
                   <button id="themeModeLight" onclick="setThemeMode('light')" class="seg-btn">Terang</button>
                   <button id="themeModeDark" onclick="setThemeMode('dark')" class="seg-btn">Gelap</button>
@@ -747,12 +791,12 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
               <div class="setting-row">
                 <div class="setting-row-t">Teks Besar</div>
-                <button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
+                <button id="tglFs" class="w-12 h-7 rounded-full relative transition" onclick="setFs()" aria-label="Teks besar" role="switch" aria-checked="false"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
               </div>
 
               <div class="setting-row">
                 <div class="setting-row-t">Hemat Animasi</div>
-                <button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
+                <button id="tglAnim" class="w-12 h-7 rounded-full relative transition" onclick="setAnim()" aria-label="Hemat animasi" role="switch" aria-checked="false"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition"></span></button>
               </div>
 
             </div>
@@ -799,7 +843,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
         </button>
 
-        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.85</span></p>
+        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.140</span></p>
 
       </section>
 
@@ -817,7 +861,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <p class="text-[13px] font-extrabold text-slate-800 leading-tight truncate">Studio Kreatif</p>
             <p id="wsHdrSub" class="text-[10px] text-slate-500 truncate">Tamu · Portal Selogiri</p>
           </div>
-          <button onclick="openStudioSettings()" aria-label="Kustomisasi Studio" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+          <button onclick="openStudioSettings()" aria-label="Kustomisasi Studio" class="ui-btn ui-btn-ghost ui-btn-icon">
             <i data-lucide="settings-2" class="w-4 h-4 text-slate-600"></i>
           </button>
         </div>
@@ -949,10 +993,10 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
     <!-- BOTTOM NAVBAR -->
     <nav class="app-navbar fixed md:hidden z-40 px-2 py-1.5 flex items-center justify-between">
-      <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Beranda</span></button>
-      <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Layanan</span></button>
-      <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Berbagi</span></button>
-      <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[9px] font-bold">Profil</span></button>
+      <button data-nav="home" onclick="navPage('home')" aria-label="Beranda" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-active"><i data-lucide="home" class="w-[20px] h-[20px]"></i><span class="text-[10px] font-bold">Beranda</span></button>
+      <button data-nav="apps" onclick="navPage('apps')" aria-label="Layanan" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i><span class="text-[10px] font-bold">Layanan</span></button>
+      <button data-nav="bagi" onclick="navPage('bagi')" aria-label="Berbagi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="share-2" class="w-[20px] h-[20px]"></i><span class="text-[10px] font-bold">Berbagi</span></button>
+      <button data-nav="profile" onclick="navPage('profile')" aria-label="Profil" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl nav-inactive"><i data-lucide="user" class="w-[20px] h-[20px]"></i><span class="text-[10px] font-bold">Profil</span></button>
     </nav>
   </div>
 
@@ -985,7 +1029,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <button data-nav="profile" onclick="navPage('profile');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
       </nav>
       <div id="drawerFooter" class="border-t border-slate-100 p-4 shrink-0">
-        <p class="text-[10px] text-slate-400 text-center font-medium">Tim Kreatif © 2026 · <span id="drawerVersi">v4.75</span></p>
+        <p class="text-[10px] text-slate-400 text-center font-medium">Tim Kreatif © 2026 · <span id="drawerVersi">v4.140</span></p>
       </div>
     </div>
   </div>
@@ -1003,7 +1047,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <p class="text-base font-extrabold text-slate-800">Kenali Portal</p>
           <p class="text-[11.5px] text-slate-500 mt-0.5">Akses penuh dengan akun guru</p>
         </div>
-        <button onclick="tutupPanel('pAvatar')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
+        <button onclick="tutupPanel('pAvatar')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon">
           <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
         </button>
       </div>
@@ -1095,14 +1139,14 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <button id="btnLogin" type="submit" class="w-full acc-bg text-white font-bold py-3.5 rounded-xl active:scale-[.98] transition shadow-sm">Masuk</button>
       </form>
       <div class="flex items-center gap-3 my-4"><div class="h-px bg-slate-100 flex-1"></div><p class="text-[10px] font-bold text-slate-400">BELUM PUNYA AKUN?</p><div class="h-px bg-slate-100 flex-1"></div></div>
-      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="w-full acc-soft acc-text font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 active:scale-[.98] transition"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
+      <a href="https://slg-timkreatif.github.io/guruberbagi/form.html" target="_blank" class="ui-btn ui-btn-soft w-full py-3.5"><i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun Baru</a>
     </div>
   </div>
 
   <!-- ============================================
        PANEL: NOTIFIKASI
        ============================================ -->
-  <div id="pNotif" class="fixed inset-0 z-50 hidden">
+  <div id="pNotif" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Notifikasi">
     <div class="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onclick="tutupPanel('pNotif')"></div>
     <div id="pNotifSheet" class="sheet">
       <div class="notif-head">
@@ -1120,7 +1164,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        PANEL: PARENT MENU
        ============================================ -->
-  <div id="pParent" class="fixed inset-0 z-50 hidden">
+  <div id="pParent" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Menu">
     <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pParent')"></div>
     <div id="pParentSheet" class="sheet bg-slate-50">
       <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
@@ -1133,7 +1177,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <p id="pParentSub" class="text-[10px] text-slate-500 truncate">—</p>
           </div>
         </div>
-        <button onclick="tutupPanel('pParent')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center shrink-0"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+        <button onclick="tutupPanel('pParent')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon shrink-0"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
       </div>
       <div id="pParentList" class="flex-1 overflow-y-auto no-scroll p-4 space-y-2"></div>
     </div>
@@ -1142,7 +1186,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        PANEL: FEEDBACK
        ============================================ -->
-  <div id="pFb" class="fixed inset-0 z-50 hidden">
+  <div id="pFb" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Ceritakan ke Kami">
     <div class="absolute inset-0 bg-black/50" onclick="tutupPanel('pFb')"></div>
     <div id="pFbSheet" class="sheet p-6 overflow-y-auto no-scroll">
       <div class="sheet-drag" data-sheet-handle></div>
@@ -1162,7 +1206,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: APP VIEWER (WebView)
        ============================================ -->
-  <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950">
+  <div id="mApp" class="fixed inset-0 z-[60] hidden flex-col bg-slate-950" role="dialog" aria-modal="true" aria-label="Aplikasi">
     <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
       <button onclick="tutupApp()" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
@@ -1178,9 +1222,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: STUDIO KREATIF
        ============================================ -->
-  <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50">
+  <div id="mStudio" class="fixed inset-0 z-[75] hidden flex-col bg-slate-50" role="dialog" aria-modal="true" aria-label="Studio Kreatif">
     <div class="fs-modal-header px-4 py-3 flex items-center gap-3 bg-white border-b border-slate-100 shrink-0">
-      <button onclick="tutupModal('mStudio')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button>
+      <button onclick="tutupModal('mStudio')" aria-label="Kembali" class="ui-btn ui-btn-ghost ui-btn-icon"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-600"></i></button>
       <p id="stTitle" class="text-sm font-extrabold text-slate-800 flex-1 truncate">Studio</p>
       <span class="text-[9px] font-black uppercase tracking-wider text-slate-400 shrink-0">Studio Kreatif</span>
     </div>
@@ -1291,7 +1335,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: POST IMAGE BUILDER
        ============================================ -->
-  <div id="mPostImage" class="fixed inset-0 z-[85] hidden flex-col bg-slate-950">
+  <div id="mPostImage" class="fixed inset-0 z-[85] hidden flex-col bg-slate-950" role="dialog" aria-modal="true" aria-label="Bagikan sebagai Gambar">
     <div class="fs-modal-header flex items-center justify-between px-4 py-3 bg-slate-900 shrink-0 gap-2">
       <button onclick="tutupModal('mPostImage')" aria-label="Kembali" class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i>
@@ -1330,7 +1374,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   <!-- ============================================
        MODAL: DETAIL SEKOLAH
        ============================================ -->
-  <div id="mSchoolDetail" class="fixed inset-0 z-50 hidden">
+  <div id="mSchoolDetail" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Detail Sekolah">
     <div class="absolute inset-0 bg-black/50" onclick="tutupModal('mSchoolDetail')"></div>
     <div id="mSchoolDetailSheet" class="sheet bg-slate-50">
       <div class="px-5 pt-5 pb-3 flex items-center justify-between bg-white border-b border-slate-100 shrink-0">
@@ -1493,7 +1537,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <div class="card modal-card p-5 space-y-4 animate-pop">
         <div class="flex items-center justify-between">
           <p id="shareTitleLabel" class="text-base font-extrabold text-slate-800">Bagikan</p>
-          <button onclick="tutupModal('mShare')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+          <button onclick="tutupModal('mShare')" aria-label="Tutup" class="ui-btn ui-btn-ghost ui-btn-icon"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
         </div>
         <div class="rounded-xl p-3.5" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
           <p class="text-[10px] font-black uppercase tracking-widest text-white/80">Guru Berbagi Selogiri</p>
@@ -1698,6 +1742,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
 
 </div>
-<script defer src="app.js?v=5.1"></script>
+<script defer src="app.js?v=5.0"></script>
 </body>
 </html>
