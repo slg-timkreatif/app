@@ -1045,16 +1045,8 @@ function showWx(cw){
   else if(cd===3){emoji='☁️';label='Berawan';color='text-slate-500';}
   else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';label='Hujan';color='text-sky-600';}
   else if(cd>=95){emoji='⛈️';label='Petir';color='text-sky-600';}
-  // Target baru — hero weather badge
+  // Cuaca hanya tampil di Panel "Ringkasan Hari Ini"
   const temp=Math.round(cw.temperature)+'°';
-  const emojiEl=$('heroWxEmoji');
-  const tempEl=$('heroWxTemp');
-  const descEl=$('heroWxDesc');
-  if(emojiEl) emojiEl.textContent=emoji;
-  if(tempEl)  tempEl.textContent=temp;
-  if(descEl)  descEl.textContent=label;
-
-  // Panel "Hari Ini" memakai data cuaca yang sama
   const tEmoji=$('todayWxEmoji');if(tEmoji)tEmoji.textContent=emoji;
   const tTemp=$('todayWxTemp');if(tTemp)tTemp.textContent=temp;
   const tDesc=$('todayWxDesc');if(tDesc)tDesc.textContent=label;
@@ -1450,7 +1442,7 @@ function hideSearchResults(){
   if(!box)return;
   box.classList.add('hidden');
   box.innerHTML='';
-  ['authCard','caroBox','infoPanel','recentBox','quickBox','footList','quoteHomeBox'].forEach(id=>{
+  ['authCard','caroBox','infoPanel','recentBox','quickBox','footList'].forEach(id=>{
     const el=$(id); if(el) el.style.display='';
   });
   document.querySelectorAll('#pageHome > div.animate-fade-up').forEach(el=>el.style.display='');
@@ -1460,7 +1452,7 @@ function renderSearchResults(q){
   if(!box)return;
   const query=q.toLowerCase();
 
-  ['authCard','caroBox','infoPanel','recentBox','quickBox','footList','quoteHomeBox'].forEach(id=>{
+  ['authCard','caroBox','infoPanel','recentBox','quickBox','footList'].forEach(id=>{
     const el=$(id); if(el) el.style.display='none';
   });
   document.querySelectorAll('#pageHome > div.animate-fade-up').forEach(el=>{
@@ -5107,12 +5099,11 @@ function setSapaan(){
   const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
   const el=$('hdrSub');if(el)el.textContent=s;
 
-  // Tanggal dipakai hero sekaligus panel "Hari Ini" (format: "Sen, 5 Okt 2026")
+  // Tanggal dipakai panel "Ringkasan Hari Ini" (format: "Sen, 5 Okt 2026")
   const H=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
   const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
   const d=new Date();
   const tanggal=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
-  const dayEl=$('heroWxDay');if(dayEl)dayEl.textContent=tanggal;
 
   const nama=namaPanggil(STATE.profile?.nama||'Guru');
   const tSapaan=$('todaySapaan');if(tSapaan)tSapaan.textContent=s+', '+nama;
@@ -5409,7 +5400,7 @@ function applyPortal(p){
     renderPopup();
   }
   const c=STATE.config||{};
-  const qb=$('quoteHomeBox');if(qb)qb.classList.toggle('hidden',c.quote_status==='OFF');
+  applyQuoteStatus();
   renderHeroBanner();
   renderCarousel();
   renderFilterBar();
@@ -5440,27 +5431,42 @@ function renderPopup(){
 }
 
 /* ============================================================
-   QUOTES
+   QUOTES — kutipan hanya tampil di Hero "Kutipan Hari Ini"
    ============================================================ */
 let _lastQuoteIdx = -1;
+
+function quoteIsOff(){
+  return String((STATE.config&&STATE.config.quote_status)||'').toUpperCase()==='OFF';
+}
+
+function applyQuoteStatus(){
+  const off=quoteIsOff();
+  const hero=$('heroCard');
+  if(hero)hero.classList.toggle('quote-off',off);
+  const refresh=$('btnQuoteRefresh');if(refresh)refresh.classList.toggle('hidden',off);
+  const left=$('btnHeroLeft');if(left)left.classList.toggle('hidden',off);
+  if(!off){ if(hero)hero.classList.remove('hidden'); return; }
+  if(hero && (hero.dataset.mode||'banner')==='inspirasi'){
+    const c=STATE.config||{};
+    const bannerActive=c.banner_status==='ON'&&(c.banner_judul||c.banner_body);
+    if(bannerActive) switchHero('banner');
+    else hero.classList.add('hidden');
+  }
+}
 
 function gantiQuote(){
   const FALLBACK='"Karya kecil hari ini, berarti besar di kemudian hari."';
   const FALLBACK_BY='Pegangan guru';
   const qt=$('quoteTextHome');
   const qa=$('quoteAuthorHome');
-  const tq=$('todayQuoteText');
-  const tqa=$('todayQuoteAuthor');
   if(!STATE.quotes.length){
-    // Tanpa quotes → pakai pegangan default supaya panel tidak kosong
+    // Tanpa quotes → pakai pegangan default supaya hero tidak kosong
     if(qt)qt.textContent=FALLBACK;
     if(qa)qa.textContent=FALLBACK_BY;
-    if(tq)tq.textContent=FALLBACK;
-    if(tqa)tqa.textContent=FALLBACK_BY;
     renderHeroIllustration();
     return;
   }
-  const b=$('btnQuoteHome');
+  const b=$('btnQuoteRefresh');
   if(b){b.classList.add('animate-spin');setTimeout(()=>b.classList.remove('animate-spin'),400);}
 
   // Hindari repeat quote yang sama berturut-turut (kalau >1 quotes)
@@ -5481,8 +5487,6 @@ function gantiQuote(){
   const teks='"'+q.kutipan+'"';
   if(qt)qt.textContent=teks;
   if(qa)qa.textContent=q.tokoh;
-  if(tq)tq.textContent=teks;
-  if(tqa)tqa.textContent=q.tokoh;
 
   // Rotasi ilustrasi bareng quote
   renderHeroIllustration();
@@ -6904,8 +6908,15 @@ function bukaGaleriMedia(){
 }
 
 /* ============================================================
-   SPOTLIGHT — Refresh Manual
+   SPOTLIGHT — Refresh Manual & shortcut dari Panel Hari Ini
    ============================================================ */
+function scrollToSpotlight(){
+  const s=$('spotlightSection');
+  if(!s) return;
+  if(s.classList.contains('hidden')){ refreshSpotlight(); return; }
+  s.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
 async function refreshSpotlight(){
   const btn = document.querySelector('.spot-head-refresh');
   if(btn) btn.classList.add('loading');
@@ -7071,7 +7082,7 @@ function initSpotlightCarousel(){
 let _heroSwitching = false;
 
 function heroLeftAction(){
-  if(_heroSwitching) return;
+  if(_heroSwitching || quoteIsOff()) return;
   const hero = $('heroCard');
   if(!hero) return;
   const current = hero.dataset.mode || 'banner';
@@ -7125,20 +7136,26 @@ function updateHeroChrome(mode){
   if(chip){
     chip.textContent = mode === 'banner'
       ? (STATE.config?.banner_kategori || 'Kegiatan')
-      : 'Inspirasi Hari Ini';
+      : 'Kutipan Hari Ini';
   }
 
+  const refresh=$('btnQuoteRefresh');
+  if(refresh)refresh.classList.toggle('hidden', mode!=='inspirasi'||quoteIsOff());
+
   if(btn){
+    const hiddenCls=quoteIsOff()?' hidden':'';
     if(mode === 'banner'){
-      // Di mode banner: tombol kiri = pill "✨ Inspirasi" untuk pindah ke inspirasi
-      btn.className = 'hero-action-pill';
-      btn.title = 'Tampilkan Inspirasi';
-      btn.innerHTML = '<i data-lucide="sparkles"></i><span>Inspirasi</span>';
+      // Di mode banner: tombol kiri = pill untuk masuk ke kutipan
+      btn.className = 'hero-action-pill'+hiddenCls;
+      btn.title = 'Lihat kutipan hari ini';
+      btn.setAttribute('aria-label','Lihat kutipan hari ini');
+      btn.innerHTML = '<i data-lucide="sparkles"></i><span>Kutipan</span>';
     } else {
-      // Di mode inspirasi: tombol kiri = icon refresh untuk balik ke banner
-      btn.className = 'hero-action-icon';
-      btn.title = 'Ganti tampilan';
-      btn.innerHTML = '<i data-lucide="refresh-cw"></i>';
+      // Di mode kutipan: tombol kiri = kembali ke kegiatan
+      btn.className = 'hero-action-icon'+hiddenCls;
+      btn.title = 'Kembali ke kegiatan';
+      btn.setAttribute('aria-label','Kembali ke kegiatan');
+      btn.innerHTML = '<i data-lucide="arrow-left"></i>';
     }
     icons();
   }
@@ -7257,6 +7274,8 @@ function renderHeroBanner(){
   const bannerActive = c.banner_status === 'ON' && (c.banner_judul || c.banner_body);
 
   if(!bannerActive){
+    if(quoteIsOff()){ hero.classList.add('hidden'); return; }
+    hero.classList.remove('hidden');
     hero.dataset.mode = 'inspirasi';
     const banner = $('heroBannerMode');
     const insp = $('heroInspirasiMode');
@@ -7266,6 +7285,7 @@ function renderHeroBanner(){
     return;
   }
 
+  hero.classList.remove('hidden');
   hero.dataset.mode = 'banner';
   const banner = $('heroBannerMode');
   const insp = $('heroInspirasiMode');

@@ -959,73 +959,7 @@ html.dark .hero-quote-v8 { color: #F1F5F9; }
   min-height: 128px;
 }
 
-.hero-weather-v8 {
-  background: rgba(255,255,255,.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,.7);
-  border-radius: 18px;
-  padding: 12px 14px;
-  display: inline-flex;
-  flex-direction: column;
-  gap: 2px;
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-  align-self: flex-end;
-  margin-bottom: 4px;
-  box-shadow: 0 1px 3px rgba(20,18,26,.04);
-}
-html.dark .hero-weather-v8 {
-  background: rgba(34,38,46,.5);
-  border-color: rgba(94,234,212,.14);
-  box-shadow: 0 1px 3px rgba(0,0,0,.2);
-}
-.hw-line1-v8 {
-  display: flex; align-items: baseline; gap: 6px;
-  line-height: 1;
-  color: var(--ink, #0F172A);
-}
-html.dark .hw-line1-v8 { color: #F1F5F9; }
-.hw-emoji-v8 { font-size: 18px; line-height: 1; }
-.hw-temp-v8 {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-.hw-desc-v8 {
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--acc-text);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 5px;
-}
-.hw-day-v8 {
-  font-size: 10px;
-  font-weight: 700;
-  color: #64748B;
-  letter-spacing: 0.02em;
-  margin-top: 3px;
-}
-html.dark .hw-day-v8 { color: #94A3B8; }
-.hw-location-v8 {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 10px;
-  font-weight: 700;
-  color: #64748B;
-  margin-top: 5px;
-  padding-top: 6px;
-  border-top: 1px solid rgba(20,18,26,.06);
-}
-html.dark .hw-location-v8 {
-  color: #94A3B8;
-  border-top-color: rgba(255,255,255,.06);
-}
-.hw-location-v8 svg { width: 10px; height: 10px; opacity: .75; }
+.hero-card-v8[data-mode="inspirasi"] .hero-bottom-v8{justify-content:flex-end}
 
 .hero-illustration-v8 {
   width: 152px;
@@ -1099,9 +1033,7 @@ html.dark .hero-illustration-v8 img {
     min-height: 0;
     align-items: flex-end;
     justify-content: flex-start;
-    padding-right: 260px;
   }
-  .hero-weather-v8 { margin-bottom: 0; align-self: auto; }
   .hero-illustration-v8 {
     position: absolute;
     right: 16px;
@@ -1113,11 +1045,6 @@ html.dark .hero-illustration-v8 img {
     justify-self: auto;
   }
   .hero-illus-fallback-v8 > svg { width: 200px; height: 200px; }
-  .hw-temp-v8  { font-size: 26px; }
-  .hw-emoji-v8 { font-size: 20px; }
-  .hw-desc-v8  { font-size: 11px; margin-top: 6px; }
-  .hw-day-v8   { font-size: 11px; }
-  .hw-location-v8 { font-size: 11px; }
 }
 
 /* ---------- SIDEBAR ---------- */
@@ -2561,11 +2488,6 @@ html.dark .today-panel{background:linear-gradient(145deg,color-mix(in srgb,var(-
 .today-wx-main small{font-size:var(--fs-2xs);font-weight:700;color:#64748B}
 
 .today-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.today-quote{grid-column:1 / -1}
-@media (min-width:1024px){
-  .today-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .today-quote{grid-column:auto}
-}
 .today-cell{
   position:relative;min-width:0;text-align:left;
   display:flex;flex-direction:column;gap:7px;
@@ -2611,24 +2533,18 @@ button.today-cell:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .today-karya-arrow{width:14px;height:14px;color:var(--acc-text);flex-shrink:0}
-.today-quote-text{
-  font-size:var(--fs-sm);font-weight:700;line-height:1.45;margin:0;color:var(--ink,#0F172A);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+.today-karya-more{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:4px;
+  margin-top:1px;padding:0;border:0;background:none;cursor:pointer;
+  font-size:var(--fs-2xs);font-weight:800;color:var(--acc-text);
 }
-.today-quote-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.today-quote-author{font-size:var(--fs-2xs);font-weight:800;color:var(--acc-text)}
-.today-quote-btn{
-  width:24px;height:24px;flex-shrink:0;cursor:pointer;
-  border-radius:8px;border:1px solid var(--border);background:var(--card);
-  display:flex;align-items:center;justify-content:center;
-}
-.today-quote-btn svg{width:12px;height:12px;color:var(--acc-text)}
+.today-karya-more:hover{text-decoration:underline}
+.today-karya-more svg{width:11px;height:11px}
 .today-empty{font-size:var(--fs-xs);font-weight:600;color:#64748B;line-height:1.4}
 html.dark .today-sapaan,
 html.dark .today-wx-main b,
 html.dark .today-agenda-title,
-html.dark .today-karya-text b,
-html.dark .today-quote-text{color:#E8EBF0}
+html.dark .today-karya-text b{color:#E8EBF0}
 html.dark .today-tanggal,
 html.dark .today-wx-main small,
 html.dark .today-agenda-meta,
@@ -3609,6 +3525,10 @@ html.dark .hero-action-pill:hover{background:rgba(20,184,166,.28)}
 .hero-action-pill span{
   white-space:nowrap;
 }
+
+/* Kutipan dimatikan lewat pengaturan admin */
+.hero-card-v8.quote-off .hero-quote-v8,
+.hero-card-v8.quote-off .hero-author-v8{display:none}
 
 /* ============================================================
    HERO PANEL — Animasi Transisi

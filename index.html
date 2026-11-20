@@ -66,7 +66,7 @@
 tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans-serif']},animation:{'fade-up':'fadeUp .45s ease both','pop':'pop .3s cubic-bezier(.34,1.56,.64,1) both','spin':'spin .6s linear infinite'},keyframes:{fadeUp:{'0%':{opacity:0,transform:'translateY(12px)'},'100%':{opacity:1,transform:'translateY(0)'}},pop:{'0%':{opacity:0,transform:'scale(.85)'},'100%':{opacity:1,transform:'scale(1)'}},spin:{to:{transform:'rotate(360deg)'}}}}}}
 </script>
 <link rel="stylesheet" href="ui-core.css?v=1.0">
-<link rel="stylesheet" href="styles.css?v=5.0">
+<link rel="stylesheet" href="styles.css?v=5.1">
 </head>
 <body class="min-h-screen" data-page="home" data-navbar="floating" data-navbar-color="dark" data-navmode="bottom" data-density="normal" data-iconstyle="default">
 <a href="#mainContent" class="skip-link">Lewati ke konten utama</a>
@@ -143,7 +143,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       </div>
       <div class="sb-brand-text">
         <div class="sb-brand-name">Guru Berbagi</div>
-        <div class="sb-brand-ver" id="sideVersi">Portal · v4.144</div>
+        <div class="sb-brand-ver" id="sideVersi">Portal · v4.145</div>
       </div>
     </div>
 
@@ -180,7 +180,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <a href="?page=help">Bantuan</a>
         <a href="?page=privacy">Kebijakan</a>
       </div>
-      <div class="sb-footer-copyright">Tim Kreatif © 2026 · <span id="sideVersi2">v4.144</span></div>
+      <div class="sb-footer-copyright">Tim Kreatif © 2026 · <span id="sideVersi2">v4.145</span></div>
     </div>
 
     <!-- User -->
@@ -273,8 +273,11 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <div class="hero-top-v8">
             <span id="heroChip" class="hero-chip-v8">Kegiatan</span>
             <div class="hero-actions-v8">
-              <button id="btnHeroLeft" onclick="heroLeftAction()" aria-label="Ganti tampilan" class="hero-action-icon" title="Tampilkan Inspirasi">
+              <button id="btnHeroLeft" onclick="heroLeftAction()" aria-label="Lihat kutipan" class="hero-action-icon" title="Lihat kutipan">
                 <i data-lucide="sparkles"></i>
+              </button>
+              <button id="btnQuoteRefresh" onclick="gantiQuote()" aria-label="Ganti kutipan" class="hero-action-icon hidden" title="Ganti kutipan">
+                <i data-lucide="refresh-cw"></i>
               </button>
               <button id="btnHeroShare" onclick="heroRightAction()" aria-label="Bagikan" class="hero-action-icon" title="Bagikan">
                 <i data-lucide="share-2"></i>
@@ -309,19 +312,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div id="quoteAuthorHome" class="hero-author-v8">—</div>
 
             <div class="hero-bottom-v8">
-              <div class="hero-weather-v8">
-                <div class="hw-line1-v8">
-                  <span id="heroWxEmoji" class="hw-emoji-v8">☀️</span>
-                  <span id="heroWxTemp" class="hw-temp-v8">--°</span>
-                </div>
-                <div id="heroWxDesc" class="hw-desc-v8">Memuat…</div>
-                <div id="heroWxDay" class="hw-day-v8">—</div>
-                <div class="hw-location-v8">
-                  <i data-lucide="map-pin"></i>
-                  <span>Selogiri, Wonogiri</span>
-                </div>
-              </div>
-
               <div id="heroIllustration" class="hero-illustration-v8">
                 <div class="hero-illus-fallback-v8">
                   <i data-lucide="sparkles"></i>
@@ -362,15 +352,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
                 <span class="skel skel-line" style="width:80%"></span>
                 <span class="skel skel-line w45"></span>
               </button>
-            </div>
-
-            <div class="today-cell today-quote">
-              <span class="today-cell-label"><i data-lucide="quote"></i> Kata Mutiara</span>
-              <p id="todayQuoteText" class="today-quote-text">"Memuat kata mutiara…"</p>
-              <div class="today-quote-foot">
-                <span id="todayQuoteAuthor" class="today-quote-author">—</span>
-                <button onclick="gantiQuote()" class="today-quote-btn" aria-label="Ganti kata mutiara" title="Ganti kata mutiara"><i data-lucide="refresh-cw"></i></button>
-              </div>
+              <button class="today-karya-more" onclick="scrollToSpotlight()" aria-label="Lihat semua karya di Spotlight">
+                Lihat semua <i data-lucide="arrow-right"></i>
+              </button>
             </div>
           </div>
         </section>
@@ -609,7 +593,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
           <div class="card p-4 flex items-center justify-between text-[11px] font-semibold text-slate-500 md:col-span-1">
             <span class="flex items-center gap-2"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Guru Berbagi Selogiri</span>
-            <span id="aboutVer">v4.144</span>
+            <span id="aboutVer">v4.145</span>
           </div>
 
           <a href="https://slg-timkreatif.github.io/guruberbagi/akun/guru.html"
@@ -843,7 +827,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
           <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset ke Default
         </button>
 
-        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.144</span></p>
+        <p class="text-[10px] text-center text-slate-400">Tim Kreatif © 2026 · <span id="setVersi">v4.145</span></p>
 
       </section>
 
@@ -1029,7 +1013,7 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
         <button data-nav="profile" onclick="navPage('profile');closeDrawer()" class="side-btn nav-inactive w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold"><i data-lucide="user" class="w-4 h-4"></i>Profil</button>
       </nav>
       <div id="drawerFooter" class="border-t border-slate-100 p-4 shrink-0">
-        <p class="text-[10px] text-slate-400 text-center font-medium">Tim Kreatif © 2026 · <span id="drawerVersi">v4.144</span></p>
+        <p class="text-[10px] text-slate-400 text-center font-medium">Tim Kreatif © 2026 · <span id="drawerVersi">v4.145</span></p>
       </div>
     </div>
   </div>
@@ -1742,6 +1726,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
 
 </div>
-<script defer src="app.js?v=5.3"></script>
+<script defer src="app.js?v=5.4"></script>
 </body>
 </html>
