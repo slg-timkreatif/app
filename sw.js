@@ -1,10 +1,10 @@
 /* ============================================================
    Service Worker — Guru Berbagi Selogiri
-   Version: 4.142 (offline-first)
+   Version: 4.143 (offline-first)
    ============================================================ */
 
-const CACHE = 'gb-cache-v4.142';
-const RUNTIME = 'gb-runtime-v4.142';
+const CACHE = 'gb-cache-v4.143';
+const RUNTIME = 'gb-runtime-v4.143';
 
 /* File yang di-cache saat install */
 const SHELL = [
@@ -86,7 +86,7 @@ self.addEventListener('fetch', e => {
   /* 2. Navigasi HTML → network first, cache fallback */
   if (req.mode === 'navigate') {
     e.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'reload' })
       .then(res => {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(req, copy));
