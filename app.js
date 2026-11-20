@@ -20,6 +20,26 @@ const sbData=window.supabase.createClient(SB_DATA_URL,SB_DATA_ANON);
 const $=id=>document.getElementById(id);
 
 /* ============================================================
+   SPOTLIGHT CACHE — dideklarasi awal supaya analyzable sebelum boot()
+   ============================================================ */
+const SPOTLIGHT_TTL = 2*60*1000;
+const SPOTLIGHT_LS_KEY = 'gb_spotlight_cache_v1';
+let _spotlightCache = { data: null, ts: 0 };
+let _spotlightDetailCache = {};
+
+/* Hydrate dari localStorage saat script load */
+(function _hydrateSpotlight(){
+  try{
+    const raw = localStorage.getItem(SPOTLIGHT_LS_KEY);
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    if(parsed && Array.isArray(parsed.data) && parsed.data.length){
+      _spotlightCache = { data: parsed.data, ts: parsed.ts || 0 };
+    }
+  }catch(_){}
+})();
+
+/* ============================================================
    PRESETS TEMA
    ============================================================ */
 const PRESETS={
@@ -6662,23 +6682,7 @@ function renderRailRecent(){
   icons();
 }
 /* ---------- SPOTLIGHT KARYA (Carousel) ---------- */
-const SPOTLIGHT_TTL = 2*60*1000;
-const SPOTLIGHT_LS_KEY = 'gb_spotlight_cache_v1';
-let _spotlightCache = { data: null, ts: 0 };
-let _spotlightDetailCache = {};
-
-/* Hydrate dari localStorage saat script load */
-(function _hydrateSpotlight(){
-  try{
-    const raw = localStorage.getItem(SPOTLIGHT_LS_KEY);
-    if(!raw) return;
-    const parsed = JSON.parse(raw);
-    if(parsed && Array.isArray(parsed.data) && parsed.data.length){
-      _spotlightCache = { data: parsed.data, ts: parsed.ts || 0 };
-    }
-  }catch(_){}
-})();
-
+/* Cache dideklarasi di bagian atas file, sebelum boot() dijalankan. */
 function _spotlightTsFromId(id){
   const m = String(id||'').match(/(\d{13})/);
   return m ? parseInt(m[1]) : 0;
