@@ -14,6 +14,13 @@
   "background_color": "#F6F5F9",
   "theme_color": "#F6F5F9",
   "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "io.github.slg_timkreatif.twa",
+      "url": "https://play.google.com/store/apps/details?id=io.github.slg_timkreatif.twa"
+    }
+  ],
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/slg-timkreatif/app/refs/heads/main/1768315347206.png",

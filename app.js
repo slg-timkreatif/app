@@ -8,6 +8,11 @@ const SB_ANON='sb_publishable_O_qwmOBPSU8dylEPCrPRAA_GC25Ii5x';
 const LOGO='https://cdn.jsdelivr.net/gh/slg-timkreatif/app@main/1768315347206.png';
 const FOTO_BASE=SB_URL+'/storage/v1/object/public/foto-gtk/';
 const isTWA=(document.referrer||'').startsWith('android-app://');
+const APP_VER='4.147';
+const APK_VER=new URLSearchParams(location.search).get('apkv')||null;
+const TWA_PKG=((document.referrer||'').match(/android-app:\/\/([^/]+)/)||[])[1]||null;
+const CLIENT_KIND=isTWA?'twa':(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?'pwa':'browser';
+function uaRingkas(){const u=navigator.userAgent||'';return{android:(u.match(/Android\s([\d.]+)/)||[])[1]||null,chrome:(u.match(/Chrome\/([\d.]+)/)||[])[1]||null};}
 function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
 
 const sb=window.supabase.createClient(SB_URL,SB_ANON);
@@ -962,9 +967,41 @@ function guruId(){
 }
 function logAktivitas(aksi,detail){
   const gid=guruId();if(!gid)return;
-  sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{
+  const payload=Object.assign({
+    client:CLIENT_KIND, pkg:TWA_PKG, apkv:APK_VER, webVer:APP_VER, ua:uaRingkas()
+  },detail||{});
+  sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:payload}).then(r=>{
     if(r.error)console.warn('log:',r.error.message);
   });
+}
+
+/* Install tracing — ID acak (pseudonym), bukan identitas perangkat */
+function installId(){
+  let id=null;
+  try{id=localStorage.getItem('gb_install_id');}catch(e){}
+  if(!id){
+    id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():
+       'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
+         const r=Math.random()*16|0,v=c==='x'?r:(r&3|8);return v.toString(16);
+       });
+    try{localStorage.setItem('gb_install_id',id);}catch(e){}
+  }
+  return id;
+}
+async function catatInstall(client){
+  if(client!=='twa'&&client!=='pwa')return;
+  try{
+    const {error}=await sb.from('creative_installs').insert({
+      install_id:installId(),
+      guru_id:guruId(),
+      client,
+      pkg:client==='twa'?TWA_PKG:null,
+      apkv:client==='twa'?APK_VER:null,
+      web_ver:APP_VER,
+      ua:uaRingkas()
+    },{onConflict:'install_id',ignoreDuplicates:true});
+    if(error)console.warn('[install]',error.message);
+  }catch(e){console.warn('[install]',e);}
 }
 
 /* ============================================================
@@ -978,7 +1015,7 @@ function initPWA(){
   if(!standalone&&!isTWA){
     window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
   }
-  window.addEventListener('appinstalled',()=>{toast('Aplikasi terpasang di HP!');});
+  window.addEventListener('appinstalled',()=>{toast('Aplikasi terpasang di HP!');catatInstall('pwa');});
 }
 function pasangApp(){
   if(isTWA)return toast('Sudah terpasang sebagai aplikasi Play Store','info');
@@ -6362,6 +6399,7 @@ function hideCtxMenu(){$('ctxMenu')?.classList.remove('show');}
       }
     }catch(e){}
   }
+  if(CLIENT_KIND!=='browser')catatInstall(CLIENT_KIND);
   try{history.replaceState({view:'home',sub:null,panel:null,modal:null},'')}catch(e){}
 
   renderAuthUI();

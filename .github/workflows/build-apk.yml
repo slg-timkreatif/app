@@ -123,7 +123,7 @@ jobs:
              --arg a "${{ secrets.KEY_ALIAS }}" \
              --arg vn "${{ github.event.inputs.version_name }}" \
              --argjson vc ${{ github.event.inputs.version_code }} \
-             '.storePassword=$s | .keyPassword=$k | .signingKey.alias=$a | .appVersionName=$vn | .appVersionCode=$vc' \
+             '.storePassword=$s | .keyPassword=$k | .signingKey.alias=$a | .appVersionName=$vn | .appVersionCode=$vc | .startUrl=("/app/?apkv=" + $vn)' \
              twa-manifest.json > tmp.json && mv tmp.json twa-manifest.json
 
       - name: Generate Android project
