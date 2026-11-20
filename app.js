@@ -1045,11 +1045,14 @@ function showWx(cw){
   else if(cd===3){emoji='☁️';label='Berawan';color='text-slate-500';}
   else if((cd>=51&&cd<=57)||(cd>=61&&cd<=67)||(cd>=80&&cd<=82)){emoji='🌧️';label='Hujan';color='text-sky-600';}
   else if(cd>=95){emoji='⛈️';label='Petir';color='text-sky-600';}
-  // Cuaca hanya tampil di Panel "Ringkasan Hari Ini"
+  // Cuaca tampil di Hero "Kutipan Hari Ini"
   const temp=Math.round(cw.temperature)+'°';
-  const tEmoji=$('todayWxEmoji');if(tEmoji)tEmoji.textContent=emoji;
-  const tTemp=$('todayWxTemp');if(tTemp)tTemp.textContent=temp;
-  const tDesc=$('todayWxDesc');if(tDesc)tDesc.textContent=label;
+  const emojiEl=$('heroWxEmoji');
+  const tempEl=$('heroWxTemp');
+  const descEl=$('heroWxDesc');
+  if(emojiEl) emojiEl.textContent=emoji;
+  if(tempEl)  tempEl.textContent=temp;
+  if(descEl)  descEl.textContent=label;
 }
 
 /* ============================================================
@@ -5099,15 +5102,12 @@ function setSapaan(){
   const s=j<10?'Selamat Pagi':j<15?'Selamat Siang':j<18?'Selamat Sore':'Selamat Malam';
   const el=$('hdrSub');if(el)el.textContent=s;
 
-  // Tanggal dipakai panel "Ringkasan Hari Ini" (format: "Sen, 5 Okt 2026")
+  // Tanggal dipakai hero "Kutipan Hari Ini" (format: "Sen, 5 Okt 2026")
   const H=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
   const B=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
   const d=new Date();
   const tanggal=`${H[d.getDay()]}, ${d.getDate()} ${B[d.getMonth()]} ${d.getFullYear()}`;
-
-  const nama=namaPanggil(STATE.profile?.nama||'Guru');
-  const tSapaan=$('todaySapaan');if(tSapaan)tSapaan.textContent=s+', '+nama;
-  const tTanggal=$('todayTanggal');if(tTanggal)tTanggal.textContent=tanggal;
+  const dayEl=$('heroWxDay');if(dayEl)dayEl.textContent=tanggal;
 }
 
 async function simpanSosmed(){
@@ -6781,6 +6781,13 @@ async function extractKaryaHtml(rawHtml) {
   }
   return trimmed;
 }
+function safeExternalUrl(raw){
+  try{
+    const u=new URL(String(raw||'').trim(), location.href);
+    return /^https?:$/.test(u.protocol) ? u.href : '';
+  }catch(_){ return ''; }
+}
+
 async function bukaSpotlight(id){
   if(!id) return;
   toast('Memuat karya…','info');
@@ -6849,24 +6856,24 @@ async function bukaSpotlight(id){
     }
   }catch(_){}
 
+  // Tanpa kode HTML → lempar ke browser luar, tidak dipaksa masuk iframe.
+  if(html.length <= 10){
+    const url = safeExternalUrl(link);
+    if(!url){ toast('Karya tidak punya konten','info'); return; }
+    const w = window.open(url, '_blank');
+    if(w){ try{ w.opener = null; }catch(_){} return; }
+    // Fallback kalau popup diblokir karena dibuka setelah fetch async
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener nofollow';
+    document.body.appendChild(a); a.click(); a.remove();
+    return;
+  }
+
   const frame = $('mAppFrame');
   frame.removeAttribute('src');
   frame.removeAttribute('srcdoc');
-
-  if(html.length > 10){
-    frame.setAttribute('sandbox','allow-scripts allow-popups allow-forms allow-modals allow-top-navigation-by-user-activation');
-    frame.srcdoc = html;
-  } else if(link){
-    frame.removeAttribute('sandbox');
-    let u = link;
-    if(u.includes('drive.google')) u = u.replace('/view','/preview');
-    const yt = u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([^#&?]{11})/);
-    if(yt) u = 'https://www.youtube.com/embed/' + yt[1];
-    frame.src = u;
-  } else {
-    toast('Karya tidak punya konten','info');
-    return;
-  }
+  frame.setAttribute('sandbox','allow-scripts allow-popups allow-forms allow-modals allow-top-navigation-by-user-activation');
+  frame.srcdoc = html;
   $('mAppTitle').textContent = judul;
   openModal('mApp');
 }
@@ -6908,15 +6915,8 @@ function bukaGaleriMedia(){
 }
 
 /* ============================================================
-   SPOTLIGHT — Refresh Manual & shortcut dari Panel Hari Ini
+   SPOTLIGHT — Refresh Manual
    ============================================================ */
-function scrollToSpotlight(){
-  const s=$('spotlightSection');
-  if(!s) return;
-  if(s.classList.contains('hidden')){ refreshSpotlight(); return; }
-  s.scrollIntoView({behavior:'smooth',block:'center'});
-}
-
 async function refreshSpotlight(){
   const btn = document.querySelector('.spot-head-refresh');
   if(btn) btn.classList.add('loading');
@@ -7024,6 +7024,8 @@ function initSpotlightCarousel(){
     return (slideRect.left - trackRect.left) + track.scrollLeft - padLeft();
   };
   const getIdx = () => {
+    // Saat scroll sudah mentok di ujung, paksa dot terakhir aktif.
+    if(track.scrollLeft >= maxScroll() - 2 && slides.length) return slides.length - 1;
     const sl = track.scrollLeft;
     let idx = 0, min = Infinity;
     slides.forEach((s, i) => {
@@ -7041,6 +7043,9 @@ function initSpotlightCarousel(){
     if(btnPrev) btnPrev.disabled = track.scrollLeft <= 1;
     if(btnNext) btnNext.disabled = track.scrollLeft >= maxScroll() - 1;
   };
+  // Handler terbaru disimpan di elemen: listener scroll dipasang sekali,
+  // tapi harus selalu memakai closure dari render saat ini.
+  track._spUpdate = update;
   const go = (i, instant) => {
     const s = slides[Math.max(0, Math.min(i, slides.length - 1))];
     if(!s) return;
@@ -7065,7 +7070,7 @@ function initSpotlightCarousel(){
     let tick = false;
     track.addEventListener('scroll', () => {
       if(tick) return; tick = true;
-      requestAnimationFrame(() => { tick = false; update(); });
+      requestAnimationFrame(() => { tick = false; track._spUpdate?.(); });
     }, { passive: true });
     track._spScrollWired = true;
   }
@@ -7332,6 +7337,9 @@ function renderHeroBanner(){
 
 /* ---------- PANEL HARI INI: agenda + karya ringkas ---------- */
 async function renderTodayPanel(){
+  // Panel sudah dihapus dari beranda — fungsi sengaja jadi no-op
+  // supaya pemanggil lama tidak perlu diubah satu-satu.
+  if(!$('todayPanel')) return;
   try{
   // Agenda paling dekat: yang akan datang diprioritaskan, lalu yang sudah lewat
   const agBox=$('todayAgenda');
