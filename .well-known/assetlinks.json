@@ -7,7 +7,8 @@
       "namespace": "android_app",
       "package_name": "io.github.slg_timkreatif.twa",
       "sha256_cert_fingerprints": [
-        "F0:35:55:6D:84:D7:43:EE:88:E1:4B:2C:B8:28:F8:AB:8B:95:F2:81:B9:90:81:A6:03:18:96:E6:17:43:48:9F"
+        "F0:35:55:6D:84:D7:43:EE:88:E1:4B:2C:B8:28:F8:AB:8B:95:F2:81:B9:90:81:A6:03:18:96:E6:17:43:48:9F",
+        "24:2A:78:D0:67:EC:C5:79:2D:8A:8F:3E:DE:06:01:CF:C8:37:FC:D6:82:6C:AF:42:14:9B:F9:2F:A6:FF:B0:65"
       ]
     }
   }
