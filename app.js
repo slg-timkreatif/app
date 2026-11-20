@@ -1272,7 +1272,7 @@ function studioFieldsFromQuery(q){
 }
 
 function setPageInstant(pg){
-  const validPages=['home','apps','bagi','agenda','dokumen','profile','setting'];
+  const validPages=['home','apps','bagi','agenda','dokumen','profile','setting','privacy'];
   document.body.dataset.page=pg;
 
   validPages.forEach(p=>{
@@ -1283,7 +1283,7 @@ function setPageInstant(pg){
 
   const tt=$('hdrTitle');
   if(tt){
-    tt.textContent=({apps:'Layanan',bagi:'Studio Kreatif',agenda:'Agenda Kegiatan',dokumen:'Dokumen',profile:'Profil',setting:'Pengaturan'})[pg]||'';
+    tt.textContent=({apps:'Layanan',bagi:'Studio Kreatif',agenda:'Agenda Kegiatan',dokumen:'Dokumen',profile:'Profil',setting:'Pengaturan',privacy:'Kebijakan Privasi'})[pg]||'';
   }
 
   document.querySelectorAll('[data-nav]').forEach(b=>{
