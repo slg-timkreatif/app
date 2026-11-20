@@ -357,6 +357,46 @@ html.dark .ws-draft-btn-sec{background:#282D36;color:#B5BCC8}
 .ws-karya:active{transform:scale(.95)}
 .ws-karya-lbl{font-size:9px;font-weight:900;color:#fff;text-align:center;line-height:1.1;width:100%;text-shadow:0 1px 2px rgba(0,0,0,.4);position:relative;z-index:1}
 
+/* —— Studio: panduan, filter, sambutan, favourit —— */
+.ws-guide{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;padding:9px 11px;border-radius:14px;background:var(--acc-soft);border:1px solid color-mix(in srgb, var(--acc) 12%, transparent)}
+.ws-guide span{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:var(--acc-text)}
+.ws-guide span+span::before{content:'›';margin-right:6px;opacity:.45;font-weight:900}
+.ws-guide b{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:9999px;background:var(--acc);color:#fff;font-size:9px}
+.ws-catbar{display:flex;gap:6px;overflow-x:auto;no-scroll:scroll;padding:10px 2px 2px}
+.ws-cat{flex:0 0 auto;padding:7px 11px;border-radius:9999px;border:1px solid var(--border);background:var(--card);color:#64748B;font-size:10px;font-weight:800;cursor:pointer;transition:all .15s;white-space:nowrap}
+.ws-cat.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.ws-cat:active{transform:scale(.95)}
+.ws-batch-wrap{margin-top:8px}
+.ws-batch-wrap.hidden{display:none}
+.ws-mini-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 11px;border-radius:12px;border:1px dashed color-mix(in srgb, var(--acc) 35%, var(--border));background:transparent;color:var(--acc-text);font-size:10px;font-weight:800;cursor:pointer;transition:all .15s}
+.ws-mini-btn:hover{background:var(--acc-soft)}
+.ws-mini-btn:active{transform:scale(.97)}
+.ws-tpl{position:relative}
+.ws-tpl-fav{position:absolute;top:6px;right:6px;z-index:2;width:26px;height:26px;border-radius:9999px;border:0;background:rgba(255,255,255,.9);color:#94A3B8;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12);transition:all .15s}
+.ws-tpl-fav.on{color:#F59E0B}
+.ws-tpl-fav.on svg{fill:currentColor}
+.ws-tpl-fav:active{transform:scale(.9)}
+.ws-tpl-time{position:absolute;top:5px;left:5px;z-index:2;padding:3px 6px;border-radius:9999px;background:rgba(0,0,0,.45);color:#fff;font-size:8px;font-weight:800}
+.ws-karya-del{position:absolute;top:5px;right:5px;z-index:2;width:22px;height:22px;border-radius:9999px;border:0;background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ws-welcome{margin-top:12px;padding:15px;border-radius:20px;background:linear-gradient(135deg,var(--acc-soft),var(--card));border:1px solid color-mix(in srgb, var(--acc) 14%, transparent)}
+.ws-welcome-head{display:flex;align-items:flex-start;gap:10px}
+.ws-welcome-ico{width:36px;height:36px;border-radius:13px;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ws-welcome-title{font-size:12.5px;font-weight:900;color:var(--ink);line-height:1.25}
+.ws-welcome-sub{font-size:10.5px;color:#64748B;margin-top:3px;line-height:1.5}
+.ws-welcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.ws-welcome-item{border:0;background:transparent;padding:0;cursor:pointer;text-align:left;border-radius:12px;overflow:hidden;transition:transform .15s}
+.ws-welcome-item:active{transform:scale(.96)}
+.ws-welcome-item img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
+.ws-welcome-item span{display:block;font-size:9px;font-weight:800;color:#64748B;margin-top:4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws-draft-actions{flex-wrap:wrap}
+.ws-draft-actions .ws-draft-btn{min-width:30%}
+.st-canvas-wrap{max-width:100%;display:flex;justify-content:center}
+.st-canvas-wrap.is-busy #stCanvas{opacity:.55}
+.st-busy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:10px;font-weight:800;color:var(--acc-text);pointer-events:none}
+.st-busy.hidden{display:none}
+.st-spin{width:26px;height:26px;border-radius:9999px;border:3px solid color-mix(in srgb, var(--acc) 20%, transparent);border-top-color:var(--acc);animation:stSpin .7s linear infinite}
+@keyframes stSpin{to{transform:rotate(360deg)}}
+
 /* ============================================
    MODAL — Animations + Safe-area (v4.83)
    ============================================ */

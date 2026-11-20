@@ -196,6 +196,8 @@ const STATE={
   favsAgenda:new Set(JSON.parse(localStorage.getItem('gb_favs_agenda')||'[]')),
   filterLayanan:'all',
   studioTab:'foto',
+  studioCat:'all',
+  tplFavs:new Set(JSON.parse(localStorage.getItem('gb_tpl_fav')||'[]')),
   studioResume:null
 };
 
@@ -237,6 +239,7 @@ function studioColors(){
 function setPalette(k){
   if(!STATE.studio || !PALETTES[k]) return;
   STATE.studio.palette = k;
+  pushStudioHistory();
   buildControls();
   renderStudio();
 }
@@ -347,6 +350,176 @@ const TPL_ILLUS = {
   `)
 };
 const FONTS={modern:{n:'Modern',f:'Inter, Arial, sans-serif',w:'700'},elegan:{n:'Elegan',f:'"Playfair Display", Georgia, serif',w:'800'},hangat:{n:'Hangat',f:'Caveat, cursive',w:'700'}};
+
+/* ============================================================
+   STUDIO — Kategori, preview, favorit, snapshot karya
+   ============================================================ */
+const TPL_CAT={
+  belajar:'harian', momen:'harian', dokumentasi:'harian',
+  prestasi:'prestasi', undangan:'undangan', cover:'materi',
+  quote:'inspirasi', ucapan:'inspirasi'
+};
+const TPL_CAT_LABEL={
+  all:'Semua', harian:'Harian', prestasi:'Prestasi', undangan:'Undangan',
+  materi:'Materi', inspirasi:'Inspirasi', favorit:'Favorit', saya:'Template Saya'
+};
+const TPL_SAMPLE={
+  belajar:{label:'BELAJAR HARI INI',title:'Semangat belajar!',sub:'Kelas 5 · Matematika'},
+  kelas:{label:'MATERI KELAS',title:'Pecahan',sub:'Kelas 5 · Matematika'},
+  momen:{label:'MOMEN BELAJAR',title:'Seru banget!',sub:'Kegiatan kelas'},
+  prestasi:{label:'PRESTASI',title:'Juara 1 Lomba',sub:'Nadia Putri'},
+  quote:{label:'INSPIRASI',title:'"Belajar itu kunci"',sub:'— Ki Hajar Dewantara'},
+  ucapan:{label:'UCAPAN',title:'Selamat!',sub:'Semoga sukses selalu'},
+  undangan:{label:'UNDANGAN',title:'Rapat GTK',sub:'Selasa, 08.00 · Ruang Guru'},
+  cover:{label:'MATERI PEMBELAJARAN',title:'Penjumlahan',sub:'Kelas 3 · Bu Sari'},
+  dokumentasi:{label:'DOKUMENTASI',title:'Kegiatan Kelas',sub:'12 November 2026'}
+};
+const _tplPreviewCache={};
+const KARYA_MAX=24;
+
+function tplColors(k){
+  const wa={belajar:['#0D9488','#14B8A6'],kelas:['#2563EB','#0EA5E9'],momen:['#7C3AED','#A855F7'],prestasi:['#D97706','#F59E0B'],quote:['#0F766E','#14B8A6']};
+  const kartu={quote:['#7C3AED','#A855F7'],ucapan:['#E11D48','#F43F5E'],undangan:['#2563EB','#0EA5E9'],prestasi:['#D97706','#F59E0B'],cover:['#059669','#10B981'],dokumentasi:['#0C4A6E','#0284C7']};
+  return wa[k]||kartu[k]||['#0D9488','#14B8A6'];
+}
+function tplGradient(k){const c=tplColors(k);return `linear-gradient(135deg,${c[0]},${c[1]})`;}
+
+/* Preview thumbnail memakai contoh konten nyata — bukan sekadar ikon */
+function previewTemplateCanvas(k, waMode, w, h, override){
+  const cv=document.createElement('canvas');
+  cv.width=w; cv.height=h;
+  const x=cv.getContext('2d');
+  const col=tplColors(k), s=h/400;
+  const g=x.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,col[0]); g.addColorStop(1,col[1]);
+  x.fillStyle=g; x.fillRect(0,0,w,h);
+  x.save(); x.globalAlpha=.12; x.fillStyle='#fff';
+  x.beginPath(); x.arc(w*.86,h*.12,h*.30,0,7); x.fill(); x.restore();
+  x.strokeStyle='rgba(255,255,255,.35)'; x.lineWidth=2*s;
+  roundRect(x,9*s,9*s,w-18*s,h-18*s,11*s); x.stroke();
+
+  const data=TPL_SAMPLE[k]||{label:'STUDIO KREATIF',title:'Karya Guru',sub:'Guru Berbagi Selogiri'};
+  const title=(typeof override==='string'&&override.trim())?override.trim():data.title;
+  x.textAlign='center';
+
+  if(waMode){
+    const ph=h*.44, py=h*.10;
+    x.save(); roundRect(x,w*.10,py,w*.80,ph,10*s); x.clip();
+    const pg=x.createLinearGradient(0,py,0,py+ph);
+    pg.addColorStop(0,'rgba(255,255,255,.30)'); pg.addColorStop(1,'rgba(255,255,255,.05)');
+    x.fillStyle=pg; x.fillRect(w*.10,py,w*.80,ph);
+    x.strokeStyle='rgba(255,255,255,.7)'; x.lineWidth=2.5*s;
+    x.strokeRect(w*.38,py+ph*.27,w*.24,ph*.40);
+    x.beginPath(); x.arc(w*.50,py+ph*.40,ph*.07,0,7); x.stroke();
+    x.restore();
+    x.fillStyle='rgba(255,255,255,.85)'; x.font=`800 ${9*s}px Inter,sans-serif`;
+    x.fillText(data.label,w/2,py+ph+17*s);
+    x.fillStyle='#fff'; x.font=`800 ${14*s}px Inter,sans-serif`;
+    wrapText(x,title,w*.82).slice(0,2).forEach((ln,i)=>x.fillText(ln,w/2,py+ph+37*s+i*18*s));
+    x.beginPath(); x.arc(w*.16,h*.91,9*s,0,7); x.fillStyle='rgba(255,255,255,.85)'; x.fill();
+    x.textAlign='left'; x.fillStyle='rgba(255,255,255,.9)'; x.font=`800 ${8*s}px Inter,sans-serif`;
+    x.fillText('Guru Berbagi',w*.16+14*s,h*.91+3*s);
+  }else{
+    x.fillStyle='rgba(255,255,255,.72)'; x.font=`800 ${9*s}px Inter,sans-serif`;
+    x.fillText(data.label,w/2,h*.23);
+    x.fillStyle='#fff'; x.font=`800 ${16*s}px Inter,sans-serif`;
+    wrapText(x,title,w*.80).slice(0,3).forEach((ln,i)=>x.fillText(ln,w/2,h*.38+i*21*s));
+    x.fillStyle='rgba(255,255,255,.85)'; x.font=`600 ${9*s}px Inter,sans-serif`;
+    x.fillText(data.sub,w/2,h*.73);
+  }
+  x.textAlign='right'; x.fillStyle='rgba(255,255,255,.55)';
+  x.font=`600 ${7*s}px Inter,sans-serif`;
+  x.fillText('#GuruBerbagiSelogiri',w-14*s,h-16*s);
+  return cv;
+}
+function tplPreview(k, waMode, override){
+  const key=k+'|'+(waMode?'wa':'kartu')+'|'+(override||'');
+  if(_tplPreviewCache[key])return _tplPreviewCache[key];
+  try{
+    const url=previewTemplateCanvas(k,waMode,300,400,override).toDataURL('image/jpeg',.82);
+    _tplPreviewCache[key]=url;
+    return url;
+  }catch(e){return '';}
+}
+
+function isTplFav(k){return STATE.tplFavs.has(k);}
+function toggleTplFav(k){
+  const on=!STATE.tplFavs.has(k);
+  if(on)STATE.tplFavs.add(k); else STATE.tplFavs.delete(k);
+  try{localStorage.setItem('gb_tpl_fav',JSON.stringify([...STATE.tplFavs]));}catch(_){}
+  renderStudioTabContent();
+  toast(on?'Template masuk favorit':'Dihapus dari favorit','info');
+}
+function getKarya(){
+  try{const a=JSON.parse(localStorage.getItem('gb_karya')||'[]');return Array.isArray(a)?a:[];}
+  catch(_){return [];}
+}
+function setKarya(arr){
+  const clean=(arr||[]).slice(0,KARYA_MAX);
+  try{localStorage.setItem('gb_karya',JSON.stringify(clean));return true;}
+  catch(e){
+    try{
+      localStorage.setItem('gb_karya',JSON.stringify(clean.slice(0,Math.ceil(clean.length/2))));
+      toast('Karya lama dikurangi agar muat','warning');
+      return true;
+    }catch(_){}
+    toast('Penyimpanan penuh — hapus beberapa karya dulu','error');
+    return false;
+  }
+}
+function getCustomTpl(){
+  try{const a=JSON.parse(localStorage.getItem('gb_tpl_custom')||'[]');return Array.isArray(a)?a:[];}
+  catch(_){return [];}
+}
+function studioDefaults(tpl, waMode){
+  return {
+    waMode:!!waMode, tpl, fmt:'story', font:'modern', palette:'teal', fields:{},
+    photo:null, photoSmall:null, crop:{offsetX:0,offsetY:0,scale:1},
+    tintPhoto:false, showFoot:true, showTag:true, showSchoolLogo:false,
+    tagText:'#GuruBerbagiSelogiri #GTKSelogiri', exportFmt:'png'
+  };
+}
+function studioSnapshot(){
+  const s=STATE.studio||{};
+  return {
+    waMode:!!s.waMode, tpl:s.tpl, fmt:s.fmt||'story', font:s.font||'modern',
+    palette:s.palette||'teal', fields:Object.assign({},s.fields||{}),
+    photoSmall:s.photoSmall||null, crop:Object.assign({offsetX:0,offsetY:0,scale:1},s.crop||{}),
+    tintPhoto:!!s.tintPhoto, showFoot:s.showFoot!==false, showTag:s.showTag!==false,
+    showSchoolLogo:!!s.showSchoolLogo, tagText:s.tagText||'#GuruBerbagiSelogiri',
+    exportFmt:s.exportFmt||'png'
+  };
+}
+function applyStudioSnapshot(snap){
+  if(!snap)return false;
+  const base=studioDefaults(snap.tpl,!!snap.waMode);
+  STATE.studio=Object.assign(base,{
+    waMode:!!snap.waMode, tpl:snap.tpl||base.tpl, fmt:snap.fmt||base.fmt,
+    font:snap.font||base.font, palette:snap.palette||base.palette,
+    fields:Object.assign({},snap.fields||{}), photoSmall:snap.photoSmall||null,
+    crop:Object.assign({offsetX:0,offsetY:0,scale:1},snap.crop||{}),
+    tintPhoto:!!snap.tintPhoto, showFoot:snap.showFoot!==false,
+    showTag:snap.showTag!==false, showSchoolLogo:!!snap.showSchoolLogo,
+    tagText:snap.tagText||base.tagText, exportFmt:snap.exportFmt||'png', photo:null
+  });
+  return true;
+}
+function hydrateStudioPhoto(){
+  const s=STATE.studio;
+  if(!s||!s.photoSmall||s.photo)return Promise.resolve(false);
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>{if(STATE.studio===s)s.photo=img;resolve(!!s.photo);};
+    img.onerror=()=>resolve(false);
+    img.src=s.photoSmall;
+  });
+}
+function saveStudioLast(thumb){
+  try{
+    const snap=studioSnapshot();
+    localStorage.setItem('gb_studio_last',JSON.stringify(Object.assign(snap,{thumb:thumb||null,t:Date.now()})));
+  }catch(_){}
+}
 const PANELS=['pNotif','pFb','pLogin','pParent','pAvatar'];
 const MODALS=['mApp','mPop','mIos','mStudio','mShare','mPostImage','mSchoolDetail','mNews'];
 const isMobile=matchMedia('(max-width:768px)').matches;
@@ -1082,7 +1255,7 @@ function setPageInstant(pg){
 
   const tt=$('hdrTitle');
   if(tt){
-    tt.textContent=({apps:'Layanan',bagi:'Berbagi',agenda:'Agenda Kegiatan',dokumen:'Dokumen',profile:'Profil',setting:'Pengaturan'})[pg]||'';
+    tt.textContent=({apps:'Layanan',bagi:'Studio Kreatif',agenda:'Agenda Kegiatan',dokumen:'Dokumen',profile:'Profil',setting:'Pengaturan'})[pg]||'';
   }
 
   document.querySelectorAll('[data-nav]').forEach(b=>{
@@ -1125,6 +1298,19 @@ function navPage(pg){
   if(pg==='profile')renderProfile();
   if(pg==='agenda')renderAgenda();
 }
+
+/* Keyboard shortcut Studio: Ctrl/Cmd+Z undo, Ctrl/Cmd+Y redo, Ctrl/Cmd+S simpan */
+document.addEventListener('keydown',e=>{
+  const modal=$('mStudio');
+  if(!modal||modal.classList.contains('hidden')||!STATE.studio)return;
+  const tag=(e.target&&e.target.tagName||'').toLowerCase();
+  const inField=tag==='input'||tag==='textarea'||e.target?.isContentEditable;
+  if(!(e.ctrlKey||e.metaKey))return;
+  const key=(e.key||'').toLowerCase();
+  if(key==='z'&&!inField){e.preventDefault();e.shiftKey?redoStudio():undoStudio();}
+  else if(key==='y'&&!inField){e.preventDefault();redoStudio();}
+  else if(key==='s'){e.preventDefault();simpanKarya(true);}
+});
 
 window.addEventListener('popstate',e=>renderState(e.state||{view:'home',sub:null,panel:null,modal:null}));
 function renderState(s){
@@ -3067,6 +3253,7 @@ function applyCrop(){
     offsetY:_cropState.offsetY,
     scale:_cropState.scale
   };
+  pushStudioHistory();
   tutupCrop();
   renderStudio();
 }
@@ -3527,90 +3714,167 @@ function openStudio(tpl, pre, opts) {
   opts = opts || {};
   let waMode = !!opts.wa;
   loadExtraFonts();
-  
-  // Safety net: kalau tpl ada di TPL_WA tapi dipanggil tanpa wa:true,
-  // auto-correct ke WA mode. Cegah error "Template tidak dikenali".
-  let def = waMode ? TPL_WA[tpl] : TPL[tpl];
-// Auto-correct ke WA mode kalau:
-// (a) tpl tidak ada di TPL sama sekali, tapi ada di TPL_WA
-// (b) tpl ambigu (ada di kedua TPL) DAN caller eksplisit dari WA grid
-//     → dideteksi lewat absence opts.wa tapi ada flag dari caller
-const onlyInWA = !waMode && !TPL[tpl] && TPL_WA[tpl];
-if (onlyInWA) {
-  console.warn('[openStudio] auto-correct: "' + tpl + '" is WA-only — enabling waMode');
-  def = TPL_WA[tpl];
-  waMode = true;
-}
-if (!def) {
-  console.warn('[openStudio] tpl invalid:', tpl, 'waMode:', waMode, 'available:', Object.keys(waMode ? TPL_WA : TPL));
-  toast('Template tidak dikenali: ' + tpl, 'error');
-  return;
-}
-  
-  STATE.studio = {
-    waMode,
-    tpl,
-    fmt:'story',
-    font:'modern',
-    palette:'teal',
-    fields: Object.assign({}, pre || {}),
-  photo: null,
-  photoSmall: null,
-  crop: { offsetX: 0, offsetY: 0, scale: 1 },
-  tintPhoto: false,
-  showFoot: true,
-    showTag:true,
-    showSchoolLogo:false,
-    tagText:'#GuruBerbagiSelogiri #GTKSelogiri'
-  };
-  
-  $('stTitle').textContent = def.n;
 
+  // Safety net: template WA yang dipanggil tanpa wa:true otomatis dikoreksi.
+  let def = waMode ? TPL_WA[tpl] : TPL[tpl];
+  const onlyInWA = !waMode && !TPL[tpl] && TPL_WA[tpl];
+  if (onlyInWA) {
+    console.warn('[openStudio] auto-correct: "' + tpl + '" is WA-only — enabling waMode');
+    def = TPL_WA[tpl];
+    waMode = true;
+  }
+  if (!def) {
+    console.warn('[openStudio] tpl invalid:', tpl, 'waMode:', waMode, 'available:', Object.keys(waMode ? TPL_WA : TPL));
+    toast('Template tidak dikenali: ' + tpl, 'error');
+    return;
+  }
+
+  // Snapshot (Lanjutkan / Karya Saya / Template Saya) menimpa nilai awal.
+  if (opts.snap && opts.snap.tpl) {
+    tpl = opts.snap.tpl;
+    waMode = !!opts.snap.waMode;
+    def = (waMode ? TPL_WA : TPL)[tpl] || def;
+  }
+
+  STATE.studio = studioDefaults(tpl, waMode);
+  if (pre) Object.assign(STATE.studio.fields, pre || {});
+  if (opts.snap) {
+    const snap = opts.snap;
+    Object.assign(STATE.studio, {
+      waMode: !!snap.waMode, tpl: snap.tpl || tpl,
+      fmt: snap.fmt || 'story', font: snap.font || 'modern', palette: snap.palette || 'teal',
+      fields: Object.assign({}, snap.fields || pre || {}),
+      photoSmall: snap.photoSmall || null,
+      crop: Object.assign({ offsetX: 0, offsetY: 0, scale: 1 }, snap.crop || {}),
+      tintPhoto: !!snap.tintPhoto,
+      showFoot: snap.showFoot !== false, showTag: snap.showTag !== false,
+      showSchoolLogo: !!snap.showSchoolLogo,
+      tagText: snap.tagText || STATE.studio.tagText,
+      exportFmt: snap.exportFmt || 'png'
+    });
+    def = (waMode ? TPL_WA : TPL)[STATE.studio.tpl] || def;
+  }
+
+  $('stTitle').textContent = opts.title || def.n;
+
+  resetStudioHistory();
   updateStudioGuestBanner();
   buildControls();
   openModal('mStudio');
   renderStudio();
+  pushStudioHistory();
+  saveStudioLast(opts.thumb || null);
 
-  // Track sebagai "terakhir dibuka" untuk Resume card
-  try {
-    localStorage.setItem('gb_studio_last', JSON.stringify({
-      waMode,
-      tpl,
-      fields: STATE.studio.fields,
-      thumb: null,
-      t: Date.now()
-    }));
-  } catch(_) {}
+  // Karya tersimpan memakai fotoSmall — hidrasi ulang ke canvas.
+  if (STATE.studio.photoSmall) {
+    hydrateStudioPhoto().then(ok => {
+      if (ok) { buildControls(); renderStudio(); }
+    });
+  }
 
-  if(!schoolLogoImg && STATE.profile?.npsn){
-    ensureSchoolLogoLoaded().then(img=>{
-      if(img){ buildControls(); renderStudio(); }
+  if (!schoolLogoImg && STATE.profile?.npsn) {
+    ensureSchoolLogoLoaded().then(img => {
+      if (img) { buildControls(); renderStudio(); }
     });
   }
 }
 
 function openWAStatus(tpl) {
-  if (!STATE.profile) {
-    _pendingIntent = { type:'studio', tpl, opts:{wa:true}, t: Date.now() };
-    toast('Login dulu untuk pakai Status WA', 'info');
-    openPanel('pLogin');
-    return;
-  }
+  // Tamu boleh membuka Status WA — watermark ditambahkan di canvas.
   if (!TPL_WA[tpl]) {
     console.warn('[openWAStatus] tpl invalid:', tpl, 'available:', Object.keys(TPL_WA));
     toast('Template tidak dikenali: ' + tpl, 'error');
     return;
   }
-  logAktivitas('wa_builder', { template: tpl });
+  if (STATE.profile) logAktivitas('wa_builder', { template: tpl });
   openStudio(tpl, {}, { wa: true });
 }
 
-function setSFmt(k){STATE.studio.fmt=k;buildControls();renderStudio();}
-function setSFont(k){STATE.studio.font=k;buildControls();renderStudio();}
+function setSFmt(k){if(!STATE.studio)return;STATE.studio.fmt=k;pushStudioHistory();buildControls();renderStudio();}
+function setSFont(k){if(!STATE.studio)return;STATE.studio.font=k;pushStudioHistory();buildControls();renderStudio();}
 let studioTimer=null;
-function queueStudio(){clearTimeout(studioTimer);studioTimer=setTimeout(()=>renderStudio(),200);}
-function setField(k,v){STATE.studio.fields[k]=v;queueStudio();}
-function stTog(k){if(!STATE.studio)return;STATE.studio[k]=!STATE.studio[k];buildControls();renderStudio();}
+function queueStudio(){
+  clearTimeout(studioTimer);
+  studioTimer=setTimeout(()=>{pushStudioHistory();renderStudio();},250);
+}
+function setField(k,v){
+  if(!STATE.studio)return;
+  STATE.studio.fields[k]=v;
+  queueStudio();
+}
+function stTog(k){
+  if(!STATE.studio)return;
+  STATE.studio[k]=!STATE.studio[k];
+  pushStudioHistory();
+  buildControls();
+  renderStudio();
+}
+
+/* —— Undo / redo —— */
+let _studioHistory=[], _studioHistIdx=-1, _studioRestoring=false;
+function resetStudioHistory(){_studioHistory=[];_studioHistIdx=-1;syncStudioHistoryButtons();}
+function syncStudioHistoryButtons(){
+  const u=$('stUndo'), r=$('stRedo');
+  if(u){u.disabled=_studioHistIdx<=0;u.classList.toggle('opacity-40',u.disabled);}
+  if(r){r.disabled=_studioHistIdx>=_studioHistory.length-1;r.classList.toggle('opacity-40',r.disabled);}
+}
+function pushStudioHistory(){
+  if(_studioRestoring||!STATE.studio)return;
+  const snap=studioSnapshot();
+  if(_studioHistory[_studioHistIdx]&&JSON.stringify(_studioHistory[_studioHistIdx])===JSON.stringify(snap))return;
+  _studioHistory=_studioHistory.slice(0,_studioHistIdx+1);
+  _studioHistory.push(snap);
+  if(_studioHistory.length>30)_studioHistory.shift();
+  _studioHistIdx=_studioHistory.length-1;
+  syncStudioHistoryButtons();
+}
+function undoStudio(){
+  if(!STATE.studio||_studioHistIdx<=0)return;
+  _studioRestoring=true;
+  _studioHistIdx--;
+  applyStudioSnapshot(_studioHistory[_studioHistIdx]);
+  hydrateStudioPhoto().then(()=>{
+    buildControls();renderStudio();_studioRestoring=false;syncStudioHistoryButtons();
+  });
+}
+function redoStudio(){
+  if(!STATE.studio||_studioHistIdx>=_studioHistory.length-1)return;
+  _studioRestoring=true;
+  _studioHistIdx++;
+  applyStudioSnapshot(_studioHistory[_studioHistIdx]);
+  hydrateStudioPhoto().then(()=>{
+    buildControls();renderStudio();_studioRestoring=false;syncStudioHistoryButtons();
+  });
+}
+function setExportFmt(f){
+  if(!STATE.studio||!['png','jpeg','webp'].includes(f))return;
+  STATE.studio.exportFmt=f;
+  pushStudioHistory();
+  buildControls();
+}
+
+/* —— Preset identitas sekolah —— */
+function getSchoolPreset(){try{return JSON.parse(localStorage.getItem('gb_school_preset')||'null');}catch(_){return null;}}
+function simpanPresetSekolah(){
+  const st=STATE.studio;if(!st)return;
+  const p={tagText:st.tagText,showTag:st.showTag,showFoot:st.showFoot,showSchoolLogo:st.showSchoolLogo,palette:st.palette};
+  try{localStorage.setItem('gb_school_preset',JSON.stringify(p));}catch(_){}
+  toast('Preset sekolah disimpan ✓');
+}
+function pakaiPresetSekolah(){
+  const p=getSchoolPreset(), st=STATE.studio;
+  if(!st)return;
+  if(!p)return toast('Belum ada preset tersimpan','info');
+  Object.assign(st,{
+    tagText:p.tagText||st.tagText, showTag:p.showTag!==false,
+    showFoot:p.showFoot!==false, showSchoolLogo:!!p.showSchoolLogo,
+    palette:p.palette||st.palette
+  });
+  pushStudioHistory();
+  buildControls();renderStudio();
+  toast('Preset diterapkan ✓');
+}
+
 function setStudioPhoto(ev){
   const f=ev.target.files[0];
   if(!f)return;
@@ -3625,6 +3889,7 @@ function setStudioPhoto(ev){
       c.width=img.width*s;c.height=img.height*s;
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
       STATE.studio.photoSmall=c.toDataURL('image/jpeg',.8);
+      pushStudioHistory();
       buildControls();
       renderStudio();
       setTimeout(()=>{if(STATE.studio?.photo)openCropEditor();},300);
@@ -3634,8 +3899,14 @@ function setStudioPhoto(ev){
   rd.readAsDataURL(f);
   ev.target.value='';
 }
-function clearStudioPhoto(){STATE.studio.photo=null;STATE.studio.photoSmall=null;buildControls();renderStudio();}
-const sw=(k,on)=>`<button onclick="stTog('${k}')" class="w-12 h-7 rounded-full relative transition ${on?'acc-bg':'bg-slate-200'}"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition ${on?'left-6':'left-1'}"></span></button>`;
+function clearStudioPhoto(){
+  if(!STATE.studio)return;
+  STATE.studio.photo=null;STATE.studio.photoSmall=null;
+  pushStudioHistory();
+  buildControls();renderStudio();
+}
+const SW_LABEL={tintPhoto:'Warnai foto',showFoot:'Footnote aplikasi',showSchoolLogo:'Logo sekolah',showTag:'Hashtag'};
+const sw=(k,on)=>`<button type="button" onclick="stTog('${k}')" role="switch" aria-checked="${!!on}" aria-label="${SW_LABEL[k]||k}" class="w-12 h-7 rounded-full relative transition ${on?'acc-bg':'bg-slate-200'}"><span class="absolute top-1 w-5 h-5 bg-white rounded-full transition ${on?'left-6':'left-1'}"></span></button>`;
 
 function buildControls(){
   const st=STATE.studio;
@@ -3650,22 +3921,23 @@ function buildControls(){
     const on=(st.palette||'teal')===k;
     return `<button type="button" onclick="setPalette('${k}')" title="${p.n}" aria-label="${p.n}" class="w-9 h-9 rounded-full transition active:scale-90 shrink-0" style="background:linear-gradient(135deg,${p.c1},${p.c2});${on?'box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--acc)':'box-shadow:0 0 0 2px rgba(255,255,255,.25)'}"></button>`;
   }).join('');
-h += '</div>';
-h += '<div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mt-3">Warnai Foto ' + sw('tintPhoto', st.tintPhoto) + '</div>';
+  h += '</div>';
+  h += '<div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mt-3">Warnai Foto ' + sw('tintPhoto', st.tintPhoto) + '</div>';
 
-h += '<p class="lbl mt-3">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
-  h+='<p class="lbl mt-3">Font</p><div class="flex gap-1.5">'+Object.entries(FONTS).map(([k,v])=>`<button onclick="setSFont('${k}')" class="flex-1 py-2 rounded-lg text-[11px] font-bold transition ${k===st.font?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
-  h+=t.f.map(([k,ph])=>`<input value="${esc(st.fields[k]||'')}" oninput="setField('${k}',this.value)" placeholder="${ph}" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">`).join('');
+  h += '<p class="lbl mt-3">Ukuran</p><div class="flex flex-wrap gap-1.5">'+Object.entries(FMT).map(([k,v])=>`<button type="button" onclick="setSFmt('${k}')" class="px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition ${k===st.fmt?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
+  h+='<p class="lbl mt-3">Font</p><div class="flex gap-1.5">'+Object.entries(FONTS).map(([k,v])=>`<button type="button" onclick="setSFont('${k}')" class="flex-1 py-2 rounded-lg text-[11px] font-bold transition ${k===st.font?'acc-bg text-white':'card text-slate-500'}">${v.n}</button>`).join('')+'</div>';
+  h+='<p class="lbl mt-3">Teks</p>';
+  h+=t.f.map(([k,ph])=>`<input type="text" value="${esc(st.fields[k]||'')}" oninput="setField('${k}',this.value)" placeholder="${esc(ph)}" aria-label="${esc(ph)}" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 acc-ring">`).join('');
   if (st.photo) {
-  h += `<div class="mt-2 grid grid-cols-3 gap-2">
-    <button onclick="$('stFoto').click()" class="py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition"><i data-lucide="image" class="w-3.5 h-3.5"></i> Ganti</button>
-    <button onclick="openCropEditor()" class="py-2.5 rounded-xl acc-soft acc-text text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition"><i data-lucide="move" class="w-3.5 h-3.5"></i> Atur</button>
-    <button onclick="clearStudioPhoto()" class="py-2.5 rounded-xl bg-rose-50 text-rose-500 text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus</button>
-  </div>`;
-} else {
-  h += `<button onclick="$('stFoto').click()" class="mt-2 w-full py-2.5 rounded-xl acc-soft acc-text text-[11px] font-bold flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="image" class="w-4 h-4"></i> ${t.ph?'Foto utama':'Foto latar (opsional)'}</button>`;
-}
-h += `<input type="file" id="stFoto" accept="image/*" class="hidden" onchange="setStudioPhoto(event)">`;
+    h += `<div class="mt-2 grid grid-cols-3 gap-2">
+      <button type="button" onclick="$('stFoto').click()" class="py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition"><i data-lucide="image" class="w-3.5 h-3.5"></i> Ganti</button>
+      <button type="button" onclick="openCropEditor()" class="py-2.5 rounded-xl acc-soft acc-text text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition"><i data-lucide="move" class="w-3.5 h-3.5"></i> Atur</button>
+      <button type="button" onclick="clearStudioPhoto()" class="py-2.5 rounded-xl bg-rose-50 text-rose-500 text-[11px] font-bold flex items-center justify-center gap-1.5 active:scale-95 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus</button>
+    </div>`;
+  } else {
+    h += `<button type="button" onclick="$('stFoto').click()" class="mt-2 w-full py-2.5 rounded-xl acc-soft acc-text text-[11px] font-bold flex items-center justify-center gap-2 active:scale-95 transition"><i data-lucide="image" class="w-4 h-4"></i> ${t.ph?'Foto utama':'Foto latar (opsional)'}</button>`;
+  }
+  h += `<input type="file" id="stFoto" accept="image/*" class="hidden" onchange="setStudioPhoto(event)" aria-label="Pilih foto">`;
   h+=`<div class="mt-3 space-y-3">`;
   if(!st.waMode){
     h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Footnote aplikasi ${sw('showFoot',st.showFoot)}</div>`;
@@ -3681,7 +3953,19 @@ h += `<input type="file" id="stFoto" accept="image/*" class="hidden" onchange="s
   }else if(STATE.profile?.npsn){
     h+=`<p class="text-[10px] text-slate-400 italic">Logo sekolah belum tersedia. Upload di Profil → Sekolah Saya (opsional).</p>`;
   }
-  h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Hashtag ${sw('showTag',st.showTag)}</div><input value="${esc(st.tagText)}" oninput="STATE.studio.tagText=this.value;queueStudio()" placeholder="Hashtag kustom" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring"></div>`;
+  h+=`<div class="flex items-center justify-between text-[11px] font-bold text-slate-600">Hashtag ${sw('showTag',st.showTag)}</div><input type="text" value="${esc(st.tagText)}" oninput="STATE.studio.tagText=this.value;queueStudio()" placeholder="Hashtag kustom" aria-label="Hashtag kustom" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring"></div>`;
+
+  h+=`<div class="mt-3 card p-3 space-y-2">
+    <p class="lbl">Identitas Sekolah</p>
+    <p class="text-[9.5px] text-slate-400 leading-snug">Simpan warna, hashtag, dan logo sekali pakai untuk semua karya.</p>
+    <div class="grid grid-cols-2 gap-2">
+      <button type="button" onclick="simpanPresetSekolah()" class="py-2 rounded-xl bg-slate-100 text-slate-600 text-[10px] font-bold active:scale-95 transition">Simpan preset</button>
+      <button type="button" onclick="pakaiPresetSekolah()" class="py-2 rounded-xl acc-soft acc-text text-[10px] font-bold active:scale-95 transition">Pakai preset</button>
+    </div>
+  </div>`;
+
+  h+='<p class="lbl mt-3">Format Unduh</p><div class="flex gap-1.5">'+['png','jpeg','webp'].map(f=>`<button type="button" onclick="setExportFmt('${f}')" class="flex-1 py-2 rounded-lg text-[10px] font-bold transition ${(st.exportFmt||'png')===f?'acc-bg text-white':'card text-slate-500'}">${f.toUpperCase()}</button>`).join('')+'</div>';
+
   $('stControls').innerHTML=h;
   paintCaptionBox();
   icons();
@@ -3757,9 +4041,21 @@ function truncateText(ctx,text,maxW){
   return t+'…';
 }
 
+let _studioRenderSeq=0;
+function endStudioRender(seq){
+  if(seq!==_studioRenderSeq)return;
+  const busy=$('stBusy');
+  busy?.classList.add('hidden');
+  busy?.parentElement?.classList.remove('is-busy');
+}
 async function renderStudio(){
   const st=STATE.studio;if(!st)return;
-  const F=FMT[st.fmt],W=F.w,H=F.h,s=H>=W?H/1920:H/720;
+  const seq=++_studioRenderSeq;
+  const busy=$('stBusy');
+  busy?.parentElement?.classList.add('is-busy');
+  busy?.classList.remove('hidden');
+
+  const F=FMT[st.fmt]||FMT.story,W=F.w,H=F.h,s=H>=W?H/1920:H/720;
   const cv=$('stCanvas');
   cv.width=W;cv.height=H;cv.style.aspectRatio=W+'/'+H;
   const ctx=cv.getContext('2d');
@@ -3768,11 +4064,14 @@ async function renderStudio(){
     await document.fonts.load('800 64px "Playfair Display"');
     await document.fonts.load('700 64px Caveat');
   }catch(e){}
+  if(seq!==_studioRenderSeq)return;
 
   if(st.waMode){
     await renderStudioWA(ctx, W, H, s);
+    if(seq!==_studioRenderSeq)return;
     drawGuestWatermark(ctx, W, H, s);
     paintCaptionBox();
+    endStudioRender(seq);
     return;
   }
 
@@ -3871,6 +4170,7 @@ if(st.photo){
     const cy = H - 190 * s + avatarR;
 
     const avatarImg = await ensureUserAvatarLoaded();
+    if(seq!==_studioRenderSeq)return;
     drawAvatarCircle(ctx, avatarImg, cx, cy, avatarR, STATE.profile?.nama, s);
 
     const nameX = 70 * s + avatarR * 2 + 26 * s;
@@ -3919,6 +4219,7 @@ if (hd && STATE.profile) {
 
   // Watermark untuk guest
   drawGuestWatermark(ctx, W, H, s);
+  endStudioRender(seq);
 }
 
 /* ============================================================
@@ -4353,109 +4654,120 @@ async function copyCaptionWA(){
 /* ============================================================
    KARYA SAYA
    ============================================================ */
-function simpanKarya(){
-  if(!STATE.profile){toast('Login untuk menyimpan karya','info');return;}
-  const st=STATE.studio;const cv=$('stCanvas');
+function namaFileKarya(){
+  const st=STATE.studio||{};
+  const t=(st.waMode?TPL_WA:TPL)[st.tpl]||{};
+  const raw=(st.fields&&(st.fields.title||st.fields.judul||st.fields.text||st.fields.materi||st.fields.caption))||t.n||'karya';
+  const slug=String(raw).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40)||'karya';
+  const ext=st.exportFmt==='jpeg'?'jpg':(st.exportFmt||'png');
+  return slug+'-guru-berbagi.'+ext;
+}
+function simpanKarya(notify){
+  if(!STATE.profile){if(notify)toast('Login untuk menyimpan karya','info');return;}
+  const st=STATE.studio,cv=$('stCanvas');
+  if(!st||!cv)return;
   const t=document.createElement('canvas');
-  const tw=216,th=Math.round(tw*cv.height/cv.width);
+  const tw=216,th=Math.max(1,Math.round(tw*cv.height/cv.width));
   t.width=tw;t.height=th;
   t.getContext('2d').drawImage(cv,0,0,tw,th);
-  const thumb = t.toDataURL('image/jpeg',.7);
-
-  let arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
-  arr.unshift({
-  waMode: !!st.waMode,
-  tpl: st.tpl,
-  fmt: st.fmt,
-  font: st.font,
-  palette: st.palette || 'teal',
-  fields: st.fields,
-  photoSmall: st.photoSmall,
-  crop: st.crop || { offsetX: 0, offsetY: 0, scale: 1 },
-  tintPhoto: !!st.tintPhoto,
-  showFoot: st.showFoot,
-  showTag: st.showTag,
-  showSchoolLogo: st.showSchoolLogo,
-  tagText: st.tagText,
-  thumb,
-  t: Date.now()
-});
-  arr=arr.slice(0,12);
-  localStorage.setItem('gb_karya',JSON.stringify(arr));
-
-  // Track "terakhir" untuk Resume Card
-  try {
-    localStorage.setItem('gb_studio_last', JSON.stringify({
-      waMode: !!st.waMode,
-      tpl: st.tpl,
-      fields: st.fields,
-      thumb,
-      t: Date.now()
-    }));
-  } catch(_) {}
-
-  renderKarya();
-  renderStudioResume();
+  let thumb;
+  try{thumb=t.toDataURL('image/webp',.72);}catch(_){thumb=t.toDataURL('image/jpeg',.7);}
+  const row=Object.assign(studioSnapshot(),{id:Date.now(),thumb,t:Date.now()});
+  const arr=getKarya();
+  arr.unshift(row);
+  if(!setKarya(arr))return;
+  saveStudioLast(thumb);
+  renderKarya();renderStudioResume();renderWelcome();
+  if(notify)toast('Karya tersimpan ✓');
 }
 function renderKarya(){
-  const arr = (() => {
-    try { return JSON.parse(localStorage.getItem('gb_karya') || '[]'); }
-    catch(_) { return []; }
-  })();
-
-  const wrap = $('wsKaryaWrap');
-  const grid = $('wsKaryaGrid');
-  const count = $('wsKaryaCount');
-
-  if(!wrap || !grid) return;
-
-  if(!arr.length || !STATE.profile){
-    wrap.classList.add('hidden');
-    return;
-  }
-
+  const arr=getKarya();
+  const wrap=$('wsKaryaWrap'),grid=$('wsKaryaGrid'),count=$('wsKaryaCount');
+  if(!wrap||!grid)return;
+  if(!arr.length||!STATE.profile){wrap.classList.add('hidden');return;}
   wrap.classList.remove('hidden');
-  if(count) count.textContent = arr.length;
-
-  const preview = arr.slice(0, 4);
-  grid.innerHTML = preview.map((k, i) => {
-    const tplDef = TPL_WA[k.tpl] || TPL[k.tpl] || { n: 'Karya' };
-    const bg = 'linear-gradient(135deg,var(--acc),var(--acc2))';
-    return `
-      <div onclick="openKarya(${i})" class="ws-karya" style="background:${bg}">
-        <img src="${esc(k.thumb)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" loading="lazy">
-        <span class="ws-karya-lbl">${esc(tplDef.n)}</span>
-      </div>`;
+  if(count)count.textContent=arr.length;
+  grid.innerHTML=arr.slice(0,6).map((k,i)=>{
+    const tplDef=TPL_WA[k.tpl]||TPL[k.tpl]||{n:'Karya'};
+    return `<div onclick="openKarya(${i})" class="ws-karya" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
+      <img src="${esc(k.thumb)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" loading="lazy">
+      <button type="button" onclick="event.stopPropagation();hapusKarya(${i})" class="ws-karya-del" aria-label="Hapus karya"><i data-lucide="x" class="w-3 h-3"></i></button>
+      <span class="ws-karya-lbl">${esc(tplDef.n)} · ${esc(waktuRelatif(k.t))}</span>
+    </div>`;
   }).join('');
-
   icons();
 }
+function hapusKarya(i){
+  const arr=getKarya();if(!arr[i])return;
+  arr.splice(i,1);
+  if(!setKarya(arr))return;
+  renderKarya();renderWelcome();
+  toast('Karya dihapus','info');
+}
 function openKarya(i){
-  const arr=JSON.parse(localStorage.getItem('gb_karya')||'[]');
-  const k=arr[i];if(!k)return;
-  STATE.studio={waMode:!!k.waMode,tpl:k.tpl,fmt:k.fmt,font:k.font,palette:k.palette||'teal',fields:Object.assign({},k.fields),photo:null,photoSmall:k.photoSmall||null,crop:k.crop||{offsetX:0,offsetY:0,scale:1},tintPhoto:!!k.tintPhoto,showFoot:k.showFoot,showTag:k.showTag,showSchoolLogo:k.showSchoolLogo||false,tagText:k.tagText};
-  if(k.photoSmall){const img=new Image();img.onload=()=>{STATE.studio.photo=img;renderStudio();};img.src=k.photoSmall;}
-  const def = k.waMode ? TPL_WA[k.tpl] : TPL[k.tpl];
-  $('stTitle').textContent=def.n;
-  updateStudioGuestBanner();
-  buildControls();
-  openModal('mStudio');
-  renderStudio();
+  const k=getKarya()[i];if(!k)return;
+  const def=(k.waMode?TPL_WA:TPL)[k.tpl];
+  openStudio(k.tpl,{}, {snap:k,thumb:k.thumb,title:def?.n});
 }
 function unduhStudio(){
-  $('stCanvas').toBlob(b=>{
+  const cv=$('stCanvas'),st=STATE.studio||{};
+  const fmt=st.exportFmt||'png';
+  const mime='image/'+fmt, q=fmt==='png'?undefined:.92;
+  cv.toBlob(b=>{
+    if(!b)return toast('Gagal mengunduh karya','error');
+    const type=(fmt!=='png'&&b.type!==mime)?'image/png':mime;
     const a=document.createElement('a');
-    a.href=URL.createObjectURL(b);
-    a.download='karya-guru-berbagi.png';
+    a.href=URL.createObjectURL(new Blob([b],{type}));
+    a.download=namaFileKarya();
     a.click();
-    URL.revokeObjectURL(a.href);
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
     simpanKarya();
-    const st = STATE.studio;
-    if (st?.waMode) {
-      copyCaptionWA();
-    }
+    if(st.waMode)copyCaptionWA();
     toast('Karya diunduh!');
-  },'image/png');
+  },mime,q);
+}
+
+/* —— Jadikan karya sebagai template pribadi —— */
+function studioSnapshotFromKarya(k){
+  return Object.assign(studioDefaults(k.tpl,!!k.waMode),{
+    waMode:!!k.waMode,tpl:k.tpl,fmt:k.fmt||'story',font:k.font||'modern',palette:k.palette||'teal',
+    fields:Object.assign({},k.fields||{}),photoSmall:k.photoSmall||null,
+    crop:Object.assign({offsetX:0,offsetY:0,scale:1},k.crop||{}),
+    tintPhoto:!!k.tintPhoto,showFoot:k.showFoot!==false,showTag:k.showTag!==false,
+    showSchoolLogo:!!k.showSchoolLogo,tagText:k.tagText||'#GuruBerbagiSelogiri #GTKSelogiri',
+    exportFmt:k.exportFmt||'png'
+  });
+}
+function jadikanTemplatePrompt(i){
+  const k=getKarya()[i];if(!k)return;
+  const def=(k.waMode?TPL_WA:TPL)[k.tpl]||{n:'Karya'};
+  $('popContent').innerHTML=`<div class="p-5 space-y-3">
+    <div class="flex items-center justify-between">
+      <p class="text-base font-extrabold text-slate-800">Jadikan Template</p>
+      <button type="button" onclick="tutupModal('mPop')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+    </div>
+    <p class="text-[10px] text-slate-500">Template tersimpan di perangkat ini dan muncul di tab yang sesuai.</p>
+    <input id="tplCustomNama" type="text" maxlength="40" value="${esc(def.n+' Saya')}" aria-label="Nama template" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring">
+    <button type="button" onclick="simpanTemplateKarya(${i},$('tplCustomNama').value)" class="w-full acc-bg text-white font-bold py-3 rounded-xl text-xs">Simpan template</button>
+  </div>`;
+  if($('mPop').classList.contains('hidden'))openModal('mPop');
+  icons();
+  setTimeout(()=>$('tplCustomNama')?.focus(),120);
+}
+function simpanTemplateKarya(i,nama){
+  const k=getKarya()[i];if(!k)return;
+  const arr=getCustomTpl();
+  arr.unshift({id:'c'+Date.now(),nama:String(nama||'Template Saya').slice(0,40),thumb:k.thumb,snap:studioSnapshotFromKarya(k),t:Date.now()});
+  try{localStorage.setItem('gb_tpl_custom',JSON.stringify(arr.slice(0,12)));}
+  catch(_){return toast('Penyimpanan penuh','error');}
+  tutupModal('mPop');
+  renderBagi();
+  toast('Template tersimpan ✓');
+}
+function bukaTemplateCustom(id){
+  const t=getCustomTpl().find(x=>x.id===id);if(!t)return;
+  if(!$('mPop').classList.contains('hidden'))tutupModal('mPop');
+  openStudio(t.snap.tpl,{}, {snap:t.snap,thumb:t.thumb,title:t.nama});
 }
 async function bagiStudio(){
   const cv = $('stCanvas');
@@ -4464,8 +4776,10 @@ async function bagiStudio(){
   const caption = waMode ? buildCaptionWA() : '';
 
   try {
-    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
-    const file = new File([blob], 'karya-guru-berbagi.png', { type: 'image/png' });
+    const fmt=st.exportFmt||'png';
+    const mime='image/'+fmt;
+    const blob = await new Promise(r => cv.toBlob(r, mime, fmt==='png'?undefined:.92));
+    const file = new File([blob||new Blob([],{type:mime})], namaFileKarya(), { type: blob?.type||mime });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       const payload = { files: [file], title: 'Guru Berbagi Selogiri' };
@@ -4488,96 +4802,113 @@ async function bagiStudio(){
 }
 
 /* ============================================================
-   GRID RENDER — Studio + WA
+   GRID RENDER — preview nyata + kategori + favorit
    ============================================================ */
+function tplKeysForTab(tab){
+  let keys=Object.keys(tab==='foto'?TPL_WA:TPL);
+  const cat=STATE.studioCat||'all';
+  if(cat==='favorit')keys=keys.filter(k=>STATE.tplFavs.has(k));
+  else if(cat!=='all')keys=keys.filter(k=>(TPL_CAT[k]||'lain')===cat);
+  keys.sort((a,b)=>(isTplFav(b)?1:0)-(isTplFav(a)?1:0));
+  return keys;
+}
+function tplCardHTML(k,waMode,t){
+  const fav=isTplFav(k);
+  const open=waMode?`openWAStatus('${k}')`:`openStudio('${k}')`;
+  const prev=tplPreview(k,waMode);
+  return `<div onclick="${open}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${open}}" class="ws-tpl" role="button" tabindex="0" aria-label="Buka template ${esc(t.n)}">
+    <div class="ws-tpl-thumb" style="background:${tplGradient(k)}">
+      ${prev?`<img src="${esc(prev)}" alt="" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:''}
+      <button type="button" onclick="event.stopPropagation();toggleTplFav('${k}')" class="ws-tpl-fav ${fav?'on':''}" aria-label="${fav?'Hapus dari favorit':'Tambah ke favorit'}"><i data-lucide="star" class="w-3.5 h-3.5" ${fav?'fill="currentColor"':''}></i></button>
+    </div>
+    <div class="ws-tpl-label">${esc(t.n)}</div>
+  </div>`;
+}
+function customTplCardHTML(t){
+  return `<div onclick="bukaTemplateCustom('${t.id}')" onkeydown="if(event.key==='Enter')bukaTemplateCustom('${t.id}')" class="ws-tpl" role="button" tabindex="0" aria-label="Buka template ${esc(t.nama)}">
+    <div class="ws-tpl-thumb" style="background:var(--acc-soft)">
+      ${t.thumb?`<img src="${esc(t.thumb)}" alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`:''}
+      <span class="ws-tpl-time">Template Saya</span>
+    </div>
+    <div class="ws-tpl-label">${esc(t.nama)}</div>
+  </div>`;
+}
+function renderCatBar(){
+  const bar=$('wsCatBar');if(!bar)return;
+  const tab=STATE.studioTab||'foto';
+  const source=tab==='foto'?TPL_WA:TPL;
+  const cats=['all'];
+  Object.keys(source).forEach(k=>{const c=TPL_CAT[k]||'lain';if(!cats.includes(c))cats.push(c);});
+  if(getCustomTpl().some(t=>(!!(t.snap&&t.snap.waMode))===(tab==='foto')))cats.push('saya');
+  if(Object.keys(source).some(k=>STATE.tplFavs.has(k)))cats.push('favorit');
+  const cur=STATE.studioCat||'all';
+  const active=cats.includes(cur)?cur:'all';
+  if(active!==cur)STATE.studioCat=active;
+  bar.innerHTML=cats.map(c=>`<button type="button" onclick="setStudioCat('${c}')" class="ws-cat ${c===active?'on':''}">${esc(TPL_CAT_LABEL[c]||c)}</button>`).join('');
+  icons();
+}
+function setStudioCat(c){STATE.studioCat=c;renderStudioTabContent();}
+function pilihStudioTab(tab){STATE.studioTab=tab;STATE.studioCat='all';renderStudioTabContent();}
 function renderStudioGrid(){
-  const box = $('wsPanelKartu');
-  if(!box) return;
-
-  const GRAD = {
-    quote:       'linear-gradient(135deg,#7C3AED,#A855F7)',
-    ucapan:      'linear-gradient(135deg,#E11D48,#F43F5E)',
-    undangan:    'linear-gradient(135deg,#2563EB,#0EA5E9)',
-    prestasi:    'linear-gradient(135deg,#D97706,#F59E0B)',
-    cover:       'linear-gradient(135deg,#059669,#10B981)',
-    dokumentasi: 'linear-gradient(135deg,#0C4A6E,#0284C7)'
-  };
-
-  const entries = Object.entries(TPL);
-  const MAX_SHOW = 5;
-
-  let html = '';
-entries.slice(0, MAX_SHOW).forEach(([k, t]) => {
-  const grad = GRAD[k] || 'linear-gradient(135deg,#7C3AED,#A855F7)';
-  const illus = TPL_ILLUS[k] || `<i data-lucide="${t.i}" class="w-6 h-6" style="color:rgba(255,255,255,.6)"></i>`;
-  html += `
-    <div onclick="openStudio('${k}')" class="ws-tpl">
-      <div class="ws-tpl-thumb" style="aspect-ratio:3/4">
-        <div style="position:absolute;inset:0;background:${grad}"></div>
-        <div class="ws-illus">${illus}</div>
-      </div>
-      <div class="ws-tpl-label">${esc(t.n)}</div>
-    </div>`;
-});
-
-  html += `
-    <div onclick="bukaSemuaTemplate('kartu')" class="ws-seeall ws-seeall-sq">
-      <div class="ws-seeall-ico">
-        <i data-lucide="grid-3x3" class="w-5 h-5"></i>
-      </div>
-      <span class="ws-seeall-lbl">Semua</span>
-    </div>`;
-
-  box.innerHTML = html;
+  const box=$('wsPanelKartu');if(!box)return;
+  const cat=STATE.studioCat||'all';
+  let html='';
+  tplKeysForTab('kartu').forEach(k=>{html+=tplCardHTML(k,false,TPL[k]);});
+  if(cat==='all'||cat==='saya'){
+    html+=getCustomTpl().filter(t=>!(t.snap&&t.snap.waMode)).map(customTplCardHTML).join('');
+  }
+  if(!html)html='<p class="col-span-full text-center text-[11px] text-slate-400 py-6">Belum ada template di kategori ini.</p>';
+  box.innerHTML=html;
+  icons();
+}
+function renderWAStatusGrid(){
+  const box=$('wsPanelFoto');if(!box)return;
+  const cat=STATE.studioCat||'all';
+  let html='';
+  tplKeysForTab('foto').forEach(k=>{html+=tplCardHTML(k,true,TPL_WA[k]);});
+  if(cat==='all'||cat==='saya'){
+    html+=getCustomTpl().filter(t=>!!(t.snap&&t.snap.waMode)).map(customTplCardHTML).join('');
+  }
+  if(!html)html='<p class="col-span-full text-center text-[11px] text-slate-400 py-6">Belum ada template di kategori ini.</p>';
+  box.innerHTML=html;
   icons();
 }
 
-/* ============================================================
-   STUDIO — Buka Semua Template (modal)
-   ============================================================ */
-function bukaSemuaTemplate(mode){
-  const isWA = mode === 'foto';
-  const source = isWA ? TPL_WA : TPL;
-  const GRAD = isWA ? {
-    belajar:'linear-gradient(135deg,#0D9488,#14B8A6)',
-    kelas:'linear-gradient(135deg,#2563EB,#0EA5E9)',
-    momen:'linear-gradient(135deg,#7C3AED,#A855F7)',
-    prestasi:'linear-gradient(135deg,#D97706,#F59E0B)',
-    quote:'linear-gradient(135deg,#0F766E,#14B8A6)'
-  } : {
-    quote:'linear-gradient(135deg,#7C3AED,#A855F7)',
-    ucapan:'linear-gradient(135deg,#E11D48,#F43F5E)',
-    undangan:'linear-gradient(135deg,#2563EB,#0EA5E9)',
-    prestasi:'linear-gradient(135deg,#D97706,#F59E0B)',
-    cover:'linear-gradient(135deg,#059669,#10B981)',
-    dokumentasi:'linear-gradient(135deg,#0C4A6E,#0284C7)'
-  };
-
-  const items = Object.entries(source).map(([k,t])=>{
-    const grad = GRAD[k] || 'linear-gradient(135deg,#0D9488,#14B8A6)';
-    return `
-      <button onclick="tutupModal('mPop');${isWA?`openWAStatus('${k}')`:`openStudio('${k}')`}" class="card p-3 flex flex-col items-center gap-2 active:scale-95 transition">
-        <span class="w-12 h-12 rounded-xl flex items-center justify-center" style="background:${grad}">
-          <i data-lucide="${t.i}" class="w-6 h-6 text-white"></i>
-        </span>
-        <span class="text-[10px] font-bold text-slate-700 text-center leading-tight">${esc(t.n)}</span>
-      </button>`;
-  }).join('');
-
-  const html = `
-    <div class="p-5 space-y-3">
-      <div class="flex items-center justify-between">
-        <p class="text-base font-extrabold text-slate-800">${isWA ? 'Template Foto WA' : 'Template Kartu'}</p>
-        <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
-          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
-        </button>
-      </div>
-      <div class="grid grid-cols-3 gap-2">${items}</div>
-    </div>`;
-
-  $('popContent').innerHTML = html;
+/* —— Batch status WA —— */
+function bukaBatchWA(){
+  if(!STATE.profile){toast('Login untuk membuat banyak status','info');openPanel('pLogin');return;}
+  const opts=Object.entries(TPL_WA).map(([k,t])=>`<option value="${k}">${esc(t.n)}</option>`).join('');
+  $('popContent').innerHTML=`<div class="p-5 space-y-3">
+    <div class="flex items-center justify-between">
+      <p class="text-base font-extrabold text-slate-800">Buat Beberapa Status</p>
+      <button type="button" onclick="tutupModal('mPop')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+    </div>
+    <p class="text-[10px] text-slate-500 leading-snug">Satu caption per baris, maksimal 8 status. Foto bisa ditambahkan setelah dibuat.</p>
+    <select id="batchTpl" aria-label="Template" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring">${opts}</select>
+    <textarea id="batchText" rows="7" placeholder="Baris pertama…&#10;Baris kedua…" aria-label="Daftar caption" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] acc-ring resize-none"></textarea>
+    <button type="button" onclick="prosesBatchWA()" class="w-full acc-bg text-white font-bold py-3 rounded-xl text-xs">Buat status</button>
+  </div>`;
   openModal('mPop');
   icons();
+}
+function prosesBatchWA(){
+  const tpl=$('batchTpl')?.value||'belajar';
+  const lines=($('batchText')?.value||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean).slice(0,8);
+  if(!lines.length)return toast('Tulis minimal satu caption','info');
+  const def=TPL_WA[tpl];if(!def)return;
+  const field=(def.f&&def.f[0]&&def.f[0][0])||'caption';
+  const arr=getKarya();
+  const pal=Object.keys(PALETTES);
+  lines.forEach((line,i)=>{
+    const snap=studioDefaults(tpl,true);
+    snap.fields[field]=line;
+    snap.palette=pal[i%pal.length]||'teal';
+    arr.unshift(Object.assign(snap,{id:Date.now()+i,thumb:tplPreview(tpl,true,line),t:Date.now()-i}));
+  });
+  if(!setKarya(arr))return;
+  tutupModal('mPop');
+  renderBagi();
+  toast(lines.length+' status dibuat ✓');
 }
 
 /* ============================================================
@@ -4627,6 +4958,14 @@ async function buatWADariDraft(){
   openStudio('belajar', { caption: txt }, { wa: true });
 }
 
+async function buatKartuDariDraft(){
+  const el=$('wsDraftInput');if(!el)return;
+  const txt=el.value.trim();
+  if(!txt){toast('Tulis dulu catatan Anda','info');return;}
+  await simpanDraftQuick();
+  openStudio('quote',{text:txt});
+}
+
 function navToCatatan(){
   const w = $('postSectionWrap');
   if(!w) return;
@@ -4641,34 +4980,25 @@ function navToCatatan(){
    STUDIO — Karya Saya
    ============================================================ */
 function bukaGaleriKarya(){
-  const arr = (() => {
-    try { return JSON.parse(localStorage.getItem('gb_karya') || '[]'); }
-    catch(_) { return []; }
-  })();
-
+  const arr=getKarya();
   if(!arr.length) return toast('Belum ada karya','info');
-
-  const items = arr.map((k, i) => `
-    <button onclick="tutupModal('mPop');openKarya(${i})" class="ws-tpl">
-      <div class="ws-tpl-thumb">
-        <img src="${esc(k.thumb)}" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+  const items=arr.map((k,i)=>`
+    <div onclick="tutupModal('mPop');openKarya(${i})" class="ws-tpl" role="button" tabindex="0" aria-label="Buka karya">
+      <div class="ws-tpl-thumb" style="background:linear-gradient(135deg,var(--acc),var(--acc2))">
+        ${k.thumb?`<img src="${esc(k.thumb)}" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">`:''}
+        <button type="button" onclick="event.stopPropagation();jadikanTemplatePrompt(${i})" class="ws-tpl-fav" aria-label="Jadikan template" title="Jadikan template"><i data-lucide="bookmark" class="w-3.5 h-3.5"></i></button>
+        <span class="ws-tpl-time">${esc(waktuRelatif(k.t))}</span>
       </div>
       <div class="ws-tpl-label">${esc((TPL_WA[k.tpl] || TPL[k.tpl] || {n:'Karya'}).n)}</div>
-    </button>
-  `).join('');
-
-  const html = `
-    <div class="p-5 space-y-3">
-      <div class="flex items-center justify-between">
-        <p class="text-base font-extrabold text-slate-800">Karya Saya · ${arr.length}</p>
-        <button onclick="tutupModal('mPop')" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center">
-          <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
-        </button>
-      </div>
-      <div class="grid grid-cols-3 gap-2">${items}</div>
-    </div>`;
-
-  $('popContent').innerHTML = html;
+    </div>`).join('');
+  $('popContent').innerHTML=`<div class="p-5 space-y-3">
+    <div class="flex items-center justify-between">
+      <p class="text-base font-extrabold text-slate-800">Karya Saya · ${arr.length}</p>
+      <button type="button" onclick="tutupModal('mPop')" aria-label="Tutup" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4 text-slate-500"></i></button>
+    </div>
+    <p class="text-[10px] text-slate-500">Ketuk karya untuk dibuka, atau ikon bookmark untuk dijadikan template.</p>
+    <div class="grid grid-cols-3 gap-2">${items}</div>
+  </div>`;
   openModal('mPop');
   icons();
 }
@@ -4715,57 +5045,46 @@ function openStudioSettings(){
   icons();
 }
 
-function renderWAStatusGrid(){
-  const box = $('wsPanelFoto');
-  if(!box) return;
-
-  const GRAD = {
-    belajar:  'linear-gradient(135deg,#0D9488,#14B8A6)',
-    kelas:    'linear-gradient(135deg,#2563EB,#0EA5E9)',
-    momen:    'linear-gradient(135deg,#7C3AED,#A855F7)',
-    prestasi: 'linear-gradient(135deg,#D97706,#F59E0B)',
-    quote:    'linear-gradient(135deg,#0F766E,#14B8A6)'
-  };
-
- const entries = Object.entries(TPL_WA);
-const MAX_SHOW = 5;
-
-let html = '';
-entries.slice(0, MAX_SHOW).forEach(([k, t]) => {
-  const grad = GRAD[k] || 'linear-gradient(135deg,#7C3AED,#A855F7)';
-  const illus = TPL_ILLUS[k] || `<i data-lucide="${t.i}" class="w-6 h-6" style="color:rgba(255,255,255,.6)"></i>`;
-  html += `
-    <div onclick="openWAStatus('${k}')" class="ws-tpl">
-  <div class="ws-tpl-thumb" style="aspect-ratio:3/4">
-    <div style="position:absolute;inset:0;background:${grad}"></div>
-    <div class="ws-illus">${illus}</div>
-    <span style="position:absolute;bottom:6px;left:6px;right:6px;height:3px;background:rgba(94,234,212,.75);border-radius:2px;width:38%"></span>
-  </div>
-  <div class="ws-tpl-label">${esc(t.n)}</div>
-</div>`;
-});
-
-  html += `
-    <div onclick="bukaSemuaTemplate('foto')" class="ws-seeall">
-      <div class="ws-seeall-ico">
-        <i data-lucide="grid-3x3" class="w-5 h-5"></i>
-      </div>
-      <span class="ws-seeall-lbl">Semua</span>
-    </div>`;
-
-  box.innerHTML = html;
-  icons();
-}
-
 /* ============================================================
    RENDER BAGI
    ============================================================ */
 function renderBagi(){
   renderStudioHeader();
+  renderWelcome();
   renderStudioResume();
   renderStudioTabContent();
   renderKarya();
   fetchPosts();
+  icons();
+}
+
+/* ============================================================
+   STUDIO — Sambutan untuk pengguna baru
+   ============================================================ */
+function renderWelcome(){
+  const wrap=$('wsWelcomeWrap');if(!wrap)return;
+  let last=null;
+  try{last=JSON.parse(localStorage.getItem('gb_studio_last')||'null');}catch(_){}
+  if((STATE.profile&&last)||getKarya().length){wrap.innerHTML='';return;}
+  const picks=[['belajar',true],['quote',false],['cover',false]];
+  const cards=picks.map(([k,wa])=>{
+    const t=(wa?TPL_WA:TPL)[k];
+    const act=wa?`openWAStatus('${k}')`:`openStudio('${k}')`;
+    return `<button type="button" onclick="${act}" class="ws-welcome-item">
+      <img src="${esc(tplPreview(k,wa))}" alt="" loading="lazy">
+      <span>${esc(t.n)}</span>
+    </button>`;
+  }).join('');
+  wrap.innerHTML=`<div class="ws-welcome">
+    <div class="ws-welcome-head">
+      <span class="ws-welcome-ico"><i data-lucide="sparkles" class="w-4 h-4"></i></span>
+      <div class="flex-1 min-w-0">
+        <p class="ws-welcome-title">Selamat datang di Studio Kreatif</p>
+        <p class="ws-welcome-sub">Buat status WA, kartu, dan poster untuk berbagi inspirasi dengan guru lain. Mulai dari contoh di bawah.</p>
+      </div>
+    </div>
+    <div class="ws-welcome-grid">${cards}</div>
+  </div>`;
   icons();
 }
 
@@ -4818,8 +5137,6 @@ function renderStudioResume(){
   const wrap = $('wsResumeWrap');
   if(!wrap) return;
 
-  if(!STATE.profile){ wrap.innerHTML = ''; return; }
-
   const last = (() => {
     try { return JSON.parse(localStorage.getItem('gb_studio_last') || 'null'); }
     catch(_) { return null; }
@@ -4861,11 +5178,8 @@ function lanjutkanStudio(){
   try {
     const last = JSON.parse(localStorage.getItem('gb_studio_last') || 'null');
     if(!last) return toast('Tidak ada riwayat','info');
-    if(last.waMode){
-      openStudio(last.tpl, last.fields || {}, { wa: true });
-    } else {
-      openStudio(last.tpl, last.fields || {});
-    }
+    const def=(last.waMode?TPL_WA:TPL)[last.tpl];
+    openStudio(last.tpl,{}, {snap:last,thumb:last.thumb,title:def?.n});
   } catch(e){
     toast('Gagal lanjutkan','error');
   }
@@ -4880,6 +5194,8 @@ function switchStudioTab(tab){
   const tk = $('wsTabKartu');
   const pf = $('wsPanelFoto');
   const pk = $('wsPanelKartu');
+  const batch = $('wsBatchWrap');
+  batch?.classList.toggle('hidden', tab !== 'foto');
   if(!tf || !tk || !pf || !pk) return;
 
   if(tab === 'foto'){
@@ -4899,6 +5215,7 @@ function switchStudioTab(tab){
 function renderStudioTabContent(){
   renderWAStatusGrid();
   renderStudioGrid();
+  renderCatBar();
   switchStudioTab(STATE.studioTab || 'foto');
 }
 
