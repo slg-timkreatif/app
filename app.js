@@ -12,6 +12,7 @@ const APP_VER='4.147';
 const APK_VER=new URLSearchParams(location.search).get('apkv')||null;
 const TWA_PKG=((document.referrer||'').match(/android-app:\/\/([^/]+)/)||[])[1]||null;
 const CLIENT_KIND=isTWA?'twa':(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?'pwa':'browser';
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 function uaRingkas(){const u=navigator.userAgent||'';return{android:(u.match(/Android\s([\d.]+)/)||[])[1]||null,chrome:(u.match(/Chrome\/([\d.]+)/)||[])[1]||null};}
 function fotoUrl(gid,thumb){return gid?FOTO_BASE+gid+(thumb?'_t.webp':'.webp'):'';}
 
@@ -1007,21 +1008,11 @@ async function catatInstall(client){
 /* ============================================================
    PWA Install
    ============================================================ */
-let deferredPrompt=null;
 function initPWA(){
-  const sib=$('setInstallBtn');
-  if(sib&&isTWA)sib.classList.add('hidden');
+  const ib=$('setIosBtn');
   const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone||isTWA;
-  if(!standalone&&!isTWA){
-    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
-  }
-  window.addEventListener('appinstalled',()=>{toast('Aplikasi terpasang di HP!');catatInstall('pwa');});
-}
-function pasangApp(){
-  if(isTWA)return toast('Sudah terpasang sebagai aplikasi Play Store','info');
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}
-  else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}
-  else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');
+  if(ib&&(!isIOS||standalone))ib.classList.add('hidden');
+  window.addEventListener('appinstalled',()=>{toast('Ditambahkan ke Layar Utama!');catatInstall('pwa');});
 }
 
 /* ============================================================

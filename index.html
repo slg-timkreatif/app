@@ -768,16 +768,16 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
             <div class="setting-head-icon"><i data-lucide="smartphone"></i></div>
             <div class="setting-head-text">
               <div class="setting-head-title">Aplikasi</div>
-              <div class="setting-head-sub">Install · Feedback · Force Sync</div>
+              <div class="setting-head-sub">Feedback · Force Sync · iOS</div>
             </div>
             <div class="setting-head-chev"><i data-lucide="chevron-down"></i></div>
           </div>
           <div class="setting-content">
             <div class="setting-content-inner">
 
-              <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left border-b border-slate-100">
-                <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
-                <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
+              <button id="setIosBtn" onclick="openModal('mIos')" class="hidden w-full flex items-center gap-3 py-3 active:bg-slate-50 transition text-left border-b border-slate-100">
+                <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
+                <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Panduan iPhone/iPad</span><span class="block text-[10px] text-slate-500 mt-0.5">Buka di Safari → Tambahkan ke Layar Utama</span></span>
                 <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
               </button>
 
@@ -1389,7 +1389,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
       <button onclick="tutupModal('mIos')" aria-label="Tutup" class="absolute top-3 right-3 w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center active:scale-90 transition">
         <i data-lucide="x" class="w-4 h-4 text-slate-500"></i>
       </button>
-      <p id="iosTitle" class="text-base font-extrabold text-slate-800 mb-3 pr-10">Pasang di iPhone/iPad</p>
+      <p id="iosTitle" class="text-base font-extrabold text-slate-800 mb-3 pr-10">Akses di iPhone/iPad</p>
+      <p class="text-xs text-slate-500 mb-3">Aplikasi Android memakai APK. Di iOS, tambahkan portal ini ke Layar Utama lewat Safari (belum tersedia aplikasi native).</p>
       <ol class="text-sm text-slate-600 space-y-2 list-decimal list-inside">
         <li>Ketuk tombol <b>Bagikan</b></li>
         <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
@@ -1735,6 +1736,6 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
   </div>
 
 </div>
-<script defer src="app.js?v=5.7"></script>
+<script defer src="app.js?v=5.8"></script>
 </body>
 </html>

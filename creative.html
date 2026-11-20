@@ -513,9 +513,9 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
     <div class="card p-4">
       <p class="text-[13px] font-extrabold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="settings" class="w-4 h-4 acc-text"></i> Aplikasi</p>
       <div class="divide-y divide-slate-100">
-        <button id="setInstallBtn" onclick="pasangApp()" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
-          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="download" class="w-4 h-4"></i></span>
-          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Pasang Aplikasi di HP</span><span class="block text-[10px] text-slate-500 mt-0.5">Akses lebih cepat dari layar utama</span></span>
+        <button id="setIosBtn" onclick="openModal('mIos')" class="hidden w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
+          <span class="w-9 h-9 rounded-xl acc-soft acc-text flex items-center justify-center shrink-0"><i data-lucide="smartphone" class="w-4 h-4"></i></span>
+          <span class="flex-1 min-w-0"><span class="block text-sm font-bold text-slate-700 leading-tight">Panduan iPhone/iPad</span><span class="block text-[10px] text-slate-500 mt-0.5">Buka di Safari → Tambahkan ke Layar Utama</span></span>
           <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 shrink-0"></i>
         </button>
         <button onclick="openPanel('pFb')" class="w-full flex items-center gap-3 py-3.5 active:bg-slate-50 transition text-left">
@@ -712,7 +712,8 @@ tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{sans:['Inter','sans
 
   <div id="mIos" class="fixed inset-0 z-[70] hidden items-center justify-center p-6 bg-black/60">
     <div class="w-full max-w-sm card p-6 animate-pop">
-      <p class="text-base font-extrabold text-slate-800 mb-3">Pasang di iPhone/iPad</p>
+      <p class="text-base font-extrabold text-slate-800 mb-3">Akses di iPhone/iPad</p>
+      <p class="text-xs text-slate-500 mb-3">Aplikasi Android memakai APK. Di iOS, tambahkan portal ini ke Layar Utama lewat Safari (belum tersedia aplikasi native).</p>
       <ol class="text-sm text-slate-600 space-y-2 list-decimal list-inside">
         <li>Ketuk tombol <b>Bagikan</b></li>
         <li>Pilih <b>"Tambahkan ke Layar Utama"</b></li>
@@ -1177,21 +1178,12 @@ function guruId(){
 }
 function logAktivitas(aksi,detail){const gid=guruId();if(!gid)return;sb.from('creative_activity_log').insert({guru_id:gid,aksi:aksi,detail:detail||{}}).then(r=>{if(r.error)console.warn('log:',r.error.message);});}
 
-let deferredPrompt=null;
 function initPWA(){
-  const sib=$('setInstallBtn');
-  if(sib&&isTWA)sib.classList.add('hidden');
+  const ib=$('setIosBtn');
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone||isTWA;
-  if(!standalone&&!isTWA){
-    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
-  }
-  window.addEventListener('appinstalled',()=>{toast('Aplikasi terpasang di HP!');});
-}
-function pasangApp(){
-  if(isTWA)return toast('Sudah terpasang sebagai aplikasi Play Store','info');
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}
-  else if(/iphone|ipad/i.test(navigator.userAgent)){openModal('mIos');}
-  else toast('Browser: menu ⋮ → "Tambahkan ke Layar Utama"','info');
+  if(ib&&(!ios||standalone))ib.classList.add('hidden');
+  window.addEventListener('appinstalled',()=>{toast('Ditambahkan ke Layar Utama!');});
 }
 /* ============================================================
    Offline Queue
