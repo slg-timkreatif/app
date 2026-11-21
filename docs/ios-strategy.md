@@ -8,7 +8,7 @@
 
 ## Jangka pendek (sudah diterapkan)
 
-- Tombol install PWA generik dihapus dari `index.html` dan `creative.html`.
+- Tombol install PWA generik dihapus dari `index.html`; halaman legacy `creative.html` sudah dihapus dari repo.
 - Tombol **"Panduan iPhone/iPad"** hanya muncul di perangkat iOS (iPhone/iPad/iPod, termasuk iPadOS desktop-mode).
 - Modal `mIos` memberitahu pengguna:
   1. Buka portal di **Safari**

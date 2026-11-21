@@ -97,8 +97,6 @@ self.addEventListener('fetch', e => {
         if (cached) return cached;
         const idx = await caches.match('./index.html');
         if (idx) return idx;
-        const cr = await caches.match('./creative.html');
-        if (cr) return cr;
         return caches.match('./');
       })
     );
